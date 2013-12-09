@@ -18,7 +18,7 @@ Version: \tab 0.0.0\cr
 Date: \tab 2013-12-08\cr
 License: \tab GPL >= 3.0 restrictions: non-commerical use
 }
-The package provides a suite of software analytics for the analysis of strucutured products
+The package provides a suite of software for the analysis of strucutured products
 }
 \author{
 Glenn M. Schultz, CFA

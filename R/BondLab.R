@@ -2,21 +2,24 @@
 #copyright Glenn Schultz, CFA December 2013
 
 options(digits = 8)
-
-#----------------------------------------------------------------------------------------
-#Bond Lab Functions
-#----------------------------------------------------------------------------------------
 library(termstrc)
 library(ggplot2)
 library(reshape2)
 library(lubridate)
 library(methods)
 
+
+
+#----------------------------------------------------------------------------------------
+#Bond Lab Functions
+#----------------------------------------------------------------------------------------
+
+
 #---------------------------------
 #Time value of money functions
 #---------------------------------
 
-PresentValue <- function(interest.rate = 0.01, number.periods = 1, frequency = 1) {
+PresentValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
@@ -44,7 +47,7 @@ PresentValue <- function(interest.rate = 0.01, number.periods = 1, frequency = 1
   1/(1+interest.rate)^number.periods
 }
 
-FutureValue <- function(interest.rate = 0.01, number.periods = 1, frequency = 1) {
+FutureValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -72,7 +75,7 @@ FutureValue <- function(interest.rate = 0.01, number.periods = 1, frequency = 1)
 } 
 
 
-PresentValueAnnuity <-function(interest.rate = 0.01, number.periods = 1, frequency = 1) {
+PresentValueAnnuity <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -95,7 +98,7 @@ PresentValueAnnuity <-function(interest.rate = 0.01, number.periods = 1, frequen
   ((1-(1/(1+interest.rate)^number.periods))/interest.rate)
 }
 
-PresentValueAnnuityDue <-function(interest.rate = 0.01, number.periods = 1, frequency = 1){
+PresentValueAnnuityDue <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -118,7 +121,7 @@ PresentValueAnnuityDue <-function(interest.rate = 0.01, number.periods = 1, freq
   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate)  
 }
 
-FutureValueAnnuity <- function(interest.rate = 0.01, number.periods = 1, frequency = 1){
+FutureValueAnnuity <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -150,7 +153,7 @@ FutureValueAnnuity <- function(interest.rate = 0.01, number.periods = 1, frequen
 
 #YYTMtoPrice is a simple yield to price equation for a standard bond
 #This equation treats the bond as a annuity and zero coupon payment
-YTMtoPrice<- function(yield.to.maturity,coupon, coupon.frequency, years.mat, face.value){
+YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
   
   #need to error trap this function
   n = years.mat * coupon.frequency
@@ -163,7 +166,7 @@ YTMtoPrice<- function(yield.to.maturity,coupon, coupon.frequency, years.mat, fac
 
 #bondprice is a simple price to yield equation for a standard bond
 #This equation treats the bond as a annuity and zero coupon payment
-bondprice<- function(yield.to.maturity,coupon, coupon.frequency, years.mat, face.value){
+bondprice<- function(yield.to.maturity = numeric(),coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
   n = years.mat * coupon.frequency
   c = coupon/coupon.frequency
   i = yield.to.maturity/coupon.frequency
@@ -174,7 +177,7 @@ bondprice<- function(yield.to.maturity,coupon, coupon.frequency, years.mat, face
 
 #bond estimated yield to maturity this equation estimates a bond's yield
 #to maturity for a yield to maturity guess may be used with uniroot ytm functions
-EstimYTM <- function(coupon, coupon.frequency, years.mat, face.value, price){
+EstimYTM <- function(coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric(), price = numeric()){
   c = coupon
   n = years.mat
   f = coupon.frequency
@@ -187,7 +190,7 @@ EstimYTM <- function(coupon, coupon.frequency, years.mat, face.value, price){
 # Mortgage Payment Functions
 #---------------------------
 
-Mortgage.Monthly.Payment <- function(orig.bal, note.rate, term.mos){
+Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric(), term.mos = numeric()){
   note.rate = note.rate/1200
   term = term.mos
   pmt.factor = (1+note.rate)^term
@@ -196,7 +199,7 @@ Mortgage.Monthly.Payment <- function(orig.bal, note.rate, term.mos){
 }
 
 
-Sched.Prin <- function(balance, note.rate, term.mos, period, payment){
+Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric(), payment = numeric()){
   note.rate = note.rate/1200
   term = term.mos
   Monthly.Pmt = payment
@@ -206,14 +209,14 @@ Sched.Prin <- function(balance, note.rate, term.mos, period, payment){
   Scheduled.Prin
 }
 
-Remain.Balance <- function(balance, note.rate, term.mos, period){
+Remain.Balance <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
   note.rate = note.rate/1200
   term = term.mos
   Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term.mos)-1))
   Remain.Balance
 }
 
-PPC.Ramp <- function(season.period, begin.cpr, end.cpr, period){
+PPC.Ramp <- function(season.period = numeric(), begin.cpr = numeric(), end.cpr = numeric(), period = numeric()){
   if(end.cpr >= 1) {end.cpr = end.cpr/100 
                     begin.cpr = begin.cpr/100}
   monthly.cpr = (begin.cpr + ((period - 1) * (end.cpr-begin.cpr)/(season.period -1)))
@@ -258,7 +261,7 @@ ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.d
   
   #Error Trapping on Dates settlement date < next payment date or settlement date , issue date    
   if(settlement.date > nextpmt.date) stop ("Settlement Date is Greater Than Next Payment Date")
-  if(settlement.date < issue.date) stop ("Settlement Date is Less Than Next Payment Date")
+  if(settlement.date < issue.date) stop ("Settlement Date is Less Than Issue Date")
   if(settlement.date < lastpmt.date) stop ("Settlment Date is Less Than Last Payment Date")
   #Error Trapping on frequency and payment dates
   
@@ -299,7 +302,8 @@ BondBasisConversion <- function(issue.date, start.date, end.date, settlement.dat
 #-------------------------
 BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
   
-  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  bond.id <- readRDS(paste("~/BondLabData/BondData/",bond.id, ".rds", sep = ""))
+
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -420,7 +424,7 @@ MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), s
   
   #Error Trap the CPR Input - needs to be done
   
-  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  bond.id <- readRDS(paste("~/BondLabData/BondData/",bond.id, ".rds", sep = ""))
   
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
@@ -481,7 +485,7 @@ MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), s
     MBS.CF.Table[x,1] = x
     MBS.CF.Table[x,2] = pmtdate[x] + delay
     MBS.CF.Table[x,3] = time.period[x]
-    if (MBS.CF.Table[x,1] == 1) {MBS.CF.Table[x,4] = (original.bal * factor)} else {MBS.CF.Table[x,4] = MBS.CF.Table[x-1,9]}
+    if (MBS.CF.Table[x,1] == 1) {MBS.CF.Table[x,4] = principal} else {MBS.CF.Table[x,4] = MBS.CF.Table[x-1,9]}
     MBS.CF.Table[x,5] = Mortgage.Monthly.Payment(orig.bal = MBS.CF.Table[x,4], note.rate = note.rate, 
                                                  term.mos = (num.periods - MBS.CF.Table[x,1] + 1))
     
@@ -1175,29 +1179,6 @@ setClass("PassThroughAnalytics", contains = c("MortgageCashFlows", "MortgageTerm
 # Bond Lab Methods
 #--------------------------------
 
-# Methods to initialize
-#---------------------------------  
-setMethod("initialize",
-          signature(.Object = "BondCashFlows"),
-          function (.Object){
-            return(.Object)
-          }
-) 
 
-setMethod("initialize",
-          signature(.Object = "MortgageCashFlows"),
-          function (.Object){
-            return(.Object)
-          }
-)
 
-setMethod("initialize",
-          signature(.Object = "BondAnalytics"),
-          function (.Object) 
-          {
-            return(.Object)
-          }
-)
 
-# Methods to plot
-#-----------------------------------  

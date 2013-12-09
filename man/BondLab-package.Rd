@@ -3,38 +3,37 @@
 \alias{BondLab}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+A package for the analysis of Mortgage and Asset Backed Securities
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Bond Lab offers functions for the analysis and valuation of Mortgage and Asset Backed Securities. The implementation of Bond Lab focuses the valuation, structuring, and risk management of structured product investments. Bond Lab was written to support the book Investing in Mortgage and Asset Backed Securities with R and Bond Lab.
 }
+
+
 \details{
 \tabular{ll}{
 Package: \tab BondLab\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 0.0.0\cr
 Date: \tab 2013-12-08\cr
-License: \tab What license is it under?\cr
+License: \tab GPL >= 3.0 restrictions: non-commerical use
 }
-~~ An overview of how to use the package, including the most important functions ~~
+The package provides a suite of software analytics for the analysis of strucutured products
 }
 \author{
-Who wrote it
+Glenn M. Schultz, CFA
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Glenn Schultz<glennmschultz@me.com>
 }
 \references{
-~~ Literature or other references for background information ~~
+Glenn M. Schultz, CFA (2015): Investing in Mortgage and Asset Backed Securities with R and Bond Lab
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
-\keyword{ package }
+
+\keyword{ Fixed Income }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+%~~ Optional links to other man pages, e.g. ~~
+%~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }
 \examples{
-~~ simple examples of the most important functions ~~
+%~~ simple examples of the most important functions ~~
 }

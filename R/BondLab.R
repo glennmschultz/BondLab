@@ -8,12 +8,9 @@ library(reshape2)
 library(lubridate)
 library(methods)
 
-
-
 #----------------------------------------------------------------------------------------
 #Bond Lab Functions
 #----------------------------------------------------------------------------------------
-
 
 #---------------------------------
 #Time value of money functions
@@ -302,7 +299,7 @@ BondBasisConversion <- function(issue.date, start.date, end.date, settlement.dat
 #-------------------------
 BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
   
-  bond.id <- readRDS(paste("~/BondLabData/BondData/",bond.id, ".rds", sep = ""))
+  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
 
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
@@ -424,7 +421,7 @@ MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), s
   
   #Error Trap the CPR Input - needs to be done
   
-  bond.id <- readRDS(paste("~/BondLabData/BondData/",bond.id, ".rds", sep = ""))
+  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
   
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
@@ -1176,8 +1173,47 @@ setClass("BondAnalytics", contains = c("BondCashFlows", "BondTermStructure"))
 setClass("PassThroughAnalytics", contains = c("MortgageCashFlows", "MortgageTermStructure"))
 
 #--------------------------------
-# Bond Lab Methods
+# Bond Lab Initialize
 #--------------------------------
+setGeneric(
+  name = "BondCashFlows",
+  def = function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric())
+  {standardGeneric("BondCashFlows")})
+
+setGeneric(
+  name = "MortgageCashFlows",
+  def = function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
+                 price = numeric(), PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+                 seasoning.period = numeric(), CPR = numeric())
+  {standardGeneric("MortgageCashFlows")})
+
+setGeneric("BondTermStructure",
+           def = function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), 
+                          price = numeric(), cashflow = "character")
+           {standardGeneric("BondTermStrucutre")})
+
+setGeneric("BondAnalytics",
+           def = function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
+                           settlement.date = "character", method = method)
+           {standardGeneric("BondAnalytics")})
+
+setGeneric("TermStructure",
+           function(trade.date = "character", method = "character")
+           {standardGeneric("TermStructure")})
+
+setGeneric("PassThroughAnalytics",
+           function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
+                     settlement.date = "character", method = method, PrepaymentAssumption = "character", 
+                     ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+             {standardGeneric("PassThroughAnalytics")})
+
+#-------------------------------
+#Bond Lab Methods 
+#-------------------------------
+
+
+
+
 
 
 

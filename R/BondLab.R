@@ -265,10 +265,8 @@ ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.d
   
   #Error Trap the user's price input
   if(price <= 0) stop("No valid bond price")
-  if(price <= 1) {price = price} else {price = price/100}
   #Error Trap the user's coupon input
   if (coupon < 0 | coupon > 100) stop("No valid coupon specified.")
-  #if(coupon > 0) {coupon = coupon/100} else {coupon = coupon}
   #Note: Minimum demonination needs to be added to class bond information as well as function input
 }
 
@@ -315,8 +313,10 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
   # This function error traps bond input information
   ErrorTrap(bond.id = bond.id, principal = principal, settlement.date = settlement.date, price = price)
   
-  #if(price <= 1) {price = price} else {price = price/100}
-  #if(coupon > 0) {coupon = coupon/100} else {coupon = coupon}
+  #  Validate the price and coupon passed through the error trapping function
+  #  This validates that the correct unit is passed into the Bond Cash Flow function
+  if(price <= 1) {price = price} else {price = price/100}
+  if(coupon > 1) {coupon = coupon/100} else {coupon = coupon}
   
   #Calculate the number of cashflows that will be paid from settlement date to maturity date 
   #step1 calculate the years to maturity  
@@ -445,6 +445,9 @@ MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), s
   
   #error trap function needs to be upated to reflect expansion of the bond class
   #needs servicing, pmi and gfee error trapping
+  
+  #  Validate the price and coupon passed through the error trapping function
+  #  This validates that the correct unit is passed into the Bond Cash Flow function
   if(price <= 1) {price = price} else {price = price/100}
   if(coupon > 1) {coupon = coupon/100} else {coupon = coupon}
   if(note.rate > 1) {note.rate = note.rate/100} else {note.rate = note.rate}
@@ -1192,10 +1195,10 @@ setGeneric(
                  seasoning.period = numeric(), CPR = numeric())
   {standardGeneric("MortgageCashFlows")})
 
-#setGeneric("BondTermStructure",
-#           def = function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), 
-#                          price = numeric(), cashflow = "character")
-#           {standardGeneric("BondTermStrucutre")})
+setGeneric("BondTermStructure",
+           def = function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), 
+                          price = numeric(), cashflow = "character")
+           {standardGeneric("BondTermStructure")})
 
 setGeneric("BondAnalytics",
            def = function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
@@ -1246,24 +1249,23 @@ setMethod("show",
             cat("BondLab Rating:");print(object@BondLab)
             
             plotdata = as.data.frame(cbind(object@Period, object@TotalCashFlow))
-            colnames(plotdata) <- c("Period", "Cash Flow")
-            plotdata = melt(plotdata, id = "Period")
+            colnames(plotdata) <- c("Period", "CashFlow")
             
-            #plot <- ggplot(plotdata, aes(x= Period, y = value) +
-              #geom_bar(stat = "identity") +
-              #theme_minimal()+
-              #scale_fill_brewer(palette = "Greys") +
-              #labs(fill = "") +
-              #ylab("Bond Cash Flow") +
-              #xlab("Period") +
-              #theme(axis.title.y=element_text(angle = 90, size = 20)) +
-              #theme(axis.text.y = element_text(angle = 90, size = 15)) +
-              #theme(axis.title.x=element_text(angle = 0, size = 20)) +
-              #theme(axis.text.x = element_text(angle = 0, size = 15)) +
-              #theme(legend.position = c(.82,.73))+
-              #theme(legend.background = element_rect(fill = "white"))
+            #plotdata = melt(plotdata, id = "Period")
             
-            #print(plot)
+            plot <- ggplot(plotdata, aes(x= Period, y = CashFlow)) +
+              geom_bar(stat = "identity", fill = "Grey") +
+              theme_minimal() + 
+              labs(fill = "") +
+              ylab("Bond Cash Flow") +
+              xlab("Period") +
+              theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              theme(legend.position = c(.82,.73))
+                         
+            print(plot)
 
           }
 )

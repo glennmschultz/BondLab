@@ -999,7 +999,6 @@ PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(
   #The first step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
   TermStructure <- TermStructure(trade.date = trade.date, method = method)
-  #return((as.matrix(TermStructure@spotrate)))
   
   #The second step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
@@ -1407,17 +1406,88 @@ setMethod("show",
            plotdata2 <- as.data.frame(cbind(object@KeyRateTenor, object@KeyRateDuration))
            colnames(plotdata2) <- c("KRTenor", "KRDuration")
            
-           plot2 <- ggplot(plotdata2, aes(x = KRTenor, y = KRDuration)) +
+           plot2 <- ggplot(plotdata2, aes(x = as.factor(KRTenor), y = KRDuration)) +
              geom_bar(stat = "identity", fill = "Grey") +
              theme_minimal() +
              labs(fill = "") +
              ylab("Key Rate Duration") +
-             xlab("Key Rate Tenor") 
+             xlab("Key Rate Tenor") +
+             theme(axis.title.y=element_text(angle = 90, size = 20)) +
+             theme(axis.text.y = element_text(angle = 90, size = 15)) +
+             theme(axis.title.x=element_text(angle = 0, size = 20)) +
+             theme(axis.text.x = element_text(angle = 0, size = 15)) +
+             theme(legend.position = c(.82,.73))
            
          multiplot(plot1, plot2, cols = 1)
            
           }
           )
+
+setMethod("show", 
+          signature(object = "PassThroughAnalytics"),
+          function(object)
+          {
+            cat("Bond Description", "\n")
+            cat("BondId:"); print(object@ID)
+            cat("Cusip:"); print(object@Cusip)
+            cat("Coupon:"); print(object@Coupon)
+            cat("Frequency:"); print(object@Frequency)
+            cat("Basis:"); print(object@BondBasis)
+            cat("Issue Date:"); print(object@IssueDate)
+            cat("Last Payment Date:"); print(object@LastPmtDate)
+            cat("Next Payment Date:"); print(object@NextPmtDate)
+            cat("Maturity Date:"); print(object@Maturity)
+            cat("Bond Valuation:", "\n")
+            cat("Price:"); print(object@Price)
+            cat("Acrrued:"); print(object@Acrrued)
+            cat("Yield to Maturity:"); print(object@YieldToMaturity)
+            cat("Risk Metrics:", "\n")
+            cat("Weighted Average Life:"); print(object@WAL)
+            cat("Modified Duration:"); print(unname(object@ModDuration))
+            cat("Convexity:"); print(unname(object@Convexity))
+            cat("Effective Duration"); print(unname(object@EffDuration))
+            cat("Effective Convexity"); print(unname(object@EffConvexity))
+            cat("Sector Detail:", "\n")
+            cat("Bond Type:"); print(object@BondType)
+            cat("Sector:"); print(object@Sector)
+            cat("Moodys:"); print(object@Moody)
+            cat("S&P:"); print(object@SP)
+            cat("BondLab Rating:");print(object@BondLab)
+            
+            plotdata1 = as.data.frame(cbind(object@Period, object@TotalCashFlow))
+            colnames(plotdata1) <- c("Period", "CashFlow")
+            
+            plot1 <- ggplot(plotdata1, aes(x= Period, y = CashFlow)) +
+              geom_bar(stat = "identity", width = 1, fill = "Grey") +
+              theme_minimal() + 
+              labs(fill = "") +
+              ylab("Mtg. Cash Flow") +
+              xlab("Period") +
+              theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              theme(legend.position = c(.82,.73))
+            
+            plotdata2 <- as.data.frame(cbind(object@KeyRateTenor, object@KeyRateDuration))
+            colnames(plotdata2) <- c("KRTenor", "KRDuration")
+            
+            plot2 <- ggplot(plotdata2, aes(x = as.factor(KRTenor), y = KRDuration)) +
+              geom_bar(stat = "identity", fill = "Grey") +
+              theme_minimal() +
+              labs(fill = "") +
+              ylab("Key Rate Duration") +
+              xlab("Key Rate Tenor") +
+              theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              theme(legend.position = c(.82,.73))
+            
+            multiplot(plot1, plot2, cols = 1)
+            
+          }
+)
 
 
 

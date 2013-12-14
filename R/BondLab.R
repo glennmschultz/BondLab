@@ -1,5 +1,13 @@
-#BondLab
-#copyright Glenn Schultz, CFA December 2013
+# BondLab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+
+# copyright Glenn Schultz, CFA December 2013
+# This software is licensed under GPL 3 or greater with the restriction that the code cannot be
+# altered and the software cannot be used for commerical use either be profit or non-profit organizations
+# without the written consent of Glenn M. Schultz.
 
 options(digits = 8)
 library(termstrc)
@@ -8,6 +16,7 @@ library(reshape2)
 library(lubridate)
 library(methods)
 library(plyr)
+library(grid)
 
 #----------------------------------------------------------------------------------------
 #Bond Lab Functions
@@ -612,27 +621,25 @@ Effective.Convexity <- function(Rate.Delta, cashflow, discount.rates, discount.r
 # and mortgage cash flow security   
 #-----------------------------------    
 BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), price = numeric(), cashflow = "character"){
-  options("scipen"= 999, "digits"=8)
+
   
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
   maturity = bond.id@Maturity
   acrrued = cashflow@Acrrued
   
-
   #Class name variable.  This will set the class name for the new class to be initilized
   ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
   
   #Error Trap the user's price input
-  #if(price <= 1) {price = price} else {price = price/100}
-  #if(price <= 0) stop("No valid bond price")
+  if(price <= 1) {price = price} else {price = price/100}
+  if(price <=0) stop("No valid bond price")
   proceeds = (principal * price) + acrrued 
   
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
   # this insures that stored values will not be wrongly be passed to the funtion
   #internal functions used to compute key rate duration and convexity
-  
   Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
                                  discount.rates.up, discount.rates.dwn, t.period, proceeds){
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
@@ -828,7 +835,8 @@ BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), Ter
       EffConvexity = sum(KR.Duration[,3]),
       KeyRateTenor = KR.Duration[,1],
       KeyRateDuration = KR.Duration[,2],
-      KeyRateConvexity = KR.Duration[,3]    
+      KeyRateConvexity = KR.Duration[,3]
+      
   )
 } # End the function
 
@@ -1027,6 +1035,34 @@ SwapRateData <- function(datafile = "character", maturityvector = numeric()){
     if(SwapRateData[i,ColCount] != "ND") {data = SwapRateData[i,]                                      
                                           data <- rbind(data, as.numeric(maturityvector))
                                           saveRDS(data, paste(data[1,1], ".rds", sep = ""), compress = TRUE)}}
+}
+
+multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
+  require(grid)
+  
+  plots <- c(list(...), plotlist)
+  
+  numPlots = length(plots)
+  
+  if (is.null(layout)) {
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                     ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+  
+  if (numPlots == 1) {
+    print(plots[[1]])
+    
+  } else {
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    
+    for (i in 1:numPlots) {
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+      
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
 }
 
 
@@ -1251,8 +1287,6 @@ setMethod("show",
             plotdata = as.data.frame(cbind(object@Period, object@TotalCashFlow))
             colnames(plotdata) <- c("Period", "CashFlow")
             
-            #plotdata = melt(plotdata, id = "Period")
-            
             plot <- ggplot(plotdata, aes(x= Period, y = CashFlow)) +
               geom_bar(stat = "identity", fill = "Grey") +
               theme_minimal() + 
@@ -1324,7 +1358,66 @@ setMethod("show",
 )
 
 
-
+setMethod("show", 
+          signature(object = "BondAnalytics"),
+          function(object)
+          {
+           cat("Bond Description", "\n")
+           cat("BondId:"); print(object@ID)
+           cat("Cusip:"); print(object@Cusip)
+           cat("Coupon:"); print(object@Coupon)
+           cat("Frequency:"); print(object@Frequency)
+           cat("Basis:"); print(object@BondBasis)
+           cat("Issue Date:"); print(object@IssueDate)
+           cat("Last Payment Date:"); print(object@LastPmtDate)
+           cat("Next Payment Date:"); print(object@NextPmtDate)
+           cat("Maturity Date:"); print(object@Maturity)
+           cat("Bond Valuation:", "\n")
+           cat("Price:"); print(object@Price)
+           cat("Acrrued:"); print(object@Acrrued)
+           cat("Yield to Maturity:"); print(object@YieldToMaturity)
+           cat("Risk Metrics:", "\n")
+           cat("Weighted Average Life:"); print(object@WAL)
+           cat("Modified Duration:"); print(unname(object@ModDuration))
+           cat("Convexity:"); print(unname(object@Convexity))
+           cat("Effective Duration"); print(unname(object@EffDuration))
+           cat("Effective Convexity"); print(unname(object@EffConvexity))
+           cat("Sector Detail:", "\n")
+           cat("Bond Type:"); print(object@BondType)
+           cat("Sector:"); print(object@Sector)
+           cat("Moodys:"); print(object@Moody)
+           cat("S&P:"); print(object@SP)
+           cat("BondLab Rating:");print(object@BondLab)
+           
+           plotdata1 = as.data.frame(cbind(object@Period, object@TotalCashFlow))
+           colnames(plotdata1) <- c("Period", "CashFlow")
+           
+           plot1 <- ggplot(plotdata1, aes(x= Period, y = CashFlow)) +
+             geom_bar(stat = "identity", fill = "Grey") +
+             theme_minimal() + 
+             labs(fill = "") +
+             ylab("Bond Cash Flow") +
+             xlab("Period") +
+             theme(axis.title.y=element_text(angle = 90, size = 20)) +
+             theme(axis.text.y = element_text(angle = 90, size = 15)) +
+             theme(axis.title.x=element_text(angle = 0, size = 20)) +
+             theme(axis.text.x = element_text(angle = 0, size = 15)) +
+             theme(legend.position = c(.82,.73))
+           
+           plotdata2 <- as.data.frame(cbind(object@KeyRateTenor, object@KeyRateDuration))
+           colnames(plotdata2) <- c("KRTenor", "KRDuration")
+           
+           plot2 <- ggplot(plotdata2, aes(x = KRTenor, y = KRDuration)) +
+             geom_bar(stat = "identity", fill = "Grey") +
+             theme_minimal() +
+             labs(fill = "") +
+             ylab("Key Rate Duration") +
+             xlab("Key Rate Tenor") 
+           
+         multiplot(plot1, plot2, cols = 1)
+           
+          }
+          )
 
 
 

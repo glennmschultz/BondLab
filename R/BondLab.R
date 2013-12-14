@@ -264,8 +264,8 @@ ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.d
   #Error Trapping on frequency and payment dates
   
   #Error Trap the user's price input
-  if(price <=0) stop("No valid bond price")
-  #if(price <= 1) {price = price} else {price = price/100}
+  if(price <= 0) stop("No valid bond price")
+  if(price <= 1) {price = price} else {price = price/100}
   #Error Trap the user's coupon input
   if (coupon < 0 | coupon > 100) stop("No valid coupon specified.")
   #if(coupon > 0) {coupon = coupon/100} else {coupon = coupon}
@@ -315,8 +315,8 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
   # This function error traps bond input information
   ErrorTrap(bond.id = bond.id, principal = principal, settlement.date = settlement.date, price = price)
   
-  if(price <= 1) {price = price} else {price = price/100}
-  if(coupon > 0) {coupon = coupon/100} else {coupon = coupon}
+  #if(price <= 1) {price = price} else {price = price/100}
+  #if(coupon > 0) {coupon = coupon/100} else {coupon = coupon}
   
   #Calculate the number of cashflows that will be paid from settlement date to maturity date 
   #step1 calculate the years to maturity  
@@ -616,18 +616,20 @@ BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), Ter
   maturity = bond.id@Maturity
   acrrued = cashflow@Acrrued
   
+
   #Class name variable.  This will set the class name for the new class to be initilized
   ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
   
   #Error Trap the user's price input
-  if(price <= 1) {price = price} else {price = price/100}
-  if(price <=0) stop("No valid bond price")
+  #if(price <= 1) {price = price} else {price = price/100}
+  #if(price <= 0) stop("No valid bond price")
   proceeds = (principal * price) + acrrued 
   
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
   # this insures that stored values will not be wrongly be passed to the funtion
   #internal functions used to compute key rate duration and convexity
+  
   Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
                                  discount.rates.up, discount.rates.dwn, t.period, proceeds){
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
@@ -938,7 +940,9 @@ TermStructure <- function(trade.date = "character", method = "character"){
 # This function analyzes a standard non callable bond and serves as the constructor function
 #-----------------------------------
 BondAnalytics <- function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
-                           settlement.date = "character", method = method) {
+                           settlement.date = "character", method = method) 
+{
+
   
   #Default method for TermStructure
   if(missing(method)) method = "ns"
@@ -996,7 +1000,7 @@ PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(
   #The third step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
   MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-                                             principal = original.bal * MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
+                                             principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
   new("PassThroughAnalytics", MortgageCashFlow, MortgageTermStructure)    
 }
@@ -1188,15 +1192,16 @@ setGeneric(
                  seasoning.period = numeric(), CPR = numeric())
   {standardGeneric("MortgageCashFlows")})
 
-setGeneric("BondTermStructure",
-           def = function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), 
-                          price = numeric(), cashflow = "character")
-           {standardGeneric("BondTermStrucutre")})
+#setGeneric("BondTermStructure",
+#           def = function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), 
+#                          price = numeric(), cashflow = "character")
+#           {standardGeneric("BondTermStrucutre")})
 
 setGeneric("BondAnalytics",
            def = function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
                            settlement.date = "character", method = method)
            {standardGeneric("BondAnalytics")})
+
 
 setGeneric("TermStructure",
            function(trade.date = "character", method = "character")
@@ -1211,6 +1216,57 @@ setGeneric("PassThroughAnalytics",
 #-------------------------------
 #Bond Lab Methods 
 #-------------------------------
+setMethod("show",
+          signature(object = "BondCashFlows"),
+          function (object) 
+          {      
+            cat("Bond Description", "\n")
+            cat("BondId:"); print(object@ID)
+            cat("Cusip:"); print(object@Cusip)
+            cat("Coupon:"); print(object@Coupon)
+            cat("Frequency:"); print(object@Frequency)
+            cat("Basis:"); print(object@BondBasis)
+            cat("Issue Date:"); print(object@IssueDate)
+            cat("Last Payment Date:"); print(object@LastPmtDate)
+            cat("Next Payment Date:"); print(object@NextPmtDate)
+            cat("Maturity Date:"); print(object@Maturity)
+            cat("Bond Valuation:", "\n")
+            cat("Price:"); print(object@Price)
+            cat("Acrrued:"); print(object@Acrrued)
+            cat("Yield to Maturity:"); print(object@YieldToMaturity)
+            cat("Risk Metrics:", "\n")
+            cat("Weighted Average Life:"); print(object@WAL)
+            cat("Modified Duration:"); print(unname(object@ModDuration))
+            cat("Convexity:"); print(unname(object@Convexity))
+            cat("Sector Detail:", "\n")
+            cat("Bond Type:"); print(object@BondType)
+            cat("Sector:"); print(object@Sector)
+            cat("Moodys:"); print(object@Moody)
+            cat("S&P:"); print(object@SP)
+            cat("BondLab Rating:");print(object@BondLab)
+            
+            plotdata = as.data.frame(cbind(object@Period, object@TotalCashFlow))
+            colnames(plotdata) <- c("Period", "Cash Flow")
+            plotdata = melt(plotdata, id = "Period")
+            
+            #plot <- ggplot(plotdata, aes(x= Period, y = value) +
+              #geom_bar(stat = "identity") +
+              #theme_minimal()+
+              #scale_fill_brewer(palette = "Greys") +
+              #labs(fill = "") +
+              #ylab("Bond Cash Flow") +
+              #xlab("Period") +
+              #theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              #theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              #theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              #theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              #theme(legend.position = c(.82,.73))+
+              #theme(legend.background = element_rect(fill = "white"))
+            
+            #print(plot)
+
+          }
+)
 
 setMethod("show",
           signature(object = "MortgageCashFlows"),

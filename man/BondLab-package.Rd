@@ -1,5 +1,5 @@
-\name{BondLab-package}
-\alias{BondLab-package}
+\name{BondLab}
+\alias{BondLab}
 \alias{BondLab}
 \docType{package}
 \title{

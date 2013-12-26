@@ -32,7 +32,7 @@ The method used to fit the term strucutre.  The default is nelson-siegel.  Other
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+BondAanlytics extends the classes TermStrucutre, BondTermStructure, and BondCashFlows
 }
 \value{
 Returns the class BondAnalytics
@@ -42,62 +42,25 @@ Returns the class BondAnalytics
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+Investing in Mortgage and Asset Backed Securities using R and Bond Lab (2015), Glenn Schultz, CFA
 }
 \author{
 Glenn Schultz, CFA
 }
 \note{
-%%  ~~further notes~~
+This class may be further extended in the future
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BondCashFlows}},\code{\link{BondBasisConversion}}
 }
 \examples{
-BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, trade.date = "01-10-2013", settlement.date = "01-15-2013" )
+BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, trade.date = "01-10-2013", settlement.date = "01-15-2013", method = "ns")
 
-## The function is currently defined as
-structure(function (bond.id = "character", principal = numeric(), 
-    price = numeric(), trade.date = "character", settlement.date = "character", 
-    method = method) 
-{
-    standardGeneric("BondAnalytics")
-  }, generic = structure("BondAnalytics", package = "BondLab"), package = "BondLab", group = list(), valueClass = character(0), signature = c("bond.id", 
-"principal", "price", "trade.date", "settlement.date", "method"
-), default = structure(function (bond.id = "character", principal = numeric(), 
-    price = numeric(), trade.date = "character", settlement.date = "character", 
-    method = method) 
-{
-    if (missing(method)) 
-        method = "ns"
-    Rate.Delta = 1
-    TermStructure <- TermStructure(trade.date = trade.date, method = method)
-    BondCashFlow <- BondCashFlows(bond.id = bond.id, principal = principal, 
-        settlement.date = settlement.date, price = price)
-    BondTermStructure <- BondTermStructure(bond.id = BondCashFlow, 
-        Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-        principal = principal, price = price, cashflow = BondCashFlow)
-    new("BondAnalytics", BondCashFlow, BondTermStructure)
-  }, target = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), generic = structure("BondAnalytics", package = "BondLab"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = (structure(function (bond.id = "character", 
-    principal = numeric(), price = numeric(), trade.date = "character", 
-    settlement.date = "character", method = method) 
-{
-    if (missing(method)) 
-        method = "ns"
-    Rate.Delta = 1
-    TermStructure <- TermStructure(trade.date = trade.date, method = method)
-    BondCashFlow <- BondCashFlows(bond.id = bond.id, principal = principal, 
-        settlement.date = settlement.date, price = price)
-    BondTermStructure <- BondTermStructure(bond.id = BondCashFlow, 
-        Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-        principal = principal, price = price, cashflow = BondCashFlow)
-    new("BondAnalytics", BondCashFlow, BondTermStructure)
-  }, target = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), generic = structure("BondAnalytics", package = "BondLab"), class = structure("derivedDefaultMethod", package = "methods")))(bond.id, 
-    principal, price, trade.date, settlement.date, method), class = structure("nonstandardGenericFunction", package = "methods"))
 }
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ Fixed Income }

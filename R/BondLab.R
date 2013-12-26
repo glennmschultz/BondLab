@@ -4,10 +4,21 @@
 # for the specific analysis of structured products residential mortgage backed securities, 
 # asset backed securities, and commerical mortgage backed securities
 
-# copyright Glenn Schultz, CFA December 2013
-# This software is licensed under GPL 3 or greater with the restriction that the code cannot be
-# altered and the software cannot be used for commerical use either be profit or non-profit organizations
-# without the written consent of Glenn M. Schultz.
+#Copyright (C) 2015  Glenn M Schultz, CFA
+  
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 options(digits = 8)
 library(termstrc)
@@ -16,7 +27,18 @@ library(reshape2)
 library(lubridate)
 library(methods)
 library(plyr)
-library(grid)
+
+
+#----------------------------------------------------------------------------------------
+# Utils globalVariables is called so that the R CMD check will not issue a note
+# The utils below are global variables for the multi plot function used for ggplot2 methods
+utils::globalVariables(c("grid.newpage", "pushViewport", "viewport", "gridlayout"))
+# The utils below are global variables for the BondAnalytics and PassThroughAnalytics methods using ggplot2
+utils::globalVariables(c("Period", "CashFlow", "KRTenor", "KRDuration", "Period", "CashFlow"))
+# The utils below are global variables for the MortgageCashFlow methods using ggplot2
+utils::globalVariables(c("value", "variable"))
+
+
 
 #----------------------------------------------------------------------------------------
 #Bond Lab Functions
@@ -283,7 +305,8 @@ ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.d
 #Bond basis function This function set the interest payment day count basis  
 #----------------------------
 
-BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, lastpmt.date, nextpmt.date, coupon, principal, frequency, price){
+BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
+                        lastpmt.date, nextpmt.date, coupon, principal, frequency, price){
   # This  Function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
   #It returns the number of payments that will be received, period, and n for discounting
   #issue.date is the issuance date of the bond
@@ -292,7 +315,7 @@ BondBasisConversion <- function(issue.date, start.date, end.date, settlement.dat
   #settlement.date is the settlement date of hte bond
   #lastpmt.date is the last coupon payment date
   #nextpmt.date is the next coupon payment date
-  
+
   d1 = if(settlement.date == issue.date) {day(issue.date)} else {day(settlement.date)}    
   m1 = if(settlement.date == issue.date) {month(issue.date)} else {month(settlement.date)}
   y1 = if(settlement.date == issue.date) {year(issue.date)} else {year(settlement.date)}
@@ -954,6 +977,9 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                            settlement.date = "character", method = method) 
 {
 
+  #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
+  #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
+  if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
   
   #Default method for TermStructure
   if(missing(method)) method = "ns"
@@ -964,7 +990,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #The first step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
   TermStructure <- TermStructure(trade.date = trade.date, method = method)
-  #return((as.matrix(TermStructure@spotrate)))
+
   
   #The second step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
@@ -1036,8 +1062,19 @@ SwapRateData <- function(datafile = "character", maturityvector = numeric()){
                                           saveRDS(data, paste(data[1,1], ".rds", sep = ""), compress = TRUE)}}
 }
 
+# Multiple plot function
+# Source: cookbook for R
+# Author: Winston Change
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+
 multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
-  require(grid)
+
   
   plots <- c(list(...), plotlist)
   

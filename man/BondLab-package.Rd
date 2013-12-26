@@ -1,6 +1,5 @@
 \name{BondLab}
-\alias{BondLab}
-\alias{BondLab}
+\alias{BondLab - package}
 \docType{package}
 \title{
 A package for the analysis of Mortgage and Asset Backed Securities
@@ -30,10 +29,4 @@ Glenn M. Schultz, CFA (2015): Investing in Mortgage and Asset Backed Securities 
 }
 
 \keyword{ Fixed Income }
-\seealso{
-%~~ Optional links to other man pages, e.g. ~~
-%~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-%~~ simple examples of the most important functions ~~
-}
+

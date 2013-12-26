@@ -77,66 +77,6 @@ Constant Prepayment Rate
 \examples{
 PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 100, trade.date = "01-10-2013", settlement.date = "01-13-2013", PrepaymentAssumption = "PPC", begin.cpr = .2, end.cpr = 6, seasoning.period = 30)
 
-
-## The function is currently defined as
-structure(function (bond.id = "character", original.bal = numeric(), 
-    price = numeric(), trade.date = "character", settlement.date = "character", 
-    method = method, PrepaymentAssumption = "character", ..., 
-    begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), 
-    CPR = numeric()) 
-{
-    standardGeneric("PassThroughAnalytics")
-  }, generic = structure("PassThroughAnalytics", package = "BondLab"), package = "BondLab", group = list(), valueClass = character(0), signature = c("bond.id", 
-"original.bal", "price", "trade.date", "settlement.date", "method", 
-"PrepaymentAssumption", "begin.cpr", "end.cpr", "seasoning.period", 
-"CPR"), default = structure(function (bond.id = "character", 
-    original.bal = numeric(), price = numeric(), trade.date = "character", 
-    settlement.date = "character", method = method, PrepaymentAssumption = "character", 
-    ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), 
-    CPR = numeric()) 
-{
-    if (trade.date > settlement.date) 
-        stop("Trade Date Must be less than settlement date")
-    if (missing(method)) 
-        method = "ns"
-    Rate.Delta = 1
-    TermStructure <- TermStructure(trade.date = trade.date, method = method)
-    MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, 
-        original.bal = original.bal, settlement.date = settlement.date, 
-        price = price, PrepaymentAssumption = PrepaymentAssumption, 
-        begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, 
-        CPR = CPR)
-    MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, 
-        Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-        principal = original.bal * MortgageCashFlow@MBSFactor, 
-        price = price, cashflow = MortgageCashFlow)
-    new("PassThroughAnalytics", MortgageCashFlow, MortgageTermStructure)
-  }, target = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), generic = structure("PassThroughAnalytics", package = "BondLab"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = (structure(function (bond.id = "character", 
-    original.bal = numeric(), price = numeric(), trade.date = "character", 
-    settlement.date = "character", method = method, PrepaymentAssumption = "character", 
-    ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), 
-    CPR = numeric()) 
-{
-    if (trade.date > settlement.date) 
-        stop("Trade Date Must be less than settlement date")
-    if (missing(method)) 
-        method = "ns"
-    Rate.Delta = 1
-    TermStructure <- TermStructure(trade.date = trade.date, method = method)
-    MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, 
-        original.bal = original.bal, settlement.date = settlement.date, 
-        price = price, PrepaymentAssumption = PrepaymentAssumption, 
-        begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, 
-        CPR = CPR)
-    MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, 
-        Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-        principal = original.bal * MortgageCashFlow@MBSFactor, 
-        price = price, cashflow = MortgageCashFlow)
-    new("PassThroughAnalytics", MortgageCashFlow, MortgageTermStructure)
-  }, target = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "bond.id", package = "methods"), generic = structure("PassThroughAnalytics", package = "BondLab"), class = structure("derivedDefaultMethod", package = "methods")))(bond.id, 
-    original.bal, price, trade.date, settlement.date, method, 
-    PrepaymentAssumption, ..., begin.cpr = begin.cpr, end.cpr = end.cpr, 
-    seasoning.period = seasoning.period, CPR = CPR), class = structure("nonstandardGenericFunction", package = "methods"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

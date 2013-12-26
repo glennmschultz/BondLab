@@ -50,31 +50,6 @@ Glenn Schultz, CFA
 \examples{
 PresentValue(.05, number.periods = 4, frequency = 2)
 
-## The function is currently defined as
-function (interest.rate = numeric(), number.periods = numeric(), 
-    frequency = numeric()) 
-{
-    if (missing(interest.rate)) 
-        stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-    if (!is.numeric(interest.rate)) 
-        stop("No numeric interest.rate specified.")
-    if (interest.rate < 0 | interest.rate > 1) 
-        stop("No valid  interest.rate specified.")
-    if (missing(number.periods)) 
-        stop("Need to provide the number of discounting periods")
-    if (!is.numeric(number.periods)) 
-        stop(" No numeric discounting period specfified")
-    if (number.periods < 1) 
-        stop("No valid  number.periods specified.")
-    if (missing(frequency)) 
-        stop("Need to provide the frequency")
-    if (!is.numeric(frequency)) 
-        stop(" No numeric frequency specfified")
-    if (frequency < 1 | frequency > 12) 
-        stop("No valid frequency specified.")
-    interest.rate = interest.rate/frequency
-    1/(1 + interest.rate)^number.periods
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

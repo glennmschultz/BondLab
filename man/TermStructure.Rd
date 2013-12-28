@@ -46,7 +46,7 @@ The TermStructure class is used to pass the spot and foward rate vectors to Bond
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{BondTermStructure}}
+\code{\link{BondTermStructure}}, \code{\link{PassThroughAnalytics}}, \code{\link{BondAnalytics}}
 }
 \examples{
 

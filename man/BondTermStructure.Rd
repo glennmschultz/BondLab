@@ -57,14 +57,16 @@ BondTermStrucutre is dependent on input from classes BondCashFlows or MortgageCa
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{BondCashFlows}}, \code{\link{MortgageCashFlows}}, \code{\link{TermStructure}}
+\code{\link{BondCashFlows}}, \code{\link{MortgageCashFlows}}, \code{\link{TermStructure}}, \code{\link{PassThroughAnalytics}}, \code{\link{BondAnalytics}}
 }
-\examples{
 
-}
+%\examples{}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ Key Rate Duration }
-\keyword{ Effective Duration }% __ONLY ONE__ keyword per line
-\keyword{ Effective Convexity }
-\keyword{ Term Strucuture }
+\keyword{Key Rate Duration}
+\keyword{Effective Duration}
+\keyword{Effective Convexity}
+\keyword{Term Strucuture}
+\keyword{ZV Spread}
+\keyword{Spot Spread}

@@ -54,7 +54,7 @@ This class may be further extended in the future
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{BondCashFlows}},\code{\link{BondBasisConversion}}
+\code{\link{BondCashFlows}},\code{\link{BondBasisConversion}}, \code{\link{BondTermStructure}}
 }
 \examples{
 BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, trade.date = "01-10-2013", settlement.date = "01-15-2013", method = "ns")
@@ -63,5 +63,10 @@ BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, trade.date =
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ Fixed Income }
-\keyword{ Term Structure }% __ONLY ONE__ keyword per line
+\keyword{Fixed Income}
+\keyword{Term Structure}
+\keyword{Duration}
+\keyword{Effective Duration}
+\keyword{Key Rate Duration}
+\keyword{Convexity}
+\keyword{Effective Convexity}

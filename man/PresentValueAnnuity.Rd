@@ -26,26 +26,26 @@ The frequency of (i) divides the annual rate by its frequency. For example, 1 = 
 for example, assume a two year period with semi-annual discounting and an annual rate of 5.0\%, i =.05, number of periods = 4, freqency = 2
 }
 \value{
-%%  ~Describe the value returned
+The present value factor given an interest rate (i), number of periods (n), and frequency (i)
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+Investing in Mortgage and Asset Backed Securities with R and Bond Lab (2015), Glenn Schultz, CFA
 }
 \author{
 Glenn Schultz, CFA
 }
 \note{
-%%  ~~further notes~~
+Present Value of Annuity used in the discounting and valuation of cash flows
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{PresentValue}}, \code{\link{FutureValue}},\code{\link{FutureValueAnnuity}},
 }
 \examples{
 PresentValueAnnuity(i = .05, number.periods = 4, frequency = 2)
@@ -53,5 +53,5 @@ PresentValueAnnuity(i = .05, number.periods = 4, frequency = 2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ Bond Lab }
-\keyword{ present value }% __ONLY ONE__ keyword per line
+\keyword{ Fixed Income }
+\keyword{ Present Value }

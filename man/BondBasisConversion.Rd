@@ -63,7 +63,7 @@ Used in BondCashFlows and MortgageCashFlows
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{BondCashFlows}}, \code{\link{MortgageCashFlows}}
+\code{\link{BondCashFlows}}, \code{\link{MortgageCashFlows}}, \code{\link{BondAnalytics}}, \code{\link{PassThroughAnalytics}}
 }
 \examples{
 

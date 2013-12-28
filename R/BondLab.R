@@ -443,7 +443,7 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
   )
 }
 #------------------------------------------------------
-#Mortgage cashf flow function.  This function calculates the cash flow of a mortgage pass through security
+#Mortgage cash flow function.  This function calculates the cash flow of a mortgage pass through security
 #-----------------------------------------------------
 MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
                               price = numeric(), PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 

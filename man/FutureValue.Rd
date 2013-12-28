@@ -26,26 +26,26 @@ frequency The frequency of (i) divides teh annual rate by its frequency.  For ex
 For example, assume a two year period with semi annual discounting and an annual rate of 5.0\%. i = .05, number of periods = 4, frequency = 2
 }
 \value{
-%%  ~Describe the value returned
+Returns the future value factor given i, n, and frequency
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+Investing in Mortgage and Asset Backed Securties with R and Bond Lab (2015), Glenn Schultz, CFA
 }
 \author{
 Glenn Schultz, CFA
 }
 \note{
-%%  ~~further notes~~
+Present and future value functions are used in the discounting and valuation of cash flows
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{PresentValue}},\code{\link{PresentValueAnnuity}}
 }
 \examples{
 FutureValue(.05, number.periods = 4, frequency = 2)
@@ -53,5 +53,6 @@ FutureValue(.05, number.periods = 4, frequency = 2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Present Value }
+\keyword{ Present Value Annuity }
+\keyword{ Fixed Income }

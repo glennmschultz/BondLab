@@ -50,29 +50,29 @@ Constant Prepayment Rate
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Returns the superclass PassThrough Analytics
 }
 \value{
-%%  ~Describe the value returned
+Superclass
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+Investing in Mortgage and Asset Backed Securities (2015) with R and Bond Lab, Glenn Schultz, CFA
 }
 \author{
-%%  ~~who you are~~
+Glenn Schultz, CFA
 }
 \note{
-%%  ~~further notes~~
+The class may be extended in the future
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{MortgageCashFlows}}, \code{\link{TermStructure}}, \code{\link{BondTermStructure}}
 }
 \examples{
 PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 100, trade.date = "01-10-2013", settlement.date = "01-13-2013", PrepaymentAssumption = "PPC", begin.cpr = .2, end.cpr = 6, seasoning.period = 30)
@@ -81,4 +81,11 @@ PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 100
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ Mortgage Pass Through }
-\keyword{ Analytics }% __ONLY ONE__ keyword per line
+\keyword{ Analytics }
+\keyword{ Duration }
+\keyword{ Effective Duration }
+\keyword{Effective Convexity }
+\keyword{ Key Rate Duration }
+\keyword{ Weighted Average Life}
+\keyword{ Yield to Maturity }
+

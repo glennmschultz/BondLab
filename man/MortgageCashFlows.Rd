@@ -44,10 +44,10 @@ Constant Prepayment Rate used when PrepaymentAssumption = "CPR"
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+MortgageCashFlows class is the CashFlow input to BondTermStrucuture
 }
 \value{
-%%  ~Describe the value returned
+Returns the class MortgageCashFlows
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
@@ -60,13 +60,13 @@ Investing in Mortgage and Asset Backed Securities using R and BondLab (2015), Gl
 Glenn Schultz, CFA
 }
 \note{
-%%  ~~further notes~~
+Extends the class BondTermStructure and superclass PassThroughAnalytics
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BondTermStructure}}, \code{\link{PassThroughAnalytics}}, \code{\link{BondBasisConversion}}
 }
 \examples{
 MortgageCashFlows(bond.id = "bondlabMBS4", original.bal = 100000, settlement.date = "01-13-2013", price = 100, PrepaymentAssumption = "PPC", begin.cpr = .2, end.cpr = 6, seasoning.period = 30) 
@@ -74,5 +74,8 @@ MortgageCashFlows(bond.id = "bondlabMBS4", original.bal = 100000, settlement.dat
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ Duration }
+\keyword{ Modified Duration }
+\keyword{ Yield to Maturity }
+\keyword{ Prepayment }
+\keyword{ Weighted Average Life }

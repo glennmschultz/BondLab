@@ -44,7 +44,7 @@ BondCashFlows object is used in the BondAnalytics Function
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{BondAnalytics}}
+\code{\link{BondAnalytics}}, \code{\link{BondBasisConversion}}, \code{\link{BondTermStructure}}
 }
 \examples{
 BondCashFlows(bond.id = "bondlab10", principal = 100000, settlement.date = "01-15-2013", price = 100)
@@ -52,5 +52,11 @@ BondCashFlows(bond.id = "bondlab10", principal = 100000, settlement.date = "01-1
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ Bond }
-\keyword{ Cash Flow }% __ONLY ONE__ keyword per line
+\keyword{Bond}
+\keyword{CashFlow}
+\keyword{Modified Duration}
+\keyword{Fixed Income}
+\keyword{Duration}
+\keyword{Convexity}
+\keyword{Weighted Average Life}
+\keyword{Yield to Maturity}

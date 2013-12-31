@@ -42,7 +42,7 @@ Returns the class BondAnalytics
 %% ...
 }
 \references{
-Investing in Mortgage and Asset Backed Securities using R and Bond Lab (2015), Glenn Schultz, CFA
+Investing in Mortgage and Asset Backed Securities with R and Bond Lab (2015), Glenn Schultz, CFA
 }
 \author{
 Glenn Schultz, CFA

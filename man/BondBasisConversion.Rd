@@ -51,7 +51,7 @@ the bond basis (day count convention used to compute interest due the investor)
 Returns fraction of the year remaining for the calculation of acrrued interest
 }
 \references{
-Investing in Mortgage and Asset Backed Securities Using R and Bond Lab (2015), Glenn Schultz
+Investing in Mortgage and Asset Backed Securities with R and Bond Lab (2015), Glenn Schultz
 }
 \author{
 Glenn Schultz, CFA

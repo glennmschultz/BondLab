@@ -32,7 +32,7 @@ The function returns the class bond cash flows
 returns the class bond cash flows
 }
 \references{
-Investing in Mortgage and Asset Backed Securities using R and Bond Lan (2015), Glenn Schultz
+Investing in Mortgage and Asset Backed Securities with R and Bond Lan (2015), Glenn Schultz
 }
 \author{
 Glenn Schultz, CFA

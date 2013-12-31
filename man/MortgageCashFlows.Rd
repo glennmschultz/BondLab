@@ -54,7 +54,7 @@ Returns the class MortgageCashFlows
 %% ...
 }
 \references{
-Investing in Mortgage and Asset Backed Securities using R and BondLab (2015), Glenn Schultz
+Investing in Mortgage and Asset Backed Securities with R and BondLab (2015), Glenn Schultz
 }
 \author{
 Glenn Schultz, CFA

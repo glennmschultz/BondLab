@@ -38,8 +38,6 @@ utils::globalVariables(c("Period", "CashFlow", "KRTenor", "KRDuration", "Period"
 # The utils below are global variables for the MortgageCashFlow methods using ggplot2
 utils::globalVariables(c("value", "variable"))
 
-
-
 #----------------------------------------------------------------------------------------
 #Bond Lab Functions
 #----------------------------------------------------------------------------------------
@@ -1244,6 +1242,16 @@ setClass("MortgageSMMVector",
            LoanAge = "numeric",
            smm = "array"))
 
+# ----- The following classes define rate of return and valuation classes
+setClass("RateofReturn",
+         representation(
+         PmtDate = "character",
+         Period = "numeric",
+         ReinvestRate = "numeric",
+         CashFlowRcvd = "numeric",
+         ReInvestmentIncome = "numeric",
+         CashFlowRemainder = "numeric"))
+
 #The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
 setClass("BondAnalytics", contains = c("BondCashFlows", "BondTermStructure"))
 
@@ -1253,7 +1261,7 @@ setClass("BondAnalytics", contains = c("BondCashFlows", "BondTermStructure"))
 setClass("PassThroughAnalytics", contains = c("MortgageCashFlows", "MortgageTermStructure"))
 
 #--------------------------------
-# Bond Lab Initialize
+# Bond Lab Initialize Set Generics
 #--------------------------------
 setGeneric(
   name = "BondCashFlows",
@@ -1289,7 +1297,7 @@ setGeneric("PassThroughAnalytics",
              {standardGeneric("PassThroughAnalytics")})
 
 #-------------------------------
-#Bond Lab Methods 
+#Bond Lab Set Methods 
 #-------------------------------
 setMethod("show",
           signature(object = "BondCashFlows"),
@@ -1392,7 +1400,6 @@ setMethod("show",
             print(plot)
           }
 )
-
 
 setMethod("show", 
           signature(object = "BondAnalytics"),

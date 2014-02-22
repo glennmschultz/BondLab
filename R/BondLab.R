@@ -19,7 +19,6 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 options(digits = 8)
 library(termstrc)
 library(ggplot2)
@@ -27,7 +26,6 @@ library(reshape2)
 library(lubridate)
 library(methods)
 library(plyr)
-
 
 #----------------------------------------------------------------------------------------
 # Utils globalVariables is called so that the R CMD check will not issue a note
@@ -100,7 +98,6 @@ FutureValue <- function(interest.rate = numeric(), number.periods = numeric(), f
   
   (1+interest.rate)^number.periods  
 } 
-
 
 PresentValueAnnuity <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   if (missing(interest.rate))
@@ -225,7 +222,6 @@ Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric()
   pmt
 }
 
-
 Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric(), payment = numeric()){
   note.rate = note.rate/1200
   term = term.mos
@@ -329,7 +325,6 @@ BondBasisConversion <- function(issue.date, start.date, end.date, settlement.dat
 BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
   
   bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
-
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -359,8 +354,6 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
   # then compute the payment dates
   pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
                       else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
-  
-  
   
   #step3 build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
   time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
@@ -642,7 +635,6 @@ Effective.Convexity <- function(Rate.Delta, cashflow, discount.rates, discount.r
 # and mortgage cash flow security   
 #-----------------------------------    
 BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), price = numeric(), cashflow = "character"){
-
   
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
@@ -963,6 +955,14 @@ TermStructure <- function(trade.date = "character", method = "character"){
   )
 } 
 
+#-------------------------------
+#Rate of Return Analysis
+#-------------------------------
+RateofReturn <- function(ReinvestmentRate = numeric(), ReceivedCF = "character", 
+                         RemainingCF = "character", SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric()) {
+  
+}
+
 #--------------------------------
 # Bond Analytics Functions
 # These functions analyze a bond using the above functions
@@ -1038,6 +1038,46 @@ PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(
   
   new("PassThroughAnalytics", MortgageCashFlow, MortgageTermStructure)    
 }
+
+#----------------------------------
+#Prepayment Model Functions
+#These functions are used to build the base prepayment model
+#----------------------------------
+
+#----------------------------------
+# Seasoning function is a 3-parameter asymtote exponential function where
+# The three parameter asymptote is equivalent to the PPC ramp
+# a is the asymptote of the function
+# b is the intercept of the function
+# c is the point where the max CPR is achieved
+
+Seasoning <- function(a = numeric(), b = numeric(), c = numeric(), LoanAge = numeric()){
+  a - b * exp(-c * LoanAge)}
+
+
+#----------------------------------
+# Seasonality is modeled as a sin wave
+# a is the amplitude of the wave an set the maximum seasonal factor
+# Month is the calendar month (1..., 12) numeric
+# b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
+
+Seasonality <- function( a = numeric(), Month = numeric(), b= numeric()){
+  (1  + a *sin((pi/2 * (Month + b - 3)) / 3 - 1))}
+
+#-------------------------------------
+# arctanget function with a location parameter
+Borrower.Incentive <- function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric()) { 
+  theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi))) 
+}
+
+
+#-----------------------------------
+# Burnout is an exponentially decreasing function
+# a is the coefficient on the burnout varaible and b is the measure of burnout
+Burnout <- function(a = numeric(), b= numeric(), MaxIncen = numeric(), Age = numeric()){
+  exp(a * Age +  b * MaxIncen)
+}
+
 
 #----------------------------------
 # Helper Functions These function help to manage
@@ -1247,10 +1287,11 @@ setClass("RateofReturn",
          representation(
          PmtDate = "character",
          Period = "numeric",
-         ReinvestRate = "numeric",
-         CashFlowRcvd = "numeric",
+         ReinvestmentRate = "numeric",
+         ReceivedCF = "numeric",
          ReInvestmentIncome = "numeric",
-         CashFlowRemainder = "numeric"))
+         RemainingCF = "numeric",
+         HorizonSpread = "numeric"))
 
 #The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
 setClass("BondAnalytics", contains = c("BondCashFlows", "BondTermStructure"))
@@ -1295,6 +1336,27 @@ setGeneric("PassThroughAnalytics",
                      settlement.date = "character", method = method, PrepaymentAssumption = "character", 
                      ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
              {standardGeneric("PassThroughAnalytics")})
+
+setGeneric("RateofReturn",
+           function(ReinvestmentRate = numeric(), ReceivedCF = "character", RemainingCF = "character",
+                    SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric())
+             {standardGenric("RateofReturn")})
+
+setGeneric("Seasoning",
+           function (a = numeric(), b = numeric (), c = numeric, LoanAge = numeric())
+             {standardGeneric("Seasoning")})
+
+setGeneric("Borrower.Incentive",
+           function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric())
+             {standardGeneric("Borrower.Incentive")})
+
+setGeneric("Burnout",
+           function(a = numeric(), b = numeric(), MaxIncen = numeric(), Age = numeric())
+             {standardGeneric("Burnout")})
+
+setGeneric("Seasonality",
+           function(a = numeric(), Month = numeric(), b = numeric())
+             {standardGeneric("Seasonality")})
 
 #-------------------------------
 #Bond Lab Set Methods 

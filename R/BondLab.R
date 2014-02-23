@@ -19,32 +19,32 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-options(digits = 8)
-library(termstrc)
-library(ggplot2)
-library(reshape2)
-library(lubridate)
-library(methods)
-library(plyr)
+  options(digits = 8)
+  library(termstrc)
+  library(ggplot2)
+  library(reshape2)
+  library(lubridate)
+  library(methods)
+  library(plyr)
 
-#----------------------------------------------------------------------------------------
-# Utils globalVariables is called so that the R CMD check will not issue a note
-# The utils below are global variables for the multi plot function used for ggplot2 methods
-utils::globalVariables(c("grid.newpage", "pushViewport", "viewport", "gridlayout"))
-# The utils below are global variables for the BondAnalytics and PassThroughAnalytics methods using ggplot2
-utils::globalVariables(c("Period", "CashFlow", "KRTenor", "KRDuration", "Period", "CashFlow"))
-# The utils below are global variables for the MortgageCashFlow methods using ggplot2
-utils::globalVariables(c("value", "variable"))
+  #----------------------------------------------------------------------------------------
+  # Utils globalVariables is called so that the R CMD check will not issue a note
+  # The utils below are global variables for the multi plot function used for ggplot2 methods
+  utils::globalVariables(c("grid.newpage", "pushViewport", "viewport", "gridlayout"))
+  # The utils below are global variables for the BondAnalytics and PassThroughAnalytics methods using ggplot2
+  utils::globalVariables(c("Period", "CashFlow", "KRTenor", "KRDuration", "Period", "CashFlow"))
+  # The utils below are global variables for the MortgageCashFlow methods using ggplot2
+  utils::globalVariables(c("value", "variable"))
 
-#----------------------------------------------------------------------------------------
-#Bond Lab Functions
-#----------------------------------------------------------------------------------------
+  #----------------------------------------------------------------------------------------
+  #Bond Lab Functions
+  #----------------------------------------------------------------------------------------
 
-#---------------------------------
-#Time value of money functions
-#---------------------------------
+  #---------------------------------
+  #Time value of money functions
+  #---------------------------------
 
-PresentValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
+  PresentValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
@@ -70,9 +70,9 @@ PresentValue <- function(interest.rate = numeric(), number.periods = numeric(), 
   interest.rate = interest.rate/frequency
   
   1/(1+interest.rate)^number.periods
-}
+  }
 
-FutureValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
+  FutureValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -97,9 +97,9 @@ FutureValue <- function(interest.rate = numeric(), number.periods = numeric(), f
   interest.rate = interest.rate/frequency
   
   (1+interest.rate)^number.periods  
-} 
+  } 
 
-PresentValueAnnuity <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
+  PresentValueAnnuity <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -120,9 +120,9 @@ PresentValueAnnuity <-function(interest.rate = numeric(), number.periods = numer
     stop("No valid frequency specified.")
   interest.rate = interest.rate/frequency
   ((1-(1/(1+interest.rate)^number.periods))/interest.rate)
-}
+  }
 
-PresentValueAnnuityDue <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
+  PresentValueAnnuityDue <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -143,9 +143,9 @@ PresentValueAnnuityDue <-function(interest.rate = numeric(), number.periods = nu
     stop("No valid frequency specified.")
   interest.rate = interest.rate/frequency
   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate)  
-}
+  }
 
-FutureValueAnnuity <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
+  FutureValueAnnuity <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
   if (missing(interest.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
@@ -169,15 +169,15 @@ FutureValueAnnuity <- function(interest.rate = numeric(), number.periods = numer
   
   interest.rate = interest.rate/frequency
   (((1 + interest.rate)^(number.periods)) -1)/interest.rate
-}
+  }
 
-#----------------------------------
-# Bond Yield to Maturity Functions
-#---------------------------------
+  #----------------------------------
+  # Bond Yield to Maturity Functions
+  #---------------------------------
 
-#YYTMtoPrice is a simple yield to price equation for a standard bond
-#This equation treats the bond as a annuity and zero coupon payment
-YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
+  #YYTMtoPrice is a simple yield to price equation for a standard bond
+  #This equation treats the bond as a annuity and zero coupon payment
+  YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
   
   #need to error trap this function
   n = years.mat * coupon.frequency
@@ -186,43 +186,43 @@ YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.
   fv = face.value
   
   (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)   
-}
+  }
 
-#bondprice is a simple price to yield equation for a standard bond
-#This equation treats the bond as a annuity and zero coupon payment
-bondprice<- function(yield.to.maturity = numeric(),coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
+  #bondprice is a simple price to yield equation for a standard bond
+  #This equation treats the bond as a annuity and zero coupon payment
+  bondprice<- function(yield.to.maturity = numeric(),coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
   n = years.mat * coupon.frequency
   c = coupon/coupon.frequency
   i = yield.to.maturity/coupon.frequency
   fv = face.value
   
   (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)
-}
+  }
 
-#bond estimated yield to maturity this equation estimates a bond's yield
-#to maturity for a yield to maturity guess may be used with uniroot ytm functions
-EstimYTM <- function(coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric(), price = numeric()){
+  #bond estimated yield to maturity this equation estimates a bond's yield
+  #to maturity for a yield to maturity guess may be used with uniroot ytm functions
+  EstimYTM <- function(coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric(), price = numeric()){
   c = coupon
   n = years.mat
   f = coupon.frequency
   fv = face.value
   p = price/100 
   ((c * fv) + ((fv - (fv *p))/2)) / (((fv + (fv *p))/f))
-}
+  }
 
-#---------------------------
-# Mortgage Payment Functions
-#---------------------------
+  #---------------------------
+  # Mortgage Payment Functions
+  #---------------------------
 
-Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric(), term.mos = numeric()){
+  Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric(), term.mos = numeric()){
   note.rate = note.rate/1200
   term = term.mos
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
   pmt
-}
+  }
 
-Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric(), payment = numeric()){
+  Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric(), payment = numeric()){
   note.rate = note.rate/1200
   term = term.mos
   Monthly.Pmt = payment
@@ -230,27 +230,27 @@ Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = nu
   disc.prin = ((1+note.rate)^(term))-1
   Scheduled.Prin = balance *(disc.pmt/disc.prin)
   Scheduled.Prin
-}
+  }
 
-Remain.Balance <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
+  Remain.Balance <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
   note.rate = note.rate/1200
   term = term.mos
   Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term.mos)-1))
   Remain.Balance
-}
+  }
 
-PPC.Ramp <- function(season.period = numeric(), begin.cpr = numeric(), end.cpr = numeric(), period = numeric()){
+  PPC.Ramp <- function(season.period = numeric(), begin.cpr = numeric(), end.cpr = numeric(), period = numeric()){
   if(end.cpr >= 1) {end.cpr = end.cpr/100 
                     begin.cpr = begin.cpr/100}
   monthly.cpr = (begin.cpr + ((period - 1) * (end.cpr-begin.cpr)/(season.period -1)))
   cpr = ifelse(monthly.cpr <= end.cpr, monthly.cpr, end.cpr)
   cpr
-}
+  }
 
-#--------------------------
-# Error trap function for bond inputs
-#--------------------------  
-ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()) {
+  #--------------------------
+  # Error trap function for bond inputs
+  #--------------------------  
+  ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()) {
   #Error inputs by the user make sure all needed dates and values are passed to Bond Cash Flow
   issue.date = bond.id@IssueDate
   start.date = bond.id@DatedDate
@@ -293,13 +293,13 @@ ErrorTrap <- function(bond.id = "character", principal = numeric(), settlement.d
   #Error Trap the user's coupon input
   if (coupon < 0 | coupon > 100) stop("No valid coupon specified.")
   #Note: Minimum demonination needs to be added to class bond information as well as function input
-}
+  }
 
-#----------------------------
-#Bond basis function This function set the interest payment day count basis  
-#----------------------------
+  #----------------------------
+  #Bond basis function This function set the interest payment day count basis  
+  #----------------------------
 
-BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
+  BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
                         lastpmt.date, nextpmt.date, coupon, principal, frequency, price){
   # This  Function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
   #It returns the number of payments that will be received, period, and n for discounting
@@ -319,10 +319,10 @@ BondBasisConversion <- function(issue.date, start.date, end.date, settlement.dat
   
   (max(0, 30 - d1) + min(30, d2) + 360*(y2-y1) + 30*(m2-m1-1))/360}
 
-#--------------------------
-#Bond cash flow function. This function computes the cash flow of a standard non-callable bond
-#-------------------------
-BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
+  #--------------------------
+  #Bond cash flow function. This function computes the cash flow of a standard non-callable bond
+  #-------------------------
+  BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
   
   bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
   
@@ -432,11 +432,11 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
       TotalCashFlow = Bond.CF.Table[,8],
       bond.id
   )
-}
-#------------------------------------------------------
-#Mortgage cash flow function.  This function calculates the cash flow of a mortgage pass through security
-#-----------------------------------------------------
-MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
+  }
+  #------------------------------------------------------
+  #Mortgage cash flow function.  This function calculates the cash flow of a mortgage pass through security
+  #-----------------------------------------------------
+  MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
                               price = numeric(), PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
                               seasoning.period = numeric(), CPR = numeric()) {
   
@@ -608,33 +608,33 @@ MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), s
       GFeePremium = MBS.CF.Table[,12],
       TotalCashFlow = MBS.CF.Table[,14]    
   )
-}  
-#-------------------------------------
-#Risk measures.  These functions measure effective duration, effective convexity, and key rate duration
-#These need to be fixed!!
-#-------------------------------------
-Effective.Duration <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
+  }  
+  #-------------------------------------
+  #Risk measures.  These functions measure effective duration, effective convexity, and key rate duration
+  #These need to be fixed!!
+  #-------------------------------------
+  Effective.Duration <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
   Price = proceeds/10
   Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
   Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
   Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)  
   (Price.UP - Price.DWN)/(2*Price*Rate.Delta)
-}
+  }
 
-Effective.Convexity <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
+  Effective.Convexity <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
   Price = proceeds/10
   Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
   Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
   Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
   
   (Price.UP + Price.DWN + (2*Price))/(2*(Price*Rate.Delta)^2)
-}  
+  }  
 
-#-----------------------------------
-#Bond Term Structure measures key rate duration and spot spread of a standard non callable bond
-# and mortgage cash flow security   
-#-----------------------------------    
-BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), price = numeric(), cashflow = "character"){
+  #-----------------------------------
+  #Bond Term Structure measures key rate duration and spot spread of a standard non callable bond
+  # and mortgage cash flow security   
+  #-----------------------------------    
+  BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), price = numeric(), cashflow = "character"){
   
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
@@ -851,13 +851,13 @@ BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), Ter
       KeyRateConvexity = KR.Duration[,3]
       
   )
-} # End the function
+  } # End the function
 
-#---------------------------------------------------
-#Term strucutre call term strc 
-#and holds forward and spot rates as slots to class Term Structure 
-#---------------------------------------------------
-TermStructure <- function(trade.date = "character", method = "character"){
+  #---------------------------------------------------
+  #Term strucutre call term strc 
+  #and holds forward and spot rates as slots to class Term Structure 
+  #---------------------------------------------------
+  TermStructure <- function(trade.date = "character", method = "character"){
   
   #Error Trap User inputs to the function
   if(missing(trade.date)) stop("missing dataset")  
@@ -1001,14 +1001,15 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   
   new("BondAnalytics", BondCashFlow, BondTermStructure)
   
-}
+  }
 
 
-# This function analyzes a standard pass through security and serves as the constructor function
-#--------------------------------------  
-PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
-                                  settlement.date = "character", method = method, PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
-{
+  # This function analyzes a standard pass through security and serves as the constructor function
+  #--------------------------------------  
+  PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
+                                  settlement.date = "character", method = method, PrepaymentAssumption = "character", ..., begin.cpr = numeric(), 
+                                  end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
+  {
   
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
   #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
@@ -1037,57 +1038,146 @@ PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(
                                              principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
   new("PassThroughAnalytics", MortgageCashFlow, MortgageTermStructure)    
-}
+  }
 
-#----------------------------------
-#Prepayment Model Functions
-#These functions are used to build the base prepayment model
-#----------------------------------
+  # The Bond Lab base prepayment model
+  #----------------------------------------------------------------------------------------------------
+  Prepayment.Model <- function(Turnover.Rate = numeric(), LoanAge = numeric(), Month = numeric(), incentive = numeric(),
+                               Seasoning.alpha = numeric(), Seasoning.beta = numeric(), Seasoning.theta = numeric(),
+                               Seasonality.alpha = numeric(), Seasonality.theta = numeric(),
+                               Fast.theta1 = numeric(), Fast.theta2 = numeric(), Fast.beta = numeric(), Fast.location = numeric(),
+                               Slow.theta1 = numeric(), Slow.theta2 = numeric(), Slow.beta = numeric(), Slow.location = numeric(),
+                               Burnout.beta1 = numeric(), Burnout.beta2 = numeric(), Burnout.maxincen = numeric()){
+  # Set Default Values
+  
+  Turnover.Rate     = 0.08
+  Seasoning.alpha   = 1.0
+  Seasoning.beta    = 0.879
+  Seasoning.theta   = 0.192
+  Seasonality.alpha = 0.15
+  Seasonality.theta = 12.0
+  Fast.theta1       = 0.025
+  Fast.theta2       = 0.019
+  Fast.beta         =-4.0
+  Fast.location     = 1.0
+  Slow.theta1       = 0.001
+  Slow.theta2       = 0.004
+  Slow.beta         =-1.0
+  Slow.location     = 0.5
+  Burnout.beta1     =-1
+  Burnout.beta2     =-1
+  Burnout.maxincen  = .25
+    
+  #Error Trap the Turnover Rate
+  if (missing(Turnover.Rate))
+  stop("Need to specify Turnover.Rate as number between 0 and 1 for calculations.")
+    
+  if (!is.numeric(Turnover.Rate)  )
+  stop("No numeric Turnover.Rate specified.")
+    
+  if (Turnover.Rate < .01 | Turnover.Rate > 1)
+  stop("No valid Turnover.Rate specified.")
+  
+  # Restate the turnover rate as a single monthly mortality rate
+  Turnover.Rate <- 1-(1 - Turnover.Rate)^(1/12)
+    
+  Turnover <- Turnover.Rate * 
+              Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
+              Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
+  
+  Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
+  
+  Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
+  
+  Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen * 100, LoanAge = LoanAge)
+  
+  Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
+  
+  SMM <- Turnover + Refinance
+  }
 
-#----------------------------------
-# Seasoning function is a 3-parameter asymtote exponential function where
-# The three parameter asymptote is equivalent to the PPC ramp
-# a is the asymptote of the function
-# b is the intercept of the function
-# c is the point where the max CPR is achieved
+  #----------------------------------
+  #Prepayment Model Functions.  These functions are used to build the base prepayment model
+  #----------------------------------
 
-Seasoning <- function(a = numeric(), b = numeric(), c = numeric(), LoanAge = numeric()){
-  a - b * exp(-c * LoanAge)}
+  #----------------------------------
+  # Seasoning function is a 3-parameter asymtote exponential function where
+  # The three parameter asymptote is equivalent to the PPC ramp
+  # a is the asymptote of the function
+  # b is the intercept of the function
+  # c is the point where the max CPR is achieved
+
+  Seasoning <- function(alpha = numeric(), beta = numeric(), theta = numeric(), LoanAge = numeric()){
+  if (missing(alpha))
+    stop("Need to specify alpha tuning parameter.")
+  if (!is.numeric(alpha)  )
+    stop("No numeric alpha specified.")
+  
+  if (missing(beta))
+    stop("Need to specify beta tuning parameter.")
+  if (!is.numeric(beta)  )
+    stop("No numeric beta specified.")
+  
+  if (missing(theta))
+    stop("Need to specify theta tuning parameter.")
+  if (!is.numeric(theta)  )
+    stop("No numeric theta specified.")
+  
+  if (missing(LoanAge))
+    stop("Need to specify theta tuning parameter.")
+  if (!is.numeric(LoanAge)  )
+    stop("No numeric theta specified.")
+    
+  alpha - beta * exp(-theta * LoanAge)}
+
+  #----------------------------------
+  # Seasonality is modeled as a sin wave
+  # a is the amplitude of the wave an set the maximum seasonal factor
+  # Month is the calendar month (1..., 12) numeric
+  # b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
+  Seasonality <- function( alpha = numeric(), Month = numeric(), theta= numeric()){
+
+  if (missing(alpha))
+  stop("Need to specify alpha tuning parameter.")
+  if (!is.numeric(alpha)  )
+  stop("No numeric alpha specified.")
+  
+  if (missing(Month))
+    stop("Need to specify Month variable.")
+  if (!is.numeric(Month)  )
+    stop("No numeric alpha specified.")
+  
+  if (missing(theta))
+    stop("Need to specify Month variable.")
+  if (!is.numeric(theta)  )
+    stop("No numeric alpha specified.")
 
 
-#----------------------------------
-# Seasonality is modeled as a sin wave
-# a is the amplitude of the wave an set the maximum seasonal factor
-# Month is the calendar month (1..., 12) numeric
-# b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
+  (1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))}
 
-Seasonality <- function( a = numeric(), Month = numeric(), b= numeric()){
-  (1  + a *sin((pi/2 * (Month + b - 3)) / 3 - 1))}
-
-#-------------------------------------
-# arctanget function with a location parameter
-Borrower.Incentive <- function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric()) { 
+  #-------------------------------------
+  # arctanget function with a location parameter
+  Borrower.Incentive <- function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric()) { 
   theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi))) 
-}
+  }
+
+  #-----------------------------------
+  # Burnout is an exponentially decreasing function
+  # a is the coefficient on the burnout varaible and b is the measure of burnout
+  Burnout <- function(beta1 = numeric(), beta2= numeric(), MaxIncen = numeric(), LoanAge = numeric()){
+  exp(beta1 * LoanAge +  beta2 * MaxIncen)
+  }
 
 
-#-----------------------------------
-# Burnout is an exponentially decreasing function
-# a is the coefficient on the burnout varaible and b is the measure of burnout
-Burnout <- function(a = numeric(), b= numeric(), MaxIncen = numeric(), Age = numeric()){
-  exp(a * Age +  b * MaxIncen)
-}
+  #----------------------------------
+  # Helper Functions These function help to manage
+  # The data sources   
+  #----------------------------------
 
+  # Swap Curve data creates a data base of daily yield
+  # curves using swap rate data from the Federal Reserve
 
-#----------------------------------
-# Helper Functions These function help to manage
-# The data sources   
-#----------------------------------
-
-# Swap Curve data creates a data base of daily yield
-# curves using swap rate data from the Federal Reserve
-
-SwapRateData <- function(datafile = "character", maturityvector = numeric()){
+  SwapRateData <- function(datafile = "character", maturityvector = numeric()){
   #========== Read Swap Rate Data ===========================
   SwapRateData <-read.csv(datafile, header = TRUE, as.is = TRUE)
   #======== remove month and year data and reorder dataset
@@ -1098,20 +1188,20 @@ SwapRateData <- function(datafile = "character", maturityvector = numeric()){
     if(SwapRateData[i,ColCount] != "ND") {data = SwapRateData[i,]                                      
                                           data <- rbind(data, as.numeric(maturityvector))
                                           saveRDS(data, paste(data[1,1], ".rds", sep = ""), compress = TRUE)}}
-}
+  }
 
-# Multiple plot function
-# Source: cookbook for R
-# Author: Winston Change
-# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-# - cols:   Number of columns in layout
-# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#
-# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-# then plot 1 will go in the upper left, 2 will go in the upper right, and
-# 3 will go all the way across the bottom.
+  # Multiple plot function
+  # Source: cookbook for R
+  # Author: Winston Change
+  # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+  # - cols:   Number of columns in layout
+  # - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+  #
+  # If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+  # then plot 1 will go in the upper left, 2 will go in the upper right, and
+  # 3 will go all the way across the bottom.
 
-multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
+  multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 
   
   plots <- c(list(...), plotlist)
@@ -1135,16 +1225,16 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
       
       print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
                                       layout.pos.col = matchidx$col))
+      }
     }
   }
-}
 
 
-#-----------------------
-# Classes these are the new classes used by by Bond Lab
-#------------------------
+  #-----------------------
+  # Classes these are the new classes used by by Bond Lab
+  #------------------------
 
-# --- The following classes define standard bond analytics
+  # --- The following classes define standard bond analytics
 setClass("BondDetails",
          representation(
            Cusip = "character",
@@ -1343,7 +1433,7 @@ setGeneric("RateofReturn",
              {standardGenric("RateofReturn")})
 
 setGeneric("Seasoning",
-           function (a = numeric(), b = numeric (), c = numeric, LoanAge = numeric())
+           function (alpha = numeric(), beta = numeric (), theta = numeric(), LoanAge = numeric())
              {standardGeneric("Seasoning")})
 
 setGeneric("Borrower.Incentive",
@@ -1351,11 +1441,11 @@ setGeneric("Borrower.Incentive",
              {standardGeneric("Borrower.Incentive")})
 
 setGeneric("Burnout",
-           function(a = numeric(), b = numeric(), MaxIncen = numeric(), Age = numeric())
+           function(beta1 = numeric(), beta2 = numeric(), MaxIncen = numeric(), LoanAge = numeric())
              {standardGeneric("Burnout")})
 
 setGeneric("Seasonality",
-           function(a = numeric(), Month = numeric(), b = numeric())
+           function(alpha = numeric(), Month = numeric(), theta = numeric())
              {standardGeneric("Seasonality")})
 
 #-------------------------------

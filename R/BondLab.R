@@ -437,13 +437,14 @@
   #Mortgage cash flow function.  This function calculates the cash flow of a mortgage pass through security
   #-----------------------------------------------------
   MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                              price = numeric(), PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+                              price = numeric(), TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
                               seasoning.period = numeric(), CPR = numeric()) {
    
   bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
   
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
+  
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -455,7 +456,7 @@
   delay = bond.id@PaymentDelay
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
-  #Mortgage specific inputs
+  #Mortgage specific inputs these are useed in the PrepaymentAssumption Object
   note.rate = bond.id@GWac
   FirstPmtDate = bond.id@FirstPmtDate
   FinalPmtDate = bond.id@FinalPmtDate
@@ -496,6 +497,12 @@
   #num.periods is the total number of cashflows to be received
   #num.period is the period in which the cashflow is received
   num.periods = length(time.period)
+  
+  #step5 initialize the prepayment model assumption class
+  
+  PrepaymentAssumption <- PrepaymentAssumption(NoteRate = note.rate * 100, FirstPmtDate = FirstPmtDate, LastPmtDate = lastpmt.date, NextPmtDate = nextpmt.date, FinalPmtDate = FinalPmtDate,
+    TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+  
   col.names <- c("Period", "Date", "Time", "Begin Bal", "Monthly Pmt", "Scheduled Int", "Scheduled Prin", "Prepaid Prin", 
                  "Ending Bal", "Sevicing", "PMI", "GFee", "Pass Through Interest", "Investor CashFlow", "Present Value Factor", "Present Value", 
                  "Duration", "Convexity Time", "CashFlow Convexity", "Convexity")
@@ -513,23 +520,9 @@
     MBS.CF.Table[x,6] = MBS.CF.Table[x,4] * (note.rate/12)
     MBS.CF.Table[x,7] = Sched.Prin(balance = MBS.CF.Table[x,4], note.rate = note.rate, 
                                    term.mos = (num.periods - MBS.CF.Table[x,1] + 1), period = 1, payment = MBS.CF.Table[x,5])
-    
-    #This required logic for the prepayment assumption PPC, CPR, or Model.  
-    #It is done here rather than outside the loop so the mortgage cashflow uses only one for loop
-    
-    if(x != num.periods) {MBS.CF.Table[x,8] = 
-                            
-                            if(PrepaymentAssumption == "PPC") {
-                              (1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, 
-                                             season.period = seasoning.period, period = x))^(1/12)) * (MBS.CF.Table[x,4] - MBS.CF.Table[x,7])              
-                              
-                            }else{
-                              if(PrepaymentAssumption == "CPR") {(1-(1-CPR)^(1/12)) * (MBS.CF.Table[x,4] - MBS.CF.Table[x,7])}
-                            }
-                          
-    }else{
-      MBS.CF.Table[x,8] = 0
-    }
+        
+    if(x != num.periods) {MBS.CF.Table[x,8] = PrepaymentAssumption@SMM[x] * (MBS.CF.Table[x,4] - MBS.CF.Table[x,7])} else                     
+      {MBS.CF.Table[x,8] = 0}
     
     MBS.CF.Table[x,9] = MBS.CF.Table[x,4] - MBS.CF.Table[x,7] - MBS.CF.Table[x,8]
     MBS.CF.Table[x,10] = MBS.CF.Table[x,4] * (servicing.fee/1200)
@@ -553,8 +546,11 @@
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
     sum(pv) - (proceeds + acrrued.interest)}
+  
+  
   ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.000000001, time.period = MBS.CF.Table[,3], 
                 cashflow = MBS.CF.Table[,14], principal = principal, price = price, acrrued.interest = acrrued.interest)$root
+  
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
   
   #Step7 Present value of the cash flows Present Value Factors
@@ -597,7 +593,7 @@
       MonthlyInterest = MBS.CF.Table[,6],
       PassThroughInterest = MBS.CF.Table[,13],
       ScheduledPrin = MBS.CF.Table[,7],
-      SMM = 999,
+      SMM = PrepaymentAssumption@SMM,
       PrepaidPrin = MBS.CF.Table[,8],
       EndingBal = MBS.CF.Table[,9],
       ServicingIncome = MBS.CF.Table[,10],
@@ -1011,7 +1007,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   # This function analyzes a standard pass through security and serves as the constructor function
   #--------------------------------------  
   PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
-                                  settlement.date = "character", method = method, PrepaymentAssumption = "character", ..., begin.cpr = numeric(), 
+                                  settlement.date = "character", method = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), 
                                   end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
   {
   
@@ -1032,7 +1028,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #The second step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
   MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                                        price = price, PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, 
+                                        price = price, TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, 
                                         end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
   
   #The third step is to calculate effective duration, convexity, and key rate durations and key rate convexities
@@ -1046,8 +1042,11 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   # ---------  This function is the prepayment model and serves as a constructor for the prepayment model vector 
   # ---------  Prepayment Assumption
   PrepaymentAssumption <- function(NoteRate = numeric(), FirstPmtDate = "character", LastPmtDate = "character", NextPmtDate = "character", 
-                                   FinalPmtDate = "character", method = "charcter", trade.date = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+                                   FinalPmtDate = "character", TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
                                    seasoning.period = numeric(), CPR = numeric()){
+    
+    #Error Trap the CPR assumption
+    if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
     
     FirstPmtDate = as.Date(FirstPmtDate, "%m-%d-%Y")
     LastPmtDate = as.Date(LastPmtDate, "%m-%d-%Y")
@@ -1059,10 +1058,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     #Check for a valid prepayment assumption
     if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
     PrepayAssumption <- PrepaymentAssumption
-   
-    TermStructure <- TermStructure(trade.date = trade.date, method = method) 
-    
-    
+     
     Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/30.44) +1
     Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
     Period = seq(from = 1, to = Remain.Term, by = 1)
@@ -1074,17 +1070,17 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     Mtg.Rate = TermStructure@TenYearFwd + .80
     
     if(PrepaymentAssumption == "MODEL")
-      {SMM = Prepayment.Model(LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = NoteRate - Mtg.Rate)} else {
-        if(PrepaymentAssumption == "PPC") {SMM = PPC.Ramp(season.period = seasoning.period, begin.cpr = begin.cpr, end.cpr = end.cpr, period = LoanAge)} else
+        {SMM = Prepayment.Model(LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = NoteRate - Mtg.Rate)} else {
+        if(PrepaymentAssumption == "PPC") 
+        {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, season.period = seasoning.period, period = LoanAge))^(1/12))} else
         {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
     }
-          
-    
+      
     new("PrepaymentAssumption",
         PrepayAssumption = as.character(PrepayAssumption),
-        PPCStart = 0,
-        PPCEnd = 0,
-        PPCSeasoning = as.numeric(),
+        PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
+        PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
+        PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period} else {0},
         NoteRate = as.numeric(NoteRate),
         FirstPmtDate = as.character(FirstPmtDate),
         LastPmtDate = as.character(LastPmtDate),
@@ -1108,9 +1104,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                                Fast.theta1 = 0.025, Fast.theta2 = 0.019, Fast.beta = -4.0, Fast.location = 1.0,
                                Slow.theta1 = 0.001, Slow.theta2 = 0.004, Slow.beta = -1.0, Slow.location = 0.5,
                                Burnout.beta1 = -1, Burnout.beta2 = -1, Burnout.maxincen = .25){
-    
-
-  
+      
   # Restate the turnover rate as a single monthly mortality rate
   Turnover.Rate <- 1-(1 - Turnover.Rate)^(1/12)
     
@@ -1122,6 +1116,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
   Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
   Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen * 100, LoanAge = LoanAge)
+  
   Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
   
   SMM <-pmax(0, Refinance + Turnover)
@@ -1440,7 +1435,7 @@ setGeneric(
 setGeneric(
   name = "MortgageCashFlows",
   def = function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                 price = numeric(), PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+                 price = numeric(), TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
                  seasoning.period = numeric(), CPR = numeric())
   {standardGeneric("MortgageCashFlows")})
 

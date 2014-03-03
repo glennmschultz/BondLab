@@ -500,7 +500,7 @@
   
   #step5 initialize the prepayment model assumption class
   
-  PrepaymentAssumption <- PrepaymentAssumption(NoteRate = note.rate * 100, FirstPmtDate = FirstPmtDate, LastPmtDate = lastpmt.date, NextPmtDate = nextpmt.date, FinalPmtDate = FinalPmtDate,
+  PrepaymentAssumption <- PrepaymentAssumption(NoteRate = note.rate, FirstPmtDate = FirstPmtDate, LastPmtDate = lastpmt.date, NextPmtDate = nextpmt.date, FinalPmtDate = FinalPmtDate,
     TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
   
   col.names <- c("Period", "Date", "Time", "Begin Bal", "Monthly Pmt", "Scheduled Int", "Scheduled Prin", "Prepaid Prin", 
@@ -1047,6 +1047,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     
     #Error Trap the CPR assumption
     if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
+    if(NoteRate < 1) {NoteRate = NoteRate * 100} else {NoteRate + NoteRate}
     
     FirstPmtDate = as.Date(FirstPmtDate, "%m-%d-%Y")
     LastPmtDate = as.Date(LastPmtDate, "%m-%d-%Y")

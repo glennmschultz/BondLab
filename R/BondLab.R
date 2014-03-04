@@ -437,11 +437,8 @@
   #Mortgage cash flow function.  This function calculates the cash flow of a mortgage pass through security
   #-----------------------------------------------------
   MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                              price = numeric(), TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
-                              seasoning.period = numeric(), CPR = numeric()) {
+                              price = numeric(), TermStructure = "character", PrepaymentAssumption = "character"){
    
-  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
-  
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
   
@@ -456,7 +453,7 @@
   delay = bond.id@PaymentDelay
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
-  #Mortgage specific inputs these are useed in the PrepaymentAssumption Object
+  #Mortgage specific inputs
   note.rate = bond.id@GWac
   FirstPmtDate = bond.id@FirstPmtDate
   FinalPmtDate = bond.id@FinalPmtDate
@@ -499,9 +496,6 @@
   num.periods = length(time.period)
   
   #step5 initialize the prepayment model assumption class
-  
-  PrepaymentAssumption <- PrepaymentAssumption(NoteRate = note.rate, FirstPmtDate = FirstPmtDate, LastPmtDate = lastpmt.date, NextPmtDate = nextpmt.date, FinalPmtDate = FinalPmtDate,
-    TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
   
   col.names <- c("Period", "Date", "Time", "Begin Bal", "Monthly Pmt", "Scheduled Int", "Scheduled Prin", "Prepaid Prin", 
                  "Ending Bal", "Sevicing", "PMI", "GFee", "Pass Through Interest", "Investor CashFlow", "Present Value Factor", "Present Value", 
@@ -593,13 +587,13 @@
       MonthlyInterest = MBS.CF.Table[,6],
       PassThroughInterest = MBS.CF.Table[,13],
       ScheduledPrin = MBS.CF.Table[,7],
-      SMM = PrepaymentAssumption@SMM,
+      #SMM = PrepaymentAssumption@SMM,
       PrepaidPrin = MBS.CF.Table[,8],
       EndingBal = MBS.CF.Table[,9],
       ServicingIncome = MBS.CF.Table[,10],
       PMIPremium = MBS.CF.Table[,11],    
       GFeePremium = MBS.CF.Table[,12],
-      TotalCashFlow = MBS.CF.Table[,14]    
+      TotalCashFlow = MBS.CF.Table[,14]
   )
   }  
   #-------------------------------------
@@ -955,14 +949,167 @@
   )
 } 
 
-#-------------------------------
-#Rate of Return Analysis
-#-------------------------------
-RateofReturn <- function(ReinvestmentRate = numeric(), ReceivedCF = "character", 
-                         RemainingCF = "character", SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric()) {
+  #----------------------------------
+  #Prepayment Model Functions.  These functions are used to build the base prepayment model
+  #----------------------------------
   
-}
+  #----------------------------------
+  # Seasoning function is a 3-parameter asymtote exponential function where
+  # The three parameter asymptote is equivalent to the PPC ramp
+  # a is the asymptote of the function
+  # b is the intercept of the function
+  # c is the point where the max CPR is achieved
+  
+  Seasoning <- function(alpha = numeric(), beta = numeric(), theta = numeric(), LoanAge = numeric()){
+    if (missing(alpha))
+      stop("Need to specify alpha tuning parameter.")
+    if (!is.numeric(alpha)  )
+      stop("No numeric alpha specified.")
+    
+    if (missing(beta))
+      stop("Need to specify beta tuning parameter.")
+    if (!is.numeric(beta)  )
+      stop("No numeric beta specified.")
+    
+    if (missing(theta))
+      stop("Need to specify theta tuning parameter.")
+    if (!is.numeric(theta)  )
+      stop("No numeric theta specified.")
+    
+    if (missing(LoanAge))
+      stop("Need to specify theta tuning parameter.")
+    if (!is.numeric(LoanAge)  )
+      stop("No numeric theta specified.")
+    
+    alpha - beta * exp(-theta * LoanAge)}
+  
+  #----------------------------------
+  # Seasonality is modeled as a sin wave
+  # a is the amplitude of the wave an set the maximum seasonal factor
+  # Month is the calendar month (1..., 12) numeric
+  # b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
+  Seasonality <- function( alpha = numeric(), Month = numeric(), theta= numeric()){
+    
+    if (missing(alpha))
+      stop("Need to specify alpha tuning parameter.")
+    if (!is.numeric(alpha)  )
+      stop("No numeric alpha specified.")
+    
+    if (missing(Month))
+      stop("Need to specify Month variable.")
+    if (!is.numeric(Month)  )
+      stop("No numeric alpha specified.")
+    
+    if (missing(theta))
+      stop("Need to specify Month variable.")
+    if (!is.numeric(theta)  )
+      stop("No numeric alpha specified.")
+    
+    (1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))}
+  
+  #-------------------------------------
+  # arctanget function with a location parameter
+  Borrower.Incentive <- function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric()) { 
+    theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi))) 
+  }
+  
+  #-----------------------------------
+  # Burnout is an exponentially decreasing function
+  # a is the coefficient on the burnout varaible and b is the measure of burnout
+  Burnout <- function(beta1 = numeric(), beta2= numeric(), MaxIncen = numeric(), LoanAge = numeric()){
+    exp(beta1 * LoanAge +  beta2 * MaxIncen)
+  }  
 
+  # The Bond Lab base prepayment model
+  #----------------------------------------------------------------------------------------------------
+  Prepayment.Model <- function(Turnover.Rate = .08, LoanAge = numeric(), Month = numeric(), incentive = numeric(),
+                               Seasoning.alpha = 1.0, Seasoning.beta = 0.879, Seasoning.theta = 0.192,
+                               Seasonality.alpha = 0.15, Seasonality.theta = 12.0,
+                               Fast.theta1 = 0.025, Fast.theta2 = 0.019, Fast.beta = -4.0, Fast.location = 1.0,
+                               Slow.theta1 = 0.001, Slow.theta2 = 0.004, Slow.beta = -1.0, Slow.location = 0.5,
+                               Burnout.beta1 = -1, Burnout.beta2 = -1, Burnout.maxincen = .25){
+    
+    # Restate the turnover rate as a single monthly mortality rate
+    Turnover.Rate <- 1-(1 - Turnover.Rate)^(1/12)
+    
+    Turnover <- Turnover.Rate * 
+      Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
+      Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
+    
+    # Calculate the Borrower Refinance Response
+    Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
+    Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
+    Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen * 100, LoanAge = LoanAge)
+    
+    Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
+    
+    SMM <-pmax(0, Refinance + Turnover)
+    
+  }
+  
+   
+  # ---------  This function is the prepayment model and serves as a constructor for the prepayment model vector 
+  # ---------  Prepayment Assumption
+  PrepaymentAssumption <- function(TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+                                   seasoning.period = numeric(), CPR = numeric()){
+    #Error Trap the CPR assumption
+    if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
+    #if(NoteRate < 1) {NoteRate = NoteRate * 100} else {NoteRate + NoteRate}
+    
+    NoteRate = bond.id@GWac
+    FirstPmtDate = as.Date(bond.id@FirstPrinPaymentDate, "%m-%d-%Y")
+    LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+    FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
+    NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+    
+    col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
+    
+    #Check for a valid prepayment assumption
+    if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
+    PrepayAssumption <- PrepaymentAssumption
+    
+    Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/30.44) +1
+    Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
+    Period = seq(from = 1, to = Remain.Term, by = 1)
+    PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
+    LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
+                                  FirstPmtDate, units = "days")/30.44) + 1
+    
+    NoteRate = as.numeric(rep(NoteRate, Remain.Term))
+    Mtg.Rate = TermStructure@TenYearFwd + .80
+    
+    if(PrepaymentAssumption == "MODEL")
+    {SMM = Prepayment.Model(LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = NoteRate - Mtg.Rate)} else {
+      if(PrepaymentAssumption == "PPC") 
+      {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, season.period = seasoning.period, period = LoanAge))^(1/12))} else
+      {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
+    }
+    
+    new("PrepaymentAssumption",
+        PrepayAssumption = as.character(PrepayAssumption),
+        PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
+        PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
+        PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period} else {0},
+        NoteRate = as.numeric(NoteRate),
+        FirstPmtDate = as.character(FirstPmtDate),
+        LastPmtDate = as.character(LastPmtDate),
+        FinalPmtDate = as.character(FinalPmtDate),
+        Period = Period,
+        PmtDate = as.character(PmtDate),
+        LoanAge = as.numeric(LoanAge),
+        MtgRateFwd = Mtg.Rate,
+        SMM = as.numeric(SMM)
+    )
+        
+  }
+
+  #-------------------------------
+  #Rate of Return Analysis
+  #-------------------------------
+  RateofReturn <- function(ReinvestmentRate = numeric(), ReceivedCF = "character", 
+                           RemainingCF = "character", SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric()) {
+    
+  }
 #--------------------------------
 # Bond Analytics Functions
 # These functions analyze a bond using the above functions
@@ -1011,6 +1158,8 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                                   end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
   {
   
+  
+    
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
   #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
@@ -1021,179 +1170,30 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
   Rate.Delta = 1
   
-  #The first step is to call the desired coupon curve into memory 
+  # The first steo is to read in the Bond Detail
+  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  
+  #The second step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
   TermStructure <- TermStructure(trade.date = trade.date, method = method)
   
-  #The second step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
+  # Third if mortgage security call the prepayment model
+  PrepaymentAssumption <- PrepaymentAssumption(TermStructure = TermStructure, 
+  PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+  
+  #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
   MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                                        price = price, TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, 
-                                        end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+                                        price = price, TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption)
   
-  #The third step is to calculate effective duration, convexity, and key rate durations and key rate convexities
+  #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
   MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
                                              principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
-  new("PassThroughAnalytics", MortgageCashFlow, MortgageTermStructure, TermStructure)    
+  new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageTermStructure, TermStructure, PrepaymentAssumption)    
   }
 
-  # ---------  This function is the prepayment model and serves as a constructor for the prepayment model vector 
-  # ---------  Prepayment Assumption
-  PrepaymentAssumption <- function(NoteRate = numeric(), FirstPmtDate = "character", LastPmtDate = "character", NextPmtDate = "character", 
-                                   FinalPmtDate = "character", TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
-                                   seasoning.period = numeric(), CPR = numeric()){
-    
-    #Error Trap the CPR assumption
-    if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
-    if(NoteRate < 1) {NoteRate = NoteRate * 100} else {NoteRate + NoteRate}
-    
-    FirstPmtDate = as.Date(FirstPmtDate, "%m-%d-%Y")
-    LastPmtDate = as.Date(LastPmtDate, "%m-%d-%Y")
-    FinalPmtDate = as.Date(FinalPmtDate, "%m-%d-%Y")
-    NextPmtDate = as.Date(NextPmtDate, "%m-%d-%Y")
-    
-    col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
-    
-    #Check for a valid prepayment assumption
-    if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
-    PrepayAssumption <- PrepaymentAssumption
-     
-    Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/30.44) +1
-    Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
-    Period = seq(from = 1, to = Remain.Term, by = 1)
-    PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
-    LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
-                                             FirstPmtDate, units = "days")/30.44) + 1
-    
-    NoteRate = as.numeric(rep(NoteRate, Remain.Term))
-    Mtg.Rate = TermStructure@TenYearFwd + .80
-    
-    if(PrepaymentAssumption == "MODEL")
-        {SMM = Prepayment.Model(LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = NoteRate - Mtg.Rate)} else {
-        if(PrepaymentAssumption == "PPC") 
-        {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, season.period = seasoning.period, period = LoanAge))^(1/12))} else
-        {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
-    }
-      
-    new("PrepaymentAssumption",
-        PrepayAssumption = as.character(PrepayAssumption),
-        PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
-        PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
-        PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period} else {0},
-        NoteRate = as.numeric(NoteRate),
-        FirstPmtDate = as.character(FirstPmtDate),
-        LastPmtDate = as.character(LastPmtDate),
-        FinalPmtDate = as.character(FinalPmtDate),
-        Period = Period,
-        PmtDate = as.character(PmtDate),
-        LoanAge = as.numeric(LoanAge),
-        MtgRateFwd = Mtg.Rate,
-        SMM = as.numeric(SMM)
-    )
-        
-       
-  }
-    
-  
-  # The Bond Lab base prepayment model
-  #----------------------------------------------------------------------------------------------------
-  Prepayment.Model <- function(Turnover.Rate = .08, LoanAge = numeric(), Month = numeric(), incentive = numeric(),
-                               Seasoning.alpha = 1.0, Seasoning.beta = 0.879, Seasoning.theta = 0.192,
-                               Seasonality.alpha = 0.15, Seasonality.theta = 12.0,
-                               Fast.theta1 = 0.025, Fast.theta2 = 0.019, Fast.beta = -4.0, Fast.location = 1.0,
-                               Slow.theta1 = 0.001, Slow.theta2 = 0.004, Slow.beta = -1.0, Slow.location = 0.5,
-                               Burnout.beta1 = -1, Burnout.beta2 = -1, Burnout.maxincen = .25){
-      
-  # Restate the turnover rate as a single monthly mortality rate
-  Turnover.Rate <- 1-(1 - Turnover.Rate)^(1/12)
-    
-  Turnover <- Turnover.Rate * 
-              Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
-              Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
-  
-  # Calculate the Borrower Refinance Response
-  Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
-  Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
-  Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen * 100, LoanAge = LoanAge)
-  
-  Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
-  
-  SMM <-pmax(0, Refinance + Turnover)
-  
-  }
-
-  #----------------------------------
-  #Prepayment Model Functions.  These functions are used to build the base prepayment model
-  #----------------------------------
-
-  #----------------------------------
-  # Seasoning function is a 3-parameter asymtote exponential function where
-  # The three parameter asymptote is equivalent to the PPC ramp
-  # a is the asymptote of the function
-  # b is the intercept of the function
-  # c is the point where the max CPR is achieved
-
-  Seasoning <- function(alpha = numeric(), beta = numeric(), theta = numeric(), LoanAge = numeric()){
-  if (missing(alpha))
-    stop("Need to specify alpha tuning parameter.")
-  if (!is.numeric(alpha)  )
-    stop("No numeric alpha specified.")
-  
-  if (missing(beta))
-    stop("Need to specify beta tuning parameter.")
-  if (!is.numeric(beta)  )
-    stop("No numeric beta specified.")
-  
-  if (missing(theta))
-    stop("Need to specify theta tuning parameter.")
-  if (!is.numeric(theta)  )
-    stop("No numeric theta specified.")
-  
-  if (missing(LoanAge))
-    stop("Need to specify theta tuning parameter.")
-  if (!is.numeric(LoanAge)  )
-    stop("No numeric theta specified.")
-    
-  alpha - beta * exp(-theta * LoanAge)}
-
-  #----------------------------------
-  # Seasonality is modeled as a sin wave
-  # a is the amplitude of the wave an set the maximum seasonal factor
-  # Month is the calendar month (1..., 12) numeric
-  # b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
-  Seasonality <- function( alpha = numeric(), Month = numeric(), theta= numeric()){
-
-  if (missing(alpha))
-  stop("Need to specify alpha tuning parameter.")
-  if (!is.numeric(alpha)  )
-  stop("No numeric alpha specified.")
-  
-  if (missing(Month))
-    stop("Need to specify Month variable.")
-  if (!is.numeric(Month)  )
-    stop("No numeric alpha specified.")
-  
-  if (missing(theta))
-    stop("Need to specify Month variable.")
-  if (!is.numeric(theta)  )
-    stop("No numeric alpha specified.")
-
-  (1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))}
-
-  #-------------------------------------
-  # arctanget function with a location parameter
-  Borrower.Incentive <- function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric()) { 
-  theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi))) 
-  }
-
-  #-----------------------------------
-  # Burnout is an exponentially decreasing function
-  # a is the coefficient on the burnout varaible and b is the measure of burnout
-  Burnout <- function(beta1 = numeric(), beta2= numeric(), MaxIncen = numeric(), LoanAge = numeric()){
-  exp(beta1 * LoanAge +  beta2 * MaxIncen)
-  }
 
   #----------------------------------
   # Helper Functions These function help to manage
@@ -1341,8 +1341,26 @@ setClass("MBSDetails",
            BalloonDate = "character",
            MBSFactor = "numeric"
          ))
+  
+  setClass("PrepaymentAssumption",
+           representation(
+             PrepayAssumption = "character",
+             PPCStart = "numeric",
+             PPCEnd = "numeric",
+             PPCSeasoning = "numeric",
+             FirstPmtDate = "character",
+             LastPmtDate = "character",
+             FinalPmtDate = "character",
+             PmtDate = "character",
+             LoanAge = "numeric",
+             Period = "numeric",
+             NoteRate = "numeric",
+             MtgRateFwd = "numeric",
+             SMM = "numeric"),
+             contains = "MBSDetails"
+           )
 
-setClass("MortgageCashFlows",
+  setClass("MortgageCashFlows",
          representation(
            Price = "numeric",
            Acrrued = "numeric",
@@ -1358,14 +1376,15 @@ setClass("MortgageCashFlows",
            MonthlyInterest = "numeric",
            PassThroughInterest = "numeric",
            ScheduledPrin = "numeric",
-           SMM = "numeric",
+           #SMM = "numeric",
            PrepaidPrin = "numeric",
            EndingBal = "numeric",
            ServicingIncome = "numeric",
            PMIPremium = "numeric",
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"),
-         contains = "MBSDetails")
+           contains = "MBSDetails"
+         )
 
 setClass("MortgageTermStructure",
          representation(
@@ -1375,7 +1394,8 @@ setClass("MortgageTermStructure",
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"),
-         contains = "MBSDetails")
+         contains = "MBSDetails"
+         )
 
 # --- The following classes define rates and Prepayment model classes
 
@@ -1389,22 +1409,6 @@ setClass("TermStructure",
            TwoYearFwd = "numeric",
            TenYearFwd = "numeric"
            ))
-
-setClass("PrepaymentAssumption",
-         representation(
-           PrepayAssumption = "character",
-           PPCStart = "numeric",
-           PPCEnd = "numeric",
-           PPCSeasoning = "numeric",
-           FirstPmtDate = "character",
-           LastPmtDate = "character",
-           FinalPmtDate = "character",
-           PmtDate = "character",
-           LoanAge = "numeric",
-           Period = "numeric",
-           NoteRate = "numeric",
-           MtgRateFwd = "numeric",
-           SMM = "numeric"))
 
 # ----- The following classes define rate of return and valuation classes
 setClass("RateofReturn",
@@ -1423,7 +1427,7 @@ setClass("BondAnalytics", contains = c("BondCashFlows", "BondTermStructure", "Te
 #The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class for all mortgage
 #passthrough analytics
 
-setClass("PassThroughAnalytics", contains = c("MortgageCashFlows", "MortgageTermStructure", "TermStructure"))
+setClass("PassThroughAnalytics", contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption"))
 
 #--------------------------------
 # Bond Lab Initialize Set Generics
@@ -1436,8 +1440,7 @@ setGeneric(
 setGeneric(
   name = "MortgageCashFlows",
   def = function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                 price = numeric(), TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
-                 seasoning.period = numeric(), CPR = numeric())
+                 price = numeric(), TermStructure = "character", PrepaymentAssumption = "character")
   {standardGeneric("MortgageCashFlows")})
 
 setGeneric("BondTermStructure",
@@ -1460,6 +1463,13 @@ setGeneric("PassThroughAnalytics",
                      settlement.date = "character", method = method, PrepaymentAssumption = "character", 
                      ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
              {standardGeneric("PassThroughAnalytics")})
+  
+#setGeneric("PrepaymentAssumption",
+#           function(NoteRate = numeric(), FirstPmtDate = "character", LastPmtDate = "character", NextPmtDate = "character", 
+#                    FinalPmtDate = "character", TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+##                    seasoning.period = numeric(), CPR = numeric())
+#           {standardGeneric("PrepaymentAssumption")}
+#           )  
 
 setGeneric("RateofReturn",
            function(ReinvestmentRate = numeric(), ReceivedCF = "character", RemainingCF = "character",

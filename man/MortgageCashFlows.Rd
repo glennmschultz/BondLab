@@ -8,7 +8,7 @@ MortgageCashFlows
 A constructor function for the class MortgageCashFlows
 }
 \usage{
-MortgageCashFlows(bond.id = "character", original.bal = numeric(), settlement.date = "character", price = numeric(), PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+MortgageCashFlows(bond.id = "character", original.bal = numeric(), settlement.date = "character", price = numeric(), TermStructure = "character", PrepaymentAssumption = "character")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -69,7 +69,6 @@ Extends the class BondTermStructure and superclass PassThroughAnalytics
 \code{\link{BondTermStructure}}, \code{\link{PassThroughAnalytics}}, \code{\link{BondBasisConversion}}
 }
 \examples{
-MortgageCashFlows(bond.id = "bondlabMBS4", original.bal = 100000, settlement.date = "01-13-2013", price = 100, PrepaymentAssumption = "PPC", begin.cpr = .2, end.cpr = 6, seasoning.period = 30) 
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -324,8 +324,6 @@
   #-------------------------
   BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
   
-  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
-  
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
   end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
@@ -587,7 +585,6 @@
       MonthlyInterest = MBS.CF.Table[,6],
       PassThroughInterest = MBS.CF.Table[,13],
       ScheduledPrin = MBS.CF.Table[,7],
-      #SMM = PrepaymentAssumption@SMM,
       PrepaidPrin = MBS.CF.Table[,8],
       EndingBal = MBS.CF.Table[,9],
       ServicingIncome = MBS.CF.Table[,10],
@@ -1029,6 +1026,8 @@
                                Slow.theta1 = 0.001, Slow.theta2 = 0.004, Slow.beta = -1.0, Slow.location = 0.5,
                                Burnout.beta1 = -1, Burnout.beta2 = -1, Burnout.maxincen = .25){
     
+    # All of the above needs to made into a model tuning class 
+    
     # Restate the turnover rate as a single monthly mortality rate
     Turnover.Rate <- 1-(1 - Turnover.Rate)^(1/12)
     
@@ -1050,7 +1049,7 @@
    
   # ---------  This function is the prepayment model and serves as a constructor for the prepayment model vector 
   # ---------  Prepayment Assumption
-  PrepaymentAssumption <- function(TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
+  PrepaymentAssumption <- function(bond.id = "character", TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
                                    seasoning.period = numeric(), CPR = numeric()){
     #Error Trap the CPR assumption
     if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
@@ -1075,11 +1074,14 @@
     LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
                                   FirstPmtDate, units = "days")/30.44) + 1
     
-    NoteRate = as.numeric(rep(NoteRate, Remain.Term))
-    Mtg.Rate = TermStructure@TenYearFwd + .80
+    NoteRate = as.numeric(rep(NoteRate, length(TermStructure@TenYearFwd)))
+    Mtg.Rate = as.numeric(TermStructure@TenYearFwd + .80)
+    Incentive = NoteRate - Mtg.Rate
+    Burnout 
+    
     
     if(PrepaymentAssumption == "MODEL")
-    {SMM = Prepayment.Model(LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = NoteRate - Mtg.Rate)} else {
+    {SMM = Prepayment.Model(LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = Incentive)} else {
       if(PrepaymentAssumption == "PPC") 
       {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, season.period = seasoning.period, period = LoanAge))^(1/12))} else
       {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
@@ -1122,6 +1124,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                            settlement.date = "character", method = method) 
 {
 
+
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
   #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
@@ -1132,11 +1135,13 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
   Rate.Delta = 1
   
+  # The first steo is to read in the Bond Detail
+  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  
   #The first step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
   TermStructure <- TermStructure(trade.date = trade.date, method = method)
 
-  
   #The second step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
   BondCashFlow <- BondCashFlows(bond.id = bond.id, principal = principal, settlement.date = settlement.date, price = price)
@@ -1146,7 +1151,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   BondTermStructure <- BondTermStructure(bond.id = BondCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
                                          principal = principal, price = price, cashflow = BondCashFlow)
   
-  new("BondAnalytics", BondCashFlow, BondTermStructure, TermStructure)
+  new("BondAnalytics", bond.id, BondCashFlow, BondTermStructure, TermStructure)
   
   }
 
@@ -1178,7 +1183,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   TermStructure <- TermStructure(trade.date = trade.date, method = method)
   
   # Third if mortgage security call the prepayment model
-  PrepaymentAssumption <- PrepaymentAssumption(TermStructure = TermStructure, 
+  PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
   PrepaymentAssumption = PrepaymentAssumption, begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
   
   #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
@@ -1422,7 +1427,7 @@ setClass("RateofReturn",
          HorizonSpread = "numeric"))
 
 #The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
-setClass("BondAnalytics", contains = c("BondCashFlows", "BondTermStructure", "TermStructure"))
+setClass("BondAnalytics", contains = c("MBSDetails", "BondCashFlows", "BondTermStructure", "TermStructure"))
 
 #The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class for all mortgage
 #passthrough analytics

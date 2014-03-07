@@ -47,7 +47,6 @@ BondCashFlows object is used in the BondAnalytics Function
 \code{\link{BondAnalytics}}, \code{\link{BondBasisConversion}}, \code{\link{BondTermStructure}}
 }
 \examples{
-BondCashFlows(bond.id = "bondlab10", principal = 100000, settlement.date = "01-15-2013", price = 100)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

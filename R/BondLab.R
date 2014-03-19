@@ -6,19 +6,6 @@
 
 #Copyright (C) 2015  Glenn M Schultz, CFA
   
-#This program is free software: you can redistribute it and/or modify
-#it under the terms of the GNU General Public License as published by
-#the Free Software Foundation, either version 3 of the License, or
-#(at your option) any later version.
-
-#This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#GNU General Public License for more details.
-
-#You should have received a copy of the GNU General Public License
-#along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
   options(digits = 8)
   library(termstrc)
   library(ggplot2)
@@ -1091,16 +1078,25 @@
     
     NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
     Mtg.Rate =  as.numeric(TermStructure@TenYearFwd[1:length(LoanAge)] + .80)
-    Incentive =  NoteRate - Mtg.Rate
-    Burnout = seq(along = length(LoanAge)) <= pmax(Burnout, Incentive) 
-    
-
-      if(PrepaymentAssumption == "MODEL")
-      {SMM = Prepayment.Model(ModelTune = ModelTune, LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), incentive = Incentive, Burnout.maxincen = Burnout)} else {
-      if(PrepaymentAssumption == "PPC") 
-      {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, season.period = seasoning.period, period = LoanAge))^(1/12))} else
-      {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
+    Incentive =  as.numeric(NoteRate - Mtg.Rate)
+    Burnout = Burnout
+    BurnoutVector = NULL
+    for(i in seq_along(LoanAge)){
+    if(i == 1) if(Burnout[i] > Incentive[i]) BurnoutVector[i] = Burnout[i] else BurnoutVector[i] = Incentive[i]
+    if(i > 1) if(BurnoutVector[i-1] > Incentive[i]) BurnoutVector[i] = BurnoutVector[i-1] else BurnoutVector[i] = Incentive[i]
     }
+
+      
+    if(PrepaymentAssumption == "MODEL")
+      {SMM = Prepayment.Model(ModelTune = ModelTune, LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), 
+                              incentive = Incentive, Burnout.maxincen = BurnoutVector)} 
+      else 
+      {if(PrepaymentAssumption == "PPC") 
+      {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, 
+                                      season.period = seasoning.period, period = LoanAge))^(1/12))} 
+      else
+      {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
+      }
     
     new("PrepaymentAssumption",
         PrepayAssumption = as.character(PrepayAssumption),
@@ -1115,6 +1111,8 @@
         PmtDate = as.character(PmtDate),
         LoanAge = as.numeric(LoanAge),
         MtgRateFwd = Mtg.Rate,
+        Incentive = Incentive,
+        BurnoutVector = BurnoutVector,
         SMM = as.numeric(SMM)
     )
         
@@ -1380,6 +1378,8 @@ setClass("MBSDetails",
              Period = "numeric",
              NoteRate = "numeric",
              MtgRateFwd = "numeric",
+             Incentive = "numeric",
+             BurnoutVector = "numeric",
              SMM = "numeric"),
              contains = "MBSDetails"
            )

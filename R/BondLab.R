@@ -404,7 +404,7 @@
   #Assign Values to the slots
   new("BondCashFlows",   
       Price = price * 100,
-      Acrrued = acrrued.interest,
+      Accrued = acrrued.interest,
       YieldToMaturity = Yield.To.Maturity,
       WAL = WAL,
       ModDuration = Modified.Duration,
@@ -422,7 +422,7 @@
   #Mortgage cash flow function.  This function calculates the cash flow of a mortgage pass through security
   #-----------------------------------------------------
   MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                              price = numeric(), TermStructure = "character", PrepaymentAssumption = "character"){
+                              price = numeric(), PrepaymentAssumption = "character"){
    
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
@@ -515,9 +515,10 @@
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
                                          settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date, coupon = coupon, principal = principal, 
                                          frequency = frequency, price = price)) * 360
+ 
   days.between.pmtdate = ((12/frequency)/12) * 360
   days.of.acrrued = (days.between.pmtdate - days.to.nextpmt) 
-  acrrued.interest = (days.of.acrrued/days.between.pmtdate) * MBS.CF.Table[1,6]
+  acrrued.interest = (days.of.acrrued/days.between.pmtdate) * MBS.CF.Table[1,13]
   
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
@@ -559,7 +560,7 @@
   new("MortgageCashFlows",
       bond.id,
       Price = price * 100,
-      Acrrued = acrrued.interest,
+      Accrued = acrrued.interest,
       YieldToMaturity = Yield.To.Maturity,
       WAL = WAL,
       ModDuration = Modified.Duration,
@@ -610,7 +611,7 @@
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
   maturity = bond.id@Maturity
-  acrrued = cashflow@Acrrued
+  acrrued = cashflow@Accrued
   
   #Class name variable.  This will set the class name for the new class to be initilized
   ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
@@ -932,7 +933,7 @@
       TenYearFwd = Ten.Year.Fwd
   )
 } 
-
+  
   #----------------------------------
   #Prepayment Model Functions.  These functions are used to build the base prepayment model
   #----------------------------------
@@ -1205,7 +1206,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
   MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                      price = price, TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption)
+                      price = price, PrepaymentAssumption = PrepaymentAssumption)
   
   #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
@@ -1215,6 +1216,85 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageTermStructure, TermStructure, PrepaymentAssumption)    
   }
 
+  #----------------------------------
+  #Agency Mortgage Dollar Roll
+    
+    DollarRoll <- function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", settlement.date = "character", 
+                           fwd.settlement.date = "character", reinvestment.rate = numeric(), 
+                         method = "ns", PrepaymentAssumption = "character", ...,begin.cpr = numeric(), 
+                         end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
+    
+    #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
+    #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
+    if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
+    
+    #Default method for TermStructure
+    if(missing(method)) method = "ns"
+    
+    #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
+    Rate.Delta = 1
+    
+    # The first step is to read in the Bond Detail and Prepayment Model Tuning Parameters
+    bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+    ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
+    Burnout = bond.id@Burnout
+   
+    
+    #The second step is to call the desired coupon curve into memory 
+    #This is done with the TermStructure function which creates the class TermStructure
+    TermStructure <- TermStructure(trade.date = trade.date, method = method)
+    
+    # Third if mortgage security call the prepayment model
+    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
+                                                 PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                                 begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+    
+    #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
+    #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
+    MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                          price = price, PrepaymentAssumption = PrepaymentAssumption)
+    
+    DollarRoll <- function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
+                           settlement.date = "character", fwd.settlement.date = character, reinvestment.rate = numeric()) {           
+      
+      #need to error trap these inputs
+      #reinvestment rate
+      #drop
+     
+      Factor = bond.id@MBSFactor
+      CurrentBal = original.bal * Factor
+      BeginningMarketValue = original.bal * Factor * price
+      Accrued = MortgageCashFlow@Accrued
+      FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
+      LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+      RemainingTerm = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
+      FwdPrice = price - drop
+      reinvestment.rate = reinvestment.rate /100
+
+      new("DollarRoll",
+        SettlementDate = settlement.date,
+        FwdSettlementDate = fwd.settlement.date,
+        GrossCoupon = bond.id@GWac,
+        NetCoupon = bond.id@Coupon,
+        OriginalTerm = bond.id@AmortizationTerm,
+        RemainingTerm = RemainingTerm,
+        OrigBalance = original.bal,
+        CurrentBalance = CurrentBal,
+        Price = price,
+        Accrued = Accrued,
+        DropTickValue = drop,
+        FwdPrice = FwdPrice,
+        ReinvestmentRate = reinvestment.rate,
+        FutureValue = 999,
+        DropImpliedValue = 999
+        )
+    }
+   
+    DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, settlement.date = settlement.date, 
+                            fwd.settlement.date = fwd.settlement.date, reinvestment.rate = .25)
+   return(DollarRoll)
+  }
+  
   #----------------------------------
   # Helper Functions These function help to manage
   # The data sources   
@@ -1302,7 +1382,7 @@ setClass("BondDetails",
 setClass("BondCashFlows",
          representation(
            Price = "numeric",
-           Acrrued = "numeric",
+           Accrued = "numeric",
            YieldToMaturity = "numeric",
            WAL = "numeric",
            ModDuration = "numeric",
@@ -1387,7 +1467,7 @@ setClass("MBSDetails",
   setClass("MortgageCashFlows",
          representation(
            Price = "numeric",
-           Acrrued = "numeric",
+           Accrued = "numeric",
            YieldToMaturity = "numeric",
            WAL = "numeric",
            ModDuration = "numeric",
@@ -1420,6 +1500,25 @@ setClass("MortgageTermStructure",
            KeyRateConvexity = "numeric"),
          contains = "MBSDetails"
          )
+
+  setClass("DollarRoll",
+          representation(
+           SettlementDate = "character",
+           FwdSettlementDate = "character",  
+           GrossCoupon = "numeric",
+           NetCoupon = "numeric",
+           OriginalTerm = "numeric",
+           RemainingTerm = "numeric",
+           OrigBalance = "numeric",
+           CurrentBalance = "numeric",
+           Price = "numeric",
+           Accrued = "numeric",
+           DropTickValue = "numeric",
+           FwdPrice = "numeric",
+           ReinvestmentRate = "numeric",
+           FutureValue = "numeric",
+           DropImpliedValue = "numeric"
+        )) 
 
 # --- The following classes define rates and Prepayment model tune classes
 # --- these classes are used to pass term strucuture information and prepayment model
@@ -1486,7 +1585,7 @@ setGeneric(
 setGeneric(
   name = "MortgageCashFlows",
   def = function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                 price = numeric(), TermStructure = "character", PrepaymentAssumption = "character")
+                 price = numeric(), PrepaymentAssumption = "character")
   {standardGeneric("MortgageCashFlows")})
 
 setGeneric("BondTermStructure",
@@ -1510,12 +1609,12 @@ setGeneric("PassThroughAnalytics",
                      ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
              {standardGeneric("PassThroughAnalytics")})
   
-#setGeneric("PrepaymentAssumption",
-#           function(NoteRate = numeric(), FirstPmtDate = "character", LastPmtDate = "character", NextPmtDate = "character", 
-#                    FinalPmtDate = "character", TermStructure = "character", PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), 
-##                    seasoning.period = numeric(), CPR = numeric())
-#           {standardGeneric("PrepaymentAssumption")}
-#           )  
+setGeneric("PrepaymentAssumption",
+           function(bond.id = "character", TermStructure = "character", ModelTune = "character", Burnout = numeric(),
+                    PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), 
+                    seasoning.period = numeric(), CPR = numeric())
+           {standardGeneric("PrepaymentAssumption")}
+           )  
 
 setGeneric("RateofReturn",
            function(ReinvestmentRate = numeric(), ReceivedCF = "character", RemainingCF = "character",
@@ -1760,7 +1859,7 @@ setMethod("show",
               theme(axis.text.x = element_text(angle = 0, size = 15)) +
               theme(legend.position = c(.82,.73))
             
-            plotdata2 <- as.data.frame(cbind(object@KeyRateTenor, object@KeyRateDuration))
+            plotdata2 = as.data.frame(cbind(object@KeyRateTenor, object@KeyRateDuration))
             colnames(plotdata2) <- c("KRTenor", "KRDuration")
             
             plot2 <- ggplot(plotdata2, aes(x = as.factor(KRTenor), y = KRDuration)) +
@@ -1774,8 +1873,8 @@ setMethod("show",
               theme(axis.title.x=element_text(angle = 0, size = 20)) +
               theme(axis.text.x = element_text(angle = 0, size = 15)) +
               theme(legend.position = c(.82,.73))
-            
-            multiplot(plot1, plot2, cols = 1)
+                  
+             multiplot(plot1, plot2, cols = 1)
             
           }
 )

@@ -202,7 +202,14 @@
   #---------------------------
 
   Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric(), term.mos = numeric()){
-  note.rate = note.rate/12
+  
+  #Error Trap Note Rate
+    if (missing(note.rate))
+      stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
+    if (!is.numeric(note.rate)  )
+      stop("No numeric interest.rate specified.")
+
+  note.rate = note.rate/12 
   term = term.mos
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
@@ -1312,7 +1319,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
       days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
       
       FutureValueofPmts = ScheduledPrin + PrepaidPrin + PassThroughInterest
-      FuturePrincipalProceeds = RemainingBalance * price 
+      FuturePrincipalProceeds = RemainingBalance * FwdPrice 
       FwdAccrued = (days.of.accrued/days.between.pmtdate) * as.numeric(MortgageCashFlow@MonthlyInterest[2])
       FutureValueHold = FutureValueofPmts + FuturePrincipalProceeds + FwdAccrued
       
@@ -1329,7 +1336,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
      settlement.day.diff = as.integer(difftime(MBSPmtDate, fwd.settlement.date, units = "days"))
      DiscValueofCarry = FutureValueofPmts * ((1 +finance.rate) ^ (settlement.day.diff/360))
   
-     FutureValuePrinCarry = FuturePrincipalProceeds + FwdAccrued + DiscValueofCarry
+     FutureValuePrinCarry = (RemainingBalance * price) + FwdAccrued + DiscValueofCarry
      FinanceCost = as.numeric(TotalProceeds * finance.rate * (reinvestment.days/361))
      TotalFutureValue = FutureValuePrinCarry - FinanceCost
  

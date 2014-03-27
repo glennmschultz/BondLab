@@ -202,17 +202,16 @@
   #---------------------------
 
   Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric(), term.mos = numeric()){
-  note.rate = note.rate/1200
+  note.rate = note.rate/12
   term = term.mos
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
   pmt
   }
 
-  Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric(), payment = numeric()){
-  note.rate = note.rate/1200
+  Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
+  note.rate = note.rate/12
   term = term.mos
-  Monthly.Pmt = payment
   disc.pmt =  note.rate * (1+note.rate)^(period-1)
   disc.prin = ((1+note.rate)^(term))-1
   Scheduled.Prin = balance *(disc.pmt/disc.prin)
@@ -287,7 +286,7 @@
   #----------------------------
 
   BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
-                        lastpmt.date, nextpmt.date, coupon, principal, frequency, price){
+                        lastpmt.date, nextpmt.date){
   # This  Function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
   #It returns the number of payments that will be received, period, and n for discounting
   #issue.date is the issuance date of the bond
@@ -331,7 +330,7 @@
   #Calculate the number of cashflows that will be paid from settlement date to maturity date 
   #step1 calculate the years to maturity  
   ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date, coupon = coupon, principal = principal, frequency = frequency, price = price) 
+                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date) 
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -342,7 +341,7 @@
   
   #step3 build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
   time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate, coupon = coupon, principal = principal, frequency = frequency, price = price)
+                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
@@ -362,22 +361,22 @@
     Bond.CF.Table[i,8] = Bond.CF.Table[i,6] + Bond.CF.Table[i,7]
   }
   
-  #step5 calculate acrrued interest for the period
+  #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
-                                         settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date, coupon = coupon, principal = principal, 
-                                         frequency = frequency, price = price)) * 360
+                          settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date)) * 360
+  
   days.between.pmtdate = ((12/frequency)/12) * 360
-  days.of.acrrued = days.between.pmtdate - days.to.nextpmt
-  acrrued.interest = (days.of.acrrued/days.between.pmtdate) * Bond.CF.Table[1,6]
+  days.of.accrued = days.between.pmtdate - days.to.nextpmt
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,6]
   
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
-  irr <- function(rate , time.period , cashflow , principal , price , acrrued.interest){
+  irr <- function(rate , time.period , cashflow , principal , price , accrued.interest){
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
-    sum(pv) - (proceeds + acrrued.interest)}
+    sum(pv) - (proceeds + accrued.interest)}
   ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.000000001, time.period = Bond.CF.Table[,3], 
-                cashflow = Bond.CF.Table[,8], principal = principal, price = price, acrrued.interest = acrrued.interest)$root
+                cashflow = Bond.CF.Table[,8], principal = principal, price = price, accrued.interest = accrued.interest)$root
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
   
   #Step7 Present value of the cash flows Present Value Factors
@@ -387,11 +386,11 @@
   Bond.CF.Table[,10] = Bond.CF.Table[,8] * Bond.CF.Table[,9]
   
   #Step8 Risk measures Duration Factors
-  Bond.CF.Table[,11] = Bond.CF.Table[,3] * (Bond.CF.Table[,10]/((principal * price) + acrrued.interest))
+  Bond.CF.Table[,11] = Bond.CF.Table[,3] * (Bond.CF.Table[,10]/((principal * price) + accrued.interest))
   
   #Convexity Factors
   Bond.CF.Table[,12] = Bond.CF.Table[,3] *(Bond.CF.Table[,3] + 1)
-  Bond.CF.Table[,13] = (Bond.CF.Table[,8]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((Bond.CF.Table[,3] + 2) * frequency)))/((principal * price) + acrrued.interest)
+  Bond.CF.Table[,13] = (Bond.CF.Table[,8]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((Bond.CF.Table[,3] + 2) * frequency)))/((principal * price) + accrued.interest)
   Bond.CF.Table[,14] = Bond.CF.Table[,12] * Bond.CF.Table[,13] 
   
   #Weighted Average Life
@@ -404,7 +403,7 @@
   #Assign Values to the slots
   new("BondCashFlows",   
       Price = price * 100,
-      Accrued = acrrued.interest,
+      Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity,
       WAL = WAL,
       ModDuration = Modified.Duration,
@@ -462,7 +461,7 @@
   #Calculate the number of cashflows that will be paid from settlement date to the last pmt date
   #step 1 calculate the years to maturity
   ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date, coupon = coupon, principal = principal, frequency = frequency, price = price) 
+                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date) 
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -473,7 +472,7 @@
   
   #step3 build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
   time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate, coupon = coupon, principal = principal, frequency = frequency, price = price)
+                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
@@ -498,7 +497,7 @@
     
     MBS.CF.Table[x,6] = MBS.CF.Table[x,4] * (note.rate/12)
     MBS.CF.Table[x,7] = Sched.Prin(balance = MBS.CF.Table[x,4], note.rate = note.rate, 
-                                   term.mos = (num.periods - MBS.CF.Table[x,1] + 1), period = 1, payment = MBS.CF.Table[x,5])
+                                   term.mos = (num.periods - MBS.CF.Table[x,1] + 1), period = 1)
         
     if(x != num.periods) {MBS.CF.Table[x,8] = PrepaymentAssumption@SMM[x] * (MBS.CF.Table[x,4] - MBS.CF.Table[x,7])} else                     
       {MBS.CF.Table[x,8] = 0}
@@ -511,25 +510,24 @@
     MBS.CF.Table[x,14] = MBS.CF.Table[x,13] + MBS.CF.Table[x,7] + MBS.CF.Table[x,8]
   }
   
-  #step5 calculate acrrued interest for the period
+  #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
-                                         settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date, coupon = coupon, principal = principal, 
-                                         frequency = frequency, price = price)) * 360
+                        settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date)) * 360
  
   days.between.pmtdate = ((12/frequency)/12) * 360
-  days.of.acrrued = (days.between.pmtdate - days.to.nextpmt) 
-  acrrued.interest = (days.of.acrrued/days.between.pmtdate) * MBS.CF.Table[1,13]
+  days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * MBS.CF.Table[1,13]
   
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
-  irr <- function(rate , time.period , cashflow , principal , price , acrrued.interest){
+  irr <- function(rate , time.period , cashflow , principal , price , accrued.interest){
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
-    sum(pv) - (proceeds + acrrued.interest)}
+    sum(pv) - (proceeds + accrued.interest)}
   
   
   ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.000000001, time.period = MBS.CF.Table[,3], 
-                cashflow = MBS.CF.Table[,14], principal = principal, price = price, acrrued.interest = acrrued.interest)$root
+                cashflow = MBS.CF.Table[,14], principal = principal, price = price, accrued.interest = accrued.interest)$root
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
   
@@ -540,12 +538,12 @@
   MBS.CF.Table[,16] = MBS.CF.Table[,14] * MBS.CF.Table[,15]
   
   #Step8 Risk measures Duration Factors
-  MBS.CF.Table[,17] = MBS.CF.Table[,3] * (MBS.CF.Table[,16]/((principal * price) + acrrued.interest))
+  MBS.CF.Table[,17] = MBS.CF.Table[,3] * (MBS.CF.Table[,16]/((principal * price) + accrued.interest))
   
   #Convexity Factors
   MBS.CF.Table[,18] = MBS.CF.Table[,3] *(MBS.CF.Table[,3] + 1)
   MBS.CF.Table[,19] = (MBS.CF.Table[,14]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((MBS.CF.Table[,3] + 2) * frequency)))/ 
-    ((principal * price) + acrrued.interest)
+    ((principal * price) + accrued.interest)
   MBS.CF.Table[,20] = MBS.CF.Table[,18] * MBS.CF.Table[,19] 
   
   #Weighted Average Life
@@ -560,7 +558,7 @@
   new("MortgageCashFlows",
       bond.id,
       Price = price * 100,
-      Accrued = acrrued.interest,
+      Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity,
       WAL = WAL,
       ModDuration = Modified.Duration,
@@ -611,7 +609,7 @@
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
   maturity = bond.id@Maturity
-  acrrued = cashflow@Accrued
+  accrued = cashflow@Accrued
   
   #Class name variable.  This will set the class name for the new class to be initilized
   ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
@@ -619,7 +617,7 @@
   #Error Trap the user's price input
   if(price <= 1) {price = price} else {price = price/100}
   if(price <=0) stop("No valid bond price")
-  proceeds = (principal * price) + acrrued 
+  proceeds = (principal * price) + accrued 
   
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
@@ -1220,9 +1218,8 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #Agency Mortgage Dollar Roll
     
     DollarRoll <- function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", settlement.date = "character", 
-                           fwd.settlement.date = "character", reinvestment.rate = numeric(), 
-                         method = "ns", PrepaymentAssumption = "character", ...,begin.cpr = numeric(), 
-                         end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
+                          fwd.settlement.date = "character", reinvestment.rate = numeric(),  finance.rate = numeric(), method = "ns", 
+                          PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
     
     #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
     #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
@@ -1239,7 +1236,6 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
    
-    
     #The second step is to call the desired coupon curve into memory 
     #This is done with the TermStructure function which creates the class TermStructure
     TermStructure <- TermStructure(trade.date = trade.date, method = method)
@@ -1255,43 +1251,130 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                                           price = price, PrepaymentAssumption = PrepaymentAssumption)
     
     DollarRoll <- function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
-                           settlement.date = "character", fwd.settlement.date = character, reinvestment.rate = numeric()) {           
+                           settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(),
+                           MortgageCashFlow = "character") {
       
       #need to error trap these inputs
-      #reinvestment rate
-      #drop
-     
+      #reinvestment rate, drop
+      
+      #Error Trap the user's price input
+      if(price <= 1) {price = price} else {price = price/100}
+      if(price <= 0) stop("No valid bond price")
+      
+      #Error Trap the user's drop input
+      #if(drop < 1/32) {drop = drop} else {drop = drop/100}
+      
+      #Here upgrade the bond basis function to include actual day count
+      settlement.date = as.Date(settlement.date, "%m-%d-%Y")
+      fwd.settlement.date = as.Date(fwd.settlement.date, "%m-%d-%Y")
+      reinvestment.days = as.numeric(difftime(fwd.settlement.date, settlement.date, units = "days"))
+      
       Factor = bond.id@MBSFactor
-      CurrentBal = original.bal * Factor
+      CurrentBal = as.numeric(original.bal * Factor)
       BeginningMarketValue = original.bal * Factor * price
-      Accrued = MortgageCashFlow@Accrued
+      
+      IssueDate = as.Date(bond.id@IssueDate)
+      DatedDate = as.Date(bond.id@DatedDate)
+      Maturity = as.Date(bond.id@Maturity)
+      Frequency = as.numeric(bond.id@Frequency)
+      Coupon = as.numeric(bond.id@Coupon)
+      
       FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
       LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+      NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
       RemainingTerm = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
-      FwdPrice = price - drop
-      reinvestment.rate = reinvestment.rate /100
-
+      FwdPrice = price - (drop/100)
+      reinvestment.rate = reinvestment.rate 
+      
+      #Dollar Roll Hold versus Roll Analysis..
+      #Dollar Roll Proceeds
+      Accrued = MortgageCashFlow@Accrued
+      TotalProceeds = BeginningMarketValue + Accrued
+      ReinvestmentIncome = as.numeric(TotalProceeds * reinvestment.rate * (reinvestment.days/361))
+      TotalRollProceeds = TotalProceeds + ReinvestmentIncome
+      
+      #Hold Proceeds - Calculate the value of holding the MBS
+      ScheduledPrin = as.numeric(MortgageCashFlow@ScheduledPrin[1])
+      PrepaidPrin = as.numeric(MortgageCashFlow@PrepaidPrin[1])
+      PassThroughInterest = as.numeric(MortgageCashFlow@PassThroughInterest[1])
+      RemainingBalance = as.numeric(MortgageCashFlow@EndingBal[1])
+      
+      #Forward settlement and payment dates to compute the value of holding versus rolling
+      #Roll Settlement Dates forward by the roll months.  For example one month roll, two months
+      #Default value is one month
+      
+      FwdNextPmtDate = NextPmtDate %m+% months(1) #The months (1) should be a variable allowing for two-, and three- months
+      FwdLastPmtDate = LastPmtDate %m+% months(1)
+      days.to.nextpmt = BondBasisConversion(issue.date = IssueDate, start.date = DatedDate, end.date = Maturity,
+                                           settlement.date = fwd.settlement.date, lastpmt.date = FwdLastPmtDate, nextpmt.date = FwdNextPmtDate)
+      days.to.nextpmt = days.to.nextpmt * 360
+      days.between.pmtdate = ((12/Frequency)/12) * 360
+      days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
+      
+      FutureValueofPmts = ScheduledPrin + PrepaidPrin + PassThroughInterest
+      FuturePrincipalProceeds = RemainingBalance * price 
+      FwdAccrued = (days.of.accrued/days.between.pmtdate) * as.numeric(MortgageCashFlow@MonthlyInterest[2])
+      FutureValueHold = FutureValueofPmts + FuturePrincipalProceeds + FwdAccrued
+      
+     #Compute the Roll Economics....
+     #Hold or Roll Analysis and Economics of Trade  
+     if (TotalRollProceeds > FutureValueHold) 
+         HoldorRoll = as.character("Roll") else HoldorRoll = as.character("Hold")  
+         Advantage = as.numeric(abs(TotalRollProceeds - FutureValueHold))
+    
+     #Compute the days between the roll settlment date and the payment date
+     #This is to derive the discounted value of the carry between the settlement date and the payment date
+     #The discount rate is applied to the Future Value of the payments and is the Discounted Value of the Carry
+     MBSPmtDate = as.Date(MortgageCashFlow@PmtDate[1], "%Y-%m-%d")
+     settlement.day.diff = as.integer(difftime(MBSPmtDate, fwd.settlement.date, units = "days"))
+     DiscValueofCarry = FutureValueofPmts * ((1 +finance.rate) ^ (settlement.day.diff/360))
+  
+     FutureValuePrinCarry = FuturePrincipalProceeds + FwdAccrued + DiscValueofCarry
+     FinanceCost = as.numeric(TotalProceeds * finance.rate * (reinvestment.days/361))
+     TotalFutureValue = FutureValuePrinCarry - FinanceCost
+ 
+     DropImpliedValue = ((TotalFutureValue - TotalProceeds)/RemainingBalance) * 32
+            
       new("DollarRoll",
-        SettlementDate = settlement.date,
-        FwdSettlementDate = fwd.settlement.date,
+        SettlementDate = as.character(settlement.date),
+        FwdSettlementDate = as.character(fwd.settlement.date),
         GrossCoupon = bond.id@GWac,
         NetCoupon = bond.id@Coupon,
         OriginalTerm = bond.id@AmortizationTerm,
         RemainingTerm = RemainingTerm,
         OrigBalance = original.bal,
         CurrentBalance = CurrentBal,
-        Price = price,
+        Price = price * 100,
+        PrincipalProceeds = BeginningMarketValue,
         Accrued = Accrued,
-        DropTickValue = drop,
-        FwdPrice = FwdPrice,
+        TotalProceeds = TotalProceeds,
+        DaysInterest = reinvestment.days,
+        ReinvestmentIncome = ReinvestmentIncome,
+        ScheduledPrin = ScheduledPrin,
+        PrepaidPrin = PrepaidPrin,
+        PassThroughInterest = PassThroughInterest,
+        FutureValueHold = FutureValueHold,
+        RemainingBalance = RemainingBalance,
+        FuturePrincipalProceeds = FuturePrincipalProceeds,
+        FwdAccrued = FwdAccrued,
+        Drop = drop,
+        FwdPrice = FwdPrice * 100,
+        FinanceRate = finance.rate,
         ReinvestmentRate = reinvestment.rate,
-        FutureValue = 999,
-        DropImpliedValue = 999
+        FutureValueRoll = TotalRollProceeds,
+        HoldorRoll = HoldorRoll,
+        Advantage = Advantage,
+        DiscValueofCarry = DiscValueofCarry,
+        FutureValuePrinCarry = FutureValuePrinCarry,
+        TotalFutureValue = TotalFutureValue,
+        DropImpliedValue = DropImpliedValue,
+        MortgageCashFlow
         )
-    }
+      }
    
     DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, settlement.date = settlement.date, 
-                            fwd.settlement.date = fwd.settlement.date, reinvestment.rate = .25)
+                            fwd.settlement.date = fwd.settlement.date, reinvestment.rate = reinvestment.rate, finance.rate = finance.rate, 
+                            MortgageCashFlow = MortgageCashFlow)
    return(DollarRoll)
   }
   
@@ -1512,13 +1595,31 @@ setClass("MortgageTermStructure",
            OrigBalance = "numeric",
            CurrentBalance = "numeric",
            Price = "numeric",
+           PrincipalProceeds = "numeric",
            Accrued = "numeric",
-           DropTickValue = "numeric",
+           TotalProceeds = "numeric",
+           DaysInterest = "numeric",
+           ReinvestmentIncome = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           PassThroughInterest = "numeric",
+           FutureValueHold = "numeric",
+           RemainingBalance = "numeric",
+           FuturePrincipalProceeds = "numeric",
+           FwdAccrued = "numeric",
+           Drop = "numeric",
            FwdPrice = "numeric",
+           FinanceRate = "numeric",
            ReinvestmentRate = "numeric",
-           FutureValue = "numeric",
-           DropImpliedValue = "numeric"
-        )) 
+           HoldorRoll = "character",
+           Advantage = "numeric",
+           FutureValueRoll = "numeric",
+           DiscValueofCarry = "numeric",
+           FutureValuePrinCarry = "numeric",
+           TotalFutureValue = "numeric",
+           DropImpliedValue = "numeric"),
+           contains="MortgageCashFlows"
+        ) 
 
 # --- The following classes define rates and Prepayment model tune classes
 # --- these classes are used to pass term strucuture information and prepayment model
@@ -1661,7 +1762,7 @@ setMethod("show",
             cat("Maturity Date:"); print(object@Maturity)
             cat("Bond Valuation:", "\n")
             cat("Price:"); print(object@Price)
-            cat("Acrrued:"); print(object@Acrrued)
+            cat("Accrued:"); print(object@Accrued)
             cat("Yield to Maturity:"); print(object@YieldToMaturity)
             cat("Risk Metrics:", "\n")
             cat("Weighted Average Life:"); print(object@WAL)
@@ -1710,7 +1811,7 @@ setMethod("show",
             cat("Maturity Date:"); print(object@Maturity)
             cat("Bond Valuation:", "\n")
             cat("Price:"); print(object@Price)
-            cat("Acrrued:"); print(object@Acrrued)
+            cat("Accrued:"); print(object@Accrued)
             cat("Yield to Maturity:"); print(object@YieldToMaturity)
             cat("Risk Metrics:", "\n")
             cat("Weighted Average Life:"); print(object@WAL)
@@ -1763,7 +1864,7 @@ setMethod("show",
            cat("Maturity Date:"); print(object@Maturity)
            cat("Bond Valuation:", "\n")
            cat("Price:"); print(object@Price)
-           cat("Acrrued:"); print(object@Acrrued)
+           cat("Accrued:"); print(object@Accrued)
            cat("Yield to Maturity:"); print(object@YieldToMaturity)
            cat("Risk Metrics:", "\n")
            cat("Weighted Average Life:"); print(object@WAL)
@@ -1829,7 +1930,7 @@ setMethod("show",
             cat("Maturity Date:"); print(object@Maturity)
             cat("Bond Valuation:", "\n")
             cat("Price:"); print(object@Price)
-            cat("Acrrued:"); print(object@Acrrued)
+            cat("Accrued:"); print(object@Accrued)
             cat("Yield to Maturity:"); print(object@YieldToMaturity)
             cat("Risk Metrics:", "\n")
             cat("Weighted Average Life:"); print(object@WAL)

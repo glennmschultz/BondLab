@@ -1297,7 +1297,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
       #Dollar Roll Proceeds
       Accrued = MortgageCashFlow@Accrued
       TotalProceeds = BeginningMarketValue + Accrued
-      ReinvestmentIncome = as.numeric(TotalProceeds * reinvestment.rate * (reinvestment.days/361))
+      ReinvestmentIncome = as.numeric(TotalProceeds * reinvestment.rate * (reinvestment.days/360))
       TotalRollProceeds = TotalProceeds + ReinvestmentIncome
       
       #Hold Proceeds - Calculate the value of holding the MBS

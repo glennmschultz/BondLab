@@ -3,8 +3,9 @@
 # in addition to standard fixed income analysis bond lab provides 
 # for the specific analysis of structured products residential mortgage backed securities, 
 # asset backed securities, and commerical mortgage backed securities
+# License MIT
 
-#Copyright (C) 2015  Glenn M Schultz, CFA
+#Copyright (C) 2014  Glenn M Schultz, CFA
   
   options(digits = 8)
   library(termstrc)
@@ -164,7 +165,15 @@
 
   #YYTMtoPrice is a simple yield to price equation for a standard bond
   #This equation treats the bond as a annuity and zero coupon payment
-  YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
+  YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.frequency = numeric(), 
+                        years.mat = numeric(), face.value = numeric()){
+    
+    if (missing(yield.to.maturity))
+    stop("Need to specify a maturity greater than 0")
+    if (!is.numeric(yield.to.maturity)  )
+    stop("No numeric yield to maturity specified.")
+    if (yield.to.maturity <0 | yield.to.maturity > 1)
+    stop("No valid  interest.rate specified.")
   
   #need to error trap this function
   n = years.mat * coupon.frequency
@@ -760,7 +769,7 @@
     KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/100)
   }
   
-  #===== Impliment Shift of Spot Rates =======================
+  #===== Implement Shift of Spot Rates =======================
   # Once the KRIndex is populated implement the shift in the spot rates using the KRIndex table as the control 
   # w is the counter of the internal knot points used to compute key rate duration it ignores the boundary knots
   # used for interpolation at the end points.  x is the length of the array.  Currently the analysis is limited
@@ -834,10 +843,11 @@
   #Term strucutre call term strc 
   #and holds forward and spot rates as slots to class Term Structure 
   #---------------------------------------------------
-  TermStructure <- function(trade.date = "character", method = "character"){
+  TermStructure <- function(rates.data = "character", method = "character"){
   
+  #function(trade.date = "character", method = "character")  
   #Error Trap User inputs to the function
-  if(missing(trade.date)) stop("missing dataset")  
+  if(missing(rates.data)) stop("missing rates data object")  
   
   #Default to Nelson-Siegel
   if(missing(method)) method = "ns"
@@ -850,8 +860,9 @@
   if(!method %in% CheckMethod) stop ("Invalid 'method' Value")
   
   #Call the desired curve from rates data folder
-  trade.date = as.Date(trade.date, "%m-%d-%Y")
-  rates.data = readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+  #trade.date = as.Date(trade.date, "%m-%d-%Y")
+  rates.data <- rates.data
+  #rates.data = readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
   
   #set the column counter to make cashflows for termstrucutre
   ColCount <- as.numeric(ncol(rates.data))
@@ -1032,10 +1043,9 @@
       Burnout.beta1       = ModelTune@Burnout.beta.1 
       Burnout.beta2       = ModelTune@Burnout.beta.2
     
-    
     # All of the above needs to made into a model tuning class 
-    
     # Restate the turnover rate as a single monthly mortality rate
+    
     Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
     
     Turnover <- Turnover.Rate * 
@@ -1123,6 +1133,138 @@
     )
         
   }
+  
+# ---------------- This function is the dollar roll analysis ---------------------------
+# ---------------- Currently the function calcualtes the 1 month roll ------------------
+# ---------------- Upgrade the bond basis function for actual/actual day count ---------  
+  DollarRoll <- function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
+                         settlement.date = "character", fwd.settlement.date = "character", 
+                         reinvestment.rate = numeric(), finance.rate = numeric(),
+                         MortgageCashFlow = "character") {
+    
+    #need to error trap these inputs
+    #reinvestment rate, drop
+    
+    #Error Trap the user's price input
+    if(price <= 1) {price = price} else {price = price/100}
+    if(price <= 0) stop("No valid bond price")
+    
+    #Error Trap the user's drop input
+    #if(drop < 1/32) {drop = drop} else {drop = drop/100}
+    
+    #Here upgrade the bond basis function to include actual day count
+    settlement.date = as.Date(settlement.date, "%m-%d-%Y")
+    fwd.settlement.date = as.Date(fwd.settlement.date, "%m-%d-%Y")
+    reinvestment.days = as.numeric(difftime(fwd.settlement.date, settlement.date, units = "days"))
+    
+    Factor = bond.id@MBSFactor
+    CurrentBal = as.numeric(original.bal * Factor)
+    BeginningMarketValue = original.bal * Factor * price
+    
+    IssueDate = as.Date(bond.id@IssueDate)
+    DatedDate = as.Date(bond.id@DatedDate)
+    Maturity = as.Date(bond.id@Maturity)
+    Frequency = as.numeric(bond.id@Frequency)
+    Coupon = as.numeric(bond.id@Coupon)
+    
+    FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
+    LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+    NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+    RemainingTerm = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
+    FwdPrice = price - (drop/100)
+    reinvestment.rate = reinvestment.rate 
+    
+    #Dollar Roll Hold versus Roll Analysis..
+    #Dollar Roll Proceeds
+    Accrued = MortgageCashFlow@Accrued
+    TotalProceeds = BeginningMarketValue + Accrued
+    ReinvestmentIncome = as.numeric(TotalProceeds * reinvestment.rate * (reinvestment.days/360))
+    TotalRollProceeds = TotalProceeds + ReinvestmentIncome
+    
+    #Hold Proceeds - Calculate the value of holding the MBS
+    ScheduledPrin = as.numeric(MortgageCashFlow@ScheduledPrin[1])
+    PrepaidPrin = as.numeric(MortgageCashFlow@PrepaidPrin[1])
+    PassThroughInterest = as.numeric(MortgageCashFlow@PassThroughInterest[1])
+    RemainingBalance = as.numeric(MortgageCashFlow@EndingBal[1])
+    
+    #Forward settlement and payment dates to compute the value of holding versus rolling
+    #Roll Settlement Dates forward by the roll months.  For example one month roll, two months
+    #Default value is one month
+    
+    FwdNextPmtDate = NextPmtDate %m+% months(1) #The months (1) should be a variable allowing for two-, and three- months
+    FwdLastPmtDate = LastPmtDate %m+% months(1)
+    days.to.nextpmt = BondBasisConversion(issue.date = IssueDate, start.date = DatedDate, end.date = Maturity,
+                                          settlement.date = fwd.settlement.date, lastpmt.date = FwdLastPmtDate, nextpmt.date = FwdNextPmtDate)
+    days.to.nextpmt = days.to.nextpmt * 360
+    days.between.pmtdate = ((12/Frequency)/12) * 360
+    days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
+    
+    FutureValueofPmts = ScheduledPrin + PrepaidPrin + PassThroughInterest
+    FuturePrincipalProceeds = RemainingBalance * FwdPrice 
+    FwdAccrued = (days.of.accrued/days.between.pmtdate) * as.numeric(MortgageCashFlow@MonthlyInterest[2])
+    FutureValueHold = FutureValueofPmts + FuturePrincipalProceeds + FwdAccrued
+    
+    #Compute the Roll Economics....
+    #Hold or Roll Analysis and Economics of Trade  
+    if (TotalRollProceeds > FutureValueHold) 
+      HoldorRoll = as.character("Roll") else HoldorRoll = as.character("Hold")  
+    Advantage = as.numeric(abs(TotalRollProceeds - FutureValueHold))
+    
+    #Compute the days between the roll settlment date and the payment date
+    #This is to derive the discounted value of the carry between the settlement date and the payment date
+    #The discount rate is applied to the Future Value of the payments and is the Discounted Value of the Carry
+    MBSPmtDate = as.Date(MortgageCashFlow@PmtDate[1], "%Y-%m-%d")
+    settlement.day.diff = as.integer(difftime(MBSPmtDate, fwd.settlement.date, units = "days"))
+    DiscValueofCarry = FutureValueofPmts * ((1 +finance.rate) ^ (settlement.day.diff/360))
+    
+    FutureValuePrinCarry = (RemainingBalance * price) + FwdAccrued + DiscValueofCarry
+    FinanceCost = as.numeric(TotalProceeds * finance.rate * (reinvestment.days/361))
+    TotalFutureValue = FutureValuePrinCarry - FinanceCost
+    
+    DropImpliedValue = ((TotalFutureValue - TotalProceeds)/RemainingBalance) * 32
+    
+    new("DollarRoll",
+        #MBS price and settlment information
+        SettlementDate = as.character(settlement.date),
+        FwdSettlementDate = as.character(fwd.settlement.date),
+        Price = price * 100,
+        Drop = drop,
+        FwdPrice = FwdPrice * 100,
+        # MBS information
+        GrossCoupon = bond.id@GWac,
+        NetCoupon = bond.id@Coupon,
+        OriginalTerm = bond.id@AmortizationTerm,
+        RemainingTerm = RemainingTerm,
+        OrigBalance = original.bal,
+        CurrentBalance = CurrentBal,
+        #Settlement information
+        PrincipalProceeds = BeginningMarketValue,
+        Accrued = Accrued,
+        TotalProceeds = TotalProceeds,
+        DaysInterest = reinvestment.days,
+        ReinvestmentIncome = ReinvestmentIncome,
+        # MBS hold information
+        ScheduledPrin = ScheduledPrin,
+        PrepaidPrin = PrepaidPrin,
+        PassThroughInterest = PassThroughInterest,
+        FutureValueHold = FutureValueHold,
+        RemainingBalance = RemainingBalance,
+        FuturePrincipalProceeds = FuturePrincipalProceeds,
+        FwdAccrued = FwdAccrued,
+        # Investor financing rates
+        FinanceRate = finance.rate,
+        ReinvestmentRate = reinvestment.rate,
+        FutureValueRoll = TotalRollProceeds,
+        FutureValuePrinCarry = FutureValuePrinCarry,
+        DiscValueofCarry = DiscValueofCarry,
+        # Roll analysis
+        HoldorRoll = HoldorRoll,
+        Advantage = Advantage,
+        TotalFutureValue = TotalFutureValue,
+        DropImpliedValue = DropImpliedValue,
+        MortgageCashFlow
+    )
+  }
 
   #-------------------------------
   #Rate of Return Analysis
@@ -1157,10 +1299,13 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   
   # The first steo is to read in the Bond Detail
   bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  #Call the desired curve from rates data folder
+  trade.date = as.Date(trade.date, "%m-%d-%Y")
+  rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
   
   #The first step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
-  TermStructure <- TermStructure(trade.date = trade.date, method = method)
+  TermStructure <- TermStructure(rates.data = rates.data, method = method)
 
   #The second step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
@@ -1193,15 +1338,19 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
   Rate.Delta = 1
   
-  # The first step is to read in the Bond Detail and Prepayment Model Tuning Parameters
+  # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  #Call the desired curve from rates data folder
+  trade.date = as.Date(trade.date, "%m-%d-%Y")
+  rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+  #Call Prepayment Model
   ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
   Burnout = bond.id@Burnout
   #return(ModelTune)
 
   #The second step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
-  TermStructure <- TermStructure(trade.date = trade.date, method = method)
+  TermStructure <- TermStructure(rates.data = rates.data, method = method)
   
   # Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
@@ -1224,9 +1373,56 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #----------------------------------
   #Agency Mortgage Dollar Roll
     
-    DollarRoll <- function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", settlement.date = "character", 
-                          fwd.settlement.date = "character", reinvestment.rate = numeric(),  finance.rate = numeric(), method = "ns", 
-                          PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
+    DollarRollAnalytics <- function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
+                           settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(),  
+                           finance.rate = numeric(), method = "ns", PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
+    
+    #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
+    #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
+    if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
+    
+    #Default method for TermStructure
+    if(missing(method)) method = "ns"
+    
+    #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
+    Rate.Delta = 1
+    
+    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+    bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+    #Call the desired curve from rates data folder
+    trade.date = as.Date(trade.date, "%m-%d-%Y")
+    rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+    #Call Prepayment Model
+    ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
+    Burnout = bond.id@Burnout
+    #return(ModelTune)
+   
+    #The second step is to call the desired coupon curve into memory 
+    #This is done with the TermStructure function which creates the class TermStructure
+    TermStructure <- TermStructure(rates.data = rates.data, method = method)
+    
+    # Third if mortgage security call the prepayment model
+    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
+                                                 PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                                 begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+    
+    #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
+    #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
+    MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                          price = price, PrepaymentAssumption = PrepaymentAssumption)
+    
+   
+    DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, settlement.date = settlement.date, 
+                            fwd.settlement.date = fwd.settlement.date, reinvestment.rate = reinvestment.rate, finance.rate = finance.rate, 
+                            MortgageCashFlow = MortgageCashFlow)
+   return(DollarRoll)
+  }
+  
+  #-------------- Scenario Analysis
+   ScenarioAnalysis <- function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
+                                settlement.date = "character", method = "ns", 
+                                PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), 
+                                CPR = numeric()) {
     
     #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
     #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
@@ -1242,7 +1438,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
-   
+    
     #The second step is to call the desired coupon curve into memory 
     #This is done with the TermStructure function which creates the class TermStructure
     TermStructure <- TermStructure(trade.date = trade.date, method = method)
@@ -1257,132 +1453,23 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                                           price = price, PrepaymentAssumption = PrepaymentAssumption)
     
-    DollarRoll <- function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
-                           settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(),
-                           MortgageCashFlow = "character") {
-      
-      #need to error trap these inputs
-      #reinvestment rate, drop
-      
-      #Error Trap the user's price input
-      if(price <= 1) {price = price} else {price = price/100}
-      if(price <= 0) stop("No valid bond price")
-      
-      #Error Trap the user's drop input
-      #if(drop < 1/32) {drop = drop} else {drop = drop/100}
-      
-      #Here upgrade the bond basis function to include actual day count
-      settlement.date = as.Date(settlement.date, "%m-%d-%Y")
-      fwd.settlement.date = as.Date(fwd.settlement.date, "%m-%d-%Y")
-      reinvestment.days = as.numeric(difftime(fwd.settlement.date, settlement.date, units = "days"))
-      
-      Factor = bond.id@MBSFactor
-      CurrentBal = as.numeric(original.bal * Factor)
-      BeginningMarketValue = original.bal * Factor * price
-      
-      IssueDate = as.Date(bond.id@IssueDate)
-      DatedDate = as.Date(bond.id@DatedDate)
-      Maturity = as.Date(bond.id@Maturity)
-      Frequency = as.numeric(bond.id@Frequency)
-      Coupon = as.numeric(bond.id@Coupon)
-      
-      FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
-      LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-      NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-      RemainingTerm = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
-      FwdPrice = price - (drop/100)
-      reinvestment.rate = reinvestment.rate 
-      
-      #Dollar Roll Hold versus Roll Analysis..
-      #Dollar Roll Proceeds
-      Accrued = MortgageCashFlow@Accrued
-      TotalProceeds = BeginningMarketValue + Accrued
-      ReinvestmentIncome = as.numeric(TotalProceeds * reinvestment.rate * (reinvestment.days/360))
-      TotalRollProceeds = TotalProceeds + ReinvestmentIncome
-      
-      #Hold Proceeds - Calculate the value of holding the MBS
-      ScheduledPrin = as.numeric(MortgageCashFlow@ScheduledPrin[1])
-      PrepaidPrin = as.numeric(MortgageCashFlow@PrepaidPrin[1])
-      PassThroughInterest = as.numeric(MortgageCashFlow@PassThroughInterest[1])
-      RemainingBalance = as.numeric(MortgageCashFlow@EndingBal[1])
-      
-      #Forward settlement and payment dates to compute the value of holding versus rolling
-      #Roll Settlement Dates forward by the roll months.  For example one month roll, two months
-      #Default value is one month
-      
-      FwdNextPmtDate = NextPmtDate %m+% months(1) #The months (1) should be a variable allowing for two-, and three- months
-      FwdLastPmtDate = LastPmtDate %m+% months(1)
-      days.to.nextpmt = BondBasisConversion(issue.date = IssueDate, start.date = DatedDate, end.date = Maturity,
-                                           settlement.date = fwd.settlement.date, lastpmt.date = FwdLastPmtDate, nextpmt.date = FwdNextPmtDate)
-      days.to.nextpmt = days.to.nextpmt * 360
-      days.between.pmtdate = ((12/Frequency)/12) * 360
-      days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-      
-      FutureValueofPmts = ScheduledPrin + PrepaidPrin + PassThroughInterest
-      FuturePrincipalProceeds = RemainingBalance * FwdPrice 
-      FwdAccrued = (days.of.accrued/days.between.pmtdate) * as.numeric(MortgageCashFlow@MonthlyInterest[2])
-      FutureValueHold = FutureValueofPmts + FuturePrincipalProceeds + FwdAccrued
-      
-     #Compute the Roll Economics....
-     #Hold or Roll Analysis and Economics of Trade  
-     if (TotalRollProceeds > FutureValueHold) 
-         HoldorRoll = as.character("Roll") else HoldorRoll = as.character("Hold")  
-         Advantage = as.numeric(abs(TotalRollProceeds - FutureValueHold))
+    Period = MortgageCashFlow@Period
+    PmtDate = MortgageCashFlow@PmtDate
+    TimePeriod = MortgageCashFlow@TimePeriod
+    BeginningBal = MortgageCashFlow@BeginningBal
+    MonthlyInterest = MortgageCashFlow@MonthlyInterest
+    ScheduledPrin = MortgageCashFlow@ScheduledPrin
+    PrepaidPrin = MortgageCashFlow@PrepaidPrin
+    EndingBal = MortgageCashFlow@EndingBal
+    TotalCashFlow = MonthlyInterest + ScheduledPrin + PrepaidPrin
     
-     #Compute the days between the roll settlment date and the payment date
-     #This is to derive the discounted value of the carry between the settlement date and the payment date
-     #The discount rate is applied to the Future Value of the payments and is the Discounted Value of the Carry
-     MBSPmtDate = as.Date(MortgageCashFlow@PmtDate[1], "%Y-%m-%d")
-     settlement.day.diff = as.integer(difftime(MBSPmtDate, fwd.settlement.date, units = "days"))
-     DiscValueofCarry = FutureValueofPmts * ((1 +finance.rate) ^ (settlement.day.diff/360))
-  
-     FutureValuePrinCarry = (RemainingBalance * price) + FwdAccrued + DiscValueofCarry
-     FinanceCost = as.numeric(TotalProceeds * finance.rate * (reinvestment.days/361))
-     TotalFutureValue = FutureValuePrinCarry - FinanceCost
- 
-     DropImpliedValue = ((TotalFutureValue - TotalProceeds)/RemainingBalance) * 32
-            
-      new("DollarRoll",
-        SettlementDate = as.character(settlement.date),
-        FwdSettlementDate = as.character(fwd.settlement.date),
-        GrossCoupon = bond.id@GWac,
-        NetCoupon = bond.id@Coupon,
-        OriginalTerm = bond.id@AmortizationTerm,
-        RemainingTerm = RemainingTerm,
-        OrigBalance = original.bal,
-        CurrentBalance = CurrentBal,
-        Price = price * 100,
-        PrincipalProceeds = BeginningMarketValue,
-        Accrued = Accrued,
-        TotalProceeds = TotalProceeds,
-        DaysInterest = reinvestment.days,
-        ReinvestmentIncome = ReinvestmentIncome,
-        ScheduledPrin = ScheduledPrin,
-        PrepaidPrin = PrepaidPrin,
-        PassThroughInterest = PassThroughInterest,
-        FutureValueHold = FutureValueHold,
-        RemainingBalance = RemainingBalance,
-        FuturePrincipalProceeds = FuturePrincipalProceeds,
-        FwdAccrued = FwdAccrued,
-        Drop = drop,
-        FwdPrice = FwdPrice * 100,
-        FinanceRate = finance.rate,
-        ReinvestmentRate = reinvestment.rate,
-        FutureValueRoll = TotalRollProceeds,
-        HoldorRoll = HoldorRoll,
-        Advantage = Advantage,
-        DiscValueofCarry = DiscValueofCarry,
-        FutureValuePrinCarry = FutureValuePrinCarry,
-        TotalFutureValue = TotalFutureValue,
-        DropImpliedValue = DropImpliedValue,
-        MortgageCashFlow
-        )
-      }
-   
-    DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, settlement.date = settlement.date, 
-                            fwd.settlement.date = fwd.settlement.date, reinvestment.rate = reinvestment.rate, finance.rate = finance.rate, 
-                            MortgageCashFlow = MortgageCashFlow)
-   return(DollarRoll)
+    Scenario <- list(Period, PmtDate, TimePeriod, BeginningBal, MonthlyInterest, 
+                     ScheduledPrin, PrepaidPrin, EndingBal, TotalCashFlow)
+    names(Scenario) <- c("Period", "PmtDate", "TimePeriod", "BeginningBal", "MonthlyInterest", "ScheduledPrin", 
+                         "PrepaidPrin", "EndingBal", "TotalCashFlow")
+    
+     new("ScenarioResult", 
+        Cashflow = Scenario)
   }
   
   #----------------------------------
@@ -1448,7 +1535,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #------------------------
 
   # --- The following classes define standard bond analytics
-setClass("BondDetails",
+  setClass("BondDetails",
          representation(
            Cusip = "character",
            ID = "character",
@@ -1469,7 +1556,7 @@ setClass("BondDetails",
            Putable = "character",
            SinkingFund = "character"))
 
-setClass("BondCashFlows",
+  setClass("BondCashFlows",
          representation(
            Price = "numeric",
            Accrued = "numeric",
@@ -1485,7 +1572,7 @@ setClass("BondCashFlows",
            TotalCashFlow = "numeric"),
          contains = "BondDetails")
 
-setClass("BondTermStructure",
+  setClass("BondTermStructure",
          representation(
            SpotSpread = "numeric",   
            EffDuration = "numeric",
@@ -1496,7 +1583,7 @@ setClass("BondTermStructure",
          contains = "BondDetails")
 
 # --- The folllowing classes define standard Mortgage Passthrough analytics
-setClass("MBSDetails", 
+  setClass("MBSDetails", 
          representation(
            Cusip = "character",
            ID = "character",
@@ -1580,7 +1667,7 @@ setClass("MBSDetails",
            contains = "MBSDetails"
          )
 
-setClass("MortgageTermStructure",
+  setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
            EffDuration = "numeric",
@@ -1632,7 +1719,7 @@ setClass("MortgageTermStructure",
 # --- these classes are used to pass term strucuture information and prepayment model
 # --- tuning paramaters  
 
-setClass("TermStructure",
+  setClass("TermStructure",
          representation(
            tradedate = "character",
            period = "numeric",
@@ -1643,7 +1730,7 @@ setClass("TermStructure",
            TenYearFwd = "numeric"
            ))
 
-setClass("PrepaymentModelTune",
+  setClass("PrepaymentModelTune",
         representation(
           TurnoverRate = "numeric",
           Turnover.alpha = "numeric",
@@ -1662,9 +1749,14 @@ setClass("PrepaymentModelTune",
           Burnout.beta.1 = "numeric",
           Burnout.beta.2 = "numeric"
           ))
-
+  
 # ----- The following classes define rate of return and valuation classes
-setClass("RateofReturn",
+  setClass("ScenarioResult",
+           representation(
+           Cashflow = "list"   
+             ))
+        
+  setClass("RateofReturn",
          representation(
          PmtDate = "character",
          Period = "numeric",
@@ -1674,57 +1766,56 @@ setClass("RateofReturn",
          RemainingCF = "numeric",
          HorizonSpread = "numeric"))
 
-#The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
-setClass("BondAnalytics", contains = c("MBSDetails", "BondCashFlows", "BondTermStructure", "TermStructure"))
+#------ The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
+  setClass("BondAnalytics", contains = c("MBSDetails", "BondCashFlows", "BondTermStructure", "TermStructure"))
 
-#The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class for all mortgage
+#------ The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class for all mortgage
 #passthrough analytics
 
-setClass("PassThroughAnalytics", contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption"))
+  setClass("PassThroughAnalytics", contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption"))
 
 #--------------------------------
 # Bond Lab Initialize Set Generics
 #--------------------------------
-setGeneric(
+  setGeneric(
   name = "BondCashFlows",
   def = function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric())
   {standardGeneric("BondCashFlows")})
 
-setGeneric(
+  setGeneric(
   name = "MortgageCashFlows",
   def = function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
                  price = numeric(), PrepaymentAssumption = "character")
   {standardGeneric("MortgageCashFlows")})
 
-setGeneric("BondTermStructure",
+  setGeneric("BondTermStructure",
            def = function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), 
                           price = numeric(), cashflow = "character")
            {standardGeneric("BondTermStructure")})
 
-setGeneric("BondAnalytics",
+  setGeneric("BondAnalytics",
            def = function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
                            settlement.date = "character", method = method)
            {standardGeneric("BondAnalytics")})
 
-
-setGeneric("TermStructure",
-           function(trade.date = "character", method = "character")
+  setGeneric("TermStructure",
+           function(rates.data = "character", method = "character")
            {standardGeneric("TermStructure")})
 
-setGeneric("PassThroughAnalytics",
+  setGeneric("PassThroughAnalytics",
            function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
                      settlement.date = "character", method = method, PrepaymentAssumption = "character", 
                      ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
              {standardGeneric("PassThroughAnalytics")})
   
-setGeneric("PrepaymentAssumption",
+  setGeneric("PrepaymentAssumption",
            function(bond.id = "character", TermStructure = "character", ModelTune = "character", Burnout = numeric(),
                     PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), 
                     seasoning.period = numeric(), CPR = numeric())
            {standardGeneric("PrepaymentAssumption")}
            )  
 
-setGeneric("RateofReturn",
+  setGeneric("RateofReturn",
            function(ReinvestmentRate = numeric(), ReceivedCF = "character", RemainingCF = "character",
                     SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric())
              {standardGenric("RateofReturn")})
@@ -1750,6 +1841,15 @@ setGeneric("Prepayment.Model",
                     Month = numeric(), incentive = numeric(), Burnout.maxincen = numeric())
              {standardGeneric("Prepayment.Model")})  
 
+setGeneric("DollarRoll", function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
+                         settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), MortgageCashFlow = "character")
+            {standardGeneric("DollarRoll")})
+  
+setGeneric("DollarRollAnalytics", function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
+                                  settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), method = "ns", 
+                                  PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+                                  {standardGeneric("DollarRollAnalytics")})
+  
 #-------------------------------
 #Bond Lab Set Methods 
 #-------------------------------
@@ -1987,5 +2087,33 @@ setMethod("show",
           }
 )
 
+setMethod("show",
+          signature(object = "DollarRoll"),
+          function(object){
+          cat("Dollar Roll Analysis", "\n")
+          cat("Settlement Date"); print(object@SettlementDate)
+          cat("Settlement Price"); print(object@Price)
+          cat("Drop 32nds"); print(object@Drop)
+          cat("Forward Settlement Date"); print(object@FwdSettlementDate)
+          cat("Forward Price"); print(object@FwdPrice)
+          cat("Beginning Market Value"); print(object@PrincipalProceeds)
+          cat("Accrued Interest"); print(object@Accrued)
+          cat("Roll Proceeds"); print(object@TotalProceeds)
+          cat("Reinvestment Proceeds"); print(object@ReinvestmentIncome)
+          cat("Future Value"); print(object@FutureValueRoll)
+          cat("Dollar Advantage"); print(object@Advantage)
+          #cat("Basis Points (Annualized"); print(object@BasisPoints)
+          cat("Breakeven Drop"); print(object@DropImpliedValue)
+          cat("Hold or Roll"); print(object@HoldorRoll)
+          cat("Scheduled Principal"); print(object@ScheduledPrin)
+          cat("Prepaid Principal"); print(object@PrepaidPrin)
+          cat("Pass Through Interest"); print(object@PassThroughInterest)
+          cat("Remaining Principal"); print(object@RemainingBalance)
+          cat("Proceeds"); print(object@FuturePrincipalProceeds)
+          cat("Hold Accrued"); print(object@FwdAccrued)
+          cat("Future Value"); print(object@FutureValuePrinCarry)
+          }
+          )
+  
 
 

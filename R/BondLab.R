@@ -1346,7 +1346,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #Call Prepayment Model
   ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
   Burnout = bond.id@Burnout
-  #return(ModelTune)
+
 
   #The second step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
@@ -1395,7 +1395,6 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     #Call Prepayment Model
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
-    #return(ModelTune)
    
     #The second step is to call the desired coupon curve into memory 
     #This is done with the TermStructure function which creates the class TermStructure
@@ -1419,10 +1418,9 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   }
   
   #-------------- Scenario Analysis
-   ScenarioAnalysis <- function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
-                                settlement.date = "character", method = "ns", 
-                                PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), 
-                                CPR = numeric()) {
+   ScenarioAnalysis <- 
+    function( scenario.set = vector(), bond.id = "character", original.bal= numeric(), price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
+    PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
     
     #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
     #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
@@ -1434,20 +1432,32 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
     Rate.Delta = 1
     
-    # The first step is to read in the Bond Detail and Prepayment Model Tuning Parameters
+    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
     bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+    #Call the desired curve from rates data folder
+    trade.date = as.Date(trade.date, "%m-%d-%Y")
+    rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+    #Call Prepayment Model
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
+
+    Scenario <- function(scenario.set = vector(), rates.data = "character", bond.id = "character", original.bal = numeric(),
+             settlement.date = "character", PrepaymentAssumption = "character", ModelTune = "character", Burnout = numeric(),
+             begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){ 
     
     #The second step is to call the desired coupon curve into memory 
     #This is done with the TermStructure function which creates the class TermStructure
-    TermStructure <- TermStructure(trade.date = trade.date, method = method)
+    
+    
+    TermStructure <- TermStructure(rates.data = rates.data, method = method)
+           # ends the for loop of the scenario set
     
     # Third if mortgage security call the prepayment model
     PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
-                                                 PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
-                                                 begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
-    
+                              PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                              begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+
+  
     #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
     #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
     MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
@@ -1467,9 +1477,17 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                      ScheduledPrin, PrepaidPrin, EndingBal, TotalCashFlow)
     names(Scenario) <- c("Period", "PmtDate", "TimePeriod", "BeginningBal", "MonthlyInterest", "ScheduledPrin", 
                          "PrepaidPrin", "EndingBal", "TotalCashFlow")
+    return(Scenario)
     
-     new("ScenarioResult", 
-        Cashflow = Scenario)
+    }  # ends the function Scenario
+
+    # This is call to the scenario function it is not part of the scenario function stupid!!
+    Scenario <- Scenario(scenario.set = scenario.set, rates.data = rates.data, bond.id = bond.id, 
+                         original.bal = original.bal, settlement.date = settlement.date, 
+                         PrepaymentAssumption = PrepaymentAssumption, ..., 
+                         begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
+                         CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)    
+   
   }
   
   #----------------------------------

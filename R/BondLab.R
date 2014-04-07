@@ -1441,46 +1441,54 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
 
+    # -------------------- This is a function that will be moved 
     Scenario <- function(scenario.set = vector(), rates.data = "character", bond.id = "character", original.bal = numeric(),
              settlement.date = "character", PrepaymentAssumption = "character", ModelTune = "character", Burnout = numeric(),
              begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){ 
+      
+    ScenarioResult <- list()
     
-    #The second step is to call the desired coupon curve into memory 
-    #This is done with the TermStructure function which creates the class TermStructure
+    #Normalize the scenario vector to add to the rates data.  Users typically specify rate shifts in basis points but recall rate data
+    #in percent from most data sources.  Scenario set is divided by 100
+    scenario.set = (scenario.set/100)
+      
+    #Initialize the first loop to run over scenario set    
+      for(i in 1:length(scenario.set)){
+      # add the rate shift to rates
+      rates = rates.data      
+      rates[1,2:length(rates.data)] = as.character(as.numeric(Rates[1,2:length(rates.data)]) + scenario.set[i])
+      
+      MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                          price = price, PrepaymentAssumption = 
+                                            PrepaymentAssumption(bond.id = bond.id, 
+                                            TermStructure = TermStructure(rates.data = rates, method = method), 
+                                            PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                            begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR))
     
+      Period = MortgageCashFlow@Period
+      PmtDate = MortgageCashFlow@PmtDate
+      TimePeriod = MortgageCashFlow@TimePeriod
+      BeginningBal = MortgageCashFlow@BeginningBal
+      MonthlyInterest = MortgageCashFlow@MonthlyInterest
+      ScheduledPrin = MortgageCashFlow@ScheduledPrin
+      PrepaidPrin = MortgageCashFlow@PrepaidPrin
+      EndingBal = MortgageCashFlow@EndingBal
+      TotalCashFlow = MonthlyInterest + ScheduledPrin + PrepaidPrin
+         
+      Scenario <- list(Period, PmtDate, TimePeriod, BeginningBal, MonthlyInterest, ScheduledPrin, PrepaidPrin, EndingBal, TotalCashFlow)
+      names(Scenario) <- c("Period", "PmtDate", "TimePeriod", "BeginningBal", "MonthlyInterest", "ScheduledPrin", 
+                                                              "PrepaidPrin", "EndingBal", "TotalCashFlow")
+      
+      #ScenarioResult <- append(ScenarioResult, list(Scenario))
+      ScenarioResult[[paste("scenario", scenario.set[i] * 100, sep = "")]] <- Scenario 
     
-    TermStructure <- TermStructure(rates.data = rates.data, method = method)
-           # ends the for loop of the scenario set
-    
-    # Third if mortgage security call the prepayment model
-    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
-                              PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
-                              begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
-
-  
-    #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
-    #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
-    MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                                          price = price, PrepaymentAssumption = PrepaymentAssumption)
-    
-    Period = MortgageCashFlow@Period
-    PmtDate = MortgageCashFlow@PmtDate
-    TimePeriod = MortgageCashFlow@TimePeriod
-    BeginningBal = MortgageCashFlow@BeginningBal
-    MonthlyInterest = MortgageCashFlow@MonthlyInterest
-    ScheduledPrin = MortgageCashFlow@ScheduledPrin
-    PrepaidPrin = MortgageCashFlow@PrepaidPrin
-    EndingBal = MortgageCashFlow@EndingBal
-    TotalCashFlow = MonthlyInterest + ScheduledPrin + PrepaidPrin
-    
-    Scenario <- list(Period, PmtDate, TimePeriod, BeginningBal, MonthlyInterest, 
-                     ScheduledPrin, PrepaidPrin, EndingBal, TotalCashFlow)
-    names(Scenario) <- c("Period", "PmtDate", "TimePeriod", "BeginningBal", "MonthlyInterest", "ScheduledPrin", 
-                         "PrepaidPrin", "EndingBal", "TotalCashFlow")
-    return(Scenario)
-    
+      } # end the for loop 
+      
+     new("ScenarioResult",
+         ScenarioResult = ScenarioResult)
     }  # ends the function Scenario
-
+    # -------------- This is the end of the function
+    
     # This is call to the scenario function it is not part of the scenario function stupid!!
     Scenario <- Scenario(scenario.set = scenario.set, rates.data = rates.data, bond.id = bond.id, 
                          original.bal = original.bal, settlement.date = settlement.date, 
@@ -1771,7 +1779,7 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
 # ----- The following classes define rate of return and valuation classes
   setClass("ScenarioResult",
            representation(
-           Cashflow = "list"   
+           ScenarioResult = "list"   
              ))
         
   setClass("RateofReturn",

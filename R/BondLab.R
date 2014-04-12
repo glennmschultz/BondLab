@@ -1502,19 +1502,13 @@
     #Call Prepayment Model
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
-
-    # -------------------- This is a function that will be moved 
-
-    
-    # -------------- This is the end of the function
     
     # This is call to the scenario function it is not part of the scenario function stupid!!
-    Scenario <- Scenario(scenario.set = scenario.set, scenario.type = scenario.type, price = price, rates.data = rates.data, method = method, bond.id = bond.id, 
-                         original.bal = original.bal, settlement.date = settlement.date, 
+    Scenario <- Scenario(scenario.set = scenario.set, scenario.type = scenario.type, price = price, rates.data = rates.data, 
+                         method = method, bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                          PrepaymentAssumption = PrepaymentAssumption, ..., 
                          begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
-                         CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)    
-   
+                         CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)       
   }
   
   #----------------------------------
@@ -1757,7 +1751,7 @@
            FutureValuePrinCarry = "numeric",
            TotalFutureValue = "numeric",
            DropImpliedValue = "numeric"),
-           contains="MortgageCashFlows"
+           contains = "MortgageCashFlows"
         ) 
 
 # --- The following classes define rates and Prepayment model tune classes
@@ -1830,14 +1824,15 @@
 #------ The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
   setClass("BondAnalytics", contains = c("MBSDetails", "BondCashFlows", "BondTermStructure", "TermStructure"))
 
-#------ The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class for all mortgage
-#passthrough analytics
+#------ The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class 
+#------ for all mortgage passthrough analytics
 
-  setClass("PassThroughAnalytics", contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption"))
+  setClass("PassThroughAnalytics", 
+           contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption"))
 
-#--------------------------------
+#---------------------------------------
 # Bond Lab Initialize Set Generics
-#--------------------------------
+#---------------------------------------
   setGeneric(
   name = "BondCashFlows",
   def = function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric())
@@ -1881,42 +1876,48 @@
                     SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric())
              {standardGenric("RateofReturn")})
 
-setGeneric("Seasoning",
+  setGeneric("Seasoning",
            function (alpha = numeric(), beta = numeric (), theta = numeric(), LoanAge = numeric())
              {standardGeneric("Seasoning")})
 
-setGeneric("Borrower.Incentive",
+  setGeneric("Borrower.Incentive",
            function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric())
              {standardGeneric("Borrower.Incentive")})
 
-setGeneric("Burnout",
+  setGeneric("Burnout",
            function(beta1 = numeric(), beta2 = numeric(), MaxIncen = numeric(), LoanAge = numeric())
              {standardGeneric("Burnout")})
 
-setGeneric("Seasonality",
+  setGeneric("Seasonality",
            function(alpha = numeric(), Month = numeric(), theta = numeric())
              {standardGeneric("Seasonality")})
   
-setGeneric("Prepayment.Model",
+  setGeneric("Prepayment.Model",
            function(ModelTune = "character", LoanAge = numeric(), 
                     Month = numeric(), incentive = numeric(), Burnout.maxincen = numeric())
              {standardGeneric("Prepayment.Model")})  
 
-setGeneric("DollarRoll", function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
+  setGeneric("DollarRoll", function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
                          settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), MortgageCashFlow = "character")
             {standardGeneric("DollarRoll")})
   
-setGeneric("DollarRollAnalytics", function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
-                                  settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), method = "ns", 
-                                  PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-                                  {standardGeneric("DollarRollAnalytics")})
+  setGeneric("DollarRollAnalytics", function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
+                        settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), method = "ns", 
+                        PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+            {standardGeneric("DollarRollAnalytics")})
 
-setGeneric("Scenario", function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character",method = "character", 
+  setGeneric("Scenario", function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character",method = "character", 
                        bond.id = "character", original.bal = numeric(), settlement.date = "character", 
                        PrepaymentAssumption = "character", 
                        ModelTune = "character", Burnout = numeric(), 
                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-                       {standardGeneric("Scenario")})
+            {standardGeneric("Scenario")})
+
+  setGeneric("ScenarioAnalysis", function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
+                      price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
+                      PrepaymentAssumption = "character", ..., 
+                      begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+              {standardGeneric("ScenarioAnalysis")})  
   
 #-------------------------------
 #Bond Lab Set Methods 

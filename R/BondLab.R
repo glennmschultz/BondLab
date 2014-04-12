@@ -1265,27 +1265,86 @@
         MortgageCashFlow
     )
   }
-
-  #-------------------------------
-  #Rate of Return Analysis
-  #-------------------------------
+  
+# ----------------------------------------------------------
+# Scenario Analysis Function
+# Runs interest rate scenario analysis based on scenario set
+# ----------------------------------------------------------
+  Scenario <- function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character", method = "character", 
+                       bond.id = "character", original.bal = numeric(), settlement.date = "character", 
+                       PrepaymentAssumption = "character", 
+                       ModelTune = "character", Burnout = numeric(), 
+                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){ 
+    
+    ScenarioResult <- list()
+    
+    if(scenario.type != "rate") stop ("Invalid Scenario Specfied")
+    
+    #Normalize the scenario vector to add to the rates data.  
+    #Users typically specify rate shifts in basis points but recall rate data
+    #in percent from most data sources.  Scenario set is divided by 100
+    scenario.set = (scenario.set/100)
+    
+    #Initialize the first loop to run over scenario set    
+    for(i in 1:length(scenario.set)){
+      # add the rate shift to rates
+      rates = rates.data      
+      rates[1,2:length(rates.data)] = as.character(as.numeric(Rates[1,2:length(rates.data)]) + scenario.set[i])
+      
+      TermStructure = TermStructure(rates.data = rates, method = method)
+      
+      Prepayment = PrepaymentAssumption(bond.id = bond.id, 
+                                        TermStructure = TermStructure, 
+                                        PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                        begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+      
+      MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                           price = price, PrepaymentAssumption = Prepayment)
+      
+      Scenario <-
+        new("Scenario",
+            Period = MortgageCashFlow@Period,
+            PmtDate = MortgageCashFlow@PmtDate,
+            TimePeriod = MortgageCashFlow@TimePeriod,
+            BeginningBal = MortgageCashFlow@BeginningBal,
+            PassThroughInterest = MortgageCashFlow@PassThroughInterest,
+            ScheduledPrin = MortgageCashFlow@ScheduledPrin,
+            PrepaidPrin = MortgageCashFlow@PrepaidPrin,
+            EndingBal = MortgageCashFlow@EndingBal,
+            TotalCashFlow = MortgageCashFlow@PassThroughInterest + 
+              MortgageCashFlow@ScheduledPrin + 
+              MortgageCashFlow@PrepaidPrin,
+            spotrate = TermStructure@spotrate,
+            forwardrate = TermStructure@forwardrate,
+            SMM = Prepayment@SMM)
+      
+      ScenarioAnalysis <- append(ScenarioAnalysis, Scenario)
+      
+    } # end the for loop 
+    
+    new("ScenarioSet",
+        Scenario = ScenarioAnalysis)
+  }  # ends the function Scenario
+ 
+# -------------------------------
+# Rate of Return Analysis
+# -------------------------------
   RateofReturn <- function(ReinvestmentRate = numeric(), ReceivedCF = "character", 
                            RemainingCF = "character", SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric()) {
     
   }
-#--------------------------------
-# Bond Analytics Functions
-# These functions analyze a bond using the above functions
-# and construct the appropriate objects  
-#--------------------------------
+# --------------------------------
+# Bond Analytics Functions - THESE ARE THE BOND LAB ENGINES !!!
+# These functions are different from the above they use the functions together
+# to analyze a bond or mortgage backed security using the above functions and construct the appropriate objects (classes)  
+# --------------------------------
 
 # This function analyzes a standard non callable bond and serves as the constructor function
 # These are the engines  
-#-----------------------------------
-BondAnalytics <- function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
+# -----------------------------------
+  BondAnalytics <- function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
                            settlement.date = "character", method = method) 
 {
-
 
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
   #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
@@ -1324,8 +1383,9 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   # This function analyzes a standard pass through security and serves as the constructor function
   #--------------------------------------  
   PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
-                                  settlement.date = "character", method = "character", PrepaymentAssumption = "character", ...,begin.cpr = numeric(), 
-                                  end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
+                                  settlement.date = "character", method = "character", 
+                                  PrepaymentAssumption = "character", ...,
+                                  begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
   {
   
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
@@ -1346,11 +1406,11 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
   #Call Prepayment Model
   ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
   Burnout = bond.id@Burnout
-
-
-  #The second step is to call the desired coupon curve into memory 
-  #This is done with the TermStructure function which creates the class TermStructure
-  TermStructure <- TermStructure(rates.data = rates.data, method = method)
+ 
+ 
+ #The second step is to call the desired coupon curve into memory 
+ #This is done with the TermStructure function which creates the class TermStructure
+ TermStructure <- TermStructure(rates.data = rates.data, method = method)
   
   # Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
@@ -1411,16 +1471,18 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
                                           price = price, PrepaymentAssumption = PrepaymentAssumption)
     
    
-    DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, settlement.date = settlement.date, 
-                            fwd.settlement.date = fwd.settlement.date, reinvestment.rate = reinvestment.rate, finance.rate = finance.rate, 
-                            MortgageCashFlow = MortgageCashFlow)
+    DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, 
+                             settlement.date = settlement.date, fwd.settlement.date = fwd.settlement.date, 
+                             reinvestment.rate = reinvestment.rate, finance.rate = finance.rate, MortgageCashFlow = MortgageCashFlow)
    return(DollarRoll)
   }
   
   #-------------- Scenario Analysis
    ScenarioAnalysis <- 
-    function( scenario.set = vector(), bond.id = "character", original.bal= numeric(), price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
-    PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
+    function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
+              price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
+              PrepaymentAssumption = "character", ..., 
+              begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
     
     #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
     #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
@@ -1442,55 +1504,12 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
     Burnout = bond.id@Burnout
 
     # -------------------- This is a function that will be moved 
-    Scenario <- function(scenario.set = vector(), rates.data = "character", bond.id = "character", original.bal = numeric(),
-             settlement.date = "character", PrepaymentAssumption = "character", ModelTune = "character", Burnout = numeric(),
-             begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){ 
-      
-    ScenarioResult <- list()
+
     
-    #Normalize the scenario vector to add to the rates data.  Users typically specify rate shifts in basis points but recall rate data
-    #in percent from most data sources.  Scenario set is divided by 100
-    scenario.set = (scenario.set/100)
-      
-    #Initialize the first loop to run over scenario set    
-      for(i in 1:length(scenario.set)){
-      # add the rate shift to rates
-      rates = rates.data      
-      rates[1,2:length(rates.data)] = as.character(as.numeric(Rates[1,2:length(rates.data)]) + scenario.set[i])
-      
-      MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                                          price = price, PrepaymentAssumption = 
-                                            PrepaymentAssumption(bond.id = bond.id, 
-                                            TermStructure = TermStructure(rates.data = rates, method = method), 
-                                            PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
-                                            begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR))
-    
-      Period = MortgageCashFlow@Period
-      PmtDate = MortgageCashFlow@PmtDate
-      TimePeriod = MortgageCashFlow@TimePeriod
-      BeginningBal = MortgageCashFlow@BeginningBal
-      MonthlyInterest = MortgageCashFlow@MonthlyInterest
-      ScheduledPrin = MortgageCashFlow@ScheduledPrin
-      PrepaidPrin = MortgageCashFlow@PrepaidPrin
-      EndingBal = MortgageCashFlow@EndingBal
-      TotalCashFlow = MonthlyInterest + ScheduledPrin + PrepaidPrin
-         
-      Scenario <- list(Period, PmtDate, TimePeriod, BeginningBal, MonthlyInterest, ScheduledPrin, PrepaidPrin, EndingBal, TotalCashFlow)
-      names(Scenario) <- c("Period", "PmtDate", "TimePeriod", "BeginningBal", "MonthlyInterest", "ScheduledPrin", 
-                                                              "PrepaidPrin", "EndingBal", "TotalCashFlow")
-      
-      #ScenarioResult <- append(ScenarioResult, list(Scenario))
-      ScenarioResult[[paste("scenario", scenario.set[i] * 100, sep = "")]] <- Scenario 
-    
-      } # end the for loop 
-      
-     new("ScenarioResult",
-         ScenarioResult = ScenarioResult)
-    }  # ends the function Scenario
     # -------------- This is the end of the function
     
     # This is call to the scenario function it is not part of the scenario function stupid!!
-    Scenario <- Scenario(scenario.set = scenario.set, rates.data = rates.data, bond.id = bond.id, 
+    Scenario <- Scenario(scenario.set = scenario.set, scenario.type = scenario.type, price = price, rates.data = rates.data, method = method, bond.id = bond.id, 
                          original.bal = original.bal, settlement.date = settlement.date, 
                          PrepaymentAssumption = PrepaymentAssumption, ..., 
                          begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
@@ -1777,9 +1796,25 @@ BondAnalytics <- function (bond.id = "character", principal = numeric(), price =
           ))
   
 # ----- The following classes define rate of return and valuation classes
-  setClass("ScenarioResult",
+  setClass("Scenario",
            representation(
-           ScenarioResult = "list"   
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           BeginningBal = "numeric",
+           PassThroughInterest = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           EndingBal = "numeric",
+           TotalCashFlow = "numeric",
+           spotrate = "numeric",
+           forwardrate = "numeric",
+           SMM = "numeric"
+             ))
+
+  setClass("ScenarioSet",
+             representation(
+               Scenario = "list"
              ))
         
   setClass("RateofReturn",
@@ -1875,6 +1910,13 @@ setGeneric("DollarRollAnalytics", function(bond.id = "character", original.bal= 
                                   settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), method = "ns", 
                                   PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
                                   {standardGeneric("DollarRollAnalytics")})
+
+setGeneric("Scenario", function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character",method = "character", 
+                       bond.id = "character", original.bal = numeric(), settlement.date = "character", 
+                       PrepaymentAssumption = "character", 
+                       ModelTune = "character", Burnout = numeric(), 
+                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+                       {standardGeneric("Scenario")})
   
 #-------------------------------
 #Bond Lab Set Methods 

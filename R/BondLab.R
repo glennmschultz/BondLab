@@ -1305,6 +1305,7 @@
                                            price = price, PrepaymentAssumption = Prepayment)
       
       Scenario <- new("Scenario",
+                  Name = paste("Scenario", scenario.set[i] * 100, sep = ""),    
                   Period = MortgageCashFlow@Period,
                   PmtDate = MortgageCashFlow@PmtDate,
                   TimePeriod = MortgageCashFlow@TimePeriod,
@@ -1320,7 +1321,7 @@
                   forwardrate = TermStructure@forwardrate,
                   SMM = Prepayment@SMM)
       
-      ScenarioResult <- append(ScenarioAnalysis, Scenario)
+      ScenarioResult <- append(ScenarioResult, Scenario)
       
     } # end the for loop 
      
@@ -1805,6 +1806,7 @@
 # ----- The following classes define rate of return and valuation classes
   setClass("Scenario",
            representation(
+           Name = "character",   
            Period = "numeric",
            PmtDate = "character",
            TimePeriod = "numeric",

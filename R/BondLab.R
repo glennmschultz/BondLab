@@ -1207,7 +1207,7 @@
     #Compute the Roll Economics....
     #Hold or Roll Analysis and Economics of Trade  
     if (TotalRollProceeds > FutureValueHold) 
-      HoldorRoll = as.character("Roll") else HoldorRoll = as.character("Hold")  
+    HoldorRoll = as.character("Roll") else HoldorRoll = as.character("Hold")  
     Advantage = as.numeric(abs(TotalRollProceeds - FutureValueHold))
     
     #Compute the days between the roll settlment date and the payment date
@@ -1270,7 +1270,7 @@
 # Scenario Analysis Function
 # Runs interest rate scenario analysis based on scenario set
 # ----------------------------------------------------------
-  Scenario <- function(scenario.set = vector(), scenario.type = "character", price = numeric(), 
+  Mtg.Scenario <- function(scenario.set = vector(), scenario.type = "character", price = numeric(), 
                        rates.data = "character", method = "character", 
                        bond.id = "character", original.bal = numeric(), settlement.date = "character", 
                        PrepaymentAssumption = "character", 
@@ -1304,7 +1304,7 @@
       MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                                            price = price, PrepaymentAssumption = Prepayment)
       
-      Scenario <- new("Scenario",
+      Scenario <- new("Mtg.Scenario",
                   Name = paste("Scenario", scenario.set[i] * 100, sep = ""),    
                   Period = MortgageCashFlow@Period,
                   PmtDate = MortgageCashFlow@PmtDate,
@@ -1325,7 +1325,7 @@
       
     } # end the for loop 
      
-     new("ScenarioSet", 
+     new("Mtg.ScenarioSet", 
          Scenario = ScenarioResult,
          MortgageCashFlow)
 
@@ -1430,7 +1430,7 @@
   MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
                           principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
-  Scenario <- Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
+  Scenario <- Mtg.Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
                        method = method, bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                        PrepaymentAssumption = "MODEL",
                        begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
@@ -1438,7 +1438,7 @@
   
   new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageTermStructure, TermStructure, PrepaymentAssumption, Scenario)    
   }
-  
+   
   #----------------------------------
   #Agency Mortgage Dollar Roll
     
@@ -1487,7 +1487,7 @@
   }
   
   #-------------- Scenario Analysis
-   ScenarioAnalysis <- 
+   Mtg.ScenarioAnalysis <- 
     function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
               price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
               PrepaymentAssumption = "character", ..., 
@@ -1516,13 +1516,23 @@
     Burnout = bond.id@Burnout
     
     # This is call to the scenario function it is not part of the scenario function stupid!!
-    Scenario <- Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
+    Scenario <- Mtg.Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
                          method = method, bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                          PrepaymentAssumption = PrepaymentAssumption, ..., 
                          begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
                          CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)
     
     return(Scenario)
+  }
+  
+  
+  # This is bondlab!! the final call to the analytic engines ...
+  
+  BondLab  <- function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
+                        settlement.date = "character", method = method, scenario.set = vector(), ...,
+                        PrepaymentAssumption = "character", 
+                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){
+    
   }
   
   #----------------------------------
@@ -1804,7 +1814,7 @@
           ))
   
 # ----- The following classes define rate of return and valuation classes
-  setClass("Scenario",
+  setClass("Mtg.Scenario",
            representation(
            Name = "character",   
            Period = "numeric",
@@ -1821,7 +1831,7 @@
            SMM = "numeric"
              ))
 
-  setClass("ScenarioSet",
+  setClass("Mtg.ScenarioSet",
              representation(
                Scenario = "list"),
                contains = "MortgageCashFlows"
@@ -1844,7 +1854,7 @@
 #------ for all mortgage passthrough analytics
 
   setClass("PassThroughAnalytics", 
-           contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption", "ScenarioSet"))
+           contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption", "Mtg.ScenarioSet"))
 
 
 #---------------------------------------
@@ -1923,18 +1933,18 @@
                         PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
             {standardGeneric("DollarRollAnalytics")})
 
-  setGeneric("Scenario", function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character",method = "character", 
+  setGeneric("Mtg.Scenario", function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character",method = "character", 
                        bond.id = "character", original.bal = numeric(), settlement.date = "character", 
                        PrepaymentAssumption = "character", 
                        ModelTune = "character", Burnout = numeric(), 
                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-            {standardGeneric("Scenario")})
+            {standardGeneric("Mtg.Scenario")})
 
-  setGeneric("ScenarioAnalysis", function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
+  setGeneric("Mtg.ScenarioAnalysis", function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
                       price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
                       PrepaymentAssumption = "character", ..., 
                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-              {standardGeneric("ScenarioAnalysis")})  
+              {standardGeneric("Mtg.ScenarioAnalysis")})  
   
 #-------------------------------
 #Bond Lab Set Methods 

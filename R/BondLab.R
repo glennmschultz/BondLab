@@ -365,6 +365,7 @@
   num.periods = length(time.period)
   col.names <- c("Period", "Date", "Time", "Principal Outstanding", "Coupon", "Coupon Income", "Principal Paid", "TotalCashFlow",
                  "Present Value Factor", "Present Value", "Duration", "Convexity Time", "CashFlow Convexity", "Convexity")
+  
   Bond.CF.Table <- array(data = NA, c(num.periods, 14), dimnames = list(seq(c(1:num.periods)),col.names))  
   for(i in 1:num.periods){
     Bond.CF.Table[i,1] = i
@@ -563,7 +564,7 @@
   MBS.CF.Table[,20] = MBS.CF.Table[,18] * MBS.CF.Table[,19] 
   
   #Weighted Average Life
-  WAL = sum((((MBS.CF.Table[,5]) + (MBS.CF.Table[,7])) * MBS.CF.Table[,3])/ sum((MBS.CF.Table[,7]) + (MBS.CF.Table[,5])))
+  WAL = sum((((MBS.CF.Table[,7]) + (MBS.CF.Table[,8])) * MBS.CF.Table[,3])/ sum((MBS.CF.Table[,7]) + (MBS.CF.Table[,8])))
   
   #Duration and Convexity
   Duration = apply(MBS.CF.Table, 2, sum)[17]
@@ -1292,6 +1293,7 @@
     for(i in 1:length(scenario.set)){
       # add the rate shift to rates
       rates = rates.data      
+      
       rates[1,2:length(rates.data)] = as.character(as.numeric(Rates[1,2:length(rates.data)]) + scenario.set[i])
       
       TermStructure = TermStructure(rates.data = rates, method = method)
@@ -1479,7 +1481,7 @@
     MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                                           price = price, PrepaymentAssumption = PrepaymentAssumption)
     
-   
+  
     DollarRoll <- DollarRoll(bond.id = bond.id, price = price, drop = drop, original.bal = original.bal, 
                              settlement.date = settlement.date, fwd.settlement.date = fwd.settlement.date, 
                              reinvestment.rate = reinvestment.rate, finance.rate = finance.rate, MortgageCashFlow = MortgageCashFlow)
@@ -1524,16 +1526,7 @@
     
     return(Scenario)
   }
-  
-  
-  # This is bondlab!! the final call to the analytic engines ...
-  
-  BondLab  <- function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
-                        settlement.date = "character", method = method, scenario.set = vector(), ...,
-                        PrepaymentAssumption = "character", 
-                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){
-    
-  }
+
   
   #----------------------------------
   # Helper Functions These function help to manage

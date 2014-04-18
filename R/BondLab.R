@@ -1290,11 +1290,12 @@
     scenario.set = (scenario.set/100)
     
     #Initialize the first loop to run over scenario set    
-    for(i in 1:length(scenario.set)){
-      # add the rate shift to rates
+    
+    for(i in 1:length(scenario.set)){ 
+       #add the rate shift to rates
       rates = rates.data      
       
-      rates[1,2:length(rates.data)] = as.character(as.numeric(Rates[1,2:length(rates.data)]) + scenario.set[i])
+      rates[1,2:length(rates.data)] = as.character(as.numeric(rates[1,2:length(rates.data)]) + scenario.set[i])
       
       TermStructure = TermStructure(rates.data = rates, method = method)
       
@@ -1517,6 +1518,7 @@
     ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
     Burnout = bond.id@Burnout
     
+    
     # This is call to the scenario function it is not part of the scenario function stupid!!
     Scenario <- Mtg.Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
                          method = method, bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
@@ -1524,9 +1526,97 @@
                          begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
                          CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)
     
-    return(Scenario)
+    CashFlowAnalysis <- function(scenario = "character"){
+    # This begins the loop through the scenario set for analysis
+    # Loop through the number of scenarios  
+      for (i in 1:length(scenario@Scenario)){
+      
+    }      
+    }
+    
+    CashFlowAnalysis <- CashFlowAnalysis(scenario = Scenario)
+    
+    return(CashFlowAnalysis)
   }
 
+  
+  Mtg.ScenarioAnalysis.2 <- 
+    function( scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
+              price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
+              PrepaymentAssumption = "character", ..., 
+              begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
+      
+      #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
+      #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
+      if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
+      
+      #Default method for TermStructure
+      if(missing(method)) method = "ns"
+      
+      #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
+      Rate.Delta = 1
+      
+      #Initialize the Scenario Result 
+      
+      ScenarioResult <- list()
+      
+      # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+      bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+      #Call the desired curve from rates data folder
+      trade.date = as.Date(trade.date, "%m-%d-%Y")
+      rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+      #Call Prepayment Model
+      ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
+      Burnout = bond.id@Burnout
+      
+
+      for(i in 1:length(scenario.set)){
+        conn <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
+        print(scenario.set[i])
+        Scenario <- readRDS(conn) 
+
+        rates = rates.data
+        rates[1,2:length(rates)] = Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
+      
+        TermStructure = TermStructure(rates.data = rates, method = method)
+      
+        Prepayment = PrepaymentAssumption(bond.id = bond.id, 
+                                        TermStructure = TermStructure, 
+                                        PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                        begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+      
+        MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                           price = price, PrepaymentAssumption = Prepayment)
+      
+        Scenario <- new("Mtg.Scenario",  
+                      Period = MortgageCashFlow@Period,
+                      PmtDate = MortgageCashFlow@PmtDate,
+                      TimePeriod = MortgageCashFlow@TimePeriod,
+                      BeginningBal = MortgageCashFlow@BeginningBal,
+                      PassThroughInterest = MortgageCashFlow@PassThroughInterest,
+                      ScheduledPrin = MortgageCashFlow@ScheduledPrin,
+                      PrepaidPrin = MortgageCashFlow@PrepaidPrin,
+                      EndingBal = MortgageCashFlow@EndingBal,
+                      TotalCashFlow = MortgageCashFlow@PassThroughInterest + 
+                      MortgageCashFlow@ScheduledPrin + 
+                      MortgageCashFlow@PrepaidPrin,
+                      spotrate = TermStructure@spotrate,
+                      forwardrate = TermStructure@forwardrate,
+                      SMM = Prepayment@SMM,
+                      Scenario
+                     )
+      
+      ScenarioResult <- append(ScenarioResult, Scenario)
+
+      }
+      
+      close(conn)
+      
+      
+      new("Mtg.ScenarioSet", 
+          Scenario = ScenarioResult,
+          MortgageCashFlow)
+    }
   
   #----------------------------------
   # Helper Functions These function help to manage
@@ -1807,9 +1897,18 @@
           ))
   
 # ----- The following classes define rate of return and valuation classes
+  setClass("Scenario",
+          representation(
+          Name = "character",
+          Type = "character",
+          Horizon = "character",
+          ShiftType = "character",
+          Shiftbps = "numeric",
+          Formula = "function"
+          ))
+  
   setClass("Mtg.Scenario",
-           representation(
-           Name = "character",   
+           representation( 
            Period = "numeric",
            PmtDate = "character",
            TimePeriod = "numeric",
@@ -1821,14 +1920,23 @@
            TotalCashFlow = "numeric",
            spotrate = "numeric",
            forwardrate = "numeric",
-           SMM = "numeric"
-             ))
+           SMM = "numeric"),
+             contains = "Scenario")
 
   setClass("Mtg.ScenarioSet",
              representation(
                Scenario = "list"),
                contains = "MortgageCashFlows"
-             )
+           )
+  
+  setClass("CashFlowAnalysis",
+           representation(
+           ScenarioName = "character",   
+           Yield = "numeric",
+           AvgLife = "numeric",
+           ZVSpread = "numeric",
+           CPR = "numeric"
+              ))
         
   setClass("RateofReturn",
          representation(

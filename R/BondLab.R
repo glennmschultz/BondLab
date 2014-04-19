@@ -1266,74 +1266,70 @@
         MortgageCashFlow
     )
   }
-  
-# ----------------------------------------------------------
-# Scenario Analysis Function
-# Runs interest rate scenario analysis based on scenario set
-# ----------------------------------------------------------
-  Mtg.Scenario <- function(scenario.set = vector(), scenario.type = "character", price = numeric(), 
-                       rates.data = "character", method = "character", 
-                       bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                       PrepaymentAssumption = "character", 
-                       ModelTune = "character", Burnout = numeric(), 
-                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){ 
+
+#------- Scenario Function --------
+# opens connection to scenario library
+#----------------------------------
+  Scenario <- function(bond.id ="character", settlement.date = "character", price = numeric(), original.bal = numeric(),
+                       scenario.set = vector(), rates.data = "character", method = "character", 
+                       PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
+                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
     
-    #set the default for Scenario
-    if(missing(scenario.type)) scenario.type = "rate"
-    
-    #should take rate or cpr build in a switch function
+    if(missing(method)) method = "ns"
     ScenarioResult <- list()
     
-    #Normalize the scenario vector to add to the rates data.  
-    #Users typically specify rate shifts in basis points but recall rate data
-    #in percent from most data sources.  Scenario set is divided by 100
-    scenario.set = (scenario.set/100)
-    
-    #Initialize the first loop to run over scenario set    
-    
-    for(i in 1:length(scenario.set)){ 
-       #add the rate shift to rates
-      rates = rates.data      
+    for(i in 1:length(scenario.set)){
+      conn <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
       
-      rates[1,2:length(rates.data)] = as.character(as.numeric(rates[1,2:length(rates.data)]) + scenario.set[i])
+      Scenario <- readRDS(conn) 
+      
+      rates = rates.data
+      rates[1,2:length(rates)] = Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
       
       TermStructure = TermStructure(rates.data = rates, method = method)
+      
       
       Prepayment = PrepaymentAssumption(bond.id = bond.id, 
                                         TermStructure = TermStructure, 
                                         PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
                                         begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
-      
+
       MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                                            price = price, PrepaymentAssumption = Prepayment)
-      
-      Scenario <- new("Mtg.Scenario",
-                  Name = paste("Scenario", scenario.set[i] * 100, sep = ""),    
-                  Period = MortgageCashFlow@Period,
-                  PmtDate = MortgageCashFlow@PmtDate,
-                  TimePeriod = MortgageCashFlow@TimePeriod,
-                  BeginningBal = MortgageCashFlow@BeginningBal,
-                  PassThroughInterest = MortgageCashFlow@PassThroughInterest,
-                  ScheduledPrin = MortgageCashFlow@ScheduledPrin,
-                  PrepaidPrin = MortgageCashFlow@PrepaidPrin,
-                  EndingBal = MortgageCashFlow@EndingBal,
-                  TotalCashFlow = MortgageCashFlow@PassThroughInterest + 
-                  MortgageCashFlow@ScheduledPrin + 
-                  MortgageCashFlow@PrepaidPrin,
-                  spotrate = TermStructure@spotrate,
-                  forwardrate = TermStructure@forwardrate,
-                  SMM = Prepayment@SMM)
-      
-      ScenarioResult <- append(ScenarioResult, Scenario)
-      
-    } # end the for loop 
-     
-     new("Mtg.ScenarioSet", 
-         Scenario = ScenarioResult,
-         MortgageCashFlow)
 
-  }  # ends the function Scenario
- 
+      Scenario <- new("Mtg.Scenario",  
+                      Period = MortgageCashFlow@Period,
+                      PmtDate = MortgageCashFlow@PmtDate,
+                      TimePeriod = MortgageCashFlow@TimePeriod,
+                      BeginningBal = MortgageCashFlow@BeginningBal,
+                      PassThroughInterest = MortgageCashFlow@PassThroughInterest,
+                      ScheduledPrin = MortgageCashFlow@ScheduledPrin,
+                      PrepaidPrin = MortgageCashFlow@PrepaidPrin,
+                      EndingBal = MortgageCashFlow@EndingBal,
+                      TotalCashFlow = MortgageCashFlow@PassThroughInterest + 
+                      MortgageCashFlow@ScheduledPrin + 
+                      MortgageCashFlow@PrepaidPrin,
+                      spotrate = TermStructure@spotrate,
+                      forwardrate = TermStructure@forwardrate,
+                      SMM = Prepayment@SMM,
+                      Scenario
+      )
+
+      ScenarioResult <- append(ScenarioResult, Scenario)
+
+    } # end loop
+    
+    close(conn)
+    
+    
+    new("Mtg.ScenarioSet", 
+        Scenario = ScenarioResult,
+        MortgageCashFlow)
+    
+    
+  } # scenario end function
+  
+  
 # -------------------------------
 # Rate of Return Analysis
 # -------------------------------
@@ -1392,7 +1388,8 @@
   #--------------------------------------  
   PassThroughAnalytics <- function (bond.id = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
                                   settlement.date = "character", method = "character", scenario.set = vector(),
-                                  PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) 
+                                  PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()
+                                 ) 
   {
   
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
@@ -1406,12 +1403,18 @@
   Rate.Delta = 1
   
   # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-  bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+  conn1 <-  gzfile(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+  bond.id = readRDS(conn1)
+
+  
   #Call the desired curve from rates data folder
-  trade.date = as.Date(trade.date, "%m-%d-%Y")
-  rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
-  #Call Prepayment Model
-  ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
+  conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+  rates.data <- readRDS(conn2)
+
+  #Call Prepayment Model Tuning Parameters
+  conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+  ModelTune <- readRDS(conn3)
+  
   Burnout = bond.id@Burnout
  
   #The second step is to call the desired coupon curve into memory 
@@ -1433,11 +1436,11 @@
   MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
                           principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
-  Scenario <- Mtg.Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
-                       method = method, bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                       PrepaymentAssumption = "MODEL",
-                       begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
-                       CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)     
+  Scenario <- Mtg.ScenarioAnalysis(scenario.set = scenario.set, bond.id = bond.id@ID, original.bal = original.bal, 
+                                   trade.date = trade.date, settlement.date = settlement.date, price = price, 
+                                   PrepaymentAssumption = "MODEL")
+  
+  closeAllConnections()
   
   new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageTermStructure, TermStructure, PrepaymentAssumption, Scenario)    
   }
@@ -1474,8 +1477,8 @@
     
     # Third if mortgage security call the prepayment model
     PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
-                                                 PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
-                                                 begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+                                  PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                  begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
     
     #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
     #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
@@ -1490,57 +1493,8 @@
   }
   
   #-------------- Scenario Analysis
-   Mtg.ScenarioAnalysis <- 
-    function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
-              price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
-              PrepaymentAssumption = "character", ..., 
-              begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
-    
-    #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
-    #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
-    if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
-    
-    #Default for scenario.type
-    if(missing(scenario.type)) scenario.type = "rate"
-    
-    #Default method for TermStructure
-    if(missing(method)) method = "ns"
-    
-    #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
-    Rate.Delta = 1
-    
-    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-    bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
-    #Call the desired curve from rates data folder
-    trade.date = as.Date(trade.date, "%m-%d-%Y")
-    rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
-    #Call Prepayment Model
-    ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
-    Burnout = bond.id@Burnout
-    
-    
-    # This is call to the scenario function it is not part of the scenario function stupid!!
-    Scenario <- Mtg.Scenario(scenario.set = scenario.set, price = price, rates.data = rates.data, 
-                         method = method, bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                         PrepaymentAssumption = PrepaymentAssumption, ..., 
-                         begin.cpr = begin.cpr, end.cpr = begin.cpr, seasoning.period = seasoning.period, 
-                         CPR = CPR, ModelTune = ModelTune, Burnout = Burnout)
-    
-    CashFlowAnalysis <- function(scenario = "character"){
-    # This begins the loop through the scenario set for analysis
-    # Loop through the number of scenarios  
-      for (i in 1:length(scenario@Scenario)){
-      
-    }      
-    }
-    
-    CashFlowAnalysis <- CashFlowAnalysis(scenario = Scenario)
-    
-    return(CashFlowAnalysis)
-  }
-
   
-  Mtg.ScenarioAnalysis.2 <- 
+  Mtg.ScenarioAnalysis <- 
     function( scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
               price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
               PrepaymentAssumption = "character", ..., 
@@ -1550,6 +1504,9 @@
       #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
       if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
       
+      #Call the desired curve from rates data folder
+      #trade.date = as.Date(trade.date, "%m-%d-%Y")
+      
       #Default method for TermStructure
       if(missing(method)) method = "ns"
       
@@ -1557,68 +1514,25 @@
       Rate.Delta = 1
       
       #Initialize the Scenario Result 
-      
-      ScenarioResult <- list()
-      
+       
       # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
       bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
       #Call the desired curve from rates data folder
       trade.date = as.Date(trade.date, "%m-%d-%Y")
-      rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+      rates.data <- readRDS(paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""))
       #Call Prepayment Model
       ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
       Burnout = bond.id@Burnout
       
-
-      for(i in 1:length(scenario.set)){
-        conn <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
-        print(scenario.set[i])
-        Scenario <- readRDS(conn) 
-
-        rates = rates.data
-        rates[1,2:length(rates)] = Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
       
-        TermStructure = TermStructure(rates.data = rates, method = method)
-      
-        Prepayment = PrepaymentAssumption(bond.id = bond.id, 
-                                        TermStructure = TermStructure, 
-                                        PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
-                                        begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
-      
-        MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                                           price = price, PrepaymentAssumption = Prepayment)
-      
-        Scenario <- new("Mtg.Scenario",  
-                      Period = MortgageCashFlow@Period,
-                      PmtDate = MortgageCashFlow@PmtDate,
-                      TimePeriod = MortgageCashFlow@TimePeriod,
-                      BeginningBal = MortgageCashFlow@BeginningBal,
-                      PassThroughInterest = MortgageCashFlow@PassThroughInterest,
-                      ScheduledPrin = MortgageCashFlow@ScheduledPrin,
-                      PrepaidPrin = MortgageCashFlow@PrepaidPrin,
-                      EndingBal = MortgageCashFlow@EndingBal,
-                      TotalCashFlow = MortgageCashFlow@PassThroughInterest + 
-                      MortgageCashFlow@ScheduledPrin + 
-                      MortgageCashFlow@PrepaidPrin,
-                      spotrate = TermStructure@spotrate,
-                      forwardrate = TermStructure@forwardrate,
-                      SMM = Prepayment@SMM,
-                      Scenario
-                     )
-      
-      ScenarioResult <- append(ScenarioResult, Scenario)
-
-      }
-      
-      close(conn)
-      
-      
-      new("Mtg.ScenarioSet", 
-          Scenario = ScenarioResult,
-          MortgageCashFlow)
-    }
+      Scenario <- Scenario(bond.id = bond.id, settlement.date = settlement.date, price = price, original.bal = original.bal,
+                           scenario.set = scenario.set, rates.data = rates.data,
+                           PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout,
+                           begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+     
+    } # end of analysis
   
-  #----------------------------------
+    #----------------------------------
   # Helper Functions These function help to manage
   # The data sources   
   #----------------------------------
@@ -2033,18 +1947,17 @@
                         settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), method = "ns", 
                         PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
             {standardGeneric("DollarRollAnalytics")})
-
-  setGeneric("Mtg.Scenario", function(scenario.set = vector(), scenario.type = "character", price = numeric(), rates.data = "character",method = "character", 
-                       bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                       PrepaymentAssumption = "character", 
-                       ModelTune = "character", Burnout = numeric(), 
+  
+  setGeneric("Scenario", function(bond.id ="character", settlement.date = "character", price = numeric(), original.bal = numeric(),
+                       scenario.set = vector(), rates.data = "character", method = "character", 
+                       PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-            {standardGeneric("Mtg.Scenario")})
-
-  setGeneric("Mtg.ScenarioAnalysis", function( scenario.set = vector(), scenario.type = "character", bond.id = "character", original.bal= numeric(), 
-                      price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
-                      PrepaymentAssumption = "character", ..., 
-                      begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+  {standardGeneric("Scenario")})
+  
+  setGeneric("Mtg.ScenarioAnalysis", function(scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
+                         price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
+                         PrepaymentAssumption = "character", ..., 
+                         begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
               {standardGeneric("Mtg.ScenarioAnalysis")})  
   
 #-------------------------------

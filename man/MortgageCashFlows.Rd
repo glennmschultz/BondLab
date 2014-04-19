@@ -8,40 +8,32 @@ MortgageCashFlows
 A constructor function for the class MortgageCashFlows
 }
 \usage{
-MortgageCashFlows(bond.id = "character", original.bal = numeric(), settlement.date = "character", price = numeric(), TermStructure = "character", PrepaymentAssumption = "character")
+MortgageCashFlows(bond.id = "character", original.bal = numeric(), settlement.date = "character", price = numeric(), 
+PrepaymentAssumption = "character")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{bond.id}{
-The bond cusip or psudeo cusip number
-}
+The bond cusip or psudeo cusip number}
   \item{original.bal}{
-The original balance of the mortgage security. The trading factor is stored in the bond cusip file and passed to MortgageCashFlows
-}
+The original balance of the mortgage security. The trading factor is stored in the bond cusip file and passed to MortgageCashFlows}
   \item{settlement.date}{
-settlement date of the MBS
-}
+settlement date of the MBS}
   \item{price}{
-price is the bond price paid by the investor
-}
+price is the bond price paid by the investor}
   \item{PrepaymentAssumption}{
-The prepayment assumption used to derive the MBS cash flow.  Valid inputs are PPC assumption, model, ,or CPR 
-}
+The prepayment assumption used to derive the MBS cash flow.  Valid inputs are PPC assumption, model, ,or CPR}
+
   \item{\dots}{
-allows for evaluation of the below
-}
+allows for evaluation of the below}
   \item{begin.cpr}{
-The starting CPR used when PrepaymentAssumption = "PPC"
-}
+The starting CPR used when PrepaymentAssumption = "PPC"}
   \item{end.cpr}{
-The peak CPR reached at the end of the seasoning period
-}
+The peak CPR reached at the end of the PPC seasoning period}
   \item{seasoning.period}{
-The lenght of the seasoning period
-}
+The length of the PPC seasoning period}
   \item{CPR}{
-Constant Prepayment Rate used when PrepaymentAssumption = "CPR"
-}
+Constant Prepayment Rate used when PrepaymentAssumption = "CPR"}
 }
 \details{
 MortgageCashFlows class is the CashFlow input to BondTermStrucuture

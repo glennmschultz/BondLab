@@ -8,7 +8,7 @@ Bond Basis Conversion
 This function is used to adjust the bond basis.  The bond basis is the payment date count used to compute interest due 
 }
 \usage{
-BondBasisConversion(issue.date, start.date, end.date, settlement.date, lastpmt.date, nextpmt.date, coupon, principal, frequency, price)
+BondBasisConversion(issue.date, start.date, end.date, settlement.date, lastpmt.date, nextpmt.date)
 }
 
 \arguments{
@@ -29,18 +29,6 @@ The previous interest payment date (often referred to as the last payment date)
 }
   \item{nextpmt.date}{
 The upcoming interest payment date
-}
-  \item{coupon}{
-The coupon (interest rate) paid to the investor
-}
-  \item{principal}{
-The principal balance outstanding
-}
-  \item{frequency}{
-The number of payments made to the investor
-}
-  \item{price}{
-The price paid by the buyer to the seller
 }
 }
 \details{
@@ -67,7 +55,7 @@ Used in BondCashFlows and MortgageCashFlows
 }
 \examples{
 
-BondBasisConversion(issue.date = as.Date(c("2013-01-15")), start.date = as.Date(c("2013-01-15")), end.date = as.Date(c("2015-01-15")), settlement.date = as.Date(c("2013-01-15")), lastpmt.date = as.Date(c("2013-01-15")), nextpmt.date = as.Date(c("2013-07-15")), coupon = .03, principal = 1000, frequency = 2, price = 100)
+BondBasisConversion(issue.date = as.Date(c("2013-01-15")), start.date = as.Date(c("2013-01-15")), end.date = as.Date(c("2015-01-15")), settlement.date = as.Date(c("2013-01-15")), lastpmt.date = as.Date(c("2013-01-15")), nextpmt.date = as.Date(c("2013-07-15")))
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

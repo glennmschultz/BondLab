@@ -8,12 +8,12 @@ TermStructure
 This is a constructure for S4 class object TermStrucutre.  The constructor call the package termstrc
 }
 \usage{
-TermStructure(trade.date = "character", method = "character")
+TermStructure(rates.data = "character", method = "character")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{trade.date}{
-The date on which the investor (buyer or seller) initiates a trade
+  \item{rates.data}{
+rate data used to fit the term strucutre of interest rates
 }
   \item{method}{
 The method used to fit the term strucutre 

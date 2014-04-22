@@ -1,1 +1,7 @@
 exportPattern("^[[:alpha:]]+")
+import(ggplot2)
+import(lubridate)
+import(methods)
+import(plyr)
+import(reshape2)
+import(termstrc)

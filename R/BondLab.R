@@ -248,6 +248,12 @@
   cpr = ifelse(monthly.cpr <= end.cpr, monthly.cpr, end.cpr)
   cpr
   }
+  
+  SMMVector.To.CPR <- function(SMM = vector(), num.period = numeric()){
+    SMM = prod(1 + SMM)^(1/num.period)
+    SMM = SMM - 1
+    SMMVector.to.CPR = 1-(1-SMM)^12 
+  }
 
   #--------------------------
   # Error trap function for bond inputs

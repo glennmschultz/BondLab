@@ -1102,7 +1102,7 @@
     Mtg.Rate =  as.numeric(TermStructure@TenYearFwd[1:length(LoanAge)] + .80)
     Incentive =  as.numeric(NoteRate - Mtg.Rate)
     Burnout = Burnout
-    BurnoutVector = NULL
+    #BurnoutVector = 
     for(i in seq_along(LoanAge)){
     if(i == 1) if(Burnout[i] > Incentive[i]) BurnoutVector[i] = Burnout[i] else BurnoutVector[i] = Incentive[i]
     if(i > 1) if(BurnoutVector[i-1] > Incentive[i]) BurnoutVector[i] = BurnoutVector[i-1] else BurnoutVector[i] = Incentive[i]

@@ -1,0 +1,21 @@
+{
+    "debugBreakpointsState" : {
+        "breakpoints" : [
+            {
+                "editor_line_number" : 4,
+                "editor_state" : 2,
+                "function_name" : "PrepaymentModel",
+                "function_steps" : "",
+                "id" : 2,
+                "is_package_breakpoint" : false,
+                "is_pending_debug_completion" : false,
+                "line_number" : 4,
+                "needs_updated_steps" : false,
+                "package_name" : "",
+                "path" : "~/BondLabSource/PrepaymentModel.R",
+                "state" : 2,
+                "type" : 0
+            }
+        ]
+    }
+}

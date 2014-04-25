@@ -1,0 +1,512 @@
+geom_line(size = .5, colour = "black", alpha = .75, linetype = 2) +
+geom_point(size = 1, colour = "black", alpha = .5) +
+theme_minimal() +
+ylab("Burnout (%)")+
+xlab("Loan Age") +
+theme(panel.grid.major = element_line(size = .25, color = "grey")) +
+theme(axis.text = element_text(size = 15)) +
+theme(axis.title = element_text(size = 20))
+# graph 15
+PrepaymentModelData <- data.frame(c(seq(1,360,1)))
+PrepaymentModelData[2] <- ifelse(PrepaymentModelData[,1]%%12 != 0, PrepaymentModelData[,1]%%12, 12)
+PrepaymentModelData[3] <- rep(0,360)
+PrepaymentModelData[4] <- Prepayment.Model(Turnover.Rate = .08, LoanAge = PrepaymentModelData[,1], Month = PrepaymentModelData[,2], incentive = PrepaymentModelData[,3])
+PrepaymentModelData[5] <- (1-(1-PrepaymentModelData[,4])^12) * 100
+colnames(PrepaymentModelData) <- c("LoanAge", "Month", "Incentive", "SMM", "CPR")
+PrepaymentModel <- data.frame(PrepaymentModelData[,1])
+PrepaymentModel[2] <- PrepaymentModelData[,5]
+colnames(PrepaymentModel) <- c("LoanAge", "CPR")
+PrepaymentModel <- melt(PrepaymentModel, id = "LoanAge")
+ggplot(subset(PrepaymentModel, LoanAge <= 120), aes(x=LoanAge, y = value , linetype = variable)) +
+geom_point(size = 4, colour = "black", alpha = .5) +
+geom_line(size = .3, colour = "black", alpha = .75, linetype = 1) +
+theme_minimal() +
+ylab("CPR (%)")+
+xlab("Loan Age") +
+theme(panel.grid.major = element_line(size = .25, color = "grey")) +
+theme(axis.text = element_text(size = 15)) +
+theme(axis.title = element_text(size = 20))
+#Table to refinance
+RefiTable <- data.frame(c(seq(100000, 400000, 50000)))
+RefiTable[2] <- Mortgage.Monthly.Payment(orig.bal = RefiTable[,1], note.rate = 5, term.mos = 360)
+RefiTable[3] <- Mortgage.Monthly.Payment(orig.bal = RefiTable[,1], note.rate = 4.5, term.mos = 360)
+RefiTable[4] <- RefiTable[,2] - RefiTable[,3]
+RefiTable[5] <- rep(2000,7)
+RefiTable[6] <- as.integer(RefiTable[,5]/RefiTable[,4])
+ggplot(subset(PrepaymentModel, LoanAge <= 120), aes(x=LoanAge, y = value , linetype = variable)) +
+geom_point(size = 4, colour = "black", alpha = .5) +
+geom_line(size = .3, colour = "black", alpha = .75, linetype = 1) +
+theme_minimal() +
+ylab("CPR (%)")+
+xlab("Loan Age") +
+theme(panel.grid.major = element_line(size = .25, color = "grey")) +
+theme(axis.text = element_text(size = 15)) +
+theme(axis.title = element_text(size = 20))
+# graph 15
+PrepaymentModelData <- data.frame(c(seq(1,360,1)))
+PrepaymentModelData[2] <- ifelse(PrepaymentModelData[,1]%%12 != 0, PrepaymentModelData[,1]%%12, 12)
+PrepaymentModelData[3] <- rep(0,360)
+PrepaymentModelData[4] <- Prepayment.Model(Turnover.Rate = .08, LoanAge = PrepaymentModelData[,1], Month = PrepaymentModelData[,2], incentive = PrepaymentModelData[,3])
+PrepaymentModelData[5] <- (1-(1-PrepaymentModelData[,4])^12) * 100
+colnames(PrepaymentModelData) <- c("LoanAge", "Month", "Incentive", "SMM", "CPR")
+PrepaymentModelData <- data.frame(c(seq(1,360,1)))
+PrepaymentModelData[2] <- ifelse(PrepaymentModelData[,1]%%12 != 0, PrepaymentModelData[,1]%%12, 12)
+PrepaymentModelData[3] <- rep(0,360)
+PrepaymentModelData[4] <- Prepayment.Model(Turnover.Rate = .08, LoanAge = PrepaymentModelData[,1], Month = PrepaymentModelData[,2], incentive = PrepaymentModelData[,3])
+PrepaymentModelData[4] <- Prepayment.Model(Turnover.Rate = .08, LoanAge = PrepaymentModelData[,1], Month = PrepaymentModelData[,2], incentive = PrepaymentModelData[,3])
+bondlabMBS4 <- PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 105.75, trade.date = "01-10-2013",
+settlement.date = "01-13-2013", scenario.set = c("DA50", "NC", "UA50", "UA100", "UA150", "UA200"),
+PrepaymentAssumption = "MODEL")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[2][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[5][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[3][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[4][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[3][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[5][[1]]@SMM)^12)*100, type = "l")
+Burnout(-1, -1, 25, seq(1,360,1))
+plot(Burnout(-1, -1, 25, seq(1,360,1)))
+plot(Burnout(-.01, -.01, 25, seq(1,360,1)))
+FH30.Generic <- new("PrepaymentModelTune",
+TurnoverRate = 0.08,
+Turnover.alpha = 1.0,
+Turnover.beta = 0.87,
+Turnover.theta = 0.197,
+Seasonality.alpha = 0.15,
+Seasonality.theta = 12.0,
+Incentive.Fast.theta.1 = 0.025,
+Incentive.Fast.theta.2 = 0.019,
+Incentive.Fast.beta = -4.0,
+Incentive.Fast.eta = 1.0,
+Incentive.Slow.theta.1 = 0.001,
+Incentive.Slow.theta.2 = 0.004,
+Incentive.Slow.beta = -1.0,
+Incentive.Slow.eta = 0.5,
+Burnout.beta.1 = -.01,
+Burnout.beta.2 = -.01
+)
+saveRDS(FH30.Generic, "FH30.Generic.rds")
+setwd("~/BondLab/PrepaymentModel")
+setwd("~/BondLab/PrepaymentModel")
+saveRDS(FH30.Generic, "FH30.Generic.rds")
+library(BondLab)
+bondlabMBS4 <- PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 105.75, trade.date = "01-10-2013",
+settlement.date = "01-13-2013", scenario.set = c("DA50", "NC", "UA50", "UA100", "UA150", "UA200"),
+PrepaymentAssumption = "MODEL")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[2][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[4][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[5][[1]]@SMM)^12)*100, type = "l")
+ExtractScenario <- function(bond.id = character){
+ScenarioName = list()
+ScenarioCPR = list()
+ScenarioYieldToMaturity = list()
+ScenarioSpreadToCurve = list()
+ScenarioWAL = list()
+ScenarioModDuration = list()
+for(i in 1:6){
+ScenarioName = append(ScenarioName,bond.id@Scenario[i][[1]]@Name)
+ScenarioCPR = append(ScenarioCPR,  SMMVector.To.CPR(bond.id@Scenario[i][[1]]@SMM, length(bond.id@Scenario[i][[1]]@SMM)) * 100)
+ScenarioYieldToMaturity = append(ScenarioYieldToMaturity, bond.id@Scenario[i][[1]]@YieldToMaturity * 100)
+ScenarioSpreadToCurve = append(ScenarioSpreadToCurve, bond.id@Scenario[i][[1]]@SpreadToInterCurve)
+ScenarioWAL = append(ScenarioWAL, bond.id@Scenario[i][[1]]@WAL)
+ScenarioModDuration = append(ScenarioModDuration, bond.id@Scenario[i][[1]]@ModDuration)
+}
+Result <- cbind(ScenarioName, ScenarioCPR, ScenarioYieldToMaturity, ScenarioSpreadToCurve, ScenarioWAL, ScenarioModDuration)
+return(Result)
+}
+xtable(t(ExtractScenario(bondlabMBS4)), digits = 2)
+library("xtable", lib.loc="/Library/Frameworks/R.framework/Versions/3.0/Resources/library")
+xtable(t(ExtractScenario(bondlabMBS4)), digits = 2)
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[5][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[1][[1]]@SMM)^12)*100, type = "l")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[3][[1]]@SMM)^12)*100, type = "l")
+setwd("~/BondLab/PrepaymentModel")
+Tune <- readRDS("FH30.Generic.rds")
+Incen <-rep(0, 360)
+LA <- (1, 360, 1)
+LA <- seq(1, 360, 1)
+Prepayment.Model
+Prepayment.Model(ModelTune - Tune, LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+Prepayment.Model(ModelTune = "Tune", LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+Prepayment.Model(ModelTune = as.character(Tune), LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+Prepayment.Model(ModelTune = Tune, LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+Model <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+plot(Model)
+Prepayment.Model(ModelTune = Tune, LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+Prepayment.Model(ModelTune = "Tune", LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+PrepaymentAssumption
+Tune
+Prepayment.Model(ModelTune = Tune, LoanAge = LA, incentive = Incen, Burnout.maxincen = 25)
+plot(Prepayment.Model(ModelTune = Tune, LoanAge = LA, incentive = Incen, Burnout.maxincen = 25))
+plot(Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25))
+LA%%12
+LA%%12 + 1
+LA%%12 + 1
+Month <- LA%%12 + 1
+plot(Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25))
+plot(Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25))
+plot(Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25), type = "l")
+test <- (Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25), type = "l")
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR, type = "l")
+Burnout(-.01, -.01, 25)
+Burnout
+plot(Burnout(-.01, .01, 25))
+plot(Burnout(-.01, -.01, 25))
+plot(Burnout(-.01, -.01, .25))
+Burnout
+plot(Burnout(-.01, -.01, 25, LoanAge = LA))
+plot(Burnout(-1, -1, .25, LoanAge = LA))
+plot(Burnout(-1, -1, 25, LoanAge = LA))
+plot(Burnout(-.01, -.01, 25, LoanAge = LA))
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+CPR
+bondlabMBS4 <- PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 105.75, trade.date = "01-10-2013",
+settlement.date = "01-13-2013", scenario.set = c("DA50", "NC", "UA50", "UA100", "UA150", "UA200"),
+PrepaymentAssumption = "MODEL")
+#This is how I access the class Scenario Set
+plot((1-(1-bondlabMBS4@Scenario[3][[1]]@SMM)^12)*100, type = "l")
+Incen <- rep(1, 360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR, type = "l")
+plot(Burnout(beta1 = -.01, beta2 = -.01, MaxIncen = bondlabMBS55@BurnoutVector, LoanAge = LA))
+plot(Burnout(beta1 = -.01, beta2 = -.01, MaxIncen = bondlabMBS4@BurnoutVector, LoanAge = LA))
+plot(Burnout(beta1 = -.01, beta2 = -.01, MaxIncen = bondlabMBS4@BurnoutVector, LoanAge = LA))
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR, type = "l")
+Incen <- seq(0, 360, 1)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = 12, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR, type = "l")
+seasoning(1, .87, .197, LoanAge = LA)
+Seasoning(1, .87, .197, LoanAge = LA)
+# graph 9.11
+LoanAge.Vector <- data.frame(c(seq(1, 180, 1)))
+Season.Vector <- 1 * Seasoning( alpha = 1, beta = 0.87, theta = 0.192, LoanAge = LoanAge.Vector[,1])
+LoanAge.Vector <- data.frame(cbind(LoanAge.Vector, Season.Vector))
+colnames(LoanAge.Vector) <- c("LoanAge", "Seasoning")
+ggplot(subset(LoanAge.Vector, LoanAge <= 60), aes(x=LoanAge, y = Seasoning)) +
+geom_line(linetype = 1) +
+theme_minimal() +
+ylab("CPR (%)")+
+xlab("Loan Age") +
+theme(panel.grid.major = element_line(size = .25, color = "grey")) +
+theme(axis.text = element_text(size = 15)) +
+theme(axis.title = element_text(size = 20))
+FH30.Generic <- new("PrepaymentModelTune",
+TurnoverRate = 0.08,
+Turnover.alpha = 1.0,
+Turnover.beta = 0.87,
+Turnover.theta = 0.192,
+Seasonality.alpha = 0.15,
+Seasonality.theta = 12.0,
+Incentive.Fast.theta.1 = 0.025,
+Incentive.Fast.theta.2 = 0.019,
+Incentive.Fast.beta = -4.0,
+Incentive.Fast.eta = 1.0,
+Incentive.Slow.theta.1 = 0.001,
+Incentive.Slow.theta.2 = 0.004,
+Incentive.Slow.beta = -1.0,
+Incentive.Slow.eta = 0.5,
+Burnout.beta.1 = -.01,
+Burnout.beta.2 = -.01
+)
+setwd("~/BondLab/PrepaymentModel")
+saveRDS(FH30.Generic, "FH30.Generic.rds")
+seasoning(1, .87, .192, LoanAge = LA)
+Seasoning(1, .87, .192, LoanAge = LA)
+Seasoning(theta = 1, beta = .87, alpah = .192, LoanAge = LA)
+Seasoning(theta = 1, beta = .87, alpha = .192, LoanAge = LA)
+Seasoning(theta = 1, beta  = .192, alpha = .87, LoanAge = LA)
+Seasoning(theta = 1, beta  = .87, alpha = .192, LoanAge = LA)
+Seasoning( alpha = 1, beta = 0.87, theta = 0.192, LoanAge = LA)
+plot(Seasoning( alpha = 1, beta = 0.87, theta = 0.192, LoanAge = LA))
+plot(Seasoning( alpha = 1, beta = 0.87, theta = 0.197, LoanAge = LA))
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR, type = "l")
+plot(CPR[1:60], type = "l")
+plot(Seasoning( alpha = 1, beta = 0.87, theta = 0.192, LoanAge = LA))
+plot(. 08 * Seasoning( alpha = 1, beta = 0.87, theta = 0.192, LoanAge = LA))
+plot(Seasoning( alpha = 1, beta = 0.87, theta = 0.192, LoanAge = LA) * .08)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR[1:60], type = "l")
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR[1:60], type = "l")
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR[1:60], type = "l")
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+CPR <- (1-(1-test)^12) * 100
+plot(CPR[1:60], type = "l")
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = 25)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month, incentive = Incen, Burnout.maxincen = rep(25,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = rep(25,360))
+rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = rep(25,360))
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(Seasoning( alpha = 1, beta = 0.87, theta = 0.197, LoanAge = LA))
+1-(1-.08)^(1/12)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+test
+plot(test)
+plot(test, type = l)
+plot(test, type = "l")
+plot(1-(1-test)^12, type = "l")
+plot((1-(1-test)^12) * 100, type = "l")
+SMM <-pmax(0, Fast)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+Incen <- rep(1,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+Incen <- rep(0,360)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = .25)
+plot((1-(1-test)^12) * 100, type = "l")
+Burnout
+plot(Burnout(beta1 = -.01, beta2 = -.01, MaxIncen = 25, LoanAge = LA ))
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+plot(test)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+Incen <- rep(1,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test)^12) * 100, type = "l")
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+Borrower.Incentive
+Incentive.Tune <- seq(-300, 300, 25)
+slow <- Borrower.Incentive(incentive = Incentive.Tune, theta1 = .001, theta2 = .002,
+beta = -1, location = .5)
+plot(slow, type = 'l')
+plot(slow, type = 'l' x = incentive)
+slow
+fast <- Borrower.Incentive(incentive = Incentive.Tune, theta1 = .025, theta2 = .019,
+beta = -4, location = 1)
+plot(fast, type = 'l' x = incentive)
+plot(fast, type = 'l')
+Incentive.Tune <- (-300, 300, 10)
+Incentive.Tune <- seq(-300, 300, 10)
+slow <- Borrower.Incentive(incentive = Incentive.Tune, theta1 = .001, theta2 = .002,
+beta = -1, location = .5)
+pincent <- cbind(Incentive.Tune, slow)
+plot(pincent
+pincent <- data.frame(Incentive.Tune, slow)
+pincent <- data.frame(Incentive.Tune, slow)
+plot(pincent)
+pincent
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+library(BondLab)
+Incen <- rep(0,360)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot((1-(1-test[1:36])^12) * 100, type = "l")
+plot(test)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+1-(1-.08)^(1/12)
+# graph 13 Fast Payer Slow Payer
+FastSlow.Payer <- data.frame(c(seq(-300, 300, 25)))
+FastSlow.Payer[2] <- Borrower.Incentive(FastSlow.Payer[1]/100, theta1 = 0.025, theta2 = 0.019, beta = -4, location = 1)
+FastSlow.Payer[3] <- Borrower.Incentive(FastSlow.Payer[1]/100, theta1 = 0.001, theta2 = 0.004, beta = -1, location = .5)
+colnames(FastSlow.Payer) <- c("Incentive", "FastPayer", "SlowPayer")
+FastSlow.Payer <- melt(FastSlow.Payer, id = "Incentive")
+ggplot(FastSlow.Payer, aes(x=Incentive, y = value , shape = variable)) +
+geom_point(size = 5, colour = "black", alpha = .5) +
+geom_line(size = .5, colour = "black", alpha = .75, linetype = 2) +
+theme_minimal() +
+ylab("SMM (%)")+
+xlab("Incentive") +
+theme(panel.grid.major = element_line(size = .25, color = "grey")) +
+theme(axis.text = element_text(size = 15)) +
+theme(axis.title = element_text(size = 20)) +
+theme(legend.position = c(.1, .2)) +
+scale_shape(name = "Legend", labels = c("Fast Payer", "Slow Payer"))
+View(FastSlow.Payer)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+-0.008 * .4
+-0.0008 * .4
+-.0001 * .6
+-.0001 * .8
+-.0032 * .2
+1-(1-.08)^(1/12)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+TurnoverRate        = ModelTune@TurnoverRate
+Seasoning.alpha     = ModelTune@Turnover.alpha
+Seasoning.beta      = ModelTune@Turnover.beta
+Seasoning.theta     = ModelTune@Turnover.theta
+Seasonality.alpha   = ModelTune@Seasonality.alpha
+Seasonality.theta   = ModelTune@Seasonality.theta
+Fast.theta1         = ModelTune@Incentive.Fast.theta.1
+Fast.theta2         = ModelTune@Incentive.Fast.theta.2
+Fast.beta           = ModelTune@Incentive.Fast.beta
+Fast.location       = ModelTune@Incentive.Fast.eta
+Slow.theta1         = ModelTune@Incentive.Slow.theta.1
+Slow.theta2         = ModelTune@Incentive.Slow.theta.2
+Slow.beta           = ModelTune@Incentive.Slow.beta
+Slow.location       = ModelTune@Incentive.Slow.eta
+Burnout.beta1       = ModelTune@Burnout.beta.1
+Burnout.beta2       = ModelTune@Burnout.beta.2
+Slow.beta           = ModelTune@Incentive.Slow.beta
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(test)
+library(BondLab)
+test <- Prepayment.Model(ModelTune = Tune, LoanAge = LA, Month = Month,
+incentive = Incen, Burnout.maxincen = 25)
+plot(test, type = "l")
+plot(1-((1-test)^12), type = "l")
+plot((1-((1-test)^12)*100), type = "l")
+plot((1-((1-test)^12))*100, type = "l")
+bondlabMBS4 <- PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 105.75, trade.date = "01-10-2013",
+settlement.date = "01-13-2013", scenario.set = c("DA50", "NC", "UA50", "UA100", "UA150", "UA200"),
+PrepaymentAssumption = "MODEL")
+ExtractScenario <- function(bond.id = character){
+ScenarioName = list()
+ScenarioCPR = list()
+ScenarioYieldToMaturity = list()
+ScenarioSpreadToCurve = list()
+ScenarioWAL = list()
+ScenarioModDuration = list()
+for(i in 1:6){
+ScenarioName = append(ScenarioName,bond.id@Scenario[i][[1]]@Name)
+ScenarioCPR = append(ScenarioCPR,  SMMVector.To.CPR(bond.id@Scenario[i][[1]]@SMM, length(bond.id@Scenario[i][[1]]@SMM)) * 100)
+ScenarioYieldToMaturity = append(ScenarioYieldToMaturity, bond.id@Scenario[i][[1]]@YieldToMaturity * 100)
+ScenarioSpreadToCurve = append(ScenarioSpreadToCurve, bond.id@Scenario[i][[1]]@SpreadToInterCurve)
+ScenarioWAL = append(ScenarioWAL, bond.id@Scenario[i][[1]]@WAL)
+ScenarioModDuration = append(ScenarioModDuration, bond.id@Scenario[i][[1]]@ModDuration)
+}
+Result <- cbind(ScenarioName, ScenarioCPR, ScenarioYieldToMaturity, ScenarioSpreadToCurve, ScenarioWAL, ScenarioModDuration)
+return(Result)
+}
+xtable(t(ExtractScenario(bondlabMBS4)), digits = 2)

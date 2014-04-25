@@ -1029,17 +1029,17 @@
 
   # The Bond Lab base prepayment model
   #----------------------------------------------------------------------------------------------------
-  Prepayment.Model <- function(ModelTune = "character", LoanAge = numeric(), 
-                               Month = numeric(), incentive = numeric(), Burnout.maxincen = numeric()){
+  Prepayment.Model <- function(ModelTune = "character", LoanAge = vector(), 
+                               Month = vector(), incentive = vector(), Burnout.maxincen = numeric()){
       
-      TurnoverRate        = ModelTune@TurnoverRate                         
+      TurnoverRate        = ModelTune@TurnoverRate                       
       Seasoning.alpha     = ModelTune@Turnover.alpha
       Seasoning.beta      = ModelTune@Turnover.beta 
       Seasoning.theta     = ModelTune@Turnover.theta
       Seasonality.alpha   = ModelTune@Seasonality.alpha
       Seasonality.theta   = ModelTune@Seasonality.theta
       Fast.theta1         = ModelTune@Incentive.Fast.theta.1  
-      Fast.theta2         = ModelTune@Incentive.Fast.theta.1 
+      Fast.theta2         = ModelTune@Incentive.Fast.theta.2 
       Fast.beta           = ModelTune@Incentive.Fast.beta 
       Fast.location       = ModelTune@Incentive.Fast.eta
       Slow.theta1         = ModelTune@Incentive.Slow.theta.1 
@@ -1061,11 +1061,13 @@
     # Calculate the Borrower Refinance Response
     Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
     Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
-    Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen * 100, LoanAge = LoanAge)
+    Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen, LoanAge = LoanAge)
     
     Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
     
-    SMM <-pmax(0, Refinance + Turnover)
+    SMM = Refinance + Turnover
+    
+    SMM <-pmax(0, SMM)
     
   }
   
@@ -1101,17 +1103,12 @@
     NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
     Mtg.Rate =  as.numeric(TermStructure@TenYearFwd[1:length(LoanAge)] + .80)
     Incentive =  as.numeric(NoteRate - Mtg.Rate)
-    Burnout = Burnout
-    #BurnoutVector = 
-    for(i in seq_along(LoanAge)){
-    if(i == 1) if(Burnout[i] > Incentive[i]) BurnoutVector[i] = Burnout[i] else BurnoutVector[i] = Incentive[i]
-    if(i > 1) if(BurnoutVector[i-1] > Incentive[i]) BurnoutVector[i] = BurnoutVector[i-1] else BurnoutVector[i] = Incentive[i]
-    }
-
+    Burnout = bond.id@Burnout
+    
       
     if(PrepaymentAssumption == "MODEL")
       {SMM = Prepayment.Model(ModelTune = ModelTune, LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), 
-                              incentive = Incentive, Burnout.maxincen = BurnoutVector)} 
+                              incentive = Incentive, Burnout.maxincen = Burnout)} 
       else 
       {if(PrepaymentAssumption == "PPC") 
       {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, 
@@ -1134,7 +1131,6 @@
         LoanAge = as.numeric(LoanAge),
         MtgRateFwd = Mtg.Rate,
         Incentive = Incentive,
-        BurnoutVector = BurnoutVector,
         SMM = as.numeric(SMM)
     )
         
@@ -1335,8 +1331,7 @@
     } # end loop
     
     close(conn)
-    
-    
+  
     new("Mtg.ScenarioSet", 
         Scenario = ScenarioResult,
         MortgageCashFlow)
@@ -1710,7 +1705,6 @@
              NoteRate = "numeric",
              MtgRateFwd = "numeric",
              Incentive = "numeric",
-             BurnoutVector = "numeric",
              SMM = "numeric"),
              contains = "MBSDetails"
            )

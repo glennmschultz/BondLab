@@ -1499,6 +1499,7 @@
     Rate.Delta = 1
     
     # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+    # I need to open and Close using connections
     bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
     #Call the desired curve from rates data folder
     trade.date = as.Date(trade.date, "%m-%d-%Y")

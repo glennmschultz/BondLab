@@ -1145,8 +1145,6 @@
     }
     
     Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, type = bond.id@AmortizationType, term = bond.id@AmortizationTerm)
-    #Mtg.Rate =  as.numeric(TermStructure@TenYearFwd[1:length(LoanAge)] + .80)
-    print(Mtg.Rate)
     
     Incentive =  as.numeric(NoteRate - Mtg.Rate)
     Burnout = bond.id@Burnout
@@ -1317,7 +1315,7 @@
 #------- Scenario Function --------
 # opens connection to scenario library
 #----------------------------------
-  Mtg.Scenario <- function(bond.id ="character", settlement.date = "character", MortgageRate = "character", price = numeric(), original.bal = numeric(),  
+  Mtg.Scenario <- function(bond.id ="character", settlement.date = "character", price = numeric(), original.bal = numeric(),  
                        scenario.set = vector(), rates.data = "character", method = "character", 
                        PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) { 
@@ -1325,13 +1323,13 @@
     if(missing(method)) method = "ns"
     
     ScenarioResult <- list()
+    
+    connS2 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    MortgageRate <- readRDS(connS2)
 
     for(i in 1:length(scenario.set)){
       connS1 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
       Scenario <- readRDS(connS1) 
-
-      connS2 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", MortgageRate, ",rds", sep ="", open = "rb"))
-      MortgageRate <= readRDS(connS2)
       
       rates = rates.data
       rates[1,2:length(rates)] = Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
@@ -1377,12 +1375,10 @@
 
     } # end loop
     
-    close(conn)
-  
+
     new("Mtg.ScenarioSet", 
         Scenario = ScenarioResult,
-        MortgageCashFlow)
-    
+        MortgageCashFlow)    
     
   } # scenario end function
   
@@ -1557,7 +1553,7 @@
   #-------------- Scenario Analysis
   
   Mtg.ScenarioAnalysis <- 
-    function( scenario.set = vector(), bond.id = "character", MortgageRate = "character", original.bal= numeric(), 
+    function( scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
               price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
               PrepaymentAssumption = "character", ..., 
               begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
@@ -1565,9 +1561,6 @@
       #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
       #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
       if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
-      
-      #Call the desired curve from rates data folder
-      #trade.date = as.Date(trade.date, "%m-%d-%Y")
       
       #Default method for TermStructure
       if(missing(method)) method = "ns"
@@ -1579,10 +1572,10 @@
        
       # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
       bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
+      
       #Call the desired curve from rates data folder
       trade.date = as.Date(trade.date, "%m-%d-%Y")
       rates.data <- readRDS(paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""))
-      MortgageRate <- readRDS(paste("~BondLab/PrepaymentModel", MortgageRate, ".rds", sep = ""))
       
       #Call Prepayment Model
       ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
@@ -2012,13 +2005,13 @@
                         PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
             {standardGeneric("DollarRollAnalytics")})
   
-  setGeneric("Mtg.Scenario", function(bond.id ="character", MortgageRate = "character", settlement.date = "character", price = numeric(), original.bal = numeric(),
+  setGeneric("Mtg.Scenario", function(bond.id ="character", settlement.date = "character", price = numeric(), original.bal = numeric(),
                        scenario.set = vector(), rates.data = "character", method = "character", 
                        PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
                        begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
   {standardGeneric("Mtg.Scenario")})
   
-  setGeneric("Mtg.ScenarioAnalysis", function(scenario.set = vector(), bond.id = "character", MortgageRate = "character", original.bal= numeric(), 
+  setGeneric("Mtg.ScenarioAnalysis", function(scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
                          price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
                          PrepaymentAssumption = "character", ..., 
                          begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())

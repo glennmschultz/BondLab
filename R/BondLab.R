@@ -32,7 +32,7 @@
   #Time value of money functions
   #---------------------------------
   
-  TimeValue <- function(interest.rate = numeric(), number.period = numeric(), frequency = numeric()){
+  TimeValue <- function(interest.rate = numeric(), number.period = numeric(), frequency = numeric(), type = "character"){
     if (missing(interest.rate))
       stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
     if (!is.numeric(interest.rate)  )
@@ -1112,6 +1112,7 @@
     #PPC function has error trapping feature so there is no need to error trap for PPC
     
     NoteRate = bond.id@GWac
+    sato = bond.id@SATO
     FirstPmtDate = as.Date(bond.id@FirstPrinPaymentDate, "%m-%d-%Y")
     LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
     FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
@@ -1127,6 +1128,7 @@
                                   FirstPmtDate, units = "days")/30.44) + 1
     
     NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
+    sato = as.numeric(rep(sato, length(LoanAge)))
     
     # Here the switch function is used to determine the mortgage function to propogate the forward mortgage rate
     # switch is used because there will be more than 2 or 3 rates in the future and if else will get messy
@@ -1136,8 +1138,8 @@
       term = as.character(term)
       switch( type, 
               fixed = switch(term,
-                             "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd, ten = TermStructure@TenYearFwd),
-                             "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd, ten = TermStructure@TenYearFwd)
+                             "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], ten = TermStructure@TenYearFwd[1:length(LoanAge)], sato = sato),
+                             "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd, ten = TermStructure@TenYearFwd, sato = sato)
                              ), # end first nested switch statement
               arm = switch(term, 
                            "30" = 0 ) # end second nested switch statement
@@ -1145,6 +1147,8 @@
     }
     
     Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, type = bond.id@AmortizationType, term = bond.id@AmortizationTerm)
+    
+    Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] # This is why I need to make class classflow array
     
     Incentive =  as.numeric(NoteRate - Mtg.Rate)
     Burnout = bond.id@Burnout
@@ -1734,7 +1738,8 @@
            BalloonDate = "character",
            MBSFactor = "numeric",
            Model = "character",
-           Burnout = "numeric"
+           Burnout = "numeric",
+           SATO = "numeric"
          ))
   
   setClass("PrepaymentAssumption",

@@ -32,7 +32,7 @@
   #Time value of money functions
   #---------------------------------
   
-  TimeValue <- function(interest.rate = numeric(), number.period = numeric(), frequency = numeric(), type = "character"){
+  TimeValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric(), type = "character"){
     if (missing(interest.rate))
       stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
     if (!is.numeric(interest.rate)  )
@@ -54,135 +54,18 @@
     if (frequency < 1 | frequency >12 )
       stop("No valid frequency specified.")
     
-    interest.rate = interest.rate/frequency
+    if(! type %in% c("PV", "PVA", "PVAD", "FV", "FVA"))
+      stop("Time value function not specfied correctly")
     
-  }
-
-  PresentValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
+    interest.rate = interest.rate/frequency
   
-  if (missing(interest.rate))
-    stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-  if (!is.numeric(interest.rate)  )
-    stop("No numeric interest.rate specified.")
-  if (interest.rate <0 | interest.rate > 1)
-    stop("No valid  interest.rate specified.")
-  
-  if(missing(number.periods))
-    stop("Need to provide the number of discounting periods")
-  if(!is.numeric(number.periods))
-    stop(" No numeric discounting period specfified")
-  if (number.periods < 1 )
-    stop("No valid  number.periods specified.")
-  
-  if(missing(frequency))
-    stop("Need to provide the frequency")
-  if(!is.numeric(frequency))
-    stop(" No numeric frequency specfified")
-  if (frequency < 1 | frequency >12 )
-    stop("No valid frequency specified.")
-  
-  interest.rate = interest.rate/frequency
-  
-  1/(1+interest.rate)^number.periods
-  }
-
-  FutureValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
-  if (missing(interest.rate))
-    stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-  if (!is.numeric(interest.rate)  )
-    stop("No numeric interest.rate specified.")
-  if (interest.rate <0 | interest.rate > 1)
-    stop("No valid  interest.rate specified.")
-  
-  if(missing(number.periods))
-    stop("Need to provide the number of discounting periods")
-  if(!is.numeric(number.periods))
-    stop(" No numeric discounting period specfified")
-  if (number.periods < 1 )
-    stop("No valid  number.periods specified.")
-  
-  if(missing(frequency))
-    stop("Need to provide the frequency")
-  if(!is.numeric(frequency))
-    stop(" No numeric frequency specfified")
-  if (frequency < 1 | frequency >12 )
-    stop("No valid frequency specified.")
-  
-  interest.rate = interest.rate/frequency
-  
-  (1+interest.rate)^number.periods  
-  } 
-
-  PresentValueAnnuity <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()) {
-  if (missing(interest.rate))
-    stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-  if (!is.numeric(interest.rate)  )
-    stop("No numeric interest.rate specified.")
-  if (interest.rate <0 | interest.rate > 1)
-    stop("No valid  interest.rate specified.")
-  if(missing(number.periods))
-    stop("Need to provide the number of discounting periods")
-  if(!is.numeric(number.periods))
-    stop(" No numeric discounting period specfified")
-  if (number.periods < 1 )
-    stop("No valid  number.periods specified.")
-  if(missing(frequency))
-    stop("Need to provide the frequency")
-  if(!is.numeric(frequency))
-    stop(" No numeric frequency specfified")
-  if (frequency < 1 | frequency >12 )
-    stop("No valid frequency specified.")
-  interest.rate = interest.rate/frequency
-  ((1-(1/(1+interest.rate)^number.periods))/interest.rate)
-  }
-
-  PresentValueAnnuityDue <-function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
-  if (missing(interest.rate))
-    stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-  if (!is.numeric(interest.rate)  )
-    stop("No numeric interest.rate specified.")
-  if (interest.rate <0 | interest.rate > 1)
-    stop("No valid  interest.rate specified.")
-  if(missing(number.periods))
-    stop("Need to provide the number of discounting periods")
-  if(!is.numeric(number.periods))
-    stop(" No numeric discounting period specfified")
-  if (number.periods < 1 )
-    stop("No valid  number.periods specified.")
-  if(missing(frequency))
-    stop("Need to provide the frequency")
-  if(!is.numeric(frequency))
-    stop(" No numeric frequency specfified")
-  if (frequency < 1 | frequency >12 )
-    stop("No valid frequency specified.")
-  interest.rate = interest.rate/frequency
-  ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate)  
-  }
-
-  FutureValueAnnuity <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric()){
-  if (missing(interest.rate))
-    stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-  if (!is.numeric(interest.rate)  )
-    stop("No numeric interest.rate specified.")
-  if (interest.rate <0 | interest.rate > 1)
-    stop("No valid  interest.rate specified.")
-  
-  if(missing(number.periods))
-    stop("Need to provide the number of discounting periods")
-  if(!is.numeric(number.periods))
-    stop(" No numeric discounting period specfified")
-  if (number.periods < 1 )
-    stop("No valid  number.periods specified.")
-  
-  if(missing(frequency))
-    stop("Need to provide the frequency")
-  if(!is.numeric(frequency))
-    stop(" No numeric frequency specfified")
-  if (frequency < 1 | frequency >12 )
-    stop("No valid frequency specified.")
-  
-  interest.rate = interest.rate/frequency
-  (((1 + interest.rate)^(number.periods)) -1)/interest.rate
+      switch(type,
+      PV =  1/(1+interest.rate)^number.periods,
+      PVA = ((1-(1/(1+interest.rate)^number.periods))/interest.rate),
+      PVAD =   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate),  
+      FV =  (1+interest.rate)^number.periods,
+      FVA =   (((1 + interest.rate)^(number.periods)) -1)/interest.rate)
+   
   }
 
   #----------------------------------
@@ -261,7 +144,7 @@
   }
 
   Remain.Balance <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
-  note.rate = note.rate/1200
+  note.rate = note.rate/12
   term = term.mos
   Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term.mos)-1))
   Remain.Balance

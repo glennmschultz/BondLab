@@ -28,6 +28,9 @@
   #Bond Lab Functions
   #----------------------------------------------------------------------------------------
 
+  days.in.month = 30.44
+  days.in.year = 365.28
+  months.in.year = 12
   #---------------------------------
   #Time value of money functions
   #---------------------------------
@@ -570,9 +573,10 @@
   }
   
   #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
-  Spot.Spread <- function(spread, cashflow, discount.rates, t.period, proceeds){
+  Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
+                          t.period = vector(), proceeds = numeric()){
     Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
-    proceeds - Present.Value
+    return(proceeds - Present.Value)
   }
   
   #================= set up the index names for each array that will be used in the function
@@ -589,6 +593,7 @@
   
   #set the arrays for key rate duration calculation
   #key rate table holds data for the term structure and shifts in the key rates
+  #!!!!!!!!!!!!!! DIM TO LENGTH OF CASH FLOW ARRAY AND SET LAST KR TO LENGTH LINE 604
   Key.Rate.Table <- array(data = NA, c(360,6), dimnames = list(seq(c(1:360)), Index.Names))
   
   #key rate duration array holds the key rates and the key rate duration
@@ -604,14 +609,17 @@
   KRIndex <- array(data = NA, c(KRCount, 6), dimnames = list(seq(c(1:KRCount)), Index.Names))
   
   # Initialize the cash flow array for discounting and key rate caclulations
-  # this will be populated from class BondCashFlows 
-  CashFlowArray <- array(data = NA, c(360,2), dimnames = list(seq(1:360), c("period", "cashflow")))
+  # this will be populated from class BondCashFlows
+  # !!!!!!!!!!!!!!!!!DIM CASHFLOW ARRAY TO SIZE OF CASHFLOW!!!!!!!!!!!!!!!!!!!!!!
+  CashFlowArray <- array(data = NA, c(360,2), 
+                         dimnames = list(seq(1:360), c("period", "cashflow")))
   
   #Initialze the spot rate array for key rate duration calculations
   SpotRate <- as.matrix(TermStructure@spotrate)
   
   # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS coefficients from Term Stucture
   # and then populate and align the cashflow array for discounting and key rate computations
+  # !!!!!!!!!!!!!!! SET LOOP TO LENGTH OF CASHFLOW ARRAY !!!!!!!!!!!!!!!!!!!!!!!!!!
   for(x in 1:360){
     
     #Period (n) in which the cashflow is received
@@ -634,18 +642,21 @@
   #This loops through the time period and set the cashflows into the propery array location for
   #discounts by indexing the cashflows to the array.  The indexing is conditional on the integer of the first period less than or equal to 1
   
-  
   if(as.integer(cashflow@TimePeriod[1] *12) != 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12) + 1,2] = cashflow@TotalCashFlow
   if(as.integer(cashflow@TimePeriod[1] * 12) == 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12),2] = cashflow@TotalCashFlow
   
   #solve for spread to spot curve to equal price
-  spot.spread <- uniroot(Spot.Spread, interval = c(-1, 1), tol = .0000000001, CashFlowArray[,2],
+   spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), tol = .0000000001, CashFlowArray[,2],
                          discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
   
+  
   #convert the spot spread to the frequency of the bond
-  #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+  spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+  
   #Step three add the spot spread to the spot curve to get the discount rates that are need for
   #the key rate duration calculation
+  
+  #at a minimum the cash flow array should be 360 months
   for(i in 1:360){
     Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
   }
@@ -958,8 +969,6 @@
       Burnout.beta1       = ModelTune@Burnout.beta.1 
       Burnout.beta2       = ModelTune@Burnout.beta.2
     
-    # All of the above needs to made into a model tuning class 
-    # Restate the turnover rate as a single monthly mortality rate
     
     Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
     
@@ -974,13 +983,10 @@
     
     Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
     
-    SMM = Refinance + Turnover
-    
-    SMM <-pmax(0, SMM)
-    
+    SMM = Refinance + Turnover    
+    SMM <-pmax(0, SMM)    
   }
   
-   
   # ---------  This function is the prepayment model and serves as a constructor for the prepayment model vector 
   # ---------  Prepayment Assumption
   PrepaymentAssumption <- function(bond.id = "character", TermStructure = "character", MortgageRate = "character", ModelTune = "character", 
@@ -1103,7 +1109,7 @@
     FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
     LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
     NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-    RemainingTerm = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
+    RemainingTerm = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/days.in.month)
     FwdPrice = price - (drop/100)
     reinvestment.rate = reinvestment.rate 
     
@@ -1157,26 +1163,26 @@
     DropImpliedValue = ((TotalFutureValue - TotalProceeds)/RemainingBalance) * 32
     
     new("DollarRoll",
-        #MBS price and settlment information
+        # -- MBS price and settlment information
         SettlementDate = as.character(settlement.date),
         FwdSettlementDate = as.character(fwd.settlement.date),
         Price = price * 100,
         Drop = drop,
         FwdPrice = FwdPrice * 100,
-        # MBS information
+        # -- MBS information
         GrossCoupon = bond.id@GWac,
         NetCoupon = bond.id@Coupon,
         OriginalTerm = bond.id@AmortizationTerm,
         RemainingTerm = RemainingTerm,
         OrigBalance = original.bal,
         CurrentBalance = CurrentBal,
-        #Settlement information
+        # -- Settlement information
         PrincipalProceeds = BeginningMarketValue,
         Accrued = Accrued,
         TotalProceeds = TotalProceeds,
         DaysInterest = reinvestment.days,
         ReinvestmentIncome = ReinvestmentIncome,
-        # MBS hold information
+        # -- Determine MBS hold information
         ScheduledPrin = ScheduledPrin,
         PrepaidPrin = PrepaidPrin,
         PassThroughInterest = PassThroughInterest,
@@ -1184,13 +1190,13 @@
         RemainingBalance = RemainingBalance,
         FuturePrincipalProceeds = FuturePrincipalProceeds,
         FwdAccrued = FwdAccrued,
-        # Investor financing rates
+        # -- Compute Investor Financing Rates
         FinanceRate = finance.rate,
         ReinvestmentRate = reinvestment.rate,
         FutureValueRoll = TotalRollProceeds,
         FutureValuePrinCarry = FutureValuePrinCarry,
         DiscValueofCarry = DiscValueofCarry,
-        # Roll analysis
+        # -- Compute Roll analysis
         HoldorRoll = HoldorRoll,
         Advantage = Advantage,
         TotalFutureValue = TotalFutureValue,
@@ -1202,38 +1208,103 @@
 #------- Scenario Function --------
 # opens connection to scenario library
 #----------------------------------
-  Mtg.Scenario <- function(bond.id ="character", settlement.date = "character", price = numeric(), original.bal = numeric(),  
-                       scenario.set = vector(), rates.data = "character", method = "character", 
-                       PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
-                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) { 
+  Mtg.Scenario <- function(bond.id ="character", trade.date = "character", settlement.date = "character", price = numeric(), proceeds = numeric(), 
+                           spot.spread = numeric(), original.bal = numeric(), scenario.set = vector(), rates.data = "character", 
+                           method = "character", PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
+                           begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) { 
     
-    if(missing(method)) method = "ns"
-    
-    ScenarioResult <- list()
-    
-    connS2 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-    MortgageRate <- readRDS(connS2)
-
-    for(i in 1:length(scenario.set)){
-      connS1 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
-      Scenario <- readRDS(connS1) 
+      if(missing(method)) method = "ns"
       
+      ScenarioResult <- list()
+      
+      # First step open mortgage rate functions
+      connS1 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+      MortgageRate <- readRDS(connS1)
+      
+      #Call the desired curve from rates data folder
+      trade.date = as.Date(trade.date, "%m-%d-%Y")
+      
+      connS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+      rates.data <- readRDS(connS2)
+      
+      #Call Prepayment Model
+      connS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
+      ModelTune <- readRDS(connS3)
+      Burnout = bond.id@Burnout
+      
+      
+      # ----------------------- Scenario Analysis --------------------------------  
+      for(i in 1:length(scenario.set)){
+      connS4 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
+      Scenario <- readRDS(connS4) 
+      
+      # Third call the trade date rates data
       rates = rates.data
+      
+      # Fourth call the scenario 
       rates[1,2:length(rates)] = Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
       
+      # Caclulate the term strucute
       TermStructure = TermStructure(rates.data = rates, method = method)
       
+      # Run the prpeayment model
       Prepayment = PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = TermStructure, 
                                         PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
                                         begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
 
-      MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
-                                           price = price, PrepaymentAssumption = Prepayment)
+      # Scenario Mortgage cash flow analysis 
+      MortgageCashFlow = MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, 
+                                           settlement.date = settlement.date, price = price, PrepaymentAssumption = Prepayment)
       
-      InterpolateCurve <- loess(as.numeric(rates.data[1,2:9])~as.numeric(rates.data[2,2:9]), 
-                                               data = data.frame(rates.data))
+      # Calculate static cash flow spread to the curve                                      
+      InterpolateCurve <- loess(as.numeric(rates.data[1,2:9]) ~ as.numeric(rates.data[2,2:9]), data = data.frame(rates.data))  
+      SpreadtoCurve = (MortgageCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, MortgageCashFlow@WAL )
+            
+      # The second step will be to calculate the scenario effective duration and convexity   
+      MortgageTermStructure = BondTermStructure(bond.id = bond.id, Rate.Delta = 1, TermStructure = TermStructure,
+                              principal = original.bal * MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
       
-      SpreadtoCurve <- (MortgageCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, MortgageCashFlow@WAL )
+      # ---------------------------------------------------------------
+      # Function to compute the horizon return 
+      ReturnAnalysis <- function(Scenario = "character", settlement.date = "character", proceeds = numeric(), 
+                                 MortgageTermStructure = "character", spot.spread = numeric(), HrzMonths = numeric(), 
+                                 ReinvestmentRate = numeric()) {
+      
+      # Need to error trap the reinvestment rate   
+        
+      # Reinvestment of cash flow  
+      ReceivedCF = Scenario@TotalCashFlow[1:HrzMonths]
+      n.period = as.numeric(difftime(as.Date(Scenario@PmtDate[HrzMonths]), as.Date(Scenario@PmtDate[1:HrzMonths]), units = "days")/days.in.month)
+      Reinvestment = ReceivedCF * (1 + (ReinvestmentRate/months.in.year)) ^ (n.period)
+      Reinvestment = sum(Reinvestment)
+      
+      # Price the tail cash flow priced at horizon
+      # Forward month indexes to the cashflow array
+      FwdMonth = (HrzMonths + 1)
+      FwdSettleDate = as.Date(settlement.date, "%m-%d-%Y")  %m+% months(HrzMonths)
+      FwdCashFlowPmtDate = Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]
+      RemainingCF = Scenario@TotalCashFlow[FwdMonth:length(Scenario@TotalCashFlow)]
+      n.period.fwd = as.numeric(difftime(as.Date(Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]), as.Date(FwdSettleDate), units = "days")/days.in.month)
+                  
+      # The approach bases the investor return on the forward rate curve and forward rates.
+      DiscountRate =  
+      # Spot rates at horizon to length of cashflows
+      (1+((TermStructure@spotrate[FwdMonth:length(Scenario@TotalCashFlow)] + spot.spread)/1200))  ^
+      # Index time period to period less length of the horizon for discounting the forward price
+      (-1 * n.period.fwd)
+      
+      DiscPV = sum(RemainingCF * DiscountRate)
+      TotalHrzProceeds = Reinvestment + DiscPV
+      
+      Return = TotalHrzProceeds/proceeds 
+      
+      }
+      
+      HorizonReturn <- ReturnAnalysis(Scenario = MortgageCashFlow, MortgageTermStructure = MortgageTermStructure, proceeds = proceeds,
+                              settlement.date = settlement.date, spot.spread = spot.spread, HrzMonths = 12, ReinvestmentRate = .0025)
+      
+      HorizonReturn = (HorizonReturn - 1) * 100
+    
       
       Scenario <- new("Mtg.Scenario",  
                       Period = MortgageCashFlow@Period,
@@ -1255,7 +1326,14 @@
                       SpreadToInterCurve = SpreadtoCurve,
                       ModDuration = MortgageCashFlow@ModDuration,
                       Convexity = MortgageCashFlow@Convexity,
+                      EffDuration = MortgageTermStructure@EffDuration,
+                      EffConvexity = MortgageTermStructure@EffConvexity,
+                      KeyRateTenor = MortgageTermStructure@KeyRateTenor,
+                      KeyRateDuration = MortgageTermStructure@KeyRateDuration,
+                      KeyRateConvexity = MortgageTermStructure@KeyRateConvexity,
+                      HorizonReturn = HorizonReturn,
                       Scenario
+                      
       )
 
       ScenarioResult <- append(ScenarioResult, Scenario)
@@ -1269,14 +1347,7 @@
     
   } # scenario end function
   
-  
-# -------------------------------
-# Rate of Return Analysis
-# -------------------------------
-  RateofReturn <- function(ReinvestmentRate = numeric(), ReceivedCF = "character", 
-                           RemainingCF = "character", SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric()) {
-    
-  }
+
 # --------------------------------
 # Bond Analytics Functions - THESE ARE THE BOND LAB ENGINES !!!
 # These functions are different from the above they use the functions together
@@ -1357,8 +1428,7 @@
   
   #Call Mortgage Rate Functions
   conn4 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(conn4)
-  
+  MortgageRate <- readRDS(conn4)  
   Burnout = bond.id@Burnout
  
   #The second step is to call the desired coupon curve into memory 
@@ -1380,8 +1450,12 @@
   MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
                           principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
-  Scenario <- Mtg.ScenarioAnalysis(scenario.set = scenario.set, bond.id = bond.id@ID, MortgageRate = MortgageRate, original.bal = original.bal, 
-                                   trade.date = trade.date, settlement.date = settlement.date, price = price, 
+  spread.to.spot = MortgageTermStructure@SpotSpread
+  proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
+  
+  # The sixth step in scenario based analysis
+  Scenario <- Mtg.Scenario(scenario.set = scenario.set, bond.id = bond.id, MortgageRate = MortgageRate, original.bal = original.bal, 
+                           trade.date = trade.date, settlement.date = settlement.date, price = price, proceeds = proceeds, spot.spread = spread.to.spot, 
                                    PrepaymentAssumption = "MODEL")
 
   closeAllConnections()
@@ -1437,44 +1511,7 @@
    return(DollarRoll)
   }
   
-  #-------------- Scenario Analysis
-  
-  Mtg.ScenarioAnalysis <- 
-    function( scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
-              price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
-              PrepaymentAssumption = "character", ..., 
-              begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()) {
-      
-      #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
-      #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
-      if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
-      
-      #Default method for TermStructure
-      if(missing(method)) method = "ns"
-      
-      #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
-      Rate.Delta = 1
-      
-      #Initialize the Scenario Result 
-       
-      # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-      bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
-      
-      #Call the desired curve from rates data folder
-      trade.date = as.Date(trade.date, "%m-%d-%Y")
-      rates.data <- readRDS(paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""))
-      
-      #Call Prepayment Model
-      ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
-      Burnout = bond.id@Burnout
-            
-      Scenario <- Mtg.Scenario(bond.id = bond.id, MortgageRate = MortgageRate, settlement.date = settlement.date, price = price, original.bal = original.bal,
-                           scenario.set = scenario.set, rates.data = rates.data,
-                           PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout,
-                           begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
-      
-    } # end of analysis
-  
+
     #----------------------------------
   # Helper Functions These function help to manage
   # The data sources   
@@ -1788,8 +1825,15 @@
            WAL = "numeric",
            SpreadToInterCurve = "numeric",
            ModDuration = "numeric",
-           Convexity = "numeric"),
-             contains = "Scenario")
+           Convexity = "numeric", 
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric",
+           HorizonReturn = "numeric"),
+             contains = "Scenario"
+  )
 
   setClass("Mtg.ScenarioSet",
              representation(
@@ -1893,17 +1937,12 @@
                         PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
             {standardGeneric("DollarRollAnalytics")})
   
-  setGeneric("Mtg.Scenario", function(bond.id ="character", settlement.date = "character", price = numeric(), original.bal = numeric(),
-                       scenario.set = vector(), rates.data = "character", method = "character", 
-                       PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
-                       begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+  setGeneric("Mtg.Scenario", function(bond.id ="character", trade.date = "character", settlement.date = "character", price = numeric(), proceeds = numeric(),
+                                      spot.spread = numeric(), original.bal = numeric(), scenario.set = vector(), rates.data = "character", 
+                                      method = "character", PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
+                                      begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
   {standardGeneric("Mtg.Scenario")})
   
-  setGeneric("Mtg.ScenarioAnalysis", function(scenario.set = vector(), bond.id = "character", original.bal= numeric(), 
-                         price = numeric(), trade.date = "character", settlement.date = "character", method = "character", 
-                         PrepaymentAssumption = "character", ..., 
-                         begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-              {standardGeneric("Mtg.ScenarioAnalysis")})  
   
 #-------------------------------
 #Bond Lab Set Methods 

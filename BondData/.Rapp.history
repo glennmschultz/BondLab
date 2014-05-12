@@ -1,2 +1,3 @@
 load("/Users/glennschultz/BondLab/BondData/bondlabMBS4.rds")
 load("/Users/glennschultz/BondLab/BondData/bondlabMBS55.rds")
+load("/Users/glennschultz/BondLab/BondData/bondlabMBS4.rds")

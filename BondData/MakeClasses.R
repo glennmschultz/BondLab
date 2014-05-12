@@ -87,7 +87,7 @@ bondlabMBS55 <- new("MBSDetails",
                    FirstPrinPaymentDate = "1-01-2010",
                    BalloonPmt = "no",
                    BalloonDate = "00-00-0000",
-                   MBSFactor = 1,
+                   MBSFactor = .75,
                    Model = "FH30.Generic",
                    Burnout = 25,
                    SATO = 0.25

@@ -3,7 +3,7 @@
 # in addition to standard fixed income analysis bond lab provides 
 # for the specific analysis of structured products residential mortgage backed securities, 
 # asset backed securities, and commerical mortgage backed securities
-# License Restricted to Fee Subscription
+# License Restricted GPL3
 
 #Copyright (C) 2014  Glenn M Schultz, CFA
   
@@ -460,7 +460,7 @@
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.000000001, time.period = MBS.CF.Table[,3], 
+  ytm = uniroot(irr, interval = c(lower = .01, upper = 1), tol =.000000001, time.period = MBS.CF.Table[,3], 
                 cashflow = MBS.CF.Table[,14], principal = principal, price = price, accrued.interest = accrued.interest)$root
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
@@ -533,7 +533,43 @@
   
   (Price.UP + Price.DWN + (2*Price))/(2*(Price*Rate.Delta)^2)
   }  
-
+  #-----------------------------------
+  # Mortgage OAS
+  #___________________________________
+  
+  MortgageOAS <- function(bond.id = "character", trade.date = "character", original.bal = numeric(),
+                          price = numeric()){
+    
+    trade.date = as.Date(trade.date, "%m-%d-%Y")
+    
+    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+    MOAS1 <-  gzfile(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+    bond.id = readRDS(MOAS1)
+        
+    #Call the desired curve from rates data folder
+    MOAS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+    rates.data <- readRDS(MOAS2)
+    
+    #Call Prepayment Model Tuning Parameters
+    MOAS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+    ModelTune <- readRDS(MOAS3)
+    
+    #Call Mortgage Rate Functions
+    MOAS4 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    MortgageRate <- readRDS(MOAS4)  
+    Burnout = bond.id@Burnout
+    
+    #MOAS5 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
+    #Scenario <- readRDS(MOAS5)
+    
+    InterpolateCurve <- smooth.spline( as.numeric(rates.data[2,2:9]), as.numeric(rates.data[1,2:9]),df = 3)
+    
+    fuck <- predict(InterpolateCurve, newdata = data.frame(as.numeric(c("0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30"))))
+    #KR.curve[1,] <- InterpolateCurve(KR.curve[2,])
+    
+    return(fuck)
+    
+  }
   #-----------------------------------
   #Bond Term Structure measures key rate duration and spot spread of a standard non callable bond
   # and mortgage cash flow security   
@@ -1024,6 +1060,7 @@
     # the switch function is encapsulated with prepayment assumption for now
     
     Mtg.Rate <- function(TermStructure = "character", type = "character", term = numeric()) {
+
       term = as.character(term)
       switch( type, 
               fixed = switch(term,
@@ -1032,11 +1069,11 @@
                              ), # end first nested switch statement
               arm = switch(term, 
                            "30" = 0 ) # end second nested switch statement
-      ) # end of the switch function      
+      ) # end of the switch function
+
     }
     
     Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, type = bond.id@AmortizationType, term = bond.id@AmortizationTerm)
-    
     Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] # This is why I need to make class classflow array
     
     Incentive =  as.numeric(NoteRate - Mtg.Rate)
@@ -1052,6 +1089,7 @@
                                       season.period = seasoning.period, period = LoanAge))^(1/12))} 
       else
       {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
+      
       }
     
     new("PrepaymentAssumption",
@@ -1066,8 +1104,8 @@
         Period = Period,
         PmtDate = as.character(PmtDate),
         LoanAge = as.numeric(LoanAge),
-        MtgRateFwd = Mtg.Rate,
-        Incentive = Incentive,
+        MtgRateFwd = as.numeric(Mtg.Rate),
+        Incentive = as.numeric(Incentive),
         SMM = as.numeric(SMM)
     )
         
@@ -1083,6 +1121,7 @@
     
     #need to error trap these inputs
     #reinvestment rate, drop
+    
     
     #Error Trap the user's price input
     if(price <= 1) {price = price} else {price = price/100}
@@ -1403,6 +1442,7 @@
                                  ) 
   {
   
+    
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
   #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
@@ -1414,7 +1454,7 @@
   Rate.Delta = 1
   
   # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-  conn1 <-  gzfile(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+  conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
   bond.id = readRDS(conn1)
 
   
@@ -1438,7 +1478,7 @@
   #Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, 
                           TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
-  begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+                          begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
     
   #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow. 
   #The BondCashFlows function this creates the class BondCashFlows are held in class BondCashFlows
@@ -1451,7 +1491,7 @@
                           principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
   spread.to.spot = MortgageTermStructure@SpotSpread
-  proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
+  proceeds = ((price) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
   
   # The sixth step in scenario based analysis
   Scenario <- Mtg.Scenario(scenario.set = scenario.set, bond.id = bond.id, MortgageRate = MortgageRate, original.bal = original.bal, 
@@ -1480,22 +1520,31 @@
     #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
     Rate.Delta = 1
     
-    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-    # I need to open and Close using connections
-    bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
-    #Call the desired curve from rates data folder
+    # Open bond.id connection
+ 
+    connDR1 <- gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+    bond.id = readRDS(connDR1)
+    
+    # Open connection to rates data 
     trade.date = as.Date(trade.date, "%m-%d-%Y")
-    rates.data <- readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
-    #Call Prepayment Model
-    ModelTune <- readRDS(paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""))
+    connDR2 <- gzfile(description = paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""), open = "rb")
+    rates.data = readRDS(connDR2)
+    
+    #Open Model Tune Connection
+    connDR3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",as.character(bond.id@Model),".rds", sep = ""), open = "rb")
+    ModelTune <- readRDS(connDR3) 
+      
+    # Open Mortgage Rate Connection
+    connDR4<- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    MortgageRate <- readRDS(connDR4)
+    
     Burnout = bond.id@Burnout
-   
     #The second step is to call the desired coupon curve into memory 
     #This is done with the TermStructure function which creates the class TermStructure
     TermStructure <- TermStructure(rates.data = rates.data, method = method)
     
     # Third if mortgage security call the prepayment model
-    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, 
+    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, TermStructure = TermStructure, MortgageRate = MortgageRate,
                                   PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
                                   begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
     
@@ -1512,7 +1561,7 @@
   }
   
 
-    #----------------------------------
+  #----------------------------------
   # Helper Functions These function help to manage
   # The data sources   
   #----------------------------------

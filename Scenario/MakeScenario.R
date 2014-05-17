@@ -18,6 +18,16 @@ DA50  <- new("Scenario",
                as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
              })
 
+DA25  <- new("Scenario",
+             Name = "Down50",
+             Type = "Aggressive",
+             Horizon = "Immediate",
+             ShiftType = "Parallel",
+             Shiftbps = 25,
+             Formula = function(rates.data, Shiftbps){
+               as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
+             })
+
 NC  <- new("Scenario",
              Name = "NoChg",
              Type = "Aggressive",
@@ -28,22 +38,32 @@ NC  <- new("Scenario",
                as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
              })
 
-UA100 <- new("Scenario",
-             Name = "UA100",
-             Type = "Aggressive",
-             Horizon = "Immediate",
-             ShiftType = "Parallel",
-             Shiftbps = 100,
-             Formula = function(rates.data, Shiftbps){
-               as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
-             })
-
+UA25 <- new("Scenario",
+            Name = "UP50",
+            Type = "Aggressive",
+            Horizon = "Immediate",
+            ShiftType = "Parallel",
+            Shiftbps = 25,
+            Formula = function(rates.data, Shiftbps){
+              as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
+            })
+              
 UA50 <- new("Scenario",
-             Name = "UA100",
+             Name = "UP50",
              Type = "Aggressive",
              Horizon = "Immediate",
              ShiftType = "Parallel",
              Shiftbps = 50,
+             Formula = function(rates.data, Shiftbps){
+               as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
+             })
+
+UA100 <- new("Scenario",
+             Name = "UP100",
+             Type = "Aggressive",
+             Horizon = "Immediate",
+             ShiftType = "Parallel",
+             Shiftbps = 100,
              Formula = function(rates.data, Shiftbps){
                as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
              })
@@ -80,7 +100,9 @@ UA250 <- new("Scenario",
 
 saveRDS(DA100, "DA100.rds")
 saveRDS(DA50, "DA50.rds")
+saveRDS(DA25, "DA25.rds")
 saveRDS(NC, "NC.rds")
+saveRDS(UA25, "UA25.rds")
 saveRDS(UA50, "UA50.rds")
 saveRDS(UA100, "UA100.rds")
 saveRDS(UA150, "UA150.rds")

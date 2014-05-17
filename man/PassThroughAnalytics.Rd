@@ -80,7 +80,7 @@ The class may be extended in the future
 \code{\link{MortgageCashFlows}}, \code{\link{TermStructure}}, \code{\link{BondTermStructure}}
 }
 \examples{
-PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 100, trade.date = "01-10-2013", 
+PassThroughAnalytics(bond.id = "bondlabMBS4", original.bal = 100000, price = 106, trade.date = "01-10-2013", 
                      settlement.date = "01-13-2013",  scenario.set = c("UA100", "UA150"),
                      PrepaymentAssumption = "CPR", CPR = 6)
 

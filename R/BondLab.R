@@ -30,7 +30,11 @@
 
   days.in.month = 30.44
   days.in.year = 365.28
+  weeks.in.year = 52.25
   months.in.year = 12
+  min.principal = 100
+  zero.coupon = 0
+  pmt.frequency = 2
   #---------------------------------
   #Time value of money functions
   #---------------------------------
@@ -562,12 +566,8 @@
     #MOAS5 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
     #Scenario <- readRDS(MOAS5)
     
-    InterpolateCurve <- smooth.spline( as.numeric(rates.data[2,2:9]), as.numeric(rates.data[1,2:9]),df = 3)
     
-    fuck <- predict(InterpolateCurve, newdata = data.frame(as.numeric(c("0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30"))))
-    #KR.curve[1,] <- InterpolateCurve(KR.curve[2,])
     
-    return(fuck)
     
   }
   #-----------------------------------
@@ -824,11 +824,13 @@
   #Call the desired curve from rates data folder
   #trade.date = as.Date(trade.date, "%m-%d-%Y")
   rates.data <- rates.data
-  #rates.data = readRDS(paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""))
+  #rates.data = readRDS(paste("~/BondLab/RatesData/2013-01-10.rds", sep = ""))
   
   #set the column counter to make cashflows for termstrucutre
   ColCount <- as.numeric(ncol(rates.data))
   Mat.Years <- as.numeric(rates.data[2,2:ColCount])
+  Coupon.Rate <- as.numeric(rates.data[1,2:ColCount])
+  Issue.Date <- as.Date(rates.data[1,1])
   
   #initialize coupon bonds S3 class
   #This can be upgraded when bondlab has portfolio function
@@ -850,33 +852,42 @@
   ### Assign Values to List Items #########
   data = NULL
   data$ISIN <- colnames(rates.data[2:ColCount])
-  data$ISSUEDATE <- rep(rates.data[1,1],ColCount - 1)
-  data$MATURITYDATE <- as.Date(data$ISSUEDATE) %m+% years(Mat.Years)
-  data$COUPONRATE <- as.numeric(rates.data[1,2:ColCount])/100
-  data$PRICE <- rep(1000, ColCount -1)
+  data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
+  
+  data$MATURITYDATE <-
+                   sapply(Mat.Years, function(Mat.Years = Mat.Years, Issue = Issue.Date) 
+                        {Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
+                            {Issue %m+% years(as.numeric(Mat.Years))}
+                         return(as.character(Maturity))
+                         }) 
+  
+  data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
+  
+  #data$PRICE <- rep(100, ColCount -1)
+  data$PRICE <-      ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)
+  
   data$ACCRUED <- rep(0, ColCount -1)
+  
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks"))/52.25,0))
-    Vector.Length = Vector.Length * 2 #This is frequency multiplier should be dynamic ?
+                                               units = c("weeks"))/weeks.in.year,0))
+    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
-    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/2),Vector.Length - 1) *1000, (1000+(data$COUPONRATE[j]/2)*1000))))
-    data$CASHFLOWS$DATE <- append(data$CASHFLOWS$DATE,seq(as.Date(rates.data[1,1]) %m+% months(6), as.Date(data[[3]][j]), by="6 months"))
-  }
-  
-  #The Loop Ends here and the list is made
-  
+    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
+    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+     
+    } #The Loop Ends here and the list is made
+
   data$TODAY <- as.Date(rates.data[1,1])
   TSInput[[as.character(rates.data[1,1])]] <- c(data)
-  print(data$TODAY)
   
   #set term strucutre input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
-  
-  
+     
   #Fit the term structure of interest rates
-  
+
   if(method != "cs") {TSFit <- estim_nss(dataset = TSInput, group = as.character(rates.data[1,1]), matrange = "all", method = method)} else
   {TSFit <- estim_cs(bonddata = TSInput, group = as.character(rates.data[1,1]), matrange = "all", rse = TRUE)}
   
@@ -1265,7 +1276,7 @@
       
       connS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
       rates.data <- readRDS(connS2)
-      
+     
       #Call Prepayment Model
       connS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
       ModelTune <- readRDS(connS3)
@@ -1274,17 +1285,20 @@
       
       # ----------------------- Scenario Analysis --------------------------------  
       for(i in 1:length(scenario.set)){
+      
       connS4 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
       Scenario <- readRDS(connS4) 
       
       # Third call the trade date rates data
-      rates = rates.data
+      rates <- rates.data
       
       # Fourth call the scenario 
-      rates[1,2:length(rates)] = Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
+      rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
       
+
       # Caclulate the term strucute
       TermStructure = TermStructure(rates.data = rates, method = method)
+      print(rates)
       
       # Run the prpeayment model
       Prepayment = PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = TermStructure, 
@@ -1441,8 +1455,7 @@
                                   PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()
                                  ) 
   {
-  
-    
+      
   #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
   #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
@@ -1470,6 +1483,7 @@
   conn4 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
   MortgageRate <- readRDS(conn4)  
   Burnout = bond.id@Burnout
+  
  
   #The second step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
@@ -1491,7 +1505,7 @@
                           principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
   spread.to.spot = MortgageTermStructure@SpotSpread
-  proceeds = ((price) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
+  proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
   
   # The sixth step in scenario based analysis
   Scenario <- Mtg.Scenario(scenario.set = scenario.set, bond.id = bond.id, MortgageRate = MortgageRate, original.bal = original.bal, 
@@ -1570,6 +1584,7 @@
   # curves using swap rate data from the Federal Reserve
 
   SwapRateData <- function(datafile = "character", maturityvector = numeric()){
+  # Note: maturityvector must start with an empty space e.g. c("", 1, 2, )  
   #========== Read Swap Rate Data ===========================
   SwapRateData <-read.csv(datafile, header = TRUE, as.is = TRUE)
   #======== remove month and year data and reorder dataset
@@ -1934,9 +1949,9 @@
                            settlement.date = "character", method = method)
            {standardGeneric("BondAnalytics")})
 
-  setGeneric("TermStructure",
-           function(rates.data = "character", method = "character")
-           {standardGeneric("TermStructure")})
+# setGeneric("TermStructure",
+#           function(rates.data = "character", method = "character")
+#           {standardGeneric("TermStructure")})
 
   setGeneric("PassThroughAnalytics",
            function (bond.id = "character", MortgageRate = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 

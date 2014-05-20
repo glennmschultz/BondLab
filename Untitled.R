@@ -6,10 +6,11 @@ rates.data <- readRDS(connS2)
 
 rates.data = readRDS("~/BondLab/RatesData/2013-01-10.rds")
 
-
 TermStructure(rates.data = readRDS("~/BondLab/RatesData/2013-01-10.rds"), method = "ns")
 
 test <- readRDS("~/BondLab/RatesData/2013-01-10.rds")
+
+BondTermStructure(bond.id = bondlabMBS4, Rate.Delta = .25, rates.data = rates.data, principal = 1000, price = 100)
 
 
 

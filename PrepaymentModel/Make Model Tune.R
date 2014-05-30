@@ -1,0 +1,19 @@
+FH30.Generic <- new("PrepaymentModelTune",
+                    TurnoverRate = 0.08,
+                    Turnover.alpha = 1.0,
+                    Turnover.beta = 0.87,
+                    Turnover.theta = 0.192,
+                    Seasonality.alpha = 0.15,
+                    Seasonality.theta = 12.0,
+                    Incentive.Fast.theta.1 = 0.025,
+                    Incentive.Fast.theta.2 = 0.019,
+                    Incentive.Fast.beta = -4.0,
+                    Incentive.Fast.eta = 1.0,
+                    Incentive.Slow.theta.1 = 0.001,
+                    Incentive.Slow.theta.2 = 0.004,
+                    Incentive.Slow.beta = -1.0,
+                    Incentive.Slow.eta = 0.5,
+                    Burnout.beta.1 = -.01,
+                    Burnout.beta.2 = -.01
+)
+

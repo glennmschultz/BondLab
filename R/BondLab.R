@@ -464,7 +464,7 @@
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = uniroot(irr, interval = c(lower = .01, upper = 1), tol =.000000001, time.period = MBS.CF.Table[,3], 
+  ytm = uniroot(irr, interval = c(lower = .01, upper = .5), tol =.0000000001, time.period = MBS.CF.Table[,3], 
                 cashflow = MBS.CF.Table[,14], principal = principal, price = price, accrued.interest = accrued.interest)$root
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
@@ -567,104 +567,589 @@
     #Scenario <- readRDS(MOAS5)
         
   }
-  #-----------------------------------
-  #Bond Term Structure measures key rate duration and spot spread of a standard non callable bond
-  # and mortgage cash flow security   
-  #-----------------------------------    
-  BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), rates.data = "character", 
-                                principal = numeric(), price = numeric(), cashflow = "character"){
-
-  #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
-  #frequency = bond.id@Frequency
-  #maturity = bond.id@Maturity
-  #accrued = cashflow@Accrued
-  
-  #Class name variable.  This will set the class name for the new class to be initilized
-  #ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
-  
-  #Error Trap the user's price input
-  if(price <= 1) {price = price} else {price = price/100}
-  if(price <=0) stop("No valid bond price")
-  #proceeds = (principal * price) + accrued 
-  
-  #========== Set the functions that will be used ==========
-  # These functions are set as internal functions to key rates
-  # this insures that stored values will not be wrongly be passed to the funtion
-  # internal functions used to compute key rate duration and convexity
-  Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
-                                 discount.rates.up, discount.rates.dwn, t.period, proceeds){
-    Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-    Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-    Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
-    (Price.UP - Price.DWN)/(2*proceeds*rate.delta)
-  }
-  Effective.Convexity <- function(rate.delta, cashflow, discount.rates, 
-                                  discount.rates.up, discount.rates.dwn, t.period, proceeds){
-    Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-    Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-    Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
-    (Price.UP + Price.DWN - (2*proceeds))/(2*proceeds *(rate.delta^2))
-  }
-  
-  #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
-  Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
-                          t.period = vector(), proceeds = numeric()){
-    Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
-    return(proceeds - Present.Value)
-  }
-  
-  #========== Set up curve for Key Rate Duration ========================
-  #sets the tenor of the key rate that will report a duration
-  rates <- rates.data
-  
-  Key.Rates <- c(as.character(1/12), "0.25", ".50", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30")
-  Model.Curve <- loess(as.numeric(rates[1,2:length(rates)]) ~ as.numeric(rates[2,2:length(rates)]), degree = , family = "gaussian")
-  #Model.Curve <- lm(as.numeric(rates[1,2:length(rates)]~ bs(rates[2, 2:length(rates)])))
-  Predict.Curve <- predict(Model.Curve, as.numeric(Key.Rates))
-  
-  col.name <- c("Date", "ED1M", "ED3M", "ED6M", "USSW1", "USSW2", "USSW3", "USSW5", "USSW7", "USSW10", "USSW15", "USSW20", "USSW25", "USSW30")
-  Swap.Rate <- as.character(rates[1,1]) 
-  Swap.Rate <- (append(Swap.Rate, as.character(Predict.Curve)))
-  Swap.Rate <- data.frame(rbind(Swap.Rate, append("", Key.Rates)))
-  colnames(Swap.Rate) <<- c("Date", "ED1M", "ED3M", "ED6M", "USSW1", "USSW2", "USSW3", "USSW5", "USSW7", "USSW10", "USSW15", "USSW20", "USSW25", "USSW30")
-
-
-  
-  
-  }
-
-    #============================== Calculate Key Rate Duration ============================================
-#    KR.Duration[w-1,2] <- -Effective.Duration(
-#      rate.delta = Rate.Delta/100, 
-#      cashflow = CashFlowArray[,2], 
-#      discount.rates = Key.Rate.Table[,4], 
-#      discount.rates.up = Key.Rate.Table[,6],
-#      discount.rates.dwn = Key.Rate.Table[,5],
-#      t.period = Key.Rate.Table[,2],
-#      proceeds = proceeds
-#    ) 
-#    KR.Duration[w-1,3] <- Effective.Convexity(
-#      rate.delta = Rate.Delta/100, 
-#      cashflow = CashFlowArray[,2], 
-#      discount.rates = Key.Rate.Table[,4], 
-#      discount.rates.up = Key.Rate.Table[,6],
-#      discount.rates.dwn = Key.Rate.Table[,5],
-#      t.period = Key.Rate.Table[,2],
-#      proceeds = proceeds
-#    ) 
-#  } # Outer Loop around KRIndex
-#  new(ClassName,
-#      bond.id,
-#      SpotSpread = spot.spread * 100,
-#      EffDuration = sum(KR.Duration[,2]),
-#      EffConvexity = sum(KR.Duration[,3]),
-#      KeyRateTenor = KR.Duration[,1],
-#      KeyRateDuration = KR.Duration[,2],
-#      KeyRateConvexity = KR.Duration[,3]
+# -----------
+# Bond Key Rate Calculation
+# -------------
+  BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), price = numeric(), cashflow = "character"){
+    
+    #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
+    frequency = bond.id@Frequency
+    maturity = bond.id@Maturity
+    accrued = cashflow@Accrued
+    
+    #Class name variable.  This will set the class name for the new class to be initilized
+    ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
+    
+    #Error Trap the user's price input
+    if(price <= 1) {price = price} else {price = price/100}
+    if(price <=0) stop("No valid bond price")
+    proceeds = (principal * price) + accrued 
+    
+    #========== Set the functions that will be used ==========
+    # These functions are set as internal functions to key rates
+    # this insures that stored values will not be wrongly be passed to the funtion
+    # internal functions used to compute key rate duration and convexity
+    Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
+                                   discount.rates.up, discount.rates.dwn, t.period, proceeds){
+      Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+      Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
+      Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+      (Price.UP - Price.DWN)/(2*proceeds*rate.delta)
+    }
+    Effective.Convexity <- function(rate.delta, cashflow, discount.rates, 
+                                    discount.rates.up, discount.rates.dwn, t.period, proceeds){
+      Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+      Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
+      Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+      (Price.UP + Price.DWN - (2*proceeds))/(2*proceeds *(rate.delta^2))
+    }
+    
+    #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
+    Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
+                            t.period = vector(), proceeds = numeric()){
+      Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+      return(proceeds - Present.Value)
+    }
+    
+    #================= set up the index names for each array that will be used in the function
+    # Index names set names for columns in the KRIndex. This table set the control strucutre for 
+    # the loop that will compute key rate duration given rates in the key rate table
+    Index.Names <- c("Period", "Time", "Spot Curve", "Disc Curve", "KRDwn", "KRUp")
+    
+    # KR.Duration.Col set the column names for the table that hold the key rate results
+    # this table will output to class bond analytics slot KRTenor and KRDuration
+    KR.Duration.Col <- c("Key Rate", "Key Rate Duration", "Key Rate Convexity")
+    
+    #sets the tenor of the key rate that will report a duration
+    KR.Duration.Row <- c("0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30")
+    
+    #set the arrays for key rate duration calculation
+    #key rate table holds data for the term structure and shifts in the key rates
+    #!!!!!!!!!!!!!! DIM TO LENGTH OF CASH FLOW ARRAY AND SET LAST KR TO LENGTH LINE 604
+    Key.Rate.Table <- array(data = NA, c(360,6), dimnames = list(seq(c(1:360)), Index.Names))
+    
+    #key rate duration array holds the key rates and the key rate duration
+    KR.Duration <- array(data = NA, c(11,3), dimnames = list(seq(c(1:11)), KR.Duration.Col))
+    KR.Duration[,1] <- as.numeric(KR.Duration.Row)
+    
+    # Create Index for Key Rate Table for interpolation of Key Rate Duration set outer knot points
+    # the outer points are the first and last elements in KR string
+    # this needs some logic to change the right knot point if the maturity or last payment of the 
+    # bond is greater than 30-years should be adaptive
+    KR <- c("0.083", "0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30", "30")   # Key Rates
+    KRCount = length(KR)
+    KRIndex <- array(data = NA, c(KRCount, 6), dimnames = list(seq(c(1:KRCount)), Index.Names))
+    
+    # Initialize the cash flow array for discounting and key rate caclulations
+    # this will be populated from class BondCashFlows
+    # !!!!!!!!!!!!!!!!!DIM CASHFLOW ARRAY TO SIZE OF CASHFLOW!!!!!!!!!!!!!!!!!!!!!!
+    CashFlowArray <- array(data = NA, c(360,2), 
+                           dimnames = list(seq(1:360), c("period", "cashflow")))
+    
+    #Initialze the spot rate array for key rate duration calculations
+    SpotRate <- as.matrix(TermStructure@spotrate)
+    
+    # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS coefficients from Term Stucture
+    # and then populate and align the cashflow array for discounting and key rate computations
+    # !!!!!!!!!!!!!!! SET LOOP TO LENGTH OF CASHFLOW ARRAY !!!!!!!!!!!!!!!!!!!!!!!!!!
+    for(x in 1:360){
       
-#  )
-#  } # End the function
+      #Period (n) in which the cashflow is received
+      Key.Rate.Table[x,1] = x
+      
+      # Time (t) at which the cashflow is received
+      #Time period in which the cashflow was received for discounting
+      Key.Rate.Table [x,2] = x/12
+      
+      #spot rates for discounting
+      Key.Rate.Table[x,3] = SpotRate[x,1]/100   
+      
+      #Align Cash Flows and populated the CashFlowArray
+      #Step One: Make sure all cash flows are set to zero
+      CashFlowArray[x,1] = Key.Rate.Table[x,2]
+      CashFlowArray[x,2] = 0
+    }
+    
+    #Step Two: Initialize loop and set the cashflows in the array
+    #This loops through the time period and set the cashflows into the propery array location for
+    #discounts by indexing the cashflows to the array.  The indexing is conditional on the integer of the first period less than or equal to 1
+    
+    if(as.integer(cashflow@TimePeriod[1] *12) != 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12) + 1,2] = cashflow@TotalCashFlow
+    if(as.integer(cashflow@TimePeriod[1] * 12) == 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12),2] = cashflow@TotalCashFlow
+    
+    #solve for spread to spot curve to equal price
+    spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), tol = .0000000001, CashFlowArray[,2],
+                           discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
+    
+    
+    #convert the spot spread to the frequency of the bond
+    spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+    
+    #Step three add the spot spread to the spot curve to get the discount rates that are need for
+    #the key rate duration calculation
+    
+    #at a minimum the cash flow array should be 360 months
+    for(i in 1:360){
+      Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
+    }
+    
+    #========= Populate KRIndex Table =========================
+    # The key rate index table will serve as the control table for the looping
+    # using this table allows for incremental looping of discontinous segments of the
+    #spot rate curve and is proprietary to bondlab
+    # Step 1 populate Period (n)
+    KRIndex[1:KRCount,1] <- round(as.numeric(KR) *12,0)
+    
+    # Step 2 populate time period (t)
+    KRIndex[1:KRCount,2] <- as.numeric(KR)                    
+    
+    # Step 3 Populate Index Table with the relevant points on the spot curve
+    # this is done by looping through the key rate table and allows for term structure implementation
+    # other than Nelson Siegel (note: this capability needs to built into bondlab)
+    # the key rate index table (KRIndex) is used to populate the key rate table (KRTable)
+    for (j in 1:KRCount){                                   
+      for (i in 1:360){
+        if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,3] = Key.Rate.Table[i,3]} else {KRIndex[j,3] = KRIndex[j,3]}
+      }
+    }
+    
+    # Step 4 Populate KRIndex Table with the appropriate Discount Curve values from the key rate table 
+    # these will be the reference points for the appropriate key rate shifts
+    for (j in 1:KRCount){                                   
+      for (i in 1:360){
+        if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,4] = Key.Rate.Table[i,4]} else {KRIndex[j,3] = KRIndex[j,3]}
+      }
+    }
+    
+    # Step 5 Populated KRIndex Table with KR Shifts
+    for (j in 1:KRCount){
+      KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/100)
+      KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/100)
+    }
+    
+    #===== Implement Shift of Spot Rates =======================
+    # Once the KRIndex is populated implement the shift in the spot rates using the KRIndex table as the control 
+    # w is the counter of the internal knot points used to compute key rate duration it ignores the boundary knots
+    # used for interpolation at the end points.  x is the length of the array.  Currently the analysis is limited
+    # to loans (bonds) with a maximum of 30-years to maturity.  This can be made dynamic at some point in the future
+    # y is column counter used the key rate down and key rate up values
+    for (w in 2:(KRCount-1)){ 
+      for (x in 1:360){
+        for(y in 5:6){
+          
+          # step 1: populate the spot curve outside the key rate shift =========
+          if(Key.Rate.Table[x,2] <= KRIndex[w-1,2] || Key.Rate.Table[x,2] >= KRIndex[w+1,2]) 
+          {Key.Rate.Table[x,y] = Key.Rate.Table[x,4]} else {Key.Rate.Table[x,y] = 0}
+        }
+      }
+      
+      #===== Begin Interpolation of Spot Curve ==================================
+      # Maturity points on the spot rate curve to interpolate
+      KRx <- c(KRIndex[w-1,2], KRIndex[w,2], KRIndex[w+1,2]) 
+      
+      # Spot rates that correspond to the maturity points Down and Up
+      for(z in 1:2){                                       
+        if (z == 1) 
+        {KRy <- c(KRIndex[w-1,4], KRIndex[w,5], KRIndex[w+1,4])}         
+        else 
+        {KRy <- c(KRIndex[w-1,4], KRIndex[w,6], KRIndex[w+1,4])}                                     
+        a = KRIndex[w-1,1]+ 1
+        b = KRIndex[w+1,1] - 1
+        for(h in a : b){
+          Key.Rate.Table[h,(z+4)] <- approx(KRx,KRy, Key.Rate.Table[h,2])$y
+        } # Loop through Key Rate Table and interpolation
+      } # Inner Loop to set interpolation points from KRIndex
+      
+      # This line sets the end points for disocunting when the 30-year is last point on the curve
+      # It is possible to set the endpoints longer using row 12 of the KRIndex but this will have to wait
+      # the cash flow table is programmed for MBS
+      if (KRIndex[w,2] == 30) {(Key.Rate.Table[x,5] = KRIndex[12,5]) & (Key.Rate.Table[x,6] = KRIndex[12,6])}   
+      
+      #============================== Calculate Key Rate Duration ============================================
+      KR.Duration[w-1,2] <- -Effective.Duration(
+        rate.delta = Rate.Delta/100, 
+        cashflow = CashFlowArray[,2], 
+        discount.rates = Key.Rate.Table[,4], 
+        discount.rates.up = Key.Rate.Table[,6],
+        discount.rates.dwn = Key.Rate.Table[,5],
+        t.period = Key.Rate.Table[,2],
+        proceeds = proceeds
+      ) 
+      KR.Duration[w-1,3] <- Effective.Convexity(
+        rate.delta = Rate.Delta/100, 
+        cashflow = CashFlowArray[,2], 
+        discount.rates = Key.Rate.Table[,4], 
+        discount.rates.up = Key.Rate.Table[,6],
+        discount.rates.dwn = Key.Rate.Table[,5],
+        t.period = Key.Rate.Table[,2],
+        proceeds = proceeds
+      ) 
+    } # Outer Loop around KRIndex
+    new(ClassName,
+        bond.id,
+        SpotSpread = spot.spread * 100,
+        EffDuration = sum(KR.Duration[,2]),
+        EffConvexity = sum(KR.Duration[,3]),
+        KeyRateTenor = KR.Duration[,1],
+        KeyRateDuration = KR.Duration[,2],
+        KeyRateConvexity = KR.Duration[,3]
+        
+    )
+  } # End the function
+  
+  
+  
+# --------
+# Mortgage Key Rate Duration Calculation
+# ---------  
+  MtgTermStructure <- function(bond.id = "character", original.bal = numeric(), Rate.Delta = numeric(), TermStructure = "character", 
+                                settlement.date = "character", principal = numeric(), price = numeric(), cashflow = "character"){
 
+    # Depends on objects
+    # bond.id
+    # Term Strucuture
+    # Mortgage or Bond CashFlows    
+    
+    #connBTS1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+    #bond.data <<- readRDS(connBTS1)
+    
+    # =============================================
+    # Open connections to prepayment model tune parameters and  mortgage rate model
+    # =============================================
+        
+    # Open connection to the prepayment model tuning library
+    connBTS2 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
+    ModelTune <- readRDS(connBTS2)
+    Burnout = bond.id@Burnout
+    
+    # Open connection to the Mortgage Model function
+    connBTS3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    MortgageRate <- readRDS(connBTS3)  
+    Burnout = bond.id@Burnout
+    
+    #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
+    frequency = bond.id@Frequency
+    maturity = bond.id@Maturity
+    accrued = cashflow@Accrued
+    
+    #Class name variable.  This will set the class name for the new class to be initilized
+    ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
+    
+    #Error Trap the user's price input
+    if(price <= 1) {price = price} else {price = price/100}
+    if(price <=0) stop("No valid bond price")
+    proceeds = (principal * price) + accrued 
+    
+    #========== Set the functions that will be used ==========
+    # These functions are set as internal functions to key rates
+    # this insures that stored values will not be wrongly be passed to the funtion
+    # internal functions used to compute key rate duration and convexity
+    Effective.Duration <- function(rate.delta, cashflow, cashflow.up, cashflow.dwn, 
+                                   discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
+      Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+      Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
+      Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)
+      (Price.UP - Price.DWN)/(2*proceeds*rate.delta)
+    }
+    Effective.Convexity <- function(rate.delta, cashflow, discount.rates, 
+                                    discount.rates.up, discount.rates.dwn, t.period, proceeds){
+      Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+      Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
+      Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+      (Price.UP + Price.DWN - (2*proceeds))/(2*proceeds *(rate.delta^2))
+    }
+    
+    #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
+    Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
+                            t.period = vector(), proceeds = numeric()){
+      Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+      return(proceeds - Present.Value)
+    }
+    
+    #================= set up the index names for each array that will be used in the function
+    # Index names set names for columns in the KRIndex. This table set the control strucutre for 
+    # the loop that will compute key rate duration given rates in the key rate table
+    Index.Names <- c("Period", "Time", "Spot Curve", "Disc Curve", "KRDwn", "KRUp")
+    
+    # KR.Duration.Col set the column names for the table that hold the key rate results
+    # this table will output to class bond analytics slot KRTenor and KRDuration
+    KR.Duration.Col <- c("Key Rate", "Key Rate Duration", "Key Rate Convexity")
+    
+    #sets the tenor of the key rate that will report a duration
+    KR.Duration.Row <- c("0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30")
+    
+    # ==================== Key Rate Alogrithm Starts Here ==============================
+    
+    #set the arrays for key rate duration calculation
+    #key rate table holds data for the term structure and shifts in the key rates
+    #!!!!!!!!!!!!!! DIM TO LENGTH OF CASH FLOW ARRAY AND SET LAST KR TO LENGTH LINE 604
+    Key.Rate.Table <- array(data = NA, c(360,6), dimnames = list(seq(c(1:360)), Index.Names))
+    
+    #key rate duration array holds the key rates and the key rate duration
+    KR.Duration <- array(data = NA, c(11,3), dimnames = list(seq(c(1:11)), KR.Duration.Col))
+    KR.Duration[,1] <- as.numeric(KR.Duration.Row)
+    
+    # Create Index for Key Rate Table for interpolation of Key Rate Duration set outer knot points
+    # the outer points are the first and last elements in KR string
+    # this needs some logic to change the right knot point if the maturity or last payment of the 
+    # bond is greater than 30-years should be adaptive
+    KR <- c("0.083", "0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30", "30")   # Key Rates
+    KRCount = length(KR)
+    KRIndex <- array(data = NA, c(KRCount, 6), dimnames = list(seq(c(1:KRCount)), Index.Names))
+    
+    # -------------------------------------------------------------------------------------
+    # Initialize the cash flow array for discounting and spot rate caclulations
+    # this will be populated from class BondCashFlows
+    # !!!!!!!!!!!!!!!!!DIM CASHFLOW ARRAY TO SIZE OF CASHFLOW!!!!!!!!!!!!!!!!!!!!!!
+    # This will be the first pass at the cash flows before shocking the curve
+    # --------------------------------------------------------------------------------------
+    
+    # Dimension the cashflow array for key rate discounting
+    CashFlowArray <- array(data = NA, c(360,4), 
+                           dimnames = list(seq(1:360), c("period", "cashflow_nc", "cashflow_dwn", "cashflow_up")))
+    
+    # Initialze the spot rate array for key rate duration calculations
+    # The spot rate must be passed from Term Strucuture object to Bond Term Strucuture
+    SpotRate <- as.matrix(TermStructure@spotrate)
+    
+    # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS coefficients from Term Stucture
+    # and then populate and align the cashflow array for discounting and key rate computations
+    # !!!!!!!!!!!!!!! SET LOOP TO LENGTH OF CASHFLOW ARRAY !!!!!!!!!!!!!!!!!!!!!!!!!!
+    for(x in 1:360){
+      
+      #Period (n) in which the cashflow is received
+      Key.Rate.Table[x,1] = x
+      
+      # Time (t) at which the cashflow is received
+      #Time period in which the cashflow was received for discounting
+      Key.Rate.Table [x,2] = x/12
+      
+      #spot rates for discounting
+      Key.Rate.Table[x,3] = SpotRate[x,1]/100   
+      
+      #Align Cash Flows and populated the CashFlowArray
+      #Step One: Make sure all cash flows are set to zero
+      CashFlowArray[x,1] = Key.Rate.Table[x,2]
+      CashFlowArray[x,2] = 0
+    }
+    
+    #----------- Step Two: Initialize loop and set the cashflows in the array ---------------------
+    # This loops through the time period and set the cashflows into the proper array location for
+    # discounts by indexing the cashflows to the array.  The indexing is conditional on the integer of the first period less than or equal to 1
+    
+    # This code populates the cashflows from the cashflow array object which is BondTermStructure via cashflows input
+    
+    if(as.integer(cashflow@TimePeriod[1] *12) != 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12) + 1,2] = cashflow@TotalCashFlow
+    if(as.integer(cashflow@TimePeriod[1] * 12) == 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12),2] = cashflow@TotalCashFlow
+    
+   
+    # This code solves for the spread to spot curve to equal price
+    spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), tol = .0000000001, CashFlowArray[,2],
+                           discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
+    
+    #convert the spot spread to the frequency of the bond
+    spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+    
+    #------------- Step three add the spot spread to the spot curve 
+    # This yields the discount rates that are need for the key rate duration calculation
+    
+    # at a minimum the cash flow array should be 360 months
+    for(i in 1:360){
+      Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
+    }
+    
+    #========= Populate KRIndex Table =========================
+    # The key rate index table will serve as the control table for the looping
+    # using this table allows for incremental looping of discontinous segments of the
+    # spot rate curve and is proprietary to bondlab
+    # This table was dimensioned on lines 646 - 648
+    
+    # Step 1 populate Period (n)
+    KRIndex[1:KRCount,1] <- round(as.numeric(KR) * 12,0)
+    
+    # Step 2 populate time period (t)
+    KRIndex[1:KRCount,2] <- as.numeric(KR)                    
+    
+    # Step 3 Populate Index Table with the relevant points on the spot curve
+    # this is done by looping through the key rate table and allows for term structure implementation
+    # other than Nelson Siegel (note: this capability needs to built into bondlab)
+    # the key rate index table (KRIndex) is used to populate the key rate table (KRTable)
+    for (j in 1:KRCount){                                   
+      for (i in 1:360){
+        if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,3] = Key.Rate.Table[i,3]} else {KRIndex[j,3] = KRIndex[j,3]}
+      }
+    }
+    
+    # Step 4 Populate KRIndex Table with the appropriate Discount Curve values from the key rate table 
+    # these will be the reference points for the appropriate key rate shifts
+    for (j in 1:KRCount){                                   
+      for (i in 1:360){
+        if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,4] = Key.Rate.Table[i,4]} else {KRIndex[j,3] = KRIndex[j,3]}
+      }
+    }
+    
+    # Step 5 Populated KRIndex Table with KR Shifts
+    for (j in 1:KRCount){
+      KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/100)
+      KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/100)
+    }
+    
+    #===== Implement Shift of Spot Rates =======================
+    # Once the KRIndex is populated implement the shift in the spot rates using the KRIndex table as the control 
+    # w is the counter of the internal knot points used to compute key rate duration it ignores the boundary knots
+    # used for interpolation at the end points.  x is the length of the array.  Currently the analysis is limited
+    # to loans (bonds) with a maximum of 30-years to maturity.  This can be made dynamic at some point in the future
+    # y is column counter used the key rate down and key rate up values
+    for (w in 2:(KRCount-1)){ 
+      for (x in 1:360){
+        #This allocates the up and down Key.Rate.Table index.  col 5 is KR down and 6 is KR up
+        for(y in 5:6){
+          
+          # step 1: populate the spot curve outside the key rate shift =========
+          if(Key.Rate.Table[x,2] <= KRIndex[w-1,2] || Key.Rate.Table[x,2] >= KRIndex[w+1,2]) 
+          {Key.Rate.Table[x,y] = Key.Rate.Table[x,4]} else {Key.Rate.Table[x,y] = 0}
+        }
+      }
+      
+      #===== Begin Interpolation of Spot Curve ==================================
+      # Maturity points on the spot rate curve to interpolate
+      KRx <- c(KRIndex[w-1,2], KRIndex[w,2], KRIndex[w+1,2]) 
+      
+      # Spot rates that correspond to the maturity points Down and Up
+      for(z in 1:2){                                       
+        if (z == 1) 
+        {KRy <- c(KRIndex[w-1,4], KRIndex[w,5], KRIndex[w+1,4])}         
+        else 
+        {KRy <- c(KRIndex[w-1,4], KRIndex[w,6], KRIndex[w+1,4])}                                     
+        a = KRIndex[w-1,1] + Rate.Delta 
+        b = KRIndex[w+1,1] - Rate.Delta
+        for(h in a : b){
+          Key.Rate.Table[h,(z+4)] <- approx(KRx,KRy, Key.Rate.Table[h,2])$y
+        } # Loop through Key Rate Table and interpolation
+      } # Inner Loop to set interpolation points from KRIndex
+      
+      # This line sets the end points for discounting when the 30-year is last point on the curve
+      # It is possible to set the endpoints longer using row 12 of the KRIndex
+      
+      if (KRIndex[w,2] == 30) {(Key.Rate.Table[x,5] = KRIndex[12,5]) & (Key.Rate.Table[x,6] = KRIndex[12,6])}
+      
+      #------------------------------------------------------------------------
+      # Derive Key Rate Up and Key Rate Down Cash Flows
+      # For MBS Cashflows two term strucutre objects are created the up and down term strucutres
+      # are used to drive the key rate scenario foward rates and the up and down MBS cashflows
+      # This suggests a separate Bond Term Structure for each; Bond Non-Callable, Bond Callable, and  Mortgage Term Strucutre
+      # I have the original Bond Non-Callable Term Structure Code
+      # Each can be incorporated to a final BondLab call using a switch command
+      #-----------------------------------------------------------------------
+      
+      # Initialize the TermStructure Up and Down objects
+      Key.Rate.TS.Dwn <- TermStructure
+      Key.Rate.TS.Up <- TermStructure
+      
+      Key.Rate.TS.Dwn@spotrate <- c(Key.Rate.Table[,5] * 100, 
+                                    ((TermStructure@spotrate[361:492])) + (spot.spread * 100)
+                                    )
+            
+        Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
+                            (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
+      
+        Key.Rate.TS.Dwn@TenYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 121, to = 481, by = 1)]/12) /
+                          (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
+      
+      
+      Key.Rate.TS.Up@spotrate <- c(Key.Rate.Table[,6] * 100, 
+                                    ((TermStructure@spotrate[361:492])) + (spot.spread * 100)
+                                   )
+
+      Key.Rate.TS.Up@TwoYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 25, to = 385, by = 1)]/12) /
+                                        (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
+      
+      Key.Rate.TS.Up@TenYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 121, to = 481, by = 1)]/12) /
+                                        (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
+            
+      plot( Key.Rate.TS.Up@spotrate, type = "l")
+      lines(Key.Rate.TS.Dwn@spotrate)
+      
+      
+      TS.Up <<- Key.Rate.TS.Up
+      TS.DWN <<- Key.Rate.TS.Dwn
+      
+      # Run the prepayment model to derive the SMM vector given each Key Rate shift
+      # =======================================================================   
+      # Key Rate Shift Down Prepayment Model and CashFlows
+      # ======================================================================
+      Prepayment.Dwn <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = Key.Rate.TS.Dwn, 
+                                             PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout, 
+                                             begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+      
+      # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
+      # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
+      # via a single call to BondLab
+      MortgageCashFlows.Dwn <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
+                                                 price = price*100, PrepaymentAssumption = Prepayment.Dwn)
+      
+      # Assign CashFlows into the cash flow array.  This has to be done in a loop
+      for(cfd in 1:360){
+        if(cfd > as.numeric(length(MortgageCashFlows.Dwn@TotalCashFlow))) {CashFlowArray[cfd,3] = 0} else 
+        {CashFlowArray[cfd,3] = MortgageCashFlows.Dwn@TotalCashFlow[cfd]}
+      }
+      # =======================================================================   
+      # Key Rate Shift Up Prepayment Model and CashFlows
+      # ======================================================================
+      Prepayment.Up <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = Key.Rate.TS.Up, 
+                                            PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout, 
+                                            begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+      
+      # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
+      # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
+      # via a single call to BondLab
+      MortgageCashFlows.Up <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
+                                                price = price*100, PrepaymentAssumption = Prepayment.Up)
+      
+      
+      # Assign CashFlows into the cash flow array. This has to be done in a loop
+      for(cfu in 1:360){
+        if(cfu > as.numeric(length(MortgageCashFlows.Up@TotalCashFlow))) {CashFlowArray[cfu,4] = 0} else 
+        {CashFlowArray[cfu,4] = MortgageCashFlows.Up@TotalCashFlow[cfu]}
+      }
+      
+      CFT <<- CashFlowArray
+   
+            
+      #============================== Calculate Key Rate Duration ============================================
+      KR.Duration[w-1,2] <- -Effective.Duration(
+        rate.delta = Rate.Delta/100, 
+        cashflow = CashFlowArray[,2],
+        cashflow.dwn = CashFlowArray[,3],
+        cashflow.up = CashFlowArray[,4],
+        discount.rates = Key.Rate.Table[,4], 
+        discount.rates.up = Key.Rate.Table[,6],
+        discount.rates.dwn = Key.Rate.Table[,5],
+        t.period = Key.Rate.Table[,2],
+        proceeds = proceeds
+      ) 
+      KR.Duration[w-1,3] <- Effective.Convexity(
+        rate.delta = Rate.Delta/100, 
+        cashflow = CashFlowArray[,2], 
+        discount.rates = Key.Rate.Table[,4], 
+        discount.rates.up = Key.Rate.Table[,6],
+        discount.rates.dwn = Key.Rate.Table[,5],
+        t.period = Key.Rate.Table[,2],
+        proceeds = proceeds
+      ) 
+    } # Outer Loop around KRIndex
+    new(ClassName,
+        bond.id,
+        SpotSpread = spot.spread * 100,
+        EffDuration = sum(KR.Duration[,2]),
+        EffConvexity = sum(KR.Duration[,3]),
+        KeyRateTenor = KR.Duration[,1],
+        KeyRateDuration = KR.Duration[,2],
+        KeyRateConvexity = KR.Duration[,3]
+        
+    )
+  } # End the function
+  
   #---------------------------------------------------
   #Term strucutre call term strc 
   #and holds forward and spot rates as slots to class Term Structure 
@@ -741,7 +1226,7 @@
     data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
     by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
     data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
-     
+    
     } #The Loop Ends here and the list is made
 
   data$TODAY <- as.Date(rates.data[1,1])
@@ -749,7 +1234,7 @@
   
   #set term strucutre input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
-     
+
   #Fit the term structure of interest rates
 
   if(method != "cs") {TSFit <- estim_nss(dataset = TSInput, group = as.character(rates.data[1,1]), matrange = "all", method = method)} else
@@ -862,7 +1347,7 @@
   #----------------------------------------------------------------------------------------------------
   Prepayment.Model <- function(ModelTune = "character", LoanAge = vector(), 
                                Month = vector(), incentive = vector(), Burnout.maxincen = numeric()){
-      
+    
       TurnoverRate        = ModelTune@TurnoverRate                       
       Seasoning.alpha     = ModelTune@Turnover.alpha
       Seasoning.beta      = ModelTune@Turnover.beta 
@@ -890,7 +1375,7 @@
     # Calculate the Borrower Refinance Response
     Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
     Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
-    Burnout <- Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen, LoanAge = LoanAge)
+    Burnout <-Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen, LoanAge = LoanAge)
     
     Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
     
@@ -935,7 +1420,6 @@
     # the switch function is encapsulated with prepayment assumption for now
     
     Mtg.Rate <- function(TermStructure = "character", type = "character", term = numeric()) {
-
       term = as.character(term)
       switch( type, 
               fixed = switch(term,
@@ -1145,8 +1629,7 @@
       connS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
       ModelTune <- readRDS(connS3)
       Burnout = bond.id@Burnout
-      
-      
+           
       # ----------------------- Scenario Analysis --------------------------------  
       for(i in 1:length(scenario.set)){
       
@@ -1159,10 +1642,8 @@
       # Fourth call the scenario 
       rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
       
-
       # Caclulate the term strucute
       TermStructure = TermStructure(rates.data = rates, method = method)
-
       
       # Run the prpeayment model
       Prepayment = PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = TermStructure, 
@@ -1177,9 +1658,10 @@
       InterpolateCurve <- loess(as.numeric(rates.data[1,2:9]) ~ as.numeric(rates.data[2,2:9]), data = data.frame(rates.data))  
       SpreadtoCurve = (MortgageCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, MortgageCashFlow@WAL )
             
-      # The second step will be to calculate the scenario effective duration and convexity   
-      MortgageTermStructure = BondTermStructure(bond.id = bond.id, Rate.Delta = 1, TermStructure = TermStructure,
-                              principal = original.bal * MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
+      # The second step will be to calculate the scenario effective duration and convexity
+      # I can do this with a different call that does not require BondTermStrucutre
+      #MortgageTermStructure = BondTermStructure(bond.id = bond.id, Rate.Delta = 1, TermStructure = TermStructure,
+      #                        principal = original.bal * MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
       
       # ---------------------------------------------------------------
       # Function to compute the horizon return 
@@ -1243,11 +1725,11 @@
                       SpreadToInterCurve = SpreadtoCurve,
                       ModDuration = MortgageCashFlow@ModDuration,
                       Convexity = MortgageCashFlow@Convexity,
-                      EffDuration = MortgageTermStructure@EffDuration,
-                      EffConvexity = MortgageTermStructure@EffConvexity,
-                      KeyRateTenor = MortgageTermStructure@KeyRateTenor,
-                      KeyRateDuration = MortgageTermStructure@KeyRateDuration,
-                      KeyRateConvexity = MortgageTermStructure@KeyRateConvexity,
+                      EffDuration = 999, #MortgageTermStructure@EffDuration,
+                      EffConvexity = 999, #MortgageTermStructure@EffConvexity,
+                      KeyRateTenor = 999, #MortgageTermStructure@KeyRateTenor,
+                      KeyRateDuration = 999, #MortgageTermStructure@KeyRateDuration,
+                      KeyRateConvexity = 999, #MortgageTermStructure@KeyRateConvexity,
                       HorizonReturn = HorizonReturn,
                       Scenario
                       
@@ -1328,30 +1810,29 @@
   if(missing(method)) method = "ns"
   
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
-  Rate.Delta = 1
+  Rate.Delta = .25
   
   # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
   bond.id = readRDS(conn1)
-
   
   #Call the desired curve from rates data folder
   conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(conn2)
-
-  #Call Prepayment Model Tuning Parameters
-  conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
-  ModelTune <- readRDS(conn3)
+  rates.data <<- readRDS(conn2)
   
   #Call Mortgage Rate Functions
-  conn4 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(conn4)  
+  conn3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+  MortgageRate <- readRDS(conn3)  
   Burnout = bond.id@Burnout
   
- 
+  #Call Prepayment Model Tuning Parameters
+  conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+  ModelTune <- readRDS(conn4)
+  
   #The second step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure
   TermStructure <- TermStructure(rates.data = rates.data, method = method)
+
   
   #Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, 
@@ -1365,8 +1846,8 @@
   
   #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
-  MortgageTermStructure <- BondTermStructure(bond.id = MortgageCashFlow, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-                          principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
+  MortgageTermStructure <- MtgTermStructure(bond.id = MortgageCashFlow, original.bal = original.bal, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
+                          settlement.date = settlement.date, principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
   
   spread.to.spot = MortgageTermStructure@SpotSpread
   proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
@@ -1375,7 +1856,7 @@
   Scenario <- Mtg.Scenario(scenario.set = scenario.set, bond.id = bond.id, MortgageRate = MortgageRate, original.bal = original.bal, 
                            trade.date = trade.date, settlement.date = settlement.date, price = price, proceeds = proceeds, spot.spread = spread.to.spot, 
                                    PrepaymentAssumption = "MODEL")
-
+  
   closeAllConnections()
   
   new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageTermStructure, TermStructure, PrepaymentAssumption, Scenario)    
@@ -1698,6 +2179,16 @@
            TenYearFwd = "numeric"
            ))
 
+  
+  setClass("PrepaymentModel",
+           representation(
+             Turnover = "numeric",
+             Seasoning = "function",
+             Seasonality = "function",
+             BorrowerIncentive = "function",
+             Burnout = "function"
+             ))
+  
   setClass("PrepaymentModelTune",
         representation(
           TurnoverRate = "numeric",
@@ -1803,18 +2294,19 @@
                  price = numeric(), PrepaymentAssumption = "character")
   {standardGeneric("MortgageCashFlows")})
 
- # setGeneric("BondTermStructure",
- #           def = function(bond.id = "character", Rate.Delta = numeric(), rates.data = "character", principal = numeric(), price = numeric())
- #           {standardGeneric("BondTermStructure")})
+#  setGeneric("BondTermStructure",
+#            def = function(bond.id = "character", Rate.Delta = numeric(), original.bal = numeric(), TermStructure = "character", 
+#                           settlement.date = "character", principal = numeric(), price = numeric(), cashflow = "character")
+#            {standardGeneric("BondTermStructure")})
 
   setGeneric("BondAnalytics",
            def = function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
                            settlement.date = "character", method = method)
            {standardGeneric("BondAnalytics")})
 
-# setGeneric("TermStructure",
-#           function(rates.data = "character", method = "character")
-#           {standardGeneric("TermStructure")})
+ setGeneric("TermStructure",
+           function(rates.data = "character", method = "character")
+           {standardGeneric("TermStructure")})
 
   setGeneric("PassThroughAnalytics",
            function (bond.id = "character", MortgageRate = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 

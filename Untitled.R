@@ -10,7 +10,10 @@ TermStructure(rates.data = readRDS("~/BondLab/RatesData/2013-01-10.rds"), method
 
 test <- readRDS("~/BondLab/RatesData/2013-01-10.rds")
 
-BondTermStructure(bond.id = bondlabMBS4, Rate.Delta = .25, rates.data = rates.data, principal = 1000, price = 100)
+plot(KR.Up.Fwd[200:360], type= "l") +
+  lines(Term.Structure@spotrate[200:360])
+
+
 
 
 

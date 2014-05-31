@@ -589,6 +589,18 @@
     # These functions are set as internal functions to key rates
     # this insures that stored values will not be wrongly be passed to the funtion
     # internal functions used to compute key rate duration and convexity
+    EffectiveMeasures <- function(rate.delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, 
+                                  t.period, proceeds, type){
+      Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+      Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
+      Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+      
+      switch(type, 
+      duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
+      convexity =  (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
+      )
+    }
+    
     Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
                                    discount.rates.up, discount.rates.dwn, t.period, proceeds){
       Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
@@ -683,7 +695,7 @@
     
     
     #convert the spot spread to the frequency of the bond
-    spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+    #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
     
     #Step three add the spot spread to the spot curve to get the discount rates that are need for
     #the key rate duration calculation
@@ -766,22 +778,24 @@
       if (KRIndex[w,2] == 30) {(Key.Rate.Table[x,5] = KRIndex[12,5]) & (Key.Rate.Table[x,6] = KRIndex[12,6])}   
       
       #============================== Calculate Key Rate Duration ============================================
-      KR.Duration[w-1,2] <- -Effective.Duration(
+      KR.Duration[w-1,2] <- -EffectiveMeasures(
         rate.delta = Rate.Delta/100, 
         cashflow = CashFlowArray[,2], 
         discount.rates = Key.Rate.Table[,4], 
         discount.rates.up = Key.Rate.Table[,6],
         discount.rates.dwn = Key.Rate.Table[,5],
         t.period = Key.Rate.Table[,2],
+        type = "duration",
         proceeds = proceeds
       ) 
-      KR.Duration[w-1,3] <- Effective.Convexity(
+      KR.Duration[w-1,3] <- EffectiveMeasures(
         rate.delta = Rate.Delta/100, 
         cashflow = CashFlowArray[,2], 
         discount.rates = Key.Rate.Table[,4], 
         discount.rates.up = Key.Rate.Table[,6],
         discount.rates.dwn = Key.Rate.Table[,5],
         t.period = Key.Rate.Table[,2],
+        type = "convexity",
         proceeds = proceeds
       ) 
     } # Outer Loop around KRIndex
@@ -844,20 +858,19 @@
     # These functions are set as internal functions to key rates
     # this insures that stored values will not be wrongly be passed to the funtion
     # internal functions used to compute key rate duration and convexity
-    Effective.Duration <- function(rate.delta, cashflow, cashflow.up, cashflow.dwn, 
-                                   discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
+    
+    EffectiveMeasures <- function(rate.delta , cashflow, cashflow.up, cashflow.dwn, 
+                      discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds, type){
       Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
       Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
       Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)
-      (Price.UP - Price.DWN)/(2*proceeds*rate.delta)
+      
+      switch(type,
+              duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
+              convexity =  (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
+      )
     }
-    Effective.Convexity <- function(rate.delta, cashflow, discount.rates, 
-                                    discount.rates.up, discount.rates.dwn, t.period, proceeds){
-      Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-      Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-      Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
-      (Price.UP + Price.DWN - (2*proceeds))/(2*proceeds *(rate.delta^2))
-    }
+    
     
     #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
     Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
@@ -948,7 +961,7 @@
                            discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
     
     #convert the spot spread to the frequency of the bond
-    spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+    #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
     
     #------------- Step three add the spot spread to the spot curve 
     # This yields the discount rates that are need for the key rate duration calculation
@@ -1042,23 +1055,24 @@
       # Each can be incorporated to a final BondLab call using a switch command
       #-----------------------------------------------------------------------
       
-      # Initialize the TermStructure Up and Down objects
+      # Initialize the TermStructure Up and Down objects - Create a MtgKeyRate Class to handle the rates cleaner
       Key.Rate.TS.Dwn <- TermStructure
       Key.Rate.TS.Up <- TermStructure
       
-      Key.Rate.TS.Dwn@spotrate <- c(Key.Rate.Table[,5] * 100, 
-                                    ((TermStructure@spotrate[361:492])) + (spot.spread * 100)
+      
+      Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
+                                    ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
                                     )
             
-        Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
+      Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
                             (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
       
-        Key.Rate.TS.Dwn@TenYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 121, to = 481, by = 1)]/12) /
+      Key.Rate.TS.Dwn@TenYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 121, to = 481, by = 1)]/12) /
                           (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
       
       
-      Key.Rate.TS.Up@spotrate <- c(Key.Rate.Table[,6] * 100, 
-                                    ((TermStructure@spotrate[361:492])) + (spot.spread * 100)
+      Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
+                                    ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
                                    )
 
       Key.Rate.TS.Up@TwoYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 25, to = 385, by = 1)]/12) /
@@ -1066,13 +1080,7 @@
       
       Key.Rate.TS.Up@TenYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 121, to = 481, by = 1)]/12) /
                                         (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
-            
-      plot( Key.Rate.TS.Up@spotrate, type = "l")
-      lines(Key.Rate.TS.Dwn@spotrate)
-      
-      
-      TS.Up <<- Key.Rate.TS.Up
-      TS.DWN <<- Key.Rate.TS.Dwn
+
       
       # Run the prepayment model to derive the SMM vector given each Key Rate shift
       # =======================================================================   
@@ -1112,12 +1120,9 @@
         if(cfu > as.numeric(length(MortgageCashFlows.Up@TotalCashFlow))) {CashFlowArray[cfu,4] = 0} else 
         {CashFlowArray[cfu,4] = MortgageCashFlows.Up@TotalCashFlow[cfu]}
       }
-      
-      CFT <<- CashFlowArray
-   
-            
+                  
       #============================== Calculate Key Rate Duration ============================================
-      KR.Duration[w-1,2] <- -Effective.Duration(
+      KR.Duration[w-1,2] <- -EffectiveMeasures(
         rate.delta = Rate.Delta/100, 
         cashflow = CashFlowArray[,2],
         cashflow.dwn = CashFlowArray[,3],
@@ -1126,15 +1131,20 @@
         discount.rates.up = Key.Rate.Table[,6],
         discount.rates.dwn = Key.Rate.Table[,5],
         t.period = Key.Rate.Table[,2],
+        type = "duration",
         proceeds = proceeds
       ) 
-      KR.Duration[w-1,3] <- Effective.Convexity(
+      
+      KR.Duration[w-1,3] <- EffectiveMeasures(
         rate.delta = Rate.Delta/100, 
-        cashflow = CashFlowArray[,2], 
+        cashflow = CashFlowArray[,2],
+        cashflow.dwn = CashFlowArray[,3],
+        cashflow.up = CashFlowArray[,4],
         discount.rates = Key.Rate.Table[,4], 
         discount.rates.up = Key.Rate.Table[,6],
         discount.rates.dwn = Key.Rate.Table[,5],
         t.period = Key.Rate.Table[,2],
+        type = "convexity",
         proceeds = proceeds
       ) 
     } # Outer Loop around KRIndex

@@ -3,9 +3,9 @@ DA100 <- new("Scenario",
              Type = "Aggressive",
              Horizon = "Immediate",
              ShiftType = "Parallel",
-             Shiftbps = 100,
+             Shiftbps = -100,
              Formula = function(rates.data, Shiftbps){
-               as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
+               as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
              })
 
 DA50  <- new("Scenario",
@@ -13,19 +13,19 @@ DA50  <- new("Scenario",
              Type = "Aggressive",
              Horizon = "Immediate",
              ShiftType = "Parallel",
-             Shiftbps = 50,
+             Shiftbps = -50,
              Formula = function(rates.data, Shiftbps){
-               as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
+               as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
              })
 
 DA25  <- new("Scenario",
-             Name = "Down50",
+             Name = "Down25",
              Type = "Aggressive",
              Horizon = "Immediate",
              ShiftType = "Parallel",
-             Shiftbps = 25,
+             Shiftbps = -25,
              Formula = function(rates.data, Shiftbps){
-               as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
+               as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
              })
 
 NC  <- new("Scenario",
@@ -35,7 +35,7 @@ NC  <- new("Scenario",
              ShiftType = "Parallel",
              Shiftbps = 0,
              Formula = function(rates.data, Shiftbps){
-               as.character(as.numeric(rates.data[1,2:length(rates.data)]) - Shiftbps/100)
+               as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)
              })
 
 UA25 <- new("Scenario",

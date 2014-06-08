@@ -824,9 +824,6 @@
     # Term Strucuture
     # Mortgage or Bond CashFlows    
     
-    #connBTS1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-    #bond.data <<- readRDS(connBTS1)
-    
     # =============================================
     # Open connections to prepayment model tune parameters and  mortgage rate model
     # =============================================
@@ -1055,7 +1052,8 @@
       # Each can be incorporated to a final BondLab call using a switch command
       #-----------------------------------------------------------------------
       
-      # Initialize the TermStructure Up and Down objects - Create a MtgKeyRate Class to handle the rates cleaner
+      # Initialize the TermStructure Up and Down objects 
+      # Create a MtgKeyRate Class to handle the rates the class will clean-up this code
       Key.Rate.TS.Dwn <- TermStructure
       Key.Rate.TS.Up <- TermStructure
       
@@ -1647,6 +1645,7 @@
       Scenario <- readRDS(connS4) 
       
       # Third call the trade date rates data
+      # Create variabel for the length of rates and rates data 
       rates <- rates.data
       
       # Fourth call the scenario 
@@ -1665,13 +1664,13 @@
                                            settlement.date = settlement.date, price = price, PrepaymentAssumption = Prepayment)
       
       # Calculate static cash flow spread to the curve                                      
-      InterpolateCurve <- loess(as.numeric(rates.data[1,2:9]) ~ as.numeric(rates.data[2,2:9]), data = data.frame(rates.data))  
+      InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
       SpreadtoCurve = (MortgageCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, MortgageCashFlow@WAL )
             
       # The second step will be to calculate the scenario effective duration and convexity
       # I can do this with a different call that does not require BondTermStrucutre
-      #MortgageTermStructure = BondTermStructure(bond.id = bond.id, Rate.Delta = 1, TermStructure = TermStructure,
-      #                        principal = original.bal * MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
+      MortgageTermStructure = MtgTermStructure(bond.id = bond.id, original.bal = original.bal, Rate.Delta = 0.25, TermStructure = TermStructure,
+                              settlement.date = settlement.date, principal = original.bal * MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
       
       # ---------------------------------------------------------------
       # Function to compute the horizon return 
@@ -1724,9 +1723,9 @@
                       ScheduledPrin = MortgageCashFlow@ScheduledPrin,
                       PrepaidPrin = MortgageCashFlow@PrepaidPrin,
                       EndingBal = MortgageCashFlow@EndingBal,
-                      TotalCashFlow = MortgageCashFlow@PassThroughInterest + 
+                      TotalCashFlow = (MortgageCashFlow@PassThroughInterest + 
                       MortgageCashFlow@ScheduledPrin + 
-                      MortgageCashFlow@PrepaidPrin,
+                      MortgageCashFlow@PrepaidPrin),
                       spotrate = TermStructure@spotrate,
                       forwardrate = TermStructure@forwardrate,
                       SMM = Prepayment@SMM,
@@ -1735,11 +1734,11 @@
                       SpreadToInterCurve = SpreadtoCurve,
                       ModDuration = MortgageCashFlow@ModDuration,
                       Convexity = MortgageCashFlow@Convexity,
-                      EffDuration = 999, #MortgageTermStructure@EffDuration,
-                      EffConvexity = 999, #MortgageTermStructure@EffConvexity,
-                      KeyRateTenor = 999, #MortgageTermStructure@KeyRateTenor,
-                      KeyRateDuration = 999, #MortgageTermStructure@KeyRateDuration,
-                      KeyRateConvexity = 999, #MortgageTermStructure@KeyRateConvexity,
+                      EffDuration = MortgageTermStructure@EffDuration,
+                      EffConvexity =  MortgageTermStructure@EffConvexity,
+                      KeyRateTenor =  MortgageTermStructure@KeyRateTenor,
+                      KeyRateDuration =  MortgageTermStructure@KeyRateDuration,
+                      KeyRateConvexity =  MortgageTermStructure@KeyRateConvexity,
                       HorizonReturn = HorizonReturn,
                       Scenario
                       

@@ -8,12 +8,13 @@
 #Copyright (C) 2014  Glenn M Schultz, CFA
   
   options(digits = 8)
-  library(termstrc)
   library(ggplot2)
-  library(reshape2)
   library(lubridate)
   library(methods)
   library(plyr)
+  library(reshape2)
+  library(sde)
+  library(termstrc)
 
   #----------------------------------------------------------------------------------------
   # Utils globalVariables is called so that the R CMD check will not issue a note
@@ -1053,10 +1054,10 @@
       #-----------------------------------------------------------------------
       
       # Initialize the TermStructure Up and Down objects 
-      # Create a MtgKeyRate Class to handle the rates the class will clean-up this code
+      # Use the term strucutre object 
+      
       Key.Rate.TS.Dwn <- TermStructure
       Key.Rate.TS.Up <- TermStructure
-      
       
       Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
                                     ((TermStructure@spotrate[361:492])) + (spot.spread * 0)

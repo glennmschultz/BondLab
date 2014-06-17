@@ -226,7 +226,8 @@
 
   BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
                         lastpmt.date, nextpmt.date){
-  # This  Function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
+  
+  #This function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
   #It returns the number of payments that will be received, period, and n for discounting
   #issue.date is the issuance date of the bond
   #start.date is the dated date of the bond
@@ -520,7 +521,6 @@
   }  
   #-------------------------------------
   #Risk measures.  These functions measure effective duration, effective convexity, and key rate duration
-  #These need to be fixed!!
   #-------------------------------------
   Effective.Duration <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
   Price = proceeds/10
@@ -549,24 +549,90 @@
     
     # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
     MOAS1 <-  gzfile(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-    bond.id = readRDS(MOAS1)
+    bond.id <- readRDS(MOAS1)
         
     #Call the desired curve from rates data folder
     MOAS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+    
     rates.data <- readRDS(MOAS2)
     
     #Call Prepayment Model Tuning Parameters
     MOAS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+    
     ModelTune <- readRDS(MOAS3)
     
     #Call Mortgage Rate Functions
     MOAS4 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    
     MortgageRate <- readRDS(MOAS4)  
     Burnout = bond.id@Burnout
     
-    #MOAS5 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
-    #Scenario <- readRDS(MOAS5)
-        
+    #Use the s3 class coupon bonds from the package termstrc to create the cashflow
+    #matrix used to calibrate the CIR Model to market prices.  Both termstrc 
+    #need to be S4.  YUIMA is S4 programming for stocastic differetial equations
+    
+    #set the column counter to make cashflows for termstrucutre
+    #S3 class coupon bonds but can be made into a matrix to pass to YUIMA for sde(?)
+    ColCount <- as.numeric(ncol(rates.data))
+    Mat.Years <- as.numeric(rates.data[2,2:ColCount])
+    Coupon.Rate <- as.numeric(rates.data[1,2:ColCount])
+    Issue.Date <- as.Date(rates.data[1,1])
+    
+    #initialize coupon bonds S3 class
+    #This can be upgraded when bondlab has portfolio function
+    ISIN <- vector()
+    MATURITYDATE <- vector()
+    ISSUEDATE <- vector()
+    COUPONRATE <- vector()
+    PRICE <- vector()
+    ACCRUED <- vector()
+    CFISIN <- vector()
+    CF <- vector()
+    DATE <- vector()
+    CASHFLOWS  <- list(CFISIN,CF,DATE)
+    names(CASHFLOWS) <- c("ISIN","CF","DATE")
+    TODAY <- vector()
+    data <- list()
+    TSInput <- list()
+    
+    ### Assign Values to List Items #########
+    data = NULL
+    data$ISIN <- colnames(rates.data[2:ColCount])
+    data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
+    
+    data$MATURITYDATE <-
+      sapply(Mat.Years, function(Mat.Years = Mat.Years, Issue = Issue.Date) 
+      {Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
+      {Issue %m+% years(as.numeric(Mat.Years))}
+      return(as.character(Maturity))
+      }) 
+    
+    data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
+    
+    #data$PRICE <- rep(100, ColCount -1)
+    data$PRICE <- ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)
+    
+    data$ACCRUED <- rep(0, ColCount -1)
+    
+    for(j in 1:(ColCount-1)){
+      Vector.Length <- as.numeric(round(difftime(data[[3]][j],
+                                                 data[[2]][j],
+                                                 units = c("weeks"))/weeks.in.year,0))
+      Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
+      data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
+      data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+      by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
+      data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+      
+    } #The Loop Ends here and the list is made
+    
+    data$TODAY <- as.Date(rates.data[1,1])
+    TSInput[[as.character(rates.data[1,1])]] <- c(data)
+    
+    #set term strucutre input (TSInput) to class couponbonds
+    class(TSInput) <- "couponbonds"
+
+    CIR.CF.Matrix <<- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
   }
 # -----------
 # Bond Key Rate Calculation
@@ -1179,10 +1245,8 @@
   CheckMethod <- c("ns", "dl", "sv", "asv", "cs")
   if(!method %in% CheckMethod) stop ("Invalid 'method' Value")
   
-  #Call the desired curve from rates data folder
-  #trade.date = as.Date(trade.date, "%m-%d-%Y")
+  # pass the yield curve to the function
   rates.data <- rates.data
-  #rates.data = readRDS(paste("~/BondLab/RatesData/2013-01-10.rds", sep = ""))
   
   #set the column counter to make cashflows for termstrucutre
   ColCount <- as.numeric(ncol(rates.data))
@@ -1373,11 +1437,10 @@
       Slow.location       = ModelTune@Incentive.Slow.eta
       Burnout.beta1       = ModelTune@Burnout.beta.1 
       Burnout.beta2       = ModelTune@Burnout.beta.2
+        
+      Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
     
-    
-    Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
-    
-    Turnover <- Turnover.Rate * 
+      Turnover <- Turnover.Rate * 
       Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
       Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
     

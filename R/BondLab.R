@@ -1,10 +1,12 @@
-  # BondLab is a software application for the analysis of 
+  # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License Restricted GPL3
+  # License GPL3
   # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
   
   options(digits = 8)
   library(ggplot2)
@@ -14,6 +16,7 @@
   library(reshape2)
   library(sde)
   library(termstrc)
+  library(optimx)
   
   #----------------------------------------------------------------------------------------
   # Utils globalVariables is called so that the R CMD check will not issue a note
@@ -1276,55 +1279,55 @@
   #Functions for the Cox, Ingersoll, Ross
   #Single Factor Model
   #--------------------------------------
+
   CIRBondPrice <- function(shortrate = vector(), T = numeric(), step = numeric(), kappa = numeric(), 
                            lambda = numeric(), sigma = numeric(), theta = numeric(), result = character){
-    
-    #The closed form function to the price of a bond under CIR Model
-    
     #Error trap the function
     
     if (missing(shortrate))
       stop("Need to specify shortrate.")
-      if (shortrate < 0 | shortrate > 1)
-      stop("No valid interest.rate specified.")
+   
+    # This error throws a warning in OAS
+    #if (shortrate < 0 | shortrate > 1)
+    #  stop("No valid interest.rate specified.")
     
     if (missing(T))
       stop("Need to specify maturity.")
-      if (shortrate < 0)
-      stop("No valid T specified.")
     
     if (missing(step))
       stop("Need to specify step.")
-      if (shortrate < 0)
-      stop("No valid T specified.")
     
     if (missing(kappa))
       stop("Need to specify kappa.")
-      if (kappa < 0 | kappa > 1)
+    
+    if (kappa < 0 | kappa > 1)
       stop("No valid kappa specified.")
     
     if (missing(lambda))
       stop("Need to specify lambda")
-      if (lambda < 0 | lambda > 1)
+    
+    if (lambda < 0 | lambda > 1)
       stop("No valid lambda specified.")
     
     if (missing(sigma))
       stop("Need to specify sigma")
-      if (sigma < 0 | sigma > 1)
+    
+    if (sigma < 0 | sigma > 1)
       stop("No valid sigma specified.")
     
     if (missing(theta))
-      stop("Need to specify sigma")
-      if (theta < 0 | theta > 1)
-      stop("No valid sigma specified.")
+      stop("Need to specify theta")
+    
+    if (theta < 0 | theta > 1)
+      stop("No valid theta specified.")
     
     if(missing(result))
-      result = "p"
-     
+      result = "p"  
+    
     #T is the maturity is the zero coupon bond. To price a coupon paying bond this is the maturity of the bond
     #step the time between each payment of a coupon paying bond
     
-    #cappa is the rate of mean reversion  
+    #kappa is the rate of mean reversion  
     #lambda is the market risk premium (lambda must be negative)
     #sigma is interest rate variance - specificlly sigma^2
     #theta is the mean interest rate level
@@ -1355,40 +1358,43 @@
     CIRBondPrice = switch(result,
                           p = Price,
                           y = Yield,
-                          l = Limit)
+                          l = Limit)  
+    
   }
   
-  CIRSim <- function(shortrate = numeric(), cappa = numeric(), theta = numeric(), 
+  CIRSim <- function(shortrate = numeric(), kappa = numeric(), theta = numeric(), 
                       T = numeric(), step = numeric(), sigma = numeric(), N = numeric()){
     
-    #cappa is the rate of mean reversion
+    #kappa is the rate of mean reversion
     #theta is the long term value of the short rate
     #T is the horizon
     #step is the time between each payment of coupon paying bond
     #N is the number of simulations
     
     #Error Trap Model Parameters
-    if(2*cappa*theta < sigma^2) 
+    if(2*kappa*theta < sigma^2) 
       stop("Invaild parameterization origin is inaccessible")
     
     dt <- step
     nrow <-  T/dt
     
-    deltarate <- function(cappa = numeric(), theta = numeric(), dt = numeric(), sigma = numeric()){ 
-      (cappa * (theta - simulation[i-1,j]) * dt) + sigma * sqrt(simulation[i-1,j]) * rnorm(1,0,1)}  
-    
-    #Matrix to hold the short rate paths
-    simulation = array(data = 0, c((nrow + 1), N))
-    
+
+    deltarate <- function(kappa = numeric(), theta = numeric(), dt = numeric(), sigma = numeric()){
     #Populate the first element of each path with the short rate
-    simulation[1,] = shortrate
+    #Euler discretization of the CIR model.  The discretization causes negative interest rates when 
+    #when the short term rate approaches the origin.  To solve this problem take the absolute value of square root process  
+    (kappa * (theta - simulation[i-1,j]) * dt) + (sigma * sqrt(abs(simulation[i-1,j])) * rnorm(1,0,1))}  
+    
+    #Matrix to hold the short rate paths - I can dimnames here rather than colnames same as mortgage oas (rename N to paths?)
+    simulation = array(data = 0, c((nrow + 1), N))
+          simulation[1,] = shortrate
     
     for(j in 1:N){
-      for(i in 2:(nrow + 1)){
-        
-        simulation[i,j] <- simulation[i-1, j] + deltarate(cappa = cappa, theta = theta, dt = dt, sigma = sigma)    
+      for(i in 2:(nrow + 1)){        
+        simulation[i,j] <- simulation[i-1, j] + deltarate(kappa = kappa, theta = theta, dt = dt, sigma = sigma)    
       }
     }
+    
     colnames(simulation) <- c(rep((paste("path", seq(1:N)))))
     return(simulation)
   }
@@ -1400,7 +1406,6 @@
     
     #Call the desired curve from rates data folder
     CalCIR1 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-    
     rates.data <- readRDS(CalCIR1)
     
     #set the column counter to make cashflows for termstrucutre
@@ -1462,102 +1467,141 @@
     
     #set term strucutre input (TSInput) to class couponbonds
     class(TSInput) <- "couponbonds"
-    CashFlow <<- TSInput[[1]]
-    CIR.CF.Matrix <<- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
-    CIR.Mat.Matrix <<- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
+    CashFlow <- TSInput[[1]]
+    CIR.CF.Matrix <- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
+    CIR.Mat.Matrix <- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
+    
+    #Objective function
+    CIRTune <- function(param = numeric(), shortrate = numeric(), sigma = .015, cfmatrix = matrix(), matmatrix = matrix()){
+      kappa =  param[1]
+      lambda = param[2]
+      theta =  param[3]
+      
+      Disc <- CIRBondPrice(kappa = kappa, lambda = lambda, theta = theta, shortrate = shortrate, T= matmatrix,  step = 0, sigma = sigma)    
+      CIRTune <- sqrt((sum(colSums((cfmatrix * Disc))^2))/ncol(matmatrix))
+      return(CIRTune)
+    }
+    
+    # Fit the model to the market   
+    fit <- optimx(par = c(.1, .003, .03), 
+                  fn = CIRTune, 
+                  method = "L-BFGS-B",
+                  lower = rep(.001, 3),
+                  upper = rep(1, 3),
+                  shortrate = .0016,
+                  sigma = .015,
+                  cfmatrix = CIR.CF.Matrix, 
+                  matmatrix = CIR.Mat.Matrix)  
+    close(CalCIR1)
+     return(fit)
   }
   
   #-----------------------------------
-  # Mortgage OAS
+  # Mortgage OAS Function
   #___________________________________
   
-  Mortgage.OAS <- function(bond.id = "character", trade.date = "character", original.bal = numeric(),
-                          price = numeric()){
-    
-    trade.date = as.Date(trade.date, "%m-%d-%Y")
-    
+  Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settlement.date = "character", original.bal = numeric(),
+                          price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric()){
+
     # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-    MOAS1 <-  gzfile(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-    bond.id <- readRDS(MOAS1)
+    conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+    bond.id = readRDS(conn1)
     
-    #Call the desired curve from rates data folder
-    MOAS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+    # Establish connection to mortgage rate model
+    conn2 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    MortgageRate <- readRDS(conn2)
     
-    rates.data <- readRDS(MOAS2)
+    # Establish connection to prepayment model tuning parameter
+    conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+    ModelTune <- readRDS(conn3)
+        
+    issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
+    start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
+    end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
+    lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+    nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+    coupon = bond.id@Coupon
+    frequency = bond.id@Frequency
+    delay = bond.id@PaymentDelay
+    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
     
-    #Call Prepayment Model Tuning Parameters
-    MOAS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+      #Use Bond Detail to Dimension the simulation cube
     
-    ModelTune <- readRDS(MOAS3)
+      #Calculate the number of cashflows that will be paid from settlement date to the last pmt date
+      ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
+                                     lastpmt.date = lastpmt.date, nextpmt.date = end.date) 
     
-    #Call Mortgage Rate Functions
-    MOAS4 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-    
-    MortgageRate <- readRDS(MOAS4)  
-    Burnout = bond.id@Burnout
-    
-    #set the column counter to make cashflows for termstrucutre
-    ColCount <- as.numeric(ncol(rates.data))
-    Mat.Years <- as.numeric(rates.data[2,2:ColCount])
-    Coupon.Rate <- as.numeric(rates.data[1,2:ColCount])
-    Issue.Date <- as.Date(rates.data[1,1])
-    
-    #initialize coupon bonds S3 class
-    #This can be upgraded when bondlab has portfolio function
-    ISIN <- vector()
-    MATURITYDATE <- vector()
-    ISSUEDATE <- vector()
-    COUPONRATE <- vector()
-    PRICE <- vector()
-    ACCRUED <- vector()
-    CFISIN <- vector()
-    CF <- vector()
-    DATE <- vector()
-    CASHFLOWS  <- list(CFISIN,CF,DATE)
-    names(CASHFLOWS) <- c("ISIN","CF","DATE")
-    TODAY <- vector()
-    data <- list()
-    TSInput <- list()
-    
-    ### Assign Values to List Items #########
-    data = NULL
-    data$ISIN <- colnames(rates.data[2:ColCount])
-    data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
-    
-    data$MATURITYDATE <-
-      sapply(Mat.Years, function(Mat.Years = Mat.Years, Issue = Issue.Date) 
-      {Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
-      {Issue %m+% years(as.numeric(Mat.Years))}
-      return(as.character(Maturity))
-      }) 
-    
-    data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
-    
-    #data$PRICE <- rep(100, ColCount -1)
-    data$PRICE <- ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)
-    
-    data$ACCRUED <- rep(0, ColCount -1)
-    
-    for(j in 1:(ColCount-1)){
-      Vector.Length <- as.numeric(round(difftime(data[[3]][j],
-                                                 data[[2]][j],
-                                                 units = c("weeks"))/weeks.in.year,0))
-      Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
-      data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
-      data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
-      by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
-      data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+      #Build a vector of dates for the payment schedule
+      #first get the pmtdate interval
+      pmtdate.interval = months.in.year/frequency
       
-    } #The Loop Ends here and the list is made
+      #then compute the payment dates
+      pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
+                        else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
     
-    data$TODAY <- as.Date(rates.data[1,1])
-    TSInput[[as.character(rates.data[1,1])]] <- c(data)
+      #build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
+      time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
+                                      lastpmt.date = lastpmt.date, nextpmt.date = pmtdate)
+  
+      #Initialize OAS Term Structure object.  This object is passed to prepayment assumption
+      #Allows the prepayment model to work in the Option Adjusted Spread function replacing Term Structure    
+      OAS.Term.Structure <- new("TermStructure",
+                              tradedate = as.character(trade.date),
+                              period = as.numeric(time.period),
+                              date = as.character(pmtdate),
+                              spotrate = 000,
+                              forwardrate = 000,
+                              TwoYearFwd = 000,
+                              TenYearFwd = 000
+    )
     
-    #set term strucutre input (TSInput) to class couponbonds
-    class(TSInput) <- "couponbonds"
-    CashFlow <<- TSInput[[1]]
-    CIR.CF.Matrix <<- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
-    CIR.Mat.Matrix <<- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
+      #step4 Count the number of cashflows 
+      #num.periods is the total number of cashflows to be received
+      #num.period is the period in which the cashflow is received
+      num.periods = length(time.period)
+    
+      #Set trade date and call the CalibrateCIR Model
+      #trade.date = as.Date(trade.date, "%m-%d-%Y")
+      Market.Fit <- CalibrateCIR(trade.date = trade.date)
+    
+      kappa  = Market.Fit$p1
+      lambda = Market.Fit$p2
+      theta  = Market.Fit$p3
+    
+    #For simulation pass T = mortgage term 
+    Simulation <- CIRSim(shortrate = short.rate, kappa = kappa, theta = theta, T = ((num.periods-1) / 12), step = (1/months.in.year), sigma = sigma, N = paths)
+    
+      #number of rows in the simulation will size the arrays
+      num.sim <- nrow(Simulation)
+    
+      #Dim arrays for the calculation
+      datetime.names <- c("Period", "Date", "Time")    
+      date.time <- array(data = NA, c(num.sim, 3), dimnames = list(seq(c(1:num.sim)),datetime.names))
+
+      #Time array
+      for(x in 1:num.sim){
+      date.time[x,1] = x
+      date.time[x,2] = pmtdate[x] + delay
+      date.time[x,3] = time.period[x]}
+        
+    SMM <- array(data = NA, c(num.sim, paths), dimnames = list(seq(c(1:num.sim)), c(rep((paste("path", seq(1:paths)))))))
+    
+    for(j in 1:paths){
+      
+      OAS.Term.Structure@TwoYearFwd <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
+                                      kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 2, step = 0, result = "y") * 100)
+      
+      OAS.Term.Structure@TenYearFwd <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
+                                      kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 10, step = 0, result = "y") * 100)
+      
+      
+      Prepayment <- PrepaymentAssumption(bond.id = bond.id, TermStructure = OAS.Term.Structure, MortgageRate = MortgageRate, 
+                           PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout)
+      
+      SMM[,j] <- as.matrix(Prepayment@SMM)
+
+  }
+      
   }
   
   #----------------------------------
@@ -1675,6 +1719,11 @@
   PrepaymentAssumption <- function(bond.id = "character", TermStructure = "character", MortgageRate = "character", ModelTune = "character", 
                                    Burnout = numeric(), PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), 
                                    seasoning.period = numeric(), CPR = numeric()){
+    
+    #Mortgage Rate is the call the to MortgageRDS.rds in the Prepayment Model folder.  Prepayment Assumption does not open a connection
+    #to the MortgageRate.rds it must be open by the function that is calling Prepayment Model
+    
+    
     #Check for a valid prepayment assumption
     if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
     PrepayAssumption <- PrepaymentAssumption    
@@ -1682,6 +1731,7 @@
     #Error Trap the CPR assumption
     if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
     #PPC function has error trapping feature so there is no need to error trap for PPC
+    
     
     NoteRate = bond.id@GWac
     sato = bond.id@SATO
@@ -1692,12 +1742,12 @@
     
     col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
     
-    Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/30.44) +1
-    Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/30.44)
+    Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/days.in.month) + 1
+    Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/days.in.month) + 1
     Period = seq(from = 1, to = Remain.Term, by = 1)
     PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
     LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
-                                  FirstPmtDate, units = "days")/30.44) + 1
+                                  FirstPmtDate, units = "days")/days.in.month) + 1
     
     NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
     sato = as.numeric(rep(sato, length(LoanAge)))
@@ -1711,11 +1761,11 @@
       switch( type, 
               fixed = switch(term,
                              "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], ten = TermStructure@TenYearFwd[1:length(LoanAge)], sato = sato),
-                             "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd, ten = TermStructure@TenYearFwd, sato = sato)
+                             "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)], ten = TermStructure@TenYearFwd[1:length(LoanAge)], sato = sato)
                              ), # end first nested switch statement
               arm = switch(term, 
                            "30" = 0 ) # end second nested switch statement
-      ) # end of the switch function
+      ) # end of "n" the switch logic
 
     }
     
@@ -2019,8 +2069,7 @@
                       KeyRateDuration =  MortgageTermStructure@KeyRateDuration,
                       KeyRateConvexity =  MortgageTermStructure@KeyRateConvexity,
                       HorizonReturn = HorizonReturn,
-                      Scenario
-                      
+                      Scenario                      
       )
     
       ScenarioResult <- append(ScenarioResult, Scenario)
@@ -2058,7 +2107,7 @@
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
   Rate.Delta = 1
   
-  # The first steo is to read in the Bond Detail
+  # The first step is to read in the Bond Detail
   bond.id <- readRDS(paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""))
   #Call the desired curve from rates data folder
   trade.date = as.Date(trade.date, "%m-%d-%Y")
@@ -2466,7 +2515,6 @@
            TwoYearFwd = "numeric",
            TenYearFwd = "numeric"
            ))
-
   
   setClass("PrepaymentModel",
            representation(
@@ -2604,7 +2652,7 @@
   
   setGeneric("PrepaymentAssumption",
            function(bond.id = "character", TermStructure = "character", MortgageRate = "character", ModelTune = "character", Burnout = numeric(),
-                    PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), 
+                    PrepaymentAssumption = "character",...,begin.cpr = numeric(), end.cpr = numeric(), 
                     seasoning.period = numeric(), CPR = numeric())
            {standardGeneric("PrepaymentAssumption")}
            )  

@@ -1523,6 +1523,7 @@
     coupon = bond.id@Coupon
     frequency = bond.id@Frequency
     delay = bond.id@PaymentDelay
+    factor = bond.id@MBSFactor
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
     
       #Use Bond Detail to Dimension the simulation cube
@@ -1577,31 +1578,54 @@
       #Dim arrays for the calculation
       datetime.names <- c("Period", "Date", "Time")    
       date.time <- array(data = NA, c(num.sim, 3), dimnames = list(seq(c(1:num.sim)),datetime.names))
-
-      #Time array
-      for(x in 1:num.sim){
-      date.time[x,1] = x
-      date.time[x,2] = pmtdate[x] + delay
-      date.time[x,3] = time.period[x]}
-        
-    SMM <- array(data = NA, c(num.sim, paths), dimnames = list(seq(c(1:num.sim)), c(rep((paste("path", seq(1:paths)))))))
     
-    for(j in 1:paths){
+      #Generate CashFlows from the simulated short rate
+      CashFlow <- array(data = NA, c(num.sim, paths), dimnames = list(seq(c(1:num.sim)), c(rep((paste("path", seq(1:paths)))))))
+      OAS.Output <- array(data = NA, c(paths, 1))
+    
+      for(j in 1:paths){
+      
+      OAS.Term.Structure@spotrate = as.vector(Simulation[,j])  
       
       OAS.Term.Structure@TwoYearFwd <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
                                       kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 2, step = 0, result = "y") * 100)
       
       OAS.Term.Structure@TenYearFwd <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
                                       kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 10, step = 0, result = "y") * 100)
-      
-      
+            
       Prepayment <- PrepaymentAssumption(bond.id = bond.id, TermStructure = OAS.Term.Structure, MortgageRate = MortgageRate, 
                            PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout)
       
-      SMM[,j] <- as.matrix(Prepayment@SMM)
-
-  }
       
+      MtgCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                       price = price, PrepaymentAssumption = Prepayment)
+      
+      proceeds <- (original.bal * factor * price/100) + MtgCashFlow@Accrued
+      
+      OAS.Term.Structure@spotrate[1:num.periods] <- cumprod(1 + Simulation)
+      OAS.Term.Structure@spotrate <- ((OAS.Term.Structure@spotrate ^ (1/ OAS.Term.Structure@period))^(1/12))-1
+      
+      #Discount along the simulated cure
+      
+      #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
+      #This function is encapasulated in term structure
+      
+      Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
+                              t.period = vector(), proceeds = numeric()){
+        Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+        return(proceeds - Present.Value)
+      }
+      
+      #solve for spread to spot curve to equal price
+      OAS.Output[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), tol = .0000000001, cashflow = MtgCashFlow@TotalCashFlow,
+                             discount.rates = OAS.Term.Structure@spotrate, t.period = OAS.Term.Structure@period , proceeds)$root
+      
+    
+      
+
+      
+  }
+      return(OAS.Output)
   }
   
   #----------------------------------

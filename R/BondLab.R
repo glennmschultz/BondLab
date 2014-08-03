@@ -961,6 +961,7 @@
   # This yields the discount rates that are need for the key rate duration calculation
     
   # at a minimum the cash flow array should be 360 months
+  
     for(i in 1:360){
       Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
     }
@@ -1501,9 +1502,9 @@
   #___________________________________
   
   Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settlement.date = "character", original.bal = numeric(),
-                          price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric()){
+                          price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric(), TermStructure = "character"){
 
-    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+    #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
     conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
     bond.id = readRDS(conn1)
     
@@ -1514,7 +1515,7 @@
     # Establish connection to prepayment model tuning parameter
     conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
     ModelTune <- readRDS(conn3)
-        
+            
     issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
     start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
     end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
@@ -1526,107 +1527,135 @@
     factor = bond.id@MBSFactor
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
     
-      #Use Bond Detail to Dimension the simulation cube
+    #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
+    #This function is encapasulated in term structure
     
-      #Calculate the number of cashflows that will be paid from settlement date to the last pmt date
-      ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
+    Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
+                            t.period = vector(), proceeds = numeric()){
+      Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+      return(proceeds - Present.Value)
+    }
+          
+    #First, calibrate the interest rate model to market swap rates and prices
+    #Set trade date and call the CalibrateCIR Model
+    #trade.date = as.Date(trade.date, "%m-%d-%Y")
+    
+    Market.Fit <- CalibrateCIR(trade.date = trade.date)
+    kappa  = Market.Fit$p1
+    lambda = Market.Fit$p2
+    theta  = Market.Fit$p3
+     
+    
+    #Calculate the number of cashflows that will be paid from settlement date to the last pmt date (used end date as next pmdt date for this)
+    ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
                                      lastpmt.date = lastpmt.date, nextpmt.date = end.date) 
     
-      #Build a vector of dates for the payment schedule
-      #first get the pmtdate interval
-      pmtdate.interval = months.in.year/frequency
+    #Build a vector of dates for the payment schedule
+    #first get the pmtdate interval
+    pmtdate.interval = months.in.year/frequency
       
-      #then compute the payment dates
-      pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
+    #Compute the payment dates
+    pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
                         else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
     
-      #build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
-      time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
+    
+    #Build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
+    time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
                                       lastpmt.date = lastpmt.date, nextpmt.date = pmtdate)
   
+    
+    #step4 Count the number of cashflows 
+    #num.periods is the total number of cashflows to be received
+    #num.period is the period in which the cashflow is received
+    num.periods = length(time.period)
+    num.period = seq(1:num.periods)
+    
+    
+    # Calculate static cash flow spread to the curve                                      
+    # InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
+    # SpreadtoCurve = ((ZV.MtgCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, ZV.MtgCashFlow@WAL )) /100
+        
+    
+    #==== Compute Option Adjusted Spread ==========================================
+    #For simulation pass T = mortgage term 
+    Simulation <- CIRSim(shortrate = short.rate, kappa = kappa, theta = theta, T = ((num.periods-1) / months.in.year), step = (1/months.in.year), sigma = sigma, N = paths)
+    
+    #number of rows in the simulation will size the arrays
+    num.sim <- nrow(Simulation)
+    
+    #Dim arrays for the calculation
+    cube.names <- c("Period", "Date", "Time", "SpotRate", "DiscRate", "TwoYear", "TenYear")    
+    sim.cube <- array(data = NA, c(num.sim, 7), dimnames = list(seq(c(1:num.sim)),cube.names))
+
+    #Populate the simulation cube  
+    sim.cube[,1] <- num.period
+    sim.cube[,2] <- pmtdate
+    sim.cube[,3] <- time.period
+    
+    oas.names <- c("OAS", "WAL", "ModDur", "YTM")
+    OAS.Out <- array(data = NA, c(paths,4), dimnames = list(seq(c(1:paths)),oas.names))
+    
+    for(j in 1:paths){
+    
+    #calculate spot rate for discounting  
+    sim.cube[,4] <- cumprod(1 + Simulation[,j])
+    sim.cube[,5] <- ((sim.cube[,4] ^ (1/ sim.cube[,3]))^(1/months.in.year))-1
+    
+    sim.cube[,6] <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
+                    kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 2, step = 0, result = "y") * 100)
+      
+    sim.cube[,7] <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
+                    kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 10, step = 0, result = "y") * 100)
+      
+
       #Initialize OAS Term Structure object.  This object is passed to prepayment assumption
       #Allows the prepayment model to work in the Option Adjusted Spread function replacing Term Structure    
       OAS.Term.Structure <- new("TermStructure",
-                              tradedate = as.character(trade.date),
-                              period = as.numeric(time.period),
-                              date = as.character(pmtdate),
-                              spotrate = 000,
-                              forwardrate = 000,
-                              TwoYearFwd = 000,
-                              TenYearFwd = 000
-    )
-    
-      #step4 Count the number of cashflows 
-      #num.periods is the total number of cashflows to be received
-      #num.period is the period in which the cashflow is received
-      num.periods = length(time.period)
-    
-      #Set trade date and call the CalibrateCIR Model
-      #trade.date = as.Date(trade.date, "%m-%d-%Y")
-      Market.Fit <- CalibrateCIR(trade.date = trade.date)
-    
-      kappa  = Market.Fit$p1
-      lambda = Market.Fit$p2
-      theta  = Market.Fit$p3
-    
-    #For simulation pass T = mortgage term 
-    Simulation <- CIRSim(shortrate = short.rate, kappa = kappa, theta = theta, T = ((num.periods-1) / 12), step = (1/months.in.year), sigma = sigma, N = paths)
-    
-      #number of rows in the simulation will size the arrays
-      num.sim <- nrow(Simulation)
-    
-      #Dim arrays for the calculation
-      datetime.names <- c("Period", "Date", "Time")    
-      date.time <- array(data = NA, c(num.sim, 3), dimnames = list(seq(c(1:num.sim)),datetime.names))
-    
-      #Generate CashFlows from the simulated short rate
-      CashFlow <- array(data = NA, c(num.sim, paths), dimnames = list(seq(c(1:num.sim)), c(rep((paste("path", seq(1:paths)))))))
-      OAS.Output <- array(data = NA, c(paths, 1))
-    
-      for(j in 1:paths){
-      
-      OAS.Term.Structure@spotrate = as.vector(Simulation[,j])  
-      
-      OAS.Term.Structure@TwoYearFwd <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
-                                      kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 2, step = 0, result = "y") * 100)
-      
-      OAS.Term.Structure@TenYearFwd <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
-                                      kappa = kappa, lambda = lambda, theta = theta, sigma = sigma, T = 10, step = 0, result = "y") * 100)
-            
+                                tradedate = as.character(trade.date),
+                                period = as.numeric(sim.cube[,3]),
+                                date = as.character(sim.cube[,2]),
+                                spotrate = as.numeric(sim.cube[,5]),
+                                forwardrate = 000,
+                                TwoYearFwd = as.numeric(sim.cube[,6]),
+                                TenYearFwd = as.numeric(sim.cube[,7])) 
+                
       Prepayment <- PrepaymentAssumption(bond.id = bond.id, TermStructure = OAS.Term.Structure, MortgageRate = MortgageRate, 
                            PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout)
-      
-      
+            
       MtgCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
                                        price = price, PrepaymentAssumption = Prepayment)
       
-      proceeds <- (original.bal * factor * price/100) + MtgCashFlow@Accrued
+      proceeds <- as.numeric((original.bal * factor * price/100) + MtgCashFlow@Accrued)
+            
       
-      OAS.Term.Structure@spotrate[1:num.periods] <- cumprod(1 + Simulation)
-      OAS.Term.Structure@spotrate <- ((OAS.Term.Structure@spotrate ^ (1/ OAS.Term.Structure@period))^(1/12))-1
-      
-      #Discount along the simulated cure
-      
-      #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
-      #This function is encapasulated in term structure
-      
-      Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
-                              t.period = vector(), proceeds = numeric()){
-        Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
-        return(proceeds - Present.Value)
-      }
-      
-      #solve for spread to spot curve to equal price
-      OAS.Output[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), tol = .0000000001, cashflow = MtgCashFlow@TotalCashFlow,
+    #Solve for spread to spot curve to equal price
+    OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), tol = .0000000001, cashflow = MtgCashFlow@TotalCashFlow,
                              discount.rates = OAS.Term.Structure@spotrate, t.period = OAS.Term.Structure@period , proceeds)$root
-      
-    
-      
+    OAS.Out[j,2] <- MtgCashFlow@WAL
+    OAS.Out[j,3] <- MtgCashFlow@ModDuration
+    OAS.Out[j,4] <- MtgCashFlow@YieldToMaturity          
+  } # end of the OAS j loop
+  
+  #OAS to price is the next module to build
+  
+if (sigma > 0 & TermStructure != "TRUE")      
+  
+  {new("MortgageOAS",
+      OAS = mean(OAS.Out[,1]),
+      PathSpread = OAS.Out[,1],
+      PathWAL = OAS.Out[,2],
+      PathModDur = OAS.Out[,3],
+      PathYTM =OAS.Out[,4]
+      )}
 
-      
+ else if(sigma <= 0  & TermStructure != "TRUE")
+   
+  {new("MortgageZVOAS",
+      ZVSpread = mean(OAS.Out[,1]))}
+
+ else OAS.Term.Structure
   }
-      return(OAS.Output)
-  }
+  
   
   #----------------------------------
   #Prepayment Model Functions.  These functions are used to build the base prepayment model
@@ -2222,6 +2251,53 @@
   
   new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageTermStructure, TermStructure, PrepaymentAssumption, Scenario)    
   }
+  
+  #---------------------------------
+  #This function is for Pass Through OAS Analysis and serves constructor for OAS Analysis
+  
+  PassThroughOAS <- function(bond.id = "character", trade.date = "character", settlement.date = "character", original.bal = numeric(), 
+                            price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric(), 
+                            PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()){
+    
+    
+    #Mortgage OAS is a function that should also be able to run independently from PassThroughOAS so bond.id will conflict in the 
+    #Mortgage OAS calls so create an additional bond.id variable OAS.bond.id to pass bond.id to the OAS Calls
+    OAS.bond.id <- bond.id
+        
+    # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+    conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+    bond.id <- readRDS(conn1)
+    
+    
+    # Establish connection to mortgage rate model
+    conn2 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+    MortgageRate <- readRDS(conn2)
+    
+    # Establish connection to prepayment model tuning parameter
+    conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+    ModelTune <- readRDS(conn3)
+    
+    #Call OAS Term Strucuture to Pass to the Prepayment Model
+    TermStructure <- Mortgage.OAS(bond.id = OAS.bond.id, trade.date = trade.date, settlement.date = settlement.date, original.bal = original.bal, 
+                                   price = price, short.rate = short.rate, sigma = 0, paths = 1, TermStructure = "TRUE")
+    
+    #Third if mortgage security call the prepayment model
+    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, 
+                            TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                            begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR) 
+  
+    MortgageCashFlows <-   MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                             price = price, PrepaymentAssumption = PrepaymentAssumption)
+  
+    MortgageZVOAS <- Mortgage.OAS(bond.id = OAS.bond.id, trade.date = trade.date, settlement.date =  settlement.date , original.bal = original.bal, 
+                             price = price, short.rate = short.rate, sigma = 0, paths = 1, TermStructure = "FALSE")
+  
+    MortgageOAS  <- Mortgage.OAS(bond.id = OAS.bond.id, trade.date = trade.date, settlement.date = settlement.date, original.bal = original.bal, 
+                            price = price, short.rate = short.rate, sigma = sigma, paths = paths, TermStructure = "FALSE")
+    
+    new("PassThroughOAS", bond.id, MortgageCashFlows, MortgageOAS, MortgageZVOAS)
+    
+  }
    
   #----------------------------------
   #Agency Mortgage Dollar Roll
@@ -2487,6 +2563,20 @@
            KeyRateConvexity = "numeric"),
          contains = "MBSDetails"
          )
+  
+  setClass("MortgageOAS",
+           representation(
+             OAS = "numeric",
+             PathSpread = "vector",
+             PathWAL = "vector",
+             PathModDur = "vector",
+             PathYTM = "vector"),
+           contains = "MBSDetails")
+  
+  setClass("MortgageZVOAS",
+           representation(
+             ZVSpread = "numeric"),
+           contains = "MortgageOAS")
 
   setClass("DollarRoll",
           representation(
@@ -2638,6 +2728,9 @@
 
   setClass("PassThroughAnalytics", 
            contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption", "Mtg.ScenarioSet"))
+  
+  setClass("PassThroughOAS",
+           contains = c("MBSDetails", "MortgageCashFlows", "MortgageOAS", "MortgageZVOAS"))
 
 
 #---------------------------------------

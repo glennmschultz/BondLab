@@ -1515,7 +1515,11 @@
     # Establish connection to prepayment model tuning parameter
     conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
     ModelTune <- readRDS(conn3)
-            
+    
+    #Call the desired curve from rates data folder
+    conn4 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+    rates.data <<- readRDS(conn4)
+               
     issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
     start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
     end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
@@ -1569,13 +1573,7 @@
     #num.period is the period in which the cashflow is received
     num.periods = length(time.period)
     num.period = seq(1:num.periods)
-    
-    
-    # Calculate static cash flow spread to the curve                                      
-    # InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
-    # SpreadtoCurve = ((ZV.MtgCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, ZV.MtgCashFlow@WAL )) /100
         
-    
     #==== Compute Option Adjusted Spread ==========================================
     #For simulation pass T = mortgage term 
     Simulation <- CIRSim(shortrate = short.rate, kappa = kappa, theta = theta, T = ((num.periods-1) / months.in.year), step = (1/months.in.year), sigma = sigma, N = paths)
@@ -1609,7 +1607,9 @@
       
 
       #Initialize OAS Term Structure object.  This object is passed to prepayment assumption
-      #Allows the prepayment model to work in the Option Adjusted Spread function replacing Term Structure    
+      #Allows the prepayment model to work in the Option Adjusted Spread function replacing Term Structure
+      #When sigma is zero the simulated spot rates are compounded forward rates and the two and ten year
+      #rates are calcualted from the calculated spot rate rate curve  
       OAS.Term.Structure <- new("TermStructure",
                                 tradedate = as.character(trade.date),
                                 period = as.numeric(sim.cube[,3]),
@@ -1626,7 +1626,7 @@
                                        price = price, PrepaymentAssumption = Prepayment)
       
       proceeds <- as.numeric((original.bal * factor * price/100) + MtgCashFlow@Accrued)
-            
+          
       
     #Solve for spread to spot curve to equal price
     OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), tol = .0000000001, cashflow = MtgCashFlow@TotalCashFlow,
@@ -1635,6 +1635,12 @@
     OAS.Out[j,3] <- MtgCashFlow@ModDuration
     OAS.Out[j,4] <- MtgCashFlow@YieldToMaturity          
   } # end of the OAS j loop
+  
+    # Calculate static cash flow spread to the curve at zero volatility  
+    if (sigma == 0) {                                   
+    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
+    SpreadtoCurve = ((MtgCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, MtgCashFlow@WAL ))/100
+    }
   
   #OAS to price is the next module to build
   
@@ -1651,9 +1657,12 @@ if (sigma > 0 & TermStructure != "TRUE")
  else if(sigma <= 0  & TermStructure != "TRUE")
    
   {new("MortgageZVOAS",
-      ZVSpread = mean(OAS.Out[,1]))}
+      ZVSpread = mean(OAS.Out[,1]),
+      SpreadToCurve = SpreadtoCurve)}
 
  else OAS.Term.Structure
+
+
   }
   
   
@@ -2575,7 +2584,8 @@ if (sigma > 0 & TermStructure != "TRUE")
   
   setClass("MortgageZVOAS",
            representation(
-             ZVSpread = "numeric"),
+             ZVSpread = "numeric",
+             SpreadToCurve = "numeric"),
            contains = "MortgageOAS")
 
   setClass("DollarRoll",

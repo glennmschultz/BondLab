@@ -1598,8 +1598,8 @@
     #OAS out holds OAS solutions to individual trajectory calcualtions solving for the spread to price
     OAS.Out <- array(data = NA, c(paths,5), dimnames = list(seq(c(1:paths)),oas.names))
     
-    OAS.CashFlow <- array(data = NA, c(360,paths))
-    OAS.DiscMatrix <- array(data = NA, c(360, paths))
+    OAS.CashFlow <- array(data = NA, c(num.sim,paths))
+    OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
   
       
     for(j in 1:paths){

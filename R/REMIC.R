@@ -125,6 +125,7 @@
                         TrancheDatedDate = "character",
                         TrancheFirstPmtDate = "character",
                         TrancheFinalPmtDate = "character",
+                        TrancheCoupon = "numeric",
                         Delay = "numeric",
                         PrinPmtFrequency = "numeric",
                         InterestPmtFrequency = "numeric",
@@ -146,6 +147,7 @@
                      TrancheDatedDate = "character",
                      TrancheFirstPmtDate = "character",
                      TrancheFinalPmtDate = "character",
+                     TrancheCoupon = "numeric",
                      Delay = "numeric",
                      PrinPmtFrequency = "numeric",
                      InterestPmtFrequency = "numeric",
@@ -163,6 +165,7 @@
               .Object@TrancheDatedDate = TrancheDate
               .Object@TrancheFirstPmtDate = TrancheFirstPmtDate
               .Object@TrancheFinalPmtDate = TrancheFinalPmtDate
+              .Object@TrancheCoupon = TrancheCoupon
               .Object@Delay = Delay
               .Object@PrinPmtFrequency = PrinPmtFrequency
               .Object@InterestPmtFrequency
@@ -183,6 +186,7 @@
                               TrancheDatedDate = "character",
                               TrancheFirstPmtDate = "character",
                               TrancheFinalPmtDate = "character",
+                              TrancheCoupon = "numeric",
                               Delay = "numeric",
                               PrinPmtFrequency = "numeric",
                               InterestPmtFrequency = "numeric",
@@ -198,9 +202,10 @@
                           TrancheInterest = TrancheInterest,
                           Cusip = Cusip,
                           TrancheOrigBal = TrancheOrigBal,
-                          TrancheDatedDate = TrancheDateDate,
+                          TrancheDatedDate = TrancheDatedDate,
                           TrancheFirstPmtDate = TrancheFirstPmtDate,
                           TrancheFinalPmtdate = TrancheFinalPmtDate,
+                          TrancheCoupon = TrancheCoupon,
                           Delay = Delay,
                           PrinPmtFrequency = PrinPmtFrequency,
                           InterestPmtFrequency = InterestPmtFrequency,
@@ -209,9 +214,47 @@
                           PacHigherBand,
                           Group = Group)
   }
-
-
   
+  MakeTranche <- function(  DealName = "character",
+                            TrancheNumber = "character",
+                            TrancheName = "character",
+                            TranchePrincipal = "character",
+                            TrancheInterest = "character",
+                            Cusip = "character",
+                            TrancheOrigBal = "numeric",
+                            TrancheDatedDate = "character",
+                            TrancheFirstPmtDate = "character",
+                            TrancheFinalPmtDate = "character",
+                            TrancheCoupon = "numeric",
+                            Delay = "numeric",
+                            PrinPmtFrequency = "numeric",
+                            InterestPmtFrequency = "numeric",
+                            FloaterIndex = "character",
+                            PacLowBand = "numeric",
+                            PacHighBand = "numeric",
+                            Group = "number") {
+    
+    temp <- TranchDetails( TrancheNumber = TrancheNumber,
+                            TrancheName = TrancheName,
+                            TranchePrincipal = TranchePrincipal,
+                            TrancheInterest = TrancheInterest,
+                            Cusip = Cusip,
+                            TrancheOrigBal = TrancheOrigBal,
+                            TrancheDatedDate = TrancheDateDate,
+                            TrancheFirstPmtDate = TrancheFirstPmtDate,
+                            TrancheFinalPmtDate = TrancheFinalPmtDate,
+                            TrancheCoupon = TrancheCoupon,
+                            Delay = Delay,
+                            PrinPmtFrequency = PrinPmtFrequency,
+                            InterestPmtFrequency = InterestPmtFrequency,
+                            FloaterIndex = FloaterIndex,
+                            PacLowBand = PacLowBand,
+                            PacHighBand = PacHighBand,
+                            Group = Group)
+    connGroup <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche",temp@TrancheNumber,".rds", sep = ""))
+    saveRDS(temp, connGroup)
+  }
+
 # ========= This Class is the Collateral Class ==========
   
   Collateral <- setClass("Collateral",

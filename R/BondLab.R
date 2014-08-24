@@ -2592,7 +2592,7 @@ if (TermStructure != "TRUE")
              MtgRateFwd = "numeric",
              Incentive = "numeric",
              SMM = "numeric"),
-             contains = "MBSDetails"
+             #contains = "MBSDetails"
            )
 
   setClass("MortgageCashFlows",
@@ -2643,11 +2643,6 @@ if (TermStructure != "TRUE")
              PathYTM = "vector"),
            contains = "MBSDetails")
   
- # setClass("MortgageZVOAS",
- #           representation(
- #             ZVSpread = "numeric",
- #             SpreadToCurve = "numeric"),
- #          contains = "MortgageOAS")
 
   setClass("DollarRoll",
           representation(

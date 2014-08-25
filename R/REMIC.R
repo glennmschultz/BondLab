@@ -331,11 +331,11 @@
             }
   )
   
-  CollateralGroup <- function(NumberGroups = numeric(), DealName = "character"){
+  CollateralGroup <- function(NumberofGroups = numeric(), DealName = "character"){
     
     GroupList <- list()
     
-    for(i in 1 : NumberGroups){
+    for(i in 1 : NumberofGroups){
       
       connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group",i,".rds", sep = "")) 
       Group <- readRDS(connGroup)
@@ -345,7 +345,7 @@
     new("CollateralGroup",
         Group = GroupList)
     
-    close(connGroup)
+    #close(connGroup)
   }
   # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
   #  
@@ -367,6 +367,10 @@
     connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,".rds", sep = ""))
     saveRDS(temp, connRDME)
     close(connRDME)
+    
+  }
+  
+  RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
     
   }
   
@@ -394,7 +398,11 @@
     
     Tranches <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
-    return(Tranches)
+    CollateralGroup <- CollateralGroup(NumberofGroups = 1, DealName = RAID@DealName)
+    
+    return(CollateralGroup)
+    
+   
   }
   
   

@@ -1705,7 +1705,7 @@ if (TermStructure != "TRUE")
 
  else OAS.Term.Structure
 
-
+closeAllconnections()
   }
   
   

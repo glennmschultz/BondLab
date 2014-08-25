@@ -152,8 +152,9 @@ MakeMBSDetails <- function(
     Burnout = Burnout,
     SATO = SATO)
   
-  connMBSDeails <- gzfile(description = paste("~/BondLab/BondData/",temp@ID,".rds", sep = ""))
-  saveRDS(temp, connMBSDeails)
+  connMBSDetails <- gzfile(description = paste("~/BondLab/BondData/",temp@ID,".rds", sep = ""))
+  saveRDS(temp, connMBSDetails)
+  close(connMBSDetails)
   
   
 }

@@ -1,5 +1,5 @@
 # --- This class is the REMIC at issuance disclosure ---
-  RAID <- setClass("RAID",
+  setClass("RAID",
   representation(
           DealName = "character", 
           Issuer = "character",
@@ -19,34 +19,12 @@
                     DealPriceDate = "character",
                     DealSettlementDate = "character",
                     Underwriter = "character",
-                    NumberofTranches = "numeric",
-                    NumberPacSchedules = "numeric",
-                    DealSize = "numeric",
-                    CollateralAmount = "numeric"
+                    NumberofTranches = numeric(),
+                    NumberPacSchedules = numeric(),
+                    DealSize = numeric(),
+                    CollateralAmount = numeric()
                     )
   {
-            if(missing(DealName))
-              stop("Missing Deal Name")
-            if(missing(Issuer))
-              stop("Missing Issuer")
-            if(missing(DealPriceDate))
-              stop("Missing Deal Price Date")
-            if(missing(DealPriceDate))
-              stop("Invalid Price Date")
-            if(missing(DealSettlementDate))
-              stop("Missing Deal Settlement Date")
-            if(missing(DealSettlementDate))
-              stop("Invalid Settlement Date")
-            if(missing(Underwriter))
-              stop("Missing Underwriter")
-            if(missing(NumberofTranches))
-              stop("Missing Tranches")
-            if(missing(NumberPacSchedules))
-              stop("Missing Number Pac Schedules")
-            if(missing(DealSize))
-              stop("Missing Deal Size")
-            if(missing(CollateralAmount))
-              stop("Missing Collateral Amount")
               
               .Object@DealName = DealName
               .Object@Issuer = Issuer
@@ -111,29 +89,30 @@
               CollateralAmount = CollateralAmount)
   connRAID <- gzfile(description = paste("~/BondLab/RAID/",temp@DealName,".rds", sep = ""))
   saveRDS(temp, connRAID)
+  close(connRAID)
   }
-  
-# ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
-  TrancheDetails <- setClass("TrancheDetails",
-                      representation(
-                        TrancheNumber = "character",
-                        TrancheName = "character",
-                        TranchePrincipal = "character",
-                        TrancheInterest = "character",
-                        Cusip = "character",
-                        TrancheOrigBal = "numeric",
-                        TrancheDatedDate = "character",
-                        TrancheFirstPmtDate = "character",
-                        TrancheFinalPmtDate = "character",
-                        TrancheCoupon = "numeric",
-                        Delay = "numeric",
-                        PrinPmtFrequency = "numeric",
-                        InterestPmtFrequency = "numeric",
-                        FloaterIndex = "character",
-                        PacLowBand = "numeric",
-                        PacHighBand = "numeric",
-                        Group = "numeric"
-                        ))
+    
+  # ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
+  setClass("TrancheDetails",
+           representation(
+             TrancheNumber = "character",
+             TrancheName = "character",
+             TranchePrincipal = "character",
+             TrancheInterest = "character",
+             Cusip = "character",
+             TrancheOrigBal = "numeric",
+             TrancheDatedDate = "character",
+             TrancheFirstPmtDate = "character",
+             TrancheFinalPmtDate = "character",
+             TrancheCoupon = "numeric",
+             Delay = "numeric",
+             PrinPmtFrequency = "numeric",
+             InterestPmtFrequency = "numeric",
+             FloaterIndex = "character",
+             PacLowBand = "numeric",
+             PacHighBand = "numeric",
+             Group = "numeric"
+           ))
   
   setMethod("initialize",
             signature("TrancheDetails"),
@@ -143,76 +122,77 @@
                      TranchePrincipal = "character",
                      TrancheInterest = "character",
                      Cusip = "character",
-                     TrancheOrigBal = "numeric",
+                     TrancheOrigBal = numeric(),
                      TrancheDatedDate = "character",
                      TrancheFirstPmtDate = "character",
                      TrancheFinalPmtDate = "character",
-                     TrancheCoupon = "numeric",
-                     Delay = "numeric",
-                     PrinPmtFrequency = "numeric",
-                     InterestPmtFrequency = "numeric",
+                     TrancheCoupon = numeric(),
+                     Delay = numeric(),
+                     PrinPmtFrequency = numeric(),
+                     InterestPmtFrequency = numeric(),
                      FloaterIndex = "character",
-                     PacLowBand = "numeric",
-                     PacHighBand = "numeric",
-                     Group = "numeric"){
-            
+                     PacLowBand = numeric(),
+                     PacHighBand = numeric(),
+                     Group = numeric()){
+              
               .Object@TrancheNumber = TrancheNumber
               .Object@TrancheName = TrancheName
               .Object@TranchePrincipal = TranchePrincipal
               .Object@TrancheInterest = TrancheInterest
               .Object@Cusip = Cusip
-              .Object@TrancheOrigBal = OriginalBal
-              .Object@TrancheDatedDate = TrancheDate
+              .Object@TrancheOrigBal = TrancheOrigBal
+              .Object@TrancheDatedDate = TrancheDatedDate
               .Object@TrancheFirstPmtDate = TrancheFirstPmtDate
               .Object@TrancheFinalPmtDate = TrancheFinalPmtDate
               .Object@TrancheCoupon = TrancheCoupon
               .Object@Delay = Delay
               .Object@PrinPmtFrequency = PrinPmtFrequency
-              .Object@InterestPmtFrequency
-              .Object@FloaterIndex
-              .Object@PacLowBand
-              .Object@PacHighBand
-              .Object@Group
-                            
+              .Object@InterestPmtFrequency = InterestPmtFrequency
+              .Object@FloaterIndex= FloaterIndex
+              .Object@PacLowBand = PacLowBand
+              .Object@PacHighBand = PacHighBand
+              .Object@Group = Group
+              
+              return(.Object)
             }
-            )
+  )
   
   TrancheDetails <- function( TrancheNumber = "character",
                               TrancheName = "character",
                               TranchePrincipal = "character",
                               TrancheInterest = "character",
                               Cusip = "character",
-                              TrancheOrigBal = "numeric",
+                              TrancheOrigBal = numeric(),
                               TrancheDatedDate = "character",
                               TrancheFirstPmtDate = "character",
                               TrancheFinalPmtDate = "character",
-                              TrancheCoupon = "numeric",
-                              Delay = "numeric",
-                              PrinPmtFrequency = "numeric",
-                              InterestPmtFrequency = "numeric",
+                              TrancheCoupon = numeric(),
+                              Delay = numeric(),
+                              PrinPmtFrequency = numeric(),
+                              InterestPmtFrequency = numeric(),
                               FloaterIndex = "character",
-                              PacLowBand = "numeric",
-                              PacHighBand = "numeric",
-                              Group = "number"){
+                              PacLowBand = numeric(),
+                              PacHighBand = numeric(),
+                              Group = numeric()){
     
-                      new("TrancheDetails",
-                          TrancheNumber = TrancheNumber,
-                          TrancheName = TrancheName,
-                          TranchePrincipal = TranchePrincipal,
-                          TrancheInterest = TrancheInterest,
-                          Cusip = Cusip,
-                          TrancheOrigBal = TrancheOrigBal,
-                          TrancheDatedDate = TrancheDatedDate,
-                          TrancheFirstPmtDate = TrancheFirstPmtDate,
-                          TrancheFinalPmtdate = TrancheFinalPmtDate,
-                          TrancheCoupon = TrancheCoupon,
-                          Delay = Delay,
-                          PrinPmtFrequency = PrinPmtFrequency,
-                          InterestPmtFrequency = InterestPmtFrequency,
-                          FloaterIndex,
-                          PacLowerBand,
-                          PacHigherBand,
-                          Group = Group)
+    new("TrancheDetails",
+        TrancheNumber = TrancheNumber,
+        TrancheName = TrancheName,
+        TranchePrincipal = TranchePrincipal,
+        TrancheInterest = TrancheInterest,
+        Cusip = Cusip,
+        TrancheOrigBal = TrancheOrigBal,
+        TrancheDatedDate = TrancheDatedDate,
+        TrancheFirstPmtDate = TrancheFirstPmtDate,
+        TrancheFinalPmtDate = TrancheFinalPmtDate,
+        TrancheCoupon = TrancheCoupon,
+        Delay = Delay,
+        PrinPmtFrequency = PrinPmtFrequency,
+        InterestPmtFrequency = InterestPmtFrequency,
+        FloaterIndex = FloaterIndex,
+        PacLowBand = PacLowBand,
+        PacHighBand = PacHighBand,
+        Group = Group)
   }
   
   MakeTranche <- function(  DealName = "character",
@@ -221,26 +201,26 @@
                             TranchePrincipal = "character",
                             TrancheInterest = "character",
                             Cusip = "character",
-                            TrancheOrigBal = "numeric",
+                            TrancheOrigBal = numeric(),
                             TrancheDatedDate = "character",
                             TrancheFirstPmtDate = "character",
                             TrancheFinalPmtDate = "character",
-                            TrancheCoupon = "numeric",
-                            Delay = "numeric",
-                            PrinPmtFrequency = "numeric",
-                            InterestPmtFrequency = "numeric",
+                            TrancheCoupon = numeric(),
+                            Delay = numeric(),
+                            PrinPmtFrequency = numeric(),
+                            InterestPmtFrequency = numeric(),
                             FloaterIndex = "character",
-                            PacLowBand = "numeric",
-                            PacHighBand = "numeric",
-                            Group = "number") {
+                            PacLowBand = numeric(),
+                            PacHighBand = numeric(),
+                            Group = numeric()) {
     
-    temp <- TranchDetails( TrancheNumber = TrancheNumber,
+    temp <- TrancheDetails( TrancheNumber = TrancheNumber,
                             TrancheName = TrancheName,
                             TranchePrincipal = TranchePrincipal,
                             TrancheInterest = TrancheInterest,
                             Cusip = Cusip,
                             TrancheOrigBal = TrancheOrigBal,
-                            TrancheDatedDate = TrancheDateDate,
+                            TrancheDatedDate = TrancheDatedDate,
                             TrancheFirstPmtDate = TrancheFirstPmtDate,
                             TrancheFinalPmtDate = TrancheFinalPmtDate,
                             TrancheCoupon = TrancheCoupon,
@@ -251,92 +231,170 @@
                             PacLowBand = PacLowBand,
                             PacHighBand = PacHighBand,
                             Group = Group)
-    connGroup <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche",temp@TrancheNumber,".rds", sep = ""))
-    saveRDS(temp, connGroup)
+    connTranche <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
+    saveRDS(temp, connTranche)
+    close(connTranche)
   }
-
-# ========= This Class is the Collateral Class ==========
   
-  Collateral <- setClass("Collateral",
-                         representation(
-                           Group = "numeric",
-                           Cusip = "list",
-                           OrigBal = "list"))
+  # ======== Tranches class is a list of tranches for the REMIC ===
+  setClass("Tranches",
+           representation(
+             Tranches = "list"))
+  
+  setMethod("initialize",
+            signature("Tranches"),
+            function(.Object,
+                     Tranches = list())
+            {
+              .Object@Tranches = Tranches
+              return(.Object)
+            }
+  )
+  
+  
+  Tranches <- function(NumberofTranches = numeric(), DealName = "character"){
+    
+    TrancheList <- list()
+    
+    for(i in 1: NumberofTranches){
+      
+      connTranches <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche", "_",i,".rds", sep = "")) 
+      Tranches <- readRDS(connTranches)
+      
+      TrancheList <- append(TrancheList, Tranches)}
+    
+    new("Tranches",
+        Tranches = TrancheList)
+    
+    #close(connTranches)
+    #closing conn causes this function to return null, why?
+  }
+  
+  # ========= This Class is the Collateral Class ==========
+  
+  setClass("Collateral",
+           representation(
+             Group = "numeric",
+             Cusip = "list",
+             OrigBal = "list"))
   setMethod("initialize",
             signature ("Collateral"),
             function (.Object,
-                      Group = "numeric",
-                      Cusip = "list",
-                      OrigBal = "list"){
+                      Group = numeric(),
+                      Cusip = list(),
+                      OrigBal = list()){
               
-              if(missing(Group))
-                stop("Missing Group Number")
-              if(missing(Cusip))
-              stop("Missing Cusip Details")
-              if(missing(OrigBal))
-                stop("Missing Orig Bal")
-              if(length(Cusip) != length(OrigBal))
-                stop("Cusip and Orig Balance not assigned correctly")
-            
+              
               .Object@Group = Group
               .Object@Cusip = Cusip
               .Object@OrigBal = OrigBal
               return(.Object) }
-                )
+  )
   
   Collateral <- function(DealName = "character", 
                          Group = numeric(), 
                          Cusip = list(), 
                          OrigBal = list()){
-                new("Collateral",
-                    Group = as.numeric(Group),
-                    Cusip = as.list(Cusip),
-                    OrigBal = as.list(OrigBal)
-                    )
+    new("Collateral",
+        Group = as.numeric(Group),
+        Cusip = as.list(Cusip),
+        OrigBal = as.list(OrigBal)
+    )
   }
   
   
   MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
     
-      temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
-      
-    connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_",Group,".rds", sep = ""))
+    temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
+    
+    connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group",temp@Group,".rds", sep = ""))
     saveRDS(temp, connGroup)
     
   }
   
   # ========== This Class is Collateral Group Collateral Groups Belong to Tranches ================
   
-  # This function needs to be able to assemble multiple collateral groups into a list of collateral groups
+  # This function assembles multiple collateral groups into a list of collateral groups
   # building the collateral groups for the entire deal structure
   
-  CollateralGroup <- setClass("CollateralGroup",
-                              representation(
-                                Group = "list"))
+  setClass("CollateralGroup",
+           representation(
+             Group = "list"))
   
   setMethod("initialize",
             signature("CollateralGroup"),
             function (.Object,
-                      Group = "list") 
+                      Group = list()) 
             {
               .Object@Group = Group
               return(.Object)
             }
   )
   
-  CollateralGroup <- function(NumberGroups =numeric(), DealName = "character"){
+  CollateralGroup <- function(NumberGroups = numeric(), DealName = "character"){
     
     GroupList <- list()
     
     for(i in 1 : NumberGroups){
       
-      connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_",i,".rds", sep = "")) 
+      connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group",i,".rds", sep = "")) 
       Group <- readRDS(connGroup)
       
       GroupList <- append(GroupList, Group)
     }
     new("CollateralGroup",
         Group = GroupList)
+    
+    close(connGroup)
+  }
+  # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
+  #  
+  setClass("RDME",
+           representation(
+             Cusip = "character",
+             PaymentDate = "character",
+             Coupon = "numeric",
+             Factor = "numeric"))
+  
+  MakeRDME <- function(DealName = "character",
+                       TrancheNumber = numeric(),
+                       Cusip = "character",
+                       PaymentDate = "character",
+                       Coupon = numeric(),
+                       Factor = numeric()){
+    
+    temp <- RDME(Cusip = Cusip, PaymentDate = "character", Coupon = Coupon, Factor = Factor)
+    connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,".rds", sep = ""))
+    saveRDS(temp, connRDME)
+    close(connRDME)
+    
+  }
+  
+  setClass("REMICStructure",
+           representation(),
+           contains = c("RAID", "Tranches", "CollateralGroup", "RDME")) 
+  
+  setMethod('initialize',
+            signature("REMICStructure"),
+            function(.Object){
+              .Object@RAID = class()
+              .Object@Tranches = class()
+              .Object@CollateralGroup = class()
+              .Object@RDME = class()
+              return(.Object)}
+  )
+  
+  RemicStructure <- function(DealName = "character"){
+    
+    #open connection to RAID files and instantiate RAID class
+    connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
+    RAID <- readRDS(connRAID)
+    #close connection to RAID
+    close(connRAID) 
+    
+    Tranches <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
+    
+    return(Tranches)
   }
   
   

@@ -22,8 +22,7 @@
                     NumberofTranches = numeric(),
                     NumberPacSchedules = numeric(),
                     DealSize = numeric(),
-                    CollateralAmount = numeric()
-                    )
+                    CollateralAmount = numeric())
   {
               
               .Object@DealName = DealName
@@ -36,9 +35,10 @@
               .Object@DealSize = DealSize
               .Object@CollateralAmount = CollateralAmount
  
-              return(.Object)            
-            
+              return(.Object) 
+              callNextMethod()               
           }
+
   )
 
   #Constructor function for the RAID Class
@@ -243,7 +243,7 @@
   
   setMethod("initialize",
             signature("Tranches"),
-            function(.Object,
+            function(.Object,...,
                      Tranches = list())
             {
               .Object@Tranches = Tranches
@@ -428,17 +428,16 @@
   }
   
   setClass("REMICStructure",
-           representation(),
-           contains = c("RAID", "Tranches", "CollateralGroup", "RDME")) 
+            contains = c("RAID", "Tranches")) 
   
   setMethod('initialize',
             signature("REMICStructure"),
-            function(.Object){
-              .Object@RAID = class()
-              .Object@Tranches = class()
-              .Object@CollateralGroup = class()
-              .Object@RDME = class()
-              return(.Object)}
+             function(.Object,...)
+               {
+             return(.Object)
+             callNextMethod()
+            
+  }
   )
   
   RemicStructure <- function(DealName = "character"){
@@ -447,17 +446,20 @@
     connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
     RAID <- readRDS(connRAID)
     #close connection to RAID
-    close(connRAID) 
+    #close(connRAID) 
     
-    Tranches <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
+    Tranche <<- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
-    CollateralGroup <- CollateralGroup(NumberofGroups = 1, DealName = RAID@DealName)
+    #CollateralGroup <- CollateralGroup(NumberofGroups = 1, DealName = Deal@DealName)
     
-    RDMEData <- RDMEData(NumberofTranches = RAID@NumberofTranches, DealName = "BondLabSMBS")
+    #FactorData <- RDMEData(NumberofTranches = Deal@NumberofTranches, DealName = Deal@DealName)
     
-    return(RDMEData)
-    
-   
+    new("REMICStructure", 
+        DealName = RAID@DealName, 
+        Issuer = RAID@Issuer,
+        Tranche = Tranche@Tranches)
+
+
   }
   
   

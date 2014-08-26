@@ -356,6 +356,34 @@
              Coupon = "numeric",
              Factor = "numeric"))
   
+  setMethod("initialize",
+            signature("RMDE"),
+            function(.Object,
+                      Cusip = "character",
+                      PaymentDate = "charcter",
+                      Coupon = numeric(),
+                      Factor = numeric())
+            {
+              .Object@Cusip = Cusip
+              .Object@PaymentDate = PaymentDate
+              .Object@Coupon = Coupon
+              .Object@Factor = Factor
+              
+              return(.Object)
+            }
+                    )
+  
+  RDME <- function(Cusip = "character", 
+                   PaymentDate = "character", 
+                   Coupon = numeric(), 
+                   Factor = numeric()){
+    new("RDME",
+        Cusip = Cusip,
+        PaymentDate = PaymentDate,
+        Coupon = Coupon,
+        Factor = Factor)
+  }
+  
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),
                        Cusip = "character",
@@ -364,13 +392,38 @@
                        Factor = numeric()){
     
     temp <- RDME(Cusip = Cusip, PaymentDate = "character", Coupon = Coupon, Factor = Factor)
-    connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,".rds", sep = ""))
+    connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = ""))
     saveRDS(temp, connRDME)
     close(connRDME)
     
   }
   
+  setClass("TrancheFactors",
+           representation(
+             FactorData = "list"))
+  
+  setMethod("initialize",
+            signature("TrancheFactors"),
+            function(.Object,
+                     FactorData = list())
+                    {
+                     .Object@FactorData = FactorData
+                     return(.Object)
+                     }
+            )
+  
   RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
+    RDMEList <- list()
+    
+    for(i in 1 : NumberofTranches){
+      
+      connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",i,"_","Factor",".rds", sep = "")) 
+      RDMEFactor <- readRDS(connRDME)
+      
+      RDMEList <- append(RDMEList, RDMEFactor)
+    }
+    new("TrancheFactors",
+        FactorData = RDMEList)
     
   }
   
@@ -400,7 +453,9 @@
     
     CollateralGroup <- CollateralGroup(NumberofGroups = 1, DealName = RAID@DealName)
     
-    return(CollateralGroup)
+    RDMEData <- RDMEData(NumberofTranches = RAID@NumberofTranches, DealName = "BondLabSMBS")
+    
+    return(RDMEData)
     
    
   }

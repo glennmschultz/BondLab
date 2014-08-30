@@ -36,7 +36,7 @@
               .Object@CollateralAmount = CollateralAmount
  
               return(.Object) 
-              callNextMethod()               
+              callNextMethod(.Object,...)               
           }
 
   )
@@ -154,6 +154,7 @@
               .Object@Group = Group
               
               return(.Object)
+              callNextMethod(.Object,...)
             }
   )
   
@@ -247,7 +248,10 @@
                      Tranches = list())
             {
               .Object@Tranches = Tranches
+              
               return(.Object)
+              
+              callNextMethod(.Object, ...)
             }
   )
   
@@ -307,7 +311,7 @@
     
     temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
     
-    connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group",temp@Group,".rds", sep = ""))
+    connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",temp@Group,".rds", sep = ""))
     saveRDS(temp, connGroup)
     
   }
@@ -328,6 +332,8 @@
             {
               .Object@Group = Group
               return(.Object)
+              
+              callNextMethod(.Object,...)  
             }
   )
   
@@ -337,7 +343,7 @@
     
     for(i in 1 : NumberofGroups){
       
-      connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group",i,".rds", sep = "")) 
+      connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",i,".rds", sep = "")) 
       Group <- readRDS(connGroup)
       
       GroupList <- append(GroupList, Group)
@@ -347,8 +353,9 @@
     
     #close(connGroup)
   }
+  # ======== This calss is the REMIC factor files and belongs to tranche information ==================
   # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
-  #  
+    
   setClass("RDME",
            representation(
              Cusip = "character",
@@ -370,6 +377,9 @@
               .Object@Factor = Factor
               
               return(.Object)
+              
+              callNextMethod(.Object,...)  
+              
             }
                     )
   
@@ -409,6 +419,8 @@
                     {
                      .Object@FactorData = FactorData
                      return(.Object)
+                     
+                     callNextMethod(.Object,...)  
                      }
             )
   
@@ -428,15 +440,35 @@
   }
   
   setClass("REMICStructure",
-            contains = c("RAID", "Tranches")) 
+           representation(),
+           contains = c("RAID")) 
   
-  setMethod('initialize',
+  setMethod("initialize",
             signature("REMICStructure"),
-             function(.Object,...)
-               {
-             return(.Object)
-             callNextMethod()
-            
+             function(.Object,
+                DealName = "character",
+                Issuer = "character",
+                DealPriceDate = "character",
+                DealSettlementDate = "character",
+                Underwriter = "character",
+                NumberofTranches = numeric(),
+                NumberPacSchedules = numeric(),
+                DealSize = numeric(),
+                CollateralAmount = numeric())
+             {
+               .Object@DealName = DealName
+               .Object@Issuer = Issuer
+               .Object@DealPriceDate = DealPriceDate
+               .Object@DealSettlementDate = DealSettlementDate
+               .Object@Underwriter = Underwriter
+               .Object@NumberofTranches = NumberofTranches
+               .Object@NumberPacSchedules = NumberPacSchedules
+               .Object@DealSize = DealSize
+               .Object@CollateralAmount = CollateralAmount
+               
+               return(.Object)
+             
+               callNextMethod(.Object,...)           
   }
   )
   
@@ -446,18 +478,27 @@
     connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
     RAID <- readRDS(connRAID)
     #close connection to RAID
-    #close(connRAID) 
+    close(connRAID) 
     
-    Tranche <<- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
+    Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
     #CollateralGroup <- CollateralGroup(NumberofGroups = 1, DealName = Deal@DealName)
-    
     #FactorData <- RDMEData(NumberofTranches = Deal@NumberofTranches, DealName = Deal@DealName)
     
     new("REMICStructure", 
-        DealName = RAID@DealName, 
-        Issuer = RAID@Issuer,
-        Tranche = Tranche@Tranches)
+          
+          DealName = RAID@DealName,
+          Issuer = RAID@Issuer,
+          DealPriceDate = RAID@DealPriceDate,
+          DealSettlementDate = RAID@DealSettlementDate,
+          Underwriter = RAID@Underwriter,
+          NumberofTranches = RAID@NumberofTranches,
+          NumberPacSchedules = RAID@NumberPacSchedules,
+          DealSize = RAID@DealSize,
+          CollateralAmount = RAID@CollateralAmount
+
+          
+        )
 
 
   }

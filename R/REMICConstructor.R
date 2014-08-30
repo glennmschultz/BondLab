@@ -8,6 +8,7 @@
           Underwriter = "character",
           NumberofTranches = "numeric",
           NumberPacSchedules = "numeric",
+          NumberofGroups = "numeric",
           DealSize = "numeric",
           CollateralAmount = "numeric"))
 
@@ -21,6 +22,7 @@
                     Underwriter = "character",
                     NumberofTranches = numeric(),
                     NumberPacSchedules = numeric(),
+                    NumberofGroups = numeric(),
                     DealSize = numeric(),
                     CollateralAmount = numeric())
   {
@@ -32,6 +34,7 @@
               .Object@Underwriter = Underwriter
               .Object@NumberofTranches = NumberofTranches
               .Object@NumberPacSchedules = NumberPacSchedules
+              .Object@NumberofGroups = NumberofGroups
               .Object@DealSize = DealSize
               .Object@CollateralAmount = CollateralAmount
  
@@ -50,6 +53,7 @@
                  Underwriter = "character",
                  NumberofTranches = numeric(),
                  NumberPacSchedules = numeric(),
+                 NumberofGroups = numeric(),
                  DealSize = numeric(),
                  CollateralAmount = numeric()
                  ){
@@ -62,6 +66,7 @@
                      Underwriter = Underwriter,
                      NumberofTranches = NumberofTranches,
                      NumberPacSchedules = NumberPacSchedules,
+                     NumberofGroups = NumberofGroups,
                      DealSize = DealSize,
                      CollateralAmount = CollateralAmount
                      )                 
@@ -75,6 +80,7 @@
                      Underwriter = "character",
                      NumberofTranches = numeric(),
                      NumberPacSchedules = numeric(),
+                     NumberofGroups = numeric(),
                      DealSize = numeric(),
                      CollateralAmount = numeric()){
   
@@ -85,6 +91,7 @@
               Underwriter = Underwriter,
               NumberofTranches = NumberofTranches,
               NumberPacSchedules = NumberPacSchedules,
+              NumberofGroups = NumberofGroups,
               DealSize = DealSize,
               CollateralAmount = CollateralAmount)
   connRAID <- gzfile(description = paste("~/BondLab/RAID/",temp@DealName,".rds", sep = ""))
@@ -95,6 +102,7 @@
   # ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
   setClass("TrancheDetails",
            representation(
+             DealName = "character",
              TrancheNumber = "character",
              TrancheName = "character",
              TranchePrincipal = "character",
@@ -117,6 +125,7 @@
   setMethod("initialize",
             signature("TrancheDetails"),
             function(.Object,
+                     DealName = "character",
                      TrancheNumber = "character",
                      TrancheName = "character",
                      TranchePrincipal = "character",
@@ -135,6 +144,7 @@
                      PacHighBand = numeric(),
                      Group = numeric()){
               
+              .Object@DealName = DealName
               .Object@TrancheNumber = TrancheNumber
               .Object@TrancheName = TrancheName
               .Object@TranchePrincipal = TranchePrincipal
@@ -158,7 +168,8 @@
             }
   )
   
-  TrancheDetails <- function( TrancheNumber = "character",
+  TrancheDetails <- function( DealName = "character",
+                              TrancheNumber = "character",
                               TrancheName = "character",
                               TranchePrincipal = "character",
                               TrancheInterest = "character",
@@ -177,6 +188,7 @@
                               Group = numeric()){
     
     new("TrancheDetails",
+        DealName = DealName,
         TrancheNumber = TrancheNumber,
         TrancheName = TrancheName,
         TranchePrincipal = TranchePrincipal,
@@ -215,7 +227,8 @@
                             PacHighBand = numeric(),
                             Group = numeric()) {
     
-    temp <- TrancheDetails( TrancheNumber = TrancheNumber,
+    temp <- TrancheDetails( DealName = DealName,
+                            TrancheNumber = TrancheNumber,
                             TrancheName = TrancheName,
                             TranchePrincipal = TranchePrincipal,
                             TrancheInterest = TrancheInterest,
@@ -292,7 +305,10 @@
               .Object@Group = Group
               .Object@Cusip = Cusip
               .Object@OrigBal = OrigBal
-              return(.Object) }
+              return(.Object) 
+            
+              callNextMethod(.Object,...)
+            }
   )
   
   Collateral <- function(DealName = "character", 
@@ -441,7 +457,7 @@
   
   setClass("REMICStructure",
            representation(),
-           contains = c("RAID")) 
+           contains = c("RAID", "Tranches", "CollateralGroup", "TrancheFactors")) 
   
   setMethod("initialize",
             signature("REMICStructure"),
@@ -453,8 +469,12 @@
                 Underwriter = "character",
                 NumberofTranches = numeric(),
                 NumberPacSchedules = numeric(),
+                NumberofGroups = numeric(),
                 DealSize = numeric(),
-                CollateralAmount = numeric())
+                CollateralAmount = numeric(),
+                Tranches = "character",
+                CollateralGroup = "character",
+                TrancheFactors ="character")
              {
                .Object@DealName = DealName
                .Object@Issuer = Issuer
@@ -463,8 +483,12 @@
                .Object@Underwriter = Underwriter
                .Object@NumberofTranches = NumberofTranches
                .Object@NumberPacSchedules = NumberPacSchedules
+               .Object@NumberofGroups = NumberofGroups
                .Object@DealSize = DealSize
                .Object@CollateralAmount = CollateralAmount
+               .Object@Tranches = Tranches
+               .Object@Group = CollateralGroup
+               .Object@FactorData = TrancheFactors
                
                return(.Object)
              
@@ -482,10 +506,10 @@
     
     Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
-    #CollateralGroup <- CollateralGroup(NumberofGroups = 1, DealName = Deal@DealName)
-    #FactorData <- RDMEData(NumberofTranches = Deal@NumberofTranches, DealName = Deal@DealName)
+    CollateralGroup <- CollateralGroup(NumberofGroups = RAID@NumberofGroups, DealName = RAID@DealName)
+    FactorData <- RDMEData(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
-    new("REMICStructure", 
+    REMIC <-new("REMICStructure", 
           
           DealName = RAID@DealName,
           Issuer = RAID@Issuer,
@@ -494,13 +518,20 @@
           Underwriter = RAID@Underwriter,
           NumberofTranches = RAID@NumberofTranches,
           NumberPacSchedules = RAID@NumberPacSchedules,
+          NumberofGroups = RAID@NumberofGroups,
           DealSize = RAID@DealSize,
-          CollateralAmount = RAID@CollateralAmount
-
-          
+          CollateralAmount = RAID@CollateralAmount,
+          Tranches = Tranche@Tranches,
+          CollateralGroup = CollateralGroup@Group,
+          TrancheFactors = FactorData@FactorData
         )
+    
+  
 
-
+    connREMIC <- gzfile(description = paste("~/BondLab/REMICData/", DealName, ".rds", sep = ""))
+    saveRDS(REMIC, connREMIC)
+    
+    
   }
   
   

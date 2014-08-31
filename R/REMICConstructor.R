@@ -1,4 +1,15 @@
-# --- This class is the REMIC at issuance disclosure ---
+# Bond Lab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+# License GPL3
+# Copyright (C) 2014  Glenn M Schultz, CFA
+# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+
+
+# ==== The RAID class is the REMIC at issuance disclosure ===
   setClass("RAID",
   representation(
           DealName = "character", 
@@ -44,7 +55,6 @@
 
   )
 
-  #Constructor function for the RAID Class
 
   RAID <- function(DealName = "character",
                  Issuer = "character",
@@ -72,7 +82,7 @@
                      )                 
           }
 
-  # function calls the RAID
+
   MakeRAID <- function(DealName = "character", 
                      Issuer = "character", 
                      DealPriceDate = "character", 
@@ -98,8 +108,13 @@
   saveRDS(temp, connRAID)
   close(connRAID)
   }
-    
+  
+  setGeneric("MakeRAID", function(DealName = "character", Issuer = "character", DealPriceDate = "character", DealSettlementDate = "character",
+              Underwriter = "character", NumberofTranches = numeric(), NumberPacSchedules = numeric(), NumberofGroups = numeric(), 
+              DealSize = numeric(),CollateralAmount = numeric()) {standardGeneric("MakeRAID")})
   # ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
+  # ======== This Class contains all Tranche details that are related to the REMIC =================
+  
   setClass("TrancheDetails",
            representation(
              DealName = "character",
@@ -208,6 +223,8 @@
         Group = Group)
   }
   
+  
+  
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",
                             TrancheName = "character",
@@ -250,7 +267,20 @@
     close(connTranche)
   }
   
-  # ======== Tranches class is a list of tranches for the REMIC ===
+  setGeneric("MakeTranche", function(  DealName = "character", TrancheNumber = "character", TrancheName = "character",
+                                       TranchePrincipal = "character", TrancheInterest = "character", Cusip = "character",
+                                       TrancheOrigBal = numeric(), TrancheDatedDate = "character", TrancheFirstPmtDate = "character",
+                                       TrancheFinalPmtDate = "character",TrancheCoupon = numeric(), Delay = numeric(), 
+                                       PrinPmtFrequency = numeric(),InterestPmtFrequency = numeric(), FloaterIndex = "character", 
+                                       PacLowBand = numeric(), PacHighBand = numeric(), Group = numeric())
+                                       {standardGeneric("MakeTranche")})
+  
+  # ======== Tranches class is an aggregator calss for all tranches related to a REMIC ======
+  # ================== The Tranches function is called in the REMIC Constructor =============
+  
+  # The function assembles multiple tranches associated with a deal 
+  # building the tranche classes into a list
+  
   setClass("Tranches",
            representation(
              Tranches = "list"))
@@ -287,7 +317,9 @@
     #closing conn causes this function to return null, why?
   }
   
-  # ========= This Class is the Collateral Class ==========
+  setGeneric("Tranches", function(NumberofTranches = numeric(), DealName = "character") {standardGeneric("Tranches")})
+  
+  # ========= Collateral Class is the collateral group backing the REMIC ==========
   
   setClass("Collateral",
            representation(
@@ -300,8 +332,7 @@
                       Group = numeric(),
                       Cusip = list(),
                       OrigBal = list()){
-              
-              
+                            
               .Object@Group = Group
               .Object@Cusip = Cusip
               .Object@OrigBal = OrigBal
@@ -322,7 +353,12 @@
     )
   }
   
+  setGeneric("Collateral", function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list())
+  {standardGeneric("Collateral")})
   
+  
+  # ================= Function to make the collateral rds file =================
+  # This is the input function for collateral groups
   MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
     
     temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
@@ -331,9 +367,10 @@
     saveRDS(temp, connGroup)
     
   }
+  setGeneric("MakeCollateral", function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list())
+    {standardGeneric("MakeCollateral")})
   
-  # ========== This Class is Collateral Group Collateral Groups Belong to Tranches ================
-  
+  # ========== Collateral Group Class is an aggregator of the collateral class ================
   # This function assembles multiple collateral groups into a list of collateral groups
   # building the collateral groups for the entire deal structure
   
@@ -367,8 +404,10 @@
     new("CollateralGroup",
         Group = GroupList)
     
-    #close(connGroup)
   }
+  
+  setGeneric("CollateralGroup", function(NumberofGroups = numeric(), DealName = "character") {standardGeneric("CollateralGroup")})
+
   # ======== This calss is the REMIC factor files and belongs to tranche information ==================
   # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
     
@@ -380,7 +419,7 @@
              Factor = "numeric"))
   
   setMethod("initialize",
-            signature("RMDE"),
+            signature("RDME"),
             function(.Object,
                       Cusip = "character",
                       PaymentDate = "charcter",
@@ -409,6 +448,11 @@
         Coupon = Coupon,
         Factor = Factor)
   }
+    
+  setGeneric("RDME", function(Cusip = "character", PaymentDate = "character", Coupon = numeric(), Factor = numeric())
+    {standardGeneric("RDME")})  
+  
+  # =========================== This is the input function for the  RDME rds file ===================== 
   
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),
@@ -423,6 +467,14 @@
     close(connRDME)
     
   }
+  
+  setGeneric("MakeRDME", function(DealName = "character", TrancheNumber = numeric(), Cusip = "character", 
+                                  PaymentDate = "character", Coupon = numeric(), Factor = numeric())
+                                  {standardGeneric("MakeRDME")})
+    
+  
+  # =============== The TrancheFactors class is an aggregator class ===================
+  # ============ The class aggregates the RDME classes for each associated trance ====
   
   setClass("TrancheFactors",
            representation(
@@ -455,6 +507,9 @@
     
   }
   
+  setGeneric("RDMEData", function(NumberofTranches = numeric(), DealName = "character") {standardGeneric("RDMEData")})
+  
+  #========== Superclass REMIC structure constructor for REMIC which will be called by the waterfall ==========
   setClass("REMICStructure",
            representation(),
            contains = c("RAID", "Tranches", "CollateralGroup", "TrancheFactors")) 
@@ -530,8 +585,8 @@
 
     connREMIC <- gzfile(description = paste("~/BondLab/REMICData/", DealName, ".rds", sep = ""))
     saveRDS(REMIC, connREMIC)
-    
-    
+    close(connREMIC)
+        
   }
   
-  
+  setGeneric("REMICStructure", function(DealName = "character") {standardGeneric("REMICStructure")})

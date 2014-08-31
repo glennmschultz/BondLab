@@ -27,7 +27,7 @@
   utils::globalVariables(c("value", "variable"))
   
   #----------------------------------------------------------------------------------------
-  #Bond Lab Constants
+  #Bond Lab MBS Constants
   #----------------------------------------------------------------------------------------
   
   days.in.month = 30.44
@@ -37,45 +37,7 @@
   min.principal = 100
   zero.coupon = 0
   pmt.frequency = 2
-  #---------------------------------
-  #Time value of money functions
-  #---------------------------------
-  
-  TimeValue <- function(interest.rate = numeric(), number.periods = numeric(), frequency = numeric(), type = "character"){
-    if (missing(interest.rate))
-      stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
-    if (!is.numeric(interest.rate)  )
-      stop("No numeric interest.rate specified.")
-    if (interest.rate <0 | interest.rate > 1)
-      stop("No valid  interest.rate specified.")
-    
-    if(missing(number.periods))
-      stop("Need to provide the number of discounting periods")
-    if(!is.numeric(number.periods))
-      stop(" No numeric discounting period specfified")
-    if (number.periods < 1 )
-      stop("No valid  number.periods specified.")
-    
-    if(missing(frequency))
-      stop("Need to provide the frequency")
-    if(!is.numeric(frequency))
-      stop(" No numeric frequency specfified")
-    if (frequency < 1 | frequency >12 )
-      stop("No valid frequency specified.")
-    
-    if(! type %in% c("PV", "PVA", "PVAD", "FV", "FVA"))
-      stop("Time value function not specfied correctly")
-    
-    interest.rate = interest.rate/frequency
-  
-      switch(type,
-      PV =  1/(1+interest.rate)^number.periods,
-      PVA = ((1-(1/(1+interest.rate)^number.periods))/interest.rate),
-      PVAD =   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate),  
-      FV =  (1+interest.rate)^number.periods,
-      FVA =   (((1 + interest.rate)^(number.periods)) -1)/interest.rate)
-   
-  }
+ 
   
   # ----------------------------------
   # Bond Yield to Maturity Functions 
@@ -244,31 +206,7 @@
   #Note: Minimum demonination needs to be added to class bond information as well as function input
   }
   
-  #----------------------------
-  #Bond basis function This function set the interest payment day count basis  
-  #----------------------------
-  
-  BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
-                        lastpmt.date, nextpmt.date){
-  
-  #This function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
-  #It returns the number of payments that will be received, period, and n for discounting
-  #issue.date is the issuance date of the bond
-  #start.date is the dated date of the bond
-  #end.date is the maturity date of the bond
-  #settlement.date is the settlement date of hte bond
-  #lastpmt.date is the last coupon payment date
-  #nextpmt.date is the next coupon payment date
-  
-  d1 = if(settlement.date == issue.date) {day(issue.date)} else {day(settlement.date)}    
-  m1 = if(settlement.date == issue.date) {month(issue.date)} else {month(settlement.date)}
-  y1 = if(settlement.date == issue.date) {year(issue.date)} else {year(settlement.date)}
-  d2 = day(nextpmt.date)
-  m2 = month(nextpmt.date)
-  y2 = year(nextpmt.date)
-  
-  (max(0, 30 - d1) + min(30, d2) + 360*(y2-y1) + 30*(m2-m1-1))/360}
-  
+ 
   #--------------------------
   #Bond cash flow function. This function computes the cash flow of a standard non-callable bond
   #-------------------------
@@ -2423,64 +2361,6 @@
    return(DollarRoll)
   }
   
-
-  #----------------------------------
-  # Helper Functions These function help to manage
-  # The data sources   
-  #----------------------------------
-
-  # Swap Curve data creates a data base of daily yield
-  # curves using swap rate data from the Federal Reserve
-
-  SwapRateData <- function(datafile = "character", maturityvector = numeric()){
-  # Note: maturityvector must start with an empty space e.g. c("", 1, 2, )  
-  #========== Read Swap Rate Data ===========================
-  SwapRateData <-read.csv(datafile, header = TRUE, as.is = TRUE)
-  #======== remove month and year data and reorder dataset
-  RowCount = nrow(SwapRateData)
-  ColCount = ncol(SwapRateData)
-  
-  for(i in 1:RowCount) {
-    if(SwapRateData[i,ColCount] != "ND") {data = SwapRateData[i,]                                      
-                                          data <- rbind(data, as.numeric(maturityvector))
-                                          saveRDS(data, paste(data[1,1], ".rds", sep = ""), compress = TRUE)}}
-  }
-
-  # Multiple plot function
-  # Source: cookbook for R
-  # Author: Winston Change
-  # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-  # - cols:   Number of columns in layout
-  # - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-  #
-  # If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-  # then plot 1 will go in the upper left, 2 will go in the upper right, and
-  # 3 will go all the way across the bottom.
-
-  multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
-  plots <- c(list(...), plotlist)
-  numPlots = length(plots)
-  
-  if (is.null(layout)) {
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                     ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-  
-  if (numPlots == 1) {
-    print(plots[[1]])
-    
-  } else {
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-    
-    for (i in 1:numPlots) {
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-      
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-      }
-    }
-  }
 
 
   #-----------------------

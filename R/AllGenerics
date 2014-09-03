@@ -6,7 +6,75 @@
 # License GPL3
 # Copyright (C) 2014  Glenn M Schultz, CFA
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+# book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+
+# This section is the Generics that are used by MBS 
+
+ setGeneric(
+  name = "MortgageCashFlows",
+  def = function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
+                 price = numeric(), PrepaymentAssumption = "character")
+  {standardGeneric("MortgageCashFlows")})
+
+ setGeneric("TermStructure",
+           function(rates.data = "character", method = "character")
+           {standardGeneric("TermStructure")})
+
+  setGeneric("PassThroughAnalytics",
+           function (bond.id = "character", MortgageRate = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
+                     settlement.date = "character", method = method, scenario.set = vector(), PrepaymentAssumption = "character",
+                     ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+             {standardGeneric("PassThroughAnalytics")})
+  
+  setGeneric("PrepaymentAssumption",
+           function(bond.id = "character", TermStructure = "character", MortgageRate = "character", ModelTune = "character", Burnout = numeric(),
+                    PrepaymentAssumption = "character",...,begin.cpr = numeric(), end.cpr = numeric(), 
+                    seasoning.period = numeric(), CPR = numeric())
+           {standardGeneric("PrepaymentAssumption")}
+           )  
+
+  setGeneric("RateofReturn",
+           function(ReinvestmentRate = numeric(), ReceivedCF = "character", RemainingCF = "character",
+                    SpotCurve = "character", FwdCurve = "character", HorizonSpread = numeric())
+             {standardGenric("RateofReturn")})
+
+  setGeneric("Seasoning",
+           function (alpha = numeric(), beta = numeric (), theta = numeric(), LoanAge = numeric())
+             {standardGeneric("Seasoning")})
+
+  setGeneric("Borrower.Incentive",
+           function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric())
+             {standardGeneric("Borrower.Incentive")})
+
+  setGeneric("Burnout",
+           function(beta1 = numeric(), beta2 = numeric(), MaxIncen = numeric(), LoanAge = numeric())
+             {standardGeneric("Burnout")})
+
+  setGeneric("Seasonality",
+           function(alpha = numeric(), Month = numeric(), theta = numeric())
+             {standardGeneric("Seasonality")})
+  
+  setGeneric("Prepayment.Model",
+           function(ModelTune = "character", LoanAge = numeric(), 
+                    Month = numeric(), incentive = numeric(), Burnout.maxincen = numeric())
+             {standardGeneric("Prepayment.Model")})  
+
+  setGeneric("DollarRoll", function(bond.id = "character", price = numeric(), drop = numeric(), original.bal = numeric(), 
+                         settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), MortgageCashFlow = "character")
+            {standardGeneric("DollarRoll")})
+  
+  setGeneric("DollarRollAnalytics", function(bond.id = "character", original.bal= numeric(), price = numeric(), drop = numeric(), trade.date = "character", 
+                        settlement.date = "character", fwd.settlement.date = "character", reinvestment.rate = numeric(), finance.rate = numeric(), method = "ns", 
+                        PrepaymentAssumption = "character", ...,begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+            {standardGeneric("DollarRollAnalytics")})
+  
+  setGeneric("Mtg.Scenario", function(bond.id ="character", trade.date = "character", settlement.date = "character", price = numeric(), proceeds = numeric(),
+                                      spot.spread = numeric(), original.bal = numeric(), scenario.set = vector(), rates.data = "character", 
+                                      method = "character", PrepaymentAssumption = "character",..., ModelTune = "character", Burnout = numeric(),
+                                      begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+  {standardGeneric("Mtg.Scenario")})
+  
+
 
 
 # ==== This section begins the REMIC Generics that are used to initialize a REMIC structure

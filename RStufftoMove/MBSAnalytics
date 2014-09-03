@@ -1,0 +1,195 @@
+  setClass("PassThroughAnalytics",
+           representation())
+         #, "MortgageKeyRate", "TermStructure", "PrepaymentAssumption", "Mtg.ScenarioSet"))
+  
+  setMethod("initialize",
+            signature("PassThroughAnalytics"),
+            function(.Object,
+              Cusip = "character",
+              ID = "character",
+              BondType = "character",
+              Sector ="character",
+              Coupon = "numeric",
+              IssueDate = "character",
+              DatedDate = "character",
+              Maturity = "character",
+              LastPmtDate = "character",
+              NextPmtDate = "character",
+              PaymentDelay = "numeric",
+              Moody = "character",
+              SP = "character",
+              BondLab  = "character",
+              Frequency = "numeric",
+              BondBasis = "character",
+              GWac = "numeric",
+              AmortizationType = "character",
+              AmortizationTerm = "numeric",
+              Index = "character",
+              Margin = "numeric",
+              FirstPmtDate = "character",
+              FinalPmtDate = "character",
+              Servicing = "numeric",
+              PMI = "numeric",
+              Gfee = "numeric",
+              InitialInterest = "character",
+              InterestOnlyPeriod = "numeric",
+              FirstPrinPaymentDate = "character",
+              BalloonPmt = "character",
+              BalloonDate = "character",
+              MBSFactor = "numeric",
+              Model = "character",
+              Burnout = "numeric",
+              SATO = "numeric",
+              Price = "numeric",
+              Accrued = "numeric",
+            YieldToMaturity = "numeric",
+            WAL = "numeric",
+            ModDuration = "numeric",
+            Convexity = "numeric",
+            Period = "numeric",
+            PmtDate = "character",
+            TimePeriod = "numeric",
+            BeginningBal = "numeric",
+            MonthlyPmt = "numeric",
+            MonthlyInterest = "numeric",
+            PassThroughInterest = "numeric",
+            ScheduledPrin = "numeric",
+            PrepaidPrin = "numeric",
+            EndingBal = "numeric",
+            ServicingIncome = "numeric",
+            PMIPremium = "numeric",
+            GFeePremium = "numeric",  
+            TotalCashFlow = "numeric"){
+    
+            .Object@Cusip = "character"
+            .Object@ID = "character"
+            .Object@BondType = "character"
+            .Object@Sector ="character"
+            .Object@Coupon = "numeric"
+            .Object@IssueDate = "character"
+            .Object@DatedDate = "character"
+            .Object@Maturity = "character"
+            .Object@LastPmtDate = "character"
+            .Object@NextPmtDate = "character"
+            .Object@PaymentDelay = "numeric"
+            .Object@Moody = "character"
+            .Object@SP = "character"
+            .Object@BondLab  = "character"
+            .Object@Frequency = numeric()
+            .Object@BondBasis = "character"
+            .Object@GWac = numeric()
+            .Object@AmortizationType = "character"
+            .Object@AmortizationTerm = numeric()
+            .Object@Index = "character"
+            .Object@Margin = numeric()
+            .Object@FirstPmtDate = "character"
+            .Object@FinalPmtDate = "character"
+            .Object@Servicing = numeric()
+            .Object@PMI = numeric()
+            .Object@Gfee = numeric()
+            .Object@InitialInterest = "character"
+            .Object@InterestOnlyPeriod = numeric()
+            .Object@FirstPrinPaymentDate = "character"
+            .Object@BalloonPmt = "character"
+            .Object@BalloonDate = "character"
+            .Object@MBSFactor = numeric()
+            .Object@Model = "character"
+            .Object@Burnout = numeric()
+            .Object@SATO = numeric()
+            .Object@Price = numeric()
+            .Object@Accrued = numeric()
+            .Object@YieldToMaturity = numeric()
+            .Object@WAL = numeric()
+            .Object@ModDuration = numeric()
+            .Object@Convexity = numeric()
+            .Object@Period = numeric()
+            .Object@PmtDate = "character"
+            .Object@TimePeriod = numeric()
+            .Object@BeginningBal = numeric()
+            .Object@MonthlyPmt = numeric()
+            .Object@MonthlyInterest = numeric()
+            .Object@PassThroughInterest = numeric()
+            .Object@ScheduledPrin = numeric()
+            .Object@PrepaidPrin = numeric()
+            .Object@EndingBal = numeric()
+            .Object@ServicingIncome = numeric()
+            .Object@PMIPremium = numeric()
+            .Object@GFeePremium = numeric()  
+            .Object@TotalCashFlow = numeric()
+            
+            return(.Object)
+            callNextMethod(.Object,...)
+          })
+
+
+# This function analyzes a standard pass through security and serves as the constructor function
+#--------------------------------------  
+PassThroughAnalytics <- function (bond.id = "character", MortgageRate = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
+                                  settlement.date = "character", method = "character", scenario.set = vector(),
+                                  PrepaymentAssumption = "character", ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric()
+) 
+{
+  
+  #Error Trap Settlement Date and Trade Date order.  This is not done in the Error Trap Function because that function is 
+  #to trap errors in bond information that is passed into the functions.  It is trapped here because this is the first use of trade date
+  if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
+  
+  #Default method for TermStructure
+  if(missing(method)) method = "ns"
+  
+  #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
+  Rate.Delta = .25
+  
+  # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
+  conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+  bond.id = readRDS(conn1)
+  
+  #Call the desired curve from rates data folder
+  conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+  rates.data <- readRDS(conn2)
+  
+  #Call Mortgage Rate Functions
+  conn3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+  MortgageRate <- readRDS(conn3)  
+  Burnout = bond.id@Burnout
+  
+  #Call Prepayment Model Tuning Parameters
+  conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
+  ModelTune <- readRDS(conn4)
+  
+  #The second step is to call the desired coupon curve into memory 
+  #This is done with the TermStructure function which creates the class TermStructure
+  TermStructure <- TermStructure(rates.data = rates.data, method = method)
+  
+  #Third if mortgage security call the prepayment model
+  PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, 
+                                               TermStructure = TermStructure, PrepaymentAssumption = PrepaymentAssumption, ModelTune = ModelTune, Burnout = Burnout, 
+                                               begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+  
+  #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, Duration, Convexity and CashFlow.
+  MortgageCashFlow <- MortgageCashFlows(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date, 
+                                        price = price, PrepaymentAssumption = PrepaymentAssumption)
+  
+  #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
+  #This is done with the BondTermStructureFunction this creates the class BondTermStructure
+  MortgageTermStructure <- MtgTermStructure(bond.id = MortgageCashFlow, original.bal = original.bal, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
+                                            settlement.date = settlement.date, principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
+  
+  spread.to.spot = MortgageTermStructure@SpotSpread
+  proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
+  
+  # The sixth step in scenario based analysis
+  Scenario <- Mtg.Scenario(scenario.set = scenario.set, bond.id = bond.id, MortgageRate = MortgageRate, original.bal = original.bal, 
+                           trade.date = trade.date, settlement.date = settlement.date, price = price, proceeds = proceeds, spot.spread = spread.to.spot, 
+                           PrepaymentAssumption = "MODEL")
+  
+  closeAllConnections()
+  
+  new("PassThroughAnalytics", bond.id, MortgageCashFlow, MortgageKeyRate, TermStructure, PrepaymentAssumption, Scenario)    
+}
+
+setGeneric("PassThroughAnalytics",
+           function (bond.id = "character", MortgageRate = "character", original.bal = numeric(), price = numeric(), trade.date = "character", 
+                     settlement.date = "character", method = method, scenario.set = vector(), PrepaymentAssumption = "character",
+                     ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
+           {standardGeneric("PassThroughAnalytics")})

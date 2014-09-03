@@ -9,53 +9,7 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-# ==== The RAID class is the REMIC at issuance disclosure ===
-  setClass("RAID",
-  representation(
-          DealName = "character", 
-          Issuer = "character",
-          DealPriceDate = "character",
-          DealSettlementDate = "character",
-          Underwriter = "character",
-          NumberofTranches = "numeric",
-          NumberPacSchedules = "numeric",
-          NumberofGroups = "numeric",
-          DealSize = "numeric",
-          CollateralAmount = "numeric"))
-
-  setMethod("initialize",
-          signature("RAID"),
-          function (.Object, 
-                    DealName = "character",
-                    Issuer = "character",
-                    DealPriceDate = "character",
-                    DealSettlementDate = "character",
-                    Underwriter = "character",
-                    NumberofTranches = numeric(),
-                    NumberPacSchedules = numeric(),
-                    NumberofGroups = numeric(),
-                    DealSize = numeric(),
-                    CollateralAmount = numeric())
-  {
-              
-              .Object@DealName = DealName
-              .Object@Issuer = Issuer
-              .Object@DealPriceDate = DealPriceDate
-              .Object@DealSettlementDate = DealSettlementDate
-              .Object@Underwriter = Underwriter
-              .Object@NumberofTranches = NumberofTranches
-              .Object@NumberPacSchedules = NumberPacSchedules
-              .Object@NumberofGroups = NumberofGroups
-              .Object@DealSize = DealSize
-              .Object@CollateralAmount = CollateralAmount
- 
-              return(.Object) 
-              callNextMethod(.Object,...)               
-          }
-
-  )
-
-
+# Construct RAID class with call to new
   RAID <- function(DealName = "character",
                  Issuer = "character",
                  DealPriceDate = "character",
@@ -82,7 +36,7 @@
                      )                 
           }
 
-
+# serialize the RAID class to the RAID directory
   MakeRAID <- function(DealName = "character", 
                      Issuer = "character", 
                      DealPriceDate = "character", 
@@ -109,80 +63,8 @@
   close(connRAID)
   }
   
-  setGeneric("MakeRAID", function(DealName = "character", Issuer = "character", DealPriceDate = "character", DealSettlementDate = "character",
-              Underwriter = "character", NumberofTranches = numeric(), NumberPacSchedules = numeric(), NumberofGroups = numeric(), 
-              DealSize = numeric(),CollateralAmount = numeric()) {standardGeneric("MakeRAID")})
-  # ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
-  # ======== This Class contains all Tranche details that are related to the REMIC =================
-  
-  setClass("TrancheDetails",
-           representation(
-             DealName = "character",
-             TrancheNumber = "character",
-             TrancheName = "character",
-             TranchePrincipal = "character",
-             TrancheInterest = "character",
-             Cusip = "character",
-             TrancheOrigBal = "numeric",
-             TrancheDatedDate = "character",
-             TrancheFirstPmtDate = "character",
-             TrancheFinalPmtDate = "character",
-             TrancheCoupon = "numeric",
-             Delay = "numeric",
-             PrinPmtFrequency = "numeric",
-             InterestPmtFrequency = "numeric",
-             FloaterIndex = "character",
-             PacLowBand = "numeric",
-             PacHighBand = "numeric",
-             Group = "numeric"
-           ))
-  
-  setMethod("initialize",
-            signature("TrancheDetails"),
-            function(.Object,
-                     DealName = "character",
-                     TrancheNumber = "character",
-                     TrancheName = "character",
-                     TranchePrincipal = "character",
-                     TrancheInterest = "character",
-                     Cusip = "character",
-                     TrancheOrigBal = numeric(),
-                     TrancheDatedDate = "character",
-                     TrancheFirstPmtDate = "character",
-                     TrancheFinalPmtDate = "character",
-                     TrancheCoupon = numeric(),
-                     Delay = numeric(),
-                     PrinPmtFrequency = numeric(),
-                     InterestPmtFrequency = numeric(),
-                     FloaterIndex = "character",
-                     PacLowBand = numeric(),
-                     PacHighBand = numeric(),
-                     Group = numeric()){
-              
-              .Object@DealName = DealName
-              .Object@TrancheNumber = TrancheNumber
-              .Object@TrancheName = TrancheName
-              .Object@TranchePrincipal = TranchePrincipal
-              .Object@TrancheInterest = TrancheInterest
-              .Object@Cusip = Cusip
-              .Object@TrancheOrigBal = TrancheOrigBal
-              .Object@TrancheDatedDate = TrancheDatedDate
-              .Object@TrancheFirstPmtDate = TrancheFirstPmtDate
-              .Object@TrancheFinalPmtDate = TrancheFinalPmtDate
-              .Object@TrancheCoupon = TrancheCoupon
-              .Object@Delay = Delay
-              .Object@PrinPmtFrequency = PrinPmtFrequency
-              .Object@InterestPmtFrequency = InterestPmtFrequency
-              .Object@FloaterIndex= FloaterIndex
-              .Object@PacLowBand = PacLowBand
-              .Object@PacHighBand = PacHighBand
-              .Object@Group = Group
-              
-              return(.Object)
-              callNextMethod(.Object,...)
-            }
-  )
-  
+
+# 1) Construct tranche details with call to new
   TrancheDetails <- function( DealName = "character",
                               TrancheNumber = "character",
                               TrancheName = "character",
@@ -224,7 +106,7 @@
   }
   
   
-  
+# 2) serialize the tranches to the tranches directory  
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",
                             TrancheName = "character",
@@ -267,37 +149,11 @@
     close(connTranche)
   }
   
-  setGeneric("MakeTranche", function(  DealName = "character", TrancheNumber = "character", TrancheName = "character",
-                                       TranchePrincipal = "character", TrancheInterest = "character", Cusip = "character",
-                                       TrancheOrigBal = numeric(), TrancheDatedDate = "character", TrancheFirstPmtDate = "character",
-                                       TrancheFinalPmtDate = "character",TrancheCoupon = numeric(), Delay = numeric(), 
-                                       PrinPmtFrequency = numeric(),InterestPmtFrequency = numeric(), FloaterIndex = "character", 
-                                       PacLowBand = numeric(), PacHighBand = numeric(), Group = numeric())
-                                       {standardGeneric("MakeTranche")})
+
   
-  # ======== Tranches class is an aggregator calss for all tranches related to a REMIC ======
-  # ================== The Tranches function is called in the REMIC Constructor =============
-  
+  # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
   # The function assembles multiple tranches associated with a deal 
   # building the tranche classes into a list
-  
-  setClass("Tranches",
-           representation(
-             Tranches = "list"))
-  
-  setMethod("initialize",
-            signature("Tranches"),
-            function(.Object,...,
-                     Tranches = list())
-            {
-              .Object@Tranches = Tranches
-              
-              return(.Object)
-              
-              callNextMethod(.Object, ...)
-            }
-  )
-  
   
   Tranches <- function(NumberofTranches = numeric(), DealName = "character"){
     
@@ -317,31 +173,10 @@
     #closing conn causes this function to return null, why?
   }
   
-  setGeneric("Tranches", function(NumberofTranches = numeric(), DealName = "character") {standardGeneric("Tranches")})
+
   
-  # ========= Collateral Class is the collateral group backing the REMIC ==========
-  
-  setClass("Collateral",
-           representation(
-             Group = "numeric",
-             Cusip = "list",
-             OrigBal = "list"))
-  setMethod("initialize",
-            signature ("Collateral"),
-            function (.Object,
-                      Group = numeric(),
-                      Cusip = list(),
-                      OrigBal = list()){
-                            
-              .Object@Group = Group
-              .Object@Cusip = Cusip
-              .Object@OrigBal = OrigBal
-              return(.Object) 
-            
-              callNextMethod(.Object,...)
-            }
-  )
-  
+  # 1) construct the collateral class with call to new
+    
   Collateral <- function(DealName = "character", 
                          Group = numeric(), 
                          Cusip = list(), 
@@ -350,15 +185,11 @@
         Group = as.numeric(Group),
         Cusip = as.list(Cusip),
         OrigBal = as.list(OrigBal)
-    )
-  }
+    )}
   
-  setGeneric("Collateral", function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list())
-  {standardGeneric("Collateral")})
+
   
-  
-  # ================= Function to make the collateral rds file =================
-  # This is the input function for collateral groups
+  # 2) serialize the collateral information to the groups directory
   MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
     
     temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
@@ -367,29 +198,9 @@
     saveRDS(temp, connGroup)
     
   }
-  setGeneric("MakeCollateral", function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list())
-    {standardGeneric("MakeCollateral")})
-  
-  # ========== Collateral Group Class is an aggregator of the collateral class ================
-  # This function assembles multiple collateral groups into a list of collateral groups
-  # building the collateral groups for the entire deal structure
-  
-  setClass("CollateralGroup",
-           representation(
-             Group = "list"))
-  
-  setMethod("initialize",
-            signature("CollateralGroup"),
-            function (.Object,
-                      Group = list()) 
-            {
-              .Object@Group = Group
-              return(.Object)
-              
-              callNextMethod(.Object,...)  
-            }
-  )
-  
+
+  # 3) aggregator function for the REMIC structure called by REMIC constructor
+  # the function assembles multiple collateral groups can be extended to loan level 
   CollateralGroup <- function(NumberofGroups = numeric(), DealName = "character"){
     
     GroupList <- list()
@@ -406,37 +217,7 @@
     
   }
   
-  setGeneric("CollateralGroup", function(NumberofGroups = numeric(), DealName = "character") {standardGeneric("CollateralGroup")})
-
-  # ======== This calss is the REMIC factor files and belongs to tranche information ==================
-  # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
-    
-  setClass("RDME",
-           representation(
-             Cusip = "character",
-             PaymentDate = "character",
-             Coupon = "numeric",
-             Factor = "numeric"))
-  
-  setMethod("initialize",
-            signature("RDME"),
-            function(.Object,
-                      Cusip = "character",
-                      PaymentDate = "charcter",
-                      Coupon = numeric(),
-                      Factor = numeric())
-            {
-              .Object@Cusip = Cusip
-              .Object@PaymentDate = PaymentDate
-              .Object@Coupon = Coupon
-              .Object@Factor = Factor
-              
-              return(.Object)
-              
-              callNextMethod(.Object,...)  
-              
-            }
-                    )
+  # 1) construct the tranche factors with the call to new
   
   RDME <- function(Cusip = "character", 
                    PaymentDate = "character", 
@@ -449,10 +230,9 @@
         Factor = Factor)
   }
     
-  setGeneric("RDME", function(Cusip = "character", PaymentDate = "character", Coupon = numeric(), Factor = numeric())
-    {standardGeneric("RDME")})  
+
   
-  # =========================== This is the input function for the  RDME rds file ===================== 
+  # 2) serailize tranche factor date to REME directory
   
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),
@@ -468,29 +248,8 @@
     
   }
   
-  setGeneric("MakeRDME", function(DealName = "character", TrancheNumber = numeric(), Cusip = "character", 
-                                  PaymentDate = "character", Coupon = numeric(), Factor = numeric())
-                                  {standardGeneric("MakeRDME")})
-    
-  
-  # =============== The TrancheFactors class is an aggregator class ===================
-  # ============ The class aggregates the RDME classes for each associated trance ====
-  
-  setClass("TrancheFactors",
-           representation(
-             FactorData = "list"))
-  
-  setMethod("initialize",
-            signature("TrancheFactors"),
-            function(.Object,
-                     FactorData = list())
-                    {
-                     .Object@FactorData = FactorData
-                     return(.Object)
-                     
-                     callNextMethod(.Object,...)  
-                     }
-            )
+
+  # 3) aggregator function for tranche factor information called by REMIC contructor
   
   RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
     RDMEList <- list()
@@ -507,49 +266,10 @@
     
   }
   
-  setGeneric("RDMEData", function(NumberofTranches = numeric(), DealName = "character") {standardGeneric("RDMEData")})
+
   
-  #========== Superclass REMIC structure constructor for REMIC which will be called by the waterfall ==========
-  setClass("REMICStructure",
-           representation(),
-           contains = c("RAID", "Tranches", "CollateralGroup", "TrancheFactors")) 
-  
-  setMethod("initialize",
-            signature("REMICStructure"),
-             function(.Object,
-                DealName = "character",
-                Issuer = "character",
-                DealPriceDate = "character",
-                DealSettlementDate = "character",
-                Underwriter = "character",
-                NumberofTranches = numeric(),
-                NumberPacSchedules = numeric(),
-                NumberofGroups = numeric(),
-                DealSize = numeric(),
-                CollateralAmount = numeric(),
-                Tranches = "character",
-                CollateralGroup = "character",
-                TrancheFactors ="character")
-             {
-               .Object@DealName = DealName
-               .Object@Issuer = Issuer
-               .Object@DealPriceDate = DealPriceDate
-               .Object@DealSettlementDate = DealSettlementDate
-               .Object@Underwriter = Underwriter
-               .Object@NumberofTranches = NumberofTranches
-               .Object@NumberPacSchedules = NumberPacSchedules
-               .Object@NumberofGroups = NumberofGroups
-               .Object@DealSize = DealSize
-               .Object@CollateralAmount = CollateralAmount
-               .Object@Tranches = Tranches
-               .Object@Group = CollateralGroup
-               .Object@FactorData = TrancheFactors
-               
-               return(.Object)
-             
-               callNextMethod(.Object,...)           
-  }
-  )
+ # REMIC constructor -- yeah, baby !!
+
   
   RemicStructure <- function(DealName = "character"){
     
@@ -589,4 +309,4 @@
         
   }
   
-  setGeneric("REMICStructure", function(DealName = "character") {standardGeneric("REMICStructure")})
+

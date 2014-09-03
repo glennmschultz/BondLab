@@ -1,0 +1,348 @@
+
+#--- The folllowing classes define standard Mortgage Passthrough analytics
+setClass("MBSDetails", 
+         representation(
+           Cusip = "character",
+           ID = "character",
+           BondType = "character",
+           Sector ="character",
+           Coupon = "numeric",
+           IssueDate = "character",
+           DatedDate = "character",
+           Maturity = "character",
+           LastPmtDate = "character",
+           NextPmtDate = "character",
+           PaymentDelay = "numeric",
+           Moody = "character",
+           SP = "character",
+           BondLab  = "character",
+           Frequency = "numeric",
+           BondBasis = "character",
+           GWac = "numeric",
+           AmortizationType = "character",
+           AmortizationTerm = "numeric",
+           Index = "character",
+           Margin = "numeric",
+           FirstPmtDate = "character",
+           FinalPmtDate = "character",
+           Servicing = "numeric",
+           PMI = "numeric",
+           Gfee = "numeric",
+           InitialInterest = "character",
+           InterestOnlyPeriod = "numeric",
+           FirstPrinPaymentDate = "character",
+           BalloonPmt = "character",
+           BalloonDate = "character",
+           MBSFactor = "numeric",
+           Model = "character",
+           Burnout = "numeric",
+           SATO = "numeric"))
+
+setClass("MortgageTermStructure",
+         representation(
+           SpotSpread = "numeric",   
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric"),
+         contains = "MBSDetails")
+
+setClass("MortgageCashFlows",
+         representation(
+           Price = "numeric",
+           Accrued = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric",
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           BeginningBal = "numeric",
+           MonthlyPmt = "numeric",
+           MonthlyInterest = "numeric",
+           PassThroughInterest = "numeric",
+           ScheduledPrin = "numeric",
+           #SMM = "numeric",
+           PrepaidPrin = "numeric",
+           EndingBal = "numeric",
+           ServicingIncome = "numeric",
+           PMIPremium = "numeric",
+           GFeePremium = "numeric",  
+           TotalCashFlow = "numeric"),
+         contains = "MBSDetails")
+
+setClass("MortgageOAS",
+         representation(
+           OAS = "numeric",
+           ZVSpread = "numeric",
+           SpreadToCurve = "numeric",
+           PriceDist = "vector",
+           PathSpread = "vector",
+           PathWAL = "vector",
+           PathModDur = "vector",
+           PathYTM = "vector"),
+         contains = "MBSDetails")
+
+setClass("Scenario",
+         representation(
+           Name = "character",
+           Type = "character",
+           Horizon = "character",
+           ShiftType = "character",
+           Shiftbps = "numeric",
+           Formula = "function"
+         ))
+
+setClass("Mtg.Scenario",
+         representation( 
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           BeginningBal = "numeric",
+           PassThroughInterest = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           EndingBal = "numeric",
+           TotalCashFlow = "numeric",
+           spotrate = "numeric",
+           forwardrate = "numeric",
+           SMM = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           SpreadToInterCurve = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric", 
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric",
+           HorizonReturn = "numeric"),
+           contains = "Scenario")
+
+setClass("Mtg.ScenarioSet",
+         representation(
+           Scenario = "list"),
+         contains = "MortgageCashFlows")
+
+setClass("PrepaymentAssumption",
+         representation(
+           PrepayAssumption = "character",
+           PPCStart = "numeric",
+           PPCEnd = "numeric",
+           PPCSeasoning = "numeric",
+           FirstPmtDate = "character",
+           LastPmtDate = "character",
+           FinalPmtDate = "character",
+           PmtDate = "character",
+           LoanAge = "numeric",
+           Period = "numeric",
+           NoteRate = "numeric",
+           MtgRateFwd = "numeric",
+           Incentive = "numeric",
+           SMM = "numeric"))
+
+
+setClass("DollarRoll",
+         representation(
+           SettlementDate = "character",
+           FwdSettlementDate = "character",  
+           GrossCoupon = "numeric",
+           NetCoupon = "numeric",
+           OriginalTerm = "numeric",
+           RemainingTerm = "numeric",
+           OrigBalance = "numeric",
+           CurrentBalance = "numeric",
+           Price = "numeric",
+           PrincipalProceeds = "numeric",
+           Accrued = "numeric",
+           TotalProceeds = "numeric",
+           DaysInterest = "numeric",
+           ReinvestmentIncome = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           PassThroughInterest = "numeric",
+           FutureValueHold = "numeric",
+           RemainingBalance = "numeric",
+           FuturePrincipalProceeds = "numeric",
+           FwdAccrued = "numeric",
+           Drop = "numeric",
+           FwdPrice = "numeric",
+           FinanceRate = "numeric",
+           ReinvestmentRate = "numeric",
+           HoldorRoll = "character",
+           Advantage = "numeric",
+           FutureValueRoll = "numeric",
+           DiscValueofCarry = "numeric",
+           FutureValuePrinCarry = "numeric",
+           TotalFutureValue = "numeric",
+           DropImpliedValue = "numeric"),
+         contains = "MortgageCashFlows"
+) 
+
+# --- The following classes define rates and Prepayment model tune classes
+# --- these classes are used to pass term strucuture information and prepayment model
+# --- tuning paramaters  
+
+setClass("TermStructure",
+         representation(
+           tradedate = "character",
+           period = "numeric",
+           date = "character",
+           spotrate = "numeric",
+           forwardrate = "numeric",
+           TwoYearFwd = "numeric",
+           TenYearFwd = "numeric"
+         ))
+
+setClass("PrepaymentModel",
+         representation(
+           Turnover = "numeric",
+           Seasoning = "function",
+           Seasonality = "function",
+           BorrowerIncentive = "function",
+           Burnout = "function"
+         ))
+
+setClass("PrepaymentModelTune",
+         representation(
+           TurnoverRate = "numeric",
+           Turnover.alpha = "numeric",
+           Turnover.beta = "numeric",
+           Turnover.theta = "numeric",
+           Seasonality.alpha = "numeric",
+           Seasonality.theta = "numeric",
+           Incentive.Fast.theta.1 = "numeric",
+           Incentive.Fast.theta.2 = "numeric",
+           Incentive.Fast.beta = "numeric",
+           Incentive.Fast.eta = "numeric",
+           Incentive.Slow.theta.1 = "numeric",
+           Incentive.Slow.theta.2 = "numeric",
+           Incentive.Slow.beta = "numeric",
+           Incentive.Slow.eta = "numeric",
+           Burnout.beta.1 = "numeric",
+           Burnout.beta.2 = "numeric"
+         ))
+
+setClass("MortgageRate",
+         representation(
+           yr30 = "function",
+           yr15 = "function"
+         ))
+
+# ----- The following classes define rate of return and valuation classes
+
+
+setClass("RateofReturn",
+         representation(
+           PmtDate = "character",
+           Period = "numeric",
+           ReinvestmentRate = "numeric",
+           ReceivedCF = "numeric",
+           ReInvestmentIncome = "numeric",
+           RemainingCF = "numeric",
+           HorizonSpread = "numeric"))
+
+
+
+#------ The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class 
+#------ for all mortgage passthrough analytics
+
+setClass("PassThroughAnalytics", 
+         contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption", "Mtg.ScenarioSet"))
+
+setClass("PassThroughOAS",
+         contains = c("MBSDetails", "MortgageCashFlows", "MortgageOAS"))
+
+
+
+
+
+# REMIC Classes, these classes define a REMIC
+# In all, there are eight classes that define a REMIC structure
+
+# ==== The RAID class is the REMIC at issuance disclosure ===
+setClass("RAID",
+         representation(
+           DealName = "character", 
+           Issuer = "character",
+           DealPriceDate = "character",
+           DealSettlementDate = "character",
+           Underwriter = "character",
+           NumberofTranches = "numeric",
+           NumberPacSchedules = "numeric",
+           NumberofGroups = "numeric",
+           DealSize = "numeric",
+           CollateralAmount = "numeric"))
+
+# ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
+# ======== This Class contains all Tranche details that are related to the REMIC =================
+setClass("TrancheDetails",
+         representation(
+           DealName = "character",
+           TrancheNumber = "character",
+           TrancheName = "character",
+           TranchePrincipal = "character",
+           TrancheInterest = "character",
+           Cusip = "character",
+           TrancheOrigBal = "numeric",
+           TrancheDatedDate = "character",
+           TrancheFirstPmtDate = "character",
+           TrancheFinalPmtDate = "character",
+           TrancheCoupon = "numeric",
+           Delay = "numeric",
+           PrinPmtFrequency = "numeric",
+           InterestPmtFrequency = "numeric",
+           FloaterIndex = "character",
+           PacLowBand = "numeric",
+           PacHighBand = "numeric",
+           Group = "numeric"
+         ))
+
+# ===== The Tranches Class is a list that holds the above tranche information
+# ===== for the REMIC which are strucutred with many tranches GSEs deliver tranche detail
+
+setClass("Tranches",
+         representation(
+           Tranches = "list"))
+
+# ==== Collateral Class is the representation of the collateral underlying a REMIC transaction
+
+setClass("Collateral",
+         representation(
+           Group = "numeric",
+           Cusip = "list",
+           OrigBal = "list"))
+
+# ========== Collateral Group Class is an aggregator of the collateral class ================
+# This function assembles multiple collateral groups into a list of collateral groups
+# building the collateral groups for the entire deal structure
+
+setClass("CollateralGroup",
+         representation(
+           Group = "list"))
+
+# ======== This class is the REMIC factor files and belongs to tranche information ==================
+# REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
+
+setClass("RDME",
+         representation(
+           Cusip = "character",
+           PaymentDate = "character",
+           Coupon = "numeric",
+           Factor = "numeric"))
+
+# =============== The TrancheFactors class is an aggregator class ===================
+# ============ The class aggregates the RDME classes for each associated trance ====
+
+setClass("TrancheFactors",
+         representation(
+           FactorData = "list"))
+
+#========== Superclass REMIC structure constructor for REMIC which will be called by the waterfall ==========
+setClass("REMICStructure",
+         representation(),
+         contains = c("RAID", "Tranches", "CollateralGroup", "TrancheFactors")) 
+

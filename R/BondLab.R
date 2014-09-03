@@ -37,4 +37,3 @@ months.in.year = 12
 min.principal = 100
 zero.coupon = 0
 pmt.frequency = 2
-

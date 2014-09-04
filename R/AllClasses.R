@@ -103,8 +103,8 @@ setClass("MortgageTermStructure",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
-           KeyRateConvexity = "numeric"),
-         contains = "MBSDetails")
+           KeyRateConvexity = "numeric"))
+#,         contains = "MBSDetails")
 
 setClass("MortgageCashFlows",
          representation(
@@ -122,14 +122,13 @@ setClass("MortgageCashFlows",
            MonthlyInterest = "numeric",
            PassThroughInterest = "numeric",
            ScheduledPrin = "numeric",
-           #SMM = "numeric",
            PrepaidPrin = "numeric",
            EndingBal = "numeric",
            ServicingIncome = "numeric",
            PMIPremium = "numeric",
            GFeePremium = "numeric",  
-           TotalCashFlow = "numeric"),
-         contains = "MBSDetails")
+           TotalCashFlow = "numeric"))
+#,         contains = "MBSDetails")
 
 setClass("MortgageOAS",
          representation(
@@ -140,8 +139,8 @@ setClass("MortgageOAS",
            PathSpread = "vector",
            PathWAL = "vector",
            PathModDur = "vector",
-           PathYTM = "vector"),
-         contains = "MBSDetails")
+           PathYTM = "vector"))
+#,         contains = "MBSDetails")
 
 setClass("Scenario",
          representation(

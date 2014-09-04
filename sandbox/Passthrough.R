@@ -32,5 +32,4 @@ MakeMBSDetails( Cusip = "23456789",
                 MBSFactor = 1,
                 Model = "FH30.Generic",
                 Burnout = 25,
-                SATO = 0.75
-)
+                SATO = 0.75)

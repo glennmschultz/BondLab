@@ -1,3 +1,61 @@
+# Bond Lab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+# License GPL3
+# Copyright (C) 2014  Glenn M Schultz, CFA
+# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+
+# --- The following classes define standard bond analytics
+setClass("BondDetails",
+         representation(
+           Cusip = "character",
+           ID = "character",
+           BondType = "character",
+           Sector ="character",
+           Coupon = "numeric",
+           IssueDate = "character",
+           DatedDate = "character",
+           Maturity = "character",
+           LastPmtDate = "character",
+           NextPmtDate = "character",
+           Moody = "character",
+           SP = "character",
+           BondLab  = "character",
+           Frequency = "numeric",
+           BondBasis = "character",
+           Callable = "character",
+           Putable = "character",
+           SinkingFund = "character"))
+
+setClass("BondCashFlows",
+         representation(
+           Price = "numeric",
+           Accrued = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric",
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           PrincipalOutstanding = "numeric",  
+           CouponPmt = "numeric",
+           TotalCashFlow = "numeric"),
+         contains = "BondDetails")
+
+setClass("BondTermStructure",
+         representation(
+           SpotSpread = "numeric",   
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric"),
+         contains = "BondDetails")
+
 
 #--- The folllowing classes define standard Mortgage Passthrough analytics
 setClass("MBSDetails", 
@@ -250,15 +308,15 @@ setClass("RateofReturn",
 #------ The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class 
 #------ for all mortgage passthrough analytics
 
+
+#------ The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
+setClass("BondAnalytics", contains = c("BondDetails", "BondCashFlows", "BondTermStructure", "TermStructure"))
+
 setClass("PassThroughAnalytics", 
          contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption", "Mtg.ScenarioSet"))
 
 setClass("PassThroughOAS",
          contains = c("MBSDetails", "MortgageCashFlows", "MortgageOAS"))
-
-
-
-
 
 # REMIC Classes, these classes define a REMIC
 # In all, there are eight classes that define a REMIC structure

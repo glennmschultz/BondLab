@@ -9,9 +9,286 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-# This section begins REMIC Methods the methods are used for the analysis of REMIC
-# REMIC functions require the superclass REMIC structure and the call to source(waterfall file)
 
+# Inititialize MBSDetails
+setMethod("initialize",
+          signature("MBSDetails"),
+          function(.Object,
+                   Cusip = "character",
+                   ID = "character",
+                   BondType = "character",
+                   Sector ="character",
+                   Coupon = "numeric",
+                   IssueDate = "character",
+                   DatedDate = "character",
+                   Maturity = "character",
+                   LastPmtDate = "character",
+                   NextPmtDate = "character",
+                   PaymentDelay = "numeric",
+                   Moody = "character",
+                   SP = "character",
+                   BondLab  = "character",
+                   Frequency = "numeric",
+                   BondBasis = "character",
+                   GWac = "numeric",
+                   AmortizationType = "character",
+                   AmortizationTerm = "numeric",
+                   Index = "character",
+                   Margin = "numeric",
+                   FirstPmtDate = "character",
+                   FinalPmtDate = "character",
+                   Servicing = "numeric",
+                   PMI = "numeric",
+                   Gfee = "numeric",
+                   InitialInterest = "character",
+                   InterestOnlyPeriod = "numeric",
+                   FirstPrinPaymentDate = "character",
+                   BalloonPmt = "character",
+                   BalloonDate = "character",
+                   MBSFactor = "numeric",
+                   Model = "character",
+                   Burnout = "numeric",
+                   SATO = "numeric")
+          
+{
+            .Object@Cusip = Cusip
+            .Object@ID = ID
+            .Object@BondType = BondType
+            .Object@Sector = Sector
+            .Object@Coupon = Coupon
+            .Object@IssueDate = IssueDate
+            .Object@DatedDate = DatedDate
+            .Object@Maturity = Maturity
+            .Object@LastPmtDate = LastPmtDate
+            .Object@NextPmtDate = NextPmtDate
+            .Object@PaymentDelay = PaymentDelay
+            .Object@Moody = Moody
+            .Object@SP = SP
+            .Object@BondLab = BondLab
+            .Object@Frequency = Frequency
+            .Object@BondBasis = BondBasis
+            .Object@GWac = GWac
+            .Object@AmortizationType = AmortizationType
+            .Object@AmortizationTerm = AmortizationTerm
+            .Object@Index = Index
+            .Object@Margin = Margin
+            .Object@FirstPmtDate = FirstPmtDate
+            .Object@FinalPmtDate = FinalPmtDate
+            .Object@Servicing = Servicing
+            .Object@PMI = PMI
+            .Object@Gfee = Gfee
+            .Object@InitialInterest = InitialInterest
+            .Object@InterestOnlyPeriod = InterestOnlyPeriod
+            .Object@FirstPrinPaymentDate = FirstPrinPaymentDate
+            .Object@BalloonPmt = BalloonPmt
+            .Object@BalloonDate = BalloonDate
+            .Object@MBSFactor = MBSFactor
+            .Object@Model = Model
+            .Object@Burnout = Burnout
+            .Object@SATO = SATO
+            
+            return(.Object)
+            callNextMethod(.Object,...)
+          })
+
+
+# Initialize TermStructure
+setMethod("initialize",
+          signature("TermStructure"),
+          function(.Object,...,
+                   tradedate = "character",
+                   period = "numeric",
+                   date = "character",
+                   spotrate = "numeric",
+                   forwardrate = "numeric",
+                   TwoYearFwd = "numeric",
+                   TenYearFwd = "numeric")
+          {
+            .Object@tradedate = tradedate
+            .Object@period = period
+            .Object@date = date
+            .Object@spotrate = spotrate
+            .Object@forwardrate = forwardrate
+            .Object@TwoYearFwd = TwoYearFwd
+            .Object@TenYearFwd = TenYearFwd
+            
+            return(.Object)
+            callNextMethod(.Object,...)
+          })
+
+# Initialize MortgageCashFlows
+setMethod("initialize",
+          signature("MortgageCashFlows"),
+          function(.Object,       
+                   Price = numeric(),
+                   Accrued = numeric(),
+                   YieldToMaturity = numeric(),
+                   WAL = numeric(),
+                   ModDuration = numeric(),
+                   Convexity = numeric(),
+                   Period = numeric(),
+                   PmtDate = "character",
+                   TimePeriod = numeric(),
+                   BeginningBal = numeric(),
+                   MonthlyPmt = numeric(),
+                   MonthlyInterest = numeric(),
+                   PassThroughInterest = numeric(),
+                   ScheduledPrin = numeric(),
+                   PrepaidPrin = numeric(),
+                   EndingBal = numeric(),
+                   ServicingIncome = numeric(),
+                   PMIPremium = numeric(),
+                   GFeePremium = numeric(),  
+                   TotalCashFlow = numeric()
+          ){
+            
+            .Object@Price = Price
+            .Object@Accrued = Accrued
+            .Object@YieldToMaturity = YieldToMaturity
+            .Object@WAL = WAL
+            .Object@ModDuration = ModDuration
+            .Object@Convexity = Convexity
+            .Object@Period = Period
+            .Object@PmtDate = PmtDate
+            .Object@TimePeriod = TimePeriod
+            .Object@BeginningBal = BeginningBal
+            .Object@MonthlyPmt = MonthlyPmt
+            .Object@MonthlyInterest = MonthlyInterest
+            .Object@PassThroughInterest = PassThroughInterest
+            .Object@ScheduledPrin = ScheduledPrin
+            .Object@PrepaidPrin = PrepaidPrin
+            .Object@EndingBal = EndingBal
+            .Object@ServicingIncome = ServicingIncome
+            .Object@PMIPremium = PMIPremium
+            .Object@GFeePremium = GFeePremium  
+            .Object@TotalCashFlow = TotalCashFlow
+            
+            return(.Object)
+            callNextMethod(.Object,...) 
+          })
+
+
+# This section begins the Bond Methods
+setMethod("show",
+          signature(object = "BondCashFlows"),
+          function (object) 
+          {      
+            cat("Bond Description", "\n")
+            cat("BondId:"); print(object@ID)
+            cat("Cusip:"); print(object@Cusip)
+            cat("Coupon:"); print(object@Coupon)
+            cat("Frequency:"); print(object@Frequency)
+            cat("Basis:"); print(object@BondBasis)
+            cat("Issue Date:"); print(object@IssueDate)
+            cat("Last Payment Date:"); print(object@LastPmtDate)
+            cat("Next Payment Date:"); print(object@NextPmtDate)
+            cat("Maturity Date:"); print(object@Maturity)
+            cat("Bond Valuation:", "\n")
+            cat("Price:"); print(object@Price)
+            cat("Accrued:"); print(object@Accrued)
+            cat("Yield to Maturity:"); print(object@YieldToMaturity)
+            cat("Risk Metrics:", "\n")
+            cat("Weighted Average Life:"); print(object@WAL)
+            cat("Modified Duration:"); print(unname(object@ModDuration))
+            cat("Convexity:"); print(unname(object@Convexity))
+            cat("Sector Detail:", "\n")
+            cat("Bond Type:"); print(object@BondType)
+            cat("Sector:"); print(object@Sector)
+            cat("Moodys:"); print(object@Moody)
+            cat("S&P:"); print(object@SP)
+            cat("BondLab Rating:");print(object@BondLab)
+            
+            plotdata = as.data.frame(cbind(object@Period, object@TotalCashFlow))
+            colnames(plotdata) <- c("Period", "CashFlow")
+            
+            plot <- ggplot(plotdata, aes(x= Period, y = CashFlow)) +
+              geom_bar(stat = "identity", fill = "Grey") +
+              theme_minimal() + 
+              labs(fill = "") +
+              ylab("Bond Cash Flow") +
+              xlab("Period") +
+              theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              theme(legend.position = c(.82,.73))
+            
+            print(plot)
+            
+          }
+)
+
+setMethod("show", 
+          signature(object = "BondAnalytics"),
+          function(object)
+          {
+            cat("Bond Description", "\n")
+            cat("BondId:"); print(object@ID)
+            cat("Cusip:"); print(object@Cusip)
+            cat("Coupon:"); print(object@Coupon)
+            cat("Frequency:"); print(object@Frequency)
+            cat("Basis:"); print(object@BondBasis)
+            cat("Issue Date:"); print(object@IssueDate)
+            cat("Last Payment Date:"); print(object@LastPmtDate)
+            cat("Next Payment Date:"); print(object@NextPmtDate)
+            cat("Maturity Date:"); print(object@Maturity)
+            cat("Bond Valuation:", "\n")
+            cat("Price:"); print(object@Price)
+            cat("Accrued:"); print(object@Accrued)
+            cat("Yield to Maturity:"); print(object@YieldToMaturity)
+            cat("Risk Metrics:", "\n")
+            cat("Weighted Average Life:"); print(object@WAL)
+            cat("Modified Duration:"); print(unname(object@ModDuration))
+            cat("Convexity:"); print(unname(object@Convexity))
+            cat("Effective Duration"); print(unname(object@EffDuration))
+            cat("Effective Convexity"); print(unname(object@EffConvexity))
+            cat("Sector Detail:", "\n")
+            cat("Bond Type:"); print(object@BondType)
+            cat("Sector:"); print(object@Sector)
+            cat("Moodys:"); print(object@Moody)
+            cat("S&P:"); print(object@SP)
+            cat("BondLab Rating:");print(object@BondLab)
+            
+            plotdata1 = as.data.frame(cbind(object@Period, object@TotalCashFlow))
+            colnames(plotdata1) <- c("Period", "CashFlow")
+            
+            plot1 <- ggplot(plotdata1, aes(x= Period, y = CashFlow)) +
+              geom_bar(stat = "identity", fill = "Grey") +
+              theme_minimal() + 
+              labs(fill = "") +
+              ylab("Bond Cash Flow") +
+              xlab("Period") +
+              theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              theme(legend.position = c(.82,.73))
+            
+            plotdata2 <- as.data.frame(cbind(object@KeyRateTenor, object@KeyRateDuration))
+            colnames(plotdata2) <- c("KRTenor", "KRDuration")
+            
+            plot2 <- ggplot(plotdata2, aes(x = as.factor(KRTenor), y = KRDuration)) +
+              geom_bar(stat = "identity", fill = "Grey") +
+              theme_minimal() +
+              labs(fill = "") +
+              ylab("Key Rate Duration") +
+              xlab("Key Rate Tenor") +
+              theme(axis.title.y=element_text(angle = 90, size = 20)) +
+              theme(axis.text.y = element_text(angle = 90, size = 15)) +
+              theme(axis.title.x=element_text(angle = 0, size = 20)) +
+              theme(axis.text.x = element_text(angle = 0, size = 15)) +
+              theme(legend.position = c(.82,.73))
+            
+            multiplot(plot1, plot2, cols = 1)
+            
+          }
+)
+
+
+
+
+
+# ===== This section begins the MBS Methods
 
 
 setMethod("show",
@@ -167,6 +444,9 @@ setMethod("show",
 
 
 
+
+# This section begins REMIC Methods the methods are used for the analysis of REMIC
+# REMIC functions require the superclass REMIC structure and the call to source(waterfall file)
 
 # ======= REMIC constructor methods create null empty classes to be populated by "new" constructors
 

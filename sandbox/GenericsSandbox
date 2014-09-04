@@ -8,6 +8,25 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
+
+# this section is the generics used by the bond analytics
+
+setGeneric(
+  name = "BondCashFlows",
+  def = function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric())
+  {standardGeneric("BondCashFlows")})
+
+setGeneric("BondTermStructure",
+           def = function(bond.id = "character", Rate.Delta = numeric(), original.bal = numeric(), TermStructure = "character", 
+                          settlement.date = "character", principal = numeric(), price = numeric(), cashflow = "character")
+           {standardGeneric("BondTermStructure")})
+
+setGeneric("BondAnalytics",
+           def = function (bond.id = "character", principal = numeric(), price = numeric(), trade.date = "character", 
+                           settlement.date = "character", method = method)
+           {standardGeneric("BondAnalytics")})
+
+
 # This section is the Generics that are used by MBS 
 
  setGeneric(

@@ -24,29 +24,7 @@
 #           {standardGeneric("TermStructure")})
 
 
-  setMethod("initialize",
-            signature("TermStructure"),
-            function(.Object,...,
-                     tradedate = "character",
-                     period = "numeric",
-                     date = "character",
-                     spotrate = "numeric",
-                     forwardrate = "numeric",
-                     TwoYearFwd = "numeric",
-                     TenYearFwd = "numeric")
-            {
-                .Object@tradedate = tradedate
-                .Object@period = period
-                .Object@date = date
-                .Object@spotrate = spotrate
-                .Object@forwardrate = forwardrate
-                .Object@TwoYearFwd = TwoYearFwd
-                .Object@TenYearFwd = TenYearFwd
-                
-                return(.Object)
-                callNextMethod(.Object,...)
-            }
-              )
+
 #------------------------------------------------------------------------------------------------
 # Term strucutre call term strc and holds forward and spot rates as slots to class Term Structure
 # Package termstrc is used in this function 

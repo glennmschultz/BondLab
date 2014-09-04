@@ -1653,11 +1653,12 @@
     #Call Prepayment Model Tuning Parameters
     conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
     ModelTune <- readRDS(conn4)
+    
 
     
     #Call OAS Term Strucuture to Pass to the Prepayment Model
-    #TermStructure <- Mortgage.OAS(bond.id = as.character(bond.id@ID), trade.date = trade.date, settlement.date = settlement.date, original.bal = original.bal, 
-     #                             price = price, short.rate = short.rate, sigma = sigma, paths = 1, TermStructure = "TRUE")
+    TermStructure <- Mortgage.OAS(bond.id = as.character(bond.id@ID), trade.date = trade.date, settlement.date = settlement.date, original.bal = original.bal, 
+                                  price = price, short.rate = short.rate, sigma = sigma, paths = 1, TermStructure = "TRUE")
     
     #Third if mortgage security call the prepayment model
     #PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, 

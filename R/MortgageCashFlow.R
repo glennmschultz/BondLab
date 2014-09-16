@@ -1,37 +1,11 @@
-# Mortgage cash flow engine
+# Mortgage cash flow engine computes mortgage cashflow 
 
+#  setGeneric("MortgageCashFlow", function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
+#    price = numeric(), PrepaymentAssumption = "character")
+#    {standardGeneric("MortgageCashFlow")})
 
-#======================== Set Class Mortgage Cashflows ==============================
-setClass("MortgageCashFlows",
-         representation(
-           Price = "numeric",
-           Accrued = "numeric",
-           YieldToMaturity = "numeric",
-           WAL = "numeric",
-           ModDuration = "numeric",
-           Convexity = "numeric",
-           Period = "numeric",
-           PmtDate = "character",
-           TimePeriod = "numeric",
-           BeginningBal = "numeric",
-           MonthlyPmt = "numeric",
-           MonthlyInterest = "numeric",
-           PassThroughInterest = "numeric",
-           ScheduledPrin = "numeric",
-           #SMM = "numeric",
-           PrepaidPrin = "numeric",
-           EndingBal = "numeric",
-           ServicingIncome = "numeric",
-           PMIPremium = "numeric",
-           GFeePremium = "numeric",  
-           TotalCashFlow = "numeric"))
-
-#setGeneric("CashFlow", function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-#  price = numeric(), PrepaymentAssumption = "character")
-#  {standardGeneric("CashFlow")})
-
-setMethod("initialize",
-          signature("MortgageCashFlows"),
+  setMethod("initialize",
+          signature("MortgageCashFlow"),
           function(.Object,       
                    Price = numeric(),
                    Accrued = numeric(),
@@ -77,18 +51,72 @@ setMethod("initialize",
             .Object@TotalCashFlow = TotalCashFlow
             
             return(.Object)
-            callNextMethod(.Object,...)
-            
-            
-          }
-)
+            callNextMethod(.Object,...)            
+          })
+  
+  setMethod("show",
+            signature(object = "MortgageCashFlow"),
+            function (object) 
+            {      
+              cat("Bond Description", "\n")
+              cat("BondId:"); print(object@ID)
+              cat("Cusip:"); print(object@Cusip)
+              cat("Coupon:"); print(object@Coupon)
+              cat("Frequency:"); print(object@Frequency)
+              cat("Basis:"); print(object@BondBasis)
+              cat("Issue Date:"); print(object@IssueDate)
+              cat("Last Payment Date:"); print(object@LastPmtDate)
+              cat("Next Payment Date:"); print(object@NextPmtDate)
+              cat("Maturity Date:"); print(object@Maturity)
+              cat("Bond Valuation:", "\n")
+              cat("Price:"); print(object@Price)
+              cat("Accrued:"); print(object@Accrued)
+              cat("Yield to Maturity:"); print(object@YieldToMaturity)
+              cat("Risk Metrics:", "\n")
+              cat("Weighted Average Life:"); print(object@WAL)
+              cat("Modified Duration:"); print(unname(object@ModDuration))
+              cat("Convexity:"); print(unname(object@Convexity))
+              cat("Sector Detail:", "\n")
+              cat("Bond Type:"); print(object@BondType)
+              cat("Sector:"); print(object@Sector)
+              cat("Moodys:"); print(object@Moody)
+              cat("S&P:"); print(object@SP)
+              cat("BondLab Rating:");print(object@BondLab)
+              
+              
+              plotdata = as.data.frame(cbind(object@Period, object@ScheduledPrin, object@PrepaidPrin, 
+                                             object@PassThroughInterest, object@ServicingIncome, object@PMIPremium, object@GFeePremium))
+              colnames(plotdata) <- c("Period", "Scheduled Prin", "Prepaid Prin", "PT Interest", "Servicing", "PMI", "GFee")
+              plotdata = melt(plotdata, id = "Period")
+              
+              plot <- ggplot(plotdata, aes(x= Period, y = value, fill = variable)) +
+                geom_area() +
+                theme_minimal()+
+                scale_fill_brewer(palette = "Greys") +
+                labs(fill = "") +
+                ylab("Pool Cash Flow") +
+                xlab("Period") +
+                theme(axis.title.y=element_text(angle = 90, size = 20)) +
+                theme(axis.text.y = element_text(angle = 90, size = 15)) +
+                theme(axis.title.x=element_text(angle = 0, size = 20)) +
+                theme(axis.text.x = element_text(angle = 0, size = 15)) +
+                theme(legend.position = c(.82,.73))+
+                theme(legend.background = element_rect(fill = "white"))
+              
+              print(plot)
+            }
+  )
+  
 
 #------------------------------------------------------
 # Mortgage cash flow function.  
 # This function calculates the cash flow of a mortgage pass through security
 #-----------------------------------------------------
-  MortgageCashFlows <- function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-                              price = numeric(), PrepaymentAssumption = "character"){
+MortgageCashFlow <- function(bond.id = "character", 
+                             original.bal = numeric(), 
+                             settlement.date = "character", 
+                             price = numeric(), 
+                             PrepaymentAssumption = "character"){
   
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
@@ -127,8 +155,12 @@ setMethod("initialize",
   
   #Calculate the number of cashflows that will be paid from settlement date to the last pmt date
   #step 1 calculate the years to maturity
-  ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date) 
+  ncashflows = BondBasisConversion(issue.date = issue.date, 
+                                   start.date = start.date, 
+                                   end.date = end.date, 
+                                   settlement.date = settlement.date,
+                                   lastpmt.date = lastpmt.date, 
+                                   nextpmt.date = end.date) 
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -177,12 +209,17 @@ setMethod("initialize",
   }
   
   #step5 calculate accrued interest for the period
-  days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
-                                         settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date)) * 360
+  days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
+                                         start.date = start.date, 
+                                         end.date = end.date, 
+                                         settlement.date = settlement.date,
+                                         lastpmt.date = lastpmt.date,
+                                         nextpmt.date = nextpmt.date)) * 360
   
   days.between.pmtdate = ((12/frequency)/12) * 360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
   accrued.interest = (days.of.accrued/days.between.pmtdate) * MBS.CF.Table[1,13]
+  #note the MBS.CF.Table[1,13] should be replaced by orig.bal * factor * coupon (?)
   
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
@@ -220,8 +257,7 @@ setMethod("initialize",
   Convexity = apply(MBS.CF.Table, 2, sum)[20] * .5
   
   #Create Class Mortgage Loan Cashflows
-   new("MortgageCashFlows",
-      bond.id,
+  new("MortgageCashFlow",
       Price = price * 100,
       Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity,
@@ -243,8 +279,9 @@ setMethod("initialize",
       GFeePremium = MBS.CF.Table[,12],
       TotalCashFlow = MBS.CF.Table[,14]
   )
-
 }  
+
+
 
 
 

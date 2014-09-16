@@ -9,13 +9,13 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 options(digits = 8)
-library(ggplot2)
-library(lubridate)
-library(methods)
-library(plyr)
-library(reshape2)
-library(termstrc)
-library(optimx)
+#library(ggplot2)
+#library(lubridate)
+#library(methods)
+#library(plyr)
+#library(reshape2)
+#library(termstrc)
+#library(optimx)
 
 #----------------------------------------------------------------------------------------
 # Utils globalVariables is called so that the R CMD check will not issue a note

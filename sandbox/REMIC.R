@@ -25,9 +25,10 @@ MakeRAID(DealName = "BondLabSMBS",
               TrancheOrigBal = 200000000,
               TrancheDatedDate  = "01-01-2013",
               TrancheFirstPmtDate = "02-15-2013",
-              TrancheFinalPmtDate = "02-15-2043",
+              TrancheLastPmtDate = "02-15-2043",
+              TrancheNextPmtDate = "02-15-2013",
               TrancheCoupon = 4.00,
-              Delay = 14,
+              Delay = 0,
               PrinPmtFrequency = 12,
               InterestPmtFrequency = 12,
               FloaterIndex = "999",
@@ -44,27 +45,30 @@ MakeRAID(DealName = "BondLabSMBS",
                 TrancheOrigBal = 200000000,
                 TrancheDatedDate  = "01-01-2013",
                 TrancheFirstPmtDate = "02-15-2013",
-                TrancheFinalPmtDate = "02-15-2043",
-                TrancheCoupon = 4.00,
-                Delay = 14,
+                TrancheLastPmtDate = "02-15-2043",
+                TrancheNextPmtDate = "02-15-2013",
+                TrancheCoupon = 0.00,
+                Delay = 0,
                 PrinPmtFrequency = 12,
                 InterestPmtFrequency = 12,
                 FloaterIndex = "999",
                 PacLowBand = 000,
                 PacHighBand = 000,
                 Group = 1)
+
+    Tranche <- readRDS("~/BondLab/Tranches/BondLabSMBS_Tranche_1.rds")
    
     MakeRDME(DealName = "BondLabSMBS",
              TrancheNumber = 1,
              Cusip = "BondLabSMBSIO",
-             PaymentDate = "",
+             PaymentDate = "12-31-2013",
              Coupon = 4.0,
              Factor = 1)
     
     MakeRDME(DealName = "BondLabSMBS",
              TrancheNumber = 2,
              Cusip = "BondLabSMBSPO",
-             PaymentDate = "",
+             PaymentDate = "12-31-2013",
              Coupon = 0,
              Factor = 1)
 
@@ -72,3 +76,4 @@ MakeRAID(DealName = "BondLabSMBS",
     RemicStructure("BondLabSMBS")   
     
     REMIC <- readRDS("~/BondLab/REMICData/BondLabSMBS.rds")
+

@@ -5,11 +5,11 @@
 # asset backed securities, and commerical mortgage backed securities
 # License GPL3
 # Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+# Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
+# the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-# --- The following classes define standard bond analytics
-setClass("BondDetails",
+  # --- The following classes define standard bond analytics
+  setClass("BondDetails",
          representation(
            Cusip = "character",
            ID = "character",
@@ -30,7 +30,7 @@ setClass("BondDetails",
            Putable = "character",
            SinkingFund = "character"))
 
-setClass("BondCashFlows",
+  setClass("BondCashFlows",
          representation(
            Price = "numeric",
            Accrued = "numeric",
@@ -43,22 +43,19 @@ setClass("BondCashFlows",
            TimePeriod = "numeric",
            PrincipalOutstanding = "numeric",  
            CouponPmt = "numeric",
-           TotalCashFlow = "numeric"),
-         contains = "BondDetails")
+           TotalCashFlow = "numeric"))
 
-setClass("BondTermStructure",
+  setClass("BondTermStructure",
          representation(
            SpotSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
-           KeyRateConvexity = "numeric"),
-         contains = "BondDetails")
+           KeyRateConvexity = "numeric"))
 
-
-#--- The folllowing classes define standard Mortgage Passthrough analytics
-setClass("MBSDetails", 
+  #--- The folllowing classes define standard Mortgage Passthrough analytics
+  setClass("MBSDetails", 
          representation(
            Cusip = "character",
            ID = "character",
@@ -96,7 +93,7 @@ setClass("MBSDetails",
            Burnout = "numeric",
            SATO = "numeric"))
 
-setClass("MortgageTermStructure",
+  setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
            EffDuration = "numeric",
@@ -104,9 +101,8 @@ setClass("MortgageTermStructure",
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
-#,         contains = "MBSDetails")
 
-setClass("MortgageCashFlows",
+  setClass("MortgageCashFlow",
          representation(
            Price = "numeric",
            Accrued = "numeric",
@@ -128,9 +124,8 @@ setClass("MortgageCashFlows",
            PMIPremium = "numeric",
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
-#,         contains = "MBSDetails")
 
-setClass("MortgageOAS",
+  setClass("MortgageOAS",
          representation(
            OAS = "numeric",
            ZVSpread = "numeric",
@@ -140,9 +135,8 @@ setClass("MortgageOAS",
            PathWAL = "vector",
            PathModDur = "vector",
            PathYTM = "vector"))
-#,         contains = "MBSDetails")
 
-setClass("Scenario",
+  setClass("Scenario",
          representation(
            Name = "character",
            Type = "character",
@@ -152,7 +146,7 @@ setClass("Scenario",
            Formula = "function"
          ))
 
-setClass("Mtg.Scenario",
+  setClass("Mtg.Scenario",
          representation( 
            Period = "numeric",
            PmtDate = "character",
@@ -179,12 +173,11 @@ setClass("Mtg.Scenario",
            HorizonReturn = "numeric"),
            contains = "Scenario")
 
-setClass("Mtg.ScenarioSet",
+  setClass("Mtg.ScenarioSet",
          representation(
-           Scenario = "list"),
-         contains = "MortgageCashFlows")
+           Scenario = "list"))
 
-setClass("PrepaymentAssumption",
+  setClass("PrepaymentAssumption",
          representation(
            PrepayAssumption = "character",
            PPCStart = "numeric",
@@ -202,7 +195,7 @@ setClass("PrepaymentAssumption",
            SMM = "numeric"))
 
 
-setClass("DollarRoll",
+  setClass("DollarRoll",
          representation(
            SettlementDate = "character",
            FwdSettlementDate = "character",  
@@ -235,15 +228,13 @@ setClass("DollarRoll",
            DiscValueofCarry = "numeric",
            FutureValuePrinCarry = "numeric",
            TotalFutureValue = "numeric",
-           DropImpliedValue = "numeric"),
-         contains = "MortgageCashFlows"
-) 
+           DropImpliedValue = "numeric")) 
 
-# --- The following classes define rates and Prepayment model tune classes
-# --- these classes are used to pass term strucuture information and prepayment model
-# --- tuning paramaters  
+  # --- The following classes define rates and Prepayment model tune classes
+  # --- these classes are used to pass term strucuture information and prepayment model
+  # --- tuning paramaters  
 
-setClass("TermStructure",
+  setClass("TermStructure",
          representation(
            tradedate = "character",
            period = "numeric",
@@ -254,7 +245,7 @@ setClass("TermStructure",
            TenYearFwd = "numeric"
          ))
 
-setClass("PrepaymentModel",
+  setClass("PrepaymentModel",
          representation(
            Turnover = "numeric",
            Seasoning = "function",
@@ -263,7 +254,7 @@ setClass("PrepaymentModel",
            Burnout = "function"
          ))
 
-setClass("PrepaymentModelTune",
+  setClass("PrepaymentModelTune",
          representation(
            TurnoverRate = "numeric",
            Turnover.alpha = "numeric",
@@ -283,16 +274,15 @@ setClass("PrepaymentModelTune",
            Burnout.beta.2 = "numeric"
          ))
 
-setClass("MortgageRate",
+  setClass("MortgageRate",
          representation(
            yr30 = "function",
            yr15 = "function"
          ))
 
-# ----- The following classes define rate of return and valuation classes
+  # ----- The following classes define rate of return and valuation classes
 
-
-setClass("RateofReturn",
+  setClass("RateofReturn",
          representation(
            PmtDate = "character",
            Period = "numeric",
@@ -302,26 +292,56 @@ setClass("RateofReturn",
            RemainingCF = "numeric",
            HorizonSpread = "numeric"))
 
+  #------ These classes the superclasses and providing the results of analytic runs
 
+  setClass("BondAnalytics", 
+           representation(),
+           contains = c("BondDetails", 
+                        "BondCashFlows", 
+                        "BondTermStructure", 
+                        "TermStructure"))
+  
+  setClass("DollarRollAnalytics",
+           representation(),
+           contains = c("MBSDetails",
+                        "DollarRoll"))
 
-#------ The classes MortgageCashFlows and Mortgage TermStructure extends the MortgageAnalytics a single storage class 
-#------ for all mortgage passthrough analytics
+  setClass("PassThroughAnalytics", 
+           representation(),
+           contains = c("MBSDetails", 
+                        "MortgageCashFlow", 
+                        "MortgageTermStructure", 
+                        "TermStructure", 
+                        "PrepaymentAssumption", 
+                        "Mtg.ScenarioSet"))
 
+  setClass("PassThroughOAS",
+           representation(),
+           contains = c("MBSDetails", 
+                      "MortgageCashFlow", 
+                      "MortgageOAS"))
 
-#------ The classes BondCashFlows and BondTermStructure extends the BondAnalytics a single storage class for all bond analytics
-setClass("BondAnalytics", contains = c("BondDetails", "BondCashFlows", "BondTermStructure", "TermStructure"))
+  # REMIC Classes, these classes define a REMIC
+  # In all, there are eight classes that define a REMIC structure
+  
+  # ==== REMIC CashFlow Cashflow Class =======================
+  setClass("REMICCashFlow",
+           representation(
+             TrancheName = "character",
+             TrancheNumber = "numeric",
+             Price = "numeric",
+             Accrued = "numeric",
+             YieldToMaturity = "numeric",
+             WAL = "numeric",
+             ModDuration = "numeric",
+             Convexity = "numeric",
+             Period = "numeric",
+             PmtDate = "character",
+             TimePeriod = "numeric",
+             TotalCashFlow = "numeric"))
 
-setClass("PassThroughAnalytics", 
-         contains = c("MBSDetails", "MortgageCashFlows", "MortgageTermStructure", "TermStructure", "PrepaymentAssumption", "Mtg.ScenarioSet"))
-
-setClass("PassThroughOAS",
-         contains = c("MBSDetails", "MortgageCashFlows", "MortgageOAS"))
-
-# REMIC Classes, these classes define a REMIC
-# In all, there are eight classes that define a REMIC structure
-
-# ==== The RAID class is the REMIC at issuance disclosure ===
-setClass("RAID",
+  # ==== The RAID class is the REMIC at issuance disclosure ===
+  setClass("RAID",
          representation(
            DealName = "character", 
            Issuer = "character",
@@ -334,9 +354,9 @@ setClass("RAID",
            DealSize = "numeric",
            CollateralAmount = "numeric"))
 
-# ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
-# ======== This Class contains all Tranche details that are related to the REMIC =================
-setClass("TrancheDetails",
+  # ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
+  # ======== This Class contains all Tranche details that are related to the REMIC =================
+  setClass("TrancheDetails",
          representation(
            DealName = "character",
            TrancheNumber = "character",
@@ -347,7 +367,8 @@ setClass("TrancheDetails",
            TrancheOrigBal = "numeric",
            TrancheDatedDate = "character",
            TrancheFirstPmtDate = "character",
-           TrancheFinalPmtDate = "character",
+           TrancheLastPmtDate = "character",
+           TrancheNextPmtDate = "character",
            TrancheCoupon = "numeric",
            Delay = "numeric",
            PrinPmtFrequency = "numeric",
@@ -358,48 +379,51 @@ setClass("TrancheDetails",
            Group = "numeric"
          ))
 
-# ===== The Tranches Class is a list that holds the above tranche information
-# ===== for the REMIC which are strucutred with many tranches GSEs deliver tranche detail
+  # ===== The Tranches Class is a list that holds the above tranche information
+  # ===== for the REMIC which are strucutred with many tranches GSEs deliver tranche detail
 
-setClass("Tranches",
+  setClass("Tranches",
          representation(
            Tranches = "list"))
 
-# ==== Collateral Class is the representation of the collateral underlying a REMIC transaction
+  # ==== Collateral Class is the representation of the collateral underlying a REMIC transaction
 
-setClass("Collateral",
+  setClass("Collateral",
          representation(
            Group = "numeric",
            Cusip = "list",
            OrigBal = "list"))
 
-# ========== Collateral Group Class is an aggregator of the collateral class ================
-# This function assembles multiple collateral groups into a list of collateral groups
-# building the collateral groups for the entire deal structure
+  # ========== Collateral Group Class is an aggregator of the collateral class ================
+  # This function assembles multiple collateral groups into a list of collateral groups
+  # building the collateral groups for the entire deal structure
 
-setClass("CollateralGroup",
+  setClass("CollateralGroup",
          representation(
            Group = "list"))
 
-# ======== This class is the REMIC factor files and belongs to tranche information ==================
-# REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
+  # ======== This class is the REMIC factor files and belongs to tranche information ==================
+  # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
 
-setClass("RDME",
+  setClass("RDME",
          representation(
            Cusip = "character",
            PaymentDate = "character",
            Coupon = "numeric",
            Factor = "numeric"))
 
-# =============== The TrancheFactors class is an aggregator class ===================
-# ============ The class aggregates the RDME classes for each associated trance ====
+  # =============== The TrancheFactors class is an aggregator class ===================
+  # ============ The class aggregates the RDME classes for each associated trance ====
 
-setClass("TrancheFactors",
+  setClass("TrancheFactors",
          representation(
            FactorData = "list"))
 
-#========== Superclass REMIC structure constructor for REMIC which will be called by the waterfall ==========
-setClass("REMICStructure",
+  #========== Superclass REMIC structure constructor for REMIC which will be called by the waterfall ==========
+  setClass("REMICStructure",
          representation(),
-         contains = c("RAID", "Tranches", "CollateralGroup", "TrancheFactors")) 
+         contains = c("RAID", 
+                      "Tranches", 
+                      "CollateralGroup", 
+                      "TrancheFactors")) 
 

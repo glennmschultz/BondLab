@@ -9,6 +9,98 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 #======================  Set and create class MBS Details ==============================
+#setGeneric("MBSDetails", function(Cusip = "character", ID = "character", BondType = "character", Sector ="character", Coupon = numeric(),
+#                                  IssueDate = "character", DatedDate = "character", Maturity = "character", LastPmtDate = "character", NextPmtDate = "character",
+#                                  PaymentDelay = numeric(), Moody = "character", SP = "character", BondLab  = "character", Frequency = numeric(), 
+#                                  BondBasis = "character", GWac = numeric(), AmortizationType = "character", AmortizationTerm = numeric(), Index = "character",
+#                                  Margin = numeric(), FirstPmtDate = "character", FinalPmtDate = "character", Servicing = numeric(), PMI = numeric(),
+#                                  Gfee = numeric(), InitialInterest = "character", InterestOnlyPeriod = numeric(), FirstPrinPaymentDate = "character",
+#                                  BalloonPmt = "character", BalloonDate = "character", MBSFactor = numeric(), Model = "character", Burnout = numeric(), SATO = numeric()) 
+#                                  {standardGeneric("MBSDetails")})
+
+
+
+# Inititialize MBSDetails
+setMethod("initialize",
+          signature("MBSDetails"),
+          function(.Object,
+                   Cusip = "character",
+                   ID = "character",
+                   BondType = "character",
+                   Sector ="character",
+                   Coupon = "numeric",
+                   IssueDate = "character",
+                   DatedDate = "character",
+                   Maturity = "character",
+                   LastPmtDate = "character",
+                   NextPmtDate = "character",
+                   PaymentDelay = "numeric",
+                   Moody = "character",
+                   SP = "character",
+                   BondLab  = "character",
+                   Frequency = "numeric",
+                   BondBasis = "character",
+                   GWac = "numeric",
+                   AmortizationType = "character",
+                   AmortizationTerm = "numeric",
+                   Index = "character",
+                   Margin = "numeric",
+                   FirstPmtDate = "character",
+                   FinalPmtDate = "character",
+                   Servicing = "numeric",
+                   PMI = "numeric",
+                   Gfee = "numeric",
+                   InitialInterest = "character",
+                   InterestOnlyPeriod = "numeric",
+                   FirstPrinPaymentDate = "character",
+                   BalloonPmt = "character",
+                   BalloonDate = "character",
+                   MBSFactor = "numeric",
+                   Model = "character",
+                   Burnout = "numeric",
+                   SATO = "numeric")
+          
+{
+            .Object@Cusip = Cusip
+            .Object@ID = ID
+            .Object@BondType = BondType
+            .Object@Sector = Sector
+            .Object@Coupon = Coupon
+            .Object@IssueDate = IssueDate
+            .Object@DatedDate = DatedDate
+            .Object@Maturity = Maturity
+            .Object@LastPmtDate = LastPmtDate
+            .Object@NextPmtDate = NextPmtDate
+            .Object@PaymentDelay = PaymentDelay
+            .Object@Moody = Moody
+            .Object@SP = SP
+            .Object@BondLab = BondLab
+            .Object@Frequency = Frequency
+            .Object@BondBasis = BondBasis
+            .Object@GWac = GWac
+            .Object@AmortizationType = AmortizationType
+            .Object@AmortizationTerm = AmortizationTerm
+            .Object@Index = Index
+            .Object@Margin = Margin
+            .Object@FirstPmtDate = FirstPmtDate
+            .Object@FinalPmtDate = FinalPmtDate
+            .Object@Servicing = Servicing
+            .Object@PMI = PMI
+            .Object@Gfee = Gfee
+            .Object@InitialInterest = InitialInterest
+            .Object@InterestOnlyPeriod = InterestOnlyPeriod
+            .Object@FirstPrinPaymentDate = FirstPrinPaymentDate
+            .Object@BalloonPmt = BalloonPmt
+            .Object@BalloonDate = BalloonDate
+            .Object@MBSFactor = MBSFactor
+            .Object@Model = Model
+            .Object@Burnout = Burnout
+            .Object@SATO = SATO
+            
+            return(.Object)
+            callNextMethod(.Object,...)
+          })
+
 
 
   MBSDetails <- function(

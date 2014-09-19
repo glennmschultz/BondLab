@@ -21,8 +21,8 @@
                             seasoning.period = numeric(), 
                             CPR = numeric()){
     
-  # Error Trap (?)  
-  
+  # Error Trap (?)
+      
   # ---- connect to rates data folder
   rates.data <- Rates(trade.date = trade.date)
 
@@ -53,27 +53,42 @@
                   trade.date = trade.date,
                   settlement.date = settlement.date,
                   collateral.price = collateral.price,
-                  PrepaymentAssumption = PrepaymentAssumption, 
-                  CPR = 6)
+                  PrepaymentAssumption = PrepaymentAssumption)
 
   REMIC.CashFlow <- do.call(source, list(file = "BondLabSMBS", local = TRUE))
   
-  principal = 1
-  accrued = 1
-  
+  principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
+  accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])
+   
   #solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
-  #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
-  irr <- function(rate , time.period , cashflow , principal , price , accrued.interest){
-    pv = cashflow * 1/(1+rate) ^ time.period
-    proceeds = principal * price
-    sum(pv) - (proceeds + accrued.interest)}
+  #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
   
-  ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.0000000001, time.period = REMIC.CashFlow[,3], 
-                cashflow = REMIC.CashFlow[,4], principal = principal, price = price, accrued.interest = accrued.interest)$root
   
-  #Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+  irr <- function(rate , 
+                  time.period, 
+                  cashflow, 
+                  principal, 
+                  price, 
+                  accrued.interest){
+                  pv = cashflow * (1/(1+rate) ^ time.period)
+                  proceeds = (principal * price)
+                  sum(pv) - (proceeds + accrued.interest)}
   
-  return(REMIC.CashFlow)
- 
+
+  
+  ytm = uniroot(irr, 
+                interval = c(lower = -.5, upper = 5),
+                tol =.0000000001, 
+                time.period = as.numeric(REMICCashFlow[,3]), 
+                cashflow = as.numeric(REMICCashFlow[,6]), 
+                principal = principal, 
+                price = tranche.price, 
+                accrued.interest = accrued.interest)$root
+  
+  Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+
+return(Yield.To.Maturity)
+#REMICCashFlow <<- REMICCashFlow
+#return(sum(as.numeric(REMICCashFlow[,6])))
 
 }

@@ -54,58 +54,58 @@
             callNextMethod(.Object,...)            
           })
   
-  setMethod("show",
-            signature(object = "MortgageCashFlow"),
-            function (object) 
-            {      
-              cat("Bond Description", "\n")
-              cat("BondId:"); print(object@ID)
-              cat("Cusip:"); print(object@Cusip)
-              cat("Coupon:"); print(object@Coupon)
-              cat("Frequency:"); print(object@Frequency)
-              cat("Basis:"); print(object@BondBasis)
-              cat("Issue Date:"); print(object@IssueDate)
-              cat("Last Payment Date:"); print(object@LastPmtDate)
-              cat("Next Payment Date:"); print(object@NextPmtDate)
-              cat("Maturity Date:"); print(object@Maturity)
-              cat("Bond Valuation:", "\n")
-              cat("Price:"); print(object@Price)
-              cat("Accrued:"); print(object@Accrued)
-              cat("Yield to Maturity:"); print(object@YieldToMaturity)
-              cat("Risk Metrics:", "\n")
-              cat("Weighted Average Life:"); print(object@WAL)
-              cat("Modified Duration:"); print(unname(object@ModDuration))
-              cat("Convexity:"); print(unname(object@Convexity))
-              cat("Sector Detail:", "\n")
-              cat("Bond Type:"); print(object@BondType)
-              cat("Sector:"); print(object@Sector)
-              cat("Moodys:"); print(object@Moody)
-              cat("S&P:"); print(object@SP)
-              cat("BondLab Rating:");print(object@BondLab)
-              
-              
-              plotdata = as.data.frame(cbind(object@Period, object@ScheduledPrin, object@PrepaidPrin, 
-                                             object@PassThroughInterest, object@ServicingIncome, object@PMIPremium, object@GFeePremium))
-              colnames(plotdata) <- c("Period", "Scheduled Prin", "Prepaid Prin", "PT Interest", "Servicing", "PMI", "GFee")
-              plotdata = melt(plotdata, id = "Period")
-              
-              plot <- ggplot(plotdata, aes(x= Period, y = value, fill = variable)) +
-                geom_area() +
-                theme_minimal()+
-                scale_fill_brewer(palette = "Greys") +
-                labs(fill = "") +
-                ylab("Pool Cash Flow") +
-                xlab("Period") +
-                theme(axis.title.y=element_text(angle = 90, size = 20)) +
-                theme(axis.text.y = element_text(angle = 90, size = 15)) +
-                theme(axis.title.x=element_text(angle = 0, size = 20)) +
-                theme(axis.text.x = element_text(angle = 0, size = 15)) +
-                theme(legend.position = c(.82,.73))+
-                theme(legend.background = element_rect(fill = "white"))
-              
-              print(plot)
-            }
-  )
+# setMethod("show",
+#           signature(object = "MortgageCashFlow"),
+#            function (object) 
+#            {      
+#              cat("Bond Description", "\n")
+#              cat("BondId:"); print(object@ID)
+#              cat("Cusip:"); print(object@Cusip)
+#              cat("Coupon:"); print(object@Coupon)
+#              cat("Frequency:"); print(object@Frequency)
+#              cat("Basis:"); print(object@BondBasis)
+#              cat("Issue Date:"); print(object@IssueDate)
+#              cat("Last Payment Date:"); print(object@LastPmtDate)
+#              cat("Next Payment Date:"); print(object@NextPmtDate)
+#              cat("Maturity Date:"); print(object@Maturity)
+#              cat("Bond Valuation:", "\n")
+#              cat("Price:"); print(object@Price)
+#              cat("Accrued:"); print(object@Accrued)
+#              cat("Yield to Maturity:"); print(object@YieldToMaturity)
+#              cat("Risk Metrics:", "\n")
+#              cat("Weighted Average Life:"); print(object@WAL)
+#              cat("Modified Duration:"); print(unname(object@ModDuration))
+#              cat("Convexity:"); print(unname(object@Convexity))
+#              cat("Sector Detail:", "\n")
+#              cat("Bond Type:"); print(object@BondType)
+#              cat("Sector:"); print(object@Sector)
+#              cat("Moodys:"); print(object@Moody)
+#              cat("S&P:"); print(object@SP)
+#              cat("BondLab Rating:");print(object@BondLab)
+#              
+#              
+#              plotdata = as.data.frame(cbind(object@Period, object@ScheduledPrin, object@PrepaidPrin, 
+#                                             object@PassThroughInterest, object@ServicingIncome, object@PMIPremium, object@GFeePremium))
+#              colnames(plotdata) <- c("Period", "Scheduled Prin", "Prepaid Prin", "PT Interest", "Servicing", "PMI", "GFee")
+#              plotdata = melt(plotdata, id = "Period")
+#              
+#              plot <- ggplot(plotdata, aes(x= Period, y = value, fill = variable)) +
+#                geom_area() +
+#                theme_minimal()+
+#                scale_fill_brewer(palette = "Greys") +
+#                labs(fill = "") +
+#                ylab("Pool Cash Flow") +
+#                xlab("Period") +
+#                theme(axis.title.y=element_text(angle = 90, size = 20)) +
+#                theme(axis.text.y = element_text(angle = 90, size = 15)) +
+#                theme(axis.title.x=element_text(angle = 0, size = 20)) +
+#                theme(axis.text.x = element_text(angle = 0, size = 15)) +
+#                theme(legend.position = c(.82,.73))+
+#                theme(legend.background = element_rect(fill = "white"))
+#              
+#              print(plot)
+#            }
+#  )
   
 
 #------------------------------------------------------

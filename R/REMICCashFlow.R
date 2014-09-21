@@ -53,13 +53,23 @@
                   trade.date = trade.date,
                   settlement.date = settlement.date,
                   collateral.price = collateral.price,
-                  PrepaymentAssumption = PrepaymentAssumption)
+                  PrepaymentAssumption = PrepaymentAssumption,
+                  ...,
+                  begin.cpr = begin.cpr,
+                  end.cpr = end.cpr,
+                  seasoning.period = seasoning.period,
+                  CPR = CPR)
 
   REMIC.CashFlow <- do.call(source, list(file = "BondLabSMBS", local = TRUE))
   
   principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
   accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])
-   
+  
+  #set up present value array for calculations of duration, convexity, weighted average life
+  rows <- length(REMIC.CashFlow$value[,1])
+  col.names <- c("Present Value Factor", "Present Value", "Duration", "Convexity Time", "Cash Flow Convexity", "Convexity")
+  PresentValueArray <- array(data = NA, c(rows, 6), dimnames = list(seq(c(1:rows)), col.names))
+     
   #solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
   
@@ -74,21 +84,61 @@
                   proceeds = (principal * price)
                   sum(pv) - (proceeds + accrued.interest)}
   
-
-  
   ytm = uniroot(irr, 
-                interval = c(lower = -.5, upper = 5),
-                tol =.0000000001, 
+                interval = c(lower = -.5, upper = .5),
+                tol =.0000000001,
+                #extendInt = "yes",
                 time.period = as.numeric(REMICCashFlow[,3]), 
                 cashflow = as.numeric(REMICCashFlow[,6]), 
                 principal = principal, 
                 price = tranche.price, 
                 accrued.interest = accrued.interest)$root
   
-  Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+  Yield.To.Maturity <- (((1 + ytm)^(1/frequency))-1) * frequency
+  
+  #populate the present value array.  The present value array is used with the REMIC.CashFlow matrix to compute
+  #Weighted average life, Modified Duration, and Convexity
+  
+  #PresentValueArray[,1] is the present value factors based on yield to maturity discounting
+  PresentValueArray[,1] <-  1/((1+(Yield.To.Maturity/frequency))^(as.numeric(REMIC.CashFlow$value[,3]) * frequency))
+  #PresentValueArray[,2] is the present value of the cash flows
+  PresentValueArray[,2] <- as.numeric(PresentValueArray[,1]) * as.numeric(REMIC.CashFlow$value[,6])
+  #PresentValueArray[,3] is the Duration Factors
+  PresentValueArray[,3] <- as.numeric(as.numeric(REMIC.CashFlow$value[,3]) * 
+                                          (as.numeric(PresentValueArray[,2])/(principal * tranche.price + accrued.interest)))
+  #Convexity Factors
+  PresentValueArray[,4] <- as.numeric(REMIC.CashFlow$value[,3]) * (1 + as.numeric(REMIC.CashFlow$value[,3]))
+  
+  PresentValueArray[,5] <- (as.numeric(REMIC.CashFlow$value[,6]) /
+                            ((1 + ((Yield.To.Maturity)/frequency)) ^ ((as.numeric(REMIC.CashFlow$value[,3]) + 2) * frequency))) /
+                                ((principal * tranche.price) + accrued.interest)
+  
+  PresentValueArray[,6] <- as.numeric(PresentValueArray[,4]) * as.numeric(PresentValueArray[,5])
+  
+  #Weighted Average Life - based on principal or interest depending on the trancheprincipal, notional = interest
+  WAL = if(REMIC.Tranche@TranchePrincipal != "Notional")
+    {sum((as.numeric(REMIC.CashFlow$value[,5]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} 
+    else
+    {sum((as.numeric(REMIC.CashFlow$value[,4]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))}     
+  
+  #Duration and Convexity
+  Duration = apply(PresentValueArray, 2, sum)[3]
+  Modified.Duration = Duration/(1 + (Yield.To.Maturity/frequency))
+  Convexity = apply(PresentValueArray, 2, sum)[6] * .5
+  
+  new("REMICCashFlow",
+  TrancheName = REMIC.Tranche@TrancheName,
+  TrancheNumber = REMIC.Tranche@TrancheNumber,
+  Price = tranche.price,
+  Accrued = accrued.interest,
+  YieldToMaturity = Yield.To.Maturity,
+  WAL = WAL,
+  ModDuration = Modified.Duration,
+  Convexity = Convexity,
+  Period = as.numeric(REMIC.CashFlow$value[,1]),
+  PmtDate = REMIC.CashFlow$value[,2],
+  TimePeriod = as.numeric(REMIC.CashFlow$value[,3]),
+  TotalCashFlow = as.numeric(REMIC.CashFlow$value[,6]))
 
-return(Yield.To.Maturity)
-#REMICCashFlow <<- REMICCashFlow
-#return(sum(as.numeric(REMICCashFlow[,6])))
-
+    
 }

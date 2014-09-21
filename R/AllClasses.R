@@ -328,7 +328,7 @@
   setClass("REMICCashFlow",
            representation(
              TrancheName = "character",
-             TrancheNumber = "numeric",
+             TrancheNumber = "character",
              Price = "numeric",
              Accrued = "numeric",
              YieldToMaturity = "numeric",

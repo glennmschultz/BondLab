@@ -228,7 +228,7 @@ MortgageCashFlow <- function(bond.id = "character",
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.0000000001, time.period = MBS.CF.Table[,3], 
+  ytm = uniroot(irr, interval = c(lower = -.5, upper = .5), tol =.0000000001, time.period = MBS.CF.Table[,3], 
                 cashflow = MBS.CF.Table[,14], principal = principal, price = price, accrued.interest = accrued.interest)$root
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
@@ -244,8 +244,10 @@ MortgageCashFlow <- function(bond.id = "character",
   
   #Convexity Factors
   MBS.CF.Table[,18] = MBS.CF.Table[,3] *(MBS.CF.Table[,3] + 1)
+  
   MBS.CF.Table[,19] = (MBS.CF.Table[,14]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((MBS.CF.Table[,3] + 2) * frequency)))/ 
     ((principal * price) + accrued.interest)
+  
   MBS.CF.Table[,20] = MBS.CF.Table[,18] * MBS.CF.Table[,19] 
   
   #Weighted Average Life

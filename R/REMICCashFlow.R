@@ -9,7 +9,7 @@
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
 
-  REMICAnalysis <- function(bond.id = "character", 
+  REMICCashFlow <- function(bond.id = "character", 
                             trade.date = "character",
                             settlement.date = "character",
                             collateral.price = numeric(),

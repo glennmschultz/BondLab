@@ -32,11 +32,13 @@
   # --- call term structure model
   Termstructure <- TermStructure(rates.data = rates.data) 
 
-  #-- call REMIC Trance
+  #-- call REMIC Tranche
   REMIC.Tranche <- MBS(MBS.id = bond.id)
 
   #-- call REMIC Deal Date
   REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
+  
+  
   
   issue.date <- as.Date(REMIC.Deal@DealPriceDate, "%m-%d-%Y") 
   start.date <- as.Date(REMIC.Tranche@TrancheDatedDate, "%m-%d-%Y")
@@ -49,7 +51,7 @@
   #  This validates that the correct unit is passed into the Bond Cash Flow function
   if(tranche.price <= 1) {tranche.price = tranche.price} else {tranche.price = tranche.price/100}
 
-  Collateral <- REMICCollateral(bond.id = "BondLabSMBSIO", 
+  Collateral <- REMICCollateral(bond.id = as.character(REMIC.Tranche@Cusip), 
                   trade.date = trade.date,
                   settlement.date = settlement.date,
                   collateral.price = collateral.price,
@@ -60,7 +62,7 @@
                   seasoning.period = seasoning.period,
                   CPR = CPR)
 
-  REMIC.CashFlow <- do.call(source, list(file = "BondLabSMBS", local = TRUE))
+  REMIC.CashFlow <- do.call(source, list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), local = TRUE))
   
   principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
   accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])

@@ -41,7 +41,7 @@ setMethod("initialize",
 # --------
 # Mortgage Key Rate Duration Calculation
 # ---------  
-REMICTermStructure <- function(bond.id = "character", 
+REMIC.TermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 
                              TermStructure = "character", 
@@ -55,25 +55,28 @@ REMICTermStructure <- function(bond.id = "character",
   # Term Strucuture
   # Mortgage or Bond CashFlows    
   
+  #Open connection to the tranche
+  REMIC.Tranche <- MBS(MBS.id = bond.id)
 
-  # Open connections to prepayment model tune parameters and  mortgage rate model
-
+  #Open connection to the REMIC Deal
+  REMIC.Deal <- REMICDEAL(remic.deal = REMIC.Tranche@DealName)
   
-  # Open connection to the prepayment model tuning library
-  connBTS2 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
-  ModelTune <- readRDS(connBTS2)
-  Burnout = bond.id@Burnout
+  
+  #Open connection to the prepayment model tuning library
+  #This has to made to work with multiple collateral groups
+ 
+  ModelTune <- ModelTune(REMIC.Deal@Group[[1]]@Cusip)
+
   
   # Open connection to the Mortgage Model function
-  connBTS3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(connBTS3)
+  MortgageRate <- MtgRate()
   
-  Burnout = bond.id@Burnout
+  #Burnout = bond.id@Burnout
   
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
-  frequency = bond.id@Frequency
-  maturity = bond.id@Maturity
-  accrued = cashflow@Accrued
+  #frequency = bond.id@Frequency
+  #maturity = bond.id@Maturity
+  #accrued = cashflow@Accrued
   
   #Class name variable.  This will set the class name for the new class to be initilized
   #ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
@@ -191,7 +194,7 @@ REMICTermStructure <- function(bond.id = "character",
                          discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
   
   #convert the spot spread to the frequency of the bond
-  #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+  spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
   
   #------------- Step three add the spot spread to the spot curve 
   # This yields the discount rates that are need for the key rate duration calculation

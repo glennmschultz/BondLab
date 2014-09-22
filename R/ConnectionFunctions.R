@@ -35,7 +35,7 @@
                  }
 
   #----------- connect to MBS cusip data folder
-    MBS <- function(MBS.id = character)
+    MBS <- function(MBS.id = "character")
                   {
                   MBS.Conn <- gzfile(description = paste("~/BondLab/BondData/",
                                                          MBS.id, ".rds", sep = ""), open = "rb")
@@ -44,7 +44,7 @@
                   }
     
   #----------- connect to REMIC deal file
-    REMICDeal <- function(remic.deal = character) 
+    REMICDeal <- function(remic.deal = "character") 
                  {
                   REMIC.Conn <- gzfile(description = paste("~/BondLab/REMICData/",
                                                           remic.deal, ".rds", sep = ""), open = "rb")
@@ -52,4 +52,10 @@
                   REMICDeal <- readRDS(REMIC.Conn)
                   return(REMICDeal)
                   }
+   #---------- connect to waterfall data
+   REMICWaterFall <- function(deal.name = "character")
+                  {
+                   paste("~/BondLab/WaterFall/",deal.name, sep = "")
+                  }
+   
   

@@ -35,13 +35,14 @@ REMICAnalytics <- function(bond.id = "character",
   
   #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
-  #MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
-  #                                          original.bal = original.bal, 
-  #                                          Rate.Delta = Rate.Delta, 
-  #                                          TermStructure = TermStructure, 
-  #                                          settlement.date = settlement.date, 
-  #                                          principal = original.bal *  bond.id@MBSFactor, 
-  #                                          price = price, 
-  #                                          cashflow = MortgageCashFlow)
+  MortgageTermStructure <- REMIC.TermStructure(bond.id = bond.id, 
+                                            original.bal = original.bal, 
+                                            Rate.Delta = Rate.Delta, 
+                                            TermStructure = TermStructure, 
+                                            settlement.date = settlement.date,
+                                            trade.date = trade.date,
+                                            principal = original.bal *  bond.id@MBSFactor, 
+                                            price = price, 
+                                            cashflow = MortgageCashFlow)
   
 }

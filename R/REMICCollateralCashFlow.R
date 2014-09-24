@@ -27,7 +27,8 @@
     MortgageRate <- MtgRate()
     
     # --- call term structure model
-    Termstructure <- TermStructure(rates.data = rates.data) 
+    Termstructure <- TermStructure(rates.data = rates.data)
+    #TermStructure <- Termstructure
     
     #-- call REMIC Trance
     REMIC.Tranche <- MBS(MBS.id = bond.id) 
@@ -42,7 +43,7 @@
     #    and aggregates them into a single cash flow table for
     #    the REMIC collateral group cashflow
     #    how can I work with class MortgageCashFlow to aggregate results of more
-    #    than one collateral group.
+    #    than one collateral group.  REMIC.Collateral.CashFlow function is the begining concept
   
   REMIC.Collateral.CashFlow <- function(REMIC.Deal = "character",
                                         collateral.price = numeric(),

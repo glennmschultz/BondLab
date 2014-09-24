@@ -24,13 +24,13 @@
   # Error Trap (?)
       
   # ---- connect to rates data folder
-  rates.data <- Rates(trade.date = trade.date)
+  #rates.data <- Rates(trade.date = trade.date)
 
   # --- connect to mortgage rate class
-  MortgageRate <- MtgRate()
+  #MortgageRate <- MtgRate()
 
-  # --- call term structure model
-  Termstructure <- TermStructure(rates.data = rates.data) 
+  # --- call term structure model -- this call in not needed
+  #Termstructure <- TermStructure(rates.data = rates.data) 
 
   #-- call REMIC Tranche
   REMIC.Tranche <- MBS(MBS.id = bond.id)

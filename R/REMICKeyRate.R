@@ -11,7 +11,8 @@
 setGeneric("REMICTermStructure", function(bond.id = "character", 
                                              original.bal = numeric(), 
                                              Rate.Delta = numeric(), 
-                                             TermStructure = "character", 
+                                             TermStructure = "character",
+                                             trade.date = "character",
                                              settlement.date = "character", 
                                              principal = numeric(), 
                                              price = numeric(), 
@@ -45,8 +46,9 @@ REMIC.TermStructure <- function(bond.id = "character",
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 
                              TermStructure = "character", 
-                             settlement.date = "character", 
-                             principal = numeric(), 
+                             settlement.date = "character",
+                             trade.date = "character",
+                             #principal = numeric(), 
                              price = numeric(), 
                              cashflow = "character"){
   
@@ -328,8 +330,15 @@ REMIC.TermStructure <- function(bond.id = "character",
     # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
     # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
     # via a single call to BondLab
-    MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-                                               price = price*100, PrepaymentAssumption = Prepayment.Dwn)
+    #MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
+    #                                           price = price*100, PrepaymentAssumption = Prepayment.Dwn)
+    
+    MortgageCashFlows.Up <- REMICCashFlow(bond.id = bond.id, 
+                                          trade.date = trade.date,
+                                          settlement.date = settlement.date,
+                                          collateral.price = collateral.price,
+                                          tranche.price = tranche.price,
+                                          prepayment.assumption = Prepayment.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
     for(cfd in 1:360){
@@ -346,9 +355,15 @@ REMIC.TermStructure <- function(bond.id = "character",
     # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
     # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
     # via a single call to BondLab
-    MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-                                              price = price*100, PrepaymentAssumption = Prepayment.Up)
+    #MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
+    #                                          price = price*100, PrepaymentAssumption = Prepayment.Up)
     
+    MortgageCashFlows.Up <- REMICCashFlow(bond.id = bond.id, 
+                                          trade.date = trade.date,
+                                          settlement.date = settlement.date,
+                                          collateral.price = collateral.price,
+                                          tranche.price = tranche.price,
+                                          prepayment.assumption = Prepayment.UP)
     
     # Assign CashFlows into the cash flow array. This has to be done in a loop
     for(cfu in 1:360){

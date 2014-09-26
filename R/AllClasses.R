@@ -338,6 +338,8 @@
              Period = "numeric",
              PmtDate = "character",
              TimePeriod = "numeric",
+             Interest = "numeric",
+             Principal = "numeric",
              TotalCashFlow = "numeric"))
 
   # ==== The RAID class is the REMIC at issuance disclosure ===

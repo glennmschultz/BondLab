@@ -79,10 +79,7 @@ REMIC.TermStructure <- function(bond.id = "character",
   #frequency = bond.id@Frequency
   #maturity = bond.id@Maturity
   #accrued = cashflow@Accrued
-  
-  #Class name variable.  This will set the class name for the new class to be initilized
-  #ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
-  
+    
   #Error Trap the user's price input
   if(price <= 1) {price = price} else {price = price/100}
   if(price <=0) stop("No valid bond price")

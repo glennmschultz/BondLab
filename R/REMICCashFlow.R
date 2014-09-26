@@ -140,6 +140,8 @@
   Period = as.numeric(REMIC.CashFlow$value[,1]),
   PmtDate = REMIC.CashFlow$value[,2],
   TimePeriod = as.numeric(REMIC.CashFlow$value[,3]),
+  Interest = as.numeric(REMIC.CashFlow$value[,4]),
+  Principal =   as.numeric(REMIC.CashFlow$value[,5]),
   TotalCashFlow = as.numeric(REMIC.CashFlow$value[,6]))
 
     

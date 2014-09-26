@@ -85,11 +85,12 @@
                                           price = collateral.price,
                                           PrepaymentAssumption = PrepaymentAssumption)
   
+  
   }
   return(Collateral.CashFlow)
   }
   
-  
+   # call the above function and rul collateral cash flow
    Collateral <- REMIC.Collateral.CashFlow(REMIC.Deal = REMIC.Deal,
                             collateral.price = collateral.price,
                             settlement.date = settlement.date,

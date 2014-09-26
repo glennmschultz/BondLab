@@ -88,7 +88,7 @@
          TrancheBeginValue[1,ai,1]
   }
 
-    #-- compute the principal proceeds
+  #-- compute the principal proceeds
   for(prin in 1:NoCol){
   TrancheBeginValue[1,prin,3] <- if(prin != REMIC.Tranche@TrancheNumber) 
                                 {TrancheBeginValue[1,prin,1]} else
@@ -161,7 +161,7 @@
   PmtDate <- Collateral@PmtDate
   TimePeriod <- Collateral@TimePeriod
   Interest <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber),2]
-  Principal <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber),3]
+  Principal <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber), 3]
   TrancheCF <- TrancheCashFlow[2:(NoPeriod + 1),as.numeric(REMIC.Tranche@TrancheNumber),4]
 
   

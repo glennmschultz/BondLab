@@ -1,3 +1,15 @@
+# Bond Lab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+# License GPL3
+# Copyright (C) 2014  Glenn M Schultz, CFA
+# Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
+# the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+
+
+
 REMICAnalytics <- function(bond.id = "character", 
                            trade.date = "character",
                            settlement.date = "character",
@@ -21,7 +33,7 @@ REMICAnalytics <- function(bond.id = "character",
   #This is done with the TermStructure function which creates the class TermStructure
   TermStructure <- TermStructure(rates.data = rates.data, method = method)
   
-  MortgageCashFlow <<-  REMICCashFlow(bond.id = as.character(REMIC.Tranche@Cusip), 
+  MortgageCashFlow <-  REMICCashFlow(bond.id = bond.id, 
                                      trade.date = "01-10-2013",
                                      settlement.date = "01-17-2013",
                                      collateral.price = collateral.price,
@@ -33,16 +45,17 @@ REMICAnalytics <- function(bond.id = "character",
                                      seasoning.period = seasoning.period,
                                      CPR = CPR)
   
+  Rate.Delta = .25
   #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
-  MortgageTermStructure <<- REMIC.TermStructure(bond.id = REMIC.Tranche, 
+  MortgageTermStructure <- REMICTermStructure(bond.id = bond.id, 
                                             original.bal = REMIC.Tranche@TrancheOrigBal, 
                                             Rate.Delta = Rate.Delta, 
                                             TermStructure = TermStructure, 
                                             settlement.date = settlement.date,
                                             trade.date = trade.date,
-                                            principal = original.bal *  bond.id@MBSFactor, 
-                                            price = price, 
+                                            collateral.price = collateral.price,
+                                            tranche.price = tranche.price, 
                                             cashflow = MortgageCashFlow)
   
 }

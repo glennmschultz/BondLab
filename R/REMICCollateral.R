@@ -18,17 +18,20 @@
                             begin.cpr = numeric(), 
                             end.cpr = numeric(), 
                             seasoning.period = numeric(), 
-                            CPR = numeric()){
+                            CPR = numeric(),
+                            KeyRateTermStructure = null){
  
     # ---- connect to rates data folder
     rates.data <- Rates(trade.date = trade.date)
     
     # --- connect to mortgage rate class
     MortgageRate <- MtgRate()
-    
+   
     # --- call term structure model
-    Termstructure <- TermStructure(rates.data = rates.data)
-    #TermStructure <- Termstructure
+    test <<- KeyRateTermStructure
+                         
+                                       
+    Termstructure <- if(is.null(KeyRateTermStructure) == TRUE) {TermStructure(rates.data = rates.data)} else {KeyRateTermStructure}
     
     #-- call REMIC Trance
     REMIC.Tranche <- MBS(MBS.id = bond.id) 
@@ -44,8 +47,10 @@
     #    the REMIC collateral group cashflow
     #    how can I work with class MortgageCashFlow to aggregate results of more
     #    than one collateral group.  REMIC.Collateral.CashFlow function is the begining concept
-  
-  REMIC.Collateral.CashFlow <- function(REMIC.Deal = "character",
+    
+    #----------------------------------------------------------------------------
+    # REMIC.Collateral.CashFlow is an encapsulated function used to 
+    REMIC.Collateral.CashFlow <- function(REMIC.Deal = "character",
                                         collateral.price = numeric(),
                                         settlement.date = "character",
                                         TermStructure = "character", 
@@ -55,7 +60,8 @@
                                         begin.cpr = numeric(), 
                                         end.cpr = numeric(), 
                                         seasoning.period = numeric(), 
-                                        CPR = numeric()){    
+                                        CPR = numeric(),
+                                        KeyRateTermStructure = "character"){    
 
   
   Group.Counter <- REMIC.Deal@NumberofGroups
@@ -101,7 +107,8 @@
                             begin.cpr = begin.cpr,
                             end.cpr = end.cpr,
                             seasoning.period = seasoning.period,
-                            CPR = CPR)
+                            CPR = CPR,
+                            KeyRateTermStructure = KeyRateTermStructure)
   }
   
   

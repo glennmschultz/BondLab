@@ -327,9 +327,11 @@
   # ==== REMIC CashFlow Cashflow Class =======================
   setClass("REMICCashFlow",
            representation(
+             DealName = "character",
              TrancheName = "character",
              TrancheNumber = "character",
              Price = "numeric",
+             PrincipalProceeds = "numeric",
              Accrued = "numeric",
              YieldToMaturity = "numeric",
              WAL = "numeric",
@@ -341,6 +343,15 @@
              Interest = "numeric",
              Principal = "numeric",
              TotalCashFlow = "numeric"))
+  
+  setClass("REMICTermStructure",
+           representation(
+             SpotSpread = "numeric",
+             EffDuration = "numeric",
+             EffConvexity = "numeric",
+             KeyRateTenor = "numeric",
+             KeyRateDuration = "numeric",
+             KeyRateConvexity = "numeric"))
 
   # ==== The RAID class is the REMIC at issuance disclosure ===
   setClass("RAID",

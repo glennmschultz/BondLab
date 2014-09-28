@@ -7,7 +7,60 @@
 # Copyright (C) 2014  Glenn M Schultz, CFA
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+  
+#setGeneric("REMICCashFlow", function(bond.id = "character", 
+#                                     trade.date = "character",
+#                                     settlement.date = "character",
+#                                     collateral.price = numeric(),
+#                                     tranche.price = numeric(),
+#                                     PrepaymentAssumption = "character", 
+#                                     ..., 
+#                                     begin.cpr = numeric(), 
+#                                     end.cpr = numeric(), 
+#                                     seasoning.period = numeric(), 
+#                                     CPR = numeric())
+#  {standardGeneric("REMICCashFlow")})
 
+  setMethod("initialize",
+            signature("REMICCashFlow"),
+            function(.Object,
+                      DealName = "character",
+                      TrancheName = "character",
+                      TrancheNumber = "character",
+                      Price = numeric(),
+                      PrincipalProceeds = numeric(),
+                      Accrued = numeric(),
+                      YieldToMaturity = numeric(),
+                      WAL = numeric(),
+                      ModDuration = numeric(),
+                      Convexity = numeric(),
+                      Period = numeric(),
+                      PmtDate = "character",
+                      TimePeriod = numeric(),
+                      Interest = numeric(),
+                      Principal = numeric(),
+                      TotalCashFlow = numeric())
+              {
+              .Object@DealName = DealName
+              .Object@TrancheName = TrancheName
+              .Object@TrancheNumber = TrancheNumber
+              .Object@Price = Price
+              .Object@PrincipalProceeds = PrincipalProceeds
+              .Object@Accrued = Accrued
+              .Object@YieldToMaturity = YieldToMaturity
+              .Object@WAL = WAL
+              .Object@ModDuration = ModDuration
+              .Object@Convexity = Convexity
+              .Object@Period = Period
+              .Object@PmtDate = PmtDate
+              .Object@TimePeriod = TimePeriod
+              .Object@Interest = Interest
+              .Object@Principal = Principal
+              .Object@TotalCashFlow =TotalCashFlow
+              
+              return(.Object)
+              callNextMethod(.Object,...)  
+              })
 
   REMICCashFlow <- function(bond.id = "character", 
                             trade.date = "character",
@@ -19,27 +72,17 @@
                             begin.cpr = numeric(), 
                             end.cpr = numeric(), 
                             seasoning.period = numeric(), 
-                            CPR = numeric()){
+                            CPR = numeric(),
+                            KeyRateTermStructure = NULL){
     
   # Error Trap (?)
-      
-  # ---- connect to rates data folder
-  #rates.data <- Rates(trade.date = trade.date)
-
-  # --- connect to mortgage rate class
-  #MortgageRate <- MtgRate()
-
-  # --- call term structure model -- this call in not needed
-  #Termstructure <- TermStructure(rates.data = rates.data) 
-
+  
   #-- call REMIC Tranche
   REMIC.Tranche <- MBS(MBS.id = bond.id)
 
   #-- call REMIC Deal Date
   REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
-  
-  
-  
+    
   issue.date <- as.Date(REMIC.Deal@DealPriceDate, "%m-%d-%Y") 
   start.date <- as.Date(REMIC.Tranche@TrancheDatedDate, "%m-%d-%Y")
   end.date <- as.Date(REMIC.Tranche@TrancheLastPmtDate, "%m-%d-%Y")
@@ -51,7 +94,7 @@
   #  This validates that the correct unit is passed into the Bond Cash Flow function
   if(tranche.price <= 1) {tranche.price = tranche.price} else {tranche.price = tranche.price/100}
 
-  Collateral <- REMICCollateral(bond.id = as.character(REMIC.Tranche@Cusip), 
+  Collateral <- REMICCollateral(bond.id = bond.id, 
                   trade.date = trade.date,
                   settlement.date = settlement.date,
                   collateral.price = collateral.price,
@@ -60,13 +103,15 @@
                   begin.cpr = begin.cpr,
                   end.cpr = end.cpr,
                   seasoning.period = seasoning.period,
-                  CPR = CPR)
+                  CPR = CPR,
+                  KeyRateTermStructure = KeyRateTermStructure)
 
   REMIC.CashFlow <- do.call(source, list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), local = TRUE))
   
   principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
   accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])
-  
+  principal.proceeds <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),3])
+
   #set up present value array for calculations of duration, convexity, weighted average life
   rows <- length(REMIC.CashFlow$value[,1])
   col.names <- c("Present Value Factor", "Present Value", "Duration", "Convexity Time", "Cash Flow Convexity", "Convexity")
@@ -117,6 +162,7 @@
   
   PresentValueArray[,6] <- as.numeric(PresentValueArray[,4]) * as.numeric(PresentValueArray[,5])
   
+  
   #Weighted Average Life - based on principal or interest depending on the trancheprincipal, notional = interest
   WAL = if(REMIC.Tranche@TranchePrincipal != "Notional")
     {sum((as.numeric(REMIC.CashFlow$value[,5]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} 
@@ -128,10 +174,13 @@
   Modified.Duration = Duration/(1 + (Yield.To.Maturity/frequency))
   Convexity = apply(PresentValueArray, 2, sum)[6] * .5
   
+  
   new("REMICCashFlow",
+  DealName = REMIC.Tranche@DealName,    
   TrancheName = REMIC.Tranche@TrancheName,
   TrancheNumber = REMIC.Tranche@TrancheNumber,
   Price = tranche.price,
+  PrincipalProceeds = principal.proceeds,
   Accrued = accrued.interest,
   YieldToMaturity = Yield.To.Maturity,
   WAL = WAL,

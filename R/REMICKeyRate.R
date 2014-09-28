@@ -8,16 +8,16 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-setGeneric("REMICTermStructure", function(bond.id = "character", 
-                                             original.bal = numeric(), 
-                                             Rate.Delta = numeric(), 
-                                             TermStructure = "character",
-                                             trade.date = "character",
-                                             settlement.date = "character", 
-                                             principal = numeric(), 
-                                             price = numeric(), 
-                                             cashflow = "character")
-              {standardGeneric("REMICTermStructure")})
+#setGeneric("REMICTermStructure", function(bond.id = "character", 
+#                                             original.bal = numeric(), 
+#                                             Rate.Delta = numeric(), 
+#                                             TermStructure = "character",
+#                                             trade.date = "character",
+#                                             settlement.date = "character", 
+#                                             principal = numeric(), 
+#                                             price = numeric(), 
+#                                             cashflow = "character")
+#              {standardGeneric("REMICTermStructure")})
 
 setMethod("initialize",
          signature("REMICTermStructure"),
@@ -42,14 +42,14 @@ setMethod("initialize",
 # --------
 # Mortgage Key Rate Duration Calculation
 # ---------  
-REMIC.TermStructure <- function(bond.id = "character", 
+REMICTermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 
                              TermStructure = "character", 
                              settlement.date = "character",
                              trade.date = "character",
-                             #principal = numeric(), 
-                             price = numeric(), 
+                             tranche.price = numeric(),
+                             collateral.price = numeric(),
                              cashflow = "character"){
   
   # Depends on objects:
@@ -61,30 +61,29 @@ REMIC.TermStructure <- function(bond.id = "character",
   REMIC.Tranche <- MBS(MBS.id = bond.id)
 
   #Open connection to the REMIC Deal
-  REMIC.Deal <- REMICDEAL(remic.deal = REMIC.Tranche@DealName)
-  
+  REMIC.Deal <<- REMICDeal(remic.deal = REMIC.Tranche@DealName)
   
   #Open connection to the prepayment model tuning library
   #This has to made to work with multiple collateral groups
- 
-  ModelTune <- ModelTune(REMIC.Deal@Group[[1]]@Cusip)
-
+  
+  Collateral <- MBS(MBS.id = as.character(REMIC.Deal@Group[[1]]@Cusip))
+  ModelTune <- ModelTune(Collateral)
   
   # Open connection to the Mortgage Model function
   MortgageRate <- MtgRate()
   
-  #Burnout = bond.id@Burnout
-  
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
-  #frequency = bond.id@Frequency
-  #maturity = bond.id@Maturity
-  #accrued = cashflow@Accrued
+  frequency = REMIC.Tranche@PrinPmtFrequency
+
     
   #Error Trap the user's price input
-  if(price <= 1) {price = price} else {price = price/100}
-  if(price <=0) stop("No valid bond price")
+  if(tranche.price <= 1) {tranche.price = trance.price} else {tranche.price = tranche.price/100}
+  if(tranche.price <=0) stop("No valid bond price")
   
-  proceeds = (principal * price) + accrued 
+  #This is different from mortgage pass through and bond because
+  #the Tranche analysis passes the proceeds and accrued.  Note the 
+  #Principal proceed and accrued is based on entire tranche balance
+  proceeds = cashflow@PrincipalProceeds + cashflow@Accrued
   
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
@@ -144,7 +143,7 @@ REMIC.TermStructure <- function(bond.id = "character",
   
   # -------------------------------------------------------------------------------------
   # Initialize the cash flow array for discounting and spot rate caclulations
-  # this will be populated from class BondCashFlows
+  # this will be populated from class BondCashFlows, MortgageCashFlow or REMICCashFlow
   # !!!!!!!!!!!!!!!!!DIM CASHFLOW ARRAY TO SIZE OF CASHFLOW!!!!!!!!!!!!!!!!!!!!!!
   # This will be the first pass at the cash flows before shocking the curve
   # --------------------------------------------------------------------------------------
@@ -178,63 +177,75 @@ REMIC.TermStructure <- function(bond.id = "character",
     CashFlowArray[x,2] = 0
   }
   
-  #----------- Step Two: Initialize loop and set the cashflows in the array ---------------------
+  #---------------------------------------------------------------------------------------------
+  # Step Two: Initialize loop and set the cashflows in the array
   # This loops through the time period and set the cashflows into the proper array location for
-  # discounts by indexing the cashflows to the array.  The indexing is conditional on the integer of the first period less than or equal to 1
-  
-  # This code populates the cashflows from the cashflow array object which is BondTermStructure via cashflows input
+  # discounting by indexing the cashflows to the array.  The indexing is conditional on the 
+  #integer of the first period less than or equal to 1
+  # This code populates the cashflows from the cashflow array object 
+  #--------------------------------------------------------------------------------------------
   
   if(as.integer(cashflow@TimePeriod[1] *12) != 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12) + 1,2] = cashflow@TotalCashFlow
   if(as.integer(cashflow@TimePeriod[1] * 12) == 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12),2] = cashflow@TotalCashFlow
   
   
-  # This code solves for the spread to spot curve to equal price
+  #This code solves for the spread to spot curve to equal price
   spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), tol = .0000000001, CashFlowArray[,2],
                          discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
   
   #convert the spot spread to the frequency of the bond
   spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
   
-  #------------- Step three add the spot spread to the spot curve 
-  # This yields the discount rates that are need for the key rate duration calculation
-  
+  #---------------------------------------------------------------------------------------------
+  #Step three: add the spot spread to the spot curve 
+  # This yields the discount rates that are needed for the key rate duration calculation
   # at a minimum the cash flow array should be 360 months
+  #----------------------------------------------------------------------------------------------
   
   for(i in 1:360){
     Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
   }
   
-  #========= Populate KRIndex Table =========================
+  #========= Populate KRIndex Table ================================================
   # The key rate index table will serve as the control table for the looping
   # using this table allows for incremental looping of discontinous segments of the
   # spot rate curve and is proprietary to bondlab
-  # This table was dimensioned on lines 646 - 648
-  
+    
   # Step 1 populate Period (n)
   KRIndex[1:KRCount,1] <- round(as.numeric(KR) * 12,0)
   
   # Step 2 populate time period (t)
   KRIndex[1:KRCount,2] <- as.numeric(KR)                    
+  #==================================================================================
   
-  # Step 3 Populate Index Table with the relevant points on the spot curve
+  #----------------------------------------------------------------------- 
+  #Step 4: Populate Index Table with the relevant points on the spot curve
   # this is done by looping through the key rate table and allows for term structure implementation
   # other than Nelson Siegel (note: this capability needs to built into bondlab)
   # the key rate index table (KRIndex) is used to populate the key rate table (KRTable)
+  #-----------------------------------------------------------------------
+  
   for (j in 1:KRCount){                                   
     for (i in 1:360){
       if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,3] = Key.Rate.Table[i,3]} else {KRIndex[j,3] = KRIndex[j,3]}
     }
   }
   
-  # Step 4 Populate KRIndex Table with the appropriate Discount Curve values from the key rate table 
+  #--------------------------------------------------------------------- 
+  #Step 5: Populate KRIndex Table with the appropriate Discount Curve values from the key rate table 
   # these will be the reference points for the appropriate key rate shifts
+  #---------------------------------------------------------------------
+  
   for (j in 1:KRCount){                                   
     for (i in 1:360){
       if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,4] = Key.Rate.Table[i,4]} else {KRIndex[j,3] = KRIndex[j,3]}
     }
   }
   
-  # Step 5 Populated KRIndex Table with KR Shifts
+  #--------------------------------------------------
+  # Step 6: Populated KRIndex Table with KR Shifts
+  #--------------------------------------------------
+  
   for (j in 1:KRCount){
     KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/100)
     KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/100)
@@ -246,9 +257,10 @@ REMIC.TermStructure <- function(bond.id = "character",
   # used for interpolation at the end points.  x is the length of the array.  Currently the analysis is limited
   # to loans (bonds) with a maximum of 30-years to maturity.  This can be made dynamic at some point in the future
   # y is column counter used the key rate down and key rate up values
+  
   for (w in 2:(KRCount-1)){ 
     for (x in 1:360){
-      #This allocates the up and down Key.Rate.Table index.  col 5 is KR down and 6 is KR up
+      #---This loop allocates the up and down Key.Rate.Table index Col 5 is KR down and 6 is KR up
       for(y in 5:6){
         
         # step 1: populate the spot curve outside the key rate shift =========
@@ -291,51 +303,50 @@ REMIC.TermStructure <- function(bond.id = "character",
     # Initialize the TermStructure Up and Down objects 
     # Use the term strucutre object 
     
-    Key.Rate.TS.Dwn <- TermStructure
+    Key.Rate.TS.Dwn <<- TermStructure
     Key.Rate.TS.Up <- TermStructure
     
     Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
-                                  ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
-    )
+                                  ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
     
-    Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
-                                      (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
+    Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ 
+                                      (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
+                                      (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
+                                      (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
     
-    Key.Rate.TS.Dwn@TenYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 121, to = 481, by = 1)]/12) /
-                                      (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
+    Key.Rate.TS.Dwn@TenYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 121, to = 481, by = 1)]) ^ 
+                                      (Key.Rate.TS.Dwn@period[seq(from = 121, to = 481, by = 1)]/12) /
+                                      (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
+                                      (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
     
     
     Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
                                  ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
     )
     
-    Key.Rate.TS.Up@TwoYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 25, to = 385, by = 1)]/12) /
-                                     (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
+    Key.Rate.TS.Up@TwoYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 25, to = 385, by = 1)]) ^ 
+                                     (Key.Rate.TS.Up@period[seq(from = 25, to = 385, by = 1)]/12) /
+                                     (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
+                                     (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
     
-    Key.Rate.TS.Up@TenYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 121, to = 481, by = 1)]/12) /
-                                     (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
+    Key.Rate.TS.Up@TenYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 121, to = 481, by = 1)]) ^ 
+                                     (Key.Rate.TS.Up@period[seq(from = 121, to = 481, by = 1)]/12) /
+                                     (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
+                                     (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
     
-    
+   test.Up <<- Key.Rate.TS.Up
     # Run the prepayment model to derive the SMM vector given each Key Rate shift
     # =======================================================================   
     # Key Rate Shift Down Prepayment Model and CashFlows
     # ======================================================================
-    Prepayment.Dwn <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = Key.Rate.TS.Dwn, 
-                                           PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout, 
-                                           begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
     
-    # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
-    # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
-    # via a single call to BondLab
-    #MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-    #                                           price = price*100, PrepaymentAssumption = Prepayment.Dwn)
-    
-    MortgageCashFlows.Up <- REMICCashFlow(bond.id = bond.id, 
+    MortgageCashFlows.Dwn <- REMICCashFlow(bond.id = bond.id, 
                                           trade.date = trade.date,
                                           settlement.date = settlement.date,
                                           collateral.price = collateral.price,
                                           tranche.price = tranche.price,
-                                          prepayment.assumption = Prepayment.Dwn)
+                                          PrepaymentAssumption = "MODEL",
+                                          KeyRateTermStructure = Key.Rate.TS.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
     for(cfd in 1:360){
@@ -345,22 +356,14 @@ REMIC.TermStructure <- function(bond.id = "character",
     # =======================================================================   
     # Key Rate Shift Up Prepayment Model and CashFlows
     # ======================================================================
-    Prepayment.Up <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = Key.Rate.TS.Up, 
-                                          PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout, 
-                                          begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
-    
-    # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
-    # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
-    # via a single call to BondLab
-    #MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-    #                                          price = price*100, PrepaymentAssumption = Prepayment.Up)
     
     MortgageCashFlows.Up <- REMICCashFlow(bond.id = bond.id, 
                                           trade.date = trade.date,
                                           settlement.date = settlement.date,
                                           collateral.price = collateral.price,
                                           tranche.price = tranche.price,
-                                          prepayment.assumption = Prepayment.UP)
+                                          PrepaymentAssumption = "MODEL",
+                                          KeyRateTermStructure = Key.Rate.TS.Up)
     
     # Assign CashFlows into the cash flow array. This has to be done in a loop
     for(cfu in 1:360){

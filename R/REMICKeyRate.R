@@ -61,7 +61,7 @@ REMICTermStructure <- function(bond.id = "character",
   REMIC.Tranche <- MBS(MBS.id = bond.id)
 
   #Open connection to the REMIC Deal
-  REMIC.Deal <<- REMICDeal(remic.deal = REMIC.Tranche@DealName)
+  REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
   
   #Open connection to the prepayment model tuning library
   #This has to made to work with multiple collateral groups
@@ -303,7 +303,7 @@ REMICTermStructure <- function(bond.id = "character",
     # Initialize the TermStructure Up and Down objects 
     # Use the term strucutre object 
     
-    Key.Rate.TS.Dwn <<- TermStructure
+    Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
     
     Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
@@ -334,7 +334,7 @@ REMICTermStructure <- function(bond.id = "character",
                                      (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
                                      (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
     
-   test.Up <<- Key.Rate.TS.Up
+   
     # Run the prepayment model to derive the SMM vector given each Key Rate shift
     # =======================================================================   
     # Key Rate Shift Down Prepayment Model and CashFlows

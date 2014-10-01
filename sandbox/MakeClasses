@@ -56,7 +56,7 @@ bondlabMBS4 <- new("MBSDetails",
                )
 
 bondlabMBS55 <- new("MBSDetails",
-                   Cusip = "23456789",
+                   Cusip = "34567890",
                    ID = "bondlabMBS55",
                    BondType = "MBS",
                    Sector = "MBS",

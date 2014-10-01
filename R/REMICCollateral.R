@@ -19,7 +19,7 @@
                             end.cpr = numeric(), 
                             seasoning.period = numeric(), 
                             CPR = numeric(),
-                            KeyRateTermStructure = null){
+                            KeyRateTermStructure = NULL){
  
     # ---- connect to rates data folder
     rates.data <- Rates(trade.date = trade.date)
@@ -28,10 +28,10 @@
     MortgageRate <- MtgRate()
    
     # --- call term structure model
-    test <<- KeyRateTermStructure
-                         
                                        
-    Termstructure <- if(is.null(KeyRateTermStructure) == TRUE) {TermStructure(rates.data = rates.data)} else {KeyRateTermStructure}
+    Termstructure <- if(is.null(KeyRateTermStructure) == TRUE) 
+                      {TermStructure(rates.data = rates.data)} else 
+                      {KeyRateTermStructure}
     
     #-- call REMIC Trance
     REMIC.Tranche <- MBS(MBS.id = bond.id) 
@@ -90,7 +90,6 @@
                                           settlement.date = settlement.date,
                                           price = collateral.price,
                                           PrepaymentAssumption = PrepaymentAssumption)
-  
   
   }
   return(Collateral.CashFlow)

@@ -8,9 +8,92 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
+  setMethod("initialize",
+            signature("REMICAnalytics"),
+            function(.Object,
+                     DealName = "character",
+                     TrancheNumber = "character",
+                     TrancheName = "character",
+                     TranchePrincipal = "character",
+                     TrancheInterest = "character",
+                     Cusip = "character",
+                     TrancheOrigBal = "numeric",
+                     TrancheDatedDate = "character",
+                     TrancheFirstPmtDate = "character",
+                     TrancheLastPmtDate = "character",
+                     TrancheNextPmtDate = "character",
+                     TrancheCoupon = "numeric",
+                     Delay = "numeric",
+                     PrinPmtFrequency = "numeric",
+                     InterestPmtFrequency = "numeric",
+                     FloaterIndex = "character",
+                     PacLowBand = "numeric",
+                     PacHighBand = "numeric",
+                     Group = "numeric",
+                     Price = "numeric",
+                     PrincipalProceeds = "numeric",
+                     Accrued = "numeric",
+                     YieldToMaturity = "numeric",
+                     WAL = "numeric",
+                     ModDuration = "numeric",
+                     Convexity = "numeric",
+                     Period = "numeric",
+                     PmtDate = "character",
+                     TimePeriod = "numeric",
+                     Interest = "numeric",
+                     Principal = "numeric",
+                     TotalCashFlow = "numeric",
+                     SpotSpread = "numeric",
+                     EffDuration = "numeric",
+                     EffConvexity = "numeric",
+                     KeyRateTenor = "numeric",
+                     KeyRateDuration = "numeric",
+                     KeyRateConvexity = "numeric")
+                  {
+                    .Object@DealName = DealName
+                    .Object@TrancheNumber = TrancheNumber
+                    .Object@TrancheName = TrancheName
+                    .Object@TranchePrincipal = TranchePrincipal
+                    .Object@TrancheInterest = TrancheInterest
+                    .Object@Cusip = Cusip
+                    .Object@TrancheOrigBal = TrancheOrigBal
+                    .Object@TrancheDatedDate = TrancheDatedDate
+                    .Object@TrancheFirstPmtDate = TrancheFirstPmtDate
+                    .Object@TrancheLastPmtDate = TrancheLastPmtDate
+                    .Object@TrancheNextPmtDate = TrancheNextPmtDate
+                    .Object@TrancheCoupon = TrancheCoupon
+                    .Object@Delay = Delay
+                    .Object@PrinPmtFrequency = PrinPmtFrequency
+                    .Object@InterestPmtFrequency = InterestPmtFrequency
+                    .Object@FloaterIndex = FloaterIndex
+                    .Object@PacLowBand = PacLowBand
+                    .Object@PacHighBand = PacHighBand
+                    .Object@Group = Group
+                    .Object@Price = Price
+                    .Object@PrincipalProceeds = PrincipalProceeds
+                    .Object@Accrued = Accrued
+                    .Object@YieldToMaturity = YieldToMaturity
+                    .Object@WAL = WAL
+                    .Object@ModDuration = ModDuration
+                    .Object@Convexity = Convexity
+                    .Object@Period = Period
+                    .Object@PmtDate = PmtDate
+                    .Object@TimePeriod = TimePeriod
+                    .Object@Interest = Interest
+                    .Object@Principal = Principal
+                    .Object@TotalCashFlow = TotalCashFlow
+                    .Object@SpotSpread = SpotSpread
+                    .Object@EffDuration = EffDuration
+                    .Object@EffConvexity = EffConvexity
+                    .Object@KeyRateTenor = KeyRateTenor
+                    .Object@KeyRateDuration = KeyRateDuration
+                    .Object@KeyRateConvexity = KeyRateConvexity
+                    
+                    return(.Object)
+                    callNextMethod(.Object,...)
+                  })
 
-
-REMICAnalytics <- function(bond.id = "character", 
+  REMICAnalytics <- function(bond.id = "character", 
                            trade.date = "character",
                            settlement.date = "character",
                            method = "character",
@@ -24,7 +107,7 @@ REMICAnalytics <- function(bond.id = "character",
                            CPR = numeric()){
   
   #connect to rates data
-  REMIC.Tranche <<- MBS(MBS.id = bond.id)
+  REMIC.Tranche <- MBS(MBS.id = bond.id)
   
   # ---- connect to rates data folder
   rates.data <- Rates(trade.date = trade.date)
@@ -34,8 +117,8 @@ REMICAnalytics <- function(bond.id = "character",
   TermStructure <- TermStructure(rates.data = rates.data, method = method)
   
   MortgageCashFlow <-  REMICCashFlow(bond.id = bond.id, 
-                                     trade.date = "01-10-2013",
-                                     settlement.date = "01-17-2013",
+                                     trade.date = trade.date,
+                                     settlement.date = settlement.date,
                                      collateral.price = collateral.price,
                                      tranche.price = tranche.price,
                                      PrepaymentAssumption = PrepaymentAssumption,
@@ -43,12 +126,13 @@ REMICAnalytics <- function(bond.id = "character",
                                      begin.cpr = begin.cpr,
                                      end.cpr = end.cpr,
                                      seasoning.period = seasoning.period,
-                                     CPR = CPR)
+                                     CPR = CPR,
+                                     KeyRateTermStrucuture = NULL)
   
   Rate.Delta = .25
   #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
-  MortgageTermStructure <- REMICTermStructure(bond.id = bond.id, 
+  REMICTermStructure <- REMICTermStructure(bond.id = bond.id, 
                                             original.bal = REMIC.Tranche@TrancheOrigBal, 
                                             Rate.Delta = Rate.Delta, 
                                             TermStructure = TermStructure, 
@@ -58,4 +142,44 @@ REMICAnalytics <- function(bond.id = "character",
                                             tranche.price = tranche.price, 
                                             cashflow = MortgageCashFlow)
   
+  new("REMICAnalytics",
+      DealName = REMIC.Tranche@DealName,
+      TrancheNumber = REMIC.Tranche@TrancheNumber,
+      TrancheName = REMIC.Tranche@TrancheName,
+      TranchePrincipal = REMIC.Tranche@TranchePrincipal,
+      TrancheInterest = REMIC.Tranche@TrancheInterest,
+      Cusip = REMIC.Tranche@Cusip,
+      TrancheOrigBal = REMIC.Tranche@TrancheOrigBal,
+      TrancheDatedDate = REMIC.Tranche@TrancheDatedDate,
+      TrancheFirstPmtDate = REMIC.Tranche@TrancheFirstPmtDate,
+      TrancheLastPmtDate = REMIC.Tranche@TrancheLastPmtDate,
+      TrancheNextPmtDate = REMIC.Tranche@TrancheNextPmtDate,
+      TrancheCoupon = REMIC.Tranche@TrancheCoupon,
+      Delay = REMIC.Tranche@Delay,
+      PrinPmtFrequency = REMIC.Tranche@PrinPmtFrequency,
+      InterestPmtFrequency = REMIC.Tranche@InterestPmtFrequency,
+      FloaterIndex = REMIC.Tranche@FloaterIndex,
+      PacLowBand = REMIC.Tranche@PacLowBand,
+      PacHighBand = REMIC.Tranche@PacHighBand,
+      Group = REMIC.Tranche@Group,
+      Price = MortgageCashFlow@Price,
+      PrincipalProceeds = MortgageCashFlow@PrincipalProceeds,
+      Accrued = MortgageCashFlow@Accrued,
+      YieldToMaturity = MortgageCashFlow@YieldToMaturity,
+      WAL = MortgageCashFlow@WAL,
+      ModDuration = MortgageCashFlow@ModDuration,
+      Convexity = MortgageCashFlow@Convexity,
+      Period = MortgageCashFlow@Period,
+      PmtDate = MortgageCashFlow@PmtDate,
+      TimePeriod = MortgageCashFlow@TimePeriod, 
+      Interest = MortgageCashFlow@Interest,
+      Principal = MortgageCashFlow@Principal,
+      TotalCashFlow = MortgageCashFlow@TotalCashFlow,
+      SpotSpread = REMICTermStructure@SpotSpread,
+      EffDuration = REMICTermStructure@EffDuration,
+      EffConvexity = REMICTermStructure@EffConvexity,
+      KeyRateTenor = REMICTermStructure@KeyRateTenor,
+      KeyRateDuration = REMICTermStructure@KeyRateDuration,
+      KeyRateConvexity = REMICTermStructure@KeyRateConvexity
+      )  
 }

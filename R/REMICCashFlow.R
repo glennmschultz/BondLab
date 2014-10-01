@@ -82,12 +82,18 @@
 
   #-- call REMIC Deal Date
   REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
+  
+  #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
+  #-- The last payment date is found in the REMIC Deal FactorData List
+  
+  lastpmt.date <- paste("REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]",
+        "@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]")
     
   issue.date <- as.Date(REMIC.Deal@DealPriceDate, "%m-%d-%Y") 
   start.date <- as.Date(REMIC.Tranche@TrancheDatedDate, "%m-%d-%Y")
   end.date <- as.Date(REMIC.Tranche@TrancheLastPmtDate, "%m-%d-%Y")
   settlement.date <- as.Date(c(settlement.date), "%m-%d-%Y")
-  lastpmt.date <- as.Date(REMIC.Tranche@TrancheLastPmtDate, "%m-%d-%Y")
+  lastpmt.date <- as.Date(lastpmt.date, "%m-%d-%Y")
   nextpmt.date <- as.Date(REMIC.Tranche@TrancheNextPmtDate, "%m-%d-%Y")
     
   #  Validate the price passed through the error trapping function
@@ -106,7 +112,7 @@
                   CPR = CPR,
                   KeyRateTermStructure = KeyRateTermStructure)
 
-  REMIC.CashFlow <- do.call(source, list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), local = TRUE))
+  REMIC.CashFlow <<- do.call(source, list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), local = TRUE))
   
   principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
   accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])

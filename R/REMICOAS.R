@@ -1,46 +1,71 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-#-----------------------------------
-# Mortgage OAS Function
-#___________________________________
+  #-----------------------------------
+  # Mortgage OAS Function
+  #___________________________________
 
-Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settlement.date = "character", original.bal = numeric(),
-                         price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric(), TermStructure = "character"){
+  REMIC.OAS <- function(bond.id = "character", 
+                      trade.date = "character", 
+                      settlement.date = "character", 
+                      #original.bal = numeric(),
+                      tranche.price = numeric(),
+                      collateral.price = numeric(),
+                      short.rate = numeric(), 
+                      sigma = numeric(), 
+                      paths = numeric(),
+                      ...,
+                      TermStructure = "character"){
   
-  #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-  conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-  bond.id = readRDS(conn1)
+  #Open connection to the tranche
+  REMIC.Tranche <- MBS(MBS.id = bond.id)
   
-  # Establish connection to mortgage rate model
-  conn2 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(conn2)
+  #Open connection to the REMIC Deal
+  REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
   
-  # Establish connection to prepayment model tuning parameter
-  conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
-  ModelTune <- readRDS(conn3)
+  #Open connection to the prepayment model tuning library
+  #This has to made to work with multiple collateral groups
+  
+  Collateral <- MBS(MBS.id = as.character(REMIC.Deal@Group[[1]]@Cusip))
+  ModelTune <- ModelTune(Collateral)
+  
+  # Open connection to the Mortgage Model function
+  MortgageRate <- MtgRate()
   
   #Call the desired curve from rates data folder
-  conn4 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(conn4)
+  # ---- connect to rates data folder
+  rates.data <- Rates(trade.date = trade.date)
   
-  issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
-  start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
-  end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
-  lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-  nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-  coupon = bond.id@Coupon
-  frequency = bond.id@Frequency
-  delay = bond.id@PaymentDelay
-  factor = bond.id@MBSFactor
+  #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
+  #-- The last payment date is found in the REMIC Deal FactorData List
+  
+  #lastpmt.date <- paste("REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]",
+  #"@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]", sep = "")
+  
+  lastpmt.date <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]
+  
+  
+  remic.factor <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@Factor[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@Factor)]
+  
+  tranche.origbal <- as.numeric(REMIC.Deal@Tranches[[as.numeric(REMIC.Tranche@TrancheNumber)]]@TrancheOrigBal)
+    
+  issue.date = as.Date(REMIC.Tranche@TrancheDatedDate, "%m-%d-%Y")
+  start.date = as.Date(REMIC.Tranche@TrancheFirstPmtDate, "%m-%d-%Y")
+  end.date = as.Date(REMIC.Tranche@TrancheLastPmtDate, "%m-%d-%Y")
+  lastpmt.date = as.Date(lastpmt.date, "%m-%d-%Y")
+  nextpmt.date = as.Date(REMIC.Tranche@TrancheNextPmtDate, "%m-%d-%Y")
+  coupon = REMIC.Tranche@TrancheCoupon
+  frequency = REMIC.Tranche@PrinPmtFrequency
+  delay = REMIC.Tranche@Delay
+  factor = as.numeric(remic.factor)
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
   #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
@@ -101,17 +126,20 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
   num.periods = length(time.period)
   num.period = seq(1:num.periods)
 
+ 
   #==== Compute Option Adjusted Spread ==========================================
   #For simulation pass T = mortgage term if the number of paths = 1 then volatility = 0 
   Simulation <- CIRSim(shortrate = short.rate, 
-                       kappa = kappa, theta = theta, 
+                       kappa = kappa, 
+                       theta = theta, 
                        T = ((num.periods-1) / months.in.year), 
                        step = (1/months.in.year), 
-                       sigma = sigma, N = paths)
-  
+                       sigma = sigma, 
+                       N = paths)
+
   #number of rows in the simulation will size the arrays
   num.sim <- nrow(Simulation)
-  
+
   #Dim arrays for the calculation
   cube.names <- c("Period", "Date", "Time", "SpotRate", "DiscRate", "TwoYear", "TenYear")    
   sim.cube <- array(data = NA, c(num.sim, 7), dimnames = list(seq(c(1:num.sim)),cube.names))
@@ -182,26 +210,32 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
                                 TwoYearFwd = as.numeric(sim.cube[,6]),
                                 TenYearFwd = as.numeric(sim.cube[,7]))
     
-    Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
-                                       TermStructure = OAS.Term.Structure, 
-                                       MortgageRate = MortgageRate, 
-                                       PrepaymentAssumption = "MODEL", 
-                                       ModelTune = ModelTune, 
-                                       Burnout = Burnout)
-    
-    MtgCashFlow <- MortgageCashFlow(bond.id = bond.id, 
-                                    original.bal = original.bal, 
-                                    settlement.date = settlement.date, 
-                                    price = price, 
-                                    PrepaymentAssumption = Prepayment)
-    
-    OAS.CashFlow[,j] <- as.vector(MtgCashFlow@TotalCashFlow)
+       
+     
+    MtgCashFlow <- REMICCashFlow(bond.id = bond.id, 
+                    trade.date = trade.date,
+                    settlement.date = settlement.date,
+                    collateral.price = collateral.price,
+                    tranche.price = tranche.price,
+                    PrepaymentAssumption = "MODEL",
+                    ...,
+                    begin.cpr = begin.cpr,
+                    end.cpr = end.cpr,
+                    seasoning.period = seasoning.period,
+                    CPR = CPR,
+                    KeyRateTermStructure = OAS.Term.Structure)
+        
+    OAS.CashFlow[,j] <- append(0, as.vector(MtgCashFlow@TotalCashFlow))
     OAS.DiscMatrix [,j] <- as.vector(sim.cube[,5])
     
+   
+    #Calculate proceeds to use in OAS solve
+    proceeds <- as.numeric((MtgCashFlow@PrincipalProceeds + MtgCashFlow@Accrued))
+    tranche.currbal <- tranche.origbal * factor
+ 
     
-    #error trapping of price is above currently line 1533 
-    proceeds <- as.numeric((original.bal * factor * price/100) + MtgCashFlow@Accrued)
-    curr.bal <- as.numeric(orginal.bal * factor)
+    #Calculate the principal to use in OAS solve
+    
     
     #Solve for spread to spot curve to equal price 
     OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), 
@@ -217,6 +251,10 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
     
   } # end of the OAS j loop
   
+  #Period <<- data.frame(OAS.Term.Structure@period)
+  #CF <<- data.frame(OAS.CashFlow)
+  #Disc <<- data.frame(OAS.DiscMatrix)
+  
   # Calculate OAS spread find the spread such that the average proceeds is equal to proceeds
   OAS <- function(spread = numeric(), 
                   DiscountMatrix = matrix(), 
@@ -226,16 +264,18 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
                   paths = numeric()) {
     
     OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * OAS.CashFlow[,]))
-    OAS.Proceeds <- colSums(OAS.Proceeds)
+    #OAS.Proceeds <- (colSums(OAS.Proceeds)/proceeds) * 100
+    OAS.Proceeds <- (colSums(OAS.Proceeds)/1) * 1
     return(mean(OAS.Proceeds) - proceeds)}
   
   OAS.Spread <- uniroot(OAS, 
-                        interval = c(-1,1), 
+                        interval = c(-.75,.75), 
                         tol = .000000001, 
                         DiscountMatrix = OAS.DiscMatrix, 
                         CashFlowMatrix = OAS.CashFlow,
                         period = OAS.Term.Structure@period, 
-                        proceeds = proceeds, paths = paths)$root
+                        proceeds = proceeds, 
+                        paths = paths)$root
   
   #Calculate OAS to price for price distribution
   OAS.Price <- function(spread = numeric(), 
@@ -246,7 +286,7 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
                         paths = numeric()) {
     
     OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * OAS.CashFlow[,]))
-    OAS.Proceeds <- (colSums(OAS.Proceeds)/curr.bal) * 100
+    OAS.Proceeds <- (colSums(OAS.Proceeds)/tranche.currbal) * 100
     return(OAS.Proceeds)}
   
   Price.Dist <- OAS.Price(OAS.Spread, 
@@ -262,15 +302,16 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
   # This is a good check but in reality the spread to the curve must be calculated in the PassThrough OAS and passed to 
   # ZeroVolatility Object
   #if (paths == 1) {                                   
-    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
+  InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                                 as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
     
-    SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
-                       predict(InterpolateCurve, MtgCashFlow@WAL ))/100
+  SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
+                  predict(InterpolateCurve, MtgCashFlow@WAL ))/100
   #}
   
+
+  
   if (TermStructure != "TRUE")      
-    
   {new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),

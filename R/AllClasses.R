@@ -440,4 +440,11 @@
                       "Tranches", 
                       "CollateralGroup", 
                       "TrancheFactors")) 
+  
+  #========= Superclass REMIC Analytics constructor for REMIC Anaalytics ===========================
+  setClass("REMICAnalytics",
+           representation(),
+           contains = c("TrancheDetails",
+                        "REMICCashFlow",
+                        "REMICTermStructure"))
 

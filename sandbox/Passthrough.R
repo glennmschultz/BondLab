@@ -1,4 +1,4 @@
-                MakeMBSDetails( Cusip = "012345678",
+                MakeMBSDetails( Cusip = "Pool0001",
                 ID = "Pool0001",
                 BondType = "MBS",
                 Sector = "MBS",

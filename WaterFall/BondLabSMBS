@@ -74,7 +74,7 @@
   # --- add days to next payment then acrrued can be calculated for any tranche pmt scheme
   frequency = REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * 360
-  days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
+  days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
   
   TrancheBeginValue[1,ai,2] = (days.of.accrued/days.between.pmtdate) *  
         #Tranche coupon 

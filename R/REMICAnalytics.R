@@ -16,6 +16,8 @@
                      TrancheName = "character",
                      TranchePrincipal = "character",
                      TrancheInterest = "character",
+                     TranchePrincipalDesc = "character",
+                     TrancheInterestDesc = "character",
                      Cusip = "character",
                      TrancheOrigBal = "numeric",
                      TrancheDatedDate = "character",
@@ -55,6 +57,8 @@
                     .Object@TrancheName = TrancheName
                     .Object@TranchePrincipal = TranchePrincipal
                     .Object@TrancheInterest = TrancheInterest
+                    .Object@TranchePrincipalDesc = TranchePrincipalDesc
+                    .Object@TrancheInterestDesc = TrancheInterestDesc
                     .Object@Cusip = Cusip
                     .Object@TrancheOrigBal = TrancheOrigBal
                     .Object@TrancheDatedDate = TrancheDatedDate
@@ -148,6 +152,8 @@
       TrancheName = REMIC.Tranche@TrancheName,
       TranchePrincipal = REMIC.Tranche@TranchePrincipal,
       TrancheInterest = REMIC.Tranche@TrancheInterest,
+      TranchePrincipalDesc = REMIC.Tranche@TranchePrincipalDesc,
+      TrancheInterestDesc = REMIC.Tranche@TrancheInterestDesc,
       Cusip = REMIC.Tranche@Cusip,
       TrancheOrigBal = REMIC.Tranche@TrancheOrigBal,
       TrancheDatedDate = REMIC.Tranche@TrancheDatedDate,

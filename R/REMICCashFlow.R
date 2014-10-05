@@ -86,8 +86,7 @@
   #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
   #-- The last payment date is found in the REMIC Deal FactorData List
   
-  lastpmt.date <- paste("REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]",
-        "@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]")
+  lastpmt.date <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]
     
   issue.date <- as.Date(REMIC.Deal@DealPriceDate, "%m-%d-%Y") 
   start.date <- as.Date(REMIC.Tranche@TrancheDatedDate, "%m-%d-%Y")
@@ -112,7 +111,9 @@
                   CPR = CPR,
                   KeyRateTermStructure = KeyRateTermStructure)
 
-  REMIC.CashFlow <<- do.call(source, list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), local = TRUE))
+  REMIC.CashFlow <- do.call(source, 
+                            list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), 
+                                 local = TRUE))
   
   principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
   accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])
@@ -170,10 +171,11 @@
   
   
   #Weighted Average Life - based on principal or interest depending on the trancheprincipal, notional = interest
-  WAL = if(REMIC.Tranche@TranchePrincipal != "Notional")
+  WAL = if(isTRUE(REMIC.Tranche@TranchePrincipalDesc %in% "NTL"))
+      {sum((as.numeric(REMIC.CashFlow$value[,4]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} else
     {sum((as.numeric(REMIC.CashFlow$value[,5]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} 
-    else
-    {sum((as.numeric(REMIC.CashFlow$value[,4]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))}     
+
+   
   
   #Duration and Convexity
   Duration = apply(PresentValueArray, 2, sum)[3]

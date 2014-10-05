@@ -29,7 +29,7 @@
    
     # --- call term structure model
                                        
-    Termstructure <- if(is.null(KeyRateTermStructure) == TRUE) 
+    Termstructure <- if(is.null(KeyRateTermStructure)) 
                       {TermStructure(rates.data = rates.data)} else 
                       {KeyRateTermStructure}
     
@@ -84,6 +84,9 @@
                                                end.cpr = end.cpr,
                                                seasoning.period = seasoning.period,
                                                CPR = CPR)
+  
+  #use this to plot OAS SMM vector - OAS vectors passed
+  #plot((1-(1-PrepaymentAssumption@SMM)^12) * 100, type = "l") 
   
   Collateral.CashFlow <- MortgageCashFlow(bond.id = Collateral,
                                           original.bal = REMIC.Deal@CollateralAmount,

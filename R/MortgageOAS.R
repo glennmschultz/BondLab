@@ -199,9 +199,9 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
     OAS.DiscMatrix [,j] <- as.vector(sim.cube[,5])
     
     
-    #error trapping of price is above currently line 1533 
+    #This needs some error trapping on price
     proceeds <- as.numeric((original.bal * factor * price/100) + MtgCashFlow@Accrued)
-    curr.bal <- as.numeric(orginal.bal * factor)
+    curr.bal <- as.numeric(original.bal * factor)
     
     #Solve for spread to spot curve to equal price 
     OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), 
@@ -222,12 +222,13 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
                   DiscountMatrix = matrix(), 
                   CashFlowMatrix = matrix(), 
                   period = vector(), 
-                  proceeds = numeric(), 
+                  proceeds = numeric(),
+                  price = nueric(),
                   paths = numeric()) {
     
-    OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * OAS.CashFlow[,]))
-    OAS.Proceeds <- colSums(OAS.Proceeds)
-    return(mean(OAS.Proceeds) - proceeds)}
+    OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread)^ period)) * CashFlowMatrix[,]))
+    OAS.Proceeds <- colSums(OAS.Proceeds/proceeds) * 100
+    return(mean(OAS.Proceeds) - price)}
   
   OAS.Spread <- uniroot(OAS, 
                         interval = c(-1,1), 
@@ -235,7 +236,9 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
                         DiscountMatrix = OAS.DiscMatrix, 
                         CashFlowMatrix = OAS.CashFlow,
                         period = OAS.Term.Structure@period, 
-                        proceeds = proceeds, paths = paths)$root
+                        proceeds = proceeds,
+                        price = price,
+                        paths = paths)$root
   
   #Calculate OAS to price for price distribution
   OAS.Price <- function(spread = numeric(), 

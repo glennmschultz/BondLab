@@ -376,6 +376,8 @@
            TrancheName = "character",
            TranchePrincipal = "character",
            TrancheInterest = "character",
+           TranchePrincipalDesc = "character",
+           TrancheInterestDesc = "character",
            Cusip = "character",
            TrancheOrigBal = "numeric",
            TrancheDatedDate = "character",

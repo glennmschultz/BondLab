@@ -52,7 +52,6 @@
   
   lastpmt.date <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]
   
-  
   remic.factor <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@Factor[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@Factor)]
   
   tranche.origbal <- as.numeric(REMIC.Deal@Tranches[[as.numeric(REMIC.Tranche@TrancheNumber)]]@TrancheOrigBal)
@@ -89,7 +88,6 @@
   kappa  = Market.Fit$p1
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
-  
   
   #Calculate the number of cashflows that will be paid from settlement date 
   #to the last pmt date (used end date as next pmdt date for this)
@@ -157,13 +155,9 @@
   OAS.CashFlow <- array(data = NA, c(num.sim,paths))
   OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
   
-  
   for(j in 1:paths){
     
-    #calculate spot rate for discounting  ([,5] multiplied by 100 for TermStructure - tried it did not work)
-    #sim cube 5 ifelse synchs the CIR output to that of term strucutred for MBS cashflow 
-    #analysis this needs to be fixed rates should be passed through in a common scales regardless of 
-    #interest rate model  
+    #calculate spot rate for discounting  
     sim.cube[,4] <- cumprod(1 + Simulation[,j])
     
     #sim.cube 5 is the discount rate to value cash flows
@@ -209,8 +203,6 @@
                                 forwardrate = as.numeric(Simulation[,j] * 100),
                                 TwoYearFwd = as.numeric(sim.cube[,6]),
                                 TenYearFwd = as.numeric(sim.cube[,7]))
-    
-       
      
     MtgCashFlow <- REMICCashFlow(bond.id = bond.id, 
                     trade.date = trade.date,
@@ -225,18 +217,14 @@
                     CPR = CPR,
                     KeyRateTermStructure = OAS.Term.Structure)
         
-    OAS.CashFlow[,j] <- append(0, as.vector(MtgCashFlow@TotalCashFlow))
+   
+    OAS.CashFlow[,j] <- as.vector(MtgCashFlow@TotalCashFlow)
     OAS.DiscMatrix [,j] <- as.vector(sim.cube[,5])
     
-   
     #Calculate proceeds to use in OAS solve
     proceeds <- as.numeric((MtgCashFlow@PrincipalProceeds + MtgCashFlow@Accrued))
-    tranche.currbal <- tranche.origbal * factor
- 
-    
-    #Calculate the principal to use in OAS solve
-    
-    
+    tranche.currbal <- tranche.origbal * factor + (MtgCashFlow@Accrued/(tranche.origbal * factor))
+
     #Solve for spread to spot curve to equal price 
     OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), 
                             tol = .0000000001, 
@@ -257,25 +245,33 @@
   
   # Calculate OAS spread find the spread such that the average proceeds is equal to proceeds
   OAS <- function(spread = numeric(), 
+                  tranche.principal = "character",
+                  tranche.currbal = numeric(),
+                  tranche.price = numeric(),
                   DiscountMatrix = matrix(), 
                   CashFlowMatrix = matrix(), 
                   period = vector(), 
-                  proceeds = numeric(), 
-                  paths = numeric()) {
+                  proceeds = numeric()) {
     
-    OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * OAS.CashFlow[,]))
-    #OAS.Proceeds <- (colSums(OAS.Proceeds)/proceeds) * 100
-    OAS.Proceeds <- (colSums(OAS.Proceeds)/1) * 1
-    return(mean(OAS.Proceeds) - proceeds)}
+    OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread) ^ period)) * CashFlowMatrix[,])) 
+    
+    OAS.Price <- if(isTRUE(as.character(tranche.principal) %in% "NTL" | as.character(tranche.principal) %in% "PO")) 
+    {colSums(OAS.Proceeds/tranche.currbal) * 100} else 
+    {colSums(OAS.Proceeds/proceeds) * 100}
+    
+    {return(mean(OAS.Price) - tranche.price)} 
+  }
   
   OAS.Spread <- uniroot(OAS, 
                         interval = c(-.75,.75), 
-                        tol = .000000001, 
+                        tol = .000000001,
+                        tranche.principal = as.character(REMIC.Tranche@TranchePrincipalDesc),
+                        tranche.currbal = tranche.currbal,
+                        tranche.price = tranche.price,
                         DiscountMatrix = OAS.DiscMatrix, 
                         CashFlowMatrix = OAS.CashFlow,
                         period = OAS.Term.Structure@period, 
-                        proceeds = proceeds, 
-                        paths = paths)$root
+                        proceeds = proceeds)$root
   
   #Calculate OAS to price for price distribution
   OAS.Price <- function(spread = numeric(), 
@@ -286,7 +282,11 @@
                         paths = numeric()) {
     
     OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * OAS.CashFlow[,]))
-    OAS.Proceeds <- (colSums(OAS.Proceeds)/tranche.currbal) * 100
+    
+    OAS.Proceeds <- if (REMIC.Tranche@TranchePrincipalDesc %in% "NTL" == TRUE) 
+    {(colSums(OAS.Proceeds)/tranche.currbal) * 100} else
+    {(colSums(OAS.Proceeds)/tranche.currbal)* 100}
+        
     return(OAS.Proceeds)}
   
   Price.Dist <- OAS.Price(OAS.Spread, 
@@ -301,15 +301,15 @@
   # In reality the spread to the curve will be based on the pricing speed used.
   # This is a good check but in reality the spread to the curve must be calculated in the PassThrough OAS and passed to 
   # ZeroVolatility Object
-  #if (paths == 1) {                                   
-  InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
+  #if (paths != 1) {                                   
+    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                                 as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
     
-  SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
-                  predict(InterpolateCurve, MtgCashFlow@WAL ))/100
+    SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
+                       predict(InterpolateCurve, MtgCashFlow@WAL ))/100
   #}
   
-
+  
   
   if (TermStructure != "TRUE")      
   {new("MortgageOAS",
@@ -319,10 +319,12 @@
        PathSpread = OAS.Out[,1],
        PathWAL = OAS.Out[,2],
        PathModDur = OAS.Out[,3],
-       PathYTM =OAS.Out[,4],
+       PathYTM = OAS.Out[,4],
        PriceDist = OAS.Out[,5]
-  )}
+  )
+  }
   
-  else OAS.Term.Structure
+    else OAS.Term.Structure
   
-}
+  }
+  

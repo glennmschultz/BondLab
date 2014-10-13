@@ -172,7 +172,7 @@
   
   #Weighted Average Life - based on principal or interest depending on the trancheprincipal, notional = interest
   WAL = if(isTRUE(REMIC.Tranche@TranchePrincipalDesc %in% "NTL"))
-      {sum((as.numeric(REMIC.CashFlow$value[,4]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} else
+    {sum((as.numeric(REMIC.CashFlow$value[,4]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} else
     {sum((as.numeric(REMIC.CashFlow$value[,5]) * as.numeric(REMIC.CashFlow$value[,3]))/ sum((principal * tranche.price) + accrued.interest))} 
 
    

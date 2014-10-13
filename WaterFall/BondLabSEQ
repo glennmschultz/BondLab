@@ -136,7 +136,7 @@
   #-- First, allocate interest
   for(interest in 1:NoCol)
   {TrancheCashFlow[waterfall, interest, 2] <- as.numeric(CouponArray[waterfall-1, interest]) * 
-                                              as.numeric(TrancheCashFlow[waterfall-1, 2, 1])}  
+                                              as.numeric(TrancheCashFlow[waterfall-1, interest, 1])}  
 
   #-- , allocate principal to the class A until paid to zero
 
@@ -156,8 +156,8 @@
       end
 
       if(as.numeric(TrancheCashFlow[waterfall, 1, 3]) == 0 & as.numeric(TrancheCashFlow[waterfall, 2, 3]) == 0)
-          {TrancheCashFlow[waterfall, 3, 3] = as.numeric(CollateralCashFlow[waterfall,7])}
-            else{0}
+      {TrancheCashFlow[waterfall, 3, 3] = as.numeric(CollateralCashFlow[waterfall,7])}
+      else{0}
         
  
   #-- Third, compute ending balance
@@ -172,9 +172,6 @@
                                                   as.numeric(TrancheCashFlow[waterfall, tranche, 3])
   }
     }
-
-  print(TrancheCashFlow[,,3])
-  print(CollateralCashFlow[,7])
 
   Period <- Collateral@Period
   PmtDate <- Collateral@PmtDate

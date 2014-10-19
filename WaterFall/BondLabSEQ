@@ -33,10 +33,31 @@
                                          settlement.date = settlement.date,
                                          lastpmt.date = lastpmtdate,
                                          nextpmt.date = nextpmt.date) * 360)
+
+  # -- build a vector of dates for the REMIC payment schedule
+  # -- first get the pmtdate interval
+  # -- payment Frequency
+  payment.frequency = REMIC.Deal@Tranches[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PrinPmtFrequency
+  pmtdate.interval = 12/payment.frequency
+
   
+  # then compute the payment dates
+  REMIC.pmtdate = as.Date(c(if(settlement.date == issue.date) 
+                          {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
+                          else 
+                          {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
+  
+  # -- build the time period vector (n) 
+  # -- for discounting the cashflows nextpmt date is vector of payment dates to n for each period
+  REMIC.time.period = BondBasisConversion(issue.date = issue.date, 
+                                            start.date = start.date, 
+                                            end.date = end.date, 
+                                            settlement.date =  settlement.date, 
+                                            lastpmt.date = lastpmt.date, 
+                                            nextpmt.date = REMIC.pmtdate)
   # Build collateral cashflow table for the REMIC waterfall
   CollateralCashFlow <- cbind(Period, PmtDate, BeginBal, Interest, Scheduled, Prepaid, TotalPrin, EndBal)
-
+  
   
   NoPeriod <- nrow(CollateralCashFlow)
   NoCol <- REMIC.Deal@NumberofTranches
@@ -151,8 +172,9 @@
 
       if(as.numeric(TrancheCashFlow[waterfall, 1, 3]) == 0)
         {TrancheCashFlow[waterfall, 2, 3] = 
-              min(as.numeric(CollateralCashFlow[waterfall,7]), as.numeric(TrancheCashFlow[waterfall -1, 2, 1]))
-              TrancheCashFlow[waterfall, 3, 3] = 0}
+        min(as.numeric(CollateralCashFlow[waterfall,7]), as.numeric(TrancheCashFlow[waterfall -1, 2, 1]))
+        TrancheCashFlow[waterfall, 3, 3] = 
+        max(0, as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(TrancheCashFlow[waterfall -1, 2, 1]))}
       end
 
       if(as.numeric(TrancheCashFlow[waterfall, 1, 3]) == 0 & as.numeric(TrancheCashFlow[waterfall, 2, 3]) == 0)
@@ -174,8 +196,9 @@
     }
 
   Period <- Collateral@Period
-  PmtDate <- Collateral@PmtDate
-  TimePeriod <- Collateral@TimePeriod
+  PmtDate <- as.character(REMIC.pmtdate)
+
+  TimePeriod <- REMIC.time.period
   Interest <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber),2]
   Principal <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber), 3]
   TrancheCF <- TrancheCashFlow[2:(NoPeriod + 1),as.numeric(REMIC.Tranche@TrancheNumber),4]

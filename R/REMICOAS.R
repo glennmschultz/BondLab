@@ -46,10 +46,7 @@
   
   #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
   #-- The last payment date is found in the REMIC Deal FactorData List
-  
-  #lastpmt.date <- paste("REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]",
-  #"@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]", sep = "")
-  
+    
   lastpmt.date <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]
   
   remic.factor <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@Factor[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@Factor)]
@@ -226,7 +223,7 @@
     tranche.currbal <- tranche.origbal * factor + (MtgCashFlow@Accrued/(tranche.origbal * factor))
 
     #Solve for spread to spot curve to equal price 
-    OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), 
+    OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-.5, .5), 
                             tol = .0000000001, 
                             cashflow = MtgCashFlow@TotalCashFlow,
                             discount.rates = OAS.Term.Structure@spotrate, 

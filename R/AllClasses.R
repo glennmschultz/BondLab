@@ -417,6 +417,15 @@
   setClass("CollateralGroup",
          representation(
            Group = "list"))
+  
+  # ========= Schedules is the projected schedule for a PAC/TAC Schedule
+  setClass("Schedule",
+          representation(
+            DealName = "character",
+            Group = "numeric",
+            PmtDate = "character",
+            Balance = "numeric",
+            ScheduledPmt = "numeric"))
 
   # ======== This class is the REMIC factor files and belongs to tranche information ==================
   # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC

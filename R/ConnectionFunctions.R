@@ -58,4 +58,15 @@
                    paste("~/BondLab/WaterFall/",deal.name, sep = "")
                   }
    
+   #---------- connect to BondData to run multiple cusips
+   
+   Cusip <- function(cusip = "character") 
+   {
+     Cusip.Conn <- gzfile(description = paste("~/BondLab/BondData/",
+                                              cusip, ".rds", sep = ""), open = "rb")
+     
+     Cusip <- readRDS(Cusip.Conn)
+     return(Cusip)
+   }
+   
   

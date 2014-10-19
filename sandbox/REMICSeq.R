@@ -106,5 +106,5 @@ MakeRAID(DealName = "BondLabSEQ",
   
     RemicStructure("BondLabSEQ")   
     
-    REMIC <- readRDS("~/BondLab/REMICData/BondLabSMBS.rds")
+    REMIC <- readRDS("~/BondLab/REMICData/BondLabSEQ.rds")
 

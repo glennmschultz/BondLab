@@ -227,7 +227,7 @@ MortgageCashFlow <- function(bond.id = "character",
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = uniroot(irr, interval = c(lower = -.5, upper = .5), tol =.0000000001, time.period = MBS.CF.Table[,3], 
+  ytm = uniroot(irr, interval = c(lower = -.75, upper = .75), tol =.0000000001, time.period = MBS.CF.Table[,3], 
                 cashflow = MBS.CF.Table[,14], principal = principal, price = price, accrued.interest = accrued.interest)$root
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency

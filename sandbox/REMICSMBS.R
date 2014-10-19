@@ -60,7 +60,7 @@ MakeRAID(DealName = "BondLabSMBS",
                 PacHighBand = 000,
                 Group = 1)
 
-    Tranche <- readRDS("~/BondLab/Tranches/BondLabSMBS_Tranche_1.rds")
+    Tranche <- readRDS("~/BondLab/Tranches/BondLabSMBSIO.rds")
    
     MakeRDME(DealName = "BondLabSMBS",
              TrancheNumber = 1,

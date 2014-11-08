@@ -391,7 +391,8 @@
            FloaterIndex = "character",
            PacLowBand = "numeric",
            PacHighBand = "numeric",
-           Group = "numeric"
+           Group = "numeric",
+           Schedule = "logical"
          ))
 
 
@@ -427,6 +428,7 @@
             Balance = "numeric",
             ScheduledPmt = "numeric"))
 
+
   # ======== This class is the REMIC factor files and belongs to tranche information ==================
   # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
 
@@ -452,7 +454,7 @@
                       "CollateralGroup", 
                       "TrancheFactors")) 
   
-  #========= Superclass REMIC Analytics constructor for REMIC Anaalytics ===========================
+  #========= Superclass REMIC Analytics constructor for REMIC Analytics ===========================
   setClass("REMICAnalytics",
            representation(),
            contains = c("TrancheDetails",

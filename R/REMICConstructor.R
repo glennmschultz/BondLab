@@ -63,7 +63,8 @@ setMethod("initialize",
                    FloaterIndex = "character",
                    PacLowBand = numeric(),
                    PacHighBand = numeric(),
-                   Group = numeric()){
+                   Group = numeric(),
+                   Schedule = "logical"){
             
             .Object@DealName = DealName
             .Object@TrancheNumber = TrancheNumber
@@ -86,6 +87,7 @@ setMethod("initialize",
             .Object@PacLowBand = PacLowBand
             .Object@PacHighBand = PacHighBand
             .Object@Group = Group
+            .Object@Schedule = Schedule
             
             return(.Object)
             callNextMethod(.Object,...)
@@ -131,6 +133,26 @@ setMethod("initialize",
             
             callNextMethod(.Object,...)  
           })
+
+# Initialize Schedule
+setMethod("initialize",
+          signature("Schedule"),
+          function (.Object,
+                    DealName = "character",
+                    Group = numeric(),
+                    PmtDate = "character",
+                    Balance = numeric(),
+                    ScheduledPmt = numeric()){
+                      
+                      .Object@DealName = DealName
+                      .Object@Group = Group
+                      .Object@PmtDate = PmtDate
+                      .Object@Balance = Balance
+                      .Object@ScheduledPmt = ScheduledPmt
+                      
+                      return(.Object)
+                      callNextMethod(.Object,...)
+                    })
 
 #Initialize RDME
 setMethod("initialize",
@@ -256,7 +278,7 @@ setMethod("initialize",
   close(connRAID)
   }
   
-
+  #------- Tranches functions for the REMIC constructor ---------------------------------------------------------------
 # 1) Construct tranche details with call to new
   TrancheDetails <- function( DealName = "character",
                               TrancheNumber = "character",
@@ -278,7 +300,8 @@ setMethod("initialize",
                               FloaterIndex = "character",
                               PacLowBand = numeric(),
                               PacHighBand = numeric(),
-                              Group = numeric()){
+                              Group = numeric(),
+                              Schedule = Schedule){
     
     new("TrancheDetails",
         DealName = DealName,
@@ -301,7 +324,8 @@ setMethod("initialize",
         FloaterIndex = FloaterIndex,
         PacLowBand = PacLowBand,
         PacHighBand = PacHighBand,
-        Group = Group)
+        Group = Group,
+        Schedule = Schedule)
   }
   
   
@@ -326,7 +350,8 @@ setMethod("initialize",
                             FloaterIndex = "character",
                             PacLowBand = numeric(),
                             PacHighBand = numeric(),
-                            Group = numeric()) {
+                            Group = numeric(),
+                            Schedule = "logical") {
     
     temp <- TrancheDetails( DealName = DealName,
                             TrancheNumber = TrancheNumber,
@@ -348,15 +373,14 @@ setMethod("initialize",
                             FloaterIndex = FloaterIndex,
                             PacLowBand = PacLowBand,
                             PacHighBand = PacHighBand,
-                            Group = Group)
+                            Group = Group,
+                            Schedule = Schedule)
     
     connTranche <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
     saveRDS(temp, connTranche)
     close(connTranche)
   }
-  
 
-  
   # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
   # The function assembles multiple tranches associated with a deal 
   # building the tranche classes into a list
@@ -378,9 +402,121 @@ setMethod("initialize",
     #close(connTranches)
     #closing conn causes this function to return null, why?
   }
-  
 
+  # -------- REMIC Schedules PAC and TAC schedules for REMIC
+  #1 construct the PAC REMIC Class with call to new
+
+  Schedule <- function(bond.id = "character",
+                             DealName = "character",
+                             Group = "character",
+                             original.bal = numeric(),
+                             trade.date = "character",
+                             settlement.date = "character",
+                             first.pmtdate = "character",
+                             price = numeric(),
+                             begin.cpr = numeric(),
+                             end.cpr = numeric(),
+                             seasoning.period = numeric(),
+                             lower.PSA = numeric(), 
+                             upper.PSA = numeric()){
   
+  if(missing(lower.PSA)) stop ("Missing Lower PSA")
+  if(missing(upper.PSA)) stop ("Missing Upper PSA")
+  
+  if(lower.PSA < 10) stop ("Lower PSA must be in Percentage")
+  if(upper.PSA < 10) stop ("Upper PSA must be in Percentage")
+  
+  # ---- connect to the bond data folder
+  bond.id <- MBS(MBS.id = bond.id)
+  # ---- connect to rates data folder
+  
+  rates.data <- Rates(trade.date = trade.date)
+  
+  # --- connect to mortgage rate model
+  MortgageRate <- MtgRate()
+  
+  TermStructure <- TermStructure(rates.data = rates.data, method = "ns")
+  Burnout <- bond.id@Burnout
+  
+  PSA.Band <- c(lower.PSA/100, upper.PSA/100)
+  Principal <- list()
+  
+  for(i in 1 : 2){
+    
+    begin.cpr <- begin.cpr * PSA.Band[i]
+    end.cpr <- end.cpr * PSA.Band[i]
+    
+    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id,
+                                                 TermStructure = TermStructure,
+                                                 MortgageRate = MortgageRate,
+                                                 Burnout = Burnout,
+                                                 PrepaymentAssumption = "PPC",
+                                                 begin.cpr = begin.cpr,
+                                                 end.cpr = end.cpr,
+                                                 seasoning.period = seasoning.period
+    )
+    
+    MortgageCashFlow <-  MortgageCashFlow(bond.id = bond.id,
+                                          original.bal = original.bal,    
+                                          settlement.date = settlement.date,
+                                          price = price,
+                                          PrepaymentAssumption = PrepaymentAssumption)
+    
+    Principal[[i]] <-MortgageCashFlow@ScheduledPrin + MortgageCashFlow@PrepaidPrin
+
+  }
+  Matrix <- do.call(cbind,Principal)
+  colnames(Matrix) <- c(paste(lower.PSA, "PSA", sep = ""),paste(upper.PSA, "PSA", sep = "") )
+  PACSched <- apply(Matrix, 1, min)
+  PACBal <- sum(PACSched)
+  PmtDate <- as.Date(first.pmtdate, "%m-%d-%Y") %m+% months(0:360)
+  
+  new("Schedule",
+      DealName = DealName,
+      Group = Group,
+      PmtDate = as.character(PmtDate),
+      Balance = as.numeric(unname(PACBal - cumsum(PACSched))),
+      ScheduledPmt = as.numeric(unname(PACSched)))
+
+}
+  
+# ---------- function to create and save the PAC schedule class ----------------------------------------------------
+MakeSchedule <- function(bond.id = "character",
+                         DealName = "character",
+                         Group = "character",
+                         original.bal = numeric(),
+                         trade.date = "character",
+                         settlement.date = "character",
+                         first.pmtdate = "character",
+                         price = numeric(),
+                         begin.cpr = numeric(),
+                         end.cpr = numeric(),
+                         seasoning.period = numeric(),
+                         lower.PSA = numeric(), 
+                         upper.PSA = numeric()){
+  
+                         temp <- Schedule(bond.id = bond.id,
+                                          DealName = DealName,
+                                          Group = Group,
+                                          original.bal = original.bal,
+                                          trade.date = trade.date,
+                                          settlement.date = settlement.date,
+                                          first.pmtdate = first.pmtdate,
+                                          price = price,
+                                          begin.cpr = begin.cpr,
+                                          end.cpr = end.cpr,
+                                          seasoning.period = seasoning.period,
+                                          lower.PSA = lower.PSA,
+                                          upper.PSA = upper.PSA
+                                          )
+                         connSched <- gzfile(description = paste("~/BondLab/Schedules/",
+                                                          DealName,"_","Group","_",temp@Group,"_", "Sch", ".rds", sep = ""))
+                         saveRDS(temp, connSched)
+}
+
+
+
+  # -------- Collateral groups for the REMIC Constructor -------------------------------------------------------------
   # 1) construct the collateral class with call to new
     
   Collateral <- function(DealName = "character", 
@@ -422,7 +558,7 @@ setMethod("initialize",
         Group = GroupList)
     
   }
-  
+  # ------ RDME Functions for the REMIC structuring tool ---------------------------------------------------------
   # 1) construct the tranche factors with the call to new
   
   RDME <- function(Cusip = "character", 
@@ -438,7 +574,7 @@ setMethod("initialize",
     
 
   
-  # 2) serailize tranche factor date to REME directory
+  # 2) serailize tranche factor date to RDME directory
   
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),
@@ -476,11 +612,7 @@ setMethod("initialize",
     
   }
   
-
-  
- # REMIC constructor -- yeah, baby !!
-
-  
+  #4) REMIC Constructor 
   RemicStructure <- function(DealName = "character"){
     
     #open connection to RAID files and instantiate RAID class

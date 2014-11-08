@@ -8,8 +8,8 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
   
-  # This is second BondLab waterfall ever written
-  # cashflow waterfall for BondLabSMBS
+ 
+  # cashflow waterfall for BondLabPAC01
   
   
 # --- The below are standard calculations that must be done before the waterfall
@@ -128,7 +128,7 @@
   }
 
   # --- Dimension the REMIC cashflow Array
-  # columns is the number of tranches, rows correspond to the number cashflows, 
+  # columns is the number of tranches, rows correspond to the number cashflows, (r, c, t)
   # There are 4 tables,
   # Table 1 = principal bal outstanding, 
   # Table 2 = interest, 
@@ -146,6 +146,19 @@
     }
   }
 
+  # ===================================================================================
+  # ----- Check for Bond Schedules
+  # ===================================================================================
+  
+  if(isTRUE(REMIC.Tranche@Schedule)) {schedule <- REMICSchedules(REMIC.Tranche = REMIC.Tranche)} else {schedule <- NULL}
+  
+  # -- get the REMIC Schedule start value
+  if(isTRUE(REMIC.Tranche@Schedule)) 
+  {schedule.period <- length(as.numeric(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate))} else 
+  {schedule.period <- NULL} 
+
+  Scheudle <<- schedule
+  
   # ========= This section begins the cash flow waterfall of the REMIC ===============
   # ---- Allocate principal and interest to the tranches according to payment rules 
   # ---- Note waterfall allocation of principal and interest always begins in row 2
@@ -159,32 +172,33 @@
   {TrancheCashFlow[waterfall, interest, 2] <- as.numeric(CouponArray[waterfall-1, interest]) * 
                                               as.numeric(TrancheCashFlow[waterfall-1, interest, 1])}  
 
-  #-- , allocate principal to the class A until paid to zero
+  #-- Second, allocate principal to the PAC according to its schedule
+  
+  #-- ,determine the principal due to the PAC based on outstanding balance
 
-      if(as.numeric(TrancheCashFlow[waterfall-1, 1, 1]) == 0) {TrancheCashFlow[waterfall, 1, 3] = 0} 
-      else 
-      {TrancheCashFlow[waterfall, 1, 3] =  
-      min(as.numeric(CollateralCashFlow[waterfall, 7]), as.numeric(TrancheCashFlow[waterfall-1, 1, 1])) 
-      TrancheCashFlow[waterfall, 2, 3] = 
-      max(0, as.numeric(CollateralCashFlow[waterfall, 7]) - as.numeric(TrancheCashFlow[waterfall-1, 1, 1]))
-      TrancheCashFlow[waterfall, 3, 3] = 0}
-      end
+  if(waterfall - 1 == 1) {principal = REMIC.Tranche@TrancheOrigBal - schedule@Balance[waterfall - 1]} 
+  else
+  {principal = max(0,TrancheCashFlow[waterfall-1, 1, 1] - schedule@Balance[waterfall-1])}
+  end
 
- #-- , allocate to B until paid to zero
 
-      if(as.numeric(TrancheCashFlow[waterfall, 1, 3]) == 0)
-        {TrancheCashFlow[waterfall, 2, 3] = 
-        min(as.numeric(CollateralCashFlow[waterfall,7]), as.numeric(TrancheCashFlow[waterfall -1, 2, 1]))
-        TrancheCashFlow[waterfall, 3, 3] = 
-        max(0, as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(TrancheCashFlow[waterfall -1, 2, 1]))}
-      end
-#-- , allocate to C until paid to zero
-
-      if(as.numeric(TrancheCashFlow[waterfall, 1, 3]) == 0 & as.numeric(TrancheCashFlow[waterfall, 2, 3]) == 0)
-      {TrancheCashFlow[waterfall, 3, 3] = as.numeric(CollateralCashFlow[waterfall,7])}
-      else{0}
-        
+  #-- ,pay the PAC bond first
+  
+  if(as.numeric(TrancheCashFlow[waterfall-1, 1, 1]) == 0) {TrancheCashFlow[waterfall, 1, 3] = 0} 
+  else
+  {TrancheCashFlow[waterfall, 1, 3] = min(as.numeric(principal), as.numeric(CollateralCashFlow[waterfall, 7]))}
+  end
  
+  #--, pay companion bond
+
+  if(as.numeric(TrancheCashFlow[waterfall -1, 1, 1]) == 0) {TrancheCashFlow[waterfall, 2, 3] = as.numeric(CollateralCashFlow[waterfall, 7])} 
+  else
+  {TrancheCashFlow[waterfall,2,3] = max(0,as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(principal))} 
+  end
+  
+  print(paste(CollateralCashFlow[waterfall, 7], TrancheCashFlow[waterfall,1,3], TrancheCashFlow[waterfall,2,3], sep = "::"))
+
+  
   #-- Third, compute ending balance
   for(balance in 1:NoCol){
   TrancheCashFlow[waterfall, balance, 1] <- as.numeric(TrancheCashFlow[waterfall -1, balance, 1]) -
@@ -196,8 +210,9 @@
   TrancheCashFlow[waterfall, tranche, 4] <- as.numeric(TrancheCashFlow[waterfall, tranche, 2]) +
                                                   as.numeric(TrancheCashFlow[waterfall, tranche, 3])
   }
-    }
+    } # End of Waterfall For Loop
 
+  
   Period <- Collateral@Period
   PmtDate <- as.character(REMIC.pmtdate)
 

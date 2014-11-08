@@ -144,6 +144,8 @@
      CollateralCashFlow[waterfall-1, 7]
     } else {0}
   }
+
+  
   #-- Third, compute ending balance
   for(balance in 1:NoCol){
     TrancheCashFlow[waterfall, balance, 1] <- as.numeric(TrancheCashFlow[waterfall -1, balance, 1]) -

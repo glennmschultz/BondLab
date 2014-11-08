@@ -42,7 +42,7 @@
                   MBS <- readRDS(MBS.Conn)
                   return(MBS)
                   }
-    
+     
   #----------- connect to REMIC deal file
     REMICDeal <- function(remic.deal = "character") 
                  {
@@ -52,10 +52,24 @@
                   REMICDeal <- readRDS(REMIC.Conn)
                   return(REMICDeal)
                   }
+   
    #---------- connect to waterfall data
    REMICWaterFall <- function(deal.name = "character")
                   {
                    paste("~/BondLab/WaterFall/",deal.name, sep = "")
+                  }
+   
+   #---------- connect to retrieve bond schedule data 
+    REMICSchedules <- function(REMIC.Tranche = "character")
+                  {
+                  Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
+                                as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
+                                sep = ""), open = "rb")
+                    
+                    REMICSchedules <- readRDS(Sched.Conn)
+                    #return(REMICSchedules) No need to return as this is not saved via a function wrapper but used
+                    # in the waterfall call.  The problem this is called multiple times in waterfall as the 
+                    # analysis takes place.  Should be called once
                   }
    
    #---------- connect to BondData to run multiple cusips

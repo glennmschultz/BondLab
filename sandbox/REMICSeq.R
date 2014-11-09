@@ -36,7 +36,8 @@ MakeRAID(DealName = "BondLabSEQ",
                 FloaterIndex = "999",
                 PacLowBand = 000,
                 PacHighBand = 000,
-                Group = 1)
+                Group = 1,
+                Schedule = FALSE)
       
       MakeTranche(DealName = "BondLabSEQ",
                   TrancheNumber = "2",
@@ -58,7 +59,8 @@ MakeRAID(DealName = "BondLabSEQ",
                   FloaterIndex = "999",
                   PacLowBand = 000,
                   PacHighBand = 000,
-                  Group = 1)
+                  Group = 1,
+                  Schedule = FALSE)
   
     MakeTranche(DealName = "BondLabSEQ",
                 TrancheNumber = "3",
@@ -80,7 +82,8 @@ MakeRAID(DealName = "BondLabSEQ",
                 FloaterIndex = "999",
                 PacLowBand = 000,
                 PacHighBand = 000,
-                Group = 1)
+                Group = 1,
+                Schedule = FALSE)
    
       MakeRDME(DealName = "BondLabSEQ",
                TrancheNumber = 1,

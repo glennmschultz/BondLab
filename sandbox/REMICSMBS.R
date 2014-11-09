@@ -36,7 +36,8 @@ MakeRAID(DealName = "BondLabSMBS",
               FloaterIndex = "999",
               PacLowBand = 000,
               PacHighBand = 000,
-              Group = 1)
+              Group = 1,
+              Schedule = FALSE)
     
     MakeTranche(DealName = "BondLabSMBS",
                 TrancheNumber = "2",
@@ -58,7 +59,8 @@ MakeRAID(DealName = "BondLabSMBS",
                 FloaterIndex = "999",
                 PacLowBand = 000,
                 PacHighBand = 000,
-                Group = 1)
+                Group = 1,
+                Schedule = FALSE)
 
     Tranche <- readRDS("~/BondLab/Tranches/BondLabSMBSIO.rds")
    

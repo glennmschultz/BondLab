@@ -223,7 +223,7 @@
     tranche.currbal <- tranche.origbal * factor + (MtgCashFlow@Accrued/(tranche.origbal * factor))
 
     #Solve for spread to spot curve to equal price 
-    OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-.5, .5), 
+    OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-.75, .75), 
                             tol = .0000000001, 
                             cashflow = MtgCashFlow@TotalCashFlow,
                             discount.rates = OAS.Term.Structure@spotrate, 

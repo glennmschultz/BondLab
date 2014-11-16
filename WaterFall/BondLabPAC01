@@ -97,15 +97,17 @@
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
   
   TrancheBeginValue[1,ai,2] = (days.of.accrued/days.between.pmtdate) *  
-        #Tranche coupon 
-        (if(REMIC.Deal@Tranches[[ai]]@TrancheCoupon > .01) 
-                    {REMIC.Deal@Tranches[[ai]]@TrancheCoupon = REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100} else 
-                    {REMIC.Deal@Tranches[[ai]]@TrancheCoupon = REMIC.Deal@Tranches[[ai]]@TrancheCoupon}) /
+        
+         (REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100) /  REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency * TrancheBeginValue[1,ai,1]
+        
+        #(if(REMIC.Deal@Tranches[[ai]]@TrancheCoupon > .01) 
+        #            {REMIC.Deal@Tranches[[ai]]@TrancheCoupon = REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100} else 
+        #            {REMIC.Deal@Tranches[[ai]]@TrancheCoupon = REMIC.Deal@Tranches[[ai]]@TrancheCoupon}) /
+        
+        #TrancheCoupon 
         #Tranche Frequency
-         REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency *
-  
         #Tranche current balance
-         TrancheBeginValue[1,ai,1]
+        
   }
 
   #-- compute the principal proceeds
@@ -123,7 +125,7 @@
   
   for(ca.row in 1:NoPeriod){
     for(ca.col in 1:NoCol){
-    CouponArray[ca.row, ca.col] <- REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/12
+    CouponArray[ca.row, ca.col] <- (REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/100)/frequency
     }
   }
 
@@ -156,8 +158,7 @@
   if(isTRUE(REMIC.Tranche@Schedule)) 
   {schedule.period <- length(as.numeric(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate))} else 
   {schedule.period <- NULL}
-  
-test <<- schedule
+
   # ========= This section begins the cash flow waterfall of the REMIC ===============
   # ---- Allocate principal and interest to the tranches according to payment rules 
   # ---- Note waterfall allocation of principal and interest always begins in row 2
@@ -189,7 +190,9 @@ test <<- schedule
  
   #--, pay companion bond
 
-  if(as.numeric(TrancheCashFlow[waterfall -1, 2, 1]) == 0) {TrancheCashFlow[waterfall, 2, 3] = 0} 
+  if(as.numeric(TrancheCashFlow[waterfall -1, 2, 1]) == 0) 
+  {TrancheCashFlow[waterfall, 2, 3] = 0
+   TrancheCashFlow[waterfall, 1, 3] = as.numeric(TrancheCashFlow[waterfall, 1, 3]) + as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(TrancheCashFlow[waterfall, 1, 3])} 
   else
   {TrancheCashFlow[waterfall,2,3] = min(TrancheCashFlow[waterfall -1, 2,1],  max(0,as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(principal)))} 
   end
@@ -205,15 +208,11 @@ test <<- schedule
                                                   as.numeric(TrancheCashFlow[waterfall, tranche, 3])
   }
     } # End of Waterfall For Loop
-
-  cf <<- data.frame(cbind(as.numeric(CollateralCashFlow[,8]), as.numeric(TrancheCashFlow[,1,1]), as.numeric(TrancheCashFlow[,2,1],sep = "-"))) 
-  cf2 <<- data.frame(cbind(as.numeric(CollateralCashFlow[,7]), 
-                            as.numeric(TrancheCashFlow[,1,3]), 
-                            as.numeric(TrancheCashFlow[,2,3]), 
-                            as.numeric(schedule@ScheduledPmt))) 
+   
   
   Period <- Collateral@Period
   PmtDate <- as.character(REMIC.pmtdate)
+
 
   TimePeriod <- REMIC.time.period
   Interest <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber),2]

@@ -97,7 +97,8 @@
     
   #  Validate the price passed through the error trapping function
   #  This validates that the correct unit is passed into the Bond Cash Flow function
-  if(tranche.price <= 1) {tranche.price = tranche.price} else {tranche.price = tranche.price/100}
+  #  Has to be a better way to do this?
+  if(tranche.price <= 2) {tranche.price = tranche.price} else {tranche.price = tranche.price/100}
 
   Collateral <- REMICCollateral(bond.id = bond.id, 
                   trade.date = trade.date,
@@ -139,7 +140,7 @@
                   sum(pv) - (proceeds + accrued.interest)}
   
   ytm = uniroot(irr, 
-                interval = c(lower = -.5, upper = .5),
+                interval = c(lower = -.75, upper = .75),
                 tol =.0000000001,
                 #extendInt = "yes",
                 time.period = as.numeric(REMICCashFlow[,3]), 

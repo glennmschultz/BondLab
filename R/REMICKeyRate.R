@@ -77,7 +77,7 @@ REMICTermStructure <- function(bond.id = "character",
 
     
   #Error Trap the user's price input
-  if(tranche.price <= 1) {tranche.price = trance.price} else {tranche.price = tranche.price/100}
+  if(tranche.price <= 2) {tranche.price = tranche.price} else {tranche.price = tranche.price/100}
   if(tranche.price <=0) stop("No valid bond price")
   
   #This is different from mortgage pass through and bond because

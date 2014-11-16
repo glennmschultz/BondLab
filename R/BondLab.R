@@ -32,6 +32,7 @@ utils::globalVariables(c("value", "variable"))
 
 days.in.month = 30.44
 days.in.year = 365.28
+days.in.year.360 = 360
 weeks.in.year = 52.25
 months.in.year = 12
 min.principal = 100

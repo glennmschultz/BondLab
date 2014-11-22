@@ -271,5 +271,6 @@
   REMICCashFlow <- as.matrix(cbind(Period, PmtDate, TimePeriod, Interest, Principal, TrancheCF ))
 
 
+
   
   

@@ -76,16 +76,8 @@
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * 360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
   
-  TrancheBeginValue[1,ai,2] = (days.of.accrued/days.between.pmtdate) *  
-        #Tranche coupon 
-        (if(REMIC.Deal@Tranches[[ai]]@TrancheCoupon > 1) 
-                    {REMIC.Deal@Tranches[[ai]]@TrancheCoupon = REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100} else 
-                    {REMIC.Deal@Tranches[[ai]]@TrancheCoupon = REMIC.Deal@Tranches[[ai]]@TrancheCoupon}) /
-        #Tranche Frequency
-         REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency *
-  
-        #Tranche current balance
-         TrancheBeginValue[1,ai,1]
+  TrancheBeginValue[1,ai,2] = (days.of.accrued/days.between.pmtdate) * 
+                                  (REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100) /frequency * TrancheBeginValue[1,ai,1]
   }
 
   #-- compute the principal proceeds
@@ -103,7 +95,7 @@
   
   for(ca.row in 1:NoPeriod){
     for(ca.col in 1:NoCol){
-    CouponArray[ca.row, ca.col] <- REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/12
+    CouponArray[ca.row, ca.col] <- (REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/100)/frequency
     }
   }
   

@@ -1,12 +1,5 @@
 # Mortgage cash flow engine computes mortgage cashflow 
 
-#setGeneric("MortgageCashFlow", function(bond.id = "character", 
-#                                        original.bal = numeric(), 
-#                                        settlement.date = "character", 
-#                                        price = numeric(), 
-#                                        PrepaymentAssumption = "character") 
-#                                          {standardGeneric("MortgageCashFlow")})
-
   setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
@@ -286,7 +279,12 @@ MortgageCashFlow <- function(bond.id = "character",
   )
 }  
 
-
+setGeneric("MortgageCashFlow", function(bond.id = "character", 
+                                        original.bal = numeric(), 
+                                        settlement.date = "character", 
+                                        price = numeric(), 
+                                        PrepaymentAssumption = "character") 
+{standardGeneric("MortgageCashFlow")})
 
 
 

@@ -20,7 +20,7 @@ MakeRAID(DealName = "BondLabPACInverse",
              DealPriceDate = "12-01-2012", 
              DealSettlementDate = "01-01-2013",
              Underwriter = "Bondlab",
-             NumberofTranches = 2,
+             NumberofTranches = 4,
              NumberPacSchedules = 1,
              NumberofGroups = 1,
              DealSize = 200000000,
@@ -66,7 +66,7 @@ MakeRAID(DealName = "BondLabPACInverse",
                   TrancheInterest = "Float",
                   TranchePrincipalDesc = "CMP",
                   TrancheInterestDesc = "Floater",
-                  Cusip = "BondLabCMP1",
+                  Cusip = "BondLabFloater",
                   TrancheOrigBal = 30738471,
                   TrancheDatedDate  = "01-01-2013",
                   TrancheFirstPmtDate = "01-15-2013",
@@ -77,15 +77,15 @@ MakeRAID(DealName = "BondLabPACInverse",
                   PrinPmtFrequency = 12,
                   InterestPmtFrequency = 12,
                   FloaterIndex = "1Mo. LIBOR",
-                  FloaterMargin = 0.30,
+                  FloaterMargin = .30,
                   FloaterCap = 6.66,
-                  FloaterFloor = 0.30
+                  FloaterFloor = 0.33,
                   FloaterFormula = function(Index = "vector"){min(FloaterCap, (max(Index + FloaterMargin, FloaterFloor)))},
                   PacLowBand = 000,
                   PacHighBand = 000,
                   Group = 1,
                   Schedule = TRUE,
-                  Fixed = TRUE)
+                  Fixed = FALSE)
 
     MakeTranche(DealName = "BondLabPACInverse",
                   TrancheNumber = "3",
@@ -94,26 +94,26 @@ MakeRAID(DealName = "BondLabPACInverse",
                   TrancheInterest = "Float",
                   TranchePrincipalDesc = "CMP",
                   TrancheInterestDesc = "Inverse Floater",
-                  Cusip = "BondLabCMP1",
+                  Cusip = "BondLabInverse",
                   TrancheOrigBal = 20492314,
                   TrancheDatedDate  = "01-01-2013",
                   TrancheFirstPmtDate = "01-15-2013",
                   TrancheLastPmtDate = "12-15-2042",
                   TrancheNextPmtDate = "01-15-2013",
-                  TrancheCoupon = 6.89,
+                  TrancheCoupon = 8.91,
                   Delay = 15,
                   PrinPmtFrequency = 12,
                   InterestPmtFrequency = 12,
                   FloaterIndex = "1Mo. LIBOR",
-                  FloaterMargin = 0,
-                  FloaterCap = 1.41,
-                  FloaterFloor = 1.41,
-                  FloaterFormula = function(Index = "vector"){min(FloaterCap, (max(Index + FloaterMargin, FloaterFloor)))},
+                  FloaterMargin = 9.21,
+                  FloaterCap = 9.21,
+                  FloaterFloor = 0.00,
+                  FloaterFormula = function(Index = "vector"){min(FloaterCap, (max(-1.5 * Index + FloaterMargin, FloaterFloor)))},
                   PacLowBand = 000,
                   PacHighBand = 000,
                   Group = 1,
                   Schedule = TRUE,
-                  Fixed = TRUE)
+                  Fixed = FALSE)
 
     MakeTranche(DealName = "BondLabPACInverse",
                 TrancheNumber = "4",
@@ -148,19 +148,33 @@ MakeRAID(DealName = "BondLabPACInverse",
                TrancheNumber = 1,
                Cusip = "BondLabPAC2",
                PaymentDate = "01-01-2013",
-               Coupon = 3.0,
+               Coupon = 2.25,
                Factor = 1)
       
       MakeRDME(DealName = "BondLabPACInverse",
                TrancheNumber = 2,
-               Cusip = "BondLabCMPFlt",
+               Cusip = "BondLabFltr",
                PaymentDate = "1-01-2013",
-               Coupon = 6.33,
+               Coupon = 0.55,
                Factor = 1)
 
+      MakeRDME(DealName = "BondLabPACInverse",
+              TrancheNumber = 3,
+              Cusip = "BondLabCMP1",
+              PaymentDate = "1-01-2013",
+              Coupon = 9.21,
+              Factor = 1)
+
+      MakeRDME(DealName = "BondLabPACInverse",
+            TrancheNumber = 4,
+            Cusip = "BondLabPACIO",
+            PaymentDate = "1-01-2013",
+            Coupon = 1.75,
+            Factor = 1)
+
   
-    RemicStructure("BondLabPAC01")   
+    RemicStructure("BondLabPACInverse")   
     
-    REMIC <- readRDS("~/BondLab/REMICData/BondLabPAC01.rds")
+    REMIC <- readRDS("~/BondLab/REMICData/BondLabPACInverse.rds")
 
    

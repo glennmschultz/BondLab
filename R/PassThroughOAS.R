@@ -171,29 +171,22 @@ PassThroughOAS <- function(bond.id = "character",
   #It is trapped here because this is the first use of trade date
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
   
-  
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
   Rate.Delta = .25
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-  conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-  bond.id <- readRDS(conn1)
-  
-  #Call the desired curve from rates data folder
-  conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(conn2)
-  
-  #Call Mortgage Rate Functions
-  conn3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(conn3)  
-  
+  bond.id <- MBS(MBS.id = as.character(bond.id))
   Burnout = bond.id@Burnout
   
-  #Call Prepayment Model Tuning Parameters
-  conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", bond.id@Model, ".rds", sep =""), open = "rb")        
-  ModelTune <- readRDS(conn4)
-  
+  #Call the desired curve from rates data folder
+  rates.data <- Rates(trade.date = trade.date)
   short.rate <- as.numeric(rates.data[1,2])/100
+  
+  #Call Mortgage Rate Functions
+  MortgageRate <- MtgRate()
+    
+  #Call Prepayment Model Tuning Parameters
+  ModelTune <- ModelTune(bond.id = bond.id)
   
   #Call OAS Term Strucuture to Pass to the Prepayment Model 
   #- upgrade this function for 40-years to match termstrc for key rate duration function

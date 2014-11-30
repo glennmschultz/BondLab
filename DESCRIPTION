@@ -8,5 +8,5 @@ Maintainer: Glenn Schultz <glennmschultz@me.com>
 Description: The package provides a suite of software utilities for the analysis of Mortgage and Asset Backed securities
 LazyLoad: yes
 License: GPL(>=3.0)
-Depends: termstrc, reshape2, ggplot2, lubridate, methods, plyr, grid, optimx
+Imports: termstrc, reshape2, ggplot2, lubridate, methods, plyr, grid, optimx
 

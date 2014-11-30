@@ -1,7 +1,11 @@
 # Mortgage cash flow engine computes mortgage cashflow 
 
-#  setGeneric("MortgageCashFlow", function(bond.id = "character", original.bal = numeric(), settlement.date = "character", 
-#    price = numeric(), PrepaymentAssumption = "character") {standardGeneric("MortgageCashFlow")})
+#setGeneric("MortgageCashFlow", function(bond.id = "character", 
+#                                        original.bal = numeric(), 
+#                                        settlement.date = "character", 
+#                                        price = numeric(), 
+#                                        PrepaymentAssumption = "character") 
+#                                          {standardGeneric("MortgageCashFlow")})
 
   setMethod("initialize",
           signature("MortgageCashFlow"),
@@ -163,7 +167,7 @@ MortgageCashFlow <- function(bond.id = "character",
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
-  pmtdate.interval = 12/frequency
+  pmtdate.interval = months.in.year/frequency
   # then compute the payment dates
   pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
                       else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")

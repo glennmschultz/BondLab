@@ -19,7 +19,7 @@
                       #original.bal = numeric(),
                       tranche.price = numeric(),
                       collateral.price = numeric(),
-                      short.rate = numeric(), 
+                      #short.rate = numeric(), 
                       sigma = numeric(), 
                       paths = numeric(),
                       ...,
@@ -64,6 +64,8 @@
   factor = as.numeric(remic.factor)
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
+  short.rate <- as.numeric(rates.data[1,2])/100
+  
   #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
   #This function is encapasulated in term structure
   
@@ -81,7 +83,7 @@
   #Set trade date and call the CalibrateCIR Model
   #trade.date = as.Date(trade.date, "%m-%d-%Y")
   
-  Market.Fit <- CalibrateCIR(trade.date = trade.date)
+  Market.Fit <- CalibrateCIR(trade.date = trade.date, sigma = sigma)
   kappa  = Market.Fit$p1
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
@@ -220,7 +222,8 @@
     
     #Calculate proceeds to use in OAS solve
     proceeds <- as.numeric((MtgCashFlow@PrincipalProceeds + MtgCashFlow@Accrued))
-    tranche.currbal <- tranche.origbal * factor + (MtgCashFlow@Accrued/(tranche.origbal * factor))
+    #tranche.currbal <- tranche.origbal * factor + (MtgCashFlow@Accrued/(tranche.origbal * factor))
+    tranche.currbal <- tranche.origbal * factor + MtgCashFlow@Accrued
 
     #Solve for spread to spot curve to equal price 
     OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-.75, .75), 
@@ -253,8 +256,8 @@
     OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread) ^ period)) * CashFlowMatrix[,])) 
     
     OAS.Price <- if(isTRUE(as.character(tranche.principal) %in% "NTL" | as.character(tranche.principal) %in% "PO")) 
-    {colSums(OAS.Proceeds/tranche.currbal) * 100} else 
-    {colSums(OAS.Proceeds/proceeds) * 100}
+    {colSums(OAS.Proceeds/tranche.currbal) * 100} else {colSums(OAS.Proceeds/proceeds) * 100}
+
     
     {return(mean(OAS.Price) - tranche.price)} 
   }
@@ -280,9 +283,7 @@
     
     OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * OAS.CashFlow[,]))
     
-    OAS.Proceeds <- if (REMIC.Tranche@TranchePrincipalDesc %in% "NTL" == TRUE) 
-    {(colSums(OAS.Proceeds)/tranche.currbal) * 100} else
-    {(colSums(OAS.Proceeds)/tranche.currbal)* 100}
+    OAS.Proceeds <- (colSums(OAS.Proceeds)/tranche.currbal) * 100
         
     return(OAS.Proceeds)}
   

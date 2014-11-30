@@ -12,11 +12,13 @@
 #---------------------------------
 # Calibrate CIR to market
 #________________________________
-CalibrateCIR <- function(trade.date = character){
+CalibrateCIR <- function(trade.date = character, sigma = numeric()){
   
   #Call the desired curve from rates data folder
   CalCIR1 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
   rates.data <- readRDS(CalCIR1)
+  
+  shortrate = as.numeric(rates.data[1,2])/100
   
   #set the column counter to make cashflows for termstrucutre
   ColCount <- as.numeric(ncol(rates.data))
@@ -86,6 +88,7 @@ CalibrateCIR <- function(trade.date = character){
     kappa =  param[1]
     lambda = param[2]
     theta =  param[3]
+
     
     Disc <- CIRBondPrice(kappa = kappa, lambda = lambda, theta = theta, shortrate = shortrate, T= matmatrix,  step = 0, sigma = sigma)    
     CIRTune <- sqrt((sum(colSums((cfmatrix * Disc))^2))/ncol(matmatrix))
@@ -96,10 +99,10 @@ CalibrateCIR <- function(trade.date = character){
   fit <- optimx(par = c(.1, .003, .03), 
                 fn = CIRTune, 
                 method = "L-BFGS-B",
-                lower = rep(.001, 3),
-                upper = rep(1, 3),
-                shortrate = .0016,
-                sigma = .015,
+                lower = rep(.001,3),
+                upper = rep(1, 3), 
+                shortrate = shortrate,
+                sigma = sigma,
                 cfmatrix = CIR.CF.Matrix, 
                 matmatrix = CIR.Mat.Matrix)  
   close(CalCIR1)

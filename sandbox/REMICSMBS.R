@@ -34,10 +34,15 @@ MakeRAID(DealName = "BondLabSMBS",
               PrinPmtFrequency = 12,
               InterestPmtFrequency = 12,
               FloaterIndex = "999",
+              FloaterMargin = 0,
+              FloaterCap = 4.00,
+              FloaterFloor = 4.00,
+              FloaterFormula = function(Index = "vector"){min(FloaterCap, (max(Index + FloaterMargin, FloaterFloor)))},
               PacLowBand = 000,
               PacHighBand = 000,
               Group = 1,
-              Schedule = FALSE)
+              Schedule = FALSE,
+              Fixed = TRUE)
     
     MakeTranche(DealName = "BondLabSMBS",
                 TrancheNumber = "2",
@@ -57,12 +62,15 @@ MakeRAID(DealName = "BondLabSMBS",
                 PrinPmtFrequency = 12,
                 InterestPmtFrequency = 12,
                 FloaterIndex = "999",
+                FloaterMargin = 0,
+                FloaterCap = 4.00,
+                FloaterFloor = 4.00,
+                FloaterFormula = function(Index = "vector"){min(FloaterCap, (max(Index + FloaterMargin, FloaterFloor)))},
                 PacLowBand = 000,
                 PacHighBand = 000,
                 Group = 1,
-                Schedule = FALSE)
-
-    Tranche <- readRDS("~/BondLab/Tranches/BondLabSMBSIO.rds")
+                Schedule = FALSE,
+                Fixed = TRUE)
    
     MakeRDME(DealName = "BondLabSMBS",
              TrancheNumber = 1,

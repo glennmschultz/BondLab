@@ -11,7 +11,8 @@ CusipRecord <- function(source.path = "character", target.path = "character"){
     
     connCusip <- gzfile(description = paste(as.character(target.path), as.character(temp@Cusip), ".rds", sep = ""))
     saveRDS(temp, connCusip)
-    test <<- paste(as.character(target.path), as.character(temp@Cusip), ".rds", sep = "")}
+
+  }
     
     close(connCusip)
 } 

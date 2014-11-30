@@ -13,8 +13,14 @@
 # Mortgage OAS Function
 #___________________________________
 
-Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settlement.date = "character", original.bal = numeric(),
-                         price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric(), TermStructure = "character"){
+Mortgage.OAS <- function(bond.id = "character", 
+                         trade.date = "character", 
+                         settlement.date = "character", 
+                         original.bal = numeric(),
+                         price = numeric(), 
+                         sigma = numeric(), 
+                         paths = numeric(), 
+                         TermStructure = "character"){
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
@@ -43,6 +49,8 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
   factor = bond.id@MBSFactor
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
+  short.rate = as.numeric(rates.data[1,2])/100
+  
   #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
   #This function is encapasulated in term structure
   
@@ -60,7 +68,7 @@ Mortgage.OAS <- function(bond.id = "character", trade.date = "character", settle
   #Set trade date and call the CalibrateCIR Model
   #trade.date = as.Date(trade.date, "%m-%d-%Y")
   
-  Market.Fit <- CalibrateCIR(trade.date = trade.date)
+  Market.Fit <- CalibrateCIR(trade.date = trade.date, sigma = sigma)
   kappa  = Market.Fit$p1
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3

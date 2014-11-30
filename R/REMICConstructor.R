@@ -61,10 +61,15 @@ setMethod("initialize",
                    PrinPmtFrequency = numeric(),
                    InterestPmtFrequency = numeric(),
                    FloaterIndex = "character",
+                   FloaterMargin = numeric(),
+                   FloaterCap = numeric(),
+                   FloaterFloor = numeric(),
+                   FloaterFormula = "function",
                    PacLowBand = numeric(),
                    PacHighBand = numeric(),
                    Group = numeric(),
-                   Schedule = "logical"){
+                   Schedule = "logical",
+                   Fixed = "logical"){
             
             .Object@DealName = DealName
             .Object@TrancheNumber = TrancheNumber
@@ -83,11 +88,16 @@ setMethod("initialize",
             .Object@Delay = Delay
             .Object@PrinPmtFrequency = PrinPmtFrequency
             .Object@InterestPmtFrequency = InterestPmtFrequency
-            .Object@FloaterIndex= FloaterIndex
+            .Object@FloaterIndex = FloaterIndex      
+            .Object@FloaterMargin = FloaterMargin
+            .Object@FloaterCap = FloaterCap
+            .Object@FloaterFloor = FloaterFloor
+            .Object@FloaterFormula = FloaterFormula
             .Object@PacLowBand = PacLowBand
             .Object@PacHighBand = PacHighBand
             .Object@Group = Group
             .Object@Schedule = Schedule
+            .Object@Fixed = Fixed
             
             return(.Object)
             callNextMethod(.Object,...)
@@ -298,10 +308,15 @@ setMethod("initialize",
                               PrinPmtFrequency = numeric(),
                               InterestPmtFrequency = numeric(),
                               FloaterIndex = "character",
+                              FloaterMargin = numeric(),
+                              FloaterCap = numeric(),
+                              FloaterFloor = numeric(),
+                              FloaterFormula = "function",
                               PacLowBand = numeric(),
                               PacHighBand = numeric(),
                               Group = numeric(),
-                              Schedule = Schedule){
+                              Schedule = "logical",
+                              Fixed = "logical"){
     
     new("TrancheDetails",
         DealName = DealName,
@@ -322,10 +337,15 @@ setMethod("initialize",
         PrinPmtFrequency = PrinPmtFrequency,
         InterestPmtFrequency = InterestPmtFrequency,
         FloaterIndex = FloaterIndex,
+        FloaterMargin = FloaterMargin,
+        FloaterCap = FloaterCap,
+        FloaterFloor = FloaterFloor,
+        FloaterFormula = FloaterFormula,
         PacLowBand = PacLowBand,
         PacHighBand = PacHighBand,
         Group = Group,
-        Schedule = Schedule)
+        Schedule = Schedule,
+        Fixed = Fixed)
   }
   
   
@@ -348,10 +368,15 @@ setMethod("initialize",
                             PrinPmtFrequency = numeric(),
                             InterestPmtFrequency = numeric(),
                             FloaterIndex = "character",
+                            FloaterMargin = numeric(),
+                            FloaterCap = numeric(),
+                            FloaterFloor = numeric(),
+                            FloaterFormula = "function",
                             PacLowBand = numeric(),
                             PacHighBand = numeric(),
                             Group = numeric(),
-                            Schedule = "logical") {
+                            Schedule = "logical",
+                            Fixed = "logical") {
     
     temp <- TrancheDetails( DealName = DealName,
                             TrancheNumber = TrancheNumber,
@@ -371,10 +396,15 @@ setMethod("initialize",
                             PrinPmtFrequency = PrinPmtFrequency,
                             InterestPmtFrequency = InterestPmtFrequency,
                             FloaterIndex = FloaterIndex,
+                            FloaterMargin = FloaterMargin,
+                            FloaterCap = FloaterCap,
+                            FloaterFloor = FloaterFloor,
+                            FloaterFormula = FloaterFormula,
                             PacLowBand = PacLowBand,
                             PacHighBand = PacHighBand,
                             Group = Group,
-                            Schedule = Schedule)
+                            Schedule = Schedule,
+                            Fixed = Fixed)
     
     connTranche <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
     saveRDS(temp, connTranche)

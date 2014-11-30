@@ -389,10 +389,15 @@
            PrinPmtFrequency = "numeric",
            InterestPmtFrequency = "numeric",
            FloaterIndex = "character",
+           FloaterMargin = "numeric",
+           FloaterCap = "numeric",
+           FloaterFloor = "numeric",
+           FloaterFormula = "function",
            PacLowBand = "numeric",
            PacHighBand = "numeric",
            Group = "numeric",
-           Schedule = "logical"
+           Schedule = "logical",
+           Fixed = "logical"
          ))
 
 

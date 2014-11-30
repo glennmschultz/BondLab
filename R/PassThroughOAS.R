@@ -155,7 +155,7 @@ PassThroughOAS <- function(bond.id = "character",
                            settlement.date = "character", 
                            original.bal = numeric(), 
                            price = numeric(), 
-                           short.rate = numeric(), 
+                           #short.rate = numeric(), 
                            sigma = numeric(), 
                            paths = numeric(), 
                            PrepaymentAssumption = "character", 
@@ -193,14 +193,15 @@ PassThroughOAS <- function(bond.id = "character",
   conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", bond.id@Model, ".rds", sep =""), open = "rb")        
   ModelTune <- readRDS(conn4)
   
+  short.rate <- as.numeric(rates.data[1,2])/100
+  
   #Call OAS Term Strucuture to Pass to the Prepayment Model 
-  #- upgrade thid function for 40-years to match termstrc for key rate duration function
+  #- upgrade this function for 40-years to match termstrc for key rate duration function
   TermStructure <- Mortgage.OAS(bond.id = bond.id@ID, 
                                 trade.date = trade.date, 
                                 settlement.date = settlement.date, 
                                 original.bal = original.bal, 
                                 price = price, 
-                                short.rate = short.rate, 
                                 sigma = sigma, 
                                 paths = 1, 
                                 TermStructure = "TRUE")
@@ -235,7 +236,6 @@ PassThroughOAS <- function(bond.id = "character",
                                settlement.date = settlement.date, 
                                original.bal = original.bal, 
                                price = price, 
-                               short.rate = short.rate, 
                                sigma = sigma, 
                                paths = paths, 
                                TermStructure = "FALSE")

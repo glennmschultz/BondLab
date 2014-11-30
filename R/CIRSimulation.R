@@ -22,8 +22,8 @@ CIRSim <- function(shortrate = numeric(), kappa = numeric(), theta = numeric(),
   #N is the number of simulations
   
   #Error Trap Model Parameters
-  if(2*kappa*theta < sigma^2) 
-    stop("Invaild parameterization origin is inaccessible")
+  #if(2*kappa*theta <= sigma^2) 
+  #  stop("Invaild parameterization origin is inaccessible")
   
   dt <- step
   nrow <-  T/dt

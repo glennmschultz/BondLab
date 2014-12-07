@@ -1,109 +1,5 @@
 # Mortgage cash flow engine computes mortgage cashflow 
 
-  setMethod("initialize",
-          signature("MortgageCashFlow"),
-          function(.Object,       
-                   Price = numeric(),
-                   Accrued = numeric(),
-                   YieldToMaturity = numeric(),
-                   WAL = numeric(),
-                   ModDuration = numeric(),
-                   Convexity = numeric(),
-                   Period = numeric(),
-                   PmtDate = "character",
-                   TimePeriod = numeric(),
-                   BeginningBal = numeric(),
-                   MonthlyPmt = numeric(),
-                   MonthlyInterest = numeric(),
-                   PassThroughInterest = numeric(),
-                   ScheduledPrin = numeric(),
-                   PrepaidPrin = numeric(),
-                   EndingBal = numeric(),
-                   ServicingIncome = numeric(),
-                   PMIPremium = numeric(),
-                   GFeePremium = numeric(),  
-                   TotalCashFlow = numeric()
-          ){
-            
-            .Object@Price = Price
-            .Object@Accrued = Accrued
-            .Object@YieldToMaturity = YieldToMaturity
-            .Object@WAL = WAL
-            .Object@ModDuration = ModDuration
-            .Object@Convexity = Convexity
-            .Object@Period = Period
-            .Object@PmtDate = PmtDate
-            .Object@TimePeriod = TimePeriod
-            .Object@BeginningBal = BeginningBal
-            .Object@MonthlyPmt = MonthlyPmt
-            .Object@MonthlyInterest = MonthlyInterest
-            .Object@PassThroughInterest = PassThroughInterest
-            .Object@ScheduledPrin = ScheduledPrin
-            .Object@PrepaidPrin = PrepaidPrin
-            .Object@EndingBal = EndingBal
-            .Object@ServicingIncome = ServicingIncome
-            .Object@PMIPremium = PMIPremium
-            .Object@GFeePremium = GFeePremium  
-            .Object@TotalCashFlow = TotalCashFlow
-            
-            return(.Object)
-            callNextMethod(.Object,...)            
-          })
-  
-# setMethod("show",
-#           signature(object = "MortgageCashFlow"),
-#            function (object) 
-#            {      
-#              cat("Bond Description", "\n")
-#              cat("BondId:"); print(object@ID)
-#              cat("Cusip:"); print(object@Cusip)
-#              cat("Coupon:"); print(object@Coupon)
-#              cat("Frequency:"); print(object@Frequency)
-#              cat("Basis:"); print(object@BondBasis)
-#              cat("Issue Date:"); print(object@IssueDate)
-#              cat("Last Payment Date:"); print(object@LastPmtDate)
-#              cat("Next Payment Date:"); print(object@NextPmtDate)
-#              cat("Maturity Date:"); print(object@Maturity)
-#              cat("Bond Valuation:", "\n")
-#              cat("Price:"); print(object@Price)
-#              cat("Accrued:"); print(object@Accrued)
-#              cat("Yield to Maturity:"); print(object@YieldToMaturity)
-#              cat("Risk Metrics:", "\n")
-#              cat("Weighted Average Life:"); print(object@WAL)
-#              cat("Modified Duration:"); print(unname(object@ModDuration))
-#              cat("Convexity:"); print(unname(object@Convexity))
-#              cat("Sector Detail:", "\n")
-#              cat("Bond Type:"); print(object@BondType)
-#              cat("Sector:"); print(object@Sector)
-#              cat("Moodys:"); print(object@Moody)
-#              cat("S&P:"); print(object@SP)
-#              cat("BondLab Rating:");print(object@BondLab)
-#              
-#              
-#              plotdata = as.data.frame(cbind(object@Period, object@ScheduledPrin, object@PrepaidPrin, 
-#                                             object@PassThroughInterest, object@ServicingIncome, object@PMIPremium, object@GFeePremium))
-#              colnames(plotdata) <- c("Period", "Scheduled Prin", "Prepaid Prin", "PT Interest", "Servicing", "PMI", "GFee")
-#              plotdata = melt(plotdata, id = "Period")
-#              
-#              plot <- ggplot(plotdata, aes(x= Period, y = value, fill = variable)) +
-#                geom_area() +
-#                theme_minimal()+
-#                scale_fill_brewer(palette = "Greys") +
-#                labs(fill = "") +
-#                ylab("Pool Cash Flow") +
-#                xlab("Period") +
-#                theme(axis.title.y=element_text(angle = 90, size = 20)) +
-#                theme(axis.text.y = element_text(angle = 90, size = 15)) +
-#                theme(axis.title.x=element_text(angle = 0, size = 20)) +
-#                theme(axis.text.x = element_text(angle = 0, size = 15)) +
-#                theme(legend.position = c(.82,.73))+
-#                theme(legend.background = element_rect(fill = "white"))
-#              
-#              print(plot)
-#            }
-#  )
-  
-
 #------------------------------------------------------
 # Mortgage cash flow function.  
 # This function calculates the cash flow of a mortgage pass through security
@@ -277,7 +173,111 @@ MortgageCashFlow <- function(bond.id = "character",
       GFeePremium = MBS.CF.Table[,12],
       TotalCashFlow = MBS.CF.Table[,14]
   )
-}  
+}
+
+
+setMethod("initialize",
+          signature("MortgageCashFlow"),
+          function(.Object,       
+                   Price = numeric(),
+                   Accrued = numeric(),
+                   YieldToMaturity = numeric(),
+                   WAL = numeric(),
+                   ModDuration = numeric(),
+                   Convexity = numeric(),
+                   Period = numeric(),
+                   PmtDate = "character",
+                   TimePeriod = numeric(),
+                   BeginningBal = numeric(),
+                   MonthlyPmt = numeric(),
+                   MonthlyInterest = numeric(),
+                   PassThroughInterest = numeric(),
+                   ScheduledPrin = numeric(),
+                   PrepaidPrin = numeric(),
+                   EndingBal = numeric(),
+                   ServicingIncome = numeric(),
+                   PMIPremium = numeric(),
+                   GFeePremium = numeric(),  
+                   TotalCashFlow = numeric()
+          ){
+            
+            .Object@Price = Price
+            .Object@Accrued = Accrued
+            .Object@YieldToMaturity = YieldToMaturity
+            .Object@WAL = WAL
+            .Object@ModDuration = ModDuration
+            .Object@Convexity = Convexity
+            .Object@Period = Period
+            .Object@PmtDate = PmtDate
+            .Object@TimePeriod = TimePeriod
+            .Object@BeginningBal = BeginningBal
+            .Object@MonthlyPmt = MonthlyPmt
+            .Object@MonthlyInterest = MonthlyInterest
+            .Object@PassThroughInterest = PassThroughInterest
+            .Object@ScheduledPrin = ScheduledPrin
+            .Object@PrepaidPrin = PrepaidPrin
+            .Object@EndingBal = EndingBal
+            .Object@ServicingIncome = ServicingIncome
+            .Object@PMIPremium = PMIPremium
+            .Object@GFeePremium = GFeePremium  
+            .Object@TotalCashFlow = TotalCashFlow
+            
+            return(.Object)
+            callNextMethod(.Object,...)            
+          })
+
+# setMethod("show",
+#           signature(object = "MortgageCashFlow"),
+#            function (object) 
+#            {      
+#              cat("Bond Description", "\n")
+#              cat("BondId:"); print(object@ID)
+#              cat("Cusip:"); print(object@Cusip)
+#              cat("Coupon:"); print(object@Coupon)
+#              cat("Frequency:"); print(object@Frequency)
+#              cat("Basis:"); print(object@BondBasis)
+#              cat("Issue Date:"); print(object@IssueDate)
+#              cat("Last Payment Date:"); print(object@LastPmtDate)
+#              cat("Next Payment Date:"); print(object@NextPmtDate)
+#              cat("Maturity Date:"); print(object@Maturity)
+#              cat("Bond Valuation:", "\n")
+#              cat("Price:"); print(object@Price)
+#              cat("Accrued:"); print(object@Accrued)
+#              cat("Yield to Maturity:"); print(object@YieldToMaturity)
+#              cat("Risk Metrics:", "\n")
+#              cat("Weighted Average Life:"); print(object@WAL)
+#              cat("Modified Duration:"); print(unname(object@ModDuration))
+#              cat("Convexity:"); print(unname(object@Convexity))
+#              cat("Sector Detail:", "\n")
+#              cat("Bond Type:"); print(object@BondType)
+#              cat("Sector:"); print(object@Sector)
+#              cat("Moodys:"); print(object@Moody)
+#              cat("S&P:"); print(object@SP)
+#              cat("BondLab Rating:");print(object@BondLab)
+#              
+#              
+#              plotdata = as.data.frame(cbind(object@Period, object@ScheduledPrin, object@PrepaidPrin, 
+#                                             object@PassThroughInterest, object@ServicingIncome, object@PMIPremium, object@GFeePremium))
+#              colnames(plotdata) <- c("Period", "Scheduled Prin", "Prepaid Prin", "PT Interest", "Servicing", "PMI", "GFee")
+#              plotdata = melt(plotdata, id = "Period")
+#              
+#              plot <- ggplot(plotdata, aes(x= Period, y = value, fill = variable)) +
+#                geom_area() +
+#                theme_minimal()+
+#                scale_fill_brewer(palette = "Greys") +
+#                labs(fill = "") +
+#                ylab("Pool Cash Flow") +
+#                xlab("Period") +
+#                theme(axis.title.y=element_text(angle = 90, size = 20)) +
+#                theme(axis.text.y = element_text(angle = 90, size = 15)) +
+#                theme(axis.title.x=element_text(angle = 0, size = 20)) +
+#                theme(axis.text.x = element_text(angle = 0, size = 15)) +
+#                theme(legend.position = c(.82,.73))+
+#                theme(legend.background = element_rect(fill = "white"))
+#              
+#              print(plot)
+#            }
+#  )
 
 setGeneric("MortgageCashFlow", function(bond.id = "character", 
                                         original.bal = numeric(), 

@@ -13,7 +13,8 @@
                             trade.date = "character",
                             settlement.date = "character",
                             collateral.price = numeric(),
-                            PrepaymentAssumption = "character", 
+                            PrepaymentAssumption = "character",
+                            TermStructure = "character",
                             ..., 
                             begin.cpr = numeric(), 
                             end.cpr = numeric(), 
@@ -27,11 +28,11 @@
     # --- connect to mortgage rate class
     MortgageRate <- MtgRate()
    
-    # --- call term structure model
+    # --- call term structure 
                                        
-    Termstructure <- if(is.null(KeyRateTermStructure)) 
-                      {TermStructure(rates.data = rates.data)} else 
-                      {KeyRateTermStructure}
+    #Termstructure <- if(is.null(KeyRateTermStructure)) {TermStructure(rates.data = rates.data)} else {KeyRateTermStructure}
+    Termstructure <- if(is.null(KeyRateTermStructure)) {TermStructure} else {KeyRateTermStructure}
+    
     
     #-- call REMIC Trance
     REMIC.Tranche <- MBS(MBS.id = bond.id) 

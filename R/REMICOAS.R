@@ -21,9 +21,9 @@
                       collateral.price = numeric(),
                       #short.rate = numeric(), 
                       sigma = numeric(), 
-                      paths = numeric(),
-                      ...,
-                      TermStructure = "character"){
+                      paths = numeric()){
+                      #...,
+                      #TermStructure = "character"){
   
   #Open connection to the tranche
   REMIC.Tranche <- MBS(MBS.id = bond.id)
@@ -183,25 +183,25 @@
     #When sigma is zero the simulated spot rates are compounded forward rates and the two and ten year
     #rates are calcualted from the calculated spot rate rate curve
     
-    if (TermStructure != "TRUE")
+    #if (TermStructure != "TRUE")
       OAS.Term.Structure <- new("TermStructure",
                                 tradedate = as.character(trade.date),
                                 period = as.numeric(sim.cube[,3]),
                                 date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
                                 spotrate = as.numeric(sim.cube[,5]),
-                                forwardrate = as.numeric(Simulation[,j]),
+                                forwardrate = as.numeric(Simulation[,j]) * 100,
                                 TwoYearFwd = as.numeric(sim.cube[,6]),
                                 TenYearFwd = as.numeric(sim.cube[,7]))
     
-    else
-      OAS.Term.Structure <- new("TermStructure",
-                                tradedate = as.character(as.Date(trade.date, "%m-%d-%Y")),
-                                period = as.numeric(sim.cube[,1]),
-                                date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
-                                spotrate = as.numeric(sim.cube[,5]) * 100,
-                                forwardrate = as.numeric(Simulation[,j] * 100),
-                                TwoYearFwd = as.numeric(sim.cube[,6]),
-                                TenYearFwd = as.numeric(sim.cube[,7]))
+    #else
+    #  OAS.Term.Structure <- new("TermStructure",
+    #                            tradedate = as.character(as.Date(trade.date, "%m-%d-%Y")),
+    #                            period = as.numeric(sim.cube[,1]),
+    #                            date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
+    #                            spotrate = as.numeric(sim.cube[,5]) * 100,
+    #                            forwardrate = as.numeric(Simulation[,j] * 100),
+    #                            TwoYearFwd = as.numeric(sim.cube[,6]),
+    #                            TenYearFwd = as.numeric(sim.cube[,7]))
      
     MtgCashFlow <- REMICCashFlow(bond.id = bond.id, 
                     trade.date = trade.date,
@@ -209,11 +209,11 @@
                     collateral.price = collateral.price,
                     tranche.price = tranche.price,
                     PrepaymentAssumption = "MODEL",
-                    ...,
-                    begin.cpr = begin.cpr,
-                    end.cpr = end.cpr,
-                    seasoning.period = seasoning.period,
-                    CPR = CPR,
+                    #...,
+                    #begin.cpr = begin.cpr,
+                    #end.cpr = end.cpr,
+                    #seasoning.period = seasoning.period,
+                    #CPR = CPR,
                     KeyRateTermStructure = OAS.Term.Structure)
         
    
@@ -309,8 +309,9 @@
   
   
   
-  if (TermStructure != "TRUE")      
-  {new("MortgageOAS",
+  #if (TermStructure != "TRUE")      
+  #{
+    new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),
        SpreadToCurve = SpreadtoCurve,
@@ -320,9 +321,9 @@
        PathYTM = OAS.Out[,4],
        PriceDist = OAS.Out[,5]
   )
-  }
+  #}
   
-    else OAS.Term.Structure
+   # else OAS.Term.Structure
   
   }
   

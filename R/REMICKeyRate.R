@@ -309,6 +309,11 @@ REMICTermStructure <- function(bond.id = "character",
     Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
                                   ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
     
+    Key.Rate.TS.Dwn@forwardrate <- ((((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 2, to = 362, by = 1)]) ^ 
+                                       (Key.Rate.TS.Dwn@period[seq(from = 2, to = 362, by = 1)]/12) /
+                                       (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
+                                       (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1) * 100
+    
     Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ 
                                       (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
                                       (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
@@ -321,8 +326,12 @@ REMICTermStructure <- function(bond.id = "character",
     
     
     Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
-                                 ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
-    )
+                                 ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
+    
+    Key.Rate.TS.Up@forwardrate <- ((((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 2, to = 362, by = 1)]) ^ 
+                                       (Key.Rate.TS.Dwn@period[seq(from = 2, to = 362, by = 1)]/12) /
+                                       (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ 
+                                       (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1) * 100
     
     Key.Rate.TS.Up@TwoYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 25, to = 385, by = 1)]) ^ 
                                      (Key.Rate.TS.Up@period[seq(from = 25, to = 385, by = 1)]/12) /

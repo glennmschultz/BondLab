@@ -7,60 +7,6 @@
 # Copyright (C) 2014  Glenn M Schultz, CFA
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
-  
-#setGeneric("REMICCashFlow", function(bond.id = "character", 
-#                                     trade.date = "character",
-#                                     settlement.date = "character",
-#                                     collateral.price = numeric(),
-#                                     tranche.price = numeric(),
-#                                     PrepaymentAssumption = "character", 
-#                                     ..., 
-#                                     begin.cpr = numeric(), 
-#                                     end.cpr = numeric(), 
-#                                     seasoning.period = numeric(), 
-#                                     CPR = numeric())
-#  {standardGeneric("REMICCashFlow")})
-
-  setMethod("initialize",
-            signature("REMICCashFlow"),
-            function(.Object,
-                      DealName = "character",
-                      TrancheName = "character",
-                      TrancheNumber = "character",
-                      Price = numeric(),
-                      PrincipalProceeds = numeric(),
-                      Accrued = numeric(),
-                      YieldToMaturity = numeric(),
-                      WAL = numeric(),
-                      ModDuration = numeric(),
-                      Convexity = numeric(),
-                      Period = numeric(),
-                      PmtDate = "character",
-                      TimePeriod = numeric(),
-                      Interest = numeric(),
-                      Principal = numeric(),
-                      TotalCashFlow = numeric())
-              {
-              .Object@DealName = DealName
-              .Object@TrancheName = TrancheName
-              .Object@TrancheNumber = TrancheNumber
-              .Object@Price = Price
-              .Object@PrincipalProceeds = PrincipalProceeds
-              .Object@Accrued = Accrued
-              .Object@YieldToMaturity = YieldToMaturity
-              .Object@WAL = WAL
-              .Object@ModDuration = ModDuration
-              .Object@Convexity = Convexity
-              .Object@Period = Period
-              .Object@PmtDate = PmtDate
-              .Object@TimePeriod = TimePeriod
-              .Object@Interest = Interest
-              .Object@Principal = Principal
-              .Object@TotalCashFlow =TotalCashFlow
-              
-              return(.Object)
-              callNextMethod(.Object,...)  
-              })
 
   REMICCashFlow <- function(bond.id = "character", 
                             trade.date = "character",
@@ -76,12 +22,17 @@
                             KeyRateTermStructure = NULL){
     
   # Error Trap (?)
+    
+  # ---- connect to rates data folder
+  rates.data <- Rates(trade.date = trade.date)  
   
   #-- call REMIC Tranche
   REMIC.Tranche <- MBS(MBS.id = bond.id)
 
   #-- call REMIC Deal Date
   REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
+  
+  TermStructure <- TermStructure(rates.data = rates.data)
   
   #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
   #-- The last payment date is found in the REMIC Deal FactorData List
@@ -105,6 +56,7 @@
                   settlement.date = settlement.date,
                   collateral.price = collateral.price,
                   PrepaymentAssumption = PrepaymentAssumption,
+                  TermStructure = TermStructure,
                   ...,
                   begin.cpr = begin.cpr,
                   end.cpr = end.cpr,
@@ -201,6 +153,61 @@
   Interest = as.numeric(REMIC.CashFlow$value[,4]),
   Principal =   as.numeric(REMIC.CashFlow$value[,5]),
   TotalCashFlow = as.numeric(REMIC.CashFlow$value[,6]))
-
-    
+  
 }
+  
+  setMethod("initialize",
+            signature("REMICCashFlow"),
+            function(.Object,
+                     DealName = "character",
+                     TrancheName = "character",
+                     TrancheNumber = "character",
+                     Price = numeric(),
+                     PrincipalProceeds = numeric(),
+                     Accrued = numeric(),
+                     YieldToMaturity = numeric(),
+                     WAL = numeric(),
+                     ModDuration = numeric(),
+                     Convexity = numeric(),
+                     Period = numeric(),
+                     PmtDate = "character",
+                     TimePeriod = numeric(),
+                     Interest = numeric(),
+                     Principal = numeric(),
+                     TotalCashFlow = numeric())
+{
+              .Object@DealName = DealName
+              .Object@TrancheName = TrancheName
+              .Object@TrancheNumber = TrancheNumber
+              .Object@Price = Price
+              .Object@PrincipalProceeds = PrincipalProceeds
+              .Object@Accrued = Accrued
+              .Object@YieldToMaturity = YieldToMaturity
+              .Object@WAL = WAL
+              .Object@ModDuration = ModDuration
+              .Object@Convexity = Convexity
+              .Object@Period = Period
+              .Object@PmtDate = PmtDate
+              .Object@TimePeriod = TimePeriod
+              .Object@Interest = Interest
+              .Object@Principal = Principal
+              .Object@TotalCashFlow =TotalCashFlow
+              
+              return(.Object)
+              callNextMethod(.Object,...)  
+            })
+  
+  
+  setGeneric("REMICCashFlow", function(bond.id = "character", 
+                                       trade.date = "character",
+                                       settlement.date = "character",
+                                       collateral.price = numeric(),
+                                       tranche.price = numeric(),
+                                      PrepaymentAssumption = "character", 
+                                       ..., 
+                                       begin.cpr = numeric(), 
+                                       end.cpr = numeric(), 
+                                       seasoning.period = numeric(), 
+                                       CPR = numeric(),
+                                        KeyRateTermStructure = NULL)
+                          {standardGeneric("REMICCashFlow")})  

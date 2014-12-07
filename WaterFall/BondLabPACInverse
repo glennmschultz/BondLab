@@ -15,7 +15,7 @@
 # --- The below are standard calculations that must be done before the waterfall
 # --- There are two arrays to the cash waterfall the first acrrued and balance
 # --- the second is the cash waterfall array  
-# --- Retrieve Collateral Casflow needed for waterfall allocation
+# --- Retrieve Collateral Cashflow needed for waterfall allocation
   
   Period <- as.numeric(Collateral@Period)
   PmtDate <- as.character(Collateral@PmtDate)
@@ -121,7 +121,7 @@
   
   for(ca.row in 1:NoPeriod){
     for(ca.col in 1:NoCol){
-    CouponArray[ca.row, ca.col] <- (REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/100)/frequency
+      CouponArray[ca.row, ca.col] <- (REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/100)/frequency
     }
   }
 
@@ -154,7 +154,6 @@
   if(isTRUE(REMIC.Tranche@Schedule)) 
   {schedule.period <- length(as.numeric(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate))} else 
   {schedule.period <- NULL}
-
 
   # ================ The floater and inverse are paid pro-rata ======================
   # ---- Calculate each principal payment ratio before water fall loop
@@ -195,18 +194,18 @@
  
   #--, pay companion bond
   #--, if the companion bonds are paid to zero
-  if(as.numeric(TrancheCashFlow[waterfall -1, 2, 1]) == 0 & as.numeric(TrancheCashFlow[waterfall - 1, 3, 1])) 
+  if(as.numeric(TrancheCashFlow[waterfall -1, 2, 1]) == 0 & as.numeric(TrancheCashFlow[waterfall - 1, 3, 1]) == 0) 
   {TrancheCashFlow[waterfall, 3, 3] = 0
    TrancheCashFlow[waterfall, 2, 3] = 0
    TrancheCashFlow[waterfall, 1, 3] = as.numeric(TrancheCashFlow[waterfall, 1, 3]) + as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(TrancheCashFlow[waterfall, 1, 3])} 
   else
   {Companionprincipal = 
     min(sum(TrancheCashFlow[waterfall -1, 2, 1] + TrancheCashFlow[waterfall -1, 3,1]),  
-    max(0,as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(principal)))
+    max(0,as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(principal)))}
   
-  TrancheCashFlow[waterfall, 2, 3] = Companionprincipal * FloaterRatio
-  TrancheCashFlow[waterfall, 3, 3] = Companionprincipal * InverseRatio
-  }
+  TrancheCashFlow[waterfall, 2, 3] = (Companionprincipal * FloaterRatio)
+  TrancheCashFlow[waterfall, 3, 3] = (Companionprincipal * InverseRatio)
+  
   end
   
   #--, pay PAC IO bond zero principal
@@ -227,12 +226,12 @@
                                                   as.numeric(TrancheCashFlow[waterfall, tranche, 3])
   }
     } # End of Waterfall For Loop
-   
-  
+
+  #print(Termstructure, local = TRUE)
+
   Period <- Collateral@Period
   PmtDate <- as.character(REMIC.pmtdate)
-
-
+  
   TimePeriod <- REMIC.time.period
   Interest <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber),2]
   Principal <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber), 3]

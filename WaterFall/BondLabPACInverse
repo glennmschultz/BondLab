@@ -78,9 +78,9 @@
   # ---- Table 2 is the acrrued, 
   # ---- Table 3 principal payment
   # ---- Table 4 is proceeds
-  
-  # --- Dim array to hold the variables
-  # --- Populate begin values of the tranches current balance, acrrued interest, proceeds
+  # ---- Dim array to hold the variables
+  # ---- Populate begin values of the tranches current balance, acrrued interest, proceeds
+  # ====================================================================================
   
   TrancheBeginValue <- array(data = 0, c(1, (NoCol), 4))
   
@@ -98,15 +98,12 @@
   
   TrancheBeginValue[1,ai,2] = (days.of.accrued/days.between.pmtdate) *  
         
-         (REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100) /  REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency * TrancheBeginValue[1,ai,1]
-                
-        #TrancheCoupon 
-        #Tranche Frequency
-        #Tranche current balance
-        
+         (REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100) /  REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency * TrancheBeginValue[1,ai,1]                      
   }
 
-  #-- compute the principal proceeds
+  #========================================================================
+  # compute the principal proceeds 
+  # =======================================================================
   for(prin in 1:NoCol){
   TrancheBeginValue[1,prin,3] <- if(prin != REMIC.Tranche@TrancheNumber) 
                                 {TrancheBeginValue[1,prin,1]} else
@@ -116,23 +113,35 @@
   #-- compute the proceeds
   TrancheBeginValue[,,4] <- (TrancheBeginValue[,,2] + TrancheBeginValue[,,3])
     
-  # ---- set-up the coupon array this is used to allocate interest
+  #========================================================================
+  #set-up the coupon array this is used to allocate interest 
+  #========================================================================
   CouponArray <- array(data = 0, c(NoPeriod, NoCol))
   
   for(ca.row in 1:NoPeriod){
     for(ca.col in 1:NoCol){
-      CouponArray[ca.row, ca.col] <- (REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/100)/frequency
+      if(isTRUE(REMIC.Deal@Tranches[[ca.col]]@Fixed)) 
+          {CouponArray[ca.row, ca.col] <- (REMIC.Deal@Tranches[[ca.col]]@TrancheCoupon/100)/frequency}
+            else
+          {CouponArray[ca.row, ca.col] <- REMIC.Deal@Tranches[[ca.col]]@FloaterFormula(
+              Index = (TermStructure@forwardrate[ca.row]/100)/frequency,
+              FloaterCap = (REMIC.Deal@Tranches[[ca.col]]@FloaterCap/100)/frequency,
+              FloaterMargin = (REMIC.Deal@Tranches[[ca.col]]@FloaterMargin/100)/frequency,
+              FloaterFloor = (REMIC.Deal@Tranches[[ca.col]]@FloaterFloor/100)/frequency
+              )}
+
     }
   }
 
-  # --- Dimension the REMIC cashflow Array
+  #======================================================================================
+  # Dimesion the REMIC cashflow array 
   # columns is the number of tranches, rows correspond to the number cashflows, (r, c, t)
   # There are 4 tables,
   # Table 1 = principal bal outstanding, 
   # Table 2 = interest, 
   # Table 3 = principal pmt, 
   # Table 4 = total cashflow
-  
+  #======================================================================================
   TrancheCashFlow <- array(data = 0, c((NoPeriod + 1), (NoCol), 4))
   colnames(TrancheCashFlow) <- c(rep((paste("Tranche_",seq(1:NoCol)))))
   
@@ -163,7 +172,8 @@
   InverseRatio = REMIC.Deal@Tranches[[3]]@TrancheOrigBal / CombinedBal
   # =================================================================================
 
-  # ========= This section begins the cash flow waterfall of the REMIC ==============
+  # =================================================================================
+  # This section begins the cash flow waterfall of the REMIC
   # ---- Allocate principal and interest to the tranches according to payment rules 
   # ---- Note waterfall allocation of principal and interest always begins in row 2
   # ==================================================================================
@@ -197,7 +207,8 @@
   if(as.numeric(TrancheCashFlow[waterfall -1, 2, 1]) == 0 & as.numeric(TrancheCashFlow[waterfall - 1, 3, 1]) == 0) 
   {TrancheCashFlow[waterfall, 3, 3] = 0
    TrancheCashFlow[waterfall, 2, 3] = 0
-   TrancheCashFlow[waterfall, 1, 3] = as.numeric(TrancheCashFlow[waterfall, 1, 3]) + as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric(TrancheCashFlow[waterfall, 1, 3])} 
+   TrancheCashFlow[waterfall, 1, 3] = as.numeric(TrancheCashFlow[waterfall, 1, 3]) + 
+    as.numeric(CollateralCashFlow[waterfall,7]) - as.numeric  (TrancheCashFlow[waterfall, 1, 3])} 
   else
   {Companionprincipal = 
     min(sum(TrancheCashFlow[waterfall -1, 2, 1] + TrancheCashFlow[waterfall -1, 3,1]),  
@@ -214,7 +225,8 @@
   #-- Third, compute ending balance
   for(balance in 1:NoCol){
 
-  if(balance != 4) {TrancheCashFlow[waterfall, balance, 1] <- as.numeric(TrancheCashFlow[waterfall -1, balance, 1]) - as.numeric(TrancheCashFlow[waterfall, balance, 3])}
+  if(balance != 4) {TrancheCashFlow[waterfall, balance, 1] <- 
+  as.numeric(TrancheCashFlow[waterfall -1, balance, 1]) - as.numeric(TrancheCashFlow[waterfall, balance, 3])}
   else
   {TrancheCashFlow[waterfall, balance, 1] <- as.numeric(TrancheCashFlow[waterfall -1, 1, 1]) - as.numeric(TrancheCashFlow[waterfall, 1, 3])}
   end
@@ -227,7 +239,7 @@
   }
     } # End of Waterfall For Loop
 
-  #print(Termstructure, local = TRUE)
+  #plot(TermStructure@forwardrate, type = "l")
 
   Period <- Collateral@Period
   PmtDate <- as.character(REMIC.pmtdate)
@@ -237,7 +249,7 @@
   Principal <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber), 3]
   TrancheCF <- TrancheCashFlow[2:(NoPeriod + 1),as.numeric(REMIC.Tranche@TrancheNumber),4]
 
-  
+  print(TrancheCashFlow[,,3])
 
   REMICCashFlow <- as.matrix(cbind(Period, PmtDate, TimePeriod, Interest, Principal, TrancheCF ))
 

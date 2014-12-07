@@ -32,7 +32,9 @@
   #-- call REMIC Deal Date
   REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
   
-  TermStructure <- TermStructure(rates.data = rates.data)
+  TermStructure <- if(is.null(KeyRateTermStructure)) {TermStructure(rates.data = rates.data)} else {KeyRateTermStructure}
+  #TermStructure <- TermStructure(rates.data = rates.data)
+  
   
   #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
   #-- The last payment date is found in the REMIC Deal FactorData List

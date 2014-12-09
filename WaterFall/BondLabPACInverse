@@ -249,7 +249,6 @@
   Principal <- TrancheCashFlow[2:(NoPeriod + 1), as.numeric(REMIC.Tranche@TrancheNumber), 3]
   TrancheCF <- TrancheCashFlow[2:(NoPeriod + 1),as.numeric(REMIC.Tranche@TrancheNumber),4]
 
-  print(TrancheCashFlow[,,3])
 
   REMICCashFlow <- as.matrix(cbind(Period, PmtDate, TimePeriod, Interest, Principal, TrancheCF ))
 

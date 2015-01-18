@@ -26,7 +26,18 @@ setMethod("initialize",
                    Incentive.Slow.beta = "numeric",
                    Incentive.Slow.eta = "numeric",
                    Burnout.beta.1 = "numeric",
-                   Burnout.beta.2 = "numeric"){
+                   Burnout.beta.2 = "numeric",
+                   BeginCDR = "numeric",
+                   PeakCDR = "numeric",
+                   EndCDR = "numeric",
+                   PeakMonth = "numeric",
+                   PlateauMonths = "numeric",
+                   MinOrigLTV = "numeric",
+                   MaxOrigLTV = "numeric",
+                   MinOrigMultiplier = "numeric",
+                   MaxOrigMultiplier = "numeric",
+                   UpdatedLTV.beta = "numeric",
+                   SATO.beta = "numeric"){
             
             .Object@TurnoverRate = TurnoverRate
             .Object@Turnover.alpha = Turnover.alpha
@@ -44,6 +55,12 @@ setMethod("initialize",
             .Object@Incentive.Slow.eta = Incentive.Slow.eta
             .Object@Burnout.beta.1 = Burnout.beta.a
             .Object@Burnout.beta.2 = Burnout.beta.2
+            .Object@BeginCDR = BeginCDR
+            .Object@PeakCDR = PeakCDR
+            .Object@EndCDR = EndCDR
+            .Object@PeakMonth = PeakMonth
+            .Object@PlateauMonths = PlateauMonths
+            .Object@MinOrigLTV = MinOrigLTV
             
             return(.Object)
             callNextMethod(.Object,...)

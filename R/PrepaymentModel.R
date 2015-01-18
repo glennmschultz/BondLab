@@ -45,17 +45,28 @@ setMethod("initialize",
             callNextMethod(.Object,....)
           })
 
-  #----------------------------------
+  #---------------------------------------------------------------------------------------
   #Prepayment Model Functions.  These functions are used to build the base prepayment model
-  #----------------------------------
+  #Funtion include those for voluntary repayment and defaults
+  #---------------------------------------------------------------------------------------
 
-  Seasoning <- function(alpha = numeric(), beta = numeric(), theta = numeric(), LoanAge = numeric()){
-  #----------------------------------
+  #---------------------------------------------------------------------------------------
+  #This section is the voluntary repayment functions
+  #---------------------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------------------
   # Seasoning function is a 3-parameter asymtote exponential function where
   # The three parameter asymptote is equivalent to the PPC ramp
   # a is the asymptote of the function
   # b is the intercept of the function
   # c is the point where the max CPR is achieved
+  #---------------------------------------------------------------------------------------
+  
+  Seasoning <- function(alpha = numeric(), 
+                        beta = numeric(), 
+                        theta = numeric(), 
+                        LoanAge = numeric()){
+
   
   if (missing(alpha))
     stop("Need to specify alpha tuning parameter.")
@@ -79,11 +90,12 @@ setMethod("initialize",
   
   alpha - beta * exp(-theta * LoanAge)}
 
-  #----------------------------------
+  #------------------------------------------------------------------------------------------
   # Seasonality is modeled as a sin wave
   # a is the amplitude of the wave an set the maximum seasonal factor
   # Month is the calendar month (1..., 12) numeric
   # b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
+  #------------------------------------------------------------------------------------------
   Seasonality <- function( alpha = numeric(), Month = numeric(), theta= numeric()){
   
   if (missing(alpha))
@@ -103,29 +115,42 @@ setMethod("initialize",
   
   (1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))}
 
-  #-------------------------------------
+  #--------------------------------------------------------------------------------------
   # arctanget function with a location parameter
-  Borrower.Incentive <- function(incentive = numeric(), theta1 = numeric(), theta2 = numeric(), beta = numeric(), location = numeric()) { 
-  theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi))) 
-  }
+  #--------------------------------------------------------------------------------------
+  Borrower.Incentive <- function(incentive = numeric(), 
+                                 theta1 = numeric(), 
+                                 theta2 = numeric(), 
+                                 beta = numeric(), 
+                                 location = numeric()){ 
+  theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi)))}
 
-  #-----------------------------------
+  #-------------------------------------------------------------------------------------
   # Burnout is an exponentially decreasing function
   # a is the coefficient on the burnout varaible and b is the measure of burnout
-  Burnout <- function(beta1 = numeric(), beta2= numeric(), MaxIncen = numeric(), LoanAge = numeric()){
-  exp(beta1 * LoanAge +  beta2 * MaxIncen)
-  }
+  #-------------------------------------------------------------------------------------
+  Burnout <- function(beta1 = numeric(), 
+                      beta2= numeric(), 
+                      MaxIncen = numeric(), 
+                      LoanAge = numeric()){
+  exp(beta1 * LoanAge +  beta2 * MaxIncen)}
 
-  # --------------------------------
+
+  #-------------------------------------------------------------------------------------
+  #This section is the involuntary (default) repayment functions
+  #-------------------------------------------------------------------------------------
+
+  #-------------------------------------------------------------------------------------
   # Default Baseline is a piece wise function.
-  # The use selects the begining and peak CDR as well as the peak month, ramp plateau and end End CDR
+  # The user selects the begining, peak CDR, the peak month, ramp plateau, and end End CDR
+  #-------------------------------------------------------------------------------------
   CDR.Baseline <- function(BeginCDR = numeric(),
                            PeakCDR = numeric(),
                            EndCDR = numeric(),
                            PeakMonth = numeric(),
                            PlateauMonths = numeric(),
                            EndMonth = numeric(),
-                           LoanAge = vector()) {
+                           LoanAge = numeric()) {
   
   UpRamp = PeakCDR - BeginCDR  
   DownRamp = EndCDR - PeakCDR
@@ -135,21 +160,38 @@ setMethod("initialize",
   ifelse(Month > PeakMonth & Month <= PlateauEnd ,PeakCDR, 
   ifelse(Month > PlateauEnd & Month <= EndMonth, PeakCDR + (Month - PlateauEnd) * (DownRamp/DownRampMonths),EndCDR)))}
 
-  OrigMultiplier <- function(OrigLTV = numeric()){
-    ifelse(OrigLTV > 90, 1.25,
-    iflese(OrigLTV > 80 & OrigLTV <= 90, 1.0, 0.3))
-  }
+  #------------------------------------------------------------------------------------
+  #Original Loan to Value Default Multipliers
+  #------------------------------------------------------------------------------------
+  OrigMultiplier <- function(OrigLTV = numeric(),
+                             MinOLTV = numeric(),
+                             MaxOLTV = numeric(),
+                             MinOrigMultiplier = numeric(),
+                             MaxOrigMultiplier = numeric()){
+    ifelse(OrigLTV > MaxOLTV, MaxOrigMultiplier,
+    iflese(OrigLTV > MinOLTV & OrigLTV <= MaxOLTV, 1.0, MinOrigMultiplier))}
 
-  UpdateLTVMultiplier <- function(beta, OrigLTV, ULTV){
+  #------------------------------------------------------------------------------------
+  #Updated Loan to Value Default Multiplier Function
+  #------------------------------------------------------------------------------------
+  UpdateLTVMultiplier <- function(beta = numeric(), 
+                                  OrigLTV = numeric(), 
+                                  ULTV = numeric()){
   chgLTV = (OrigLTV - ULTV)/100
   exp(-beta * chgLTV)}
 
-  SATOMultiplier <- function(beta, SATO) {
-  exp(beta * SATO)
-  }
+  #-----------------------------------------------------------------------------------
+  #SATO Default Multiplier Function
+  #-----------------------------------------------------------------------------------
 
-  # The Bond Lab base prepayment model
-  #----------------------------------------------------------------------------------------------------
+  SATOMultiplier <- function(beta = numeric(), 
+                             SATO = numeric()) {
+  exp(beta * SATO)}
+
+  #-----------------------------------------------------------------------------------
+  # The Bond Lab base voluntary prepayment model
+  # Tuning parameters are called from the PrepaymentModelTune Class
+  #-----------------------------------------------------------------------------------
   Prepayment.Model <- function(ModelTune = "character", 
                                LoanAge = vector(), 
                                Month = vector(), 
@@ -176,8 +218,8 @@ setMethod("initialize",
   Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
   
   Turnover <- Turnover.Rate * 
-    Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
-    Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
+  Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
+  Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
   
   # Calculate the Borrower Refinance Response
   Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
@@ -190,7 +232,52 @@ setMethod("initialize",
   SMM <-pmax(0, SMM)    
   }
 
-  # ---------  This function is the prepayment model it is the constructor for the prepayment model vector ----------
+
+  #-------------------------------------------------------------------------------
+  #Bond Lab base default model
+  #The default model tuning parameters are called from the prepayment model tune class
+  #-------------------------------------------------------------------------------
+  Default.Model <- function(ModelTune = "character",
+                            OrigLTV = numeric(),
+                            SATO = numeric(),
+                            UpdatedLTV = vector(),
+                            LoanAge = vector()){
+    
+    BeginCDR      = ModelTune@BeginCPR
+    PeakCDR       = ModelTune@PeakCDR
+    EndCDR        = ModelTune@EndCDR
+    PeakMonth     = ModelTune@PeakMonth
+    PlateauMonths = ModelTune@PlateauMonths
+    EndMonth      = ModelTune@EndMonth
+    MinOrigLTV    = ModelTune@MinOrigLTV
+    MaxOrigLTV    = ModelTune@MaxOrigLTV
+    MinOrigMultiplier = ModelTune@MinOrigMultiplier
+    MaxOrigMultiplier = ModelTune@MaxOrigMultiplier
+    UpdatedLTV.beta = ModelTune@UpdateLTV.beta
+    SATO.beta = ModelTune@SATO.beta
+    
+    
+          Default <- CDR.Baseline(BeginCDR = BeginCDR,
+                                  PeakCDR = PeakCDR,
+                                  EndCDR = EndCDR,
+                                  PeakMonth = PeakMonth,
+                                  PlateauMonths = PlateauMonths,
+                                  EndMonth = EndMonth,
+                                  LoanAge = LoanAge)
+    
+    #--------------------------------------------------------------------------
+    #convert to a monthly default rate (hazard) before applying default multipliers
+    #--------------------------------------------------------------------------
+    
+    Monthly.Default <- 1-(1 - (Default/100))^(1/12)
+    }
+
+
+
+  # ----------------------------------------------------------------------------
+  #This section begins the bond lab prepayment model
+  #The constructor for the prepayment model vector starts below
+  # ----------------------------------------------------------------------------
   PrepaymentAssumption <- function(bond.id = "character", 
                                    TermStructure = "character", 
                                    MortgageRate = "character", 
@@ -203,9 +290,9 @@ setMethod("initialize",
                                    seasoning.period = numeric(), 
                                    CPR = numeric()){
   
-  #Mortgage Rate is the call the to MortgageRDS.rds in the Prepayment Model folder.  Prepayment Assumption does not open a connection
-  #to the MortgageRate.rds it must be open by the function that is calling Prepayment Model
-  
+  # Mortgage Rate is the call the to MortgageRDS.rds in the Prepayment Model folder.  
+  # Prepayment Assumption does not open a connection
+  # to the MortgageRate.rds it must be open by the function that is calling Prepayment Model
   
   #Check for a valid prepayment assumption
   if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")

@@ -244,7 +244,7 @@
            TwoYearFwd = "numeric",
            TenYearFwd = "numeric"
          ))
-
+  #-- This is protype of function class to hold the prepayment model
   setClass("PrepaymentModel",
          representation(
            Turnover = "numeric",
@@ -271,7 +271,19 @@
            Incentive.Slow.beta = "numeric",
            Incentive.Slow.eta = "numeric",
            Burnout.beta.1 = "numeric",
-           Burnout.beta.2 = "numeric"
+           Burnout.beta.2 = "numeric",
+           BeginCDR = "numeric",
+           PeakCDR = "numeric",
+           EndCDR = "numeric",
+           PeakMonth = "numeric",
+           PlateauMonths = "numeric",
+           EndMonth = "numeric",
+           MinOrigLTV = "numeric",
+           MaxOrigLTV = "numeric",
+           MinOrigMultiplier = "numeric",
+           MaxOrigMultiplier = "numeric",
+           UpdatedLTV.beta = "numeric",
+           SATO.beta = "numeric"
          ))
 
   setClass("MortgageRate",

@@ -114,7 +114,39 @@ setMethod("initialize",
   # a is the coefficient on the burnout varaible and b is the measure of burnout
   Burnout <- function(beta1 = numeric(), beta2= numeric(), MaxIncen = numeric(), LoanAge = numeric()){
   exp(beta1 * LoanAge +  beta2 * MaxIncen)
-  }  
+  }
+
+  # --------------------------------
+  # Default Baseline is a piece wise function.
+  # The use selects the begining and peak CDR as well as the peak month, ramp plateau and end End CDR
+  CDR.Baseline <- function(BeginCDR = numeric(),
+                           PeakCDR = numeric(),
+                           EndCDR = numeric(),
+                           PeakMonth = numeric(),
+                           PlateauMonths = numeric(),
+                           EndMonth = numeric(),
+                           LoanAge = vector()) {
+  
+  UpRamp = PeakCDR - BeginCDR  
+  DownRamp = EndCDR - PeakCDR
+  DownRampMonths = EndMonth - (PeakMonth + PlateauMonths)
+  PlateauEnd = PeakMonth + PlateauMonths
+  ifelse(Month <= PeakMonth, 0 + ((Month-1) * (UpRamp / (PeakMonth - 1))),
+  ifelse(Month > PeakMonth & Month <= PlateauEnd ,PeakCDR, 
+  ifelse(Month > PlateauEnd & Month <= EndMonth, PeakCDR + (Month - PlateauEnd) * (DownRamp/DownRampMonths),EndCDR)))}
+
+  OrigMultiplier <- function(OrigLTV = numeric()){
+    ifelse(OrigLTV > 90, 1.25,
+    iflese(OrigLTV > 80 & OrigLTV <= 90, 1.0, 0.3))
+  }
+
+  UpdateLTVMultiplier <- function(beta, OrigLTV, ULTV){
+  chgLTV = (OrigLTV - ULTV)/100
+  exp(-beta * chgLTV)}
+
+  SATOMultiplier <- function(beta, SATO) {
+  exp(beta * SATO)
+  }
 
   # The Bond Lab base prepayment model
   #----------------------------------------------------------------------------------------------------
@@ -158,8 +190,7 @@ setMethod("initialize",
   SMM <-pmax(0, SMM)    
   }
 
-  # ---------  This function is the prepayment model and serves as a constructor for the prepayment model vector 
-  # ---------  Prepayment Assumption
+  # ---------  This function is the prepayment model it is the constructor for the prepayment model vector ----------
   PrepaymentAssumption <- function(bond.id = "character", 
                                    TermStructure = "character", 
                                    MortgageRate = "character", 

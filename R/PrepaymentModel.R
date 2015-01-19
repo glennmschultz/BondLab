@@ -174,7 +174,7 @@ setMethod("initialize",
   #------------------------------------------------------------------------------------
   #Updated Loan to Value Default Multiplier Function
   #------------------------------------------------------------------------------------
-  UpdateLTVMultiplier <- function(beta = numeric(), 
+  UpdatedLTVMultiplier <- function(beta = numeric(), 
                                   OrigLTV = numeric(), 
                                   ULTV = numeric()){
   chgLTV = (OrigLTV - ULTV)/100
@@ -253,8 +253,9 @@ setMethod("initialize",
     MaxOrigLTV    = ModelTune@MaxOrigLTV
     MinOrigMultiplier = ModelTune@MinOrigMultiplier
     MaxOrigMultiplier = ModelTune@MaxOrigMultiplier
-    UpdatedLTV.beta = ModelTune@UpdateLTV.beta
     SATO.beta = ModelTune@SATO.beta
+    UpdatedLTV.beta = ModelTune@UpdateLTV.beta
+
     
     
           Default <- CDR.Baseline(BeginCDR = BeginCDR,
@@ -270,7 +271,16 @@ setMethod("initialize",
     #--------------------------------------------------------------------------
     
     Monthly.Default <- 1-(1 - (Default/100))^(1/12)
-    }
+    
+
+    OrigCoeff <- OrigMultiplier(MinOrigLTV = MinOrigLTV,
+                                MaxOrigLTV = MaxOrigLTV,
+                                MinOrigMultiplier = MinOrigMultiplier,
+                                MaxOrigMultiplier = MaxOrigMultiplier)
+
+    SATOCoeff <- SATOMultiplier(beta = SATO.beta, SATO = SATO)
+
+    UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, UpdatedLTV)}
 
 
 

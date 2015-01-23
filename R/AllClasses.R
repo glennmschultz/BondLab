@@ -74,6 +74,8 @@
            Frequency = "numeric",
            BondBasis = "character",
            GWac = "numeric",
+           OrigLoanBal = "numeric",
+           OrigLTV = "numeric",
            AmortizationType = "character",
            AmortizationTerm = "numeric",
            Index = "character",
@@ -192,7 +194,9 @@
            NoteRate = "numeric",
            MtgRateFwd = "numeric",
            Incentive = "numeric",
-           SMM = "numeric"))
+           SMM = "numeric",
+           MDR = "numeric",
+           Severity = "numeric"))
 
 
   setClass("DollarRoll",
@@ -291,6 +295,10 @@
            yr30 = "function",
            yr15 = "function"
          ))
+  
+  setClass("UpdatedLTV",
+           representation(
+             ULTV = "function"))
 
   # ----- The following classes define rate of return and valuation classes
 

@@ -9,18 +9,8 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 #======================  Set and create class MBS Details ==============================
-#setGeneric("MBSDetails", function(Cusip = "character", ID = "character", BondType = "character", Sector ="character", Coupon = numeric(),
-#                                  IssueDate = "character", DatedDate = "character", Maturity = "character", LastPmtDate = "character", NextPmtDate = "character",
-#                                  PaymentDelay = numeric(), Moody = "character", SP = "character", BondLab  = "character", Frequency = numeric(), 
-#                                  BondBasis = "character", GWac = numeric(), AmortizationType = "character", AmortizationTerm = numeric(), Index = "character",
-#                                  Margin = numeric(), FirstPmtDate = "character", FinalPmtDate = "character", Servicing = numeric(), PMI = numeric(),
-#                                  Gfee = numeric(), InitialInterest = "character", InterestOnlyPeriod = numeric(), FirstPrinPaymentDate = "character",
-#                                  BalloonPmt = "character", BalloonDate = "character", MBSFactor = numeric(), Model = "character", Burnout = numeric(), SATO = numeric()) 
-#                                  {standardGeneric("MBSDetails")})
-
-
-
-# Inititialize MBSDetails
+# Do I need a generic for this?
+# ---------------------       Inititialize MBSDetails     ------------------------------
 setMethod("initialize",
           signature("MBSDetails"),
           function(.Object,
@@ -41,6 +31,8 @@ setMethod("initialize",
                    Frequency = "numeric",
                    BondBasis = "character",
                    GWac = "numeric",
+                   OrigLoanBal = "numeric",
+                   OrigLTV = "numeric",
                    AmortizationType = "character",
                    AmortizationTerm = "numeric",
                    Index = "character",
@@ -78,6 +70,8 @@ setMethod("initialize",
             .Object@Frequency = Frequency
             .Object@BondBasis = BondBasis
             .Object@GWac = GWac
+            .Object@OrigLoanBal = OrigLoanBal
+            .Object@OrigLTV = OrigLTV
             .Object@AmortizationType = AmortizationType
             .Object@AmortizationTerm = AmortizationTerm
             .Object@Index = Index
@@ -121,6 +115,8 @@ setMethod("initialize",
   Frequency = numeric(),
   BondBasis = "character",
   GWac = numeric(),
+  OrigLoanBal = numeric(),
+  OrigLTV = numeric(),
   AmortizationType = "character",
   AmortizationTerm = numeric(),
   Index = "character",
@@ -159,6 +155,8 @@ setMethod("initialize",
       Frequency = Frequency,
       BondBasis = BondBasis,
       GWac = GWac,
+      OrigLoanBal = OrigLoanBal,
+      OrigLTV = OrigLTV,
       AmortizationType = AmortizationType,
       AmortizationTerm = AmortizationTerm,
       Index = Index,
@@ -201,6 +199,8 @@ setMethod("initialize",
   Frequency = numeric(),
   BondBasis = "character",
   GWac = numeric(),
+  OrigLoanBal = numeric(),
+  OrigLTV = numeric(),
   AmortizationType = "character",
   AmortizationTerm = numeric(),
   Index = "character",
@@ -239,6 +239,8 @@ setMethod("initialize",
     Frequency = Frequency,
     BondBasis = BondBasis,
     GWac = GWac,
+    OrigLoanBal = OrigLoanBal,
+    OrigLTV = OrigLTV,
     AmortizationType = AmortizationType,
     AmortizationTerm = AmortizationTerm,
     Index = Index,

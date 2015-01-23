@@ -24,7 +24,9 @@ setMethod("initialize",
                    NoteRate = "numeric",
                    MtgRateFwd = "numeric",
                    Incentive = "numeric",
-                   SMM = "numeric")
+                   SMM = "numeric",
+                   MDR = "numeric",
+                   Severity = "numeric")
           {
             .Object@PrepayAssumption = PrepayAssumption
             .Object@PPCStart = PPCStart
@@ -40,6 +42,8 @@ setMethod("initialize",
             .Object@MtgRateFwd = MtgRateFwd
             .Object@Incentive = Incentive
             .Object@SMM = SMM
+            .Object@MDR = MDR
+            .Object@Severity = Severity
             
             return(.Object)
             callNextMethod(.Object,....)
@@ -156,9 +160,9 @@ setMethod("initialize",
   DownRamp = EndCDR - PeakCDR
   DownRampMonths = EndMonth - (PeakMonth + PlateauMonths)
   PlateauEnd = PeakMonth + PlateauMonths
-  ifelse(Month <= PeakMonth, 0 + ((Month-1) * (UpRamp / (PeakMonth - 1))),
-  ifelse(Month > PeakMonth & Month <= PlateauEnd ,PeakCDR, 
-  ifelse(Month > PlateauEnd & Month <= EndMonth, PeakCDR + (Month - PlateauEnd) * (DownRamp/DownRampMonths),EndCDR)))}
+  ifelse(LoanAge <= PeakMonth, 0 + ((LoanAge-1) * (UpRamp / (PeakMonth - 1))),
+  ifelse(LoanAge > PeakMonth & LoanAge <= PlateauEnd ,PeakCDR, 
+  ifelse(LoanAge > PlateauEnd & LoanAge <= EndMonth, PeakCDR + (LoanAge - PlateauEnd) * (DownRamp/DownRampMonths),EndCDR)))}
 
   #------------------------------------------------------------------------------------
   #Original Loan to Value Default Multipliers
@@ -169,7 +173,7 @@ setMethod("initialize",
                              MinOrigMultiplier = numeric(),
                              MaxOrigMultiplier = numeric()){
     ifelse(OrigLTV > MaxOLTV, MaxOrigMultiplier,
-    iflese(OrigLTV > MinOLTV & OrigLTV <= MaxOLTV, 1.0, MinOrigMultiplier))}
+    ifelse(OrigLTV > MinOLTV & OrigLTV <= MaxOLTV, 1.0, MinOrigMultiplier))}
 
   #------------------------------------------------------------------------------------
   #Updated Loan to Value Default Multiplier Function
@@ -243,7 +247,7 @@ setMethod("initialize",
                             UpdatedLTV = vector(),
                             LoanAge = vector()){
     
-    BeginCDR      = ModelTune@BeginCPR
+    BeginCDR      = ModelTune@BeginCDR
     PeakCDR       = ModelTune@PeakCDR
     EndCDR        = ModelTune@EndCDR
     PeakMonth     = ModelTune@PeakMonth
@@ -254,8 +258,8 @@ setMethod("initialize",
     MinOrigMultiplier = ModelTune@MinOrigMultiplier
     MaxOrigMultiplier = ModelTune@MaxOrigMultiplier
     SATO.beta = ModelTune@SATO.beta
-    UpdatedLTV.beta = ModelTune@UpdateLTV.beta
-
+    UpdatedLTV.beta = ModelTune@UpdatedLTV.beta
+  
     
     
           Default <- CDR.Baseline(BeginCDR = BeginCDR,
@@ -273,14 +277,20 @@ setMethod("initialize",
     Monthly.Default <- 1-(1 - (Default/100))^(1/12)
     
 
-    OrigCoeff <- OrigMultiplier(MinOrigLTV = MinOrigLTV,
-                                MaxOrigLTV = MaxOrigLTV,
+    OrigCoeff <- OrigMultiplier(OrigLTV = OrigLTV,
+                                MinOLTV = MinOrigLTV,
+                                MaxOLTV = MaxOrigLTV,
                                 MinOrigMultiplier = MinOrigMultiplier,
                                 MaxOrigMultiplier = MaxOrigMultiplier)
+   
 
     SATOCoeff <- SATOMultiplier(beta = SATO.beta, SATO = SATO)
 
-    UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, UpdatedLTV)}
+    UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, OrigLTV = OrigLTV, UpdatedLTV)
+  
+    Multiplier = log(OrigCoeff) + log(SATOCoeff) + log(UpdatedCoeff)
+  
+    MDR = Monthly.Default * exp(Multiplier)}
 
 
 
@@ -298,8 +308,11 @@ setMethod("initialize",
                                    begin.cpr = numeric(), 
                                    end.cpr = numeric(), 
                                    seasoning.period = numeric(), 
-                                   CPR = numeric()){
+                                   CPR = numeric(),
+                                   Severity = 0.0){
   
+  # Severity is optional value passed to the model the default is 35%.  Should build a severity
+  # model class like mortgage rate and scenario for severity.
   # Mortgage Rate is the call the to MortgageRDS.rds in the Prepayment Model folder.  
   # Prepayment Assumption does not open a connection
   # to the MortgageRate.rds it must be open by the function that is calling Prepayment Model
@@ -312,7 +325,7 @@ setMethod("initialize",
   if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
   #PPC function has error trapping feature so there is no need to error trap for PPC
   
-  
+  #
   NoteRate = bond.id@GWac
   sato = bond.id@SATO
   FirstPmtDate = as.Date(bond.id@FirstPrinPaymentDate, "%m-%d-%Y")
@@ -350,7 +363,7 @@ setMethod("initialize",
   }
   
   Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, type = bond.id@AmortizationType, term = bond.id@AmortizationTerm)
-  Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] # This is why I need to make class classflow array
+  Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] # This is why I need to make class classflow array maybe l- or sapply works here
   
   Incentive =  as.numeric(NoteRate - Mtg.Rate)
   Burnout = pmax(bond.id@Burnout,(Incentive * 100)-(sato * 100))
@@ -382,7 +395,9 @@ setMethod("initialize",
       LoanAge = as.numeric(LoanAge),
       MtgRateFwd = as.numeric(Mtg.Rate),
       Incentive = as.numeric(Incentive),
-      SMM = as.numeric(SMM)
+      SMM = as.numeric(SMM),
+      MDR = 0,
+      Severity = as.numeric(Severity)
   )
   
 }

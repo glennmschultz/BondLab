@@ -97,6 +97,7 @@ setMethod("initialize",
                    MtgRateFwd = "numeric",
                    Incentive = "numeric",
                    SMM = "numeric",
+                   MDR = "numeric",
                    #--- Mtg Scenario Set
                    Scenario = "list"){
             
@@ -186,6 +187,7 @@ setMethod("initialize",
             .Object@MtgRateFwd = MtgRateFwd
             .Object@Incentive = Incentive
             .Object@SMM = SMM
+            .Object@MDR = MDR
             #--- Mtg Scenario Set
             .Object@Scenario = Scenario
             
@@ -197,7 +199,8 @@ setMethod("initialize",
   # This function analyzes a standard pass through security and serves as the constructor function
   #--------------------------------------  
   PassThroughAnalytics <- function (bond.id = "character", 
-                                    MortgageRate = "character", 
+                                    MortgageRate = "character",
+                                    UpdatedLTV = "character",
                                     original.bal = numeric(), 
                                     price = numeric(), 
                                     trade.date = "character", 
@@ -226,8 +229,11 @@ setMethod("initialize",
   Rate.Delta = .25
   
   # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-  conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-  bond.id <- readRDS(conn1)
+  
+  #conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
+  #bond.id <- readRDS(conn1)
+  
+  bond.id <- MBS(MBS.id = bond.id)
   
   #Call the desired curve from rates data folder
   conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
@@ -236,6 +242,7 @@ setMethod("initialize",
   #Call Mortgage Rate Functions
   conn3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
   MortgageRate <- readRDS(conn3)
+  
   
   #move this to line 257 redundent
   Burnout = bond.id@Burnout
@@ -250,7 +257,7 @@ setMethod("initialize",
 
   #Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, 
-                                               MortgageRate = MortgageRate, 
+                                               MortgageRate = MortgageRate,
                                                TermStructure = TermStructure, 
                                                PrepaymentAssumption = PrepaymentAssumption, 
                                                ModelTune = ModelTune, 
@@ -383,6 +390,7 @@ setMethod("initialize",
       MtgRateFwd = PrepaymentAssumption@MtgRateFwd,
       Incentive = PrepaymentAssumption@Incentive,
       SMM = PrepaymentAssumption@SMM,
+      MDR = PrepaymentAssumption@MDR,
       #--- Mtg Scenario Set
       Scenario = Scenario@Scenario) 
   }

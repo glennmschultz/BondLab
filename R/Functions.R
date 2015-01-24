@@ -86,7 +86,7 @@ Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = nu
 Remain.Balance <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
   note.rate = note.rate/12
   term = term.mos
-  Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term.mos)-1))
+  Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term)-1))
   Remain.Balance
 }
 

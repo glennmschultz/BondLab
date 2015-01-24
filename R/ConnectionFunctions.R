@@ -26,6 +26,13 @@
                    MtgRate <- readRDS(MtgRate.Conn)
                    }
    
+   #------- connect to updated LTV function class
+   ULTV <- function()
+                  {
+                  ULTV.Conn <- gzfile("~/BondLab/PrepaymentModel/UpdatedLTV.rds", open = "rb")
+                  ULTV <- readRDS(ULTV.Conn)
+                  }
+   
   #----------- connect to prepayment model tune data folder
    ModelTune <- function(bond.id = "character")
                  {

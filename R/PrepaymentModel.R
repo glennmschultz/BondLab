@@ -226,9 +226,20 @@ setMethod("initialize",
   Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
   
   # Calculate the Borrower Refinance Response
-  Fast <- Borrower.Incentive(incentive = incentive, theta1 = Fast.theta1, theta2 = Fast.theta2, beta = Fast.beta, location = Fast.location)
-  Slow <- Borrower.Incentive(incentive = incentive, theta1 = Slow.theta1, theta2 = Slow.theta2, beta = Slow.beta, location = Slow.location)
-  Burnout <-Burnout(beta1 = Burnout.beta1, beta2 = Burnout.beta2, MaxIncen = Burnout.maxincen, LoanAge = LoanAge)
+  Fast <- Borrower.Incentive(incentive = incentive, 
+                             theta1 = Fast.theta1, 
+                             theta2 = Fast.theta2, 
+                             beta = Fast.beta, 
+                             location = Fast.location)
+  Slow <- Borrower.Incentive(incentive = incentive, 
+                             theta1 = Slow.theta1, 
+                             theta2 = Slow.theta2, 
+                             beta = Slow.beta, 
+                             location = Slow.location)
+  Burnout <-Burnout(beta1 = Burnout.beta1, 
+                    beta2 = Burnout.beta2, 
+                    MaxIncen = Burnout.maxincen, 
+                    LoanAge = LoanAge)
   
   Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
   
@@ -242,11 +253,16 @@ setMethod("initialize",
   #The default model tuning parameters are called from the prepayment model tune class
   #-------------------------------------------------------------------------------
   Default.Model <- function(ModelTune = "character",
+                            OrigLoanBalance = numeric(),
+                            NoteRate = numeric(),
+                            Term = numeric(),
                             OrigLTV = numeric(),
                             SATO = numeric(),
-                            UpdatedLTV = vector(),
-                            LoanAge = vector()){
+                            LoanAge = vector(),
+                            ...,
+                            HomePrice = vector()){
     
+    # -------------------- Default Model Tune Parameter -------------------------
     BeginCDR      = ModelTune@BeginCDR
     PeakCDR       = ModelTune@PeakCDR
     EndCDR        = ModelTune@EndCDR
@@ -260,6 +276,18 @@ setMethod("initialize",
     SATO.beta = ModelTune@SATO.beta
     UpdatedLTV.beta = ModelTune@UpdatedLTV.beta
   
+    # This function returns the amortization vector of a mortgage it is exact for a fixed rate mortage but only an
+    # estimate of the vector for an adjustable rate mortage sufficent for updated LTV due to amortization.
+    
+    AmortizationBalance = function(OrigLoanBalance = numeric(), 
+                                   NoteRate = numeric(), 
+                                   TermMos = numeric(), 
+                                   LoanAge = numeric()){
+    NoteRate = NoteRate/(months.in.year * 100)
+    Term = TermMos
+    Remain.Balance = OrigLoanBalance * 
+      (((1+NoteRate)^Term - ((1+NoteRate)^LoanAge))/(((1+NoteRate)^Term)-1))
+    }
     
     
           Default <- CDR.Baseline(BeginCDR = BeginCDR,
@@ -269,10 +297,19 @@ setMethod("initialize",
                                   PlateauMonths = PlateauMonths,
                                   EndMonth = EndMonth,
                                   LoanAge = LoanAge)
-    
+   
     #--------------------------------------------------------------------------
     #convert to a monthly default rate (hazard) before applying default multipliers
     #--------------------------------------------------------------------------
+    
+    #----------------------------Calculate Updated LTV ------------------------
+    EstimatedSalePrice <- OrigLoanBalance/(OrigLTV/100)
+    ScheduledBalance <- AmortizationBalance(OrigLoanBalance = OrigLoanBalance,
+                                            NoteRate = NoteRate,
+                                            TermMos = Term,
+                                            LoanAge = LoanAge)
+   
+    UpdatedLTV = ScheduledBalance / EstimatedSalePrice
     
     Monthly.Default <- 1-(1 - (Default/100))^(1/12)
     
@@ -283,13 +320,17 @@ setMethod("initialize",
                                 MinOrigMultiplier = MinOrigMultiplier,
                                 MaxOrigMultiplier = MaxOrigMultiplier)
    
-
-    SATOCoeff <- SATOMultiplier(beta = SATO.beta, SATO = SATO)
-
-    UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, OrigLTV = OrigLTV, UpdatedLTV)
   
+    SATOCoeff <- SATOMultiplier(beta = SATO.beta, 
+                                SATO = SATO)
+
+  
+    UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, 
+                                         OrigLTV = OrigLTV, 
+                                         ULTV = UpdatedLTV)
+   
     Multiplier = log(OrigCoeff) + log(SATOCoeff) + log(UpdatedCoeff)
-  
+
     MDR = Monthly.Default * exp(Multiplier)}
 
 
@@ -300,7 +341,7 @@ setMethod("initialize",
   # ----------------------------------------------------------------------------
   PrepaymentAssumption <- function(bond.id = "character", 
                                    TermStructure = "character", 
-                                   MortgageRate = "character", 
+                                   MortgageRate = "character",
                                    ModelTune = "character", 
                                    Burnout = numeric(), 
                                    PrepaymentAssumption = "character", 
@@ -328,12 +369,19 @@ setMethod("initialize",
   #
   NoteRate = bond.id@GWac
   sato = bond.id@SATO
+  AmortizationTerm = bond.id@AmortizationTerm
+  AmortizationType = bond.id@AmortizationType
+  OriginalLoanBalance = bond.id@OrigLoanBal
+  OrigLTV = bond.id@OrigLTV
   FirstPmtDate = as.Date(bond.id@FirstPrinPaymentDate, "%m-%d-%Y")
   LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
   FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
   NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
   
   col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
+  
+  #Here Mtg.Term is the term of the pass-through and may differ from the actual amortozation term
+  #reported in the MBS details because loans as typicall seasoned a few months before pooling
   
   Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/days.in.month) + 1
   Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/days.in.month) + 1
@@ -353,8 +401,12 @@ setMethod("initialize",
     term = as.character(term)
     switch( type, 
             fixed = switch(term,
-                           "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], ten = TermStructure@TenYearFwd[1:length(LoanAge)], sato = sato),
-                           "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)], ten = TermStructure@TenYearFwd[1:length(LoanAge)], sato = sato)
+            "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
+                                     ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
+                                     sato = sato),
+            "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
+                                     ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
+                                     sato = sato)
             ), # end first nested switch statement
             arm = switch(term, 
                          "30" = 0 ) # end second nested switch statement
@@ -362,8 +414,13 @@ setMethod("initialize",
     
   }
   
-  Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, type = bond.id@AmortizationType, term = bond.id@AmortizationTerm)
-  Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] # This is why I need to make class classflow array maybe l- or sapply works here
+  Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, 
+                       type = AmortizationType, 
+                       term = AmortizationTerm)
+  
+  Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] 
+  #Length of mortgage rate is set to loan age vector.
+  #This is why I need to make class classflow array maybe l- or sapply works here
   
   Incentive =  as.numeric(NoteRate - Mtg.Rate)
   Burnout = pmax(bond.id@Burnout,(Incentive * 100)-(sato * 100))
@@ -381,6 +438,15 @@ setMethod("initialize",
   
   }
   
+  MDR <- Default.Model(ModelTune = ModelTune,
+                       OrigLoanBalance = OriginalLoanBalance,
+                       NoteRate = NoteRate,
+                       Term = AmortizationTerm * months.in.year,
+                       OrigLTV = OrigLTV, 
+                       SATO = sato,  
+                       LoanAge = LoanAge)
+
+  
   new("PrepaymentAssumption",
       PrepayAssumption = as.character(PrepayAssumption),
       PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
@@ -396,7 +462,7 @@ setMethod("initialize",
       MtgRateFwd = as.numeric(Mtg.Rate),
       Incentive = as.numeric(Incentive),
       SMM = as.numeric(SMM),
-      MDR = 0,
+      MDR = as.numeric(MDR),
       Severity = as.numeric(Severity)
   )
   

@@ -350,14 +350,14 @@ setMethod("initialize",
                                    end.cpr = numeric(), 
                                    seasoning.period = numeric(), 
                                    CPR = numeric(),
-                                   Severity = 0.0){
+                                   Severity = numeric()){
   
   # Severity is optional value passed to the model the default is 35%.  Should build a severity
   # model class like mortgage rate and scenario for severity.
   # Mortgage Rate is the call the to MortgageRDS.rds in the Prepayment Model folder.  
   # Prepayment Assumption does not open a connection
   # to the MortgageRate.rds it must be open by the function that is calling Prepayment Model
-  
+    
   #Check for a valid prepayment assumption
   if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
   PrepayAssumption <- PrepaymentAssumption    
@@ -438,6 +438,7 @@ setMethod("initialize",
   
   }
   
+
   MDR <- Default.Model(ModelTune = ModelTune,
                        OrigLoanBalance = OriginalLoanBalance,
                        NoteRate = NoteRate,

@@ -1,4 +1,61 @@
 # Mortgage cash flow engine computes mortgage cashflow 
+setMethod("initialize",
+          signature("MortgageCashFlow"),
+          function(.Object,       
+                   Price = numeric(),
+                   Accrued = numeric(),
+                   YieldToMaturity = numeric(),
+                   WAL = numeric(),
+                   ModDuration = numeric(),
+                   Convexity = numeric(),
+                   Period = numeric(),
+                   PmtDate = "character",
+                   TimePeriod = numeric(),
+                   BeginningBal = numeric(),
+                   MonthlyPmt = numeric(),
+                   MonthlyInterest = numeric(),
+                   PassThroughInterest = numeric(),
+                   ScheduledPrin = numeric(),
+                   PrepaidPrin = numeric(),
+                   DefaultedPrin = numeric(),
+                   LossAmount = numeric(),
+                   RecoveredAmount = numeric(),
+                   EndingBal = numeric(),
+                   ServicingIncome = numeric(),
+                   PMIPremium = numeric(),
+                   GFeePremium = numeric(),  
+                   TotalCashFlow = numeric()
+          ){
+            
+            .Object@Price = Price
+            .Object@Accrued = Accrued
+            .Object@YieldToMaturity = YieldToMaturity
+            .Object@WAL = WAL
+            .Object@ModDuration = ModDuration
+            .Object@Convexity = Convexity
+            .Object@Period = Period
+            .Object@PmtDate = PmtDate
+            .Object@TimePeriod = TimePeriod
+            .Object@BeginningBal = BeginningBal
+            .Object@MonthlyPmt = MonthlyPmt
+            .Object@MonthlyInterest = MonthlyInterest
+            .Object@PassThroughInterest = PassThroughInterest
+            .Object@ScheduledPrin = ScheduledPrin
+            .Object@PrepaidPrin = PrepaidPrin
+            .Object@DefaultedPrin = DefaultedPrin
+            .Object@LossAmount = LossAmount
+            .Object@RecoveredAmount = RecoveredAmount
+            .Object@EndingBal = EndingBal
+            .Object@ServicingIncome = ServicingIncome
+            .Object@PMIPremium = PMIPremium
+            .Object@GFeePremium = GFeePremium  
+            .Object@TotalCashFlow = TotalCashFlow
+            
+            return(.Object)
+            callNextMethod(.Object,...)            
+          })
+
+
 
 #------------------------------------------------------
 # Mortgage cash flow function.  
@@ -58,12 +115,18 @@ MortgageCashFlow <- function(bond.id = "character",
   # first get the pmtdate interval
   pmtdate.interval = months.in.year/frequency
   # then compute the payment dates
-  pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
-                      else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
+  pmtdate = as.Date(c(if(settlement.date == issue.date) 
+  {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} else 
+    {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
   
-  #step3 build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
-  time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate)
+  #step3 build the time period vector (n) for discounting the cashflows 
+  #nextpmt date is vector of payment dates to n for each period
+  time.period = BondBasisConversion(issue.date = issue.date, 
+                                    start.date = start.date, 
+                                    end.date = end.date, 
+                                    settlement.date = settlement.date,
+                                    lastpmt.date = lastpmt.date, 
+                                    nextpmt.date = pmtdate)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
@@ -72,16 +135,39 @@ MortgageCashFlow <- function(bond.id = "character",
   
   #step5 initialize the prepayment model assumption class
   
-  col.names <- c("Period", "Date", "Time", "Begin Bal", "Monthly Pmt", "Scheduled Int", "Scheduled Prin", "Prepaid Prin", 
-                 "Ending Bal", "Sevicing", "PMI", "GFee", "Pass Through Interest", "Investor CashFlow", "Present Value Factor", "Present Value", 
-                 "Duration", "Convexity Time", "CashFlow Convexity", "Convexity")
+  col.names <- c("Period", 
+                 "Date", 
+                 "Time", 
+                 "Begin Bal", 
+                 "Monthly Pmt", 
+                 "Scheduled Int", 
+                 "Scheduled Prin", 
+                 "Prepaid Prin",
+                 "Defaulted Prin",
+                 "Loss Amount",
+                 "Recovered Amount",
+                 "Ending Bal", 
+                 "Sevicing", 
+                 "PMI", 
+                 "GFee", 
+                 "Pass Through Interest", 
+                 "Investor CashFlow", 
+                 "Present Value Factor", 
+                 "Present Value", 
+                 "Duration", 
+                 "Convexity Time", 
+                 "CashFlow Convexity", 
+                 "Convexity")
   
-  MBS.CF.Table <- array(data = NA, c(num.periods, 20), dimnames = list(seq(c(1:num.periods)),col.names))  
+  MBS.CF.Table <- array(data = NA, 
+                        c(num.periods, 23), 
+                        dimnames = list(seq(c(1:num.periods)),col.names))  
+  
   for(x in 1:num.periods){
     MBS.CF.Table[x,1] = x
     MBS.CF.Table[x,2] = pmtdate[x] + delay
     MBS.CF.Table[x,3] = time.period[x]
-    if (MBS.CF.Table[x,1] == 1) {MBS.CF.Table[x,4] = principal} else {MBS.CF.Table[x,4] = MBS.CF.Table[x-1,9]}
+    if (MBS.CF.Table[x,1] == 1) {MBS.CF.Table[x,4] = principal} else {MBS.CF.Table[x,4] = MBS.CF.Table[x-1,12]}
     MBS.CF.Table[x,5] = Mortgage.Monthly.Payment(orig.bal = MBS.CF.Table[x,4], note.rate = note.rate, 
                                                  term.mos = (num.periods - MBS.CF.Table[x,1] + 1))
     
@@ -91,13 +177,17 @@ MortgageCashFlow <- function(bond.id = "character",
     
     if(x != num.periods) {MBS.CF.Table[x,8] = PrepaymentAssumption@SMM[x] * (MBS.CF.Table[x,4] - MBS.CF.Table[x,7])} else                     
     {MBS.CF.Table[x,8] = 0}
-    
-    MBS.CF.Table[x,9] = MBS.CF.Table[x,4] - MBS.CF.Table[x,7] - MBS.CF.Table[x,8]
-    MBS.CF.Table[x,10] = MBS.CF.Table[x,4] * (servicing.fee/1200)
-    MBS.CF.Table[x,11] = MBS.CF.Table[x,4] * (pmi/1200)
-    MBS.CF.Table[x,12] = MBS.CF.Table[x,4] * (g.fee/1200)
-    MBS.CF.Table[x,13] = MBS.CF.Table[x,4] * (coupon/12)
-    MBS.CF.Table[x,14] = MBS.CF.Table[x,13] + MBS.CF.Table[x,7] + MBS.CF.Table[x,8]
+    #---- not adding new array elements here remove when line done and working
+    if(x!= num.periods) {MBS.CF.Table[x,9] = PrepaymentAssumption@MDR[x] * MBS.CF.Table[x,4]} else {MBS.CF.Table[x,9] = 0}
+    MBS.CF.Table[x,10] = MBS.CF.Table[x,9] * 0 # Will need to include severity model here
+    MBS.CF.Table[x,11] = MBS.CF.Table[x,9] - MBS.CF.Table[x,10]
+    #---- renumber legacy array elements remove line when done and working
+    MBS.CF.Table[x,12] = MBS.CF.Table[x,4] - MBS.CF.Table[x,7] - MBS.CF.Table[x,8] - MBS.CF.Table[x,11]
+    MBS.CF.Table[x,13] = MBS.CF.Table[x,4] * (servicing.fee/1200)
+    MBS.CF.Table[x,14] = MBS.CF.Table[x,4] * (pmi/1200)
+    MBS.CF.Table[x,15] = MBS.CF.Table[x,4] * (g.fee/1200)
+    MBS.CF.Table[x,16] = MBS.CF.Table[x,4] * (coupon/12)
+    MBS.CF.Table[x,17] = MBS.CF.Table[x,7] + MBS.CF.Table[x,8] + MBS.CF.Table[x,11] + MBS.CF.Table[x,16]
   }
   
   #step5 calculate accrued interest for the period
@@ -110,8 +200,8 @@ MortgageCashFlow <- function(bond.id = "character",
   
   days.between.pmtdate = ((12/frequency)/12) * 360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * MBS.CF.Table[1,13]
-  #note the MBS.CF.Table[1,13] should be replaced by orig.bal * factor * coupon (?)
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * MBS.CF.Table[1,16]
+  #note the MBS.CF.Table[1,16] should be replaced by orig.bal * factor * coupon (?)
   
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
@@ -120,35 +210,40 @@ MortgageCashFlow <- function(bond.id = "character",
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = uniroot(irr, interval = c(lower = -.75, upper = .75), tol =.0000000001, time.period = MBS.CF.Table[,3], 
-                cashflow = MBS.CF.Table[,14], principal = principal, price = price, accrued.interest = accrued.interest)$root
+  ytm = uniroot(irr, interval = c(lower = -.75, upper = .75), tol =.0000000001, 
+                time.period = MBS.CF.Table[,3], 
+                cashflow = MBS.CF.Table[,17], 
+                principal = principal, 
+                price = price, 
+                accrued.interest = accrued.interest)$root
+
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
   
   #Step7 Present value of the cash flows Present Value Factors
-  MBS.CF.Table[,15] = 1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,3] * frequency))
+  MBS.CF.Table[,18] = 1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,3] * frequency))
   
   #Present Value of the cash flows
-  MBS.CF.Table[,16] = MBS.CF.Table[,14] * MBS.CF.Table[,15]
+  MBS.CF.Table[,19] = MBS.CF.Table[,17] * MBS.CF.Table[,18]
   
   #Step8 Risk measures Duration Factors
-  MBS.CF.Table[,17] = MBS.CF.Table[,3] * (MBS.CF.Table[,16]/((principal * price) + accrued.interest))
+  MBS.CF.Table[,20] = MBS.CF.Table[,3] * (MBS.CF.Table[,19]/((principal * price) + accrued.interest))
   
   #Convexity Factors
-  MBS.CF.Table[,18] = MBS.CF.Table[,3] *(MBS.CF.Table[,3] + 1)
+  MBS.CF.Table[,21] = MBS.CF.Table[,3] *(MBS.CF.Table[,3] + 1)
   
-  MBS.CF.Table[,19] = (MBS.CF.Table[,14]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((MBS.CF.Table[,3] + 2) * frequency)))/ 
+  MBS.CF.Table[,22] = (MBS.CF.Table[,17]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((MBS.CF.Table[,3] + 2) * frequency)))/ 
     ((principal * price) + accrued.interest)
   
-  MBS.CF.Table[,20] = MBS.CF.Table[,18] * MBS.CF.Table[,19] 
+  MBS.CF.Table[,23] = MBS.CF.Table[,21] * MBS.CF.Table[,22] 
   
   #Weighted Average Life
   WAL = sum((((MBS.CF.Table[,7]) + (MBS.CF.Table[,8])) * MBS.CF.Table[,3])/ sum((MBS.CF.Table[,7]) + (MBS.CF.Table[,8])))
   
   #Duration and Convexity
-  Duration = apply(MBS.CF.Table, 2, sum)[17]
+  Duration = apply(MBS.CF.Table, 2, sum)[20]
   Modified.Duration = Duration/(1 + (Yield.To.Maturity/frequency))
-  Convexity = apply(MBS.CF.Table, 2, sum)[20] * .5
+  Convexity = apply(MBS.CF.Table, 2, sum)[23] * .5
   
   #Create Class Mortgage Loan Cashflows
   new("MortgageCashFlow",
@@ -164,67 +259,21 @@ MortgageCashFlow <- function(bond.id = "character",
       BeginningBal = MBS.CF.Table[,4],
       MonthlyPmt = MBS.CF.Table[,5],
       MonthlyInterest = MBS.CF.Table[,6],
-      PassThroughInterest = MBS.CF.Table[,13],
+      PassThroughInterest = MBS.CF.Table[,16],
       ScheduledPrin = MBS.CF.Table[,7],
       PrepaidPrin = MBS.CF.Table[,8],
-      EndingBal = MBS.CF.Table[,9],
-      ServicingIncome = MBS.CF.Table[,10],
-      PMIPremium = MBS.CF.Table[,11],    
-      GFeePremium = MBS.CF.Table[,12],
-      TotalCashFlow = MBS.CF.Table[,14]
+      DefaultedPrin = MBS.CF.Table[,9],
+      LossAmount = MBS.CF.Table[,10],
+      RecoveredAmount = MBS.CF.Table[,11],
+      EndingBal = MBS.CF.Table[,12],
+      ServicingIncome = MBS.CF.Table[,13],
+      PMIPremium = MBS.CF.Table[,14],    
+      GFeePremium = MBS.CF.Table[,15],
+      TotalCashFlow = MBS.CF.Table[,17]
   )
 }
 
 
-setMethod("initialize",
-          signature("MortgageCashFlow"),
-          function(.Object,       
-                   Price = numeric(),
-                   Accrued = numeric(),
-                   YieldToMaturity = numeric(),
-                   WAL = numeric(),
-                   ModDuration = numeric(),
-                   Convexity = numeric(),
-                   Period = numeric(),
-                   PmtDate = "character",
-                   TimePeriod = numeric(),
-                   BeginningBal = numeric(),
-                   MonthlyPmt = numeric(),
-                   MonthlyInterest = numeric(),
-                   PassThroughInterest = numeric(),
-                   ScheduledPrin = numeric(),
-                   PrepaidPrin = numeric(),
-                   EndingBal = numeric(),
-                   ServicingIncome = numeric(),
-                   PMIPremium = numeric(),
-                   GFeePremium = numeric(),  
-                   TotalCashFlow = numeric()
-          ){
-            
-            .Object@Price = Price
-            .Object@Accrued = Accrued
-            .Object@YieldToMaturity = YieldToMaturity
-            .Object@WAL = WAL
-            .Object@ModDuration = ModDuration
-            .Object@Convexity = Convexity
-            .Object@Period = Period
-            .Object@PmtDate = PmtDate
-            .Object@TimePeriod = TimePeriod
-            .Object@BeginningBal = BeginningBal
-            .Object@MonthlyPmt = MonthlyPmt
-            .Object@MonthlyInterest = MonthlyInterest
-            .Object@PassThroughInterest = PassThroughInterest
-            .Object@ScheduledPrin = ScheduledPrin
-            .Object@PrepaidPrin = PrepaidPrin
-            .Object@EndingBal = EndingBal
-            .Object@ServicingIncome = ServicingIncome
-            .Object@PMIPremium = PMIPremium
-            .Object@GFeePremium = GFeePremium  
-            .Object@TotalCashFlow = TotalCashFlow
-            
-            return(.Object)
-            callNextMethod(.Object,...)            
-          })
 
 # setMethod("show",
 #           signature(object = "MortgageCashFlow"),

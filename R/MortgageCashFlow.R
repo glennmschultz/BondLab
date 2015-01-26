@@ -177,12 +177,12 @@ MortgageCashFlow <- function(bond.id = "character",
     
     if(x != num.periods) {MBS.CF.Table[x,8] = PrepaymentAssumption@SMM[x] * (MBS.CF.Table[x,4] - MBS.CF.Table[x,7])} else                     
     {MBS.CF.Table[x,8] = 0}
-    #---- not adding new array elements here remove when line done and working
+  
     if(x!= num.periods) {MBS.CF.Table[x,9] = PrepaymentAssumption@MDR[x] * MBS.CF.Table[x,4]} else {MBS.CF.Table[x,9] = 0}
     MBS.CF.Table[x,10] = MBS.CF.Table[x,9] * 0 # Will need to include severity model here
     MBS.CF.Table[x,11] = MBS.CF.Table[x,9] - MBS.CF.Table[x,10]
-    #---- renumber legacy array elements remove line when done and working
-    MBS.CF.Table[x,12] = MBS.CF.Table[x,4] - MBS.CF.Table[x,7] - MBS.CF.Table[x,8] - MBS.CF.Table[x,11]
+
+    MBS.CF.Table[x,12] = MBS.CF.Table[x,4] - (MBS.CF.Table[x,7] + MBS.CF.Table[x,8] + MBS.CF.Table[x,9])
     MBS.CF.Table[x,13] = MBS.CF.Table[x,4] * (servicing.fee/1200)
     MBS.CF.Table[x,14] = MBS.CF.Table[x,4] * (pmi/1200)
     MBS.CF.Table[x,15] = MBS.CF.Table[x,4] * (g.fee/1200)

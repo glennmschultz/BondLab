@@ -18,7 +18,7 @@
                     Burnout.beta.1 = -.01,
                     Burnout.beta.2 = -.01,
                     BeginCDR = 0,
-                    PeakCDR = 2.75,
+                    PeakCDR = 8,
                     EndCDR = 1.5,
                     PeakMonth = 42,
                     PlateauMonths = 30,

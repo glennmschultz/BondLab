@@ -38,4 +38,46 @@
                   SATO = 0.75
                   )
 
-                FN <- MBS(MBS.id = "bondlabMBS4")
+               bondlabMBS4 <- MBS(MBS.id = "bondlabMBS4")
+                
+                MakeMBSDetails( 
+                  Cusip = "12345678",
+                  ID = "bondlabMBS55",
+                  BondType = "MBS",
+                  Sector = "MBS",
+                  Coupon = 5.5,
+                  IssueDate = "01-01-2010",
+                  DatedDate = "01-01-2010",
+                  Maturity = "01-01-2040",
+                  LastPmtDate = "01-01-2013",
+                  NextPmtDate = "02-01-2013",
+                  PaymentDelay = 24,     
+                  Moody = "Aaa",
+                  SP = "AAA",
+                  BondLab = "Aaa",
+                  Frequency = 12,
+                  BondBasis = "30360",
+                  GWac = 6.1,
+                  OrigLoanBal = 225000,
+                  OrigLTV = 80,
+                  AmortizationType = "fixed",
+                  AmortizationTerm = 30,     
+                  Index = "None",
+                  Margin = 0,
+                  FirstPmtDate = "01-01-2013",
+                  FinalPmtDate = "01-01-2043",
+                  Servicing = 0.25,
+                  PMI = 0.25,
+                  Gfee = 0.25,
+                  InitialInterest = "no",
+                  InterestOnlyPeriod = 0,
+                  FirstPrinPaymentDate = "1-01-2013",
+                  BalloonPmt = "no",
+                  BalloonDate = "00-00-0000",
+                  MBSFactor = .75,
+                  Model = "FH30.Generic",
+                  Burnout = 25,
+                  SATO = 0.25
+                )
+                
+                FN55 <- MBS(MBS.id = "bondlabMBS55")

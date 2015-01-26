@@ -66,6 +66,9 @@ setMethod("initialize",
                    PassThroughInterest = "numeric",
                    ScheduledPrin = "numeric",
                    PrepaidPrin = "numeric",
+                   DefaultedPrin = "numeric",
+                   LossAmount = "numeric",
+                   RecoveredAmount = "numeric",
                    EndingBal = "numeric",
                    ServicingIncome = "numeric",
                    PMIPremium = "numeric",
@@ -130,6 +133,9 @@ setMethod("initialize",
             .Object@PassThroughInterest = PassThroughInterest
             .Object@ScheduledPrin = ScheduledPrin
             .Object@PrepaidPrin = PrepaidPrin
+            .Object@DefaultedPrin = DefaultedPrin
+            .Object@LossAmount = LossAmount
+            .Object@RecoveredAmount = RecoveredAmount
             .Object@EndingBal = EndingBal
             .Object@ServicingIncome = ServicingIncome
             .Object@PMIPremium = PMIPremium
@@ -205,11 +211,11 @@ PassThroughOAS <- function(bond.id = "character",
                                                TermStructure = TermStructure, 
                                                PrepaymentAssumption = PrepaymentAssumption, 
                                                ModelTune = ModelTune, 
-                                               Burnout = Burnout, 
-                                               begin.cpr = begin.cpr, 
-                                               end.cpr = end.cpr, 
-                                               seasoning.period = seasoning.period, 
-                                               CPR = CPR)
+                                               Burnout = Burnout) 
+                                               #begin.cpr = begin.cpr, 
+                                               #end.cpr = end.cpr, 
+                                               #seasoning.period = seasoning.period, 
+                                               #CPR = CPR)
   
   #The fourth step is to call the bond cusip details and calculate 
   #Bond Yield to Maturity, Duration, Convexity and CashFlow.
@@ -291,6 +297,9 @@ PassThroughOAS <- function(bond.id = "character",
       PassThroughInterest = MortgageCashFlow@PassThroughInterest,
       ScheduledPrin = MortgageCashFlow@ScheduledPrin,
       PrepaidPrin = MortgageCashFlow@PrepaidPrin,
+      DefaultedPrin = MortgageCashFlow@DefaultedPrin,
+      LossAmount = MortgageCashFlow@LossAmount,
+      RecoveredAmount = MortgageCashFlow@RecoveredAmount,
       EndingBal = MortgageCashFlow@EndingBal,
       ServicingIncome = MortgageCashFlow@ServicingIncome,
       PMIPremium = MortgageCashFlow@PMIPremium,

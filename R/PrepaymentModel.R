@@ -273,8 +273,8 @@ setMethod("initialize",
     MaxOrigLTV    = ModelTune@MaxOrigLTV
     MinOrigMultiplier = ModelTune@MinOrigMultiplier
     MaxOrigMultiplier = ModelTune@MaxOrigMultiplier
-    SATO.beta = ModelTune@SATO.beta
-    UpdatedLTV.beta = ModelTune@UpdatedLTV.beta
+    SATO.beta =         ModelTune@SATO.beta
+    UpdatedLTV.beta =   ModelTune@UpdatedLTV.beta
   
     # This function returns the amortization vector of a mortgage it is exact for a fixed rate mortage but only an
     # estimate of the vector for an adjustable rate mortage sufficent for updated LTV due to amortization.
@@ -309,7 +309,7 @@ setMethod("initialize",
                                             TermMos = Term,
                                             LoanAge = LoanAge)
    
-    UpdatedLTV = ScheduledBalance / EstimatedSalePrice
+    UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * 100
     
     Monthly.Default <- 1-(1 - (Default/100))^(1/12)
     
@@ -320,16 +320,17 @@ setMethod("initialize",
                                 MinOrigMultiplier = MinOrigMultiplier,
                                 MaxOrigMultiplier = MaxOrigMultiplier)
    
-  
     SATOCoeff <- SATOMultiplier(beta = SATO.beta, 
                                 SATO = SATO)
 
-  
+    
     UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, 
                                          OrigLTV = OrigLTV, 
                                          ULTV = UpdatedLTV)
    
+
     Multiplier = log(OrigCoeff) + log(SATOCoeff) + log(UpdatedCoeff)
+
 
     MDR = Monthly.Default * exp(Multiplier)}
 

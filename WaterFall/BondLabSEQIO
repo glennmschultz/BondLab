@@ -23,7 +23,7 @@
   Interest <- as.numeric(Collateral@PassThroughInterest)
   Scheduled <- as.numeric(Collateral@ScheduledPrin)
   Prepaid <- as.numeric(Collateral@PrepaidPrin)
-  TotalPrin <- as.numeric(Collateral@ScheduledPrin + Collateral@PrepaidPrin)
+    TotalPrin <- as.numeric(Collateral@ScheduledPrin + Collateral@PrepaidPrin + Collateral@RecoveredAmount)
   EndBal <- as.numeric(Collateral@EndingBal)
 
   # ==========================================================================

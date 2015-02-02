@@ -12,8 +12,13 @@
 # Function to simulate the short term interest rate
 
 
-CIRSim <- function(shortrate = numeric(), kappa = numeric(), theta = numeric(), 
-                   T = numeric(), step = numeric(), sigma = numeric(), N = numeric()){
+CIRSim <- function(shortrate = numeric(), 
+                   kappa = numeric(), 
+                   theta = numeric(), 
+                   T = numeric(), 
+                   step = numeric(), 
+                   sigma = numeric(), 
+                   N = numeric()){
   
   #kappa is the rate of mean reversion
   #theta is the long term value of the short rate
@@ -27,9 +32,11 @@ CIRSim <- function(shortrate = numeric(), kappa = numeric(), theta = numeric(),
   
   dt <- step
   nrow <-  T/dt
-  
-  
-  deltarate <- function(kappa = numeric(), theta = numeric(), dt = numeric(), sigma = numeric()){
+
+  deltarate <- function(kappa = numeric(), 
+                        theta = numeric(), 
+                        dt = numeric(), 
+                        sigma = numeric()){
     #Populate the first element of each path with the short rate
     #Euler discretization of the CIR model.  The discretization causes negative interest rates when 
     #when the short term rate approaches the origin.  To solve this problem take the absolute value of square root process  

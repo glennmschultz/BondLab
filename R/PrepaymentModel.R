@@ -260,7 +260,7 @@ setMethod("initialize",
                             SATO = numeric(),
                             LoanAge = vector(),
                             ...,
-                            HomePrice = vector()){
+                            HomePrice = NULL){
     
     # -------------------- Default Model Tune Parameter -------------------------
     BeginCDR      = ModelTune@BeginCDR
@@ -309,7 +309,8 @@ setMethod("initialize",
                                             TermMos = Term,
                                             LoanAge = LoanAge)
    
-    UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * 100
+    if(is.null(HomePrice) == TRUE) {UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * 100} else
+    {UpdatedLTV = (ScheduledBalance / (EstimatedSalePrice * HomePrice)) * 100}
     
     Monthly.Default <- 1-(1 - (Default/100))^(1/12)
     
@@ -332,7 +333,8 @@ setMethod("initialize",
     Multiplier = log(OrigCoeff) + log(SATOCoeff) + log(UpdatedCoeff)
 
 
-    MDR = Monthly.Default * exp(Multiplier)}
+    MDR = pmin(1, Monthly.Default * exp(Multiplier))
+    return(MDR)}
 
 
 
@@ -351,6 +353,7 @@ setMethod("initialize",
                                    end.cpr = numeric(), 
                                    seasoning.period = numeric(), 
                                    CPR = numeric(),
+                                   HomePrice = NULL,
                                    Severity = numeric()){
   
   # Severity is optional value passed to the model the default is 35%.  Should build a severity
@@ -446,7 +449,9 @@ setMethod("initialize",
                        Term = AmortizationTerm * months.in.year,
                        OrigLTV = OrigLTV, 
                        SATO = sato,  
-                       LoanAge = LoanAge)
+                       LoanAge = LoanAge,
+                       ...,
+                       HomePrice = HomePrice)
 
   
   new("PrepaymentAssumption",

@@ -318,9 +318,17 @@ MtgTermStructure <- function(bond.id = "character",
     # =======================================================================   
     # Key Rate Shift Down Prepayment Model and CashFlows
     # ======================================================================
-    Prepayment.Dwn <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = Key.Rate.TS.Dwn, 
-                                           PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout, 
-                                           begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+    Prepayment.Dwn <- PrepaymentAssumption(bond.id = bond.id, 
+                                           MortgageRate = MortgageRate, 
+                                           TermStructure = Key.Rate.TS.Dwn, 
+                                           PrepaymentAssumption = "MODEL", 
+                                           ModelTune = ModelTune, 
+                                           Burnout = Burnout) 
+                                           #...,
+                                           #begin.cpr = begin.cpr, 
+                                           #end.cpr = end.cpr, 
+                                           #seasoning.period = seasoning.period, 
+                                           #CPR = CPR)
     
     # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
     # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
@@ -336,9 +344,17 @@ MtgTermStructure <- function(bond.id = "character",
     # =======================================================================   
     # Key Rate Shift Up Prepayment Model and CashFlows
     # ======================================================================
-    Prepayment.Up <- PrepaymentAssumption(bond.id = bond.id, MortgageRate = MortgageRate, TermStructure = Key.Rate.TS.Up, 
-                                          PrepaymentAssumption = "MODEL", ModelTune = ModelTune, Burnout = Burnout, 
-                                          begin.cpr = begin.cpr, end.cpr = end.cpr, seasoning.period = seasoning.period, CPR = CPR)
+    Prepayment.Up <- PrepaymentAssumption(bond.id = bond.id, 
+                                          MortgageRate = MortgageRate, 
+                                          TermStructure = Key.Rate.TS.Up, 
+                                          PrepaymentAssumption = "MODEL", 
+                                          ModelTune = ModelTune, 
+                                          Burnout = Burnout)
+                                          #...,
+                                          #begin.cpr = begin.cpr, 
+                                          #end.cpr = end.cpr, 
+                                          #seasoning.period = seasoning.period, 
+                                          #CPR = CPR)
     
     # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
     # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called

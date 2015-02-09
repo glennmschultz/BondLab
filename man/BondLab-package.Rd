@@ -5,7 +5,7 @@
 A package for the analysis of Mortgage and Asset Backed Securities
 }
 \description{
-Bond Lab offers functions for the analysis and valuation of Mortgage and Asset Backed Securities. The implementation of Bond Lab focuses the valuation, structuring, and risk management of structured product investments. Bond Lab was written to support the book Investing in Mortgage and Asset Backed Securities with R and Bond Lab.
+Bond Lab offers functions for the analysis and valuation of Mortgage and Asset Backed Securities. The implementation of Bond Lab focuses the valuation, structuring, and risk management of structured product investments.
 }
 
 
@@ -25,7 +25,7 @@ Glenn M. Schultz, CFA
 Maintainer: Glenn Schultz<glennmschultz@me.com>
 }
 \references{
-Glenn M. Schultz, CFA (2015): Investing in Mortgage and Asset Backed Securities with R and Bond Lab
+Glenn M. Schultz, CFA (2015): Investing in Mortgage and Asset Backed Securities with R and Open Source Analytics
 }
 
 \keyword{ Fixed Income }

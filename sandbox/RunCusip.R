@@ -1,1 +1,0 @@
-CusipRecord(source.path = "~/BondLab/Tranches/", target.path = "~/BondLab/BondData/")

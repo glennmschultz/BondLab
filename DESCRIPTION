@@ -9,4 +9,5 @@ Description: The package provides a suite of software utilities for the analysis
 LazyLoad: yes
 License: GPL(>=3.0)
 Imports: termstrc, reshape2, ggplot2, lubridate, methods, plyr, grid, optimx
-
+Suggests: knitr
+VignetteBuilder: knitr

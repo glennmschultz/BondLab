@@ -14,8 +14,12 @@
 
 #YYTMtoPrice is a simple yield to price equation for a standard bond
 #This equation treats the bond as a annuity and zero coupon payment
-YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.frequency = numeric(), 
-                      years.mat = numeric(), face.value = numeric()){
+#' @export YTMtoPrice
+YTMtoPrice<- function(yield.to.maturity = numeric() ,
+                      coupon = numeric(), 
+                      coupon.frequency = numeric(), 
+                      years.mat = numeric(), 
+                      face.value = numeric()){
   
   if (missing(yield.to.maturity))
     stop("Need to specify a maturity greater than 0")
@@ -35,7 +39,13 @@ YTMtoPrice<- function(yield.to.maturity = numeric() ,coupon = numeric(), coupon.
 
 #bondprice is a simple price to yield equation for a standard bond
 #This equation treats the bond as a annuity and zero coupon payment
-bondprice<- function(yield.to.maturity = numeric(),coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric()){
+#' @export bondprice
+bondprice<- function(yield.to.maturity = numeric(),
+                     coupon = numeric(), 
+                     coupon.frequency = numeric(), 
+                     years.mat = numeric(), 
+                     face.value = numeric()){
+  
   n = years.mat * coupon.frequency
   c = coupon/coupon.frequency
   i = yield.to.maturity/coupon.frequency
@@ -46,7 +56,12 @@ bondprice<- function(yield.to.maturity = numeric(),coupon = numeric(), coupon.fr
 
 #bond estimated yield to maturity this equation estimates a bond's yield
 #to maturity for a yield to maturity guess may be used with uniroot ytm functions
-EstimYTM <- function(coupon = numeric(), coupon.frequency = numeric(), years.mat = numeric(), face.value = numeric(), price = numeric()){
+#' @export EstimYTM
+EstimYTM <- function(coupon = numeric(), 
+                     coupon.frequency = numeric(), 
+                     years.mat = numeric(), 
+                     face.value = numeric(), 
+                     price = numeric()){
   c = coupon
   n = years.mat
   f = coupon.frequency
@@ -58,10 +73,12 @@ EstimYTM <- function(coupon = numeric(), coupon.frequency = numeric(), years.mat
 #---------------------------
 # Mortgage Payment Functions
 #---------------------------
-
-Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric(), term.mos = numeric()){
-  
-  #Error Trap Note Rate
+#' @export Mortgage.Monthly.Payment
+Mortgage.Monthly.Payment <- function(orig.bal = numeric(), 
+                                     note.rate = numeric(), 
+                                     term.mos = numeric()){
+  #This function computes the monthly mortgage payment and can be used as part
+  #Error Trap note rate.
   if (missing(note.rate))
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(note.rate)  )
@@ -74,7 +91,14 @@ Mortgage.Monthly.Payment <- function(orig.bal = numeric(), note.rate = numeric()
   pmt
 }
 
-Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
+#' @export Sched.Prin
+Sched.Prin <- function(balance = numeric(), 
+                       note.rate = numeric(), 
+                       term.mos = numeric(), 
+                       period = numeric()){
+  
+  #This function computes the monthly scheduled principal 
+  #Requires additional error trapping
   note.rate = note.rate/12
   term = term.mos
   disc.pmt =  note.rate * (1+note.rate)^(period-1)
@@ -83,7 +107,10 @@ Sched.Prin <- function(balance = numeric(), note.rate = numeric(), term.mos = nu
   Scheduled.Prin
 }
 
-Remain.Balance <- function(balance = numeric(), note.rate = numeric(), term.mos = numeric(), period = numeric()){
+Remain.Balance <- function(balance = numeric(), 
+                           note.rate = numeric(), 
+                           term.mos = numeric(), 
+                           period = numeric()){
   note.rate = note.rate/12
   term = term.mos
   Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term)-1))

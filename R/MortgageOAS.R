@@ -231,7 +231,7 @@ Mortgage.OAS <- function(bond.id = "character",
                   CashFlowMatrix = matrix(), 
                   period = vector(), 
                   proceeds = numeric(),
-                  price = nueric(),
+                  price = numeric(),
                   paths = numeric()) {
     
     OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread)^ period)) * CashFlowMatrix[,]))

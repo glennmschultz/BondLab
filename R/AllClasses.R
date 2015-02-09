@@ -9,6 +9,7 @@
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
   # --- The following classes define standard bond analytics
+  
   setClass("BondDetails",
          representation(
            Cusip = "character",
@@ -55,6 +56,7 @@
            KeyRateConvexity = "numeric"))
 
   #--- The folllowing classes define standard Mortgage Passthrough analytics
+  #' @exportClass MBSDetails
   setClass("MBSDetails", 
          representation(
            Cusip = "character",
@@ -95,6 +97,7 @@
            Burnout = "numeric",
            SATO = "numeric"))
 
+  #' @exportClass MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   

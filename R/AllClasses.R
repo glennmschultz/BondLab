@@ -97,7 +97,7 @@
            Burnout = "numeric",
            SATO = "numeric"))
 
-  #' @exportClass MortgageTermStructure
+
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
@@ -144,6 +144,7 @@
            PathModDur = "vector",
            PathYTM = "vector"))
 
+  #' @exportClass Scenario
   setClass("Scenario",
          representation(
            Name = "character",

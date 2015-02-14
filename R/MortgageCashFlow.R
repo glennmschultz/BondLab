@@ -66,8 +66,10 @@ MortgageCashFlow <- function(bond.id = "character",
                              PrepaymentAssumption = "character"){
   
   #This function error traps mortgage bond inputs
-  ErrorTrap(bond.id = bond.id, principal = original.balance, settlement.date = settlement.date, price = price)
-  
+  ErrorTrap(bond.id = bond.id, 
+            principal = original.balance, 
+            settlement.date = settlement.date, 
+            price = price)
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")

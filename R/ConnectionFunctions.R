@@ -11,6 +11,7 @@
 
 
   #---------- connect to the rates data folder
+#' @export Rates
    Rates <- function(trade.date = "character")
                   {
                   Rates.Conn <-gzfile(description = paste("~/BondLab/RatesData/", 

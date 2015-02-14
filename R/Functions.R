@@ -107,6 +107,7 @@ Sched.Prin <- function(balance = numeric(),
   Scheduled.Prin
 }
 
+#' @export Remain.Balance
 Remain.Balance <- function(balance = numeric(), 
                            note.rate = numeric(), 
                            term.mos = numeric(), 
@@ -117,7 +118,12 @@ Remain.Balance <- function(balance = numeric(),
   Remain.Balance
 }
 
-PPC.Ramp <- function(season.period = numeric(), begin.cpr = numeric(), end.cpr = numeric(), period = numeric()){
+#' @export PPC.Ramp
+PPC.Ramp <- function(season.period = numeric(), 
+                     begin.cpr = numeric(), 
+                     end.cpr = numeric(), 
+                     period = numeric()){
+  
   if(end.cpr >= 1) {end.cpr = end.cpr/100 
                     begin.cpr = begin.cpr/100}
   monthly.cpr = (begin.cpr + ((period - 1) * (end.cpr-begin.cpr)/(season.period -1)))
@@ -125,6 +131,7 @@ PPC.Ramp <- function(season.period = numeric(), begin.cpr = numeric(), end.cpr =
   cpr
 }
 
+#' @export SMM.To.CPR
 SMM.To.CPR <- function(SMM = numeric()){
   if (missing(SMM))
     stop("Need to specify a SMM Value")
@@ -136,6 +143,7 @@ SMM.To.CPR <- function(SMM = numeric()){
   return(SMM)
 }
 
+#' @export CPR.To.SMM
 CPR.To.SMM <- function(CPR = numeric()){
   if (missing(CPR))
     stop("Need to specify a SMM Value")
@@ -147,7 +155,9 @@ CPR.To.SMM <- function(CPR = numeric()){
   return(CPR)
 }
 
-SMMVector.To.CPR <- function(SMM = vector(), num.period = numeric()){
+#' @export SMMVector.To.CPR
+SMMVector.To.CPR <- function(SMM = vector(), 
+                             num.period = numeric()){
   # This function yields the average SMM  
   SMM = prod(1 + SMM)^(1/num.period)
   SMM = SMM - 1
@@ -157,7 +167,15 @@ SMMVector.To.CPR <- function(SMM = vector(), num.period = numeric()){
 #-------------------------------------
 #Risk measures.  These functions measure effective duration, effective convexity, and key rate duration
 #-------------------------------------
-Effective.Duration <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
+
+#' @export Effective.Duration
+Effective.Duration <- function(Rate.Delta, 
+                               cashflow, 
+                               discount.rates, 
+                               discount.rates.up, 
+                               discount.rates.dwn, 
+                               t.period, 
+                               proceeds){
   Price = proceeds/10
   Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
   Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
@@ -165,7 +183,14 @@ Effective.Duration <- function(Rate.Delta, cashflow, discount.rates, discount.ra
   (Price.UP - Price.DWN)/(2*Price*Rate.Delta)
 }
 
-Effective.Convexity <- function(Rate.Delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds){
+#' @export Effective.Convexity
+Effective.Convexity <- function(Rate.Delta, 
+                                cashflow, 
+                                discount.rates, 
+                                discount.rates.up, 
+                                discount.rates.dwn, 
+                                t.period, 
+                                proceeds){
   Price = proceeds/10
   Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
   Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)

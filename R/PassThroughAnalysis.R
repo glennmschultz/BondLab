@@ -197,7 +197,8 @@ setMethod("initialize",
 
 
   # This function analyzes a standard pass through security and serves as the constructor function
-  #--------------------------------------  
+  #-------------------------------------- 
+#' @export PassThroughAnalytics
   PassThroughAnalytics <- function (bond.id = "character", 
                                     MortgageRate = "character",
                                     UpdatedLTV = "character",
@@ -236,20 +237,20 @@ setMethod("initialize",
   bond.id <- MBS(MBS.id = bond.id)
   
   #Call the desired curve from rates data folder
-  conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(conn2)
+  #conn2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+  rates.data <- Rates(trade.date = trade.date)
   
   #Call Mortgage Rate Functions
-  conn3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(conn3)
+  #conn3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+  MortgageRate <- MtgRate()
   
   
   #move this to line 257 redundent
   Burnout = bond.id@Burnout
   
   #Call Prepayment Model Tuning Parameters
-  conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", bond.id@Model, ".rds", sep =""), open = "rb")        
-  ModelTune <- readRDS(conn4)
+  #conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", bond.id@Model, ".rds", sep =""), open = "rb")        
+  ModelTune <- ModelTune(bond.id = bond.id)
   
   #The second step is to call the desired coupon curve into memory 
   #This is done with the TermStructure function which creates the class TermStructure

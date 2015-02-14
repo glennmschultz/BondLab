@@ -3,11 +3,6 @@
 #and holds forward and spot rates as slots to class Term Structure
 #---------------------------------------------------
 
-#setGeneric("TermStructure",
-#           function(rates.data = "character", method = "character")
-#           {standardGeneric("TermStructure")})
-
-
 # Initialize TermStructure
 setMethod("initialize",
           signature("TermStructure"),
@@ -147,3 +142,8 @@ setMethod("initialize",
       TenYearFwd = Ten.Year.Fwd
   )
 } 
+
+
+setGeneric("TermStructure",
+           function(rates.data = "character", method = "character")
+           {standardGeneric("TermStructure")})

@@ -12,6 +12,20 @@
 #---------------------------------
 #Time value of money function
 #---------------------------------
+#' Time Value Function
+#'                  
+#' This is a generic function used to calculate time value
+#' @param interest.rate The interest rate used to determine the discount factor in decimal
+#' form (i.e. 4.0\% is input as 0.04)
+#' @param number.periods The number of discount periods.  For example, 
+#' in the case of a mortgage whose cash flow occurs monthly over 30 years the number of 
+#' periods is 360.
+#' @param frequency The frequency of interest payments.  For example the frequency of a
+#' mortgage whose payments occur monthly is 12
+#' @param type The type of calculation PV = present value, 
+#' PVA = present value of annuity, PVD present value of annuity due,
+#' FV = future value, FVA = future value of annuity, FVD = future value annuity due.
+#' @examples TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")
 #' @export TimeValue
 TimeValue <- function(interest.rate = numeric(), 
                       number.periods = numeric(), 
@@ -21,7 +35,7 @@ TimeValue <- function(interest.rate = numeric(),
     stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
   if (!is.numeric(interest.rate)  )
     stop("No numeric interest.rate specified.")
-  if (interest.rate <0 | interest.rate > 1)
+  if (interest.rate < 0 | interest.rate > 1)
     stop("No valid  interest.rate specified.")
   
   if(missing(number.periods))
@@ -38,7 +52,7 @@ TimeValue <- function(interest.rate = numeric(),
   if (frequency < 1 | frequency >12 )
     stop("No valid frequency specified.")
   
-  if( type %in% c("PV", "PVA", "PVAD", "FV", "FVA"))
+  if(identical(type %in% c("PV", "PVA", "PVAD", "FV", "FVA"), FALSE))
     stop("Time value function not specfied correctly")
   
   interest.rate = interest.rate/frequency
@@ -51,3 +65,9 @@ TimeValue <- function(interest.rate = numeric(),
          FVA =   (((1 + interest.rate)^(number.periods)) -1)/interest.rate)
   
 }
+
+setGeneric("TimeValue", function(interest.rate = numeric(), 
+                                 number.periods = numeric(), 
+                                 frequency = numeric(), 
+                                 type = "character")
+  {standardGeneric("TimeValue")})

@@ -1,4 +1,13 @@
-# Mortgage cash flow engine computes mortgage cashflow 
+# Bond Lab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+# License GPL3 restrictions non commerical use
+# Copyright (C) 2014  Glenn M Schultz, CFA
+# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+# book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+
 setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
@@ -55,10 +64,24 @@ setMethod("initialize",
             callNextMethod(.Object,...)            
           })
 
-#------------------------------------------------------
-# Mortgage cash flow function.  
-# This function calculates the cash flow of a mortgage pass through security
-#-----------------------------------------------------
+
+#' MortgageCashFlow
+#' 
+#' This is a generic function used to construct the class object MortgageCashFlow
+#' For this function to work properly the classes MBSDetails and PrepaymentAssumption
+#' must be present and loaded into the local environment
+#' @param bond.id A character string referencing the object MBSDetails
+#' @param original.bal The original balance of the MBS pool
+#' @param settlement.date The settlment date of the MBS trade
+#' @param price The price traded.  Price is input as a whole number.
+#' For example $102 is input as 102.00 not 1.02.
+#' @param PrepaymentAssumption A character string referencing the class object
+#'  PrepaymentAssumption
+#'  @examples
+#'  \dontrun{
+#'   MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
+#'          settlement.date = "01/13/2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
+#' @export MortgageCashFlow
 MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              settlement.date = "character", 
@@ -273,13 +296,13 @@ MortgageCashFlow <- function(bond.id = "character",
   )
 }
 
-
 setGeneric("MortgageCashFlow", function(bond.id = "character", 
                                         original.bal = numeric(), 
                                         settlement.date = "character", 
                                         price = numeric(), 
                                         PrepaymentAssumption = "character") 
 {standardGeneric("MortgageCashFlow")})
+
 
 
 

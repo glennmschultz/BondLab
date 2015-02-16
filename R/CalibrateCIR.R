@@ -1,23 +1,24 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-#---------------------------------
-# Calibrate CIR to market
-#________________________________
-CalibrateCIR <- function(trade.date = character, sigma = numeric()){
-  
-  #Call the desired curve from rates data folder
-  CalCIR1 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(CalCIR1)
-  
+  #---------------------------------
+  # Calibrate CIR to market
+  #________________________________
+  #' @importFrom lubridate %m+%
+  #' @importFrom termstrc create_cashflows_matrix create_maturities_matrix
+  #' @import optimx
+  CalibrateCIR <- function(trade.date = character, 
+                         sigma = numeric()){
+ 
+  rates.data <- Rates(trade.date = trade.date)  
   shortrate = as.numeric(rates.data[1,2])/100
   
   #set the column counter to make cashflows for termstrucutre
@@ -84,13 +85,24 @@ CalibrateCIR <- function(trade.date = character, sigma = numeric()){
   CIR.Mat.Matrix <- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
   
   #Objective function
-  CIRTune <- function(param = numeric(), shortrate = numeric(), sigma = .015, cfmatrix = matrix(), matmatrix = matrix()){
+  CIRTune <- function(param = numeric(), 
+                      shortrate = numeric(), 
+                      sigma = .015, 
+                      cfmatrix = matrix(), 
+                      matmatrix = matrix()){
+    
     kappa =  param[1]
     lambda = param[2]
     theta =  param[3]
 
+    Disc <- CIRBondPrice(kappa = kappa, 
+                         lambda = lambda, 
+                         theta = theta, 
+                         shortrate = shortrate, 
+                         T= matmatrix,  
+                         step = 0, 
+                         sigma = sigma)
     
-    Disc <- CIRBondPrice(kappa = kappa, lambda = lambda, theta = theta, shortrate = shortrate, T= matmatrix,  step = 0, sigma = sigma)    
     CIRTune <- sqrt((sum(colSums((cfmatrix * Disc))^2))/ncol(matmatrix))
     return(CIRTune)
   }
@@ -105,6 +117,10 @@ CalibrateCIR <- function(trade.date = character, sigma = numeric()){
                 sigma = sigma,
                 cfmatrix = CIR.CF.Matrix, 
                 matmatrix = CIR.Mat.Matrix)  
-  close(CalCIR1)
+
   return(fit)
 }
+
+setGeneric("CalibrateCIR", function(trade.date = character, 
+                                  sigma = numeric())
+  {standardGeneric("CalibrateCIR")})

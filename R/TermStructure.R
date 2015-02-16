@@ -26,7 +26,23 @@ setMethod("initialize",
             return(.Object)
             callNextMethod(.Object,...)
           })
-
+#' TermStructure
+#' 
+#' This is a wrapper function around the R package termstrc.
+#' The function call rates data process the yield curve and derives cashflow
+#' for the daily close swap curve. A Rates object must be call an in the local
+#' environment for this function to work.
+#' @param rates.data A character string representing the data for which the user
+#' would like to call the swap curve
+#' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
+#' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+#' For addiition details see the termstrc documentation.
+#' @examples
+#' \dontrun{
+#' TermStructure(rate.data = "01-13-2013", method = "ns"}
+#' @importFrom lubridate %m+%
+#' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
+#'@export TermStructure
   TermStructure <- function(rates.data = "character", method = "character"){
   
   #function(trade.date = "character", method = "character")  
@@ -91,11 +107,21 @@ setMethod("initialize",
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
                                                units = c("weeks"))/weeks.in.year,0))
-    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
+    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
+    #pmt.frequency should be input 
+    
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
-    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
-    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
-    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+    
+    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
+              as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * min.principal, 
+              (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+    
+    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) 
+    # this sets the month increment so that cashflows can handle discount bills
+    
+    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
+                          seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
+                          as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
     
   } #The Loop Ends here and the list is made
   
@@ -107,8 +133,12 @@ setMethod("initialize",
   
   #Fit the term structure of interest rates
   
-  if(method != "cs") {TSFit <- estim_nss(dataset = TSInput, group = as.character(rates.data[1,1]), matrange = "all", method = method)} else
-  {TSFit <- estim_cs(bonddata = TSInput, group = as.character(rates.data[1,1]), matrange = "all", rse = TRUE)}
+  if(method != "cs") {TSFit <- estim_nss(dataset = TSInput, 
+                                         group = as.character(rates.data[1,1]), 
+                                         matrange = "all", method = method)} else
+  {TSFit <- estim_cs(bonddata = TSInput, 
+                     group = as.character(rates.data[1,1]), 
+                     matrange = "all", rse = TRUE)}
   
   #Return the coefficient vector to be passed in to the spot and forward rate functions
   #Maybe have the method choosen based on the one that gives the smallest RMSE
@@ -124,13 +154,20 @@ setMethod("initialize",
   period <- seq(from = 1, to = 492, by = 1)
   #Use the date from the cashflow file
   date <- seq(as.Date(rates.data[1,1]) %m+% months(1), as.Date(data[[3]][j]), by="1 months")
-  spot.rate.curve <- spotrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
-  forward.rate.curve <- forwardrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
-  Two.Year.Fwd <- (((1 + spot.rate.curve[seq(from = 25, to = 385, by = 1)]) ^ (period[seq(from = 25, to = 385, by = 1)]/12) /
-                      (1 + spot.rate.curve[seq(from = 1, to = 361, by = 1)]) ^ (period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
   
-  Ten.Year.Fwd <- (((1 + spot.rate.curve[seq(from = 121, to = 481, by = 1)]) ^ (period[seq(from = 121, to = 481, by = 1)]/12) /
-                      (1 + spot.rate.curve[seq(from = 1, to = 361, by = 1)]) ^ (period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
+  spot.rate.curve <- spotrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
+  
+  forward.rate.curve <- forwardrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
+  
+  Two.Year.Fwd <- (((1 + spot.rate.curve[seq(from = 25, to = 385, by = 1)]) ^ 
+                      (period[seq(from = 25, to = 385, by = 1)]/12) /
+                      (1 + spot.rate.curve[seq(from = 1, to = 361, by = 1)]) ^ 
+                      (period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
+  
+  Ten.Year.Fwd <- (((1 + spot.rate.curve[seq(from = 121, to = 481, by = 1)]) ^ 
+                      (period[seq(from = 121, to = 481, by = 1)]/12) /
+                      (1 + spot.rate.curve[seq(from = 1, to = 361, by = 1)]) ^ 
+                      (period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
   
   new("TermStructure",
       tradedate = as.character(rates.data[1,1]),

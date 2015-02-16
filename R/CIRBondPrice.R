@@ -11,8 +11,14 @@
 
 #This function gives the close form solution to bond price given the short term rate
 
-CIRBondPrice <- function(shortrate = vector(), T = numeric(), step = numeric(), kappa = numeric(), 
-                         lambda = numeric(), sigma = numeric(), theta = numeric(), result = character){
+CIRBondPrice <- function(shortrate = vector(), 
+                         T = numeric(), 
+                         step = numeric(), 
+                         kappa = numeric(), 
+                         lambda = numeric(), 
+                         sigma = numeric(), 
+                         theta = numeric(), 
+                         result = character){
   #Error trap the function
   
   if (missing(shortrate))
@@ -92,3 +98,13 @@ CIRBondPrice <- function(shortrate = vector(), T = numeric(), step = numeric(), 
                         l = Limit)  
   
 }
+
+setGeneric("CIRBondPrice", function(shortrate = vector(), 
+                                  T = numeric(), 
+                                  step = numeric(), 
+                                  kappa = numeric(), 
+                                  lambda = numeric(), 
+                                  sigma = numeric(), 
+                                  theta = numeric(), 
+                                  result = character)
+  {standardGeneric("CIRBondPrice")})

@@ -8,10 +8,6 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
-#setGeneric("PassThroughOAS", function(bond.id = "character", trade.date = "character", settlement.date = "character", original.bal = numeric(), 
-#                             price = numeric(), short.rate = numeric(), sigma = numeric(), paths = numeric(), PrepaymentAssumption = "character", 
-#                             ..., begin.cpr = numeric(), end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
-#                             {standardGeneric("PassThroughOAS")})
 
 setMethod("initialize",
           signature("PassThroughOAS"),
@@ -155,7 +151,7 @@ setMethod("initialize",
 
 #---------------------------------
 #This function is for Pass Through OAS Analysis and serves constructor for OAS Analysis
-
+#' @export PassThroughOAS
 PassThroughOAS <- function(bond.id = "character", 
                            trade.date = "character", 
                            settlement.date = "character", 
@@ -202,8 +198,8 @@ PassThroughOAS <- function(bond.id = "character",
                                 original.bal = original.bal, 
                                 price = price, 
                                 sigma = sigma, 
-                                paths = 1, 
-                                TermStructure = "TRUE")
+                                paths = 1,
+                                TermStructure = TRUE)
   
   #Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, 
@@ -211,11 +207,7 @@ PassThroughOAS <- function(bond.id = "character",
                                                TermStructure = TermStructure, 
                                                PrepaymentAssumption = PrepaymentAssumption, 
                                                ModelTune = ModelTune, 
-                                               Burnout = Burnout) 
-                                               #begin.cpr = begin.cpr, 
-                                               #end.cpr = end.cpr, 
-                                               #seasoning.period = seasoning.period, 
-                                               #CPR = CPR)
+                                               Burnout = Burnout)
   
   #The fourth step is to call the bond cusip details and calculate 
   #Bond Yield to Maturity, Duration, Convexity and CashFlow.
@@ -236,15 +228,8 @@ PassThroughOAS <- function(bond.id = "character",
                                original.bal = original.bal, 
                                price = price, 
                                sigma = sigma, 
-                               paths = paths, 
-                               TermStructure = "FALSE")
-  
-  #Calculate the spread to the curve and pass to OAS                                   
-  #InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
-  #                            as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))
-  
-  #MortgageOAS@SpreadToCurve <- ((MortgageCashFlow@YieldToMaturity  * 100) - 
-  #                                predict(InterpolateCurve, MortgageCashFlow@WAL ))/100
+                               paths = paths) 
+
   
   new("PassThroughOAS",
       Cusip = bond.id@Cusip,
@@ -314,3 +299,19 @@ PassThroughOAS <- function(bond.id = "character",
       PathModDur = MortgageOAS@PathModDur,
       PathYTM = MortgageOAS@PathYTM)
 }
+
+setGeneric("PassThroughOAS", function(bond.id = "character", 
+                                  trade.date = "character", 
+                                  settlement.date = "character", 
+                                  original.bal = numeric(), 
+                                  price = numeric(), 
+                                  #short.rate = numeric(), 
+                                  sigma = numeric(), 
+                                  paths = numeric(), 
+                                  PrepaymentAssumption = "character", 
+                                  ..., 
+                                  begin.cpr = numeric(), 
+                                  end.cpr = numeric(), 
+                                  seasoning.period = numeric(), 
+                                  CPR = numeric())
+{standardGeneric("PassThroughOAS")})

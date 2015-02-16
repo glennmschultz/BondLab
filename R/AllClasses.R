@@ -97,7 +97,7 @@
            Burnout = "numeric",
            SATO = "numeric"))
 
-
+  #' @exportClass MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
@@ -106,7 +106,8 @@
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
-
+  
+  #' @exportClass MortgageCashFlow
   setClass("MortgageCashFlow",
          representation(
            Price = "numeric",
@@ -132,7 +133,8 @@
            PMIPremium = "numeric",
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
-
+  
+  #' @exportClass MortgageOAS
   setClass("MortgageOAS",
          representation(
            OAS = "numeric",
@@ -154,7 +156,7 @@
            Shiftbps = "numeric",
            Formula = "function"
          ))
-
+  #' @exportClass Mtg.Scenario
   setClass("Mtg.Scenario",
          representation( 
            Period = "numeric",
@@ -181,11 +183,21 @@
            KeyRateConvexity = "numeric",
            HorizonReturn = "numeric"),
            contains = "Scenario")
-
+  
+  #' An S4 class representing a call to scenarios.
+  #' 
+  #' @slot Scenario is a list which is used to call 
+  #' the interest rate scenarios used for total
+  #' return and horizon analysis
+  #' @exportClass Mtg.ScenarioSet
   setClass("Mtg.ScenarioSet",
          representation(
            Scenario = "list"))
-
+  
+  #' An S4 class representing the prepayment vector
+  #' given by the BondLab prepayment model
+  #'  
+  #' @exportClass PrepaymentAssumption
   setClass("PrepaymentAssumption",
          representation(
            PrepayAssumption = "character",
@@ -204,8 +216,9 @@
            SMM = "numeric",
            MDR = "numeric",
            Severity = "numeric"))
-
-
+  
+  #' An S4 class dollar roll calculator results 
+  #' @exportClass DollarRoll
   setClass("DollarRoll",
          representation(
            SettlementDate = "character",
@@ -303,6 +316,7 @@
            yr15 = "function"
          ))
   
+  # This is a prototype class for updated loan to value ratio calculation
   setClass("UpdatedLTV",
            representation(
              ULTV = "function"))

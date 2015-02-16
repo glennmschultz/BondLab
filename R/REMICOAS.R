@@ -305,12 +305,7 @@
     
     SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
                        predict(InterpolateCurve, MtgCashFlow@WAL ))/100
-  #}
-  
-  
-  
-  #if (TermStructure != "TRUE")      
-  #{
+
     new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),
@@ -321,9 +316,7 @@
        PathYTM = OAS.Out[,4],
        PriceDist = OAS.Out[,5]
   )
-  #}
-  
-   # else OAS.Term.Structure
+
   
   }
   

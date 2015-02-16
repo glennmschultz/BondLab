@@ -10,8 +10,6 @@
 
 
 # Function to simulate the short term interest rate
-
-
 CIRSim <- function(shortrate = numeric(), 
                    kappa = numeric(), 
                    theta = numeric(), 
@@ -39,19 +37,33 @@ CIRSim <- function(shortrate = numeric(),
                         sigma = numeric()){
     #Populate the first element of each path with the short rate
     #Euler discretization of the CIR model.  The discretization causes negative interest rates when 
-    #when the short term rate approaches the origin.  To solve this problem take the absolute value of square root process  
+    #when the short term rate approaches the origin.  
+    #To solve this problem take the absolute value of square root process  
     (kappa * (theta - simulation[i-1,j]) * dt) + (sigma * sqrt(abs(simulation[i-1,j])) * rnorm(1,0,1))}  
   
-  #Matrix to hold the short rate paths - I can dimnames here rather than colnames same as mortgage oas (rename N to paths?)
+  #Matrix to hold the short rate paths - 
+  #I can dimnames here rather than colnames same as mortgage oas (rename N to paths?)
   simulation = array(data = 0, c((nrow + 1), N))
   simulation[1,] = shortrate
   
   for(j in 1:N){
     for(i in 2:(nrow + 1)){        
-      simulation[i,j] <- simulation[i-1, j] + deltarate(kappa = kappa, theta = theta, dt = dt, sigma = sigma)    
+      simulation[i,j] <- simulation[i-1, j] + deltarate(kappa = kappa, 
+                                                        theta = theta, 
+                                                        dt = dt, 
+                                                        sigma = sigma)    
     }
   }
   
   colnames(simulation) <- c(rep((paste("path", seq(1:N)))))
   return(simulation)
 }
+
+setGeneric("CIRSim", function(shortrate = numeric(), 
+                              kappa = numeric(), 
+                              theta = numeric(), 
+                              T = numeric(), 
+                              step = numeric(), 
+                              sigma = numeric(), 
+                              N = numeric())
+  {standardGeneric("CIRSim")})

@@ -13,6 +13,7 @@
 # Mortgage OAS Function
 #___________________________________
 
+#' @importFrom lubridate %m+%
 Mortgage.OAS <- function(bond.id = "character", 
                          trade.date = "character", 
                          settlement.date = "character", 
@@ -20,23 +21,20 @@ Mortgage.OAS <- function(bond.id = "character",
                          price = numeric(), 
                          sigma = numeric(), 
                          paths = numeric(), 
-                         TermStructure = "character"){
+                         TermStructure = "character"
+                         ){
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
-  conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-  bond.id = readRDS(conn1)
+  bond.id = MBS(MBS.id = bond.id)
   
   # Establish connection to mortgage rate model
-  conn2 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(conn2)
+  MortgageRate <- MtgRate()
   
   # Establish connection to prepayment model tuning parameter
-  conn3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", as.character(bond.id@Model), ".rds", sep =""), open = "rb")        
-  ModelTune <- readRDS(conn3)
+  ModelTune <- ModelTune(bond.id = bond.id)
   
   #Call the desired curve from rates data folder
-  conn4 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(conn4)
+  rates.data <- Rates(trade.date = trade.date)
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -91,7 +89,8 @@ Mortgage.OAS <- function(bond.id = "character",
   pmtdate = as.Date(c(if(settlement.date == issue.date) 
                       {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
                       else 
-                      {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y") + delay
+                      {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, 
+                                                              "months"))}), "%m-%d-%Y") + delay
   
   
   #Build the time period vector (n) for discounting the cashflows nextpmt date 
@@ -278,11 +277,11 @@ Mortgage.OAS <- function(bond.id = "character",
     
     SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
                        predict(InterpolateCurve, MtgCashFlow@WAL ))/100
-  #}
+
   
   if (TermStructure != "TRUE")      
-    
-  {new("MortgageOAS",
+  
+    new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),
        SpreadToCurve = SpreadtoCurve,
@@ -290,9 +289,9 @@ Mortgage.OAS <- function(bond.id = "character",
        PathWAL = OAS.Out[,2],
        PathModDur = OAS.Out[,3],
        PathYTM =OAS.Out[,4],
-       PriceDist = OAS.Out[,5]
-  )}
+       PriceDist = OAS.Out[,5])
+
   
-  else OAS.Term.Structure
-  
+    else 
+      OAS.Term.Structure
 }

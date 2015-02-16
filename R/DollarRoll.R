@@ -84,6 +84,8 @@ setMethod("initialize",
 # ---------------- This function is the dollar roll analysis ---------------------------
 # ---------------- Currently the function calcualtes the 1 month roll ------------------
 # ---------------- Upgrade the bond basis function for actual/actual day count ---------  
+
+#' @export DollarRoll
 DollarRoll <- function(bond.id = "character", 
                        price = numeric(), 
                        drop = numeric(), 
@@ -222,3 +224,14 @@ DollarRoll <- function(bond.id = "character",
       Advantage = Advantage,
       TotalFutureValue = TotalFutureValue,
       DropImpliedValue = DropImpliedValue)}
+
+setGeneric("DollarRoll", function(bond.id = "character", 
+                                  price = numeric(), 
+                                  drop = numeric(), 
+                                  original.bal = numeric(), 
+                                  settlement.date = "character", 
+                                  fwd.settlement.date = "character", 
+                                  reinvestment.rate = numeric(), 
+                                  finance.rate = numeric(),
+                                  MortgageCashFlow = "character") 
+{standardGeneric("DollarRoll")})

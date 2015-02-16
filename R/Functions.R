@@ -7,38 +7,25 @@
 # Copyright (C) 2014  Glenn M Schultz, CFA
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+# ==========================================================================================
 
-# ----------------------------------
-# Bond Yield to Maturity Functions 
-# ----------------------------------
 
-#YYTMtoPrice is a simple yield to price equation for a standard bond
-#This equation treats the bond as a annuity and zero coupon payment
-#' @export YTMtoPrice
-YTMtoPrice<- function(yield.to.maturity = numeric() ,
-                      coupon = numeric(), 
-                      coupon.frequency = numeric(), 
-                      years.mat = numeric(), 
-                      face.value = numeric()){
-  
-  if (missing(yield.to.maturity))
-    stop("Need to specify a maturity greater than 0")
-  if (!is.numeric(yield.to.maturity)  )
-    stop("No numeric yield to maturity specified.")
-  if (yield.to.maturity <0 | yield.to.maturity > 1)
-    stop("No valid  interest.rate specified.")
-  
-  #need to error trap this function
-  n = years.mat * coupon.frequency
-  c = coupon/coupon.frequency
-  i = yield.to.maturity/coupon.frequency
-  fv = face.value
-  
-  (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)   
-}
-
-#bondprice is a simple price to yield equation for a standard bond
-#This equation treats the bond as a annuity and zero coupon payment
+#' bondprice
+#' 
+#' This is generic function to determine the price of a bond
+#' given the yield to maturity (YTM).  It is a nominal example of 
+#' pricing a bond given its yield to maturity.  The equation assumes pricing
+#' from one payment date to the next.  It does not account for acrrued interest.
+#' @param yield.to.maturity A numeric value expressing the yield to
+#' maturity (discount rate) as an annual percentage.
+#' @param coupon A numeric value the coupon paid by the bond as a percentage of
+#' the bond's principal amount
+#' @param coupon.frequency A numeirc value expressing the frequency of payments
+#' over one year
+#' @param years.mat A numeric value expressing the years to maturity
+#' @param face.value A numeric value expressing the face value (principal amount) of the bond
+#' @examples bondprice(yield.to.maturity = .05, coupon = .05, coupon.frequency = 2,
+#' years.mat = 10, face.value = 100)
 #' @export bondprice
 bondprice<- function(yield.to.maturity = numeric(),
                      coupon = numeric(), 
@@ -54,8 +41,25 @@ bondprice<- function(yield.to.maturity = numeric(),
   (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)
 }
 
-#bond estimated yield to maturity this equation estimates a bond's yield
-#to maturity for a yield to maturity guess may be used with uniroot ytm functions
+setGeneric("bondprice", function(yield.to.maturity = numeric(),
+                                 coupon = numeric(), 
+                                 coupon.frequency = numeric(), 
+                                 years.mat = numeric(), 
+                                 face.value = numeric())
+  {setGeneric("bondprice")})
+
+#' EstimYTM
+#' 
+#' Estimate a bond's yield to maturity given a price.  It is a 
+#' nominall example and does not account for acrrued interest
+#' @param coupon A numeric value expressing the bond's coupon as a
+#' percentage of its face amount
+#' @param coupon.frequency A numeric value expressing the frequency of payments
+#' over one year
+#' @param years.mat A numeric value expressing the years to maturity
+#' @param face.value A numeric value expressing the face value (principal amount) of the bond
+#' @param price A numeric value expressing the price of the bond (not percentage of face value)
+#' for example a price of$102 is entered as 102.00
 #' @export EstimYTM
 EstimYTM <- function(coupon = numeric(), 
                      coupon.frequency = numeric(), 
@@ -70,9 +74,20 @@ EstimYTM <- function(coupon = numeric(),
   ((c * fv) + ((fv - (fv *p))/2)) / (((fv + (fv *p))/f))
 }
 
-#---------------------------
-# Mortgage Payment Functions
-#---------------------------
+setGeneric("EstimYTM", function(coupon = numeric(), 
+                                coupon.frequency = numeric(), 
+                                years.mat = numeric(), 
+                                face.value = numeric(), 
+                                price = numeric())
+  {setGeneric("EstimYTM")})
+
+#' Mortgage.Monthly.Payment
+#' 
+#'Computes the monthly payment of a mortgage
+#'@param orig.bal A numeric value, the original loan amount
+#'@param note.rate A numeric vlaue, the borrower's note rate
+#'@param term.mos A numeric value, the original term of the loan in months
+#'@examples Mortgage.Monthly.Payment(orig.bal = 100000, note.rate = .04, term.mos = 360)
 #' @export Mortgage.Monthly.Payment
 Mortgage.Monthly.Payment <- function(orig.bal = numeric(), 
                                      note.rate = numeric(), 
@@ -88,7 +103,7 @@ Mortgage.Monthly.Payment <- function(orig.bal = numeric(),
   term = term.mos
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
-  pmt
+
 }
 
 #' @export Sched.Prin

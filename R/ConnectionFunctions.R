@@ -11,14 +11,16 @@
 
 
   #---------- connect to the rates data folder
-#' @export Rates
-   Rates <- function(trade.date = "character")
+    #' @export Rates
+    Rates <- function(trade.date = "character")
                   {
                   Rates.Conn <-gzfile(description = paste("~/BondLab/RatesData/", 
                                         as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
                   Rates <- readRDS(Rates.Conn)
                   return(Rates)
                   }
+    setGeneric("Rates", function(trade.date = "character")
+      {standardGeneric("Rates")})
    
    #-------- connect to mortgage rate function classes
    MtgRate <- function()

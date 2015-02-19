@@ -25,4 +25,7 @@ for example a price of$102 is entered as 102.00}
 Estimate a bond's yield to maturity given a price.  It is a
 nominall example and does not account for acrrued interest
 }
+\examples{
+EstimYTM(coupon = .04, coupon.frequency = 2, years.mat = 10, face.value = 1000, price = 100)
+}
 

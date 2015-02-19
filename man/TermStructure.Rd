@@ -16,12 +16,12 @@ For addiition details see the termstrc documentation.}
 }
 \description{
 This is a wrapper function around the R package termstrc.
-The function call rates data process the yield curve and derives cashflow
-for the daily close swap curve. A Rates object must be call an in the local
+The function call rates data processes the yield curve and derives cashflow
+for the daily close swap curve. A Rates object must be called in the local
 environment for this function to work.
 }
 \examples{
 \dontrun{
-TermStructure(rate.data = "01-13-2013", method = "ns"}
+TermStructure(rate.data = "01-13-2013", method = "ns")}
 }
 

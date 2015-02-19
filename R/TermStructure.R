@@ -29,8 +29,8 @@ setMethod("initialize",
 #' TermStructure
 #' 
 #' This is a wrapper function around the R package termstrc.
-#' The function call rates data process the yield curve and derives cashflow
-#' for the daily close swap curve. A Rates object must be call an in the local
+#' The function call rates data processes the yield curve and derives cashflow
+#' for the daily close swap curve. A Rates object must be called in the local
 #' environment for this function to work.
 #' @param rates.data A character string representing the data for which the user
 #' would like to call the swap curve
@@ -39,7 +39,7 @@ setMethod("initialize",
 #' For addiition details see the termstrc documentation.
 #' @examples
 #' \dontrun{
-#' TermStructure(rate.data = "01-13-2013", method = "ns"}
+#' TermStructure(rate.data = "01-13-2013", method = "ns")}
 #' @importFrom lubridate %m+%
 #' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
 #'@export TermStructure

@@ -46,7 +46,7 @@ setGeneric("bondprice", function(yield.to.maturity = numeric(),
                                  coupon.frequency = numeric(), 
                                  years.mat = numeric(), 
                                  face.value = numeric())
-  {setGeneric("bondprice")})
+  {standardGeneric("bondprice")})
 
 #' EstimYTM
 #' 
@@ -60,6 +60,7 @@ setGeneric("bondprice", function(yield.to.maturity = numeric(),
 #' @param face.value A numeric value expressing the face value (principal amount) of the bond
 #' @param price A numeric value expressing the price of the bond (not percentage of face value)
 #' for example a price of$102 is entered as 102.00
+#' @examples EstimYTM(coupon = .04, coupon.frequency = 2, years.mat = 10, face.value = 1000, price = 100)
 #' @export EstimYTM
 EstimYTM <- function(coupon = numeric(), 
                      coupon.frequency = numeric(), 
@@ -79,7 +80,7 @@ setGeneric("EstimYTM", function(coupon = numeric(),
                                 years.mat = numeric(), 
                                 face.value = numeric(), 
                                 price = numeric())
-  {setGeneric("EstimYTM")})
+  {standardGeneric("EstimYTM")})
 
 #' Mortgage.Monthly.Payment
 #' 
@@ -106,6 +107,13 @@ Mortgage.Monthly.Payment <- function(orig.bal = numeric(),
 
 }
 
+#' Scheduled Principal
+#' 
+#' Computes the scheduled principal of mortgage loan
+#' @param balance A numeric value, the balance of the mortgage
+#' @param note.rate A numeric value, the borrower's note rate
+#' @param term.mos A numeric value, the term of the mortgage
+#' @param period A numeric value, the number of months since the first payment
 #' @export Sched.Prin
 Sched.Prin <- function(balance = numeric(), 
                        note.rate = numeric(), 

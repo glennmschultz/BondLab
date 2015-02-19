@@ -26,4 +26,4 @@ zero.coupon = 0
 pmt.frequency = 2
 
 #' @import methods
-DummyFunction <- function(){"This function lets me use roxygen2 here to import from namespaces"}
+NULL

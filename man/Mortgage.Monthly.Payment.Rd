@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Mortgage.Monthly.Payment}
 \alias{Mortgage.Monthly.Payment}
-\title{Mortgage.Monthly.Payment}
+\title{Mortgage Monthly Payment}
 \usage{
 Mortgage.Monthly.Payment(orig.bal = numeric(), note.rate = numeric(),
   term.mos = numeric())

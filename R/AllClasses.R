@@ -56,7 +56,7 @@
            KeyRateConvexity = "numeric"))
 
   #--- The folllowing classes define standard Mortgage Passthrough analytics
-  #' @exportClass MBSDetails
+
   setClass("MBSDetails", 
          representation(
            Cusip = "character",
@@ -97,7 +97,7 @@
            Burnout = "numeric",
            SATO = "numeric"))
 
-  #' @exportClass MortgageTermStructure
+
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
@@ -107,7 +107,7 @@
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
   
-  #' @exportClass MortgageCashFlow
+
   setClass("MortgageCashFlow",
          representation(
            Price = "numeric",
@@ -134,7 +134,7 @@
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
   
-  #' @exportClass MortgageOAS
+
   setClass("MortgageOAS",
          representation(
            OAS = "numeric",
@@ -146,7 +146,7 @@
            PathModDur = "vector",
            PathYTM = "vector"))
 
-  #' @exportClass Scenario
+
   setClass("Scenario",
          representation(
            Name = "character",
@@ -156,7 +156,7 @@
            Shiftbps = "numeric",
            Formula = "function"
          ))
-  #' @exportClass Mtg.Scenario
+
   setClass("Mtg.Scenario",
          representation( 
            Period = "numeric",
@@ -184,20 +184,10 @@
            HorizonReturn = "numeric"),
            contains = "Scenario")
   
-  #' An S4 class representing a call to scenarios.
-  #' 
-  #' @slot Scenario is a list which is used to call 
-  #' the interest rate scenarios used for total
-  #' return and horizon analysis
-  #' @exportClass Mtg.ScenarioSet
   setClass("Mtg.ScenarioSet",
          representation(
            Scenario = "list"))
   
-  #' An S4 class representing the prepayment vector
-  #' given by the BondLab prepayment model
-  #'  
-  #' @exportClass PrepaymentAssumption
   setClass("PrepaymentAssumption",
          representation(
            PrepayAssumption = "character",
@@ -217,8 +207,6 @@
            MDR = "numeric",
            Severity = "numeric"))
   
-  #' An S4 class dollar roll calculator results 
-  #' @exportClass DollarRoll
   setClass("DollarRoll",
          representation(
            SettlementDate = "character",

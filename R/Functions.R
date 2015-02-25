@@ -27,7 +27,7 @@
 #' @examples bondprice(yield.to.maturity = .05, coupon = .05, coupon.frequency = 2,
 #' years.mat = 10, face.value = 100)
 #' @export bondprice
-bondprice<- function(yield.to.maturity = numeric(),
+  bondprice<- function(yield.to.maturity = numeric(),
                      coupon = numeric(), 
                      coupon.frequency = numeric(), 
                      years.mat = numeric(), 
@@ -39,9 +39,9 @@ bondprice<- function(yield.to.maturity = numeric(),
   fv = face.value
   
   (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)
-}
+  }
 
-setGeneric("bondprice", function(yield.to.maturity = numeric(),
+  setGeneric("bondprice", function(yield.to.maturity = numeric(),
                                  coupon = numeric(), 
                                  coupon.frequency = numeric(), 
                                  years.mat = numeric(), 
@@ -62,7 +62,7 @@ setGeneric("bondprice", function(yield.to.maturity = numeric(),
 #' for example a price of$102 is entered as 102.00
 #' @examples EstimYTM(coupon = .04, coupon.frequency = 2, years.mat = 10, face.value = 1000, price = 100)
 #' @export EstimYTM
-EstimYTM <- function(coupon = numeric(), 
+  EstimYTM <- function(coupon = numeric(), 
                      coupon.frequency = numeric(), 
                      years.mat = numeric(), 
                      face.value = numeric(), 
@@ -73,16 +73,16 @@ EstimYTM <- function(coupon = numeric(),
   fv = face.value
   p = price/100 
   ((c * fv) + ((fv - (fv *p))/2)) / (((fv + (fv *p))/f))
-}
+  }
 
-setGeneric("EstimYTM", function(coupon = numeric(), 
+  setGeneric("EstimYTM", function(coupon = numeric(), 
                                 coupon.frequency = numeric(), 
                                 years.mat = numeric(), 
                                 face.value = numeric(), 
                                 price = numeric())
   {standardGeneric("EstimYTM")})
 
-#' Mortgage.Monthly.Payment
+#' Mortgage Monthly Payment
 #' 
 #'Computes the monthly payment of a mortgage
 #'@param orig.bal A numeric value, the original loan amount
@@ -90,7 +90,7 @@ setGeneric("EstimYTM", function(coupon = numeric(),
 #'@param term.mos A numeric value, the original term of the loan in months
 #'@examples Mortgage.Monthly.Payment(orig.bal = 100000, note.rate = .04, term.mos = 360)
 #' @export Mortgage.Monthly.Payment
-Mortgage.Monthly.Payment <- function(orig.bal = numeric(), 
+  Mortgage.Monthly.Payment <- function(orig.bal = numeric(), 
                                      note.rate = numeric(), 
                                      term.mos = numeric()){
   #This function computes the monthly mortgage payment and can be used as part
@@ -105,17 +105,23 @@ Mortgage.Monthly.Payment <- function(orig.bal = numeric(),
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
 
-}
+  }
+
+  setGeneric("Mortgage.Monthly.Payment", function(orig.bal = numeric(),
+                                                note.rate = numeric(),
+                                                term.mos = numeric())
+  {standardGeneric("Mortgage.Monthly.Payment")})
 
 #' Scheduled Principal
 #' 
-#' Computes the scheduled principal of mortgage loan
+#' A standard generic for the calculation of scheduled principal of mortgage loan
 #' @param balance A numeric value, the balance of the mortgage
 #' @param note.rate A numeric value, the borrower's note rate
 #' @param term.mos A numeric value, the term of the mortgage
-#' @param period A numeric value, the number of months since the first payment
+#' @param period A numeric value the number of months since the first payment
+#' @examples Sched.Prin(balance = 100000, note.rate = .045, term.mos = 360, period = 2)
 #' @export Sched.Prin
-Sched.Prin <- function(balance = numeric(), 
+  Sched.Prin <- function(balance = numeric(), 
                        note.rate = numeric(), 
                        term.mos = numeric(), 
                        period = numeric()){
@@ -128,10 +134,23 @@ Sched.Prin <- function(balance = numeric(),
   disc.prin = ((1+note.rate)^(term))-1
   Scheduled.Prin = balance *(disc.pmt/disc.prin)
   Scheduled.Prin
-}
+  }
 
+  setGeneric("Sched.Prin", function(balance = numeric(),
+                                  note.rate = numeric(),
+                                  term.mos = numeric(),
+                                  period = numeric())
+  {standardGeneric("Sched.Prin")})
+#' Remain.Balance
+#' 
+#' A standard generic for the calculation of a mortgage remaining balance
+#' @param balance A numeric value the balance of the mortgage
+#' @param note.rate A numeric value the borrower's note rate
+#' @param term.mos A numeric value the term of the mortgage
+#' @param period A numeric value the numeric of months from the first payment
+#' @examples Remain.Balance(balance = 100000, note.rate = .045, term.mos = 360, period = 10)
 #' @export Remain.Balance
-Remain.Balance <- function(balance = numeric(), 
+  Remain.Balance <- function(balance = numeric(), 
                            note.rate = numeric(), 
                            term.mos = numeric(), 
                            period = numeric()){
@@ -139,10 +158,24 @@ Remain.Balance <- function(balance = numeric(),
   term = term.mos
   Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term)-1))
   Remain.Balance
-}
+  }
 
+  setGeneric("Remain.Balance", function(season.period = numeric(),
+                                      begin.cpr = numeric(),
+                                      end.cpr = numeric(),
+                                      period = numeric())
+  {standardGeneric("Remain.Balance")})
+
+#' PPC Ramp
+#' 
+#' A standard generic function for the calculation of the PPC ramp
+#' @param season.period A numeric value the time to the peak PPC ramp
+#' @param begin.cpr A numeric value the starting CPR value
+#' @param end.cpr A numeric value the ending CPR value
+#' @param period A numeric value the current period (months from start date)
+#' @examples PPC.Ramp(season.period = 30, begin.cpr = .002, end.cpr = .06, period = 30) 
 #' @export PPC.Ramp
-PPC.Ramp <- function(season.period = numeric(), 
+  PPC.Ramp <- function(season.period = numeric(), 
                      begin.cpr = numeric(), 
                      end.cpr = numeric(), 
                      period = numeric()){
@@ -152,10 +185,21 @@ PPC.Ramp <- function(season.period = numeric(),
   monthly.cpr = (begin.cpr + ((period - 1) * (end.cpr-begin.cpr)/(season.period -1)))
   cpr = ifelse(monthly.cpr <= end.cpr, monthly.cpr, end.cpr)
   cpr
-}
+  }
 
+  setGeneric("PPC.Ramp", function(season.period = numeric(),
+                                begin.cpr = numeric(),
+                                end.cpr = numeric(),
+                                period = numeric())
+  {standardGeneric("PPC.Ramp")})
+
+#' SMM.To.CPR
+#' 
+#' A standard generic function used to convert the SMM to CPR
+#' @param SMM A numeric value the single monthly mortality rate (SMM)
+#' @examples SMM.To.CPR(SMM = .002)
 #' @export SMM.To.CPR
-SMM.To.CPR <- function(SMM = numeric()){
+  SMM.To.CPR <- function(SMM = numeric()){
   if (missing(SMM))
     stop("Need to specify a SMM Value")
   if (!is.numeric(SMM)  )
@@ -164,10 +208,19 @@ SMM.To.CPR <- function(SMM = numeric()){
     stop("No SMM specified.")
   SMM = 1-((1-SMM)^(12))
   return(SMM)
-}
+  }
 
+setGeneric("SMM.To.CPR", function(SMM = numeric())
+  {standardGeneric("SMM.To.CPR")})
+
+#' CPR.To.SMM
+#' Standard Generic Function used to convert CPR to SMM
+#' 
+#' @param CPR A numeric value
+#' @examples
+#' CPR.To.SMM(CPR = .06)
 #' @export CPR.To.SMM
-CPR.To.SMM <- function(CPR = numeric()){
+  CPR.To.SMM <- function(CPR = numeric()){
   if (missing(CPR))
     stop("Need to specify a SMM Value")
   if (!is.numeric(CPR)  )
@@ -176,38 +229,67 @@ CPR.To.SMM <- function(CPR = numeric()){
     stop("No SMM specified.")
   CPR = 1-((1-CPR)^(1/12))
   return(CPR)
-}
+  }
 
+  setGeneric("CPR.To.SMM", function(CPR = numeric())
+  {standardGeneric("CPR.To.SMM")})
+
+#' SMMVector.To.CPR
+#' 
+#' A standard generic function that converts a time series of SMM
+#' to a time series of CPR.
+#' @param SMM A numeric vector of SMM
+#' @param a numeric vector of period (Loan Age)
 #' @export SMMVector.To.CPR
-SMMVector.To.CPR <- function(SMM = vector(), 
-                             num.period = numeric()){
+  SMMVector.To.CPR <- function(SMM = vector(), 
+                             num.period = vector()){
   # This function yields the average SMM  
   SMM = prod(1 + SMM)^(1/num.period)
   SMM = SMM - 1
   SMMVector.to.CPR = 1-(1-SMM)^12 
 }
 
-#-------------------------------------
-#Risk measures.  These functions measure effective duration, effective convexity, and key rate duration
-#-------------------------------------
+setGeneric("SMMVector.To.CPR", function(SMM = vector(),
+                                      period = vector())
+  {standardGeneric("SMMVector.To.CPR")})
 
+#' Effective.Duration
+#' 
+#' Calculates effective duarion based on a discount vector (zero coupon)
+#' cash flow vector, and rate delta
+#' @param Rate.Delta A numeric value the interest rate shift in basis points
+#' @param cashflow A numeric vector of cash flow
+#' @param discount.rates A numeric vector of discount rates
+#' @param discount.rates.up A numeric vector of the up discount rates
+#' @param discount.rate.dwn A numeric vector of the down discount rates
+#' @param t.period A numeric vector of the time period used for discounting
 #' @export Effective.Duration
-Effective.Duration <- function(Rate.Delta, 
-                               cashflow, 
-                               discount.rates, 
-                               discount.rates.up, 
-                               discount.rates.dwn, 
-                               t.period, 
-                               proceeds){
+  Effective.Duration <- function(Rate.Delta = numeric(), 
+                               cashflow = vector(), 
+                               discount.rates = vector(), 
+                               discount.rates.up = vector(), 
+                               discount.rates.dwn = vector(), 
+                               t.period = vector(), 
+                               proceeds = numeric()){
   Price = proceeds/10
   Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
   Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
   Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)  
   (Price.UP - Price.DWN)/(2*Price*Rate.Delta)
-}
+  }
 
+#' Effective.Convexity
+#' 
+#' Calculates effective convexity based on a discount vector (zero coupon)
+#' cash flow vector, and rate delta
+#' @param Rate.Delta  A numeric value the interest rate shift in basis points
+#' @param cashflow A numeric vector of cash flow
+#' @param discount.rates A numeric vector of the up discount rates
+#' @param discount.rates.up A numeric vector of the up discount rates
+#' @param discount.rates.down A numeric vector of the down discount rates
+#' @param t.period A numeric vector of the down discount rates
 #' @export Effective.Convexity
-Effective.Convexity <- function(Rate.Delta, 
+  Effective.Convexity <- function(Rate.Delta, 
                                 cashflow, 
                                 discount.rates, 
                                 discount.rates.up, 
@@ -220,6 +302,6 @@ Effective.Convexity <- function(Rate.Delta,
   Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
   
   (Price.UP + Price.DWN + (2*Price))/(2*(Price*Rate.Delta)^2)
-}
+  }
 
 

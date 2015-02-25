@@ -14,9 +14,12 @@ Sched.Prin(balance = numeric(), note.rate = numeric(),
 
 \item{term.mos}{A numeric value, the term of the mortgage}
 
-\item{period}{A numeric value, the number of months since the first payment}
+\item{period}{A numeric value the number of months since the first payment}
 }
 \description{
-Computes the scheduled principal of mortgage loan
+A standard generic for the calculation of scheduled principal of mortgage loan
+}
+\examples{
+Sched.Prin(balance = 100000, note.rate = .045, term.mos = 360, period = 2)
 }
 

@@ -107,6 +107,7 @@
                     callNextMethod(.Object,...)
                   })
 
+#' @export
   REMICAnalytics <- function(bond.id = "character", 
                            trade.date = "character",
                            settlement.date = "character",
@@ -115,8 +116,8 @@
                            tranche.price = numeric(),
                            PrepaymentAssumption = "character",
                            ...,
-                           begin.cpr = begin.cpr,
-                           end.cpr = end.cpr,
+                           begin.cpr = numeric(),
+                           end.cpr = numeric(),
                            seasoning.period = numeric(),
                            CPR = numeric()){
   
@@ -205,3 +206,17 @@
       KeyRateConvexity = REMICTermStructure@KeyRateConvexity
       )  
 }
+  
+setGeneric("REMICAnalytics", function(bond.id = "character", 
+                                      trade.date = "character",
+                                      settlement.date = "character",
+                                      method = "character",
+                                      collateral.price = numeric(),
+                                      tranche.price = numeric(),
+                                      PrepaymentAssumption = "character",
+                                      ...,
+                                      begin.cpr = numeric(),
+                                      end.cpr = numeric(),
+                                      seasoning.period = numeric(),
+                                      CPR = numeric())
+           {standardGeneric("REMICAnalytics")})  

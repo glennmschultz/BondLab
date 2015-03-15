@@ -13,13 +13,14 @@
   # Mortgage OAS Function
   #___________________________________
 
+  #' @export
   REMIC.OAS <- function(bond.id = "character", 
                       trade.date = "character", 
                       settlement.date = "character", 
                       #original.bal = numeric(),
                       tranche.price = numeric(),
                       collateral.price = numeric(),
-                      #short.rate = numeric(), 
+                      short.rate = numeric(), 
                       sigma = numeric(), 
                       paths = numeric()){
                       #...,

@@ -134,7 +134,42 @@
           SATO.beta = SATO.beta)
         }
     
-    #=================== This function constructs and saves the model tune =======================
+    #' Prepayment Model Tune
+    #' 
+    #' Create custom prepayment model tuning parameters that may
+    #' be applied to specific collateral cohorts
+    #' @param ModelName a character string.  The name of the model.
+    #' @param TurnoverRate a numeric value.  The estimated housing turnover rate.
+    #' @param Turnover.alpha a numeric value. The alpha value of the seasoning curve function.
+    #' @param Turnover.beta a numeric value.  The beta value of the seasoning curve function.
+    #' @param Turnover.theta a numeric value. The theta value of the seasoning curve function.
+    #' @param Seasonality.alpha a numeric value. The alpha value of the seasonality function.
+    #' @param Seasonality.theta a numeric value. The beta value of the seasonality function.
+    #' @param Incentive.Fast.theta.1 a numeric value. The first theta value of the fast payer S-curve.
+    #' @param Incentive.Fast.theta.2 a numeric value. The second theta value of fast payer S-curve.
+    #' @param Incentive.Fast.beta a numeric value. The beta value of the fast payer S-curve.
+    #' @param Incentive.Fast.eta a numeric value.  The eta value of the fast payer S-curve.
+    #' @param Incentive.Slow.theta.1 a numeric value. The first theta value of the slow payer S-curve.
+    #' @param Incentive.Slow.theta.2 a numeric value. The second theta value of the slow payer S-curve.
+    #' @param Incentive.Slow.beta a numeric value.  The beta value of the slow payer S-curve.
+    #' @param Incentive.Slow.eta a numeric value. The eta value of the slow payer S-curve.
+    #' @param Burnout.beta.1 a numeric value. The burnout first beta value to assign fast and slow payer.
+    #' @param Burnout.beta.2 a numeric value. The burnout second beta value to assign fast and slow payer.
+    #' @param BeginCDR a numeric value. The beginning CDR ramp.
+    #' @param PeakCDR a numeric value. The peak of the CDR ramp.
+    #' @param EndCDR a numeric value. The end value of the CDR ramp.
+    #' @param PeakMonth a numeric value. The month at which the CDR ramp reaches its peak.
+    #' @param PlateauMonths a numeric value. The number of months the CDR remains at its peak value.
+    #' @param EndMonth a numeric value. The month at which the CDR ramp peak ends.
+    #' @param MinOrigLTV a numeric value. The minimum original LTV which ties the 
+    #' end minimum point of the orginal LTV multiplier function
+    #' @param MaxOrigLTV a numeric value. The maximum orginal LTV which ties the
+    #' maxumum point of the original LTV multiplier
+    #' @param MinOrigMultiplier a numeric value. The minimum OLTV multiplier applied to the baseline
+    #' @param MaxOrigMultiplier a numeric value. The maximum OLTV multipler applied to the baseline
+    #' @param UpdatedLTV.beta
+    #' @param SATO.beta
+    #' @export
     MakeModelTune <- function(
       ModelName = "character",
       TurnoverRate = "numeric",

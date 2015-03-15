@@ -7,52 +7,21 @@ vignette: >
   %\VignetteIndexEntry{Bond Lab}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+
 ---
+# Introduction
+Investing in Mortgage and Asset backed securities requires specialized analytics.  The asset class is generally precieved as difficult to understand.  The underlying philosphy of Bond Lab is simple; mortgage and asset backed securities are not too complex to understand.  Indeed, the basic fixed income valuation techniques applicable to all fixed income securities also form the foundation for the valuation of mortgage **(MBS)** and asset backed **(ABS)** securities.
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+The percieved complexity of investing in strucutured products, like MBS, arise from four sources.  These are:
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+1. The contingency of residential MBS cash flows, which manifests because the borrower holds the option to repay and terimate her mortgage obligation early.
 
-## Vignette Info
+2. Cash flow structuring techniques based on the allocation of principal and interest across real estate mortgage investment conduit **REMIC** transactions.
 
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+3. Credit structuring techniques that allocate losses through the capital strucuture of transaction.
 
-## Styles
+4. Valuation techniques, interest rate models, whose goal is to simulate the economy.
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+This vignette is organized into the following four parts
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
 
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))

@@ -18,9 +18,11 @@ Effective.Duration(Rate.Delta = numeric(), cashflow = vector(),
 
 \item{discount.rates.up}{A numeric vector of the up discount rates}
 
+\item{discount.rates.dwn}{A numeric vector of the down discount rates}
+
 \item{t.period}{A numeric vector of the time period used for discounting}
 
-\item{discount.rate.dwn}{A numeric vector of the down discount rates}
+\item{proceeds}{A numeric value the proceeds/value of the bond or MBS to the investor}
 }
 \description{
 Calculates effective duarion based on a discount vector (zero coupon)

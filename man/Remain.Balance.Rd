@@ -4,17 +4,17 @@
 \alias{Remain.Balance}
 \title{Remain.Balance}
 \usage{
-Remain.Balance(season.period = numeric(), begin.cpr = numeric(),
-  end.cpr = numeric(), period = numeric())
+Remain.Balance(balance = numeric(), note.rate = numeric(),
+  term.mos = numeric(), period = numeric())
 }
 \arguments{
-\item{period}{A numeric value the numeric of months from the first payment}
-
 \item{balance}{A numeric value the balance of the mortgage}
 
 \item{note.rate}{A numeric value the borrower's note rate}
 
 \item{term.mos}{A numeric value the term of the mortgage}
+
+\item{period}{A numeric value the numeric of months from the first payment}
 }
 \description{
 A standard generic for the calculation of a mortgage remaining balance

@@ -141,6 +141,7 @@
                                   term.mos = numeric(),
                                   period = numeric())
   {standardGeneric("Sched.Prin")})
+
 #' Remain.Balance
 #' 
 #' A standard generic for the calculation of a mortgage remaining balance
@@ -160,10 +161,10 @@
   Remain.Balance
   }
 
-  setGeneric("Remain.Balance", function(season.period = numeric(),
-                                      begin.cpr = numeric(),
-                                      end.cpr = numeric(),
-                                      period = numeric())
+  setGeneric("Remain.Balance", function(balance = numeric(), 
+                                        note.rate = numeric(), 
+                                        term.mos = numeric(), 
+                                        period = numeric())
   {standardGeneric("Remain.Balance")})
 
 #' PPC Ramp
@@ -261,8 +262,9 @@ setGeneric("SMMVector.To.CPR", function(SMM = vector(),
 #' @param cashflow A numeric vector of cash flow
 #' @param discount.rates A numeric vector of discount rates
 #' @param discount.rates.up A numeric vector of the up discount rates
-#' @param discount.rate.dwn A numeric vector of the down discount rates
+#' @param discount.rates.dwn A numeric vector of the down discount rates
 #' @param t.period A numeric vector of the time period used for discounting
+#' @param proceeds A numeric value the proceeds/value of the bond or MBS to the investor
 #' @export Effective.Duration
   Effective.Duration <- function(Rate.Delta = numeric(), 
                                cashflow = vector(), 
@@ -286,8 +288,9 @@ setGeneric("SMMVector.To.CPR", function(SMM = vector(),
 #' @param cashflow A numeric vector of cash flow
 #' @param discount.rates A numeric vector of the up discount rates
 #' @param discount.rates.up A numeric vector of the up discount rates
-#' @param discount.rates.down A numeric vector of the down discount rates
+#' @param discount.rates.dwn A numeric vector of the down discount rates
 #' @param t.period A numeric vector of the down discount rates
+#' @param proceeds A numeric valu the proceeds/value of the bond or MBS to the investor
 #' @export Effective.Convexity
   Effective.Convexity <- function(Rate.Delta, 
                                 cashflow, 

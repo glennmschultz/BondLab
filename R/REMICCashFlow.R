@@ -8,6 +8,7 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
+
   REMICCashFlow <- function(bond.id = "character", 
                             trade.date = "character",
                             settlement.date = "character",
@@ -205,7 +206,7 @@
                                        settlement.date = "character",
                                        collateral.price = numeric(),
                                        tranche.price = numeric(),
-                                      PrepaymentAssumption = "character", 
+                                       PrepaymentAssumption = "character", 
                                        ..., 
                                        begin.cpr = numeric(), 
                                        end.cpr = numeric(), 

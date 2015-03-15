@@ -16,9 +16,11 @@ Effective.Convexity(Rate.Delta, cashflow, discount.rates, discount.rates.up,
 
 \item{discount.rates.up}{A numeric vector of the up discount rates}
 
+\item{discount.rates.dwn}{A numeric vector of the down discount rates}
+
 \item{t.period}{A numeric vector of the down discount rates}
 
-\item{discount.rates.down}{A numeric vector of the down discount rates}
+\item{proceeds}{A numeric valu the proceeds/value of the bond or MBS to the investor}
 }
 \description{
 Calculates effective convexity based on a discount vector (zero coupon)

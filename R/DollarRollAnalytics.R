@@ -300,3 +300,21 @@
       TotalFutureValue = DollarRoll@TotalFutureValue,
       DropImpliedValue = DollarRoll@DropImpliedValue)
       }
+  
+    setGeneric("DollarRollAnalytics", function(bond.id = "character", 
+                                               original.bal= numeric(), 
+                                               price = numeric(), 
+                                               drop = numeric(), 
+                                               trade.date = "character", 
+                                               settlement.date = "character", 
+                                               fwd.settlement.date = "character", 
+                                               reinvestment.rate = numeric(),  
+                                               finance.rate = numeric(), 
+                                               method = "ns", 
+                                               PrepaymentAssumption = "character", 
+                                               ...,
+                                               begin.cpr = numeric(), 
+                                               end.cpr = numeric(), 
+                                               seasoning.period = numeric(), 
+                                               CPR = numeric())
+               {standardGeneric("DollarRollAnalytics")})

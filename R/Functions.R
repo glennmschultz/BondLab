@@ -235,24 +235,23 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
   setGeneric("CPR.To.SMM", function(CPR = numeric())
   {standardGeneric("CPR.To.SMM")})
 
-#' SMMVector.To.CPR
-#' 
-#' A standard generic function that converts a time series of SMM
-#' to a time series of CPR.
-#' @param SMM A numeric vector of SMM
-#' @param a numeric vector of period (Loan Age)
-#' @export SMMVector.To.CPR
+  #' SMMVector.To.CPR
+  #' 
+  #' A standard generic function that converts a time series of SMM
+  #' to a time series of CPR.
+  #' @param SMM A numeric vector of SMM
+  #' @param a numeric vector of period (Loan Age)
+  #' @export SMMVector.To.CPR
   SMMVector.To.CPR <- function(SMM = vector(), 
                              num.period = vector()){
   # This function yields the average SMM  
   SMM = prod(1 + SMM)^(1/num.period)
   SMM = SMM - 1
   SMMVector.to.CPR = 1-(1-SMM)^12 
-}
+  }
 
-setGeneric("SMMVector.To.CPR", function(SMM = vector(),
-                                      period = vector())
-  {standardGeneric("SMMVector.To.CPR")})
+  setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())
+    {standardGeneric("SMMVector.To.CPR")})
 
 #' Effective.Duration
 #' 

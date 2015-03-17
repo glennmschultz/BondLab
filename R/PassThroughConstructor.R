@@ -179,6 +179,7 @@ setMethod("initialize",
 
 
 #' Make MBS Pass Through Object
+#' 
 #' This is a standard generic function used to construct a MBS pass through security
 #' @param Cusip A character the Pass Through MBS cusip.
 #' @param ID A character string the pool number. 
@@ -197,7 +198,7 @@ setMethod("initialize",
 #' @param SP A character string SP's assigned credit rating
 #' @param BondLab A character string BondLab's or the user's assigned credit rating
 #' @param Frequency A numeric value string the frequency of payments made to the investor
-#' @param Bond Basis A character string the basis on which interest is calculated
+#' @param BondBasis A character string the basis on which interest is calculated
 #' @param GWac A numeric value the borrower's note rate
 #' @param OrigLoanBal A numeric value the original balance of the loan
 #' @param OrigLTV A numeric value the borrower's original loan to value ratio
@@ -218,9 +219,9 @@ setMethod("initialize",
 #' @param Gfee A numeric value the guarantee fee taken from the borrower's note rate to
 #' guarantee timely payment of principal and interest.  Applicable in the case of Fannie
 #' Mae, Freddie Mac, or Ginnie Mae pools.
-#' @param IntitalInterest A character string indicating the note carries an interest only period
+#' @param InitialInterest A character string indicating the note carries an interest only period
 #' @param InterestOnlyPeriod A character string indicating the note's interest only period
-#' @param FirstPrinPmtDate A character string indicating the first principal payment date
+#' @param FirstPrinPaymentDate A character string indicating the first principal payment date
 #' due on an interest only mortgage.
 #' @param BalloonPmt A character string indicating the mortgage carries a balloon pmt.
 #' @param BalloonDate A character string the balloon payment date.

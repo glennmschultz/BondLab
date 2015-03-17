@@ -1,17 +1,42 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-# -----------
-# Bond Key Rate Calculation
-# -------------
-BondTermStructure <- function(bond.id = "character", Rate.Delta = numeric(), TermStructure = "character", principal = numeric(), price = numeric(), cashflow = "character"){
+  setMethod("initialize",
+            signature("BondTermStructure"),
+            function(.Object,
+                     SpotSpread = "numeric",   
+                     EffDuration = "numeric",
+                     EffConvexity = "numeric",
+                     KeyRateTenor = "numeric",
+                     KeyRateDuration = "numeric",
+                     KeyRateConvexity = "numeric")
+              
+                    {
+                    .Object@SpotSpread = SpotSpread
+                    .Object@EffDuration = EffDuration
+                    .Object@EffConvexity = EffConvexity
+                    .Object@KeyRateTenor = KeyRateTenor
+                    .Object@KeyRateDuration = KeyRateDuration
+                    .Object@KeyRateConvexity = KeyRateConvexity
+              
+              return(.Object)
+              callNextMethod(.Object,...)
+            })
+  
+  
+  BondTermStructure <- function(bond.id = "character", 
+                                Rate.Delta = numeric(), 
+                                TermStructure = "character", 
+                                principal = numeric(), 
+                                price = numeric(), 
+                                cashflow = "character"){
   
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency

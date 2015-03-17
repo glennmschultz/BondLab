@@ -1,17 +1,52 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-#--------------------------
-#Bond cash flow function. This function computes the cash flow of a standard non-callable bond
-#-------------------------
-BondCashFlows <- function (bond.id = "character", principal = numeric(), settlement.date = "character", price = numeric()){
+
+  setMethod("initialize",
+            signature("BondCashFlows"),
+            function(.Object,
+            Price = "numeric",
+            Accrued = "numeric",
+            YieldToMaturity = "numeric",
+            WAL = "numeric",
+            ModDuration = "numeric",
+            Convexity = "numeric",
+            Period = "numeric",
+            PmtDate = "character",
+            TimePeriod = "numeric",
+            PrincipalOutstanding = "numeric",  
+            CouponPmt = "numeric",
+            TotalCashFlow = "numeric")
+            
+            {
+              .Object@Price = Price
+              .Object@Accrued = Accrued
+              .Object@YieldToMaturity = YieldToMaturity
+              .Object@WAL = WAL
+              .Object@ModDuration = ModDuration
+              .Object@Convexity = Convexity
+              .Object@Period = Period
+              .Object@PmtDate = PmtDate
+              .Object@TimePeriod = TimePeriod
+              .Object@PrincipalOutstanding = PrincipalOutstanding  
+              .Object@CouponPmt = CouponPmt
+              .Object@TotalCashFlow = TotalCashFlow
+              
+              return(.Object)
+              callNextMethod(.Object,...)
+            })
+
+  BondCashFlows <- function (bond.id = "character", 
+                             principal = numeric(), 
+                             settlement.date = "character", 
+                             price = numeric()){
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -23,7 +58,10 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
   # This function error traps bond input information
-  ErrorTrap(bond.id = bond.id, principal = principal, settlement.date = settlement.date, price = price)
+  ErrorTrap(bond.id = bond.id, 
+            principal = principal, 
+            settlement.date = 
+            settlement.date, price = price)
   
   #  Validate the price and coupon passed through the error trapping function
   #  This validates that the correct unit is passed into the Bond Cash Flow function
@@ -37,7 +75,7 @@ BondCashFlows <- function (bond.id = "character", principal = numeric(), settlem
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
-  pmtdate.interval = 12/frequency
+  pmtdate.interval = months.in.year/frequency
   # then compute the payment dates
   pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
                       else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")

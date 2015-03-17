@@ -4,7 +4,7 @@
 \alias{SMMVector.To.CPR}
 \title{SMMVector.To.CPR}
 \usage{
-SMMVector.To.CPR(SMM = vector(), period = vector())
+SMMVector.To.CPR(SMM = vector(), num.period = vector())
 }
 \arguments{
 \item{SMM}{A numeric vector of SMM}

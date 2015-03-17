@@ -1,10 +1,10 @@
 ---
-title: "Bond Lab"
-author: "Glenn M schultz, CFA"
+title: "Investing in Mortgage Backed Securities with Bond Lab"
+author: "Glenn M Schultz, CFA"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Bond Lab}
+  %\VignetteIndexEntry{Investing in Mortgage Backed Securities with Bond Lab}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 
@@ -22,6 +22,6 @@ The percieved complexity of investing in strucutured products, like MBS, arise f
 
 4. Valuation techniques, interest rate models, whose goal is to simulate the economy.
 
-This vignette is organized into the following four parts
+Bond Lab introduces the following new S4 classes for the analysis of mortgage and asset backed securities
 
 

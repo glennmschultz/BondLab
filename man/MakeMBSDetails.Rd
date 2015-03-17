@@ -2,8 +2,7 @@
 % Please edit documentation in R/PassThroughConstructor.R
 \name{MakeMBSDetails}
 \alias{MakeMBSDetails}
-\title{Make MBS Pass Through Object
-This is a standard generic function used to construct a MBS pass through security}
+\title{Make MBS Pass Through Object}
 \usage{
 MakeMBSDetails(Cusip = "character", ID = "character",
   BondType = "character", Sector = "character", Coupon = numeric(),
@@ -55,6 +54,8 @@ from the trust to the investor}
 
 \item{Frequency}{A numeric value string the frequency of payments made to the investor}
 
+\item{BondBasis}{A character string the basis on which interest is calculated}
+
 \item{GWac}{A numeric value the borrower's note rate}
 
 \item{OrigLoanBal}{A numeric value the original balance of the loan}
@@ -87,7 +88,12 @@ PMI provider}
 guarantee timely payment of principal and interest.  Applicable in the case of Fannie
 Mae, Freddie Mac, or Ginnie Mae pools.}
 
+\item{InitialInterest}{A character string indicating the note carries an interest only period}
+
 \item{InterestOnlyPeriod}{A character string indicating the note's interest only period}
+
+\item{FirstPrinPaymentDate}{A character string indicating the first principal payment date
+due on an interest only mortgage.}
 
 \item{BalloonPmt}{A character string indicating the mortgage carries a balloon pmt.}
 
@@ -100,16 +106,8 @@ Mae, Freddie Mac, or Ginnie Mae pools.}
 \item{Burnout}{A numeric model the value of the borrower burnout.}
 
 \item{SATO}{A numeric value the borrrowers Spread AT Origination over the prime lending rate.}
-
-\item{Bond}{Basis A character string the basis on which interest is calculated}
-
-\item{IntitalInterest}{A character string indicating the note carries an interest only period}
-
-\item{FirstPrinPmtDate}{A character string indicating the first principal payment date
-due on an interest only mortgage.}
 }
 \description{
-Make MBS Pass Through Object
 This is a standard generic function used to construct a MBS pass through security
 }
 

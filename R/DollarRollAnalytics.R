@@ -153,7 +153,7 @@
 
   #----------------------------------
   #Agency Mortgage Dollar Roll Analytics is the constructor function for Dollar Roll
-
+  #' @export
   DollarRollAnalytics <- function(bond.id = "character", 
                                   original.bal= numeric(), 
                                   price = numeric(), 
@@ -182,22 +182,18 @@
   
   
   # Open bond.id connection
-  
-  connDR1 <- gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-  bond.id = readRDS(connDR1)
+
+  bond.id <- MBS(MBS.id = bond.id)
   
   # Open connection to rates data 
   trade.date = as.Date(trade.date, "%m-%d-%Y")
-  connDR2 <- gzfile(description = paste("~/BondLab/RatesData/", trade.date, ".rds", sep = ""), open = "rb")
-  rates.data = readRDS(connDR2)
+  rates.data = Rates(trade.date = trade.date)
   
   #Open Model Tune Connection
-  connDR3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",as.character(bond.id@Model),".rds", sep = ""), open = "rb")
-  ModelTune <- readRDS(connDR3) 
+  ModelTune <-ModelTune(bond.id = bond.id)
   
   # Open Mortgage Rate Connection
-  connDR4<- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(connDR4)
+  MortgageRate <- MortgageRate()
   
   Burnout = bond.id@Burnout
   #The second step is to call the desired coupon curve into memory 

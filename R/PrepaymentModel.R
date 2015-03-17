@@ -65,7 +65,6 @@ setMethod("initialize",
   # b is the intercept of the function
   # c is the point where the max CPR is achieved
   #---------------------------------------------------------------------------------------
-  
   Seasoning <- function(alpha = numeric(), 
                         beta = numeric(), 
                         theta = numeric(), 

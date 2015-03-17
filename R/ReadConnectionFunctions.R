@@ -52,6 +52,16 @@
                   MBS <- readRDS(MBS.Conn)
                   return(MBS)
                   }
+    
+    #----------- connect to Bond cusip data folder
+    #' @export
+    Bond <- function(Bond.id = "character")
+    {
+      Bond.Conn <- gzfile(description = paste("~/BondLab/BondData/",
+                                             Bond.id, ".rds", sep = ""), open = "rb")
+      Bond <- readRDS(Bond.Conn)
+      return(Bond)
+    }  
      
   #----------- connect to REMIC deal file
     REMICDeal <- function(remic.deal = "character") 

@@ -8,7 +8,23 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
-
+  #' REMICCashFlow
+  #' 
+  #' REMIC Cash flow analysis
+  #' @param bond.id A character string the cusip of bond id
+  #' @param trade.date A character string the trade date 
+  #' @param settlement date A character string the settlement date
+  #' @param collateral.price A numeric value the price of the collateral
+  #' @param tranche.price A numeric value the price of the tranche
+  #' @param PrepaymentAssumption A character string the prepayment assumption
+  #' @param begin.cpr A numeric value the begin CPR of the PPC ramp
+  #' @param end.cpr A numeric value the end CPR of the PPC ramp
+  #' @param seasoning.period A numeric value the length of the PPC ramp seasoning period
+  #' @param CPR A numeric value the CPR assumption used
+  #' @examples REMICCashFlow(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013", 
+  #' settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75, 
+  #' tranche.price = as.numeric(price[i]), PrepaymentAssumption = "CPR", CPR = 6)
+  #' @export
   REMICCashFlow <- function(bond.id = "character", 
                             trade.date = "character",
                             settlement.date = "character",
@@ -22,8 +38,7 @@
                             CPR = numeric(),
                             KeyRateTermStructure = NULL){
     
-  # Error Trap (?)
-    
+  # Error Trap here for inputs using error trap code (?)
   # ---- connect to rates data folder
   rates.data <- Rates(trade.date = trade.date)  
   
@@ -68,8 +83,8 @@
                   KeyRateTermStructure = KeyRateTermStructure)
 
   REMIC.CashFlow <- do.call(source, 
-                            list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), 
-                                 local = TRUE))
+                    list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), 
+                    local = TRUE))
   
   principal <- as.numeric(TrancheBeginValue[1,as.numeric(REMIC.Tranche@TrancheNumber),1])
   accrued.interest <- as.numeric(TrancheBeginValue[1, as.numeric(REMIC.Tranche@TrancheNumber),2])
@@ -212,5 +227,5 @@
                                        end.cpr = numeric(), 
                                        seasoning.period = numeric(), 
                                        CPR = numeric(),
-                                        KeyRateTermStructure = NULL)
+                                       KeyRateTermStructure = NULL)
                           {standardGeneric("REMICCashFlow")})  

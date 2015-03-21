@@ -465,6 +465,9 @@ setMethod("initialize",
   # --- connect to mortgage rate model
   MortgageRate <- MtgRate()
   
+  # --- connect to the prepayment model
+  ModelTune <- ModelTune(bond.id = bond.id)
+  
   TermStructure <- TermStructure(rates.data = rates.data, method = "ns")
   Burnout <- bond.id@Burnout
   
@@ -477,10 +480,11 @@ setMethod("initialize",
     end.cpr <- end.cpr * PSA.Band[i]
     
     PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id,
-                                                 TermStructure = TermStructure,
                                                  MortgageRate = MortgageRate,
-                                                 Burnout = Burnout,
+                                                 TermStructure = TermStructure,
                                                  PrepaymentAssumption = "PPC",
+                                                 ModelTune = ModelTune,
+                                                 Burnout = Burnout,
                                                  begin.cpr = begin.cpr,
                                                  end.cpr = end.cpr,
                                                  seasoning.period = seasoning.period
@@ -510,8 +514,29 @@ setMethod("initialize",
 
 }
   
-# ---------- function to create and save the PAC schedule class ----------------------------------------------------
-MakeSchedule <- function(bond.id = "character",
+  # ---------- function to create and save the PAC schedule class ----------------------------------------------------
+  #' MakeSchedule
+  #' 
+  #' Function to create a PAC bond sinking fund schedule
+  #' @param bond.id A character string the cusip or id
+  #' @param DealName A character string the transaction deal name
+  #' @param Group A character string the tranche's collateral group
+  #' @param original.balance A numeric value the collateral group original balance
+  #' @param trade.date A character string the trade date
+  #' @param settlement.date A character string the settlement date
+  #' @param first.pmtdate A character string the bond first payment date
+  #' @param price A numeric value the price of the underlying collateral
+  #' @param begin.cpr A numeric value the beginning value of the PPC assumption
+  #' @param end.cpr A numeric value the ending value of the PPC assumption
+  #' @param seasoning.period A numeric value the length of the PPC ramp
+  #' @param lower.PSA A numeric value the lower PSA band
+  #' @param upper.PSA A numeric value the upper PSA band
+  #' @examples MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",Group = 1,
+  #' original.bal = 200000000,first.pmtdate = "01-25-2013",trade.date = "01-10-2013",
+  #' settlement.date = "01-13-2013",price = 105.75,begin.cpr = .2,end.cpr = 6,
+  #' seasoning.period = 30,lower.PSA = 75, upper.PSA = 250)
+  #' @export  
+  MakeSchedule <- function(bond.id = "character",
                          DealName = "character",
                          Group = "character",
                          original.bal = numeric(),
@@ -540,7 +565,7 @@ MakeSchedule <- function(bond.id = "character",
                                           upper.PSA = upper.PSA
                                           )
                          connSched <- gzfile(description = paste("~/BondLab/Schedules/",
-                                                          DealName,"_","Group","_",temp@Group,"_", "Sch", ".rds", sep = ""))
+                                      DealName,"_","Group","_",temp@Group,"_", "Sch", ".rds", sep = ""))
                          saveRDS(temp, connSched)
 }
 

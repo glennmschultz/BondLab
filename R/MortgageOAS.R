@@ -136,6 +136,7 @@ Mortgage.OAS <- function(bond.id = "character",
   OAS.CashFlow <- array(data = NA, c(num.sim,paths))
   OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
   
+  #prepayout <- NULL
   
   for(j in 1:paths){
     
@@ -195,6 +196,9 @@ Mortgage.OAS <- function(bond.id = "character",
                                        PrepaymentAssumption = "MODEL", 
                                        ModelTune = ModelTune, 
                                        Burnout = Burnout)
+    #prepayout <- cbind(prepayout, Prepayment@SMM)
+    
+    
     
     MtgCashFlow <- MortgageCashFlow(bond.id = bond.id, 
                                     original.bal = original.bal, 
@@ -223,6 +227,8 @@ Mortgage.OAS <- function(bond.id = "character",
     OAS.Out[j,4] <- MtgCashFlow@YieldToMaturity
     
   } # end of the OAS j loop
+  
+  #vectors <<- prepayout
   
   # Calculate OAS spread find the spread such that the average proceeds is equal to proceeds
   OAS <- function(spread = numeric(), 

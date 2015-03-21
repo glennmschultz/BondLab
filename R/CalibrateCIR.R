@@ -15,6 +15,7 @@
   #' @importFrom lubridate %m+%
   #' @importFrom termstrc create_cashflows_matrix create_maturities_matrix
   #' @import optimx
+  #' @export
   CalibrateCIR <- function(trade.date = character, 
                          sigma = numeric()){
  

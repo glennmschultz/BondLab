@@ -10,7 +10,7 @@
 #--------------------------------------
 
 #This function gives the close form solution to bond price given the short term rate
-
+#' @export
 CIRBondPrice <- function(shortrate = vector(), 
                          T = numeric(), 
                          step = numeric(), 

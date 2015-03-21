@@ -9,7 +9,7 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-# Function to simulate the short term interest rate
+
 CIRSim <- function(shortrate = numeric(), 
                    kappa = numeric(), 
                    theta = numeric(), 

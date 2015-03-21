@@ -106,8 +106,25 @@
                     return(.Object)
                     callNextMethod(.Object,...)
                   })
-
-#' @export
+#' REMICAnalytics
+#' 
+#' Cash flow analysis and risk metrics of REMIC Tranches including spot spread analysis
+#' effective duration, effective convexity, Key rate duration analysis
+#' @param bond.id A character string the bond.id or cusip number
+#' @param trade.date A character string the trade date
+#' @param settlement.date A character string the settlement date
+#' @param method A character string the method used to fit the term strucutre
+#' @param collateral.price A numeric value the price of the underlying collateral
+#' @param tranche.price A numeric value the price of the tranche
+#' @param PrepaymentAssumption A character string defining the prepayment assumption used
+#' @param begin.cpr optional, a numeric value used when applying a PPC assumption
+#' @param end.cpr optional, a numeric value used when applying a PPC assumption
+#' @param seasoning.period optional, a numeric value used when applying a PPC assumption
+#' @param CPR optional, a numeric value used when applying a CPR assumption
+#' @examples REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
+#' settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75,
+#' tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)
+#' @export REMICAnalytics
   REMICAnalytics <- function(bond.id = "character", 
                            trade.date = "character",
                            settlement.date = "character",

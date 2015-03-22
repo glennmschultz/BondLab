@@ -41,6 +41,9 @@ setMethod("initialize",
 #' \dontrun{
 #' TermStructure(rate.data = "01-13-2013", method = "ns")}
 #' @importFrom lubridate %m+%
+#' @importFrom lubridate years
+#' @importFrom lubridate day
+#' @importFrom lubridate month
 #' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
 #'@export TermStructure
   TermStructure <- function(rates.data = "character", method = "character"){

@@ -13,7 +13,9 @@
 #----------------------------
 # Note use switch to add additional basis default will be 30/360
 
-
+#' BondBasisConversion
+#' @importFrom lubridate year
+#' @importFrom lubridate month
 BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
                                 lastpmt.date, nextpmt.date){
   

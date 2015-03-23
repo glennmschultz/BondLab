@@ -100,14 +100,13 @@
         
   (REMIC.Deal@Tranches[[ai]]@TrancheCoupon/100) / REMIC.Deal@Tranches[[ai]]@InterestPmtFrequency * TrancheBeginValue[1,ai,1]
         
-        
   }
 
   #-- compute the principal proceeds
   for(prin in 1:NoCol){
   TrancheBeginValue[1,prin,3] <- if(prin != REMIC.Tranche@TrancheNumber) 
                                 {TrancheBeginValue[1,prin,1]} else
-                                  {(TrancheBeginValue[1,prin,1] * tranche.price)}
+                                {(TrancheBeginValue[1,prin,1] * tranche.price)}
   }
   
   #-- compute the proceeds
@@ -145,7 +144,8 @@
   # ----- Check for Bond Schedules
   # ===================================================================================
   
-  if(isTRUE(REMIC.Tranche@Schedule)) {schedule <- REMICSchedules(REMIC.Tranche = REMIC.Tranche)} else {schedule <- NULL}
+  if(isTRUE(REMIC.Tranche@Schedule)) {schedule <- REMICSchedules(REMIC.Tranche = REMIC.Tranche)} else 
+                                      {schedule <- NULL}
   
   # -- get the REMIC Schedule start value
   if(isTRUE(REMIC.Tranche@Schedule)) 

@@ -185,7 +185,7 @@
                     begin.cpr = begin.cpr/100}
   monthly.cpr = (begin.cpr + ((period - 1) * (end.cpr-begin.cpr)/(season.period -1)))
   cpr = ifelse(monthly.cpr <= end.cpr, monthly.cpr, end.cpr)
-  cpr
+  return(cpr)
   }
 
   setGeneric("PPC.Ramp", function(season.period = numeric(),

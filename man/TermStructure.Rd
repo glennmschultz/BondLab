@@ -22,6 +22,6 @@ environment for this function to work.
 }
 \examples{
 \dontrun{
-TermStructure(rate.data = "01-13-2013", method = "ns")}
+TermStructure(rates.data = "01-13-2013", method = "ns")}
 }
 

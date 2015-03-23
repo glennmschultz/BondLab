@@ -435,7 +435,7 @@ setMethod("initialize",
 
   # -------- REMIC Schedules PAC and TAC schedules for REMIC
   #1 construct the PAC REMIC Class with call to new
-
+  #' @importFrom lubridate %m+%
   Schedule <- function(bond.id = "character",
                              DealName = "character",
                              Group = "character",

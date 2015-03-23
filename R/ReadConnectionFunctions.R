@@ -23,6 +23,7 @@
       {standardGeneric("Rates")})
    
    #-------- connect to mortgage rate function classes
+    #'@export
    MtgRate <- function()
                   {
                    MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
@@ -37,6 +38,7 @@
                   }
    
   #----------- connect to prepayment model tune data folder
+  #' @export
    ModelTune <- function(bond.id = "character")
                  {
                  ModelTune.Conn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", 
@@ -45,6 +47,7 @@
                  }
 
   #----------- connect to MBS cusip data folder
+    #'@export
     MBS <- function(MBS.id = "character")
                   {
                   MBS.Conn <- gzfile(description = paste("~/BondLab/BondData/",

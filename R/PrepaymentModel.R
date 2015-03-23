@@ -341,6 +341,7 @@ setMethod("initialize",
   #This section begins the bond lab prepayment model
   #The constructor for the prepayment model vector starts below
   # ----------------------------------------------------------------------------
+  #' @export
   PrepaymentAssumption <- function(bond.id = "character", 
                                    TermStructure = "character", 
                                    MortgageRate = "character",
@@ -441,16 +442,16 @@ setMethod("initialize",
   
   }
   
-
-  MDR <- Default.Model(ModelTune = ModelTune,
-                       OrigLoanBalance = OriginalLoanBalance,
-                       NoteRate = NoteRate,
-                       Term = AmortizationTerm * months.in.year,
-                       OrigLTV = OrigLTV, 
-                       SATO = sato,  
-                       LoanAge = LoanAge,
+  if(PrepaymentAssumption != "MODEL"){MDR <- rep(0, Remain.Term)} else
+                        {MDR <- Default.Model(ModelTune = ModelTune,
+                        OrigLoanBalance = OriginalLoanBalance,
+                        NoteRate = NoteRate,
+                        Term = AmortizationTerm * months.in.year,
+                        OrigLTV = OrigLTV, 
+                        SATO = sato,  
+                        LoanAge = LoanAge,
                        ...,
-                       HomePrice = HomePrice)
+                       HomePrice = HomePrice)}
 
   
   new("PrepaymentAssumption",

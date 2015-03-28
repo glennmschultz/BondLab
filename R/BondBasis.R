@@ -16,6 +16,7 @@
 #' BondBasisConversion
 #' @importFrom lubridate year
 #' @importFrom lubridate month
+#' @export
 BondBasisConversion <- function(issue.date, start.date, end.date, settlement.date, 
                                 lastpmt.date, nextpmt.date){
   

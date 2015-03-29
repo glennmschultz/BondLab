@@ -442,6 +442,9 @@ setMethod("initialize",
   
   }
   
+  
+  # this condition set default to zero when the prepayment model is not used 
+  # it allows for PSA and CPR assumptions
   if(PrepaymentAssumption != "MODEL"){MDR <- rep(0, Remain.Term)} else
                         {MDR <- Default.Model(ModelTune = ModelTune,
                         OrigLoanBalance = OriginalLoanBalance,
@@ -453,7 +456,6 @@ setMethod("initialize",
                        ...,
                        HomePrice = HomePrice)}
 
-  
   new("PrepaymentAssumption",
       PrepayAssumption = as.character(PrepayAssumption),
       PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},

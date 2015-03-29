@@ -9,7 +9,7 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-
+#' @export
 CIRSim <- function(shortrate = numeric(), 
                    kappa = numeric(), 
                    theta = numeric(), 

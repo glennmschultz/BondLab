@@ -1,3 +1,6 @@
+
+
+#' @export
 HPISim <- function(shortrate = numeric(),
                    LongTermGrowth = numeric(),
                    T = numeric(),

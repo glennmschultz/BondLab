@@ -14,6 +14,7 @@
 #___________________________________
 
 #' @importFrom lubridate %m+%
+#' @export Mortgage.OAS
 Mortgage.OAS <- function(bond.id = "character", 
                          trade.date = "character", 
                          settlement.date = "character", 

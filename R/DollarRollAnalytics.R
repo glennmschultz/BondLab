@@ -193,7 +193,7 @@
   ModelTune <-ModelTune(bond.id = bond.id)
   
   # Open Mortgage Rate Connection
-  MortgageRate <- MortgageRate()
+  MortgageRate <- MtgRate()
   
   Burnout = bond.id@Burnout
   #The second step is to call the desired coupon curve into memory 

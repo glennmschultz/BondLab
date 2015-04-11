@@ -1,2 +1,14 @@
 Bond Lab license agreement.  
-Bond Lab code is licensed for personal and eductional use commercial use is prohibited without a commerical license.  Contact Bond Lab technologies
+
+
+The Bond Lab software uses the following open source and free R software packages.  All the packages listed below are available on the CRAN repository.
+
+termstrc
+lubridate
+optimx
+methods
+knitr
+devtools
+testthat
+
+The code which consitutes Bond Lab, including wrapper functions and code designed for the use of free open source packages is licensed for both personal and eductional use. Thecommercial use of Bond Lab prohibited without a commerical license. For the terms of a commerical license contact Bond Lab technologies.

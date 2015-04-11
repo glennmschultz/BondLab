@@ -235,6 +235,7 @@ setMethod("initialize",
 
 
 # Construct RAID class with call to new
+#'@export
   RAID <- function(DealName = "character",
                  Issuer = "character",
                  DealPriceDate = "character",
@@ -262,6 +263,7 @@ setMethod("initialize",
           }
 
 # serialize the RAID class to the RAID directory
+#'@export
   MakeRAID <- function(DealName = "character", 
                      Issuer = "character", 
                      DealPriceDate = "character", 
@@ -289,7 +291,8 @@ setMethod("initialize",
   }
   
   #------- Tranches functions for the REMIC constructor ---------------------------------------------------------------
-# 1) Construct tranche details with call to new
+#Construct Tranche details
+#'@export
   TrancheDetails <- function( DealName = "character",
                               TrancheNumber = "character",
                               TrancheName = "character",
@@ -349,7 +352,8 @@ setMethod("initialize",
   }
   
   
-# 2) serialize the tranches to the tranches directory  
+# 2) serialize the tranches to the tranches directory
+#'@export
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",
                             TrancheName = "character",
@@ -414,7 +418,7 @@ setMethod("initialize",
   # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
   # The function assembles multiple tranches associated with a deal 
   # building the tranche classes into a list
-  
+#'@export  
   Tranches <- function(NumberofTranches = numeric(), DealName = "character"){
     
     TrancheList <- list()
@@ -436,6 +440,7 @@ setMethod("initialize",
   # -------- REMIC Schedules PAC and TAC schedules for REMIC
   #1 construct the PAC REMIC Class with call to new
   #' @importFrom lubridate %m+%
+  #' @export
   Schedule <- function(bond.id = "character",
                              DealName = "character",
                              Group = "character",
@@ -573,7 +578,7 @@ setMethod("initialize",
 
   # -------- Collateral groups for the REMIC Constructor -------------------------------------------------------------
   # 1) construct the collateral class with call to new
-    
+  #'@export  
   Collateral <- function(DealName = "character", 
                          Group = numeric(), 
                          Cusip = list(), 
@@ -587,6 +592,7 @@ setMethod("initialize",
 
   
   # 2) serialize the collateral information to the groups directory
+  #'@export
   MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
     
     temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
@@ -597,7 +603,8 @@ setMethod("initialize",
   }
 
   # 3) aggregator function for the REMIC structure called by REMIC constructor
-  # the function assembles multiple collateral groups can be extended to loan level 
+  # the function assembles multiple collateral groups can be extended to loan level
+  #'@export
   CollateralGroup <- function(NumberofGroups = numeric(), DealName = "character"){
     
     GroupList <- list()
@@ -615,7 +622,7 @@ setMethod("initialize",
   }
   # ------ RDME Functions for the REMIC structuring tool ---------------------------------------------------------
   # 1) construct the tranche factors with the call to new
-  
+  #'@export
   RDME <- function(Cusip = "character", 
                    PaymentDate = "character", 
                    Coupon = numeric(), 
@@ -630,7 +637,7 @@ setMethod("initialize",
 
   
   # 2) serailize tranche factor date to RDME directory
-  
+  #'@export
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),
                        Cusip = "character",
@@ -651,7 +658,7 @@ setMethod("initialize",
   
 
   # 3) aggregator function for tranche factor information called by REMIC contructor
-  
+  #'@export
   RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
     RDMEList <- list()
     
@@ -667,7 +674,8 @@ setMethod("initialize",
     
   }
   
-  #4) REMIC Constructor 
+  #4) REMIC Constructor
+#'@export
   RemicStructure <- function(DealName = "character"){
     
     #open connection to RAID files and instantiate RAID class

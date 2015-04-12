@@ -14,7 +14,7 @@ Investing in Mortgage and Asset backed securities requires specialized analytics
 
 The percieved complexity of investing in strucutured products, like MBS, arise from four sources.  These are:
 
-1. The contingency of residential MBS cash flows, which manifests because the borrower holds the option to repay and terimate her mortgage obligation early.
+1. The contingency of residential MBS cash flows, which manifests because the borrower holds the option to repay and terminate her mortgage obligation early.
 
 2. Cash flow structuring techniques based on the allocation of principal and interest across real estate mortgage investment conduit **REMIC** transactions.
 
@@ -22,6 +22,13 @@ The percieved complexity of investing in strucutured products, like MBS, arise f
 
 4. Valuation techniques, interest rate models, whose goal is to simulate the economy.
 
-Bond Lab introduces the following new S4 classes for the analysis of mortgage and asset backed securities
+Bond Lab makes used of the following R packages: termstrc, lubridate, optimx.  To my knowledge Bond Lab is the first open source and objected oriented software provided for the analysis of mortgage and consumer asset backed securities.  The packages used by Bond Lab are open source and freely available on the CRAN repository.  Bond Lab although open source is not freely available to everyone.  The Bond Lab licensing agreement allows individuals and the academic community to download an use Bond Lab for personal and educational use.  Commerical use of Bond Lab is restricted and requires a commerical license which is available by contacting Bond Lab Technologies, Inc.
 
+# Organization
+The analysis of mortgage and asset backed securities may be divided into four core competencies. These are:
+
+1. **Term Strucutre Modeling**, The valuation of all fixed income securities is based upon the term structure of interest rates.  Bond Lab makes use of the package termstc for its term strucutre modeling.  Indeed, mortgage backed securities are unique in that the term structure of interest influences valuation of MBS via the borrower's option to refinance her current mortgage for one offering a more favorable rate.
+2. **Cash-flow Modeling**, 
+3. **Structuring**, the basic input is the mortgage pool.  A mortgage pool is excatly as its name implies - a pool of mortgage loans whose principal and interest is passed through to the investor.  Beyond the mortgage pool is the Real Estate Mortgage Investment Conduit **(REMIC)**.  A REMIC allows for the creation of securities offering unique risk/reward profiles.  The key to REMIC execution lies in the division of principal and interest. 
+4. **Relative Value Analysis**,
 

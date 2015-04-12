@@ -85,6 +85,18 @@ setMethod("initialize",
 # ---------------- Currently the function calcualtes the 1 month roll ------------------
 # ---------------- Upgrade the bond basis function for actual/actual day count ---------  
 
+#' Dollar Roll Calculates the one-month Dollar Roll
+#' 
+#' One-month dollar roll analysis.  This function is called by Dollar Roll Analytics
+#' @param bond.id A character string the cusip or id of the MBS
+#' @param price A numeric value the price of the MBS
+#' @param drop A numeric value the one-month drop.
+#' @param original.bal A numeric value the original balance of the MBS pool
+#' @param settlement.date A character string the current settlement date
+#' @param fwd.settlement.date A character string the forward settlement date
+#' @param reinvestment.rate A numeric value the investor's reinvestment rate
+#' @param finance.rate  A numeric value the investor's alternative finance or repo rate
+#' @param MortgageCashFlow A character string the name of a MortgageCashFlow Object
 #' @export DollarRoll
 DollarRoll <- function(bond.id = "character", 
                        price = numeric(), 

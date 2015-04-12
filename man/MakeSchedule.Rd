@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{MakeSchedule}
 \alias{MakeSchedule}
-\title{MakeSchedule}
+\title{MakeSchedule for PAC Bond Sinking Fund Schedule}
 \usage{
 MakeSchedule(bond.id = "character", DealName = "character",
   Group = "character", original.bal = numeric(), trade.date = "character",
@@ -42,9 +42,9 @@ MakeSchedule(bond.id = "character", DealName = "character",
 Function to create a PAC bond sinking fund schedule
 }
 \examples{
-MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",Group = 1,
+\dontrun{MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",Group = 1,
 original.bal = 200000000,first.pmtdate = "01-25-2013",trade.date = "01-10-2013",
 settlement.date = "01-13-2013",price = 105.75,begin.cpr = .2,end.cpr = 6,
-seasoning.period = 30,lower.PSA = 75, upper.PSA = 250)
+seasoning.period = 30,lower.PSA = 75, upper.PSA = 250)}
 }
 

@@ -107,6 +107,15 @@ setMethod("initialize",
             
           })
 
+      #'Bond Analytics
+      #'
+      #'Analytic engine for standard bond (non-mortgage) analysis
+      #'@param bond.id A character string the cusip number or id of the bond
+      #'@param principal  A numeric value the principal amount of the bond
+      #'@param price A numeric value the price of the bond
+      #'@param trade.date A character string the trade date
+      #'@param settlement.date A character string the settlement date
+      #'@param method A character string the method used to fit the term structure passed to the package termstruc
       #'@export
       BondAnalytics <- function (bond.id = "character", 
                            principal = numeric(), 
@@ -200,3 +209,10 @@ setMethod("initialize",
            TenYearFwd = TermStructure@TenYearFwd)
       }
 
+  setGeneric("BondAnalytics", function (bond.id = "character", 
+                                        principal = numeric(), 
+                                        price = numeric(), 
+                                        trade.date = "character", 
+                                        settlement.date = "character", 
+                                        method = "character")
+    {standardGeneric("BondAnalytics")})

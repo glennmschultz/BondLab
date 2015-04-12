@@ -57,6 +57,10 @@
                   }
     
     #----------- connect to Bond cusip data folder
+    #' Bond A connection function to the BondData folder
+    #' 
+    #' Opens a connection to bond data folder
+    #' @param Bond.id A character string the bond's cusip number or id
     #' @export
     Bond <- function(Bond.id = "character")
     {

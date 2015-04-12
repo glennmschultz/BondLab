@@ -21,9 +21,11 @@
   #' @param end.cpr A numeric value the end CPR of the PPC ramp
   #' @param seasoning.period A numeric value the length of the PPC ramp seasoning period
   #' @param CPR A numeric value the CPR assumption used
-  #' @examples REMICCashFlow(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013", 
+  #' @examples 
+  #' \dontrun{
+  #' REMICCashFlow(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013", 
   #' settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75, 
-  #' tranche.price = as.numeric(price[i]), PrepaymentAssumption = "CPR", CPR = 6)
+  #' tranche.price = as.numeric(price[i]), PrepaymentAssumption = "CPR", CPR = 6)}
   #' @export
   REMICCashFlow <- function(bond.id = "character", 
                             trade.date = "character",

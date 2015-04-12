@@ -153,6 +153,24 @@
 
   #----------------------------------
   #Agency Mortgage Dollar Roll Analytics is the constructor function for Dollar Roll
+  #' Dollar Roll Analytics
+  #' 
+  #' Analysis of the one-month dollar roll for a pass through or cohort representation
+  #' @param bond.id A character string the MBS cusip or bond id
+  #' @param original.bal A numeric value the MBS original balance
+  #' @param price A numeric value the price of the MBS pass-through
+  #' @param drop A numeric value the quoted drop
+  #' @param trade.date A character string the trade date
+  #' @param settlement.date A character string the settlement date
+  #' @param fwd.settlement.date A character string the forward settlement date of the roll
+  #' @param reinvestment.rate A numeric value the investor's reinvestment rate
+  #' @param finance.rate A numeric value the investor's alternative finance or repo rate
+  #' @param method A character string the method passed to termstrc to fit the term structure
+  #' @param PrepaymentAssumption A character string the model used to value the dollar roll may be CPR, PPC, or MODEL
+  #' @param begin.cpr optional, A numeric value the beginning cpr that must be specified when PPC prepayment assumption is used
+  #' @param end.cpr optional, A numeric vlaue the ending cpr that must be specified  when PPC prepayment assumption is used
+  #' @param seasoning.period optional, A numeric value the length of the PPC seasoning ramp that must be specified when PPC prepayment assumption is used
+  #' @param CPR optional, A numeric value the CPR assumption that must be specified when CPR prepayment assumption is used
   #' @export
   DollarRollAnalytics <- function(bond.id = "character", 
                                   original.bal= numeric(), 

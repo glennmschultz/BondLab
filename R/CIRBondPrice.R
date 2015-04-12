@@ -9,7 +9,18 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 #--------------------------------------
 
-#This function gives the close form solution to bond price given the short term rate
+
+#' Cox, Ingersol, Ross Bond Price
+#' 
+#' This function gives the closed form solution to a bond price given the short-term rate
+#' @param shortrate A vector of simulated short-term rates
+#' @param T A numeric value the time over which the short-term rate is simulated
+#' @param step A numeric value the time step on the simulation
+#' @param kappa A numeric value the speed of mean reversion of the simulation
+#' @param lambda A numeric value the risk premium
+#' @param sigma A numeric value the volatility entered as a standard deviation
+#' @param theta A numeric vlaue the long term forward rate
+#' @param result A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit  
 #' @export
 CIRBondPrice <- function(shortrate = vector(), 
                          T = numeric(), 

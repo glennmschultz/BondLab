@@ -234,8 +234,6 @@ setMethod("initialize",
           })
 
 
-# Construct RAID class with call to new
-#'@export
   RAID <- function(DealName = "character",
                  Issuer = "character",
                  DealPriceDate = "character",
@@ -262,7 +260,32 @@ setMethod("initialize",
                      )                 
           }
 
-# serialize the RAID class to the RAID directory
+
+#' REMIC At Issuance Disclosure (RAID)
+#' 
+#'  RAID function creates the REMIC At Issuance Detail
+#'  @param DealName A character string the deal name
+#'  @param Issuer A character string the Isser Name
+#'  @param DealPriceDate A character string the Deal Pricing Date
+#'  @param DealSettlementDate A character string the Deal Settlement Date
+#'  @param Underwriter A character string the Deal Underwriter
+#'  @param NumberofTranches A numeric string the Number of Tranches
+#'  @param NumberofPACSchedules A numeric value the number of PAC schedules
+#'  @param NumberofGroups A numeric value the number of groups
+#'  @param DealSize A numeric value the original balance of all tranches
+#'  @param CollateralAmount A numeric value the current face amount of the collateral
+#'  @examples
+#'  \dontrun{
+#'    MakeRAID(DealName = "BondLabPACInverse", 
+#'    Issuer = "Bondlab", 
+#'    DealPriceDate = "12-01-2012", 
+#'    DealSettlementDate = "01-01-2013",
+#'    Underwriter = "Bondlab",
+#'    NumberofTranches = 4,
+#'    NumberPacSchedules = 1,
+#'    NumberofGroups = 1,
+#'    DealSize = 200000000,
+#'    CollateralAmount = 200000000)}
 #'@export
   MakeRAID <- function(DealName = "character", 
                      Issuer = "character", 
@@ -292,7 +315,7 @@ setMethod("initialize",
   
   #------- Tranches functions for the REMIC constructor ---------------------------------------------------------------
 #Construct Tranche details
-#'@export
+
   TrancheDetails <- function( DealName = "character",
                               TrancheNumber = "character",
                               TrancheName = "character",
@@ -353,6 +376,10 @@ setMethod("initialize",
   
   
 # 2) serialize the tranches to the tranches directory
+
+#' Makes Tranches for REMIC structure
+#' 
+#' Make Tranche data for REMIC constructor
 #'@export
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",
@@ -418,7 +445,7 @@ setMethod("initialize",
   # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
   # The function assembles multiple tranches associated with a deal 
   # building the tranche classes into a list
-#'@export  
+  
   Tranches <- function(NumberofTranches = numeric(), DealName = "character"){
     
     TrancheList <- list()
@@ -440,7 +467,6 @@ setMethod("initialize",
   # -------- REMIC Schedules PAC and TAC schedules for REMIC
   #1 construct the PAC REMIC Class with call to new
   #' @importFrom lubridate %m+%
-  #' @export
   Schedule <- function(bond.id = "character",
                              DealName = "character",
                              Group = "character",
@@ -520,7 +546,7 @@ setMethod("initialize",
 }
   
   # ---------- function to create and save the PAC schedule class ----------------------------------------------------
-  #' MakeSchedule
+  #' MakeSchedule for PAC Bond Sinking Fund Schedule
   #' 
   #' Function to create a PAC bond sinking fund schedule
   #' @param bond.id A character string the cusip or id
@@ -536,10 +562,11 @@ setMethod("initialize",
   #' @param seasoning.period A numeric value the length of the PPC ramp
   #' @param lower.PSA A numeric value the lower PSA band
   #' @param upper.PSA A numeric value the upper PSA band
-  #' @examples MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",Group = 1,
+  #' @examples 
+  #' \dontrun{MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",Group = 1,
   #' original.bal = 200000000,first.pmtdate = "01-25-2013",trade.date = "01-10-2013",
   #' settlement.date = "01-13-2013",price = 105.75,begin.cpr = .2,end.cpr = 6,
-  #' seasoning.period = 30,lower.PSA = 75, upper.PSA = 250)
+  #' seasoning.period = 30,lower.PSA = 75, upper.PSA = 250)}
   #' @export  
   MakeSchedule <- function(bond.id = "character",
                          DealName = "character",
@@ -577,8 +604,8 @@ setMethod("initialize",
 
 
   # -------- Collateral groups for the REMIC Constructor -------------------------------------------------------------
-  # 1) construct the collateral class with call to new
-  #'@export  
+  # 1) construct the collateral class with call to new.  This function is used by MakeCollateral
+ 
   Collateral <- function(DealName = "character", 
                          Group = numeric(), 
                          Cusip = list(), 
@@ -592,6 +619,21 @@ setMethod("initialize",
 
   
   # 2) serialize the collateral information to the groups directory
+  #' Make Collateral Group for REMIC structure
+  #' 
+  #' Makes Collateral Groups for REMIC structure currently only representative (aggregated collateral groups)
+  #' is supported.  In the future multiple collateral pools or loans are envisioned.
+  #' @param DealName A character string the deal's name
+  #' @param Group A numeric value the collateral group number
+  #' @param Cusip A list the collateral group name, collateral pool cusips, or loan numbers.
+  #' @param OrigBal A list the original balance of the collateral group name, pool cusip or loan numbers used in the deal
+  #' @examples
+  #' \dontrun{
+  #'  MakeCollateral(DealName = "BondLabPACInverse",
+  #'  Group = 1,
+  #'  Cusip = list("bondlabMBS4"),
+  #'  OrigBal = list("200000000"))
+  #' } 
   #'@export
   MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
     
@@ -604,7 +646,7 @@ setMethod("initialize",
 
   # 3) aggregator function for the REMIC structure called by REMIC constructor
   # the function assembles multiple collateral groups can be extended to loan level
-  #'@export
+
   CollateralGroup <- function(NumberofGroups = numeric(), DealName = "character"){
     
     GroupList <- list()
@@ -622,7 +664,7 @@ setMethod("initialize",
   }
   # ------ RDME Functions for the REMIC structuring tool ---------------------------------------------------------
   # 1) construct the tranche factors with the call to new
-  #'@export
+
   RDME <- function(Cusip = "character", 
                    PaymentDate = "character", 
                    Coupon = numeric(), 
@@ -637,6 +679,45 @@ setMethod("initialize",
 
   
   # 2) serailize tranche factor date to RDME directory
+  #' REMIC Disclosure Month End (RDME)
+  #' 
+  #' REMIC Month End Discloure is the monthly factor data for each Tranche
+  #' @param DealName A charcter string the deal name
+  #' @param TrancheNumber A numeric value the number of the Tranche
+  #' @param Cusip A character string the tranche cusip
+  #' @param PaymentDate A character string the payment date coinciding with the factor data
+  #' @param Coupon A numeric value the tranche's coupon
+  #' @param Factor A numeric value the tranche's factor
+  #' @examples
+  #' \dontrun{
+  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'TrancheNumber = 1,
+  #'Cusip = "BondLabPAC2",
+  #'"PaymentDate = "01-01-2013",
+  #'Coupon = 2.25,
+  #'Factor = 1)
+  #'
+  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'       TrancheNumber = 2,
+  #'       Cusip = "BondLabFltr",
+  # '      PaymentDate = "1-01-2013",
+  #'       Coupon = 0.55,
+  #'       Factor = 1)
+  #'
+  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'       TrancheNumber = 3,
+  #'       Cusip = "BondLabCMP1",
+  #'       PaymentDate = "1-01-2013",
+  #'       Coupon = 9.21,
+  #'       Factor = 1)
+  #'
+  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'       TrancheNumber = 4,
+  #'       Cusip = "BondLabPACIO",
+  #'       PaymentDate = "1-01-2013",
+  #'       Coupon = 1.75,
+  #'       Factor = 1)
+  #' } 
   #'@export
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),
@@ -658,8 +739,8 @@ setMethod("initialize",
   
 
   # 3) aggregator function for tranche factor information called by REMIC contructor
-  #'@export
-  RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
+
+    RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
     RDMEList <- list()
     
     for(i in 1 : NumberofTranches){
@@ -674,7 +755,17 @@ setMethod("initialize",
     
   }
   
-  #4) REMIC Constructor
+# --- REMIC Constructor Function these functions are used to assemble the 
+# --- RAID, Tranches, RDME, and Collateral Groups into a single REMIC structure
+
+#' REMIC Constructor 
+#' 
+#' Assembles the deal RAID, RDME, Tranches, and Groups into a REMIC structure
+#' @param DealName A character string the deal's names
+#' @examples
+#' \dontrun{
+#' RemicStructure("BondLabPACInverse")  
+#' }
 #'@export
   RemicStructure <- function(DealName = "character"){
     

@@ -28,7 +28,31 @@ Bond Lab makes used of the following R packages: termstrc, lubridate, optimx.  T
 The analysis of mortgage and asset backed securities may be divided into four core competencies. These are:
 
 1. **Term Strucutre Modeling**, The valuation of all fixed income securities is based upon the term structure of interest rates.  Bond Lab makes use of the package termstc for its term strucutre modeling.  Indeed, mortgage backed securities are unique in that the term structure of interest influences valuation of MBS via the borrower's option to refinance her current mortgage for one offering a more favorable rate.
-2. **Cash-flow Modeling**, 
+2. **Cash-flow Modeling**, The derivation of mortgage and consumer assets according to the amortization schedule of each
+giving respect to voluntary repayment, delinquency, default (involuntary repayment), and recovery.
 3. **Structuring**, the basic input is the mortgage pool.  A mortgage pool is excatly as its name implies - a pool of mortgage loans whose principal and interest is passed through to the investor.  Beyond the mortgage pool is the Real Estate Mortgage Investment Conduit **(REMIC)**.  A REMIC allows for the creation of securities offering unique risk/reward profiles.  The key to REMIC execution lies in the division of principal and interest. 
 4. **Relative Value Analysis**,
+
+#Term Structure Modeling
+The term structure modeling in Bond Lab is done using the package *termstrc*
+    Zero-Coupon Yield Curve Estimation with the Package termstrc    
+    Robert Ferstl and Josef Hayden  
+    Journal of Statistical Software   
+    year = 2010  
+    volume = 36  
+    number = 1  
+    pages 1--34  
+    url = {http://www.jstatsoft.org/v36/i01/}}
+    
+The functions in BondLab related to term structure modeling are:
+
+**CalibrateCIR** The function calibrates the single factor Cox, Ingersol, Ross term structure model to the swap rate data.  The function is not part of the package termstrc.  However, the function calls cfmatrix and matmatrix from the package termstrc.
+
+**CIRBondPrice** The function estimates bond prices given a simulated short-term rate.
+
+**SwapRateDate** The function iterates over the RatesData.csv file and creates a yield curve object for each date.
+
+**TermStructure**  The function is a wrapper around the package termstrc allowing the user to call a yield curve referencing it by date.  Yield curve data is stored in the RatesData directory.
+
+
 

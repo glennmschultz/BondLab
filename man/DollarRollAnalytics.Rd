@@ -34,6 +34,8 @@ DollarRollAnalytics(bond.id = "character", original.bal = numeric(),
 
 \item{PrepaymentAssumption}{A character string the model used to value the dollar roll may be CPR, PPC, or MODEL}
 
+\item{...}{Optional values for input when using CPR or PPC}
+
 \item{begin.cpr}{optional, A numeric value the beginning cpr that must be specified when PPC prepayment assumption is used}
 
 \item{end.cpr}{optional, A numeric vlaue the ending cpr that must be specified  when PPC prepayment assumption is used}

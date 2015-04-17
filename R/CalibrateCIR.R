@@ -12,10 +12,15 @@
   #---------------------------------
   # Calibrate CIR to market
   #________________________________
+  #' Calibrate CIR 
+  #' 
+  #' This function calibrates the CIR Model to the yield curve
   #' @importFrom lubridate %m+%
   #' @importFrom termstrc create_cashflows_matrix create_maturities_matrix
   #' @import optimx
-  #' @export
+  #' @param trade.date A numeric value the trade date
+  #' @param sigma the volatility in absolute percent the annualized value is sigma times sqrt(240)
+  #' @export  
   CalibrateCIR <- function(trade.date = character, 
                          sigma = numeric()){
  

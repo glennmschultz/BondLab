@@ -20,8 +20,8 @@
 #' @param lambda A numeric value the risk premium
 #' @param sigma A numeric value the volatility entered as a standard deviation
 #' @param theta A numeric vlaue the long term forward rate
-#' @param result A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit  
-#' @export
+#' @param result A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit
+#' @export  
 CIRBondPrice <- function(shortrate = vector(), 
                          T = numeric(), 
                          step = numeric(), 

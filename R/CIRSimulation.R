@@ -8,7 +8,16 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-
+#' CIR Sim 
+#' 
+#' The short rate simulation engine
+#' @param shortrate A numeric value the shortrate
+#' @param kappa A numeric value the rate of mean reversion
+#' @param theta A numeric value the long term forward rate
+#' @param T A numeric value time in years
+#' @param step A numeric value the time step
+#' @param sigma A numeric value the volatility not annualized
+#' @param N the number of paths
 #' @export
 CIRSim <- function(shortrate = numeric(), 
                    kappa = numeric(), 

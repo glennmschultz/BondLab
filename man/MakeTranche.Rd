@@ -18,6 +18,61 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
   PacLowBand = numeric(), PacHighBand = numeric(), Group = numeric(),
   Schedule = "logical", Fixed = "logical")
 }
+\arguments{
+\item{DealName}{A character string the deal name}
+
+\item{TrancheNumber}{A character string the Tranche Number}
+
+\item{TrancheName}{A character string the the Tranche Name}
+
+\item{TranchePrincipal}{A character string the principal type (pass-through, notional)}
+
+\item{TrancheInterest}{A character string the interest type (fixed or floating)}
+
+\item{TranchePrincipalDesc}{A character string the REMIC principal type (sequential, IO, PAC, etc.)}
+
+\item{TrancheInterestDesc}{A character string the REMIC interest type (Fixed, Floating, Variable)}
+
+\item{Cusip}{A character string the tranche cusip}
+
+\item{TrancheOrigBal}{A character numeric value the original balance}
+
+\item{TrancheDatedDate}{A character value the tranche dated date}
+
+\item{TrancheFirstPmtDate}{A character value the tranche first payment date}
+
+\item{TrancheLastPmtDate}{A character value the tranche last payment date}
+
+\item{TrancheNextPmtDate}{A character value the tranche next payment date}
+
+\item{TrancheCoupon}{A numeric value the tranche coupon}
+
+\item{Delay}{A numeric value the delay days}
+
+\item{PrinPmtFrequency}{A numeric value the principal payment frequency}
+
+\item{InterestPmtFrequency}{A numeric value the interest payment frequency}
+
+\item{FloaterIndex}{A character value the floater index name}
+
+\item{FloaterMargin}{A numeric value the floater margin}
+
+\item{FloaterCap}{A numeric value the floater cap}
+
+\item{FloaterFloor}{A numeric value the floater floor}
+
+\item{FloaterFormula}{A function the floater coupon formula}
+
+\item{PacLowBand}{A numeric value the PAC Lower Band}
+
+\item{PacHighBand}{A numeric value the PAC Upper Band}
+
+\item{Group}{A numeric value the collateral group number}
+
+\item{Schedule}{A logical indicating the PAC/TAC schedule}
+
+\item{Fixed}{A logical indicating Fixed (TRUE) or Floating (FALSE) coupon}
+}
 \description{
 Make Tranche data for REMIC constructor
 }

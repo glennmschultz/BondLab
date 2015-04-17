@@ -167,6 +167,7 @@
   #' @param finance.rate A numeric value the investor's alternative finance or repo rate
   #' @param method A character string the method passed to termstrc to fit the term structure
   #' @param PrepaymentAssumption A character string the model used to value the dollar roll may be CPR, PPC, or MODEL
+  #' @param ... Optional values for input when using CPR or PPC
   #' @param begin.cpr optional, A numeric value the beginning cpr that must be specified when PPC prepayment assumption is used
   #' @param end.cpr optional, A numeric vlaue the ending cpr that must be specified  when PPC prepayment assumption is used
   #' @param seasoning.period optional, A numeric value the length of the PPC seasoning ramp that must be specified when PPC prepayment assumption is used

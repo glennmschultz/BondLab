@@ -380,6 +380,33 @@ setMethod("initialize",
 #' Makes Tranches for REMIC structure
 #' 
 #' Make Tranche data for REMIC constructor
+#' @param DealName A character string the deal name
+#' @param TrancheNumber A character string the Tranche Number
+#' @param TrancheName A character string the the Tranche Name
+#' @param TranchePrincipal A character string the principal type (pass-through, notional)
+#' @param TrancheInterest A character string the interest type (fixed or floating)
+#' @param TranchePrincipalDesc A character string the REMIC principal type (sequential, IO, PAC, etc.)
+#' @param TrancheInterestDesc A character string the REMIC interest type (Fixed, Floating, Variable)
+#' @param Cusip A character string the tranche cusip
+#' @param TrancheOrigBal A character numeric value the original balance
+#' @param TrancheDatedDate A character value the tranche dated date
+#' @param TrancheFirstPmtDate A character value the tranche first payment date
+#' @param TrancheLastPmtDate A character value the tranche last payment date
+#' @param TrancheNextPmtDate A character value the tranche next payment date
+#' @param TrancheCoupon A numeric value the tranche coupon
+#' @param Delay A numeric value the delay days
+#' @param PrinPmtFrequency A numeric value the principal payment frequency
+#' @param InterestPmtFrequency A numeric value the interest payment frequency
+#' @param FloaterIndex A character value the floater index name
+#' @param FloaterMargin A numeric value the floater margin
+#' @param FloaterCap A numeric value the floater cap
+#' @param FloaterFloor A numeric value the floater floor
+#' @param FloaterFormula A function the floater coupon formula
+#' @param PacLowBand A numeric value the PAC Lower Band
+#' @param PacHighBand A numeric value the PAC Upper Band
+#' @param Group A numeric value the collateral group number
+#' @param Schedule A logical indicating the PAC/TAC schedule
+#' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
 #'@export
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",

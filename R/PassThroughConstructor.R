@@ -178,7 +178,7 @@ setMethod("initialize",
   }
 
 
-#' Make MBS Pass Through Object
+#' A constructor function to create a mortgage pass through security
 #' 
 #' This is a standard generic function used to construct a MBS pass through security
 #' @param Cusip A character the Pass Through MBS cusip.

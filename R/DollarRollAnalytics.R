@@ -153,7 +153,7 @@
 
   #----------------------------------
   #Agency Mortgage Dollar Roll Analytics is the constructor function for Dollar Roll
-  #' Dollar Roll Analytics
+  #' A constructor of Dollar Roll Analytics object Analysis of the one-month Dollar Roll
   #' 
   #' Analysis of the one-month dollar roll for a pass through or cohort representation
   #' @param bond.id A character string the MBS cusip or bond id

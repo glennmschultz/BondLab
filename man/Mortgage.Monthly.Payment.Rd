@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Mortgage.Monthly.Payment}
 \alias{Mortgage.Monthly.Payment}
-\title{Mortgage Monthly Payment}
+\title{A function to calculate the monthly payment of a mortgage}
 \usage{
 Mortgage.Monthly.Payment(orig.bal = numeric(), note.rate = numeric(),
   term.mos = numeric())
@@ -15,7 +15,7 @@ Mortgage.Monthly.Payment(orig.bal = numeric(), note.rate = numeric(),
 \item{term.mos}{A numeric value, the original term of the loan in months}
 }
 \description{
-Computes the monthly payment of a mortgage
+A standard generic function to compute the monthly payment of a mortgage
 }
 \examples{
 Mortgage.Monthly.Payment(orig.bal = 100000, note.rate = .04, term.mos = 360)

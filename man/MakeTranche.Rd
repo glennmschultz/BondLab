@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{MakeTranche}
 \alias{MakeTranche}
-\title{Makes Tranches for REMIC structure}
+\title{A constructor function for REMIC tranche detail}
 \usage{
 MakeTranche(DealName = "character", TrancheNumber = "character",
   TrancheName = "character", TranchePrincipal = "character",
@@ -74,6 +74,6 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 \item{Fixed}{A logical indicating Fixed (TRUE) or Floating (FALSE) coupon}
 }
 \description{
-Make Tranche data for REMIC constructor
+MakeTranche a constructor function used to create a REMIC tranche
 }
 

@@ -10,7 +10,7 @@
 # ==========================================================================================
 
 
-#' bondprice
+#' Determine the price a bond on the interest payment date 
 #' 
 #' This is generic function to determine the price of a bond
 #' given the yield to maturity (YTM).  It is a nominal example of 
@@ -48,7 +48,7 @@
                                  face.value = numeric())
   {standardGeneric("bondprice")})
 
-#' EstimYTM
+#' A function to estimate the yield to maturity of a standard bond
 #' 
 #' Estimate a bond's yield to maturity given a price.  It is a 
 #' nominall example and does not account for acrrued interest
@@ -82,9 +82,9 @@
                                 price = numeric())
   {standardGeneric("EstimYTM")})
 
-#' Mortgage Monthly Payment
+#' A function to calculate the monthly payment of a mortgage
 #' 
-#'Computes the monthly payment of a mortgage
+#' A standard generic function to compute the monthly payment of a mortgage
 #'@param orig.bal A numeric value, the original loan amount
 #'@param note.rate A numeric vlaue, the borrower's note rate
 #'@param term.mos A numeric value, the original term of the loan in months
@@ -100,7 +100,7 @@
   if (!is.numeric(note.rate)  )
     stop("No numeric interest.rate specified.")
   
-  note.rate = note.rate/12 
+  note.rate = note.rate/months.in.year
   term = term.mos
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
@@ -112,7 +112,7 @@
                                                 term.mos = numeric())
   {standardGeneric("Mortgage.Monthly.Payment")})
 
-#' Scheduled Principal
+#' A function to calculate the scheduled principal of mortgage
 #' 
 #' A standard generic for the calculation of scheduled principal of mortgage loan
 #' @param balance A numeric value, the balance of the mortgage
@@ -128,7 +128,7 @@
   
   #This function computes the monthly scheduled principal 
   #Requires additional error trapping
-  note.rate = note.rate/12
+  note.rate = note.rate/months.in.year
   term = term.mos
   disc.pmt =  note.rate * (1+note.rate)^(period-1)
   disc.prin = ((1+note.rate)^(term))-1
@@ -142,7 +142,7 @@
                                   period = numeric())
   {standardGeneric("Sched.Prin")})
 
-#' Remain.Balance
+#' A function to compute the remaining balance of a mortgage
 #' 
 #' A standard generic for the calculation of a mortgage remaining balance
 #' @param balance A numeric value the balance of the mortgage
@@ -155,7 +155,7 @@
                            note.rate = numeric(), 
                            term.mos = numeric(), 
                            period = numeric()){
-  note.rate = note.rate/12
+  note.rate = note.rate/months.in.year
   term = term.mos
   Remain.Balance = balance * ((((1+note.rate)^term) - ((1+note.rate)^period))/(((1+note.rate)^term)-1))
   Remain.Balance
@@ -167,7 +167,7 @@
                                         period = numeric())
   {standardGeneric("Remain.Balance")})
 
-#' PPC Ramp
+#' A function to calculate the PPC ramp
 #' 
 #' A standard generic function for the calculation of the PPC ramp
 #' @param season.period A numeric value the time to the peak PPC ramp
@@ -194,7 +194,7 @@
                                 period = numeric())
   {standardGeneric("PPC.Ramp")})
 
-#' SMM.To.CPR
+#' Convert the single monthly mortality rate SMM to CPR
 #' 
 #' A standard generic function used to convert the SMM to CPR
 #' @param SMM A numeric value the single monthly mortality rate (SMM)
@@ -207,16 +207,16 @@
     stop("No numeric SMM specified.")
   if (SMM <0 | SMM > 1)
     stop("No SMM specified.")
-  SMM = 1-((1-SMM)^(12))
+  SMM = 1-((1-SMM)^(months.in.year))
   return(SMM)
   }
 
 setGeneric("SMM.To.CPR", function(SMM = numeric())
   {standardGeneric("SMM.To.CPR")})
 
-#' CPR.To.SMM
-#' Standard Generic Function used to convert CPR to SMM
+#' A function to convert the CPR to a single monthly mortality rate SMM
 #' 
+#' Standard Generic Function used to convert CPR to SMM 
 #' @param CPR A numeric value
 #' @examples
 #' CPR.To.SMM(CPR = .06)
@@ -228,34 +228,34 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
     stop("No numeric SMM specified.")
   if (CPR <0 | CPR > 1)
     stop("No SMM specified.")
-  CPR = 1-((1-CPR)^(1/12))
+  CPR = 1-((1-CPR)^(1/months.in.year))
   return(CPR)
   }
 
   setGeneric("CPR.To.SMM", function(CPR = numeric())
   {standardGeneric("CPR.To.SMM")})
 
-  #' SMMVector.To.CPR
+  #' A function to convert  a time series of SMM to CPR
   #' 
-  #' A standard generic function that converts a time series of SMM
+  #' A standard generic function for the conversion a SMM time series to CPR
   #' to a time series of CPR.
   #' @param SMM A numeric vector of SMM
-  #' @param a numeric vector of period (Loan Age)
+  #' @param num.period a numeric vector of period (Loan Age)
   #' @export SMMVector.To.CPR
   SMMVector.To.CPR <- function(SMM = vector(), 
                              num.period = vector()){
   # This function yields the average SMM  
   SMM = prod(1 + SMM)^(1/num.period)
   SMM = SMM - 1
-  SMMVector.to.CPR = 1-(1-SMM)^12 
+  SMMVector.to.CPR = 1-(1-SMM)^months.in.year 
   }
 
   setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())
     {standardGeneric("SMMVector.To.CPR")})
 
-#' Effective.Duration
+#' A function to compute effectove duration
 #' 
-#' Calculates effective duarion based on a discount vector (zero coupon)
+#' Calculates effective duration based on a discount vector (zero coupon)
 #' cash flow vector, and rate delta
 #' @param Rate.Delta A numeric value the interest rate shift in basis points
 #' @param cashflow A numeric vector of cash flow
@@ -279,7 +279,7 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
   (Price.UP - Price.DWN)/(2*Price*Rate.Delta)
   }
 
-#' Effective.Convexity
+#' A function to compute effective convexity
 #' 
 #' Calculates effective convexity based on a discount vector (zero coupon)
 #' cash flow vector, and rate delta

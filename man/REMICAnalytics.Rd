@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICAnalytics.R
 \name{REMICAnalytics}
 \alias{REMICAnalytics}
-\title{REMICAnalytics}
+\title{The REMIC Analytics engine the constructor function for REMIC Analytics}
 \usage{
 REMICAnalytics(bond.id = "character", trade.date = "character",
   settlement.date = "character", method = "character",
@@ -24,6 +24,8 @@ REMICAnalytics(bond.id = "character", trade.date = "character",
 \item{tranche.price}{A numeric value the price of the tranche}
 
 \item{PrepaymentAssumption}{A character string defining the prepayment assumption used}
+
+\item{...}{Optional values when CPR and PPC are input}
 
 \item{begin.cpr}{optional, a numeric value used when applying a PPC assumption}
 

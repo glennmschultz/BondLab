@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICCashFlow.R
 \name{REMICCashFlow}
 \alias{REMICCashFlow}
-\title{REMICCashFlow}
+\title{The REMIC cash flow engine the constructor function for REMICCashFlow oject}
 \usage{
 REMICCashFlow(bond.id = "character", trade.date = "character",
   settlement.date = "character", collateral.price = numeric(),
@@ -16,11 +16,15 @@ REMICCashFlow(bond.id = "character", trade.date = "character",
 
 \item{trade.date}{A character string the trade date}
 
+\item{settlement.date}{A character string the settlement date}
+
 \item{collateral.price}{A numeric value the price of the collateral}
 
 \item{tranche.price}{A numeric value the price of the tranche}
 
 \item{PrepaymentAssumption}{A character string the prepayment assumption}
+
+\item{...}{Optional values when CPR or PPC input is used}
 
 \item{begin.cpr}{A numeric value the begin CPR of the PPC ramp}
 
@@ -30,10 +34,10 @@ REMICCashFlow(bond.id = "character", trade.date = "character",
 
 \item{CPR}{A numeric value the CPR assumption used}
 
-\item{settlement}{date A character string the settlement date}
+\item{KeyRateTermStructure}{default value NULL used for REMIC analytics do not overrided}
 }
 \description{
-REMIC Cash flow analysis
+The function is the constructor function for REMICCashFlow Object
 }
 \examples{
 \dontrun{

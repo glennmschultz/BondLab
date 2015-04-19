@@ -134,7 +134,7 @@
           SATO.beta = SATO.beta)
         }
     
-    #' Prepayment Model Tune
+    #' A constructor function to create the prepayment model tuning parameters
     #' 
     #' Create custom prepayment model tuning parameters that may
     #' be applied to specific collateral cohorts
@@ -167,8 +167,8 @@
     #' maxumum point of the original LTV multiplier
     #' @param MinOrigMultiplier a numeric value. The minimum OLTV multiplier applied to the baseline
     #' @param MaxOrigMultiplier a numeric value. The maximum OLTV multipler applied to the baseline
-    #' @param UpdatedLTV.beta
-    #' @param SATO.beta
+    #' @param UpdatedLTV.beta a numeric value,  The beta value of the update loan to value
+    #' @param SATO.beta A numeric value, the beta value of SATO
     #' @export
     MakeModelTune <- function(
       ModelName = "character",

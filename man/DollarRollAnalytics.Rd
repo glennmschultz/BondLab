@@ -2,7 +2,7 @@
 % Please edit documentation in R/DollarRollAnalytics.R
 \name{DollarRollAnalytics}
 \alias{DollarRollAnalytics}
-\title{Dollar Roll Analytics}
+\title{A constructor of Dollar Roll Analytics object Analysis of the one-month Dollar Roll}
 \usage{
 DollarRollAnalytics(bond.id = "character", original.bal = numeric(),
   price = numeric(), drop = numeric(), trade.date = "character",

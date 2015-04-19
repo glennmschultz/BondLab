@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{bondprice}
 \alias{bondprice}
-\title{bondprice}
+\title{Determine the price a bond on the interest payment date}
 \usage{
 bondprice(yield.to.maturity = numeric(), coupon = numeric(),
   coupon.frequency = numeric(), years.mat = numeric(),

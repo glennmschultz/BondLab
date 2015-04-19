@@ -2,7 +2,7 @@
 % Please edit documentation in R/PassThroughConstructor.R
 \name{MakeMBSDetails}
 \alias{MakeMBSDetails}
-\title{Make MBS Pass Through Object}
+\title{A constructor function to create a mortgage pass through security}
 \usage{
 MakeMBSDetails(Cusip = "character", ID = "character",
   BondType = "character", Sector = "character", Coupon = numeric(),

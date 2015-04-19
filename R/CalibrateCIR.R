@@ -12,9 +12,9 @@
   #---------------------------------
   # Calibrate CIR to market
   #________________________________
-  #' Calibrate CIR 
+  #' A function to calibrate the Cox, Ingersoll, Ross single factor model
   #' 
-  #' This function calibrates the CIR Model to the yield curve
+  #' The function calibrates the CIR Model to daily swap curve data
   #' @importFrom lubridate %m+%
   #' @importFrom termstrc create_cashflows_matrix create_maturities_matrix
   #' @import optimx

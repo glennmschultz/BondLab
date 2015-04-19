@@ -2,7 +2,7 @@
 % Please edit documentation in R/PassThroughOAS.R
 \name{PassThroughOAS}
 \alias{PassThroughOAS}
-\title{PassThroughOAS}
+\title{The constructor function for the passthrough OAS object}
 \usage{
 PassThroughOAS(bond.id = "character", trade.date = "character",
   settlement.date = "character", original.bal = numeric(),
@@ -25,6 +25,10 @@ PassThroughOAS(bond.id = "character", trade.date = "character",
 
 \item{paths}{A numeric value the number of simulated paths}
 
+\item{PrepaymentAssumption}{A character string the prepayment assumption either CPR, PPC, or MODEL}
+
+\item{...}{optional values when CPR or PPC prepayment assumption is input}
+
 \item{begin.cpr}{Optional, A numeric value the beginning value of the PPC ramp}
 
 \item{end.cpr}{Optional, A numeric value the end value of the PPC ramp}
@@ -32,10 +36,8 @@ PassThroughOAS(bond.id = "character", trade.date = "character",
 \item{seasoning.period}{Optional, A numeric value the length of the seasoning ramp}
 
 \item{CPR}{Optional, the assumed CPR}
-
-\item{A}{character string the prepayment assumption either CPR, PPC, or MODEL}
 }
 \description{
-This function is for Pass Through OAS Analysis and serves constructor for OAS Analysis
+This function is the Pass Through OAS constructor function
 }
 

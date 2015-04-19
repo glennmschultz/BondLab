@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondConstructor.R
 \name{MakeBondDetails}
 \alias{MakeBondDetails}
-\title{Make Bond Object}
+\title{A constuctor function to create standard bond cusip information}
 \usage{
 MakeBondDetails(Cusip = "character", ID = "character",
   BondType = "character", Sector = "character", Coupon = numeric(),

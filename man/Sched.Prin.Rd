@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Sched.Prin}
 \alias{Sched.Prin}
-\title{Scheduled Principal}
+\title{A function to calculate the scheduled principal of mortgage}
 \usage{
 Sched.Prin(balance = numeric(), note.rate = numeric(),
   term.mos = numeric(), period = numeric())

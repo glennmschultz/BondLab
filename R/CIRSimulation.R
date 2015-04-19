@@ -8,9 +8,9 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-#' CIR Sim 
+#' The Cox, Ingersoll, Ross simulation of the short term forward rate
 #' 
-#' The short rate simulation engine
+#' The function simulates the short-term forward rate according to Cox, Ingersoll, and Ross
 #' @param shortrate A numeric value the shortrate
 #' @param kappa A numeric value the rate of mean reversion
 #' @param theta A numeric value the long term forward rate

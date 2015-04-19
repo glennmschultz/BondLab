@@ -10,9 +10,9 @@
 #--------------------------------------
 
 
-#' Cox, Ingersol, Ross Bond Price
+#' Calculate the price of a zero coupon bond using the closed form equation given by Cox, Ingersoll, and Ross
 #' 
-#' This function gives the closed form solution to a bond price given the short-term rate
+#' This function implements the CIR closed form solution to a bond price given the short-term rate
 #' @param shortrate A vector of simulated short-term rates
 #' @param T A numeric value the time over which the short-term rate is simulated
 #' @param step A numeric value the time step on the simulation

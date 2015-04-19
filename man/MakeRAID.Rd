@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{MakeRAID}
 \alias{MakeRAID}
-\title{REMIC At Issuance Disclosure (RAID)}
+\title{A constructor function for the REMIC At Issuance Disclosure (RAID) file}
 \usage{
 MakeRAID(DealName = "character", Issuer = "character",
   DealPriceDate = "character", DealSettlementDate = "character",
@@ -23,16 +23,16 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{NumberofTranches}{A numeric string the Number of Tranches}
 
+\item{NumberPacSchedules}{A numeric value the number of PAC schedules}
+
 \item{NumberofGroups}{A numeric value the number of groups}
 
 \item{DealSize}{A numeric value the original balance of all tranches}
 
 \item{CollateralAmount}{A numeric value the current face amount of the collateral}
-
-\item{NumberofPACSchedules}{A numeric value the number of PAC schedules}
 }
 \description{
-RAID function creates the REMIC At Issuance Detail
+The RAID function creates the REMIC At Issuance Disclosure file
 }
 \examples{
 \dontrun{

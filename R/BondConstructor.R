@@ -97,7 +97,7 @@
         Putable = Putable,
         SinkingFund = SinkingFund)
   }
-#' Make Bond Object
+#' A constuctor function to create standard bond cusip information
 #' 
 #' This is a standard generic function used to construct a tradtional bond
 #' @param Cusip A character string the bond's cusip number

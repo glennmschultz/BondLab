@@ -13,8 +13,19 @@
 # Mortgage OAS Function
 #___________________________________
 
-#' @importFrom lubridate %m+%
-#' @export Mortgage.OAS
+#' Mortgage OAS The mortgage OAS engine for pass through OAS
+#' 
+#'  Pass through OAS engine
+#'  @param bond.id A character string the bond id or cusip number
+#'  @param trade.date A character string the trade date
+#'  @param settlement.date A character string the settlment date
+#'  @param original.bal A numeric value the pool original balance
+#'  @param price A numeric value the price of the pass through
+#'  @param sigma A numeric value the volatility assumption (not annualized)
+#'  @param paths A numeric value the number of paths
+#'  @param TermStructure A character string the term strucutre model used  
+#'  @importFrom lubridate %m+%
+#'  @export Mortgage.OAS
 Mortgage.OAS <- function(bond.id = "character", 
                          trade.date = "character", 
                          settlement.date = "character", 
@@ -22,7 +33,7 @@ Mortgage.OAS <- function(bond.id = "character",
                          price = numeric(), 
                          sigma = numeric(), 
                          paths = numeric(), 
-                         TermStructure = "character"
+                         TermStructure = "logical"
                          ){
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters

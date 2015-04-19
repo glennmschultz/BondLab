@@ -48,7 +48,7 @@ Scenario <- function(
 }
 
 # ========================== This function constructs and saves Scenario Object ================
-#' MakeScenario
+#' A constructor funtion of the class MakeScenario
 #' 
 #' This is a standard generic function used to construct the class Scenario.
 #' The Scenario class is applied to the yield curve and is passed to the scenario.set variable
@@ -56,7 +56,7 @@ Scenario <- function(
 #' @param Name A character string indicating the unique name which identifies the scenario
 #' @param Type A character string indicating the type of scenario "aggressive", "moderate"
 #' @param Horizon A character string indicating the time horizon over wich the scenario evolves
-#' @param SiftType A character sting indicating the type interest rate shift "Parallel", "Twist", "etc"
+#' @param ShiftType A character sting indicating the type interest rate shift "Parallel", "Twist", "etc"
 #' @param Shiftbps A numeric vector indicating the shift applied to each point on the curve
 #' @param Formula A function to apply the shift to each pont on the curve
 #' @examples

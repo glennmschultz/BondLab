@@ -8,19 +8,21 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
 # the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
-  #' REMICCashFlow
+  #' The REMIC cash flow engine the constructor function for REMICCashFlow oject
   #' 
-  #' REMIC Cash flow analysis
+  #' The function is the constructor function for REMICCashFlow Object
   #' @param bond.id A character string the cusip of bond id
   #' @param trade.date A character string the trade date 
-  #' @param settlement date A character string the settlement date
+  #' @param settlement.date A character string the settlement date
   #' @param collateral.price A numeric value the price of the collateral
   #' @param tranche.price A numeric value the price of the tranche
   #' @param PrepaymentAssumption A character string the prepayment assumption
+  #' @param ... Optional values when CPR or PPC input is used
   #' @param begin.cpr A numeric value the begin CPR of the PPC ramp
   #' @param end.cpr A numeric value the end CPR of the PPC ramp
   #' @param seasoning.period A numeric value the length of the PPC ramp seasoning period
   #' @param CPR A numeric value the CPR assumption used
+  #' @param KeyRateTermStructure default value NULL used for REMIC analytics do not overrided
   #' @examples 
   #' \dontrun{
   #' REMICCashFlow(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013", 

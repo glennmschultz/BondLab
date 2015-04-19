@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{PPC.Ramp}
 \alias{PPC.Ramp}
-\title{PPC Ramp}
+\title{A function to calculate the PPC ramp}
 \usage{
 PPC.Ramp(season.period = numeric(), begin.cpr = numeric(),
   end.cpr = numeric(), period = numeric())

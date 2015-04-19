@@ -341,6 +341,23 @@ setMethod("initialize",
   #This section begins the bond lab prepayment model
   #The constructor for the prepayment model vector starts below
   # ----------------------------------------------------------------------------
+  #' A contstructor function for the PrepaymentAssumption object
+  #' 
+  #' The function is a constructor function for the PrepaymentAssumption object
+  #' @param bond.id A character string the bond id or cusip
+  #' @param TermStructure A character string the method used to fit the term structure
+  #' @param MortgageRate A character string the input value of mortgagerate.rds.  Prepayment Assumption does
+  #' open Mtg.Rate connection directly rather takes the argument as an object.
+  #' @param ModelTune A character string the prepayment model tune object
+  #' @param Burnout A numeric value the burnout variable
+  #' @param PrepaymentAssumption A character string the prepayment assumption used "MODEL", "PPC", or "CPR"
+  #' @param ... Optional values when "PPC" or "CPR" is used
+  #' @param begin.cpr A numeric value the beginning CPR assumption
+  #' @param end.cpr A numeric value the ending CPR assumption
+  #' @param seasoning.period A numeric value the length of the seasoning ramp
+  #' @param CPR A numeric value the CPR assumption
+  #' @param HomePrice NULL do not override value
+  #' @param Severity A numeric value the loss severity given default
   #' @export
   PrepaymentAssumption <- function(bond.id = "character", 
                                    TermStructure = "character", 

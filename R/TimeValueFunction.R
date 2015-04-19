@@ -12,9 +12,9 @@
 #---------------------------------
 #Time value of money function
 #---------------------------------
-#' Time Value Function
+#' A function to compute the time value of money
 #'                  
-#' This is a generic function used to calculate time value
+#' A standard generic function used to calculate time value of money
 #' @param interest.rate The interest rate used to determine the discount factor in decimal
 #' form (i.e. 4.0\% is input as 0.04)
 #' @param number.periods The number of discount periods.  For example, 

@@ -65,7 +65,7 @@ setMethod("initialize",
           })
 
 
-#' MortgageCashFlow
+#'  A function to compute the cash flow of a pool of securitized mortgages
 #' 
 #' This is a generic function used to construct the class object MortgageCashFlow
 #' For this function to work properly the classes MBSDetails and PrepaymentAssumption

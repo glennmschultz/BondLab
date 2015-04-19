@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Effective.Convexity}
 \alias{Effective.Convexity}
-\title{Effective.Convexity}
+\title{A function to compute effective convexity}
 \usage{
 Effective.Convexity(Rate.Delta, cashflow, discount.rates, discount.rates.up,
   discount.rates.dwn, t.period, proceeds)

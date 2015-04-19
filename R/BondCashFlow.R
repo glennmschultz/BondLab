@@ -42,7 +42,13 @@
               return(.Object)
               callNextMethod(.Object,...)
             })
-
+  #' Bond cash flow engine for standard non-callable
+  #' 
+  #' Cashflow engine for standard non-callable bond
+  #' @param bond.id A character string the cusip number or id of the bond
+  #' @param principal A numeric valeu the principal or face amount of the bond
+  #' @param settlement.date A character string the settlement date
+  #' @param price A numeric value the price of the bond
   BondCashFlows <- function (bond.id = "character", 
                              principal = numeric(), 
                              settlement.date = "character", 
@@ -107,7 +113,7 @@
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
                                          settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date)) * 360
   
-  days.between.pmtdate = ((12/frequency)/12) * 360
+  days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = days.between.pmtdate - days.to.nextpmt
   accrued.interest = (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,6]
   

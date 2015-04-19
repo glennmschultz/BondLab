@@ -12,7 +12,18 @@
   #-----------------------------------
   # Mortgage OAS Function
   #___________________________________
-
+  #' The REMIC OAS engine. A constructor function of the Mortgage OAS object
+  #' 
+  #' REMIC.OAS calculates the option adjusted spread of a REMIC
+  #' and creates the MortgageOAS ibject
+  #' @param bond.id A character string the bond.id or cusip
+  #' @param trade.date A character string the trade date
+  #' @param settlement.date A character string the settlement date
+  #' @param tranche.price A numeric value the tranche price
+  #' @param collateral.price A numeric value the collateral price
+  #' @param short.rate A numeric value the short term forward rate
+  #' @param sigma A numeric value the volatility (not annualized)
+  #' @param paths A numeric value the number of paths
   #' @export
   REMIC.OAS <- function(bond.id = "character", 
                       trade.date = "character", 

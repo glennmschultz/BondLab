@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{MakeRDME}
 \alias{MakeRDME}
-\title{REMIC Disclosure Month End (RDME)}
+\title{A constructor function for the REMIC Disclosure Month End (RDME) file}
 \usage{
 MakeRDME(DealName = "character", TrancheNumber = numeric(),
   Cusip = "character", PaymentDate = "character", Coupon = numeric(),
@@ -22,7 +22,7 @@ MakeRDME(DealName = "character", TrancheNumber = numeric(),
 \item{Factor}{A numeric value the tranche's factor}
 }
 \description{
-REMIC Month End Discloure is the monthly factor data for each Tranche
+A constructore for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
 }
 \examples{
 \dontrun{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RatesData.R
 \name{SwapRateData}
 \alias{SwapRateData}
-\title{Swap Rate Data}
+\title{A function to read and convert a .csv data file of swap rates from the Federal Reseve to rates data}
 \usage{
 SwapRateData(datafile = "character", maturityvector = numeric())
 }

@@ -106,7 +106,7 @@
                     return(.Object)
                     callNextMethod(.Object,...)
                   })
-#' REMICAnalytics
+#' The REMIC Analytics engine the constructor function for REMIC Analytics
 #' 
 #' Cash flow analysis and risk metrics of REMIC Tranches including spot spread analysis
 #' effective duration, effective convexity, Key rate duration analysis
@@ -118,6 +118,7 @@
 #' @param tranche.price A numeric value the price of the tranche
 #' @param PrepaymentAssumption A character string defining the prepayment assumption used
 #' @param begin.cpr optional, a numeric value used when applying a PPC assumption
+#' @param ... Optional values when CPR and PPC are input
 #' @param end.cpr optional, a numeric value used when applying a PPC assumption
 #' @param seasoning.period optional, a numeric value used when applying a PPC assumption
 #' @param CPR optional, a numeric value used when applying a CPR assumption

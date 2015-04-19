@@ -2,7 +2,7 @@
 % Please edit documentation in R/ScenarioConstructor.R
 \name{MakeScenario}
 \alias{MakeScenario}
-\title{MakeScenario}
+\title{A constructor funtion of the class MakeScenario}
 \usage{
 MakeScenario(Name = "character", Type = "character",
   Horizon = "character", ShiftType = "character", Shiftbps = "numeric",
@@ -15,11 +15,11 @@ MakeScenario(Name = "character", Type = "character",
 
 \item{Horizon}{A character string indicating the time horizon over wich the scenario evolves}
 
+\item{ShiftType}{A character sting indicating the type interest rate shift "Parallel", "Twist", "etc"}
+
 \item{Shiftbps}{A numeric vector indicating the shift applied to each point on the curve}
 
 \item{Formula}{A function to apply the shift to each pont on the curve}
-
-\item{SiftType}{A character sting indicating the type interest rate shift "Parallel", "Twist", "etc"}
 }
 \description{
 This is a standard generic function used to construct the class Scenario.

@@ -261,16 +261,16 @@ setMethod("initialize",
           }
 
 
-#' REMIC At Issuance Disclosure (RAID)
+#' A constructor function for the REMIC At Issuance Disclosure (RAID) file
 #' 
-#'  RAID function creates the REMIC At Issuance Detail
+#'  The RAID function creates the REMIC At Issuance Disclosure file
 #'  @param DealName A character string the deal name
 #'  @param Issuer A character string the Isser Name
 #'  @param DealPriceDate A character string the Deal Pricing Date
 #'  @param DealSettlementDate A character string the Deal Settlement Date
 #'  @param Underwriter A character string the Deal Underwriter
 #'  @param NumberofTranches A numeric string the Number of Tranches
-#'  @param NumberofPACSchedules A numeric value the number of PAC schedules
+#'  @param NumberPacSchedules A numeric value the number of PAC schedules
 #'  @param NumberofGroups A numeric value the number of groups
 #'  @param DealSize A numeric value the original balance of all tranches
 #'  @param CollateralAmount A numeric value the current face amount of the collateral
@@ -377,9 +377,9 @@ setMethod("initialize",
   
 # 2) serialize the tranches to the tranches directory
 
-#' Makes Tranches for REMIC structure
+#' A constructor function for REMIC tranche detail
 #' 
-#' Make Tranche data for REMIC constructor
+#' MakeTranche a constructor function used to create a REMIC tranche
 #' @param DealName A character string the deal name
 #' @param TrancheNumber A character string the Tranche Number
 #' @param TrancheName A character string the the Tranche Name
@@ -573,13 +573,13 @@ setMethod("initialize",
 }
   
   # ---------- function to create and save the PAC schedule class ----------------------------------------------------
-  #' MakeSchedule for PAC Bond Sinking Fund Schedule
+  #' A constructor function to create the PAC Bond Sinking Fund Schedule file
   #' 
-  #' Function to create a PAC bond sinking fund schedule
+  #' Function to create a PAC bond sinking fund schedule file
   #' @param bond.id A character string the cusip or id
   #' @param DealName A character string the transaction deal name
   #' @param Group A character string the tranche's collateral group
-  #' @param original.balance A numeric value the collateral group original balance
+  #' @param original.bal A numeric value the collateral group original balance
   #' @param trade.date A character string the trade date
   #' @param settlement.date A character string the settlement date
   #' @param first.pmtdate A character string the bond first payment date
@@ -646,7 +646,7 @@ setMethod("initialize",
 
   
   # 2) serialize the collateral information to the groups directory
-  #' Make Collateral Group for REMIC structure
+  #' A constructor function to create the collateal group file for a REMIC
   #' 
   #' Makes Collateral Groups for REMIC structure currently only representative (aggregated collateral groups)
   #' is supported.  In the future multiple collateral pools or loans are envisioned.
@@ -706,9 +706,9 @@ setMethod("initialize",
 
   
   # 2) serailize tranche factor date to RDME directory
-  #' REMIC Disclosure Month End (RDME)
+  #' A constructor function for the REMIC Disclosure Month End (RDME) file
   #' 
-  #' REMIC Month End Discloure is the monthly factor data for each Tranche
+  #' A constructore for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
   #' @param DealName A charcter string the deal name
   #' @param TrancheNumber A numeric value the number of the Tranche
   #' @param Cusip A character string the tranche cusip
@@ -785,9 +785,9 @@ setMethod("initialize",
 # --- REMIC Constructor Function these functions are used to assemble the 
 # --- RAID, Tranches, RDME, and Collateral Groups into a single REMIC structure
 
-#' REMIC Constructor 
+#' The constructor function to build the REMIC deal from each of its elements 
 #' 
-#' Assembles the deal RAID, RDME, Tranches, and Groups into a REMIC structure
+#' The function Assembles the deal RAID, RDME, Tranches, and Groups files into a REMIC structure
 #' @param DealName A character string the deal's names
 #' @examples
 #' \dontrun{

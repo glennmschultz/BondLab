@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Effective.Duration}
 \alias{Effective.Duration}
-\title{Effective.Duration}
+\title{A function to compute effectove duration}
 \usage{
 Effective.Duration(Rate.Delta = numeric(), cashflow = vector(),
   discount.rates = vector(), discount.rates.up = vector(),
@@ -25,7 +25,7 @@ Effective.Duration(Rate.Delta = numeric(), cashflow = vector(),
 \item{proceeds}{A numeric value the proceeds/value of the bond or MBS to the investor}
 }
 \description{
-Calculates effective duarion based on a discount vector (zero coupon)
+Calculates effective duration based on a discount vector (zero coupon)
 cash flow vector, and rate delta
 }
 

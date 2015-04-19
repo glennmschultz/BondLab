@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Remain.Balance}
 \alias{Remain.Balance}
-\title{Remain.Balance}
+\title{A function to compute the remaining balance of a mortgage}
 \usage{
 Remain.Balance(balance = numeric(), note.rate = numeric(),
   term.mos = numeric(), period = numeric())

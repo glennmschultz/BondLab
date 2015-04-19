@@ -2,7 +2,7 @@
 % Please edit documentation in R/CIRSimulation.R
 \name{CIRSim}
 \alias{CIRSim}
-\title{CIR Sim}
+\title{The Cox, Ingersoll, Ross simulation of the short term forward rate}
 \usage{
 CIRSim(shortrate = numeric(), kappa = numeric(), theta = numeric(),
   T = numeric(), step = numeric(), sigma = numeric(), N = numeric())
@@ -23,6 +23,6 @@ CIRSim(shortrate = numeric(), kappa = numeric(), theta = numeric(),
 \item{N}{the number of paths}
 }
 \description{
-The short rate simulation engine
+The function simulates the short-term forward rate according to Cox, Ingersoll, and Ross
 }
 

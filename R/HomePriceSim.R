@@ -9,6 +9,15 @@
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 # ==========================================================================================
 
+#' A function to simulate home prices given a short-term rate
+#' 
+#' Simulates home prices as a function of the short-term rate and the long term growth of home prices
+#' @param shortrate A numeric value the short term forward rate given by the interest rate generation process
+#' @param LongTermGrowth A numeric value the expected long term home price growth potential
+#' @param T A numeric value the time in years
+#' @param step A numeric value the time step interval
+#' @param sigma A numeric value the volatility of home price
+#' @param N A numeric value the number of paths
 #' @export
 HPISim <- function(shortrate = numeric(),
                    LongTermGrowth = numeric(),

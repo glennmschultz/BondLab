@@ -2,7 +2,7 @@
 % Please edit documentation in R/CalibrateCIR.R
 \name{CalibrateCIR}
 \alias{CalibrateCIR}
-\title{Calibrate CIR}
+\title{A function to calibrate the Cox, Ingersoll, Ross single factor model}
 \usage{
 CalibrateCIR(trade.date = character, sigma = numeric())
 }
@@ -12,6 +12,6 @@ CalibrateCIR(trade.date = character, sigma = numeric())
 \item{sigma}{the volatility in absolute percent the annualized value is sigma times sqrt(240)}
 }
 \description{
-This function calibrates the CIR Model to the yield curve
+The function calibrates the CIR Model to daily swap curve data
 }
 

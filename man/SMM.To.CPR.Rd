@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{SMM.To.CPR}
 \alias{SMM.To.CPR}
-\title{SMM.To.CPR}
+\title{Convert the single monthly mortality rate SMM to CPR}
 \usage{
 SMM.To.CPR(SMM = numeric())
 }

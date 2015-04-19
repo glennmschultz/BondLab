@@ -148,9 +148,9 @@ setMethod("initialize",
             return(.Object)
             callNextMethod(.Object,...)})
 
-#' PassThroughOAS
+#' The constructor function for the passthrough OAS object 
 #' 
-#' This function is for Pass Through OAS Analysis and serves constructor for OAS Analysis
+#' This function is the Pass Through OAS constructor function
 #' @param bond.id A character string the MBS cusip number
 #' @param trade.date A character string the trade date
 #' @param settlement.date A character string the settlement date
@@ -158,7 +158,8 @@ setMethod("initialize",
 #' @param price A numeric value the trade price
 #' @param sigma A numeric value interest rate volatility assumption
 #' @param paths A numeric value the number of simulated paths
-#' @param A character string the prepayment assumption either CPR, PPC, or MODEL
+#' @param PrepaymentAssumption A character string the prepayment assumption either CPR, PPC, or MODEL
+#' @param ... optional values when CPR or PPC prepayment assumption is input
 #' @param begin.cpr Optional, A numeric value the beginning value of the PPC ramp
 #' @param end.cpr Optional, A numeric value the end value of the PPC ramp
 #' @param seasoning.period Optional, A numeric value the length of the seasoning ramp

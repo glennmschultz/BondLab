@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{RemicStructure}
 \alias{RemicStructure}
-\title{REMIC Constructor}
+\title{The constructor function to build the REMIC deal from each of its elements}
 \usage{
 RemicStructure(DealName = "character")
 }
@@ -10,7 +10,7 @@ RemicStructure(DealName = "character")
 \item{DealName}{A character string the deal's names}
 }
 \description{
-Assembles the deal RAID, RDME, Tranches, and Groups into a REMIC structure
+The function Assembles the deal RAID, RDME, Tranches, and Groups files into a REMIC structure
 }
 \examples{
 \dontrun{

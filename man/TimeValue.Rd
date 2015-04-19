@@ -2,7 +2,7 @@
 % Please edit documentation in R/TimeValueFunction.R
 \name{TimeValue}
 \alias{TimeValue}
-\title{Time Value Function}
+\title{A function to compute the time value of money}
 \usage{
 TimeValue(interest.rate = numeric(), number.periods = numeric(),
   frequency = numeric(), type = "character")
@@ -23,7 +23,7 @@ PVA = present value of annuity, PVD present value of annuity due,
 FV = future value, FVA = future value of annuity, FVD = future value annuity due.}
 }
 \description{
-This is a generic function used to calculate time value
+A standard generic function used to calculate time value of money
 }
 \examples{
 TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")

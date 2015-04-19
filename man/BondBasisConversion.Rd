@@ -2,12 +2,25 @@
 % Please edit documentation in R/BondBasis.R
 \name{BondBasisConversion}
 \alias{BondBasisConversion}
-\title{BondBasisConversion}
+\title{Functions to convert bond payments to their interest payment basis}
 \usage{
 BondBasisConversion(issue.date, start.date, end.date, settlement.date,
   lastpmt.date, nextpmt.date)
 }
+\arguments{
+\item{issue.date}{A character value the issue date of the security}
+
+\item{start.date}{A character value the start date for interest payment (dated date)}
+
+\item{end.date}{A character value the last payment date}
+
+\item{settlement.date}{A character value the settlement date}
+
+\item{lastpmt.date}{A character value the last payment date to the investor}
+
+\item{nextpmt.date}{A character value the next payment date to the investor}
+}
 \description{
-BondBasisConversion
+Conversion for payment date (currently 30/360 is supported)
 }
 

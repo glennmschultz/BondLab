@@ -11,6 +11,10 @@
 
 
   #---------- connect to the rates data folder
+    #' A connection function to the RatesData folder to call swap curve data
+    #' 
+    #' A read connection function to the rates data base folder to call swap rate data
+    #' @param trade.date A character string the trade date
     #' @export Rates
     Rates <- function(trade.date = "character")
                   {
@@ -23,7 +27,13 @@
       {standardGeneric("Rates")})
    
    #-------- connect to mortgage rate function classes
-    #'@export
+    #' A connection function to the Prepayment model folder to call mortgage rate function class
+    #' 
+    #' A read connection function to the mortgage rate function. No inputs are required
+    #' @examples
+    #' \dontrun{
+    #' MtgRate()}
+    #' @export
    MtgRate <- function()
                   {
                    MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
@@ -31,6 +41,7 @@
                    }
    
    #------- connect to updated LTV function class
+   # not currently implemented
    ULTV <- function()
                   {
                   ULTV.Conn <- gzfile("~/BondLab/PrepaymentModel/UpdatedLTV.rds", open = "rb")
@@ -38,6 +49,10 @@
                   }
    
   #----------- connect to prepayment model tune data folder
+  #' A connection function to the PrepaymentModel folder to call the prepayment model tuning
+  #' 
+  #' A connection function to the mortgage rate function to call prepayment model tuning
+  #' @param bond.id A character string the bond id or cusip
   #' @export
    ModelTune <- function(bond.id = "character")
                  {
@@ -47,6 +62,10 @@
                  }
 
   #----------- connect to MBS cusip data folder
+    #' A connection function to the BondData folder to call the MBS cusip objects
+    #' 
+    #' Opens a connection to the BondData folder to call MBS cusip data 
+    #' @param MBS.id A character string the MBS id or cusip number
     #'@export
     MBS <- function(MBS.id = "character")
                   {
@@ -57,9 +76,9 @@
                   }
     
     #----------- connect to Bond cusip data folder
-    #' Bond A connection function to the BondData folder
+    #' A connection function to the BondData folder for standard bond
     #' 
-    #' Opens a connection to bond data folder
+    #' Opens a connection to BondData folder to call a standard bond
     #' @param Bond.id A character string the bond's cusip number or id
     #' @export
     Bond <- function(Bond.id = "character")
@@ -71,6 +90,11 @@
     }  
      
   #----------- connect to REMIC deal file
+  #' A connection function to the REMICData folder to call REMICs by deal
+  #' 
+  #' Opens connection to the REMICData folder calling a REMIC Deal by name
+  #' @param remic.deal A character string the REMIC deal name
+  #' @export
     REMICDeal <- function(remic.deal = "character") 
                  {
                   REMIC.Conn <- gzfile(description = paste("~/BondLab/REMICData/",

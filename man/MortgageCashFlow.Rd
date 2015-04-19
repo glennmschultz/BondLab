@@ -2,7 +2,7 @@
 % Please edit documentation in R/MortgageCashFlow.R
 \name{MortgageCashFlow}
 \alias{MortgageCashFlow}
-\title{MortgageCashFlow}
+\title{A function to compute the cash flow of a pool of securitized mortgages}
 \usage{
 MortgageCashFlow(bond.id = "character", original.bal = numeric(),
   settlement.date = "character", price = numeric(),

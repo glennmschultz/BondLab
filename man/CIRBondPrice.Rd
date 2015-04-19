@@ -2,7 +2,7 @@
 % Please edit documentation in R/CIRBondPrice.R
 \name{CIRBondPrice}
 \alias{CIRBondPrice}
-\title{Cox, Ingersol, Ross Bond Price}
+\title{Calculate the price of a zero coupon bond using the closed form equation given by Cox, Ingersoll, and Ross}
 \usage{
 CIRBondPrice(shortrate = vector(), T = numeric(), step = numeric(),
   kappa = numeric(), lambda = numeric(), sigma = numeric(),
@@ -26,6 +26,6 @@ CIRBondPrice(shortrate = vector(), T = numeric(), step = numeric(),
 \item{result}{A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit}
 }
 \description{
-This function gives the closed form solution to a bond price given the short-term rate
+This function implements the CIR closed form solution to a bond price given the short-term rate
 }
 

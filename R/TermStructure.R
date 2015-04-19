@@ -37,9 +37,10 @@ setMethod("initialize",
             return(.Object)
             callNextMethod(.Object,...)
           })
-#' TermStructure
+#' The TermStructure constructor function it is a wrapper function around the package termstrc
 #' 
-#' This is a wrapper function around the R package termstrc.
+#' This is a wrapper function around the R package termstrc.  The function passes swap rate data
+#' cash flows the to termstrc and creates the TermStructure object used by Bondlab.
 #' The function call rates data processes the yield curve and derives cashflow
 #' for the daily close swap curve. A Rates object must be called in the local
 #' environment for this function to work.

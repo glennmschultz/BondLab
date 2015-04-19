@@ -2,7 +2,7 @@
 % Please edit documentation in R/ReadConnectionFunctions.R
 \name{Bond}
 \alias{Bond}
-\title{Bond A connection function to the BondData folder}
+\title{A connection function to the BondData folder for standard bond}
 \usage{
 Bond(Bond.id = "character")
 }
@@ -10,6 +10,6 @@ Bond(Bond.id = "character")
 \item{Bond.id}{A character string the bond's cusip number or id}
 }
 \description{
-Opens a connection to bond data folder
+Opens a connection to BondData folder to call a standard bond
 }
 

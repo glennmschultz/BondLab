@@ -2,8 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{CPR.To.SMM}
 \alias{CPR.To.SMM}
-\title{CPR.To.SMM
-Standard Generic Function used to convert CPR to SMM}
+\title{A function to convert the CPR to a single monthly mortality rate SMM}
 \usage{
 CPR.To.SMM(CPR = numeric())
 }
@@ -11,7 +10,6 @@ CPR.To.SMM(CPR = numeric())
 \item{CPR}{A numeric value}
 }
 \description{
-CPR.To.SMM
 Standard Generic Function used to convert CPR to SMM
 }
 \examples{

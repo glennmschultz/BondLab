@@ -197,11 +197,27 @@ setMethod("initialize",
 
 
   # This function analyzes a standard pass through security and serves as the constructor function
-  #-------------------------------------- 
+  #--------------------------------------
+#' Pass Through Analytics is the Analytic engine for a pass-through security
+#' 
+#' Analytic engine for pass through security returns pass through analytics object
+#' @param bond.id A character string the bond id or cusip
+#' @param original.bal A numeric value the original balance of the pass through
+#' @param price A numeric value the price of the pass through  
+#' @param trade.date A character string the trade date
+#' @param settlement.date A character string the settlement date
+#' @param method A character string the method used to fit the term structure.  The default is Nelson-Siegel
+#' @param scenario.set A character vector listing the scenarios to run
+#' @param PrepaymentAssumption A character string the prepayment assumption used "MODEL", "PPC", or "CPR"
+#' @param ... Optional values when "PPC" or "CPR" is used
+#' @param begin.cpr A numeric value the beginning CPR assumption
+#' @param end.cpr A numeric value the ending CPR assumption
+#' @param seasoning.period A numeric value the length of the seasoning ramp
+#' @param CPR A numeric value the CPR assumption
 #' @export PassThroughAnalytics
   PassThroughAnalytics <- function (bond.id = "character", 
-                                    MortgageRate = "character",
-                                    UpdatedLTV = "character",
+                                    #MortgageRate = "character",
+                                    #UpdatedLTV = "character",
                                     original.bal = numeric(), 
                                     price = numeric(), 
                                     trade.date = "character", 
@@ -395,4 +411,21 @@ setMethod("initialize",
       #--- Mtg Scenario Set
       Scenario = Scenario@Scenario) 
   }
+
+  setGeneric("PassThroughAnalytics", function (bond.id = "character", 
+                                               #MortgageRate = "character",
+                                               #UpdatedLTV = "character",
+                                               original.bal = numeric(), 
+                                               price = numeric(), 
+                                               trade.date = "character", 
+                                               settlement.date = "character", 
+                                               method = "character", 
+                                               scenario.set = vector(),
+                                               PrepaymentAssumption = "character", 
+                                               ..., 
+                                               begin.cpr = numeric(), 
+                                               end.cpr = numeric(), 
+                                               seasoning.period = numeric(), 
+                                               CPR = numeric()) 
+             {standardGeneric("PassThroughAnalytics")})
   

@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondAnalytics.R
 \name{BondAnalytics}
 \alias{BondAnalytics}
-\title{Bond Analytics}
+\title{Bond Analytics is the Analytic engine for a standard non-callable bond}
 \usage{
 BondAnalytics(bond.id = "character", principal = numeric(),
   price = numeric(), trade.date = "character",
@@ -22,6 +22,10 @@ BondAnalytics(bond.id = "character", principal = numeric(),
 \item{method}{A character string the method used to fit the term structure passed to the package termstruc}
 }
 \description{
-Analytic engine for standard bond (non-mortgage) analysis
+Analytic engine for standard bond (non-mortgage) analysis returns Bond Analytics object
+}
+\examples{
+BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100,
+trade.date = "01-10-2013", settlement.date = "01-16-2013")
 }
 

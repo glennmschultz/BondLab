@@ -16,7 +16,7 @@
 # Swap Rate data creates a data base of daily yield
 # curves using swap rate data from the Federal Reserve
 
-#' Swap Rate Data
+#' A function to read and convert a .csv data file of swap rates from the Federal Reseve to rates data
 #' 
 #' The function converts a .csv file of rates data to yield curve objects that can be read by the Term Structure wapper
 #' @param datafile A .csv of rates data see RatesData.csv in the RateData folder for the proper strucutre

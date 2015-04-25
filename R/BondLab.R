@@ -24,6 +24,9 @@ months.in.year = 12
 min.principal = 100
 zero.coupon = 0
 pmt.frequency = 2
+rate.delta = .25
+price.basis = 100
+yield.basis = 100
 
 #' @import methods
 NULL

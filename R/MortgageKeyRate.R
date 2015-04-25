@@ -78,12 +78,17 @@ MtgTermStructure <- function(bond.id = "character",
   #Class name variable.  This will set the class name for the new class to be initilized
   ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
   
+  # create price for mortgage cash flow call in key rate
+  price.mtg.cashflow <- price
+ 
+  
   #Error Trap the user's price input
   if(price <= 1) {price = price} else {price = price/100}
   if(price <=0) stop("No valid bond price")
   
+  # calcuate proceeds the order of operation is important
+  # calculate price basis and then proceeds based on the correct price basis
   proceeds = (principal * price) + accrued 
-  
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
   # this insures that stored values will not be wrongly be passed to the funtion
@@ -330,11 +335,9 @@ MtgTermStructure <- function(bond.id = "character",
                                            #seasoning.period = seasoning.period, 
                                            #CPR = CPR)
     
-    # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
-    # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
-    # via a single call to BondLab
+    # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-                                               price = price*100, PrepaymentAssumption = Prepayment.Dwn)
+                                               price = price.mtg.cashflow, PrepaymentAssumption = Prepayment.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
     for(cfd in 1:360){
@@ -356,11 +359,9 @@ MtgTermStructure <- function(bond.id = "character",
                                           #seasoning.period = seasoning.period, 
                                           #CPR = CPR)
     
-    # Mortgage Cashflows call here requires that price is converted back to unit of 100 otherwise uniroot fails
-    # This is becasue price is converted in pass through analytics call - Ultimately both bond and mortgage will be called
-    # via a single call to BondLab
+    # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-                                              price = price*100, PrepaymentAssumption = Prepayment.Up)
+                                              price = price.mtg.cashflow, PrepaymentAssumption = Prepayment.Up)
     
     
     # Assign CashFlows into the cash flow array. This has to be done in a loop

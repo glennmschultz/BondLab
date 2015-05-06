@@ -51,7 +51,7 @@ setMethod("initialize",
 #' For addiition details see the termstrc documentation.
 #' @examples
 #' \dontrun{
-#' TermStructure(rates.data = "01-13-2013", method = "ns")}
+#' TermStructure(rates.data = "01-10-2013", method = "ns")}
 #' @importFrom lubridate %m+%
 #' @importFrom lubridate years
 #' @importFrom lubridate day

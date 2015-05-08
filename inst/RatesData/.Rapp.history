@@ -1,0 +1,4 @@
+load("/Users/glennschultz/BondLab/RatesData/2013-01-01.rds")
+load("/Users/glennschultz/BondLab/RatesData/2013-01-10.rds")
+load("/Users/glennschultz/BondLab/RatesData/2013-10-31.rds")
+load("/Users/glennschultz/BondLab/RatesData/2003-09-18.rds")

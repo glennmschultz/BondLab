@@ -1,0 +1,6 @@
+load("/Users/glennschultz/BondLab/PrepaymentModel/FH30.Generic.rds")
+load("/Users/glennschultz/BondLab/PrepaymentModel/MortgageRate.rds")
+load("/Users/glennschultz/BondLab/PrepaymentModel/FH30.Generic.rds")
+load("/Users/glennschultz/BondLab/PrepaymentModel/PrepaymentModel.rds")
+load("/Users/glennschultz/BondLab/PrepaymentModel/FH30.Generic.rds")
+load("/Users/glennschultz/BondLab/PrepaymentModel/FH30.Generic.rds")

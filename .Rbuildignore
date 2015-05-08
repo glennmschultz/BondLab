@@ -1,2 +1,13 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^RAID$
+^BondData$
+^Groups$
+^RDME$
+^REMICData$
+^Scenario$
+^Schedules$
+^Tranches$
+^WaterFall$
+^PrepaymentModel$
+^RatesData$

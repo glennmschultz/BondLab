@@ -4,7 +4,7 @@
 # for the specific analysis of structured products residential mortgage backed securities, 
 # asset backed securities, and commerical mortgage backed securities
 # License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
+# Copyright (C) 2014 Bond Lab Technologies, Inc
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 

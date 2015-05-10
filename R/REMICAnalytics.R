@@ -122,9 +122,10 @@
 #' @param end.cpr optional, a numeric value used when applying a PPC assumption
 #' @param seasoning.period optional, a numeric value used when applying a PPC assumption
 #' @param CPR optional, a numeric value used when applying a CPR assumption
-#' @examples REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
+#' @examples 
+#' \dontrun{REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
 #' settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75,
-#' tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)
+#' tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)}
 #' @export REMICAnalytics
   REMICAnalytics <- function(bond.id = "character", 
                            trade.date = "character",

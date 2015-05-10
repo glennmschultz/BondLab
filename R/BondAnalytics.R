@@ -117,8 +117,8 @@ setMethod("initialize",
       #'@param settlement.date A character string the settlement date
       #'@param method A character string the method used to fit the term structure passed to the package termstruc
       #'@examples
-      #'BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, 
-      #'trade.date = "01-10-2013", settlement.date = "01-16-2013")
+      #'\dontrun{BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, 
+      #'trade.date = "01-10-2013", settlement.date = "01-16-2013")}
       #'@export
       BondAnalytics <- function (bond.id = "character", 
                            principal = numeric(), 

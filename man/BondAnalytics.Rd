@@ -25,7 +25,7 @@ BondAnalytics(bond.id = "character", principal = numeric(),
 Analytic engine for standard bond (non-mortgage) analysis returns Bond Analytics object
 }
 \examples{
-BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100,
-trade.date = "01-10-2013", settlement.date = "01-16-2013")
+\dontrun{BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100,
+trade.date = "01-10-2013", settlement.date = "01-16-2013")}
 }
 

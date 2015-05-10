@@ -40,8 +40,8 @@ Cash flow analysis and risk metrics of REMIC Tranches including spot spread anal
 effective duration, effective convexity, Key rate duration analysis
 }
 \examples{
-REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
+\dontrun{REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
 settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75,
-tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)
+tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)}
 }
 

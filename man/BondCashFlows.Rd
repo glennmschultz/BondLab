@@ -19,4 +19,8 @@ BondCashFlows(bond.id = "character", principal = numeric(),
 \description{
 Cashflow engine for standard non-callable bond
 }
+\examples{
+\dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000,
+settlement.date = "1/13/2013", price = 100)}
+}
 

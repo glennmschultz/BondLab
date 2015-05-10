@@ -80,7 +80,7 @@ setMethod("initialize",
 #'  @examples
 #'  \dontrun{
 #'   MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
-#'          settlement.date = "01/13/2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
+#'   settlement.date = "01/13/2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
 #' @export MortgageCashFlow
 MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 

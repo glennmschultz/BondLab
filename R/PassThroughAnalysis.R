@@ -240,7 +240,7 @@ setMethod("initialize",
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
   
   #Default method for TermStructure
-  if(missing(method)) method = "ns"
+  if(missing(method)) {method = "ns"}
   
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
   Rate.Delta = .25
@@ -282,7 +282,8 @@ setMethod("initialize",
                                                begin.cpr = begin.cpr, 
                                                end.cpr = end.cpr, 
                                                seasoning.period = seasoning.period, 
-                                               CPR = CPR)
+                                               CPR = CPR
+                                               )
     
   #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, 
   #Duration, Convexity and CashFlow.

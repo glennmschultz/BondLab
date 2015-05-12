@@ -18,7 +18,7 @@ The function converts a .csv file of rates data to yield curve objects that can 
 }
 \examples{
 \dontrun{
-SwapRateData(datefile = "RatesData",
+SwapRateData(datafile = "RatesData.csv",
 maturity = c("",.0833, .25, .5, 1, 2, 3, 4, 5, 7, 10, 30))}
 }
 

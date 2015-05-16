@@ -148,6 +148,7 @@ Mortgage.OAS <- function(bond.id = "character",
   OAS.CashFlow <- array(data = NA, c(num.sim,paths))
   OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
   
+  #uncomment this to get prepayment vectors
   #prepayout <- NULL
   
   for(j in 1:paths){
@@ -208,6 +209,8 @@ Mortgage.OAS <- function(bond.id = "character",
                                        PrepaymentAssumption = "MODEL", 
                                        ModelTune = ModelTune, 
                                        Burnout = Burnout)
+    
+    # Uncomment this line to get the prepayment vector from the model 
     #prepayout <- cbind(prepayout, Prepayment@SMM)
     
     
@@ -240,6 +243,7 @@ Mortgage.OAS <- function(bond.id = "character",
     
   } # end of the OAS j loop
   
+  # uncomment this to get prepayment vectors
   #vectors <<- prepayout
   
   # Calculate OAS spread find the spread such that the average proceeds is equal to proceeds

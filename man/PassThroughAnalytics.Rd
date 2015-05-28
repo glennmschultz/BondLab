@@ -22,7 +22,9 @@ PassThroughAnalytics(bond.id = "character", original.bal = numeric(),
 
 \item{settlement.date}{A character string the settlement date}
 
-\item{method}{A character string the method used to fit the term structure.  The default is Nelson-Siegel}
+\item{method}{A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
+sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+For addiition details see the termstrc documentation.}
 
 \item{scenario.set}{A character vector listing the scenarios to run}
 

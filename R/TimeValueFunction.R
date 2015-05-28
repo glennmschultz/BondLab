@@ -23,8 +23,8 @@
 #' @param frequency The frequency of interest payments.  For example the frequency of a
 #' mortgage whose payments occur monthly is 12
 #' @param type The type of calculation PV = present value, 
-#' PVA = present value of annuity, PVD present value of annuity due,
-#' FV = future value, FVA = future value of annuity, FVD = future value annuity due.
+#' PVA = present value of annuity, PVAD present value of annuity due,
+#' FV = future value, FVA = future value of annuity.
 #' @examples TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")
 #' @export TimeValue
 TimeValue <- function(interest.rate = numeric(), 

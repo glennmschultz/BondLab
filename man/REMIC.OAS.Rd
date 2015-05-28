@@ -6,8 +6,7 @@
 \usage{
 REMIC.OAS(bond.id = "character", trade.date = "character",
   settlement.date = "character", tranche.price = numeric(),
-  collateral.price = numeric(), short.rate = numeric(), sigma = numeric(),
-  paths = numeric())
+  collateral.price = numeric(), sigma = numeric(), paths = numeric())
 }
 \arguments{
 \item{bond.id}{A character string the bond.id or cusip}
@@ -19,8 +18,6 @@ REMIC.OAS(bond.id = "character", trade.date = "character",
 \item{tranche.price}{A numeric value the tranche price}
 
 \item{collateral.price}{A numeric value the collateral price}
-
-\item{short.rate}{A numeric value the short term forward rate}
 
 \item{sigma}{A numeric value the volatility (not annualized)}
 

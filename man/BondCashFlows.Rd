@@ -10,7 +10,7 @@ BondCashFlows(bond.id = "character", principal = numeric(),
 \arguments{
 \item{bond.id}{A character string the cusip number or id of the bond}
 
-\item{principal}{A numeric valeu the principal or face amount of the bond}
+\item{principal}{A numeric value the principal or face amount of the bond}
 
 \item{settlement.date}{A character string the settlement date}
 

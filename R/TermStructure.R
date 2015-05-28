@@ -65,7 +65,7 @@ setMethod("initialize",
   if(missing(rates.data)) stop("missing rates data object")  
   
   #Default to Nelson-Siegel
-  #if(missing(method)) method = "ns"
+  if(missing(method)) {method = "ns"}
   
   #Default to parametric
   if(method == "cs") stop("cubic spline not implemented")
@@ -197,5 +197,5 @@ setMethod("initialize",
 
 
 setGeneric("TermStructure",
-           function(rates.data = "character", method = "ns")
+           function(rates.data = "character", method = "character")
            {standardGeneric("TermStructure")})

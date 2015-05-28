@@ -19,8 +19,8 @@ periods is 360.}
 mortgage whose payments occur monthly is 12}
 
 \item{type}{The type of calculation PV = present value,
-PVA = present value of annuity, PVD present value of annuity due,
-FV = future value, FVA = future value of annuity, FVD = future value annuity due.}
+PVA = present value of annuity, PVAD present value of annuity due,
+FV = future value, FVA = future value of annuity.}
 }
 \description{
 A standard generic function used to calculate time value of money

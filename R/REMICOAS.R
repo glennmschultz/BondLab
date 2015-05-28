@@ -21,7 +21,6 @@
   #' @param settlement.date A character string the settlement date
   #' @param tranche.price A numeric value the tranche price
   #' @param collateral.price A numeric value the collateral price
-  #' @param short.rate A numeric value the short term forward rate
   #' @param sigma A numeric value the volatility (not annualized)
   #' @param paths A numeric value the number of paths
   #' @export
@@ -31,7 +30,7 @@
                       #original.bal = numeric(),
                       tranche.price = numeric(),
                       collateral.price = numeric(),
-                      short.rate = numeric(), 
+                      #short.rate = numeric(), 
                       sigma = numeric(), 
                       paths = numeric()){
                       #...,

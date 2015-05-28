@@ -206,7 +206,9 @@ setMethod("initialize",
 #' @param price A numeric value the price of the pass through  
 #' @param trade.date A character string the trade date
 #' @param settlement.date A character string the settlement date
-#' @param method A character string the method used to fit the term structure.  The default is Nelson-Siegel
+#' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
+#' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+#' For addiition details see the termstrc documentation.
 #' @param scenario.set A character vector listing the scenarios to run
 #' @param PrepaymentAssumption A character string the prepayment assumption used "MODEL", "PPC", or "CPR"
 #' @param ... Optional values when "PPC" or "CPR" is used

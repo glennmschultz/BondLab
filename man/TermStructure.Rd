@@ -4,7 +4,7 @@
 \alias{TermStructure}
 \title{The TermStructure constructor function it is a wrapper function around the package termstrc}
 \usage{
-TermStructure(rates.data = "character", method = "ns")
+TermStructure(rates.data = "character", method = "character")
 }
 \arguments{
 \item{rates.data}{A character string representing the data for which the user

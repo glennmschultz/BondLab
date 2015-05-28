@@ -46,7 +46,7 @@
   #' 
   #' Cashflow engine for standard non-callable bond
   #' @param bond.id A character string the cusip number or id of the bond
-  #' @param principal A numeric valeu the principal or face amount of the bond
+  #' @param principal A numeric value the principal or face amount of the bond
   #' @param settlement.date A character string the settlement date
   #' @param price A numeric value the price of the bond
   #' @examples

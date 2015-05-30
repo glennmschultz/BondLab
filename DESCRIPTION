@@ -1,11 +1,11 @@
 Package: BondLab
 Type: Package
-Title: A package for the analysis of structured products
+Title: BondLab is a package for the analysis of structured mortgage backed securities
 Version: 0.0.0.9000
 Date: 2013-12-08
 Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>
-Description: The package provides a suite of software utilities for the analysis of Mortgage and Asset Backed securities
+Description: BondLab is a package providing a suite of software utilities for the analysis of Mortgage and Asset Backed securities.
 LazyLoad: yes
 License: GPL(>=3.0) + file LICENSE
 Imports:  termstrc, 

@@ -23,6 +23,9 @@
   #' @param collateral.price A numeric value the collateral price
   #' @param sigma A numeric value the volatility (not annualized)
   #' @param paths A numeric value the number of paths
+  #' @examples REMIC.OAS(bond.id = "BondLabSEQ1", trade.date = "01-10-2013",
+  #' settlement.date = "01-13-2013", tranche.price = 100, collateral.price = 100,
+  #' sigma = 0.015,paths = 200)
   #' @export
   REMIC.OAS <- function(bond.id = "character", 
                       trade.date = "character", 

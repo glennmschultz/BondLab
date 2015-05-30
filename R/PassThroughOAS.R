@@ -163,14 +163,15 @@ setMethod("initialize",
 #' @param begin.cpr Optional, A numeric value the beginning value of the PPC ramp
 #' @param end.cpr Optional, A numeric value the end value of the PPC ramp
 #' @param seasoning.period Optional, A numeric value the length of the seasoning ramp
-#' @param CPR Optional, the assumed CPR 
+#' @param CPR Optional, the assumed CPR
+#' @examples PassThroughOAS(bond.id = "bondlabMBS4", trade.date = "01-10-2013", settlement.date = "01-13-2013", 
+#' original.bal = 100000, price = 105.75, sigma = 0.015, paths = 200, PrepaymentAssumption = "MODEL") 
 #' @export PassThroughOAS
 PassThroughOAS <- function(bond.id = "character", 
                            trade.date = "character", 
                            settlement.date = "character", 
                            original.bal = numeric(), 
                            price = numeric(), 
-                           #short.rate = numeric(), 
                            sigma = numeric(), 
                            paths = numeric(), 
                            PrepaymentAssumption = "character", 

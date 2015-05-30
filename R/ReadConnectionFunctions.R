@@ -18,7 +18,7 @@
     #' @export Rates
     Rates <- function(trade.date = "character")
                   {
-                  Rates.Conn <-gzfile(description = paste("RatesData/", 
+                  Rates.Conn <-gzfile(description = paste("~/BondLab/RatesData/", 
                                         as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
                   Rates <- readRDS(Rates.Conn)
                   return(Rates)
@@ -36,7 +36,7 @@
     #' @export
    MtgRate <- function()
                   {
-                   MtgRate.Conn <- gzfile("PrepaymentModel/MortgageRate.rds", open = "rb")
+                   MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
                    MtgRate <- readRDS(MtgRate.Conn)
                    }
    
@@ -44,7 +44,7 @@
    # not currently implemented
    ULTV <- function()
                   {
-                  ULTV.Conn <- gzfile("PrepaymentModel/UpdatedLTV.rds", open = "rb")
+                  ULTV.Conn <- gzfile("~/BondLab/PrepaymentModel/UpdatedLTV.rds", open = "rb")
                   ULTV <- readRDS(ULTV.Conn)
                   }
    
@@ -56,7 +56,7 @@
   #' @export
    ModelTune <- function(bond.id = "character")
                  {
-                 ModelTune.Conn <- gzfile(description = paste("PrepaymentModel/", 
+                 ModelTune.Conn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", 
                                                               bond.id@Model, ".rds", sep =""), open = "rb")        
                  ModelTune <- readRDS(ModelTune.Conn)    
                  }
@@ -69,7 +69,7 @@
     #'@export
     MBS <- function(MBS.id = "character")
                   {
-                  MBS.Conn <- gzfile(description = paste("BondData/",
+                  MBS.Conn <- gzfile(description = paste("~/BondLab/BondData/",
                                                          MBS.id, ".rds", sep = ""), open = "rb")
                   MBS <- readRDS(MBS.Conn)
                   return(MBS)
@@ -83,7 +83,7 @@
     #' @export
     Bond <- function(Bond.id = "character")
     {
-      Bond.Conn <- gzfile(description = paste("BondData/",
+      Bond.Conn <- gzfile(description = paste("~/BondLab/BondData/",
                                              Bond.id, ".rds", sep = ""), open = "rb")
       Bond <- readRDS(Bond.Conn)
       return(Bond)
@@ -97,7 +97,7 @@
   #' @export
     REMICDeal <- function(remic.deal = "character") 
                  {
-                  REMIC.Conn <- gzfile(description = paste("REMICData/",
+                  REMIC.Conn <- gzfile(description = paste("~/BondLab/REMICData/",
                                                           remic.deal, ".rds", sep = ""), open = "rb")
                   
                   REMICDeal <- readRDS(REMIC.Conn)
@@ -113,7 +113,7 @@
    #---------- connect to retrieve bond schedule data 
     REMICSchedules <- function(REMIC.Tranche = "character")
                   {
-                  Sched.Conn <- gzfile(paste("Schedules/",
+                  Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
                                 as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
                                 sep = ""), open = "rb")
                     
@@ -127,7 +127,7 @@
    
    Cusip <- function(cusip = "character") 
    {
-     Cusip.Conn <- gzfile(description = paste("BondData/",
+     Cusip.Conn <- gzfile(description = paste("~/BondLab/BondData/",
                                               cusip, ".rds", sep = ""), open = "rb")
      
      Cusip <- readRDS(Cusip.Conn)

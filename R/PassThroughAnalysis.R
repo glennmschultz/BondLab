@@ -216,6 +216,11 @@ setMethod("initialize",
 #' @param end.cpr A numeric value the ending CPR assumption
 #' @param seasoning.period A numeric value the length of the seasoning ramp
 #' @param CPR A numeric value the CPR assumption
+#' @examples 
+#' \dontrun{PassThroughAnalytics(bond.id = "bondlabMBS55", original.bal = 100000, 
+#' price = 107.5, trade.date = "01-10-2013", settlement.date = "01-13-2013", 
+#' scenario.set = c("DA25", "NC", "UA50", "UA100", "UA150", "UA200"), PrepaymentAssumption = "MODEL")}
+
 #' @export PassThroughAnalytics
   PassThroughAnalytics <- function (bond.id = "character", 
                                     #MortgageRate = "character",

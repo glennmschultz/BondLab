@@ -16,10 +16,14 @@
     #' A read connection function to the rates data base folder to call swap rate data
     #' @param trade.date A character string the trade date
     #' @export Rates
-    Rates <- function(trade.date = "character")
-                  {
-                  Rates.Conn <-gzfile(description = paste("~/BondLab/RatesData/", 
-                                        as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+    Rates <- function(trade.date = "character"){
+      
+      Rates.Conn <-gzfile(description = paste(system.file(package = "BondLab"),
+                  "/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+      
+      #Rates.Conn <-gzfile(description = paste("~/BondLab/RatesData/", 
+      #            as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+                  
                   Rates <- readRDS(Rates.Conn)
                   return(Rates)
                   }
@@ -34,18 +38,23 @@
     #' \dontrun{
     #' MtgRate()}
     #' @export
-   MtgRate <- function()
-                  {
-                   MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-                   MtgRate <- readRDS(MtgRate.Conn)
+   MtgRate <- function(){
+     
+     MtgRate.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                      "/PrepaymentModel/MortgageRate.rds", sep = ""), open = "rb")
+      #MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+      MtgRate <- readRDS(MtgRate.Conn)
                    }
    
    #------- connect to updated LTV function class
    # not currently implemented
-   ULTV <- function()
-                  {
-                  ULTV.Conn <- gzfile("~/BondLab/PrepaymentModel/UpdatedLTV.rds", open = "rb")
-                  ULTV <- readRDS(ULTV.Conn)
+   ULTV <- function(){
+    
+     ULTV.Conn <- gzfile(description = paste(system.file(package = "BondLab"), 
+                  "/PrepaymentModel/UpdatedLTV.rds", sep= ""), open = "rb")
+     
+    #ULTV.Conn <- gzfile("~/BondLab/PrepaymentModel/UpdatedLTV.rds", open = "rb")
+     ULTV <- readRDS(ULTV.Conn)
                   }
    
   #----------- connect to prepayment model tune data folder
@@ -56,8 +65,11 @@
   #' @export
    ModelTune <- function(bond.id = "character")
                  {
-                 ModelTune.Conn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", 
-                                                              bond.id@Model, ".rds", sep =""), open = "rb")        
+                 ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                                  "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
+                 
+                 #ModelTune.Conn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", 
+                 #                   bond.id@Model, ".rds", sep =""), open = "rb")        
                  ModelTune <- readRDS(ModelTune.Conn)    
                  }
 
@@ -69,8 +81,12 @@
     #'@export
     MBS <- function(MBS.id = "character")
                   {
-                  MBS.Conn <- gzfile(description = paste("~/BondLab/BondData/",
-                                                         MBS.id, ".rds", sep = ""), open = "rb")
+                  MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                              "/BondData/", MBS.id, ".rds", sep = ""), open = "rb")          
+      
+      
+                  #MBS.Conn <- gzfile(description = paste("~/BondLab/BondData/",
+                  #                                       MBS.id, ".rds", sep = ""), open = "rb")
                   MBS <- readRDS(MBS.Conn)
                   return(MBS)
                   }
@@ -83,8 +99,11 @@
     #' @export
     Bond <- function(Bond.id = "character")
     {
-      Bond.Conn <- gzfile(description = paste("~/BondLab/BondData/",
-                                             Bond.id, ".rds", sep = ""), open = "rb")
+      Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                  "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
+      
+      #Bond.Conn <- gzfile(description = paste("~/BondLab/BondData/",
+      #            Bond.id, ".rds", sep = ""), open = "rb")
       Bond <- readRDS(Bond.Conn)
       return(Bond)
     }  
@@ -95,33 +114,39 @@
   #' Opens connection to the REMICData folder calling a REMIC Deal by name
   #' @param remic.deal A character string the REMIC deal name
   #' @export
-    REMICDeal <- function(remic.deal = "character") 
-                 {
-                  REMIC.Conn <- gzfile(description = paste("~/BondLab/REMICData/",
-                                                          remic.deal, ".rds", sep = ""), open = "rb")
+    REMICDeal <- function(remic.deal = "character") {
                   
-                  REMICDeal <- readRDS(REMIC.Conn)
-                  return(REMICDeal)
+      REMIC.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                    "/REMICData/", remic.deal, ".rds", sep = ""), open = "rb")
+      
+      #REMIC.Conn <- gzfile(description = paste("~/BondLab/REMICData/",
+      #remic.deal, ".rds", sep = ""), open = "rb")
+                  
+      REMICDeal <- readRDS(REMIC.Conn)
+      return(REMICDeal)
                   }
    
    #---------- connect to waterfall data
-   REMICWaterFall <- function(deal.name = "character")
-                  {
-                   paste("~/BondLab/WaterFall/",deal.name, sep = "")
+   REMICWaterFall <- function(deal.name = "character"){
+    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "") 
+    #paste("~/BondLab/WaterFall/",deal.name, sep = "")
                   }
    
    #---------- connect to retrieve bond schedule data 
-    REMICSchedules <- function(REMIC.Tranche = "character")
-                  {
-                  Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
-                                as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
-                                sep = ""), open = "rb")
+    REMICSchedules <- function(REMIC.Tranche = "character"){
+      
+      Sched.Conn <- gzfile(paste(system.file(package = "BondLab"),
+                    "/Schedules/", as.character(REMIC.Tranche@DealName), 
+                    "_Group_", as.character(REMIC.Tranche@Group), "_Sch", ".rds"), open = "rb")
+      
+        Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
+        as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
+        sep = ""), open = "rb")
                     
-                    REMICSchedules <- readRDS(Sched.Conn)
-                    #return(REMICSchedules) No need to return as this is not saved via a function wrapper but used
-                    # in the waterfall call.  The problem this is called multiple times in waterfall as the 
-                    # analysis takes place.  Should be called once
-                  }
+      REMICSchedules <- readRDS(Sched.Conn)
+      #return(REMICSchedules) No need to return as this is not saved via a function wrapper but used
+      # in the waterfall call.  I think this is called multiple times should be called once trace this?
+      }
    
    #---------- connect to BondData to run multiple cusips
    

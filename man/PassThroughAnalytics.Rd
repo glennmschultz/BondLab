@@ -43,4 +43,9 @@ For addiition details see the termstrc documentation.}
 \description{
 Analytic engine for pass through security returns pass through analytics object
 }
+\examples{
+\dontrun{PassThroughAnalytics(bond.id = "bondlabMBS55", original.bal = 100000,
+price = 107.5, trade.date = "01-10-2013", settlement.date = "01-13-2013",
+scenario.set = c("DA25", "NC", "UA50", "UA100", "UA150", "UA200"), PrepaymentAssumption = "MODEL")}
+}
 

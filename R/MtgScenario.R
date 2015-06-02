@@ -130,24 +130,28 @@
   ScenarioResult <- list()
   
   # First step open mortgage rate functions
-  connS1 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(connS1)
+  #connS1 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+  MortgageRate <- MtgRate()
   
   #Call the desired curve from rates data folder
   trade.date = as.Date(trade.date, "%m-%d-%Y")
   
-  connS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-  rates.data <- readRDS(connS2)
+  #connS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+  rates.data <- Rates(trade.date = trade.date)
   
   #Call Prepayment Model
-  connS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
-  ModelTune <- readRDS(connS3)
+  #connS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
+  #ModelTune <- readRDS(connS3)
+  ModelTune <- ModelTune(bond.id = bond.id)
   Burnout = bond.id@Burnout
   
   # ----------------------- Scenario Analysis --------------------------------  
   for(i in 1:length(scenario.set)){
     
-    connS4 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
+    #connS4 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
+    connS4 <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
+                                         as.character(scenario.set[i]), ".rds", sep =""), open = "rb")
+    
     Scenario <- readRDS(connS4) 
     
     # Third call the trade date rates data

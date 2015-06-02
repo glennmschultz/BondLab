@@ -272,7 +272,6 @@ setMethod("initialize",
   Burnout = bond.id@Burnout
   
   #Call Prepayment Model Tuning Parameters
-  #conn4 <- gzfile(description = paste("~/BondLab/PrepaymentModel/", bond.id@Model, ".rds", sep =""), open = "rb")        
   ModelTune <- ModelTune(bond.id = bond.id)
   
   #The second step is to call the desired coupon curve into memory 

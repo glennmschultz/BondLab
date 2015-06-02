@@ -60,13 +60,14 @@ MtgTermStructure <- function(bond.id = "character",
 
   
   # Open connection to the prepayment model tuning library
-  connBTS2 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
-  ModelTune <- readRDS(connBTS2)
+  #connBTS2 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
+  #ModelTune <- readRDS(connBTS2)
+  ModelTune <- ModelTune(bond.id = bond.id)
   Burnout = bond.id@Burnout
   
   # Open connection to the Mortgage Model function
-  connBTS3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
-  MortgageRate <- readRDS(connBTS3)
+  #connBTS3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
+  MortgageRate <- MtgRate()
   
   Burnout = bond.id@Burnout
   

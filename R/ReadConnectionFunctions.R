@@ -149,14 +149,6 @@
       }
    
    #---------- connect to BondData to run multiple cusips
-   
-   Cusip <- function(cusip = "character") 
-   {
-     Cusip.Conn <- gzfile(description = paste("~/BondLab/BondData/",
-                                              cusip, ".rds", sep = ""), open = "rb")
-     
-     Cusip <- readRDS(Cusip.Conn)
-     return(Cusip)
-   }
-   
+   # BondLab will need a connection string to a cusip file to run multiple cusips from 
+   # a collateral group.  Perhaps create a Group_Collateral_File
   

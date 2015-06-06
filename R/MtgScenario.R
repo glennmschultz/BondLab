@@ -149,10 +149,11 @@
   for(i in 1:length(scenario.set)){
     
     #connS4 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
-    connS4 <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
-                                         as.character(scenario.set[i]), ".rds", sep =""), open = "rb")
+    #connS4 <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
+    #                                     as.character(scenario.set[i]), ".rds", sep =""), open = "rb")
     
-    Scenario <- readRDS(connS4) 
+    Scenario <- ScenarioCall(Scenario = scenario.set[i])
+    #Scenario <- readRDS(connS4) 
     
     # Third call the trade date rates data
     # Create variabel for the length of rates and rates data 

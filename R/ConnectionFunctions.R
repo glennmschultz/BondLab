@@ -1,16 +1,16 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
-# the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
+  # the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
 
-  #---------- connect to the rates data folder
+  #--------------------------------------------------------------------------------
     #' A connection function to the RatesData folder to call swap curve data
     #' 
     #' A read connection function to the rates data base folder to call swap rate data
@@ -30,10 +30,11 @@
     setGeneric("Rates", function(trade.date = "character")
       {standardGeneric("Rates")})
    
-   #-------- connect to mortgage rate function classes
+   #---------------------------------------------------------------------------------
     #' A connection function to the Prepayment model folder to call mortgage rate function class
     #' 
-    #' A read connection function to the mortgage rate function. No inputs are required
+    #' A read connection function to the mortgage rate function. No inputs are required the function
+    #' propogates the foward mortgage rate based on the 2-year and 10-year forward rate
     #' @examples
     #' \dontrun{
     #' MtgRate()}
@@ -46,8 +47,8 @@
       MtgRate <- readRDS(MtgRate.Conn)
                    }
    
-   #------- connect to updated LTV function class
-   # not currently implemented
+   #----------------------------------------------------------------------------------
+   #' not currently implemented
    ULTV <- function(){
     
      ULTV.Conn <- gzfile(description = paste(system.file(package = "BondLab"), 
@@ -57,11 +58,11 @@
      ULTV <- readRDS(ULTV.Conn)
                   }
    
-  #----------- connect to prepayment model tune data folder
-  #' A connection function to the PrepaymentModel folder to call the prepayment model tuning
+  #-----------------------------------------------------------------------------------
+  #' A connection function to call the PrepaymentModel model tuning parameters
   #' 
   #' A connection function to the mortgage rate function to call prepayment model tuning
-  #' @param bond.id A character string the bond id or cusip
+  #' @param bond.id A character string the bond id or cusip currently bond.id is supported
   #' @export
    ModelTune <- function(bond.id = "character")
                  {
@@ -73,13 +74,13 @@
                  ModelTune <- readRDS(ModelTune.Conn)    
                  }
 
-  #----------- connect to MBS cusip data folder
-    #' A connection function to the BondData folder to call the MBS cusip objects
-    #' 
-    #' Opens a connection to the BondData folder to call MBS cusip data 
-    #' @param MBS.id A character string the MBS id or cusip number
-    #'@export
-    MBS <- function(MBS.id = "character")
+  #------------------------------------------------------------------------------------
+  #' A connection function to the BondData to calling MBS cusips
+  #' 
+  #' Opens a connection to the BondData folder to call MBS cusip data 
+  #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
+  #' @export
+  MBS <- function(MBS.id = "character")
                   {
                   MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                               "/BondData/", MBS.id, ".rds", sep = ""), open = "rb")          
@@ -89,10 +90,11 @@
                   #                                       MBS.id, ".rds", sep = ""), open = "rb")
                   MBS <- readRDS(MBS.Conn)
                   return(MBS)
+                  close(MBS.Conn)
                   }
     
-    #----------- connect to Bond cusip data folder
-    #' A connection function to the BondData folder for standard bond
+    #----------------------------------------------------------------------------------
+    #' A connection function to the BondData calling bond cusips
     #' 
     #' Opens a connection to BondData folder to call a standard bond
     #' @param Bond.id A character string the bond's cusip number or id
@@ -108,10 +110,12 @@
       return(Bond)
     }  
      
-  #----------- connect to REMIC deal file
-  #' A connection function to the REMICData folder to call REMICs by deal
+  #-------------------------------------------------------------------------------------
+  #' A connection function to the REMICData calls REMICs by deal
   #' 
-  #' Opens connection to the REMICData folder calling a REMIC Deal by name
+  #' Opens a connection to the REMICData folder calling a REMIC Deal by name
+  #' this function supports REMIC tranche analysis by providing the REMIC
+  #' deal information as the umbrella structure over the tranche
   #' @param remic.deal A character string the REMIC deal name
   #' @export
     REMICDeal <- function(remic.deal = "character") {
@@ -126,29 +130,53 @@
       return(REMICDeal)
                   }
    
-   #---------- connect to waterfall data
+  #-------------------------------------------------------------------------------------
+  #' A connection function to the REMICWaterFall source script
+  #' 
+  #' Opens a connection to the WaterFall folder calling the REMIC waterfall
+  #' script by deal name.  This function supports REMIC tranche analysis
+  #' @param  deal.name A character string the REMIC deal name
+  #' @export  
    REMICWaterFall <- function(deal.name = "character"){
     paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "") 
-    #paste("~/BondLab/WaterFall/",deal.name, sep = "")
+     return(REMICWaterFall)
+    
+     #paste("~/BondLab/WaterFall/",deal.name, sep = "")
                   }
    
-   #---------- connect to retrieve bond schedule data 
+  #------------------------------------------------------------------------------------- 
+  #' A connection function to the REMICSchedules Data calls REMIC structuring element
+  #' schedules.  This is the PAC/TAC schedule used by the waterfall
+  #' 
+  #' Opens connection to the Schedules folder by REMIC deal name
+  #' this function supports REMIC tranche analysis by provding the REMIC
+  #' schedules deal information
+  #' @param REMIC.Tranche the REMIC tranche MBS.id or cusip.  Currently MBS.id is supported
+  #' @export
     REMICSchedules <- function(REMIC.Tranche = "character"){
       
       Sched.Conn <- gzfile(paste(system.file(package = "BondLab"),
                     "/Schedules/", as.character(REMIC.Tranche@DealName), 
                     "_Group_", as.character(REMIC.Tranche@Group), "_Sch", ".rds"), open = "rb")
       
-        Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
-        as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
-        sep = ""), open = "rb")
+        #Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
+        #as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
+        #sep = ""), open = "rb")
                     
       REMICSchedules <- readRDS(Sched.Conn)
       #return(REMICSchedules) No need to return as this is not saved via a function wrapper but used
       # in the waterfall call.  I think this is called multiple times should be called once trace this?
       }
    
-   #---------- connect to BondData to run multiple cusips
-   # BondLab will need a connection string to a cusip file to run multiple cusips from 
-   # a collateral group.  Perhaps create a Group_Collateral_File
+  #---------------------------------------------------------------------------------------
+  #' A connection function to the interest rate scenario data folder
+  #' 
+  #' Opens connection to the Scenarios folder calling user defined scenarios by name
+  ScenarioCall <- function(Scenario = "character"){
+    Scenario.Conn <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
+                      as.character(Scenario), ".rds", sep =""), open = "rb")
+    scenario <- readRDS(Scenario.Conn)
+    return(scenario)
+    
+  }  
   

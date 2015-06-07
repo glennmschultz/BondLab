@@ -2,11 +2,17 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{ULTV}
 \alias{ULTV}
-\title{not currently implemented}
+\title{Function to calculate the updated loan to value}
 \usage{
 ULTV()
 }
 \description{
-not currently implemented
+A read connection function to the updated loan to value function.  No inputs are
+required the function propogates the updated loan to value based on amortization
+and updated home price.
+}
+\examples{
+\dontrun{
+ULTV()}
 }
 

@@ -36,7 +36,7 @@ The RAID function creates the REMIC At Issuance Disclosure file
 }
 \examples{
 \dontrun{
-   MakeRAID(DealName = "BondLabPACInverse",
+   MakeRAID(DealName = "BondLabPACInverse_test",
    Issuer = "Bondlab",
    DealPriceDate = "12-01-2012",
    DealSettlementDate = "01-01-2013",

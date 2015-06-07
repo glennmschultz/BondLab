@@ -276,7 +276,7 @@ setMethod("initialize",
 #'  @param CollateralAmount A numeric value the current face amount of the collateral
 #'  @examples
 #'  \dontrun{
-#'    MakeRAID(DealName = "BondLabPACInverse", 
+#'    MakeRAID(DealName = "BondLabPACInverse_test", 
 #'    Issuer = "Bondlab", 
 #'    DealPriceDate = "12-01-2012", 
 #'    DealSettlementDate = "01-01-2013",
@@ -308,9 +308,13 @@ setMethod("initialize",
               NumberofGroups = NumberofGroups,
               DealSize = DealSize,
               CollateralAmount = CollateralAmount)
-  connRAID <- gzfile(description = paste("~/BondLab/RAID/",temp@DealName,".rds", sep = ""))
-  saveRDS(temp, connRAID)
-  close(connRAID)
+  
+  SaveRAID(RAIDFile = temp)
+  
+  #connRAID <- gzfile(description = paste("~/BondLab/RAID/",temp@DealName,".rds", sep = ""))
+  #saveRDS(temp, connRAID)
+  #close(connRAID)
+  
   }
   
   #------- Tranches functions for the REMIC constructor ---------------------------------------------------------------

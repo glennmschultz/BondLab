@@ -8,8 +8,6 @@
   # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
   # the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-
-
   #--------------------------------------------------------------------------------
     #' A connection function to the RatesData folder to call swap curve data
     #' 
@@ -20,9 +18,6 @@
       
       Rates.Conn <-gzfile(description = paste(system.file(package = "BondLab"),
                   "/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-      
-      #Rates.Conn <-gzfile(description = paste("~/BondLab/RatesData/", 
-      #            as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
                   
                   Rates <- readRDS(Rates.Conn)
                   return(Rates)
@@ -48,13 +43,20 @@
                    }
    
    #----------------------------------------------------------------------------------
-   #' not currently implemented
+   #' Function to calculate the updated loan to value
+   #' 
+   #' A read connection function to the updated loan to value function.  No inputs are
+   #' required the function propogates the updated loan to value based on amortization
+   #' and updated home price.
+   #' @examples 
+   #' \dontrun{
+   #' ULTV()}
+   #' @export
    ULTV <- function(){
     
      ULTV.Conn <- gzfile(description = paste(system.file(package = "BondLab"), 
                   "/PrepaymentModel/UpdatedLTV.rds", sep= ""), open = "rb")
      
-    #ULTV.Conn <- gzfile("~/BondLab/PrepaymentModel/UpdatedLTV.rds", open = "rb")
      ULTV <- readRDS(ULTV.Conn)
                   }
    
@@ -68,9 +70,6 @@
                  {
                  ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                                   "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
-                 
-                 #ModelTune.Conn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", 
-                 #                   bond.id@Model, ".rds", sep =""), open = "rb")        
                  ModelTune <- readRDS(ModelTune.Conn)    
                  }
 
@@ -80,17 +79,11 @@
   #' Opens a connection to the BondData folder to call MBS cusip data 
   #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
   #' @export
-  MBS <- function(MBS.id = "character")
-                  {
+  MBS <- function(MBS.id = "character"){
                   MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                               "/BondData/", MBS.id, ".rds", sep = ""), open = "rb")          
-      
-      
-                  #MBS.Conn <- gzfile(description = paste("~/BondLab/BondData/",
-                  #                                       MBS.id, ".rds", sep = ""), open = "rb")
                   MBS <- readRDS(MBS.Conn)
                   return(MBS)
-                  close(MBS.Conn)
                   }
     
     #----------------------------------------------------------------------------------
@@ -103,9 +96,6 @@
     {
       Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                   "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
-      
-      #Bond.Conn <- gzfile(description = paste("~/BondLab/BondData/",
-      #            Bond.id, ".rds", sep = ""), open = "rb")
       Bond <- readRDS(Bond.Conn)
       return(Bond)
     }  
@@ -122,10 +112,6 @@
                   
       REMIC.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                     "/REMICData/", remic.deal, ".rds", sep = ""), open = "rb")
-      
-      #REMIC.Conn <- gzfile(description = paste("~/BondLab/REMICData/",
-      #remic.deal, ".rds", sep = ""), open = "rb")
-                  
       REMICDeal <- readRDS(REMIC.Conn)
       return(REMICDeal)
                   }
@@ -138,11 +124,7 @@
   #' @param  deal.name A character string the REMIC deal name
   #' @export  
    REMICWaterFall <- function(deal.name = "character"){
-    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "") 
-     return(REMICWaterFall)
-    
-     #paste("~/BondLab/WaterFall/",deal.name, sep = "")
-                  }
+    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "")}
    
   #------------------------------------------------------------------------------------- 
   #' A connection function to the REMICSchedules Data calls REMIC structuring element
@@ -158,14 +140,8 @@
       Sched.Conn <- gzfile(paste(system.file(package = "BondLab"),
                     "/Schedules/", as.character(REMIC.Tranche@DealName), 
                     "_Group_", as.character(REMIC.Tranche@Group), "_Sch", ".rds"), open = "rb")
-      
-        #Sched.Conn <- gzfile(paste("~/BondLab/Schedules/",
-        #as.character(REMIC.Tranche@DealName), "_Group_", as.character(REMIC.Tranche@Group ), "_Sch", ".rds",
-        #sep = ""), open = "rb")
-                    
       REMICSchedules <- readRDS(Sched.Conn)
-      #return(REMICSchedules) No need to return as this is not saved via a function wrapper but used
-      # in the waterfall call.  I think this is called multiple times should be called once trace this?
+      return(REMICSchedules) 
       }
    
   #---------------------------------------------------------------------------------------
@@ -176,7 +152,15 @@
     Scenario.Conn <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
                       as.character(Scenario), ".rds", sep =""), open = "rb")
     scenario <- readRDS(Scenario.Conn)
-    return(scenario)
-    
-  }  
+    return(scenario)}
+  
+  #----------------------------------------------------------------------------------------
+  #' A connection function to save the RAID information
+  #' 
+  #' Opens a connection to the RAID folder and saves and saves
+  #' REMIC at Issuance Disclouse data
+  SaveRAID <- function(RAIDFile = "character"){  
+    connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
+    saveRDS(RAIDFile, connRAID)
+    close(connRAID)}
   

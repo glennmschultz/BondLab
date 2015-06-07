@@ -36,8 +36,6 @@
                       #short.rate = numeric(), 
                       sigma = numeric(), 
                       paths = numeric()){
-                      #...,
-                      #TermStructure = "character"){
   
   #Open connection to the tranche
   REMIC.Tranche <- MBS(MBS.id = bond.id)

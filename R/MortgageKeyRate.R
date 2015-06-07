@@ -60,16 +60,13 @@ MtgTermStructure <- function(bond.id = "character",
 
   
   # Open connection to the prepayment model tuning library
-  #connBTS2 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
-  #ModelTune <- readRDS(connBTS2)
   ModelTune <- ModelTune(bond.id = bond.id)
   Burnout = bond.id@Burnout
   
   # Open connection to the Mortgage Model function
-  #connBTS3 <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
   MortgageRate <- MtgRate()
   
-  Burnout = bond.id@Burnout
+  #Burnout = bond.id@Burnout
   
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
@@ -201,7 +198,6 @@ MtgTermStructure <- function(bond.id = "character",
   
   #------------- Step three add the spot spread to the spot curve 
   # This yields the discount rates that are need for the key rate duration calculation
-  
   # at a minimum the cash flow array should be 360 months
   
   for(i in 1:360){
@@ -330,11 +326,6 @@ MtgTermStructure <- function(bond.id = "character",
                                            PrepaymentAssumption = "MODEL", 
                                            ModelTune = ModelTune, 
                                            Burnout = Burnout) 
-                                           #...,
-                                           #begin.cpr = begin.cpr, 
-                                           #end.cpr = end.cpr, 
-                                           #seasoning.period = seasoning.period, 
-                                           #CPR = CPR)
     
     # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
@@ -354,11 +345,6 @@ MtgTermStructure <- function(bond.id = "character",
                                           PrepaymentAssumption = "MODEL", 
                                           ModelTune = ModelTune, 
                                           Burnout = Burnout)
-                                          #...,
-                                          #begin.cpr = begin.cpr, 
-                                          #end.cpr = end.cpr, 
-                                          #seasoning.period = seasoning.period, 
-                                          #CPR = CPR)
     
     # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,

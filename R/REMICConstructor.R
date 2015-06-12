@@ -318,7 +318,7 @@ setMethod("initialize",
   }
   
   #------- Tranches functions for the REMIC constructor ---------------------------------------------------------------
-#Construct Tranche details
+  #Construct Tranche details
 
   TrancheDetails <- function( DealName = "character",
                               TrancheNumber = "character",
@@ -468,9 +468,10 @@ setMethod("initialize",
                             Schedule = Schedule,
                             Fixed = Fixed)
     
-    connTranche <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
-    saveRDS(temp, connTranche)
-    close(connTranche)
+
+    #connTranche <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
+    #saveRDS(temp, connTranche)
+    #close(connTranche)
   }
 
   # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
@@ -491,8 +492,6 @@ setMethod("initialize",
     new("Tranches",
         Tranches = TrancheList)
     
-    #close(connTranches)
-    #closing conn causes this function to return null, why?
   }
 
   # -------- REMIC Schedules PAC and TAC schedules for REMIC

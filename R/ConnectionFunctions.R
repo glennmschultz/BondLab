@@ -148,6 +148,8 @@
   #' A connection function to the interest rate scenario data folder
   #' 
   #' Opens connection to the Scenarios folder calling user defined scenarios by name
+  #' @param Scenario a character string the scenario used in the analysis
+  #' @export
   ScenarioCall <- function(Scenario = "character"){
     Scenario.Conn <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
                       as.character(Scenario), ".rds", sep =""), open = "rb")
@@ -157,10 +159,26 @@
   #----------------------------------------------------------------------------------------
   #' A connection function to save the RAID information
   #' 
-  #' Opens a connection to the RAID folder and saves and saves
+  #' Opens a connection to the RAID folder and saves RAID information
   #' REMIC at Issuance Disclouse data
+  #' @param RAIDFile a character string the REMIC At Issuance Disclosure
+  #' @export
   SaveRAID <- function(RAIDFile = "character"){  
     connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
     saveRDS(RAIDFile, connRAID)
     close(connRAID)}
+  
+  #----------------------------------------------------------------------------------------
+  #' A connection function to the Tranche Details information
+  #' 
+  #' Opens a connection to the Tranches folder and save Tranche Data
+  #' REMIC Tranche information
+  #' @param Tranche a character string the Tranche
+  #' @export
+  SaveTranche <- function(Tranche = character()){
+    connTranche <- gzfile(description = paste(system.file(package = "BondLab"),
+                                  "~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
+    saveRDS(temp, connTranche)
+    close(connTranche)
+  }
   

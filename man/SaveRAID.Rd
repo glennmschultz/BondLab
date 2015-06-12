@@ -6,8 +6,11 @@
 \usage{
 SaveRAID(RAIDFile = "character")
 }
+\arguments{
+\item{RAIDFile}{a character string the REMIC At Issuance Disclosure}
+}
 \description{
-Opens a connection to the RAID folder and saves and saves
+Opens a connection to the RAID folder and saves RAID information
 REMIC at Issuance Disclouse data
 }
 

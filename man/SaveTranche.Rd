@@ -2,12 +2,17 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{SaveTranche}
 \alias{SaveTranche}
-\title{A connection function to the Tranche Details information}
+\title{A connection function to save Tranche Details information}
 \usage{
-SaveTranche(Tranche = character())
+SaveTranche(DealName = "character", TrancheNumber = "character",
+  TrancheFile = "character")
 }
 \arguments{
-\item{Tranche}{a character string the Tranche}
+\item{DealName}{a character string the Deal Name}
+
+\item{TrancheNumber}{a character string the Tranche number}
+
+\item{TrancheFile}{a character string the TrancheDetails object (file) to serialize}
 }
 \description{
 Opens a connection to the Tranches folder and save Tranche Data

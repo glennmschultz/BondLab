@@ -56,3 +56,11 @@ HPISim <- function(shortrate = numeric(),
   return(homesimulation)
 }
 
+  setGeneric("HPISim", function(shortrate = numeric(),
+                                LongTermGrowth = numeric(),
+                                T = numeric(),
+                                step = numeric(),
+                                sigma = numeric(),
+                                N = numeric())
+    {standardGeneric("HPISim")})
+

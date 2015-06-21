@@ -2,7 +2,7 @@
 % Please edit documentation in R/MortgageOAS.R
 \name{Mortgage.OAS}
 \alias{Mortgage.OAS}
-\title{Mortgage OAS The mortgage OAS engine for pass through OAS}
+\title{Mortgage OAS the OAS engine for pass through OAS}
 \usage{
 Mortgage.OAS(bond.id = "character", trade.date = "character",
   settlement.date = "character", original.bal = numeric(),

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Functions.R
 \name{Effective.Duration}
 \alias{Effective.Duration}
-\title{A function to compute effectove duration}
+\title{A function to compute effective duration}
 \usage{
 Effective.Duration(Rate.Delta = numeric(), cashflow = vector(),
   discount.rates = vector(), discount.rates.up = vector(),

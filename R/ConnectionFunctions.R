@@ -74,7 +74,7 @@
                  }
 
   #------------------------------------------------------------------------------------
-  #' A connection function to the BondData to calling MBS cusips
+  #' A connection function to the BondData calling MBS cusips
   #' 
   #' Opens a connection to the BondData folder to call MBS cusip data 
   #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
@@ -169,16 +169,70 @@
     close(connRAID)}
   
   #----------------------------------------------------------------------------------------
-  #' A connection function to the Tranche Details information
+  #' A connection function to save Tranche Details information
   #' 
   #' Opens a connection to the Tranches folder and save Tranche Data
   #' REMIC Tranche information
-  #' @param Tranche a character string the Tranche
+  #' @param DealName a character string the Deal Name
+  #' @param TrancheNumber a character string the Tranche number
+  #' @param TrancheFile a character string the TrancheDetails object (file) to serialize
   #' @export
-  SaveTranche <- function(Tranche = character()){
+  SaveTranche <- function(DealName = "character", TrancheNumber = "character", TrancheFile = "character"){
     connTranche <- gzfile(description = paste(system.file(package = "BondLab"),
-                                  "~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
-    saveRDS(temp, connTranche)
+                                  "/Tranches/",DealName,"_","Tranche","_",TrancheNumber,".rds", sep = ""))
+    saveRDS(TrancheFile, connTranche)
     close(connTranche)
   }
   
+  #----------------------------------------------------------------------------------------
+  #' A connection function used to assemble the deal tranches as a list
+  #' 
+  #' Opens a connection to the Tranches folder and creates of list of deal tranches
+  #' used by the REMIC constructor function
+  #' @param DealName A character string the Deal Name
+  #' @param TrancheNumber A character string the tranche number
+  #' @export
+  SaveTranches <- function(DealName = "character", TrancheNumber = "character"){
+    connTranches <- gzfile(description = paste(system.file(package = "BondLab"),
+                                    "/Tranches/",DealName,"_","Tranche", "_",TrancheNumber,".rds", sep = "")) 
+    Tranches <- readRDS(connTranches)
+    return(Tranches)}
+  
+  #----------------------------------------------------------------------------------------
+  #' A connection function to the schedules folder
+  #' 
+  #' Opens a connection to the Schedules folder to save PAC or TAC schedules
+  #' @param DealName A character string the deal name
+  #' @param ScheduleFile A character string the name of the schedule file to save
+  #' @export
+  SaveSchedules <- function(DealName = "character", ScheduleFile = "character"){
+    connSched <- gzfile(description = paste(system.file(package = "BondLab"),
+                                  "/Schedules/", DealName,"_","Group","_",ScheduleFile@Group,"_", "Sch", ".rds", sep = ""))
+    saveRDS(ScheduleFile, connSched)
+  }
+  
+  #----------------------------------------------------------------------------------------
+  #' A connection function to the PrepaymentModel folder
+  #' 
+  #' Opens a connection to the PrepaymentModel folder to save the prepayment model tuning
+  #' @param ModelFile A character string the model tuning default value is temp
+  #' @param ModelName A character string the model name used to reference the prepayment model
+  #' @export 
+  SaveModelTune <-function(ModelFile = "character", ModelName = "character"){
+    ModelTuneConn <-gzfile(description = paste(system.file(package = "BondLab"),
+                                               "/PrepaymentModel/", ModelName, ".rds", sep =""))
+    saveRDS(ModelFile, ModelTuneConn)
+    close.connection(ModelTuneConn)
+  }
+  
+  #-----------------------------------------------------------------------------------------
+  #' A connection functon to the Groups folder
+  #' 
+  #' 
+  #' @export
+  SaveCollGroup <- function(FileName = "character", DealName = "character", Group = numeric()){
+    connGroup <- gzfile(description = paste(system.file(package = "BondLab"),
+                                            "/Groups/",DealName,"_","Group","_",FileName@Group,".rds", sep = ""))
+    saveRDS(FileName, connGroup)
+    close.connection(connGroup)
+  }

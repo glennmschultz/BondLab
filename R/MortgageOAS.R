@@ -13,7 +13,7 @@
 # Mortgage OAS Function
 #___________________________________
 
-#' Mortgage OAS The mortgage OAS engine for pass through OAS
+#' Mortgage OAS the OAS engine for pass through OAS
 #' 
 #'  Pass through OAS engine
 #'  @param bond.id A character string the bond id or cusip number
@@ -317,3 +317,13 @@ Mortgage.OAS <- function(bond.id = "character",
     else 
       OAS.Term.Structure
 }
+
+  setGeneric("Mortgage.OAS",function(bond.id = "character", 
+                                     trade.date = "character", 
+                                     settlement.date = "character", 
+                                     original.bal = numeric(),
+                                     price = numeric(), 
+                                     sigma = numeric(), 
+                                     paths = numeric(), 
+                                     TermStructure = "logical") 
+    {standardGeneric("Mortgage.OAS")})

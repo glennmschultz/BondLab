@@ -253,7 +253,7 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
   setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())
     {standardGeneric("SMMVector.To.CPR")})
 
-#' A function to compute effectove duration
+#' A function to compute effective duration
 #' 
 #' Calculates effective duration based on a discount vector (zero coupon)
 #' cash flow vector, and rate delta
@@ -278,6 +278,15 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
   Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)  
   (Price.UP - Price.DWN)/(2*Price*Rate.Delta)
   }
+  
+  setGeneric("Effective.Duration", function(Rate.Delta = numeric(), 
+                                            cashflow = vector(), 
+                                            discount.rates = vector(), 
+                                            discount.rates.up = vector(), 
+                                            discount.rates.dwn = vector(), 
+                                            t.period = vector(), 
+                                            proceeds = numeric())
+    {standardGeneric("Effective.Duration")})
 
 #' A function to compute effective convexity
 #' 

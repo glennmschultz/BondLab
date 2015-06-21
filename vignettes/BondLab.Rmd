@@ -7,8 +7,11 @@ vignette: >
   %\VignetteIndexEntry{Investing in Mortgage Backed Securities with Bond Lab}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-
 ---
+```{r, echo = FALSE, message=FALSE}
+require(BondLab)
+```
+
 # Introduction
 Investing in Mortgage and Asset backed securities requires specialized analytics.  The asset class is generally precieved as difficult to understand.  The underlying philosphy of Bond Lab is simple; mortgage and asset backed securities are not too complex to understand.  Indeed, the basic fixed income valuation techniques applicable to all fixed income securities also form the foundation for the valuation of mortgage **(MBS)** and asset backed **(ABS)** securities.
 
@@ -16,22 +19,21 @@ The percieved complexity of investing in strucutured products, like MBS, arise f
 
 1. The contingency of residential MBS cash flows, which manifests because the borrower holds the option to repay and terminate her mortgage obligation early.
 
-2. Cash flow structuring techniques based on the allocation of principal and interest across real estate mortgage investment conduit **REMIC** transactions.
+1. Cash flow structuring techniques based on the allocation of principal and interest across real estate mortgage investment conduit **REMIC** transactions.
 
-3. Credit structuring techniques that allocate losses through the capital strucuture of transaction.
+1. Credit structuring techniques that allocate losses through the capital strucuture of transaction.
 
-4. Valuation techniques, interest rate models, whose goal is to simulate the economy.
+1. Valuation techniques, interest rate models, whose goal is to simulate the economy.
 
 Bond Lab makes used of the following R packages: termstrc, lubridate, optimx.  To my knowledge Bond Lab is the first open source and objected oriented software provided for the analysis of mortgage and consumer asset backed securities.  The packages used by Bond Lab are open source and freely available on the CRAN repository.  Bond Lab although open source is not freely available to everyone.  The Bond Lab licensing agreement allows individuals and the academic community to download an use Bond Lab for personal and educational use.  Commerical use of Bond Lab is restricted and requires a commerical license which is available by contacting Bond Lab Technologies, Inc.
 
-# Organization
+# Core Competencies
 The analysis of mortgage and asset backed securities may be divided into four core competencies. These are:
 
-1. **Term Strucutre Modeling**, The valuation of all fixed income securities is based upon the term structure of interest rates.  Bond Lab makes use of the package termstc for its term strucutre modeling.  Indeed, mortgage backed securities are unique in that the term structure of interest influences valuation of MBS via the borrower's option to refinance her current mortgage for one offering a more favorable rate.
-2. **Cash-flow Modeling**, The derivation of mortgage and consumer assets according to the amortization schedule of each
-giving respect to voluntary repayment, delinquency, default (involuntary repayment), and recovery.
-3. **Structuring**, the basic input is the mortgage pool.  A mortgage pool is excatly as its name implies - a pool of mortgage loans whose principal and interest is passed through to the investor.  Beyond the mortgage pool is the Real Estate Mortgage Investment Conduit **(REMIC)**.  A REMIC allows for the creation of securities offering unique risk/reward profiles.  The key to REMIC execution lies in the division of principal and interest. 
-4. **Relative Value Analysis**,
+- **Term Structure Modeling**, The valuation of all fixed income securities is based upon the term structure of interest rates.  Bond Lab makes use of the package termstc for its term strucutre modeling.  Indeed, mortgage backed securities are unique in that the term structure of interest influences valuation of MBS via the borrower's option to refinance her current mortgage for one offering a more favorable rate.
+- **Cash-flow Modeling**, The derivation of mortgage and consumer asset cash flow according to the amortization schedule of each giving respect to voluntary repayment, delinquency, default (involuntary repayment), and recovery.
+- **Structuring**, the basic input is the mortgage pool.  A mortgage pool is excatly as its name implies - a pool of mortgage loans whose principal and interest is passed through to the investor.  Beyond the mortgage pool is the Real Estate Mortgage Investment Conduit **(REMIC)**.  A REMIC allows for the creation of securities offering unique risk/reward profiles.  The key to REMIC execution lies in the division of principal and interest. 
+- **Valuation**, the valuation of structured securities is based on the term structure of interest rates.  Accordingly, each periodic cash flow of a mortgage or asset backed security is viewed as a zero coupon cash flow.  Thus, the investor views the cash flow profile of MBS and ABS as "bundle" of zero coupon cash flows.  Consequently the investor is able to apply a unique discount rate to each cash flow according to its tenor along the yield curve.
 
 #Term Structure Modeling
 The term structure modeling in Bond Lab is done using the package *termstrc*
@@ -46,13 +48,52 @@ The term structure modeling in Bond Lab is done using the package *termstrc*
     
 The functions in BondLab related to term structure modeling are:
 
-**CalibrateCIR** The function calibrates the single factor Cox, Ingersol, Ross term structure model to the swap rate data.  The function is not part of the package termstrc.  However, the function calls cfmatrix and matmatrix from the package termstrc.
+**CalibrateCIR** 
 
-**CIRBondPrice** The function estimates bond prices given a simulated short-term rate.
+The function calibrates the single factor Cox, Ingersol, Ross term structure model to the swap rate data.  The function is not part of the package termstrc.  However, the function calls cfmatrix and matmatrix from the package termstrc.
 
-**SwapRateDate** The function iterates over the RatesData.csv file and creates a yield curve object for each date.
+**CIRBondPrice** 
 
-**TermStructure**  The function is a wrapper around the package termstrc allowing the user to call a yield curve referencing it by date.  Yield curve data is stored in the RatesData directory.
+The function estimates bond prices given a simulated short-term rate.
+
+**SwapRateData** 
+
+The function iterates over the RatesData.csv file and creates a yield curve object for each date.
+
+**TermStructure**  
+
+The function is a wrapper around the package termstrc allowing the user to call a yield curve referencing it by date.  Yield curve data is stored in the RatesData directory and the yield curve data object is made by the SwapRateData function.
+
+#Cash Flow Modeling
+Central to the valuation and structuring of mortgage and consumer ABS is cash flow modeling.  Cash flow modeling estimates the income stream (principal and interest) the investor expects to receive over the life of the investment.  Cash flow modeling is also central to structuring.  Structuring mortgage and consumer ABS often involves the division of principal and interest.
+
+**CPR.To.SMM**
+
+Constant Prepayment Rate (CPR) is measure of mortgage pool prepayment.  CPR states, based on the monthly prepayment rate, the percentage of the pool which will payoff over 12 months at the current observed monthly prepayment rate.
+```{r, echo = TRUE}
+CPR.To.SMM(CPR = .06)
+```
+
+**SMM.To.CPR**
+
+Single Monthly Mortality (SMM) Rate is a measure of the monthly prepayment rate of a mortgage pool.  The SMM states the percentage of the pool that paid-off in the month after giving credit to scheduled principal and before application of default.
+```{r, echo = TRUE}
+SMM.To.CPR(SMM = .005)
+```
+
+**SMMVector.To.CPR**
+
+**PPC.Ramp**
+
+**Mortgage.Monthly.Payment**
+
+**MortgageCashFlow**
+
+**REMICCashFlow**
+
+
+##Prepayment Modeling 
+Borrowers hold the option to either prepay their loan early or default.  Prepayment models attempt to provide a representation of the expected re-payment, delinquency, default rate, and loss severity rate of a pool of securtized loans.  A prepayment model is an intregal part of cash flow modeling.  BondLab models both voluntary prepayments (as an additive model) and involuntary prepayments (as a multiplicative model).  The intention of such design (additive and multiplicative) was to illustrate each technique.  A multiplicative spline based model is currently in development.  The function name will remain and the change to the used will be transparent.
 
 
 

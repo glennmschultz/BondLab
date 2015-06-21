@@ -52,6 +52,7 @@
   #' @examples
   #' \dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000, 
   #' settlement.date = "1/13/2013", price = 100)}
+  #' @export
   BondCashFlows <- function (bond.id = "character", 
                              principal = numeric(), 
                              settlement.date = "character", 
@@ -168,4 +169,8 @@
   )
 }
 
-
+  setGeneric("BondCashFlows", function (bond.id = "character", 
+                                        principal = numeric(), 
+                                        settlement.date = "character", 
+                                        price = numeric())
+  {standardGeneric("BondCashFlows")})

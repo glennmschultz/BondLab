@@ -169,6 +169,38 @@
     #' @param MaxOrigMultiplier a numeric value. The maximum OLTV multipler applied to the baseline
     #' @param UpdatedLTV.beta a numeric value,  The beta value of the update loan to value
     #' @param SATO.beta A numeric value, the beta value of SATO
+    #' @examples 
+    #' \dontrun{
+    #'  MakeModelTune(ModelName = "FH30.Generic_test1",
+    #'  TurnoverRate = 0.08,
+    #'  Turnover.alpha = 1.0,
+    #'  Turnover.beta = 0.87,
+    #'  Turnover.theta = 0.192,
+    #'  Seasonality.alpha = 0.15,
+    #'  Seasonality.theta = 12.0,
+    #'  Incentive.Fast.theta.1 = 0.025,
+    #'  Incentive.Fast.theta.2 = 0.019,
+    #'  Incentive.Fast.beta = -4.0,
+    #'  Incentive.Fast.eta = 1.0,
+    #'  Incentive.Slow.theta.1 = 0.001,
+    #'  Incentive.Slow.theta.2 = 0.004,
+    #'  Incentive.Slow.beta = -1.0,
+    #'  Incentive.Slow.eta = 0.5,
+    #'  Burnout.beta.1 = -.01,
+    #'  Burnout.beta.2 = -.01,
+    #'  BeginCDR = 0,
+    #'  PeakCDR = 2.75,
+    #'  EndCDR = 1.5,
+    #'  PeakMonth = 42,
+    #'  PlateauMonths = 30,
+    #'  EndMonth = 120,
+    #'  MinOrigLTV = 80,
+    #'  MaxOrigLTV = 90,
+    #'  MinOrigMultiplier = 0.30,
+    #'  MaxOrigMultiplier = 1.25,
+    #'  UpdatedLTV.beta = 5,
+    #'  SATO.beta = .8)
+    #' }
     #' @export
     MakeModelTune <- function(
       ModelName = "character",
@@ -232,9 +264,12 @@
        SATO.beta = SATO.beta
        )
      
-     ModelTuneConn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", ModelName, ".rds", sep =""))
-     saveRDS(temp, ModelTuneConn)
-     close(ModelTuneConn)}
+     SaveModelTune(ModelFile = temp, ModelName = ModelName)
+       
+     #ModelTuneConn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", ModelName, ".rds", sep =""))
+     #saveRDS(temp, ModelTuneConn)
+     #close(ModelTuneConn)
+     }
     
      setGeneric("MakeModelTune", function(
        ModelName = "character",

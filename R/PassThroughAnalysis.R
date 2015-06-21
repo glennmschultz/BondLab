@@ -223,8 +223,6 @@ setMethod("initialize",
 
 #' @export PassThroughAnalytics
   PassThroughAnalytics <- function (bond.id = "character", 
-                                    #MortgageRate = "character",
-                                    #UpdatedLTV = "character",
                                     original.bal = numeric(), 
                                     price = numeric(), 
                                     trade.date = "character", 
@@ -420,8 +418,6 @@ setMethod("initialize",
   }
 
   setGeneric("PassThroughAnalytics", function (bond.id = "character", 
-                                               #MortgageRate = "character",
-                                               #UpdatedLTV = "character",
                                                original.bal = numeric(), 
                                                price = numeric(), 
                                                trade.date = "character", 

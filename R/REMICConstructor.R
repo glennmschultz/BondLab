@@ -309,16 +309,15 @@ setMethod("initialize",
               DealSize = DealSize,
               CollateralAmount = CollateralAmount)
   
-  SaveRAID(RAIDFile = temp)
+  SaveRAID(RAIDFile = temp)}
   
-  #connRAID <- gzfile(description = paste("~/BondLab/RAID/",temp@DealName,".rds", sep = ""))
-  #saveRDS(temp, connRAID)
-  #close(connRAID)
+  #=====================================================================================
+  #The following are Tranches functions for the REMIC constructor
+  #=====================================================================================
   
-  }
   
-  #------- Tranches functions for the REMIC constructor ---------------------------------------------------------------
-  #Construct Tranche details
+  #1)Tranched Details is a Constructor function to create Tranche data
+  # it has no connections and is used by the function MakeTranches
 
   TrancheDetails <- function( DealName = "character",
                               TrancheNumber = "character",
@@ -379,7 +378,10 @@ setMethod("initialize",
   }
   
   
-# 2) serialize the tranches to the tranches directory
+# 2) Make tranche is actually a function which calls TrancheDetails 
+  #serialize the object TrancheDetails to the tranches directory
+  #note in the help file MakeTranche is refered to as constructor since
+  #the actual constructor TrancheDetails is not exposed to the user
 
 #' A constructor function for REMIC tranche detail
 #' 
@@ -411,6 +413,35 @@ setMethod("initialize",
 #' @param Group A numeric value the collateral group number
 #' @param Schedule A logical indicating the PAC/TAC schedule
 #' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
+#' @examples
+#' \dontrun{ 
+#'   MakeTranche(DealName = "BondLabPACInverse_test",
+#'  TrancheNumber = "1",
+#'  TrancheName = "A",
+#'  TranchePrincipal = "Pass_Through",
+#'  TrancheInterest = "Fix",
+#'  TranchePrincipalDesc = "PAC",
+#'  TrancheInterestDesc = "Fix",
+#'  Cusip = "BondLabPAC2",
+#'  TrancheOrigBal = 148769215,
+#'  TrancheDatedDate  = "01-01-2013",
+#'  TrancheFirstPmtDate = "01-15-2013",
+#'  TrancheLastPmtDate = "12-15-2042",
+#'  TrancheNextPmtDate = "01-15-2013",
+#'  TrancheCoupon = 2.25,
+#'  Delay = 15,
+#'  PrinPmtFrequency = 12,
+#'  InterestPmtFrequency = 12,
+#'  FloaterIndex = "999",
+#'  FloaterMargin = 0,
+#'  FloaterCap = 0,
+#'  FloaterFloor = 0,
+#'  FloaterFormula = function(){},
+#'  PacLowBand = 75,
+#'  PacHighBand = 250,
+#'  Group = 1,
+#'  Schedule = TRUE,
+#'  Fixed = TRUE)} 
 #'@export
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",
@@ -468,11 +499,7 @@ setMethod("initialize",
                             Schedule = Schedule,
                             Fixed = Fixed)
     
-
-    #connTranche <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche","_",temp@TrancheNumber,".rds", sep = ""))
-    #saveRDS(temp, connTranche)
-    #close(connTranche)
-  }
+    SaveTranche(DealName = DealName, TrancheNumber = TrancheNumber, TrancheFile = temp)}
 
   # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
   # The function assembles multiple tranches associated with a deal 
@@ -483,19 +510,21 @@ setMethod("initialize",
     TrancheList <- list()
     
     for(i in 1: NumberofTranches){
-      
-      connTranches <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche", "_",i,".rds", sep = "")) 
-      Tranches <- readRDS(connTranches)
+  
+      Tranches <- SaveTranches(DealName = DealName, TrancheNumber = as.character(i))
+      #connTranches <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche", "_",i,".rds", sep = "")) 
+      #Tranches <- readRDS(connTranches)
       
       TrancheList <- append(TrancheList, Tranches)}
     
     new("Tranches",
-        Tranches = TrancheList)
-    
-  }
+        Tranches = TrancheList)}
 
-  # -------- REMIC Schedules PAC and TAC schedules for REMIC
-  #1 construct the PAC REMIC Class with call to new
+  # --------------------------------------------------------------------------------
+  #REMIC Schedules PAC and TAC schedules for REMIC
+  #This function is called by MakeSchedules
+  #It has no connection strings this functions constructs the PAC REMIC 
+  #Class with call to new
   #' @importFrom lubridate %m+%
   Schedule <- function(bond.id = "character",
                              DealName = "character",
@@ -626,9 +655,12 @@ setMethod("initialize",
                                           lower.PSA = lower.PSA,
                                           upper.PSA = upper.PSA
                                           )
-                         connSched <- gzfile(description = paste("~/BondLab/Schedules/",
-                                      DealName,"_","Group","_",temp@Group,"_", "Sch", ".rds", sep = ""))
-                         saveRDS(temp, connSched)
+                         
+                         SaveSchedules(DealName = DealName, ScheduleFile = temp)
+                         
+                         #connSched <- gzfile(description = paste("~/BondLab/Schedules/",
+                         #              DealName,"_","Group","_",temp@Group,"_", "Sch", ".rds", sep = ""))
+                         #saveRDS(temp, connSched)
 }
 
 
@@ -669,11 +701,13 @@ setMethod("initialize",
     
     temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
     
-    connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",temp@Group,".rds", sep = ""))
-    saveRDS(temp, connGroup)
+    SaveCollGroup(FileName = temp, DealName = DealName, Group = Group)
     
+    #connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",temp@Group,".rds", sep = ""))
+    #saveRDS(temp, connGroup)
   }
-
+  
+  #------------------------------------------------------------------------------------------
   # 3) aggregator function for the REMIC structure called by REMIC constructor
   # the function assembles multiple collateral groups can be extended to loan level
 

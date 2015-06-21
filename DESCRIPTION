@@ -5,6 +5,7 @@ Version: 0.0.0.9000
 Date: 2013-12-08
 Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>
+Copyright: BondLab Technologies, Inc.
 Description: The analysis of mortgage (MBS) and asset backed securities (ABS) is complex.  
         The valuation framework requires the investor to develop interest rate, prepayment, 
         and cash flow models.  The valaution framework views MBS and ABS cash flow as a 

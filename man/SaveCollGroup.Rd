@@ -7,7 +7,13 @@
 SaveCollGroup(FileName = "character", DealName = "character",
   Group = numeric())
 }
+\arguments{
+\item{FileName}{A character string the FileName default to temp}
+
+\item{DealName}{A character string the DealName
+Note: Group is a counter for this function connection used in the CollateralGroup function.}
+}
 \description{
-A connection functon to the Groups folder
+Opens a connection to the Groups folder to save collateral group
 }
 

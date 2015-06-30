@@ -187,8 +187,8 @@
   #----------------------------------------------------------------------------------------
   #' A connection function used to assemble the deal tranches as a list
   #' 
-  #' Opens a connection to the Tranches folder and creates of list of deal tranches
-  #' used by the REMIC constructor function
+  #' Opens a helper connection to the Tranches folder for the REMIC constructor
+  #' used by the REMIC constructor function to aggregate Tranche data
   #' @param DealName A character string the Deal Name
   #' @param TrancheNumber A character string the tranche number
   #' @export
@@ -228,7 +228,10 @@
   #-----------------------------------------------------------------------------------------
   #' A connection functon to the Groups folder
   #' 
-  #' 
+  #' Opens a connection to the Groups folder to save collateral group
+  #' @param FileName A character string the FileName default to temp
+  #' @param DealName A character string the DealName
+  #' Note: Group is a counter for this function connection used in the CollateralGroup function.  
   #' @export
   SaveCollGroup <- function(FileName = "character", DealName = "character", Group = numeric()){
     connGroup <- gzfile(description = paste(system.file(package = "BondLab"),
@@ -236,3 +239,38 @@
     saveRDS(FileName, connGroup)
     close.connection(connGroup)
   }
+  
+  
+  #------------------------------------------------------------------------------------------
+  #' A connection function to the groups folder
+  #' 
+  #' The connection is a read helper to the aggregator CollateralGroup 
+  #' @param FileName A character string the FileName default to temp
+  #' @param DealName A character string the DealName
+  #' @param Group A numeric value the collateral group number.  
+  #' Note: Group is a counter for this function connection used in the CollateralGroup function
+  #' @export
+  REMICGroupConn <- function(DealName = "character", Group = numeric()){
+    REMICGrpConn <- gzfile(description = paste(system.file(package = "BondLab"),
+                                        "/Groups/",DealName,"_","Group","_",Group,".rds", sep = ""))
+  }
+  
+  #-----------------------------------------------------------------------------------------
+  #' A save connection to the RDME folder 
+  #' 
+  #' The function opens a connection to the RDME file to save
+  #' REMIC Month End Disclosure data
+  #' @param FileName A character string the FileName default to temp
+  #' @param DealName a character string the DealName
+  #' @param TrancheNumber a numeric value the tranche number
+  #' @export
+  SaveRDME <- function(FileName = "character", DealName = "character", TrancheNumber = numeric()){
+  connRDME <- gzfile(description = paste(system.file(package = "BondLab"),
+                      "/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = ""))
+  saveRDS(FileName, connRDME)
+  close(connRDME)
+  }
+  
+  
+  
+  

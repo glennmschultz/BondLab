@@ -12,7 +12,7 @@ SaveTranches(DealName = "character", TrancheNumber = "character")
 \item{TrancheNumber}{A character string the tranche number}
 }
 \description{
-Opens a connection to the Tranches folder and creates of list of deal tranches
-used by the REMIC constructor function
+Opens a helper connection to the Tranches folder for the REMIC constructor
+used by the REMIC constructor function to aggregate Tranche data
 }
 

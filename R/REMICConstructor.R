@@ -717,10 +717,11 @@ setMethod("initialize",
     
     for(i in 1 : NumberofGroups){
       
-      connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",i,".rds", sep = "")) 
-      Group <- readRDS(connGroup)
-      
-      GroupList <- append(GroupList, Group)
+     connGroup <- REMICGroupConn(DealName = DealName, Group = i)
+     #connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",i,".rds", sep = "")) 
+     
+     Group <- readRDS(connGroup)
+     GroupList <- append(GroupList, Group)
     }
     new("CollateralGroup",
         Group = GroupList)
@@ -795,9 +796,11 @@ setMethod("initialize",
                  Coupon = Coupon, 
                  Factor = Factor)
     
-    connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = ""))
-    saveRDS(temp, connRDME)
-    close(connRDME)
+    
+    SaveRDME(FileName = temp, DealName = DealName, TrancheNumber = TrancheNumber)
+    #connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = ""))
+    #saveRDS(temp, connRDME)
+    #close(connRDME)
     
   }
   

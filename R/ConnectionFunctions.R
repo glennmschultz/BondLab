@@ -220,8 +220,9 @@
   #' @param RAIDFile a character string the REMIC At Issuance Disclosure
   #' @export
   ReadRAID <- function(RAIDFile = "character"){  
-    connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
-    readRDS(RAIDFile, connRAID)
+    connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile,".rds", sep = ""))
+    RAID <- readRDS(connRAID)
+    return(RAID)
     close(connRAID)}
   
   #----------------------------------------------------------------------------------------

@@ -842,7 +842,7 @@ setMethod("initialize",
 #'@export
   RemicStructure <- function(DealName = "character"){
     
-    RAID <- ReadRAID(RAIDfile = DealName)
+    RAID <- ReadRAID(RAIDFile = DealName)
     #open connection to RAID files and instantiate RAID class
     #connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
     #RAID <- readRDS(connRAID)

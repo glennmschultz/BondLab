@@ -8,6 +8,35 @@
   # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
   # the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
+  
+  #------------------------------------------------------------------------------------
+  #' A connection function to the BondData calling MBS cusips
+  #' 
+  #' Opens a connection to the BondData folder to call MBS cusip data 
+  #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
+  #' @export
+  MBS <- function(MBS.id = "character"){
+                  MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                              "/BondData/", MBS.id, ".rds", sep = ""), open = "rb")          
+                  MBS <- readRDS(MBS.Conn)
+                  return(MBS)
+                  }
+    
+    #----------------------------------------------------------------------------------
+    #' A connection function to the BondData calling bond cusips
+    #' 
+    #' Opens a connection to BondData folder to call a standard bond
+    #' @param Bond.id A character string the bond's cusip number or id
+    #' @export
+    Bond <- function(Bond.id = "character")
+    {
+      Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                  "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
+      Bond <- readRDS(Bond.Conn)
+      return(Bond)
+    }  
+
+
   #--------------------------------------------------------------------------------
     #' A connection function to the RatesData folder to call swap curve data
     #' 
@@ -41,7 +70,7 @@
       #MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
       MtgRate <- readRDS(MtgRate.Conn)
                    }
-   
+ 
    #----------------------------------------------------------------------------------
    #' Function to calculate the updated loan to value
    #' 
@@ -61,7 +90,7 @@
                   }
    
   #-----------------------------------------------------------------------------------
-  #' A connection function to call the PrepaymentModel model tuning parameters
+  #' A connection function to read the PrepaymentModel model tuning parameters
   #' 
   #' A connection function to the mortgage rate function to call prepayment model tuning
   #' @param bond.id A character string the bond id or cusip currently bond.id is supported
@@ -71,37 +100,36 @@
                  ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                                   "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
                  ModelTune <- readRDS(ModelTune.Conn)    
-                 }
+   }
+   
+   #----------------------------------------------------------------------------------------
+   #' A connection function to sace the PrepaymentModel model tuning parameters
+   #' 
+   #' Opens a connection to the PrepaymentModel folder to save the prepayment model tuning
+   #' @param ModelFile A character string the model tuning default value is temp
+   #' @param ModelName A character string the model name used to reference the prepayment model
+   #' @export 
+   SaveModelTune <-function(ModelFile = "character", ModelName = "character"){
+     ModelTuneConn <-gzfile(description = paste(system.file(package = "BondLab"),
+                                                "/PrepaymentModel/", ModelName, ".rds", sep =""))
+     saveRDS(ModelFile, ModelTuneConn)
+     close.connection(ModelTuneConn)
+   }
 
-  #------------------------------------------------------------------------------------
-  #' A connection function to the BondData calling MBS cusips
-  #' 
-  #' Opens a connection to the BondData folder to call MBS cusip data 
-  #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
-  #' @export
-  MBS <- function(MBS.id = "character"){
-                  MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-                              "/BondData/", MBS.id, ".rds", sep = ""), open = "rb")          
-                  MBS <- readRDS(MBS.Conn)
-                  return(MBS)
-                  }
-    
-    #----------------------------------------------------------------------------------
-    #' A connection function to the BondData calling bond cusips
-    #' 
-    #' Opens a connection to BondData folder to call a standard bond
-    #' @param Bond.id A character string the bond's cusip number or id
-    #' @export
-    Bond <- function(Bond.id = "character")
-    {
-      Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-                  "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
-      Bond <- readRDS(Bond.Conn)
-      return(Bond)
-    }  
+   #---------------------------------------------------------------------------------------
+   #' A connection function to the interest rate scenario data folder
+   #' 
+   #' Opens connection to the Scenarios folder calling user defined scenarios by name
+   #' @param Scenario a character string the scenario used in the analysis
+   #' @export
+   ScenarioCall <- function(Scenario = "character"){
+     Scenario.Conn <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
+                                                 as.character(Scenario), ".rds", sep =""), open = "rb")
+     scenario <- readRDS(Scenario.Conn)
+     return(scenario)}
      
   #-------------------------------------------------------------------------------------
-  #' A connection function to the REMICData calls REMICs by deal
+  #' A read connection function to the REMICData folder
   #' 
   #' Opens a connection to the REMICData folder calling a REMIC Deal by name
   #' this function supports REMIC tranche analysis by providing the REMIC
@@ -114,8 +142,23 @@
                     "/REMICData/", remic.deal, ".rds", sep = ""), open = "rb")
       REMICDeal <- readRDS(REMIC.Conn)
       return(REMICDeal)
-                  }
-   
+    }
+    
+    #------------------------------------------------------------------------------------------
+    #' A save connection to the REMICData folder
+    #' 
+    #' Opens a connection to REMICData folder saving a REMIC Deal by name
+    #' this connection is used by the function REMIC structure
+    #' @param DealName a character string the Deal Name
+    #' @export
+    SaveREMIC <- function(DealName = "character"){
+      connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),
+                                              "/REMICData/", DealName, ".rds", sep = ""))
+      REMIC <- saveRDS(REMIC, connREMIC)
+      return(REMIC)
+      close(connREMIC)
+    }
+    
   #-------------------------------------------------------------------------------------
   #' A connection function to the REMICWaterFall source script
   #' 
@@ -144,17 +187,18 @@
       return(REMICSchedules) 
       }
    
-  #---------------------------------------------------------------------------------------
-  #' A connection function to the interest rate scenario data folder
-  #' 
-  #' Opens connection to the Scenarios folder calling user defined scenarios by name
-  #' @param Scenario a character string the scenario used in the analysis
-  #' @export
-  ScenarioCall <- function(Scenario = "character"){
-    Scenario.Conn <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
-                      as.character(Scenario), ".rds", sep =""), open = "rb")
-    scenario <- readRDS(Scenario.Conn)
-    return(scenario)}
+    #----------------------------------------------------------------------------------------
+    #' A connection function to the schedules folder
+    #' 
+    #' Opens a connection to the Schedules folder to save PAC or TAC schedules
+    #' @param DealName A character string the deal name
+    #' @param ScheduleFile A character string the name of the schedule file to save
+    #' @export
+    SaveSchedules <- function(DealName = "character", ScheduleFile = "character"){
+      connSched <- gzfile(description = paste(system.file(package = "BondLab"),
+                                              "/Schedules/", DealName,"_","Group","_",ScheduleFile@Group,"_", "Sch", ".rds", sep = ""))
+      saveRDS(ScheduleFile, connSched)
+    }
   
   #----------------------------------------------------------------------------------------
   #' A connection function to save the RAID information
@@ -166,6 +210,18 @@
   SaveRAID <- function(RAIDFile = "character"){  
     connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
     saveRDS(RAIDFile, connRAID)
+    close(connRAID)}
+  
+  #----------------------------------------------------------------------------------------
+  #' A connection function to read the RAID information
+  #' 
+  #' Opens a connection to the RAID folder and saves RAID information
+  #' REMIC at Issuance Disclouse data
+  #' @param RAIDFile a character string the REMIC At Issuance Disclosure
+  #' @export
+  ReadRAID <- function(RAIDFile = "character"){  
+    connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
+    readRDS(RAIDFile, connRAID)
     close(connRAID)}
   
   #----------------------------------------------------------------------------------------
@@ -198,32 +254,6 @@
     Tranches <- readRDS(connTranches)
     return(Tranches)}
   
-  #----------------------------------------------------------------------------------------
-  #' A connection function to the schedules folder
-  #' 
-  #' Opens a connection to the Schedules folder to save PAC or TAC schedules
-  #' @param DealName A character string the deal name
-  #' @param ScheduleFile A character string the name of the schedule file to save
-  #' @export
-  SaveSchedules <- function(DealName = "character", ScheduleFile = "character"){
-    connSched <- gzfile(description = paste(system.file(package = "BondLab"),
-                                  "/Schedules/", DealName,"_","Group","_",ScheduleFile@Group,"_", "Sch", ".rds", sep = ""))
-    saveRDS(ScheduleFile, connSched)
-  }
-  
-  #----------------------------------------------------------------------------------------
-  #' A connection function to the PrepaymentModel folder
-  #' 
-  #' Opens a connection to the PrepaymentModel folder to save the prepayment model tuning
-  #' @param ModelFile A character string the model tuning default value is temp
-  #' @param ModelName A character string the model name used to reference the prepayment model
-  #' @export 
-  SaveModelTune <-function(ModelFile = "character", ModelName = "character"){
-    ModelTuneConn <-gzfile(description = paste(system.file(package = "BondLab"),
-                                               "/PrepaymentModel/", ModelName, ".rds", sep =""))
-    saveRDS(ModelFile, ModelTuneConn)
-    close.connection(ModelTuneConn)
-  }
   
   #-----------------------------------------------------------------------------------------
   #' A connection functon to the Groups folder
@@ -231,6 +261,7 @@
   #' Opens a connection to the Groups folder to save collateral group
   #' @param FileName A character string the FileName default to temp
   #' @param DealName A character string the DealName
+  #' @param Group A numeric value the Group number
   #' Note: Group is a counter for this function connection used in the CollateralGroup function.  
   #' @export
   SaveCollGroup <- function(FileName = "character", DealName = "character", Group = numeric()){
@@ -245,7 +276,6 @@
   #' A connection function to the groups folder
   #' 
   #' The connection is a read helper to the aggregator CollateralGroup 
-  #' @param FileName A character string the FileName default to temp
   #' @param DealName A character string the DealName
   #' @param Group A numeric value the collateral group number.  
   #' Note: Group is a counter for this function connection used in the CollateralGroup function
@@ -271,6 +301,23 @@
   close(connRDME)
   }
   
+  #------------------------------------------------------------------------------------------
+  #' A read connection to RDME folder
+  #' 
+  #' The function opens a connection for the aggreation of factor data
+  #' which is used by the REMIC constructor
+  #' @param DealName a character string the Deal Name
+  #' @param TrancheNumber a numeric value the tranche number
+  #' @export 
+  RDMEFactor <- function(DealName = "character", TrancheNumber = numeric()){
+  connRDME <- gzfile(description = paste(system.file(package = "BondLab"),
+                      "/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = "")) 
+  ReadRDME <- readRDS(connRDME)
+  return(RDMEFactor)
+  close(connRDME)
+  }
+  
+   
   
   
   

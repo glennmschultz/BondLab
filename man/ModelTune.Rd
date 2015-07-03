@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{ModelTune}
 \alias{ModelTune}
-\title{A connection function to call the PrepaymentModel model tuning parameters}
+\title{A connection function to read the PrepaymentModel model tuning parameters}
 \usage{
 ModelTune(bond.id = "character")
 }

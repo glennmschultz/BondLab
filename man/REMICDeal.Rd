@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{REMICDeal}
 \alias{REMICDeal}
-\title{A connection function to the REMICData calls REMICs by deal}
+\title{A read connection function to the REMICData folder}
 \usage{
 REMICDeal(remic.deal = "character")
 }

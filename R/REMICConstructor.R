@@ -812,8 +812,14 @@ setMethod("initialize",
     
     for(i in 1 : NumberofTranches){
       
-      connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",i,"_","Factor",".rds", sep = "")) 
-      RDMEFactor <- readRDS(connRDME)
+      
+      RDMEFactor <- RDMEFactor(DealName = DealName, TrancheNumber = i)
+      #TrancesFactor <- function(DealName = "character", TrancheNumber = numeric()){
+      #connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = "")) 
+      #RDMEFactor <- readRDS(connRDME)
+      #return(RDMEFactor)
+      #close(connRDME)
+      #}
       
       RDMEList <- append(RDMEList, RDMEFactor)
     }
@@ -836,11 +842,12 @@ setMethod("initialize",
 #'@export
   RemicStructure <- function(DealName = "character"){
     
+    RAID <- readRDS(RAIDfile = DealName)
     #open connection to RAID files and instantiate RAID class
-    connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
-    RAID <- readRDS(connRAID)
+    #connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
+    #RAID <- readRDS(connRAID)
     #close connection to RAID
-    close(connRAID) 
+    #close(connRAID) 
     
     Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
@@ -864,9 +871,9 @@ setMethod("initialize",
           TrancheFactors = FactorData@FactorData
         )
     
-    connREMIC <- gzfile(description = paste("~/BondLab/REMICData/", DealName, ".rds", sep = ""))
-    saveRDS(REMIC, connREMIC)
-    close(connREMIC)
+    #connREMIC <- gzfile(description = paste("~/BondLab/REMICData/", DealName, ".rds", sep = ""))
+    #saveRDS(REMIC, connREMIC)
+    #close(connREMIC)
         
   }
   

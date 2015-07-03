@@ -11,8 +11,6 @@ REMICGroupConn(DealName = "character", Group = numeric())
 
 \item{Group}{A numeric value the collateral group number.
 Note: Group is a counter for this function connection used in the CollateralGroup function}
-
-\item{FileName}{A character string the FileName default to temp}
 }
 \description{
 The connection is a read helper to the aggregator CollateralGroup

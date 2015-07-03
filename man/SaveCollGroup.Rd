@@ -10,7 +10,9 @@ SaveCollGroup(FileName = "character", DealName = "character",
 \arguments{
 \item{FileName}{A character string the FileName default to temp}
 
-\item{DealName}{A character string the DealName
+\item{DealName}{A character string the DealName}
+
+\item{Group}{A numeric value the Group number
 Note: Group is a counter for this function connection used in the CollateralGroup function.}
 }
 \description{

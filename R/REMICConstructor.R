@@ -871,6 +871,7 @@ setMethod("initialize",
           TrancheFactors = FactorData@FactorData
         )
     
+    SaveREMIC(DealName = DealName)
     #connREMIC <- gzfile(description = paste("~/BondLab/REMICData/", DealName, ".rds", sep = ""))
     #saveRDS(REMIC, connREMIC)
     #close(connREMIC)

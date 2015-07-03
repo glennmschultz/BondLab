@@ -154,8 +154,7 @@
     SaveREMIC <- function(DealName = "character"){
       connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),
                                               "/REMICData/", DealName, ".rds", sep = ""))
-      REMIC <- saveRDS(REMIC, connREMIC)
-      return(REMIC)
+      REMIC <- saveRDS(DealName, connREMIC)
       close(connREMIC)
     }
     

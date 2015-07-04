@@ -151,10 +151,10 @@
     #' this connection is used by the function REMIC structure
     #' @param DealName a character string the Deal Name
     #' @export
-    SaveREMIC <- function(DealName = "character"){
+    SaveREMIC <- function(DealName = "character", file = "character"){
       connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),
                                               "/REMICData/", DealName, ".rds", sep = ""))
-      REMIC <- saveRDS(DealName, connREMIC)
+      saveRDS(file, connREMIC)
       close(connREMIC)
     }
     
@@ -181,7 +181,7 @@
       
       Sched.Conn <- gzfile(paste(system.file(package = "BondLab"),
                     "/Schedules/", as.character(REMIC.Tranche@DealName), 
-                    "_Group_", as.character(REMIC.Tranche@Group), "_Sch", ".rds"), open = "rb")
+                    "_Group_", as.numeric(REMIC.Tranche@Group), "_Sch", ".rds", sep = ""), open = "rb")
       REMICSchedules <- readRDS(Sched.Conn)
       return(REMICSchedules) 
       }
@@ -313,7 +313,7 @@
   connRDME <- gzfile(description = paste(system.file(package = "BondLab"),
                       "/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = "")) 
   ReadRDME <- readRDS(connRDME)
-  return(RDMEFactor)
+  return(ReadRDME)
   close(connRDME)
   }
   

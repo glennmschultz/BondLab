@@ -505,6 +505,12 @@ setMethod("initialize",
   # The function assembles multiple tranches associated with a deal 
   # building the tranche classes into a list
   
+  #' Aggregator Function for REMIC constructor
+  #' 
+  #' Aggregates Tranche data for REMIC constructor
+  #' @param NumberofTranches A numeric value the number of tranches in the deal
+  #' @param DealName A character string the Deal Name
+  #' @export
   Tranches <- function(NumberofTranches = numeric(), DealName = "character"){
     
     TrancheList <- list()
@@ -710,7 +716,13 @@ setMethod("initialize",
   #------------------------------------------------------------------------------------------
   # 3) aggregator function for the REMIC structure called by REMIC constructor
   # the function assembles multiple collateral groups can be extended to loan level
-
+  
+  #' A function to aggregate the collateral group information
+  #' 
+  #' The function is used by the REMIC Constructor
+  #' @param NumberofGroups A numeric value the number collateral groups
+  #' @param DealName A character string the Deal Name
+  #' @export
   CollateralGroup <- function(NumberofGroups = numeric(), DealName = "character"){
     
     GroupList <- list()
@@ -805,8 +817,13 @@ setMethod("initialize",
   }
   
 
-  # 3) aggregator function for tranche factor information called by REMIC contructor
-
+    # 3) aggregator function for tranche factor information called by REMIC contructor
+    #' A function to aggregate monthly updated factor data
+    #' 
+    #' Aggregator function used by the REMIC constructor to aggregate Monthly Factor Data
+    #' @param NumberofTranches A numeric value the Number of traches related to the collateral group
+    #' @param DealName A character string the Deal Name
+    #' @export
     RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
     RDMEList <- list()
     
@@ -844,14 +861,15 @@ setMethod("initialize",
     
     RAID <- ReadRAID(RAIDFile = DealName)
     #open connection to RAID files and instantiate RAID class
-    #connRAID <- gzfile(description = paste("~/BondLab/RAID/",DealName,".rds", sep = ""))
+    #connRAID <- gzfile(description = paste(system.file(package = "BondLab"), 
+    #                                       "/RAID/",DealName,".rds", sep = ""))
     #RAID <- readRDS(connRAID)
     #close connection to RAID
     #close(connRAID) 
     
     Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
-    CollateralGroup <- CollateralGroup(NumberofGroups = RAID@NumberofGroups, DealName = RAID@DealName)
+    CollateralGroupData <- CollateralGroup(NumberofGroups = RAID@NumberofGroups, DealName = RAID@DealName)
     FactorData <- RDMEData(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
     
     REMIC <-new("REMICStructure", 
@@ -867,12 +885,13 @@ setMethod("initialize",
           DealSize = RAID@DealSize,
           CollateralAmount = RAID@CollateralAmount,
           Tranches = Tranche@Tranches,
-          CollateralGroup = CollateralGroup@Group,
+          CollateralGroup = CollateralGroupData@Group,
           TrancheFactors = FactorData@FactorData
         )
     
-    SaveREMIC(DealName = DealName)
-    #connREMIC <- gzfile(description = paste("~/BondLab/REMICData/", DealName, ".rds", sep = ""))
+    SaveREMIC(DealName = DealName, file = REMIC)
+    #connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),
+    #                                        "/REMICData/", DealName, ".rds", sep = ""))
     #saveRDS(REMIC, connREMIC)
     #close(connREMIC)
         

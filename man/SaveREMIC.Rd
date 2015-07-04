@@ -4,7 +4,7 @@
 \alias{SaveREMIC}
 \title{A save connection to the REMICData folder}
 \usage{
-SaveREMIC(DealName = "character")
+SaveREMIC(DealName = "character", file = "character")
 }
 \arguments{
 \item{DealName}{a character string the Deal Name}

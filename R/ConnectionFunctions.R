@@ -150,6 +150,7 @@
     #' Opens a connection to REMICData folder saving a REMIC Deal by name
     #' this connection is used by the function REMIC structure
     #' @param DealName a character string the Deal Name
+    #' @param file a character string the REMIC file name given be constructor
     #' @export
     SaveREMIC <- function(DealName = "character", file = "character"){
       connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),

@@ -8,6 +8,8 @@ SaveREMIC(DealName = "character", file = "character")
 }
 \arguments{
 \item{DealName}{a character string the Deal Name}
+
+\item{file}{a character string the REMIC file name given be constructor}
 }
 \description{
 Opens a connection to REMICData folder saving a REMIC Deal by name

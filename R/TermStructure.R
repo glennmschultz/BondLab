@@ -57,7 +57,7 @@ setMethod("initialize",
 #' @importFrom lubridate day
 #' @importFrom lubridate month
 #' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
-#'@export TermStructure
+#' @export TermStructure
   TermStructure <- function(rates.data = "character", method = "character"){
   
   #function(trade.date = "character", method = "character")  

@@ -104,6 +104,7 @@
   term = term.mos
   pmt.factor = (1+note.rate)^term
   pmt = (orig.bal * pmt.factor) * (note.rate/(pmt.factor -1))
+  return(pmt)
 
   }
 
@@ -133,7 +134,7 @@
   disc.pmt =  note.rate * (1+note.rate)^(period-1)
   disc.prin = ((1+note.rate)^(term))-1
   Scheduled.Prin = balance *(disc.pmt/disc.prin)
-  Scheduled.Prin
+  return(Scheduled.Prin)
   }
 
   setGeneric("Sched.Prin", function(balance = numeric(),

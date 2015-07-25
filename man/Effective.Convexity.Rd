@@ -4,26 +4,20 @@
 \alias{Effective.Convexity}
 \title{A function to compute effective convexity}
 \usage{
-Effective.Convexity(Rate.Delta, cashflow, discount.rates, discount.rates.up,
-  discount.rates.dwn, t.period, proceeds)
+Effective.Convexity(Rate.Delta = numeric(), cashflow = vector(),
+  discount.rates = vector(), time.period = vector())
 }
 \arguments{
 \item{Rate.Delta}{A numeric value the interest rate shift in basis points}
 
-\item{cashflow}{A numeric vector of cash flow}
+\item{cashflow}{A numeric vector of cashflow}
 
 \item{discount.rates}{A numeric vector of the up discount rates}
 
-\item{discount.rates.up}{A numeric vector of the up discount rates}
-
-\item{discount.rates.dwn}{A numeric vector of the down discount rates}
-
-\item{t.period}{A numeric vector of the down discount rates}
-
-\item{proceeds}{A numeric valu the proceeds/value of the bond or MBS to the investor}
+\item{time.period}{A numeric vector of the down discount rates}
 }
 \description{
 Calculates effective convexity based on a discount vector (zero coupon)
-cash flow vector, and rate delta
+cashflow vector, and rate delta
 }
 

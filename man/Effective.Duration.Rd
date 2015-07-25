@@ -5,27 +5,19 @@
 \title{A function to compute effective duration}
 \usage{
 Effective.Duration(Rate.Delta = numeric(), cashflow = vector(),
-  discount.rates = vector(), discount.rates.up = vector(),
-  discount.rates.dwn = vector(), t.period = vector(),
-  proceeds = numeric())
+  discount.rates = vector(), time.period = vector())
 }
 \arguments{
 \item{Rate.Delta}{A numeric value the interest rate shift in basis points}
 
-\item{cashflow}{A numeric vector of cash flow}
+\item{cashflow}{A numeric vector of cashflow}
 
-\item{discount.rates}{A numeric vector of discount rates}
+\item{discount.rates}{A numeric vector of the discount rates}
 
-\item{discount.rates.up}{A numeric vector of the up discount rates}
-
-\item{discount.rates.dwn}{A numeric vector of the down discount rates}
-
-\item{t.period}{A numeric vector of the time period used for discounting}
-
-\item{proceeds}{A numeric value the proceeds/value of the bond or MBS to the investor}
+\item{time.period}{A numeric vector of the time period}
 }
 \description{
-Calculates effective duration based on a discount vector (zero coupon)
-cash flow vector, and rate delta
+Calculates the effective duration based on dscount vector (zero coupon)
+cashflow vector, and rate delta
 }
 

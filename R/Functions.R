@@ -256,64 +256,59 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
 
 #' A function to compute effective duration
 #' 
-#' Calculates effective duration based on a discount vector (zero coupon)
-#' cash flow vector, and rate delta
+#' Calculates the effective duration based on dscount vector (zero coupon)
+#' cashflow vector, and rate delta
 #' @param Rate.Delta A numeric value the interest rate shift in basis points
-#' @param cashflow A numeric vector of cash flow
-#' @param discount.rates A numeric vector of discount rates
-#' @param discount.rates.up A numeric vector of the up discount rates
-#' @param discount.rates.dwn A numeric vector of the down discount rates
-#' @param t.period A numeric vector of the time period used for discounting
-#' @param proceeds A numeric value the proceeds/value of the bond or MBS to the investor
-#' @export Effective.Duration
+#' @param cashflow A numeric vector of cashflow
+#' @param discount.rates A numeric vector of the discount rates
+#' @param time.period A numeric vector of the time period
+#' @export
   Effective.Duration <- function(Rate.Delta = numeric(), 
                                cashflow = vector(), 
                                discount.rates = vector(), 
-                               discount.rates.up = vector(), 
-                               discount.rates.dwn = vector(), 
-                               t.period = vector(), 
-                               proceeds = numeric()){
-  Price = proceeds/10
-  Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-  Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-  Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)  
-  (Price.UP - Price.DWN)/(2*Price*Rate.Delta)
+                               time.period = vector()){
+
+  discount.rates.up = discount.rates + Rate.Delta
+  discount.rates.dwn = discount.rates - Rate.Delta
+  Price.NC = sum((1/((1+discount.rates)^time.period)) * cashflow)
+  Price.UP = sum((1/((1+discount.rates.up)^time.period)) * cashflow)
+  Price.DWN = sum((1/((1+discount.rates.dwn)^time.period)) * cashflow)  
+  (Price.UP - Price.DWN)/(2*Price.NC*Rate.Delta)
   }
   
   setGeneric("Effective.Duration", function(Rate.Delta = numeric(), 
                                             cashflow = vector(), 
                                             discount.rates = vector(), 
-                                            discount.rates.up = vector(), 
-                                            discount.rates.dwn = vector(), 
-                                            t.period = vector(), 
-                                            proceeds = numeric())
+                                            time.period = vector())
     {standardGeneric("Effective.Duration")})
 
 #' A function to compute effective convexity
 #' 
 #' Calculates effective convexity based on a discount vector (zero coupon)
-#' cash flow vector, and rate delta
+#' cashflow vector, and rate delta
 #' @param Rate.Delta  A numeric value the interest rate shift in basis points
-#' @param cashflow A numeric vector of cash flow
+#' @param cashflow A numeric vector of cashflow
 #' @param discount.rates A numeric vector of the up discount rates
-#' @param discount.rates.up A numeric vector of the up discount rates
-#' @param discount.rates.dwn A numeric vector of the down discount rates
-#' @param t.period A numeric vector of the down discount rates
-#' @param proceeds A numeric valu the proceeds/value of the bond or MBS to the investor
+#' @param time.period A numeric vector of the down discount rates
 #' @export Effective.Convexity
-  Effective.Convexity <- function(Rate.Delta, 
-                                cashflow, 
-                                discount.rates, 
-                                discount.rates.up, 
-                                discount.rates.dwn, 
-                                t.period, 
-                                proceeds){
-  Price = proceeds/10
-  Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-  Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-  Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+  Effective.Convexity <- function(Rate.Delta = numeric(), 
+                                 cashflow = vector(), 
+                                 discount.rates = vector(),
+                                 time.period = vector()){
+  discount.rates.up = discount.rates + Rate.Delta
+  discount.rates.dwn = discount.rates - Rate.Delta
+  Price.NC = sum((1/((1+discount.rates)^time.period)) * cashflow)
+  Price.UP = sum((1/((1+discount.rates.up)^time.period)) * cashflow)
+  Price.DWN = sum((1/((1+discount.rates.dwn)^time.period)) * cashflow)
   
-  (Price.UP + Price.DWN + (2*Price))/(2*(Price*Rate.Delta)^2)
+  (Price.UP + Price.DWN - (2*Price.NC))/(2*Price.NC*(Rate.Delta^2))
   }
+  
+  
+  setGeneric("Effective.Convexity", function(Rate.Delta = numeric(), 
+                                            cashflow = vector(), 
+                                            discount.rates = vector(), 
+                                            time.period = vector())
+  {standardGeneric("Effective.Convexity")})
 
 

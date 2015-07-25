@@ -51,7 +51,7 @@
   #' @param price A numeric value the price of the bond
   #' @examples
   #' \dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000, 
-  #' settlement.date = "1/13/2013", price = 100)}
+  #' settlement.date = "1-13-2013", price = 100)}
   #' @export
   BondCashFlows <- function (bond.id = "character", 
                              principal = numeric(), 
@@ -68,10 +68,11 @@
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   
   # This function error traps bond input information
+  
   ErrorTrap(bond.id = bond.id, 
-            principal = principal, 
-            settlement.date = 
-            settlement.date, price = price)
+            principal = principal,
+            settlement.date = settlement.date,
+            price = price)
   
   #  Validate the price and coupon passed through the error trapping function
   #  This validates that the correct unit is passed into the Bond Cash Flow function

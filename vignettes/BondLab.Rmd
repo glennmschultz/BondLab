@@ -25,7 +25,7 @@ The percieved complexity of investing in strucutured products, like MBS, arise f
 
 1. Valuation techniques, interest rate models, whose goal is to simulate the economy.
 
-Bond Lab makes used of the following R packages: termstrc, lubridate, optimx.  To my knowledge Bond Lab is the first open source and objected oriented software provided for the analysis of mortgage and consumer asset backed securities.  The packages used by Bond Lab are open source and freely available on the CRAN repository.  Bond Lab although open source is not freely available to everyone.  The Bond Lab licensing agreement allows individuals and the academic community to download an use Bond Lab for personal and educational use.  Commerical use of Bond Lab is restricted and requires a commerical license which is available by contacting Bond Lab Technologies, Inc.
+Bond Lab makes used of the following R packages: termstrc, lubridate, optimx.  To my knowledge Bond Lab is the first open source and objected oriented software provided for the analysis of mortgage and consumer asset backed securities.  The packages used by Bond Lab are open source and freely available on the CRAN repository.  Bond Lab although open source is not freely available to everyone.  The Bond Lab licensing agreement allows individuals and the academic community to download and use Bond Lab for personal and educational use.  Commerical use of Bond Lab is restricted and requires a commerical license which is available by contacting Bond Lab Technologies, Inc.
 
 # Core Compentencies
 The analysis of mortgage and asset backed securities may be divided into four core competencies. These are:
@@ -52,18 +52,32 @@ The functions in BondLab related to term structure modeling are:
 **CalibrateCIR** 
 
 The function calibrates the single factor Cox, Ingersol, Ross term structure model to the swap rate data.  The function is not part of the package termstrc.  However, the function calls cfmatrix and matmatrix from the package termstrc.
+```r
+CalibrateCIR(trade.date = character, sigma = numeric())
+```
 
 **CIRBondPrice** 
 
 The function estimates bond prices given a simulated short-term rate.
-
+```r
+CIRBondPrice(shortrate = vector(), T = numeric(), step = numeric(),
+kappa = numeric(), lambda = numeric(), sigma = numeric(),
+theta = numeric(), result = character)
+```  
 **SwapRateData** 
 
 The function iterates over the RatesData.csv file and creates a yield curve object for each date.
+```r
+SwapRateData(datafile = "character", maturityvector = numeric())
+```
 
 **TermStructure**  
 
-The function is a wrapper around the package termstrc allowing the user to call a yield curve referencing it by date.  Yield curve data is stored in the RatesData directory and the yield curve data object is made by the SwapRateData function.
+A constructor function wrapper around the package termstrc allowing the user to call a yield curve referencing it by date.Yield curve data is stored in the RatesData directory and the yield curve data object is made by the SwapRateData function.  TermStructure creates the object TermStructure  
+
+```r
+TermStructure(rates.data = "01-10-2013", method = "ns")
+```
 
 #Cash Flow Modeling
 Central to the valuation and structuring of mortgage and consumer ABS is cash flow modeling.  Cash flow modeling estimates the income stream (principal and interest) the investor expects to receive over the life of the investment.  Cash flow modeling is also central to structuring.  Structuring mortgage and consumer ABS often involves the division of principal and interest.
@@ -110,9 +124,9 @@ Sched.Prin(balance = 100000, note.rate = .045, term.mos = 360, period = 2)
 
 Mortgage CashFlow depends on the objects MBSDetail, PrepaymentAssumption, etc.  To examine an example call using MortgageCashFlow type getMethod(MBSAnalytics)
 ```r
-  MortgageCashFlow(bond.id = "character", original.bal = numeric(),
-  settlement.date = "character", price = numeric(),
-  PrepaymentAssumption = "character")
+MortgageCashFlow(bond.id = "character", original.bal = numeric(),
+settlement.date = "character", price = numeric(),
+PrepaymentAssumption = "character")
 ```
 
 **REMICCashFlow**
@@ -120,15 +134,54 @@ Mortgage CashFlow depends on the objects MBSDetail, PrepaymentAssumption, etc.  
 REMIC CashFlow depends on a minimum MBSDetail, PrepaymentAssumption, etc.To examine an example call using REMICCashFlow type getMethod(REMICCashFlow)
 
 ```r
-  REMICCashFlow(bond.id = "character", trade.date = "character",
-  settlement.date = "character", collateral.price = numeric(),
-  tranche.price = numeric(), PrepaymentAssumption = "character", ...,
-  begin.cpr = numeric(), end.cpr = numeric(),
-  seasoning.period = numeric(), CPR = numeric(),
-  KeyRateTermStructure = NULL)
+REMICCashFlow(bond.id = "character", trade.date = "character",
+settlement.date = "character", collateral.price = numeric(),
+tranche.price = numeric(), PrepaymentAssumption = "character", ...,
+begin.cpr = numeric(), end.cpr = numeric(),
+seasoning.period = numeric(), CPR = numeric(),
+KeyRateTermStructure = NULL)
 ```
 ##Prepayment Modeling 
 Borrowers hold the option to either prepay their loan early or default.  Prepayment models attempt to provide a representation of the expected re-payment, delinquency, default rate, and loss severity rate of a pool of securtized loans.  A prepayment model is an intregal part of cash flow modeling.  BondLab models both voluntary prepayments (as an additive model) and involuntary prepayments (as a multiplicative model).  The intention of such design (additive and multiplicative) is to illustrate each technique.  The additive voluntary repayment will be replaced by a multiplicative spline based model which is currently under development.  The function name will remain and the change to the user will be transparent.
+
+The BondLab prepayment and default model may be tuned to specific collateral.  The model tune is called by reference from the MBS details object.
+ 
+```r
+MakeModelTune(ModelName = "FH30.Generic",
+ TurnoverRate = 0.06,
+ Turnover.alpha = 1.0,
+ Turnover.beta = 0.87,
+ Turnover.theta = 0.192,
+ Seasonality.alpha = 0.15,
+ Seasonality.theta = 12.0,
+ Incentive.Fast.theta.1 = 0.025,
+ Incentive.Fast.theta.2 = 0.019,
+ Incentive.Fast.beta = -4.0,
+ Incentive.Fast.eta = 1.0,
+ Incentive.Slow.theta.1 = 0.001,
+ Incentive.Slow.theta.2 = 0.004,
+ Incentive.Slow.beta = -1.0,
+ Incentive.Slow.eta = 0.5,
+ Burnout.beta.1 = -.01,
+ Burnout.beta.2 = -.01,
+ BeginCDR = 0,
+ PeakCDR = 2.75,
+ EndCDR = 1.5,
+ PeakMonth = 42,
+ PlateauMonths = 30,
+ EndMonth = 120,
+ MinOrigLTV = 80,
+ MaxOrigLTV = 90,
+ MinOrigMultiplier = 0.30,
+ MaxOrigMultiplier = 1.25,
+ UpdatedLTV.beta = 5,
+ SATO.beta = .8)
+```
+
+## Structuring
+
+The basic input is the mortgage loan.  In the agency MBS the most basic structure is the pass-through seccurity.  A MBS pass-through security represents a pool of mortgage loans and, as its name implies, passes through principal and interest payments to the investor.
+
 
 
 

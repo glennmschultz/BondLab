@@ -6,7 +6,7 @@
 #' @param cashflow A numeric vector of cashflow
 #' @param discount.rates A numeric vector of the discount rates
 #' @param time.period A numeric vector of the time period
-#' @param type A character vector "duration" or "convexity"
+#' @param type A character vector to specify either duration or convexity
 #' @export
 Effective.Measure <- function(Rate.Delta = numeric(), 
                                cashflow = vector(), 

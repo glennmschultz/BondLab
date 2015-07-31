@@ -16,7 +16,7 @@ Effective.Measure(Rate.Delta = numeric(), cashflow = vector(),
 
 \item{time.period}{A numeric vector of the time period}
 
-\item{type}{A character vector "duration" or "convexity"}
+\item{type}{A character vector to specify either duration or convexity}
 }
 \description{
 Calculates the effective duration and based on discount vector (zero coupon)

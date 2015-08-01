@@ -5,7 +5,7 @@
 \title{A function to compute effective duration and convexity}
 \usage{
 Effective.Measure(Rate.Delta = numeric(), cashflow = vector(),
-  discount.rates = vector(), time.period = vector())
+  discount.rates = vector(), time.period = vector(), type = "character")
 }
 \arguments{
 \item{Rate.Delta}{A numeric value the interest rate shift in basis points}

@@ -29,5 +29,6 @@ Effective.Measure <- function(Rate.Delta = numeric(),
 setGeneric("Effective.Measure", function(Rate.Delta = numeric(), 
                                           cashflow = vector(), 
                                           discount.rates = vector(), 
-                                          time.period = vector())
+                                          time.period = vector(),
+                                          type = "character")
 {standardGeneric("Effective.Measure")})

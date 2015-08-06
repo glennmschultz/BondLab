@@ -89,11 +89,19 @@ MtgTermStructure <- function(bond.id = "character",
   proceeds = (principal * price) + accrued 
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
-  # this insures that stored values will not be wrongly be passed to the funtion
+  # this insures that stored values will not be wrongly be passed to the function
   # internal functions used to compute key rate duration and convexity
   
-  EffectiveMeasures <- function(rate.delta , cashflow, cashflow.up, cashflow.dwn, 
-                                discount.rates, discount.rates.up, discount.rates.dwn, t.period, proceeds, type){
+  EffectiveMeasures <- function(rate.delta , 
+                                cashflow, 
+                                cashflow.up, 
+                                cashflow.dwn, 
+                                discount.rates, 
+                                discount.rates.up, 
+                                discount.rates.dwn, 
+                                t.period, 
+                                proceeds, 
+                                type){
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
     Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)

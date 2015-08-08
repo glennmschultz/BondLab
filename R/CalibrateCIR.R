@@ -22,7 +22,7 @@
   #' @param sigma the volatility in absolute percent the annualized value is sigma times sqrt(240)
   #' @export  
   CalibrateCIR <- function(trade.date = character, 
-                         sigma = numeric()){
+                              sigma = numeric()){
  
   rates.data <- Rates(trade.date = trade.date)  
   shortrate = as.numeric(rates.data[1,2])/100
@@ -90,16 +90,20 @@
   CIR.CF.Matrix <- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
   CIR.Mat.Matrix <- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
   
-  #Objective function
+  #Objective function for the origin to be inaccessable the followign condition must be met
+  # 2 * kappa * theta <= sigma^2  
   CIRTune <- function(param = numeric(), 
                       shortrate = numeric(), 
-                      sigma = .015, 
+                      sigma = sigma, 
                       cfmatrix = matrix(), 
                       matmatrix = matrix()){
     
     kappa =  param[1]
     lambda = param[2]
     theta =  param[3]
+    
+    # gamma masked as lambda per Ben Bolker email
+    lambda = (lambda + sigma^2)/(2 * kappa) 
 
     Disc <- CIRBondPrice(kappa = kappa, 
                          lambda = lambda, 

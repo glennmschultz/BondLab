@@ -47,7 +47,8 @@ CIRSim <- function(shortrate = numeric(),
     #Populate the first element of each path with the short rate
     #Euler discretization of the CIR model.  The discretization causes negative interest rates when 
     #when the short term rate approaches the origin.  
-    #To solve this problem take the absolute value of square root process  
+    #To solve this problem take the absolute value of square root process
+    #Still at high volatility the model occasionally produces negative interest rates
     (kappa * (theta - simulation[i-1,j]) * dt) + (sigma * sqrt(abs(simulation[i-1,j])) * rnorm(1,0,1))}  
   
   #Matrix to hold the short rate paths - 

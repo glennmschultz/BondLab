@@ -83,6 +83,9 @@ Mortgage.OAS <- function(bond.id = "character",
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
   
+  # gamma masked as lambda per Ben Bolker email
+  lambda = (lambda + sigma^2)/(2 * kappa) 
+
   
   #Calculate the number of cashflows that will be paid from settlement date 
   #to the last pmt date (used end date as next pmdt date for this)
@@ -123,10 +126,12 @@ Mortgage.OAS <- function(bond.id = "character",
   #==== Compute Option Adjusted Spread ==========================================
   #For simulation pass T = mortgage term if the number of paths = 1 then volatility = 0 
   Simulation <- CIRSim(shortrate = short.rate, 
-                       kappa = kappa, theta = theta, 
+                       kappa = kappa, 
+                       theta = theta, 
                        T = ((num.periods-1) / months.in.year), 
                        step = (1/months.in.year), 
-                       sigma = sigma, N = paths)
+                       sigma = sigma, 
+                       N = paths)
   
   #number of rows in the simulation will size the arrays
   num.sim <- nrow(Simulation)

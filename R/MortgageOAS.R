@@ -151,8 +151,6 @@ Mortgage.OAS <- function(bond.id = "character",
   OAS.CashFlow <- array(data = NA, c(num.sim,paths))
   OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
   
-  #uncomment this to get prepayment vectors
-  #prepayout <- NULL
   
   for(j in 1:paths){
     
@@ -186,7 +184,7 @@ Mortgage.OAS <- function(bond.id = "character",
     #When sigma is zero the simulated spot rates are compounded forward rates and the two and ten year
     #rates are calcualted from the calculated spot rate rate curve
     
-    #if (TermStructure != "TRUE")
+   
       OAS.Term.Structure <- new("TermStructure",
                                 tradedate = as.character(trade.date),
                                 period = as.numeric(sim.cube[,3]),

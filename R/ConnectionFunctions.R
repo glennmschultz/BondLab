@@ -19,6 +19,7 @@
                   MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                               "/BondData/", MBS.id, ".rds", sep = ""), open = "rb")          
                   MBS <- readRDS(MBS.Conn)
+                  on.exit(close.connection(MBS.Conn))
                   return(MBS)
                   }
     
@@ -28,11 +29,11 @@
     #' Opens a connection to BondData folder to call a standard bond
     #' @param Bond.id A character string the bond's cusip number or id
     #' @export
-    Bond <- function(Bond.id = "character")
-    {
+    Bond <- function(Bond.id = "character"){
       Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                   "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
       Bond <- readRDS(Bond.Conn)
+      on.exit(close.connection(Bond.Conn))
       return(Bond)
     }  
 
@@ -44,13 +45,12 @@
     #' @param trade.date A character string the trade date
     #' @export Rates
     Rates <- function(trade.date = "character"){
-      
       Rates.Conn <-gzfile(description = paste(system.file(package = "BondLab"),
                   "/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
-                  
-                  Rates <- readRDS(Rates.Conn)
-                  return(Rates)
-                  }
+      on.exit(close.connection(Rates.Conn))            
+      Rates <- readRDS(Rates.Conn)
+      return(Rates)
+      }
     setGeneric("Rates", function(trade.date = "character")
       {standardGeneric("Rates")})
    
@@ -64,12 +64,12 @@
     #' MtgRate()}
     #' @export
    MtgRate <- function(){
-     
      MtgRate.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                       "/PrepaymentModel/MortgageRate.rds", sep = ""), open = "rb")
-      #MtgRate.Conn <- gzfile("~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
       MtgRate <- readRDS(MtgRate.Conn)
-                   }
+      on.exit(close.connection(MtgRate.Conn))
+      return(MtgRate)
+    }
  
    #----------------------------------------------------------------------------------
    #' Function to calculate the updated loan to value
@@ -82,7 +82,6 @@
    #' ULTV()}
    #' @export
    ULTV <- function(){
-    
      ULTV.Conn <- gzfile(description = paste(system.file(package = "BondLab"), 
                   "/PrepaymentModel/UpdatedLTV.rds", sep= ""), open = "rb")
      
@@ -95,11 +94,12 @@
   #' A connection function to the mortgage rate function to call prepayment model tuning
   #' @param bond.id A character string the bond id or cusip currently bond.id is supported
   #' @export
-   ModelTune <- function(bond.id = "character")
-                 {
+   ModelTune <- function(bond.id = "character"){
                  ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                                   "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
-                 ModelTune <- readRDS(ModelTune.Conn)    
+                 ModelTune <- readRDS(ModelTune.Conn)
+                 on.exit(close.connection(ModelTune.Conn))
+                 return(ModelTune)
    }
    
    #----------------------------------------------------------------------------------------

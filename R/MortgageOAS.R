@@ -23,7 +23,6 @@
 #'  @param price A numeric value the price of the pass through
 #'  @param sigma A numeric value the volatility assumption (not annualized)
 #'  @param paths A numeric value the number of paths
-#'  @param TermStructure A character string the term strucutre model used  
 #'  @importFrom lubridate %m+%
 #'  @export Mortgage.OAS
 Mortgage.OAS <- function(bond.id = "character", 
@@ -32,8 +31,7 @@ Mortgage.OAS <- function(bond.id = "character",
                          original.bal = numeric(),
                          price = numeric(), 
                          sigma = numeric(), 
-                         paths = numeric(), 
-                         TermStructure = "logical"
+                         paths = numeric()
                          ){
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
@@ -174,7 +172,7 @@ Mortgage.OAS <- function(bond.id = "character",
                                            T = 2, step = 0, 
                                            result = "y") * 100)
     
-    sim.cube[,7] <- as.vector(CIRBondPrice(shortrate = Simulation[, j], 
+    sim.cube[,7] <- as.vector(CIRBondPrice(shortrate = as.numeric(Simulation[, j]), 
                                            kappa = kappa, 
                                            lambda = lambda, 
                                            theta = theta, 
@@ -188,7 +186,7 @@ Mortgage.OAS <- function(bond.id = "character",
     #When sigma is zero the simulated spot rates are compounded forward rates and the two and ten year
     #rates are calcualted from the calculated spot rate rate curve
     
-    if (TermStructure != "TRUE")
+    #if (TermStructure != "TRUE")
       OAS.Term.Structure <- new("TermStructure",
                                 tradedate = as.character(trade.date),
                                 period = as.numeric(sim.cube[,3]),
@@ -198,15 +196,6 @@ Mortgage.OAS <- function(bond.id = "character",
                                 TwoYearFwd = as.numeric(sim.cube[,6]),
                                 TenYearFwd = as.numeric(sim.cube[,7]))
     
-    else
-      OAS.Term.Structure <- new("TermStructure",
-                                tradedate = as.character(as.Date(trade.date, "%m-%d-%Y")),
-                                period = as.numeric(sim.cube[,1]),
-                                date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
-                                spotrate = as.numeric(sim.cube[,5]) * 100,
-                                forwardrate = as.numeric(Simulation[,j] * 100),
-                                TwoYearFwd = as.numeric(sim.cube[,6]),
-                                TenYearFwd = as.numeric(sim.cube[,7]))
     
     Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
                                        TermStructure = OAS.Term.Structure, 
@@ -298,7 +287,7 @@ Mortgage.OAS <- function(bond.id = "character",
   # In reality the spread to the curve will be based on the pricing speed used.
   # This is a good check but in reality the spread to the curve must be calculated in the PassThrough OAS and passed to 
   # ZeroVolatility Object
-  #if (paths == 1) {                                   
+                                  
     InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                                 as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
     
@@ -306,8 +295,7 @@ Mortgage.OAS <- function(bond.id = "character",
                        predict(InterpolateCurve, MtgCashFlow@WAL ))/100
 
   
-  if (TermStructure != "TRUE")      
-  
+     
     new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),
@@ -319,8 +307,6 @@ Mortgage.OAS <- function(bond.id = "character",
        PriceDist = OAS.Out[,5])
 
   
-    else 
-      OAS.Term.Structure
 }
 
   setGeneric("Mortgage.OAS",function(bond.id = "character", 
@@ -329,6 +315,5 @@ Mortgage.OAS <- function(bond.id = "character",
                                      original.bal = numeric(),
                                      price = numeric(), 
                                      sigma = numeric(), 
-                                     paths = numeric(), 
-                                     TermStructure = "logical") 
+                                     paths = numeric()) 
     {standardGeneric("Mortgage.OAS")})

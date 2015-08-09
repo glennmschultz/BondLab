@@ -6,8 +6,7 @@
 \usage{
 Mortgage.OAS(bond.id = "character", trade.date = "character",
   settlement.date = "character", original.bal = numeric(),
-  price = numeric(), sigma = numeric(), paths = numeric(),
-  TermStructure = "logical")
+  price = numeric(), sigma = numeric(), paths = numeric())
 }
 \arguments{
 \item{bond.id}{A character string the bond id or cusip number}
@@ -23,8 +22,6 @@ Mortgage.OAS(bond.id = "character", trade.date = "character",
 \item{sigma}{A numeric value the volatility assumption (not annualized)}
 
 \item{paths}{A numeric value the number of paths}
-
-\item{TermStructure}{A character string the term strucutre model used}
 }
 \description{
 Pass through OAS engine

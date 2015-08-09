@@ -192,7 +192,7 @@ PassThroughOAS <- function(bond.id = "character",
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   bond.id <- MBS(MBS.id = as.character(bond.id))
-  Burnout = bond.id@Burnout
+  Burnout <- bond.id@Burnout
   
   #Call the desired curve from rates data folder
   rates.data <- Rates(trade.date = trade.date)
@@ -204,16 +204,96 @@ PassThroughOAS <- function(bond.id = "character",
   #Call Prepayment Model Tuning Parameters
   ModelTune <- ModelTune(bond.id = bond.id)
   
+  #This section begins standard bond analysis based on the term structure fit from
+  #The CIR Model Term Structure 0 volatiltiy assumption
+  issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
+  start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
+  end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
+  lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+  nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+  coupon = bond.id@Coupon
+  frequency = bond.id@Frequency
+  delay = bond.id@PaymentDelay
+  factor = bond.id@MBSFactor
+  settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+  
+  pmtdate.interval = months.in.year/frequency
+  
+  #Compute the payment dates 
+  pmtdate = as.Date(c(if(settlement.date == issue.date) 
+  {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
+  else 
+  {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, 
+                                          "months"))}), "%m-%d-%Y") + delay
+  
+  time.period <- BondBasisConversion(issue.date = issue.date, 
+                                    start.date = start.date, 
+                                    end.date = end.date, 
+                                    settlement.date = settlement.date,
+                                    lastpmt.date = lastpmt.date, 
+                                    nextpmt.date = pmtdate)
+  
+  #Compute the payment dates 
+  pmtdate = as.Date(c(if(settlement.date == issue.date) 
+  {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
+  else 
+  {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, 
+                                          "months"))}), "%m-%d-%Y") + delay
+  
+  #Count the number of cashflows 
+  #num.periods is the total number of cashflows to be received
+  #num.period is the period in which the cashflow is received
+  num.periods = length(time.period)
+  num.period = seq(1:num.periods)
+  
   #Call OAS Term Strucuture to Pass to the Prepayment Model 
-  #- upgrade this function for 40-years to match termstrc for key rate duration function
-  TermStructure <- Mortgage.OAS(bond.id = bond.id@ID, 
-                                trade.date = trade.date, 
-                                settlement.date = settlement.date, 
-                                original.bal = original.bal, 
-                                price = price, 
-                                sigma = sigma, 
-                                paths = 1,
-                                TermStructure = TRUE)
+
+  Market.Fit <- CalibrateCIR(trade.date = trade.date, sigma = sigma)
+  kappa  = Market.Fit$p1
+  lambda = Market.Fit$p2
+  theta  = Market.Fit$p3
+  
+  #gamma masked as lambda per Ben Bolker email
+  lambda = (lambda + sigma^2)/(2 * kappa) 
+  
+  Sim.Rate <- CIRSim(shortrate = short.rate,
+                      kappa = kappa,
+                      theta = theta,
+                      T = ((num.periods-1) / months.in.year),
+                      step = 1/months.in.year,
+                      sigma = 0,
+                      N = 1)
+  
+  #Compute the continuously compounded rate
+  Compounded.Rate <- cumprod(1 + Sim.Rate)
+  
+  #Compute the Spot Rate
+  Spot.Rate <- (((Compounded.Rate ^ (1/ time.period))^(1/months.in.year))-1)
+  Two.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
+                                      kappa = kappa, 
+                                      lambda = lambda, 
+                                      theta = theta, sigma = sigma, 
+                                      T = 2, step = 0, 
+                                      result = "y") * 100)
+  
+  Ten.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
+                                      kappa = kappa, 
+                                      lambda = lambda, 
+                                      theta = theta, 
+                                      sigma = sigma, 
+                                      T = 10, 
+                                      step = 0, 
+                                      result = "y") * 100)
+
+  TermStructure <- new("TermStructure",
+                       tradedate = as.character(trade.date),
+                       period = as.numeric(time.period),
+                       date = as.character(as.Date(pmtdate, origin = "1970-01-01")),
+                       spotrate = as.numeric(Spot.Rate),
+                       forwardrate = as.numeric(Sim.Rate),
+                       TwoYearFwd = as.numeric(Two.Year.Fwd),
+                       TenYearFwd = as.numeric(Ten.Year.Fwd))
+  
   
   #Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, 
@@ -235,7 +315,9 @@ PassThroughOAS <- function(bond.id = "character",
   #This is done with the MtgTermStructureFunction this creates the class BondTermStructure
   #MortgageTermStructure <- MtgTermStructure(bond.id = MortgageCashFlow, original.bal = original.bal, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
   #settlement.date = settlement.date, principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
+  #End of 0 volatility term structure fit analysis
   
+  #This section begins the OAS analysis
   MortgageOAS  <- Mortgage.OAS(bond.id = bond.id@ID, 
                                trade.date = trade.date, 
                                settlement.date = settlement.date, 

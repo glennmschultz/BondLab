@@ -81,9 +81,6 @@ Mortgage.OAS <- function(bond.id = "character",
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
   
-  # gamma masked as lambda per Ben Bolker email
-  lambda = (lambda + sigma^2)/(2 * kappa) 
-
   
   #Calculate the number of cashflows that will be paid from settlement date 
   #to the last pmt date (used end date as next pmdt date for this)

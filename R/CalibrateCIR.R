@@ -103,7 +103,7 @@
     theta =  param[3]
     
     # gamma masked as lambda per Ben Bolker email
-    lambda = (lambda + sigma^2)/(2 * kappa) 
+    #lambda = (lambda + sigma^2)/(2 * kappa) 
 
     Disc <- CIRBondPrice(kappa = kappa, 
                          lambda = lambda, 
@@ -118,11 +118,11 @@
   }
   
   # Fit the model to the market   
-  fit <- optimx(par = c(.1, .003, .03), 
+  fit <- optimx(par = c(.05, .05, .01), 
                 fn = CIRTune, 
                 method = "L-BFGS-B",
-                lower = rep(.001,3),
-                upper = rep(1, 3), 
+                lower = c(.001, .001, .001),
+                upper = c(.5, .1, .2) , 
                 shortrate = shortrate,
                 sigma = sigma,
                 cfmatrix = CIR.CF.Matrix, 

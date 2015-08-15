@@ -48,25 +48,25 @@ CIRBondPrice <- function(shortrate = vector(),
   if (missing(kappa))
     stop("Need to specify kappa.")
   
-  if (kappa < 0 | kappa > 1)
+  if (kappa < 0)
     stop("No valid kappa specified.")
   
   if (missing(lambda))
     stop("Need to specify lambda")
   
-  if (lambda < 0 | lambda > 1)
+  if (lambda < 0)
     stop("No valid lambda specified.")
   
   if (missing(sigma))
     stop("Need to specify sigma")
   
-  if (sigma < 0 | sigma > 1)
+  if (sigma < 0)
     stop("No valid sigma specified.")
   
   if (missing(theta))
     stop("Need to specify theta")
   
-  if (theta < 0 | theta > 1)
+  if (theta < 0 )
     stop("No valid theta specified.")
   
   if(missing(result))

@@ -22,7 +22,8 @@
                   on.exit(close.connection(MBS.Conn))
                   return(MBS)
                   }
-    
+    setGeneric("MBS", function(MBS.id = "character")
+      {standardGeneric("MBS")})
     #----------------------------------------------------------------------------------
     #' A connection function to the BondData calling bond cusips
     #' 
@@ -35,7 +36,9 @@
       Bond <- readRDS(Bond.Conn)
       on.exit(close.connection(Bond.Conn))
       return(Bond)
-    }  
+    }
+    setGeneric("Bond", function(Bond.id = "character")
+    {standardGeneric("Bond")})
 
 
   #--------------------------------------------------------------------------------
@@ -84,8 +87,9 @@
    ULTV <- function(){
      ULTV.Conn <- gzfile(description = paste(system.file(package = "BondLab"), 
                   "/PrepaymentModel/UpdatedLTV.rds", sep= ""), open = "rb")
-     
      ULTV <- readRDS(ULTV.Conn)
+     on.exit(close.connection(ULTV.Conn))
+     return(ULTV)
                   }
    
   #-----------------------------------------------------------------------------------
@@ -111,9 +115,9 @@
    #' @export 
    SaveModelTune <-function(ModelFile = "character", ModelName = "character"){
      ModelTuneConn <-gzfile(description = paste(system.file(package = "BondLab"),
-                                                "/PrepaymentModel/", ModelName, ".rds", sep =""))
+                                    "/PrepaymentModel/", ModelName, ".rds", sep =""))
+    on.exit(close.connection(ModelTuneConn))
      saveRDS(ModelFile, ModelTuneConn)
-     close.connection(ModelTuneConn)
    }
 
    #---------------------------------------------------------------------------------------
@@ -124,8 +128,9 @@
    #' @export
    ScenarioCall <- function(Scenario = "character"){
      Scenario.Conn <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
-                                                 as.character(Scenario), ".rds", sep =""), open = "rb")
+                              as.character(Scenario), ".rds", sep =""), open = "rb")
      scenario <- readRDS(Scenario.Conn)
+     on.exit(close.connection(Scenario.Conn))
      return(scenario)}
      
   #-------------------------------------------------------------------------------------
@@ -141,6 +146,7 @@
       REMIC.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                     "/REMICData/", remic.deal, ".rds", sep = ""), open = "rb")
       REMICDeal <- readRDS(REMIC.Conn)
+      on.exit(close.connection(REMIC.Conn))
       return(REMICDeal)
     }
     
@@ -155,8 +161,8 @@
     SaveREMIC <- function(DealName = "character", file = "character"){
       connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),
                                               "/REMICData/", DealName, ".rds", sep = ""))
+      on.exit(close.connection(connREMIC))
       saveRDS(file, connREMIC)
-      close(connREMIC)
     }
     
   #-------------------------------------------------------------------------------------
@@ -166,8 +172,9 @@
   #' script by deal name.  This function supports REMIC tranche analysis
   #' @param  deal.name A character string the REMIC deal name
   #' @export  
-   REMICWaterFall <- function(deal.name = "character"){
-    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "")}
+    REMICWaterFall <- function(deal.name = "character"){
+    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "")
+    on.exit(close.connection(REMICWaterFall))}
    
   #------------------------------------------------------------------------------------- 
   #' A connection function to the REMICSchedules Data calls REMIC structuring element
@@ -184,6 +191,7 @@
                     "/Schedules/", as.character(REMIC.Tranche@DealName), 
                     "_Group_", as.numeric(REMIC.Tranche@Group), "_Sch", ".rds", sep = ""), open = "rb")
       REMICSchedules <- readRDS(Sched.Conn)
+      on.exit(close.connection(Sched.Conn))
       return(REMICSchedules) 
       }
    
@@ -196,7 +204,8 @@
     #' @export
     SaveSchedules <- function(DealName = "character", ScheduleFile = "character"){
       connSched <- gzfile(description = paste(system.file(package = "BondLab"),
-                                              "/Schedules/", DealName,"_","Group","_",ScheduleFile@Group,"_", "Sch", ".rds", sep = ""))
+                "/Schedules/", DealName,"_","Group","_",ScheduleFile@Group,"_", "Sch", ".rds", sep = ""))
+      on.exit(close.connection(connSched))
       saveRDS(ScheduleFile, connSched)
     }
   
@@ -209,8 +218,9 @@
   #' @export
   SaveRAID <- function(RAIDFile = "character"){  
     connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
+    on.exit(close.connection(conn.RAID))
     saveRDS(RAIDFile, connRAID)
-    close(connRAID)}
+    }
   
   #----------------------------------------------------------------------------------------
   #' A connection function to read the RAID information
@@ -222,8 +232,9 @@
   ReadRAID <- function(RAIDFile = "character"){  
     connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile,".rds", sep = ""))
     RAID <- readRDS(connRAID)
+    on.exit(close.connection(connRAID))
     return(RAID)
-    close(connRAID)}
+    }
   
   #----------------------------------------------------------------------------------------
   #' A connection function to save Tranche Details information
@@ -237,8 +248,8 @@
   SaveTranche <- function(DealName = "character", TrancheNumber = "character", TrancheFile = "character"){
     connTranche <- gzfile(description = paste(system.file(package = "BondLab"),
                                   "/Tranches/",DealName,"_","Tranche","_",TrancheNumber,".rds", sep = ""))
+    on.exit(close.connection(connTranche))
     saveRDS(TrancheFile, connTranche)
-    close(connTranche)
   }
   
   #----------------------------------------------------------------------------------------
@@ -253,6 +264,7 @@
     connTranches <- gzfile(description = paste(system.file(package = "BondLab"),
                                     "/Tranches/",DealName,"_","Tranche", "_",TrancheNumber,".rds", sep = "")) 
     Tranches <- readRDS(connTranches)
+    on.exit(close.connection(connTranches))
     return(Tranches)}
   
   
@@ -268,8 +280,8 @@
   SaveCollGroup <- function(FileName = "character", DealName = "character", Group = numeric()){
     connGroup <- gzfile(description = paste(system.file(package = "BondLab"),
                                             "/Groups/",DealName,"_","Group","_",FileName@Group,".rds", sep = ""))
+    on.exit(close.connection(connGroup))
     saveRDS(FileName, connGroup)
-    close.connection(connGroup)
   }
   
   
@@ -283,7 +295,7 @@
   #' @export
   REMICGroupConn <- function(DealName = "character", Group = numeric()){
     REMICGrpConn <- gzfile(description = paste(system.file(package = "BondLab"),
-                                        "/Groups/",DealName,"_","Group","_",Group,".rds", sep = ""))
+                      "/Groups/",DealName,"_","Group","_",Group,".rds", sep = ""))
   }
   
   #-----------------------------------------------------------------------------------------
@@ -314,8 +326,8 @@
   connRDME <- gzfile(description = paste(system.file(package = "BondLab"),
                       "/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = "")) 
   ReadRDME <- readRDS(connRDME)
+  on.exit(close.connection(connRDME))
   return(ReadRDME)
-  close(connRDME)
   }
   
    

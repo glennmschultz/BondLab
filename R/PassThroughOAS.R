@@ -253,8 +253,6 @@ PassThroughOAS <- function(bond.id = "character",
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
   
-  #gamma masked as lambda per Ben Bolker email
-  lambda = (lambda + sigma^2)/(2 * kappa) 
   
   Sim.Rate <- CIRSim(shortrate = short.rate,
                       kappa = kappa,

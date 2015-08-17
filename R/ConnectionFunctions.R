@@ -10,7 +10,7 @@
 
   
   #------------------------------------------------------------------------------------
-  #' A connection function to the BondData calling MBS cusips
+  #' A connection function to BondData calling MBS cusips
   #' 
   #' Opens a connection to the BondData folder to call MBS cusip data 
   #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
@@ -173,8 +173,7 @@
   #' @param  deal.name A character string the REMIC deal name
   #' @export  
     REMICWaterFall <- function(deal.name = "character"){
-    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "")
-    on.exit(close.connection(REMICWaterFall))}
+    paste(system.file(package = "BondLab"), "/Waterfall/", deal.name, sep = "")}
    
   #------------------------------------------------------------------------------------- 
   #' A connection function to the REMICSchedules Data calls REMIC structuring element
@@ -218,7 +217,7 @@
   #' @export
   SaveRAID <- function(RAIDFile = "character"){  
     connRAID <- gzfile(description = paste(system.file(package = "BondLab"), "/RAID/",RAIDFile@DealName,".rds", sep = ""))
-    on.exit(close.connection(conn.RAID))
+    on.exit(close.connection(connRAID))
     saveRDS(RAIDFile, connRAID)
     }
   

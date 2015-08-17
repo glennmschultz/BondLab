@@ -312,3 +312,23 @@ setGeneric("SMM.To.CPR", function(SMM = numeric())
   {standardGeneric("Effective.Convexity")})
 
 
+#' A function to calculate forward rates
+#' 
+#' Calculate forward rate given a vector of spot rates
+#' @param SpotRate.Curve A vector of monthly spot rates
+#' @param FwdRate.Tenor A numeric value the tenor of the forward rate in months
+#' @export Forward.Rate
+  Forward.Rate <- function(SpotRate.Curve = vector(),
+                           FwdRate.Tenor){
+                max.maturity <- length(SpotRate.Curve)
+                num.period <- seq(from = 1/months.in.year, to = max.maturity/months.in.year, by = 1/months.in.year)
+                FutureValueVector <- (1 + SpotRate.Curve) ^ num.period
+                
+                Forward.Rate <- FutureValueVector[(FwdRate.Tenor + 1):max.maturity] / 
+                                FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
+                Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
+  }
+  setGeneric("Forward.Rate", function(SpotRate.Curve = vector(),
+                                      FwdRate.Tenor = numeric())
+    {standardGeneric("Forward.Rate")})
+  

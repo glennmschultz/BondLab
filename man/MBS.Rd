@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{MBS}
 \alias{MBS}
-\title{A connection function to the BondData calling MBS cusips}
+\title{A connection function to BondData calling MBS cusips}
 \usage{
 MBS(MBS.id = "character")
 }

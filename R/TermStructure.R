@@ -174,22 +174,17 @@ setMethod("initialize",
   
   forward.rate.curve <- forwardrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
   
-  Two.Year.Fwd <- (((1 + spot.rate.curve[seq(from = 25, to = 385, by = 1)]) ^ 
-                      (period[seq(from = 25, to = 385, by = 1)]/12) /
-                      (1 + spot.rate.curve[seq(from = 1, to = 361, by = 1)]) ^ 
-                      (period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
-  
-  Ten.Year.Fwd <- (((1 + spot.rate.curve[seq(from = 121, to = 481, by = 1)]) ^ 
-                      (period[seq(from = 121, to = 481, by = 1)]/12) /
-                      (1 + spot.rate.curve[seq(from = 1, to = 361, by = 1)]) ^ 
-                      (period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
+  Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:360]
+    
+  Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:360]
+
   
   new("TermStructure",
       tradedate = as.character(rates.data[1,1]),
       period = as.numeric(period),
       date = as.character(date),
-      spotrate = spot.rate.curve,
-      forwardrate = forward.rate.curve,
+      spotrate = spot.rate.curve[1:360],
+      forwardrate = forward.rate.curve[1:360],
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
   )

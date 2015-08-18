@@ -166,6 +166,7 @@ MtgTermStructure <- function(bond.id = "character",
   # The spot rate must be passed from Term Strucuture object to Bond Term Strucuture
   SpotRate <- as.matrix(TermStructure@spotrate)
   
+  
   # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS coefficients from Term Stucture
   # and then populate and align the cashflow array for discounting and key rate computations
   # !!!!!!!!!!!!!!! SET LOOP TO LENGTH OF CASHFLOW ARRAY !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -179,7 +180,7 @@ MtgTermStructure <- function(bond.id = "character",
     Key.Rate.Table [x,2] = x/12
     
     #spot rates for discounting
-    Key.Rate.Table[x,3] = SpotRate[x,1]/100   
+    Key.Rate.Table[x,3] = SpotRate[x,1]/yield.basis
     
     #Align Cash Flows and populated the CashFlowArray
     #Step One: Make sure all cash flows are set to zero
@@ -219,7 +220,7 @@ MtgTermStructure <- function(bond.id = "character",
   # This table was dimensioned on lines 646 - 648
   
   # Step 1 populate Period (n)
-  KRIndex[1:KRCount,1] <- round(as.numeric(KR) * 12,0)
+  KRIndex[1:KRCount,1] <- round(as.numeric(KR) * months.in.year,0)
   
   # Step 2 populate time period (t)
   KRIndex[1:KRCount,2] <- as.numeric(KR)                    
@@ -244,8 +245,8 @@ MtgTermStructure <- function(bond.id = "character",
   
   # Step 5 Populated KRIndex Table with KR Shifts
   for (j in 1:KRCount){
-    KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/100)
-    KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/100)
+    KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/yield.basis)
+    KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/yield.basis)
   }
   
   #===== Implement Shift of Spot Rates =======================
@@ -302,27 +303,13 @@ MtgTermStructure <- function(bond.id = "character",
     Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
     
-    Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
-                                  ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
-    )
+    Key.Rate.TS.Dwn@spotrate <- TermStructure@spotrate 
+    Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, FwdRate.Tenor = 24) 
+    Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, FwdRate.Tenor = 120)
     
-    Key.Rate.TS.Dwn@TwoYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 25, to = 385, by = 1)]/12) /
-                                      (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
-    
-    Key.Rate.TS.Dwn@TenYearFwd <- (((1 + Key.Rate.TS.Dwn@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 121, to = 481, by = 1)]/12) /
-                                      (1 + Key.Rate.TS.Dwn@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Dwn@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
-    
-    
-    Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
-                                 ((TermStructure@spotrate[361:492])) + (spot.spread * 0)
-    )
-    
-    Key.Rate.TS.Up@TwoYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 25, to = 385, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 25, to = 385, by = 1)]/12) /
-                                     (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/2))-1
-    
-    Key.Rate.TS.Up@TenYearFwd <- (((1 + Key.Rate.TS.Up@spotrate[seq(from = 121, to = 481, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 121, to = 481, by = 1)]/12) /
-                                     (1 + Key.Rate.TS.Up@spotrate[seq(from = 1, to = 361, by = 1)]) ^ (Key.Rate.TS.Up@period[seq(from = 1, to = 361, by = 1)]/12))^(1/10))-1
-    
+    Key.Rate.TS.Up@spotrate <- TermStructure@spotrate 
+    Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, FwdRate.Tenor = 24) 
+    Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, FwdRate.Tenor = 120)
     
     # Run the prepayment model to derive the SMM vector given each Key Rate shift
     # =======================================================================   

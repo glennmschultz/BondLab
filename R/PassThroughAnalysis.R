@@ -292,11 +292,12 @@ setMethod("initialize",
   #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, 
   #Duration, Convexity and CashFlow.
   MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
-                                        original.bal = original.bal, 
-                                        settlement.date = settlement.date, 
-                                        price = price, 
-                                        PrepaymentAssumption = PrepaymentAssumption)
+                                       original.bal = original.bal, 
+                                       settlement.date = settlement.date, 
+                                       price = price, 
+                                       PrepaymentAssumption = PrepaymentAssumption)
   
+
   #The fifth step is to calculate effective duration, convexity, and key rate durations and key rate convexities
   #This is done with the BondTermStructureFunction this creates the class BondTermStructure
   MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
@@ -307,7 +308,7 @@ setMethod("initialize",
                                             principal = original.bal *  bond.id@MBSFactor, 
                                             price = price, 
                                             cashflow = MortgageCashFlow)
-
+  
   spread.to.spot = MortgageTermStructure@SpotSpread
   proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
   
@@ -323,7 +324,7 @@ setMethod("initialize",
                            spot.spread = spread.to.spot, 
                            PrepaymentAssumption = "MODEL")
   
-  closeAllConnections()
+
   
   new("PassThroughAnalytics", 
       Cusip = bond.id@Cusip,

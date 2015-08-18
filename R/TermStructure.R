@@ -183,7 +183,7 @@ setMethod("initialize",
       tradedate = as.character(rates.data[1,1]),
       period = as.numeric(period),
       date = as.character(date),
-      spotrate = spot.rate.curve[1:360],
+      spotrate = spot.rate.curve,
       forwardrate = forward.rate.curve[1:360],
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd

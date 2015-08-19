@@ -122,12 +122,62 @@ Sched.Prin(balance = 100000, note.rate = .045, term.mos = 360, period = 2)
 
 **MortgageCashFlow**
 
-Mortgage CashFlow depends on the objects MBSDetail, PrepaymentAssumption, etc.  To examine an example call using MortgageCashFlow type getMethod(MBSAnalytics)
+MortgageCashFlow depends on the objects MBSDetail, PrepaymentAssumption, etc.  To examine an example call using MortgageCashFlow type getMethod(MBSAnalytics).  The MortgageCashFlow function creates the cashflow of passthrough security.  It could be used to amortize an unsecuritized mortgage note by changing the MBS security delay to 0. However,
+it is recommend that the user create a function for mortgage note amortization schedule with the mortgage amortization
+functions provided
+
 ```r
 MortgageCashFlow(bond.id = "character", original.bal = numeric(),
 settlement.date = "character", price = numeric(),
 PrepaymentAssumption = "character")
 ```
+bond.id is a character string refrencing a MBS cusip object either a passthrough security or REMIC
+original.bal is a numeric value and the original principal amount of the MBS traded.
+settlement.date is a character string the settlement date entered mm-dd-yyyy
+PrepaymentAssumption is a character string referencing the PrepaymentAssumption object.
+
+All of the above objects are required inputs to MortgageCashflow a call to MortgageCashFlow is as follows:
+```{r, echo=TRUE}
+#First, call the MBS passthrough object
+MBS <- MBS(MBS.id = "bondlabMBS4")
+
+#Second, call the yield curve for the corresponding settlement date
+Rates <- Rates(trade.date = "01-10-2013")
+
+#Third, call TermStructure and MortgageRate.  TermStructure will fit the
+#term strucutre using the package Termstrc and MtgRate will propogate the 
+#forward mortgage rate based on the forward two- and ten-year passed from 
+#the object TermStructure
+TermStructure <- TermStructure(rates.data = Rates, method = "ns")
+MortgageRate <- MtgRate()
+
+#Fourth, ModelTune calls the model tuning parameter.  The default model tuning
+#parameters are associated with MBSDetails object slot Model abd Burnout out is 
+#extracted from the MBS object to provide an initial burnout value for the prepayment model
+ModelTune <- ModelTune(bond.id = MBS)
+Burnout <- MBS@Burnout
+
+#Fifth, PrepaymentAssumption is used to assign a prepayment assumption to MortgageCashFlow
+#valid PrepaymentAssumptions are "MODEL", "PPC", "CPR"
+
+Prepay <-PrepaymentAssumption(bond.id = MBS, 
+                              TermStructure = TermStructure, 
+                              MortgageRate = MortgageRate, 
+                              ModelTune = ModelTune,
+                              Burnout = Burnout,
+                              PrepaymentAssumption = "CPR",
+                              CPR = .06)
+
+#Finally, call MortgageCashFlow.
+MortgageCashFlow <- MortgageCashFlow(bond.id = MBS, original.bal = 1000000, 
+                 settlement.date = "01-13-2013", 
+                 price = 105.75, 
+                 PrepaymentAssumption = Prepay)
+
+#The first 24 months of cashflow are
+MortgageCashFlow@TotalCashFlow[1:24]
+```
+
 
 **REMICCashFlow**
 

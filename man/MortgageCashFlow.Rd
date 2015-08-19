@@ -29,6 +29,6 @@ must be present and loaded into the local environment
 \examples{
 \dontrun{
   MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
-  settlement.date = "01/13/2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
+  settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
 }
 

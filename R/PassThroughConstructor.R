@@ -228,7 +228,47 @@ setMethod("initialize",
 #' @param MBSFactor A numeric value the current factor of the MBS.
 #' @param Model A character string the prepayment model to use.
 #' @param Burnout A numeric model the value of the borrower burnout.
-#' @param SATO A numeric value the borrrowers Spread AT Origination over the prime lending rate. 
+#' @param SATO A numeric value the borrrowers Spread AT Origination over the prime lending rate.
+#' @examples 
+#' \dontrun{
+#'  MakeMBSDetails( 
+#'  Cusip = "23456789",
+#'  ID = "bondlabMBS4",
+#'  BondType = "MBS",
+#'  Sector = "MBS",
+#'  Coupon = 4.0,
+#'  IssueDate = "01-01-2013",
+#'  DatedDate = "01-01-2013",
+#'  Maturity = "01-01-2043",
+#'  LastPmtDate = "01-01-2013",
+#'  NextPmtDate = "02-01-2013",
+#'  PaymentDelay = 24,     
+#'  Moody = "Aaa",
+#'  SP = "AAA",
+#'  BondLab = "Aaa",
+#'  Frequency = 12,
+#'  BondBasis = "30360",
+#'  GWac = 4.75,
+#'  OrigLoanBal = 275000,
+#'  OrigLTV = 80,
+#'  AmortizationType = "fixed",
+#'  AmortizationTerm = 30,     
+#'  Index = "None",
+#'  Margin = 0,
+#'  FirstPmtDate = "01-01-2013",
+#'  FinalPmtDate = "01-01-2043",
+#'  Servicing = 0.25,
+#'  PMI = 0.25,
+#'  Gfee = 0.25,
+#'  InitialInterest = "no",
+#'  InterestOnlyPeriod = 0,
+#'  FirstPrinPaymentDate = "1-01-2013",
+#'  BalloonPmt = "no",
+#'  BalloonDate = "00-00-0000",
+#'  MBSFactor = 1,
+#'  Model = "FH30.Generic",
+#'  Burnout = 25,
+#'  SATO = 0.75)} 
 #' @export
   
   MakeMBSDetails <- function(

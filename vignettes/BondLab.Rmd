@@ -131,10 +131,11 @@ MortgageCashFlow(bond.id = "character", original.bal = numeric(),
 settlement.date = "character", price = numeric(),
 PrepaymentAssumption = "character")
 ```
-bond.id is a character string refrencing a MBS cusip object either a passthrough security or REMIC
-original.bal is a numeric value and the original principal amount of the MBS traded.
-settlement.date is a character string the settlement date entered mm-dd-yyyy
-PrepaymentAssumption is a character string referencing the PrepaymentAssumption object.
+1. bond.id is a character string refrencing a MBS cusip object either a passthrough security or REMIC.
+1. original.bal is a numeric value and the original principal amount of the MBS traded.
+1. settlement.date is a character string the settlement date entered mm-dd-yyyy
+1. price is a numeric value the price of the MBS passthrough
+1. PrepaymentAssumption is a character string referencing the PrepaymentAssumption object.
 
 All of the above objects are required inputs to MortgageCashflow a call to MortgageCashFlow is as follows:
 ```{r, echo=TRUE}

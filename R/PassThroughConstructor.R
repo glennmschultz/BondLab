@@ -351,7 +351,7 @@ setMethod("initialize",
     SATO = SATO)
   
   connMBSDetails <- gzfile(description = paste(system.file(package = "BondLab"),
-                                      "~/BondLab/BondData/",temp@ID,".rds", sep = ""))
+                                      "~/BondData/",temp@ID,".rds", sep = ""))
   saveRDS(temp, connMBSDetails)
   close(connMBSDetails)
 }

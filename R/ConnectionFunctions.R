@@ -40,11 +40,24 @@
     setGeneric("Bond", function(Bond.id = "character")
     {standardGeneric("Bond")})
 
+  #------------------------------------------------------------------------------------
+    #' A connection function to BondData folder saved MBS cusip Detail
+    #' 
+    #' Opens a connection to BondData folder to save MBS cusip detail
+    #' @export
+    SaveMBS <- function(){
+      connMBSDetails <- gzfile(description = paste(system.file(package = "BondLab"),
+                                                 "/BondData/",temp@ID,".rds", sep = ""))
+      saveRDS(temp, connMBSDetails)
+      close(connMBSDetails)}
+      
+      setGeneric("SaveMBS", function(...)
+      {standardGeneric("SaveMBS")})
 
   #--------------------------------------------------------------------------------
     #' A connection function to the RatesData folder to call swap curve data
     #' 
-    #' A read connection function to the rates data base folder to call swap rate data
+    #' A read connection function to the rates database folder to call swap rate data
     #' @param trade.date A character string the trade date
     #' @export Rates
     Rates <- function(trade.date = "character"){
@@ -56,8 +69,8 @@
       }
     setGeneric("Rates", function(trade.date = "character")
       {standardGeneric("Rates")})
-   
-   #---------------------------------------------------------------------------------
+ 
+  #---------------------------------------------------------------------------------
     #' A connection function to the Prepayment model folder to call mortgage rate function class
     #' 
     #' A read connection function to the mortgage rate function. No inputs are required the function

@@ -39,5 +39,6 @@
   for(i in 1:RowCount) {
     if(SwapRateData[i,ColCount] != "ND") {data = SwapRateData[i,]                                      
                                           data <- rbind(data, as.numeric(maturityvector))
-                                          saveRDS(data, paste(data[1,1], ".rds", sep = ""), compress = TRUE)}}
+                                          saveRDS(data, paste(system.file(package = "BondLab"), 
+                                                              data[1,1], ".rds", sep = ""), compress = TRUE)}}
 }

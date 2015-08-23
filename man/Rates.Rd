@@ -10,6 +10,6 @@ Rates(trade.date = "character")
 \item{trade.date}{A character string the trade date}
 }
 \description{
-A read connection function to the rates data base folder to call swap rate data
+A read connection function to the rates database folder to call swap rate data
 }
 

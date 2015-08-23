@@ -350,10 +350,11 @@ setMethod("initialize",
     Burnout = Burnout,
     SATO = SATO)
   
-  connMBSDetails <- gzfile(description = paste(system.file(package = "BondLab"),
-                                      "/BondData/",temp@ID,".rds", sep = ""))
-  saveRDS(temp, connMBSDetails)
-  close(connMBSDetails)
+ # connMBSDetails <- gzfile(description = paste(system.file(package = "BondLab"),
+ #                                      "/BondData/",temp@ID,".rds", sep = ""))
+ #  saveRDS(temp, connMBSDetails)
+ #  close(connMBSDetails)
+  SaveMBS()
 }
 
 setGeneric("MakeMBSDetails", function(

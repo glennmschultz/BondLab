@@ -4,7 +4,10 @@
 \alias{SaveMBS}
 \title{A connection function to BondData folder saved MBS cusip Detail}
 \usage{
-SaveMBS(...)
+SaveMBS(filename = "character")
+}
+\arguments{
+\item{filename}{A character string the file name to save the default is temp}
 }
 \description{
 Opens a connection to BondData folder to save MBS cusip detail

@@ -354,7 +354,7 @@ setMethod("initialize",
  #                                      "/BondData/",temp@ID,".rds", sep = ""))
  #  saveRDS(temp, connMBSDetails)
  #  close(connMBSDetails)
-  SaveMBS()
+  SaveMBS(filename = "temp")
 }
 
 setGeneric("MakeMBSDetails", function(

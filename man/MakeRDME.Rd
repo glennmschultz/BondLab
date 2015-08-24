@@ -22,7 +22,7 @@ MakeRDME(DealName = "character", TrancheNumber = numeric(),
 \item{Factor}{A numeric value the tranche's factor}
 }
 \description{
-A constructore for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
+A constructor for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
 }
 \examples{
 \dontrun{

@@ -758,7 +758,7 @@ setMethod("initialize",
   # 2) serailize tranche factor date to RDME directory
   #' A constructor function for the REMIC Disclosure Month End (RDME) file
   #' 
-  #' A constructore for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
+  #' A constructor for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
   #' @param DealName A charcter string the deal name
   #' @param TrancheNumber A numeric value the number of the Tranche
   #' @param Cusip A character string the tranche cusip

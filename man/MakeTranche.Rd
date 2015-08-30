@@ -5,37 +5,73 @@
 \title{A constructor function for REMIC tranche detail}
 \usage{
 MakeTranche(DealName = "character", TrancheNumber = "character",
+  NumberofComponents = numeric(), ComponentofTranches = numeric(),
   TrancheName = "character", TranchePrincipal = "character",
-  TrancheInterest = "character", TranchePrincipalDesc = "character",
-  TrancheInterestDesc = "character", Cusip = "character",
-  TrancheOrigBal = numeric(), TrancheDatedDate = "character",
-  TrancheFirstPmtDate = "character", TrancheLastPmtDate = "character",
-  TrancheNextPmtDate = "character", TrancheCoupon = numeric(),
-  Delay = numeric(), PrinPmtFrequency = numeric(),
-  InterestPmtFrequency = numeric(), FloaterIndex = "character",
-  FloaterMargin = numeric(), FloaterCap = numeric(),
-  FloaterFloor = numeric(), FloaterFormula = "function",
-  PacLowBand = numeric(), PacHighBand = numeric(), Group = numeric(),
-  Schedule = "logical", Fixed = "logical")
+  TranchePrincipalDesc = "character", TrancheInterestDesc = "character",
+  TrancheOtherDescription = "character", Cusip = "character",
+  TrancheOrigBal = numeric(), TrancheInterest = "character",
+  TrancheCoupon = numeric(), AccrualRate = numeric(),
+  TreasuryMaturity = numeric(), TreasuryYield = numeric(),
+  TreasurySpread = numeric(), TrancheYield = numeric(),
+  TranchePrice = numeric(), TrancheProceedsWithInterest = numeric(),
+  TrancheAvgLife = numeric(), TrancheDuration = numeric(),
+  TrancheDatedDate = numeric(), TrancheFirstPmtDate = "character",
+  TrancheLastPmtDate = "character", TrancheNextPmtDate = "character",
+  TrancheFinalPmtDate = "character", Delay = numeric(),
+  InterestPmtFrequency = numeric(), PrinPmtFrequency = numeric(),
+  PacLowBand = numeric(), PacHighBand = numeric(),
+  FloaterIndex = "character", InitialIndexValue = numeric(),
+  FloaterMargin = numeric(), FloaterMultiplier = numeric(),
+  FloaterCap = numeric(), FloaterFloor = numeric(),
+  FloaterInitialCoupon = numeric(), FloaterResetFrequency = numeric(),
+  FloaterFirstResetDate = "character", FloaterFormula = "function",
+  Group = numeric(), TrancheType = "character", Schedule = "logical",
+  Fixed = "logical")
 }
 \arguments{
 \item{DealName}{A character string the deal name}
 
 \item{TrancheNumber}{A character string the Tranche Number}
 
+\item{NumberofComponents}{A numeric value the number of components}
+
+\item{ComponentofTranches}{A string identifying component tranches}
+
 \item{TrancheName}{A character string the the Tranche Name}
 
 \item{TranchePrincipal}{A character string the principal type (pass-through, notional)}
-
-\item{TrancheInterest}{A character string the interest type (fixed or floating)}
 
 \item{TranchePrincipalDesc}{A character string the REMIC principal type (sequential, IO, PAC, etc.)}
 
 \item{TrancheInterestDesc}{A character string the REMIC interest type (Fixed, Floating, Variable)}
 
+\item{TrancheOtherDescription}{A character string the other REMIC descriptive information}
+
 \item{Cusip}{A character string the tranche cusip}
 
 \item{TrancheOrigBal}{A character numeric value the original balance}
+
+\item{TrancheInterest}{A character string the Tranche Interest Type}
+
+\item{TrancheCoupon}{A numeric value the tranche coupon}
+
+\item{AccrualRate}{A numeric value the accrual rate on the bond}
+
+\item{TreasuryMaturity}{A numeric value the maturity of the pricing benchmark (Treasury or Swap)}
+
+\item{TreasuryYield}{A numeric value the yield of the pricing benchmark (Treasury or Swap)}
+
+\item{TreasurySpread}{A numeric value the spread over the pricing bechmark (Treasury or Swap)}
+
+\item{TrancheYield}{A numeric value the new issue pricing yield to maturity}
+
+\item{TranchePrice}{A numeric value the new issue price}
+
+\item{TrancheProceedsWithInterest}{A numeric value the new issue proceeds}
+
+\item{TrancheAvgLife}{A numeric value the average life at pricing}
+
+\item{TrancheDuration}{A numeric value the duration (modified) at pricing}
 
 \item{TrancheDatedDate}{A character value the tranche dated date}
 
@@ -45,29 +81,41 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 
 \item{TrancheNextPmtDate}{A character value the tranche next payment date}
 
-\item{TrancheCoupon}{A numeric value the tranche coupon}
+\item{TrancheFinalPmtDate}{A character value the tranche final payment date}
 
 \item{Delay}{A numeric value the delay days}
 
-\item{PrinPmtFrequency}{A numeric value the principal payment frequency}
-
 \item{InterestPmtFrequency}{A numeric value the interest payment frequency}
 
-\item{FloaterIndex}{A character value the floater index name}
-
-\item{FloaterMargin}{A numeric value the floater margin}
-
-\item{FloaterCap}{A numeric value the floater cap}
-
-\item{FloaterFloor}{A numeric value the floater floor}
-
-\item{FloaterFormula}{A function the floater coupon formula}
+\item{PrinPmtFrequency}{A numeric value the principal payment frequency}
 
 \item{PacLowBand}{A numeric value the PAC Lower Band}
 
 \item{PacHighBand}{A numeric value the PAC Upper Band}
 
+\item{FloaterIndex}{A character value the floater index name}
+
+\item{InitialIndexValue}{A numeric value the value of the floater's reference index at issuance}
+
+\item{FloaterMargin}{A numeric value the floater margin}
+
+\item{FloaterMultiplier}{A numeric value the floater multiplier}
+
+\item{FloaterCap}{A numeric value the floater cap}
+
+\item{FloaterFloor}{A numeric value the floater floor}
+
+\item{FloaterInitialCoupon}{A numeric value the floater's new issue coupon}
+
+\item{FloaterResetFrequency}{A numeric value the reset frequency (12 is monthly)}
+
+\item{FloaterFirstResetDate}{A character string the first reset date following issuance}
+
+\item{FloaterFormula}{A function the floater coupon formula}
+
 \item{Group}{A numeric value the collateral group number}
+
+\item{TrancheType}{A character value the type of tranche (standard, exchangeable)}
 
 \item{Schedule}{A logical indicating the PAC/TAC schedule}
 
@@ -77,33 +125,6 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 MakeTranche a constructor function used to create a REMIC tranche
 }
 \examples{
-\dontrun{
-  MakeTranche(DealName = "BondLabPACInverse_test",
- TrancheNumber = "1",
- TrancheName = "A",
- TranchePrincipal = "Pass_Through",
- TrancheInterest = "Fix",
- TranchePrincipalDesc = "PAC",
- TrancheInterestDesc = "Fix",
- Cusip = "BondLabPAC2",
- TrancheOrigBal = 148769215,
- TrancheDatedDate  = "01-01-2013",
- TrancheFirstPmtDate = "01-15-2013",
- TrancheLastPmtDate = "12-15-2042",
- TrancheNextPmtDate = "01-15-2013",
- TrancheCoupon = 2.25,
- Delay = 15,
- PrinPmtFrequency = 12,
- InterestPmtFrequency = 12,
- FloaterIndex = "999",
- FloaterMargin = 0,
- FloaterCap = 0,
- FloaterFloor = 0,
- FloaterFormula = function(){},
- PacLowBand = 75,
- PacHighBand = 250,
- Group = 1,
- Schedule = TRUE,
- Fixed = TRUE)}
+\dontrun{Need Example}
 }
 

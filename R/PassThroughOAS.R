@@ -37,10 +37,10 @@ setMethod("initialize",
                    Servicing = "numeric",
                    PMI = "numeric",
                    Gfee = "numeric",
-                   InitialInterest = "character",
+                   InitialInterest = "logical",
                    InterestOnlyPeriod = "numeric",
                    FirstPrinPaymentDate = "character",
-                   BalloonPmt = "character",
+                   BalloonPmt = "logical",
                    BalloonDate = "character",
                    MBSFactor = "numeric",
                    Model = "character",
@@ -188,7 +188,7 @@ PassThroughOAS <- function(bond.id = "character",
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
   
   #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
-  Rate.Delta = .25
+  Rate.Delta = rate.delta
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   bond.id <- MBS(MBS.id = as.character(bond.id))
@@ -196,7 +196,7 @@ PassThroughOAS <- function(bond.id = "character",
   
   #Call the desired curve from rates data folder
   rates.data <- Rates(trade.date = trade.date)
-  short.rate <- as.numeric(rates.data[1,2])/100
+  short.rate <- as.numeric(rates.data[1,2])/yield.basis
   
   #Call Mortgage Rate Functions
   MortgageRate <- MtgRate()
@@ -272,7 +272,7 @@ PassThroughOAS <- function(bond.id = "character",
                                       lambda = lambda, 
                                       theta = theta, sigma = sigma, 
                                       T = 2, step = 0, 
-                                      result = "y") * 100)
+                                      result = "y") * yield.basis)
   
   Ten.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
                                       kappa = kappa, 
@@ -281,7 +281,7 @@ PassThroughOAS <- function(bond.id = "character",
                                       sigma = sigma, 
                                       T = 10, 
                                       step = 0, 
-                                      result = "y") * 100)
+                                      result = "y") * yield.basis)
 
   TermStructure <- new("TermStructure",
                        tradedate = as.character(trade.date),

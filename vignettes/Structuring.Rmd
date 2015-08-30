@@ -23,148 +23,110 @@ The Bond Lab structuring tool is based on the followng objects:
 * Schedules
 * Waterfall
 
-The following example illustrates structuring a simple IO/PO transaction.  The bondlabSMBS deal is reverse engineered as a BL001.
+The following example illustrates structuring a simple IO/PO transaction.  The following illustrates the structuring steps for FNMA Strip Trust 416.
 
+First, structure the collateral information as given by the relay file at issuance.  Structure the collateral group using the MakeMBSDetails function.  This saves the collateral group information in the BondData folder. Future versions BondLab will include a make CollateralDetail and data folder structure. 
+``` r
+  MakeMBSDetails(
+    Cusip = "FNM1900416",
+    ID = "FNM1900416",
+    BondType = "MBS",
+    Sector = "PassThrough",
+    Coupon = 4.000,
+    IssueDate = "10-01-2012",
+    DatedDate = "10-01-2012",
+    Maturity = "03-01-2042",
+    LastPmtDate ="10-01-2012",
+    NextPmtDate = "11-01-2012",
+    PaymentDelay = 24,
+    Moody = "Aaa",
+    SP = "AAA",
+    BondLab = "AAA",
+    Frequency = 12,
+    BondBasis = "30360",
+    GWac = 4.53,
+    OrigLoanBal = 230000,
+    OrigLTV = 150,
+    AmortizationType = "fixed",
+    AmortizationTerm = 360,
+    Index = "none",
+    Margin = 0,
+    FirstPmtDate = "03-01-2012",
+    FinalPmtDate = "03-01-2041",
+    Servicing = 0.25,
+    Gfee = 0.25,
+    InitialInterest = FALSE,
+    InterestOnlyPeriod = 0,
+    FirstPrinPaymentDate = "00-00-0000",
+    BalloonPmt = FALSE,
+    BalloonDate = "00-00-0000",
+    MBSFactor = 1,
+    Model = "FH30.Generic",
+    Burnout = 25,
+    SATO = 0.50
+  )
+```
 ## The RAID file - REMIC At Issuance Disclosure file.  
-The RAID file is the indicative data for the REMIC at issuance.
-
-  + **DealName** The deal name is identified by the agency or issuing shelf.  In the case of an agency REMIC the deal name is followed series or trust number.  Private label REMICs are identified by the issuer or shelf followed by the year of issuance and transaction number.
-  + **Issuer** Typically the deal sponsor.  Agency REMIC deal sponsors are Fannie Mae (FNM), Freddie Mac (FHR), and Ginnie Mae (GNM)
-  + **DealPriceDate** The date the deal is priced
-  + **DealSettlement** The first settlement date of the deal
-  + **Underwriter** The deal underwriter
-  + **NumberofTranches** The number of tranches in the deal
-  + **NumberofPACSchedules** The number of schedules in the transaction
-  + **NumberofGroups** The number of collateral groups
-  + **DealSize** The original balance of all tranches
-  + **CollateralAmount** The current balance of the collateral contributed to the deal
-
-The Bond Lab MakeRAID function help file provides additional detail needed to create the RAID file.
-```{r, echo = TRUE} 
-  MakeRAID(DealName = "BL001", 
-             Issuer = "Bondlab", 
-             DealPriceDate = "12-01-2012", 
-             DealSettlementDate = "01-01-2013",
-             Underwriter = "Bondlab",
-             NumberofTranches = 2,
-             NumberPacSchedules = 0,
-             NumberofGroups = 1,
-             DealSize = 200000000,
-             CollateralAmount = 200000000)
-  
-```  
+Second, create The RAID file.  This file is the indicative data for the REMIC at issuance.  The RAID object is save in the RAID folder.  The slots for this class are 100% compliant to the FNMA relay files.
+``` r
+  MakeMBSDetails(
+    Cusip = "FNM1900416",
+    ID = "FNM1900416",
+    BondType = "MBS",
+    Sector = "PassThrough",
+    Coupon = 4.000,
+    IssueDate = "10-01-2012",
+    DatedDate = "10-01-2012",
+    Maturity = "03-01-2042",
+    LastPmtDate ="10-01-2012",
+    NextPmtDate = "11-01-2012",
+    PaymentDelay = 24,
+    Moody = "Aaa",
+    SP = "AAA",
+    BondLab = "AAA",
+    Frequency = 12,
+    BondBasis = "30360",
+    GWac = 4.53,
+    OrigLoanBal = 230000,
+    OrigLTV = 150,
+    AmortizationType = "fixed",
+    AmortizationTerm = 360,
+    Index = "none",
+    Margin = 0,
+    FirstPmtDate = "03-01-2012",
+    FinalPmtDate = "03-01-2041",
+    Servicing = 0.25,
+    Gfee = 0.25,
+    InitialInterest = FALSE,
+    InterestOnlyPeriod = 0,
+    FirstPrinPaymentDate = "00-00-0000",
+    BalloonPmt = FALSE,
+    BalloonDate = "00-00-0000",
+    MBSFactor = 1,
+    Model = "FH30.Generic",
+    Burnout = 25,
+    SATO = 0.50
+  )
+```
 
 
 ## Create the collateral group underlying the REMIC transaction
 
-   + **DealName** The deal (transaction) to which the the collateral has been contributed
-   + **Group** The group to which the collateral belongs
-   + **Cusip** The cusip of the collateral group this may be a psudeo pool, representative collateral group, 
-   or a list of pool cusip which constitute the collateral group
-   + **OrigBal** The original balance of the pool contributed to the REMIC
+Third, create the collateral group object.  For the first structuring pass use the collateral information created above.  The collateral group object is designed to hold multiple groups or pools.  The REMIC cashflow engine logic needs to be completed.  Future versions of BondLab will allow for collateral information or expand to pools.
 
-The Bond Lab MakeCollateral function help file provides additional detail needed to create the collateral group.
+``` r
+    MakeCollateral(
+      DealName = "FNS416",
+      Group = 1,
+      Cusip = list("FNM1900416"),
+      OrigBal = list(275000000)
+    )
+```    
 
-```{r, echo=TRUE}
-    MakeCollateral(DealName = "BL001",
-                   Group = 1,
-                   Cusip = list("bondlabMBS4"),
-                   OrigBal = list("200000000"))
-```
+## Create the Tranche data for REMIC
 
 
-## Create the tranche data for REMIC
-   
-   + **DealName** The deal (transaction) to which the tranche belongs
-   + **TrancheNumber** The tranche number
-   + **TrancheName** The tranche name
-   + **TranchePrincipal** The principal payment type Pass_Through, Re-REMIC etc
-   + **TrancheInterest** The interest payment type "Fixed" or "Float"
-   + **TranchePrincipalDesc** The REMIC principal type "NTL" indicate notional balance
-   + **TrancheInterestDesc** The interest payment Fixed or Floating
-   + **Cusip** The bond cusip
-   + **TrancheOrigBal** The original balance of the tranche
-   + **TrancheDatedDate** The tranche dated date.  The is the day upon which interest accrual begins
-   + **TrancheFirstPmtDate** The date of the first payment date
-   + **TrancheLastPmtDate** The date of the previous or last payment date
-   + **TrancheNextPmtDate** The date of the next payment date
-   + **TrancheCoupon** The coupon rate at which interest accures
-   + **Delay** The payment delay if any
-   + **PrinPmtFrequency** The frequency of principal payments (monthly payments = 12)
-   + **InterestPmtFrequency** The frequency of interest payments (monthly payments = 12)
-   + **FloaterIndex** If the bond is floating rate the index used to calculate the coupon
-   + **FloaterMargin** The margin (spread over the index) used to calcualte the floater coupon
-   + **FloaterCap** The maximum rate of the floating rate coupon
-   + **FloaterFloor** The minimum rate of the floating rate coupon
-   + **FloaterFormula** The formula used to determine the floating rate coupon
-   + **PacLowBand** For a PAC bond the lower PSA band
-   + **PacUpperBand** For a PAC bond the upper PSA band
-   + **Group** The collateral group number
-   + **Schedule** A logical indicating the presence of a schedule for PAC/TAC
-   + **Fixed** A logical indicating the coupon type Fixed (TRUE) or Floating (FALSE)
 
-
-The Bond Lab MakeTranche function help file provides additional detail needed to create the REMIC tranches
-
-```{r, echo=TRUE}
-  MakeTranche(DealName = "BL001",
-              TrancheNumber = "1",
-              TrancheName = "A",
-              TranchePrincipal = "Pass_Through",
-              TrancheInterest = "Fix",
-              TranchePrincipalDesc = "NTL",
-              TrancheInterestDesc = "Fix",
-              Cusip = "BL001IO",
-              TrancheOrigBal = 200000000,
-              TrancheDatedDate  = "01-01-2013",
-              TrancheFirstPmtDate = "01-15-2013",
-              TrancheLastPmtDate = "12-15-2042",
-              TrancheNextPmtDate = "01-15-2013",
-              TrancheCoupon = 4.00,
-              Delay = 0,
-              PrinPmtFrequency = 12,
-              InterestPmtFrequency = 12,
-              FloaterIndex = "999",
-              FloaterMargin = 0,
-              FloaterCap = 4.00,
-              FloaterFloor = 4.00,
-              FloaterFormula = function(Index = "vector"){min(FloaterCap, 
-                                (max(Index + FloaterMargin, FloaterFloor)))},
-              PacLowBand = 000,
-              PacHighBand = 000,
-              Group = 1,
-              Schedule = FALSE,
-              Fixed = TRUE)
-    
-    MakeTranche(DealName = "BL001",
-                TrancheNumber = "2",
-                TrancheName = "B",
-                TranchePrincipal = "Pass_Through",
-                TrancheInterest = "Fix",
-                TranchePrincipalDesc = "PO",
-                TrancheInterestDesc = "Fix",
-                Cusip = "BL001PO",
-                TrancheOrigBal = 200000000,
-                TrancheDatedDate  = "01-01-2013",
-                TrancheFirstPmtDate = "01-15-2013",
-                TrancheLastPmtDate = "12-15-2042",
-                TrancheNextPmtDate = "01-15-2013",
-                TrancheCoupon = 0.00,
-                Delay = 0,
-                PrinPmtFrequency = 12,
-                InterestPmtFrequency = 12,
-                FloaterIndex = "999",
-                FloaterMargin = 0,
-                FloaterCap = 4.00,
-                FloaterFloor = 4.00,
-                FloaterFormula = function(Index = "vector"){min(FloaterCap, 
-                                  (max(Index + FloaterMargin, FloaterFloor)))},
-                PacLowBand = 000,
-                PacHighBand = 000,
-                Group = 1,
-                Schedule = FALSE,
-                Fixed = TRUE)
-```
 
 ## Create the REMIC Month End Disclosure file (RDME)
 
@@ -178,28 +140,12 @@ The Bond Lab MakeTranche function help file provides additional detail needed to
 A RDME file must be created for each tranche.  The RDME file stores the history of the payment date,
 tranche coupon, and tranche factor.  The Bond Lab MakeRDME function help file provides additional detail to create
 the RDME file
-```{r, echo=TRUE}
-    MakeRDME(DealName = "BL001",
-             TrancheNumber = 1,
-             Cusip = "BL001IO",
-             PaymentDate = "01-01-2013",
-             Coupon = 4.0,
-             Factor = 1)
-    
-    MakeRDME(DealName = "BL001",
-             TrancheNumber = 2,
-             Cusip = "BL001PO",
-             PaymentDate = "1-01-2013",
-             Coupon = 0,
-             Factor = 1)
-```
+
   
 ## Call the REMIC constructor function
 
 Once the objects are created and saved call the REMICStructure function.  This function creates the REMIC umbrella and saves tranche to the BondData folder
 
-```{r, echo=TRUE}
-    RemicStructure(DealName = "BL001") 
-```    
+
 
 ## The last step is to write the waterfall and save in the Waterfall folder

@@ -5,15 +5,28 @@
 \title{A constructor function for the REMIC At Issuance Disclosure (RAID) file}
 \usage{
 MakeRAID(DealName = "character", Issuer = "character",
-  DealPriceDate = "character", DealSettlementDate = "character",
-  Underwriter = "character", NumberofTranches = numeric(),
-  NumberPacSchedules = numeric(), NumberofGroups = numeric(),
-  DealSize = numeric(), CollateralAmount = numeric())
+  DealNumber = "character", DealPriceDate = "character",
+  DealSettlementDate = "character", Underwriter = "character",
+  Trustee = "character", PricingSpeed = numeric(),
+  JumpReferenceSpeed1 = numeric(), JumpReferenceSpeed2 = numeric(),
+  JumpReferenceSpeed3 = numeric(), JumpReferenceSpeed4 = numeric(),
+  NumberofTranches = numeric(), NumberofComponentTranches = numeric(),
+  NumberofCombinedTranches = numeric(), NumberofPools = numeric(),
+  PacSchedulesIncluded = "logical", NumberofPacSchedules = numeric(),
+  NumberofGroups = numeric(), DealSize = numeric(),
+  CollateralAmount = numeric(), CollateralAvgLife = numeric(),
+  BondValue = numeric(), BondValueMethod = "character",
+  BondValueCap = numeric(), BondValueDiscountRate = numeric(),
+  BondValueReinvestmentRate = numeric(), ExpenseBasisPointFee = numeric(),
+  ExpenseFixed = numeric(), ExpensePeriodicity = numeric(),
+  InitialReserveFund = numeric())
 }
 \arguments{
 \item{DealName}{A character string the deal name}
 
 \item{Issuer}{A character string the Isser Name}
+
+\item{DealNumber}{A character string the Deal Number}
 
 \item{DealPriceDate}{A character string the Deal Pricing Date}
 
@@ -21,30 +34,60 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{Underwriter}{A character string the Deal Underwriter}
 
-\item{NumberofTranches}{A numeric string the Number of Tranches}
+\item{Trustee}{A character string the deal Trustee}
 
-\item{NumberPacSchedules}{A numeric value the number of PAC schedules}
+\item{PricingSpeed}{A character string the deal pricing speed}
+
+\item{JumpReferenceSpeed1}{A numeric value the Jump Z speed}
+
+\item{JumpReferenceSpeed2}{A numeric value the Jump Z speed}
+
+\item{JumpReferenceSpeed3}{A numeric value the Jump Z speed}
+
+\item{JumpReferenceSpeed4}{A numeric value the Jump Z speed}
+
+\item{NumberofTranches}{A numeric value the number of Tranches}
+
+\item{NumberofComponentTranches}{A numeric value the number of component Tranches}
+
+\item{NumberofCombinedTranches}{A numeric value the number of combined Tranches}
+
+\item{NumberofPools}{A numeric value the number of pools}
+
+\item{PacSchedulesIncluded}{A logical value TRUE/FALSE}
+
+\item{NumberofPacSchedules}{A numeric value the number of PAC schedules}
 
 \item{NumberofGroups}{A numeric value the number of groups}
 
 \item{DealSize}{A numeric value the original balance of all tranches}
 
 \item{CollateralAmount}{A numeric value the current face amount of the collateral}
+
+\item{CollateralAvgLife}{A numeric value the avg life of the collateral}
+
+\item{BondValue}{A numeric value the bond price}
+
+\item{BondValueMethod}{A character string the valuation method}
+
+\item{BondValueCap}{A numeric value the Bond Coupon Cap Rate}
+
+\item{BondValueDiscountRate}{A numeric value the Bond discount rate}
+
+\item{BondValueReinvestmentRate}{A numeric value the assumed trust reinvestment rate}
+
+\item{ExpenseBasisPointFee}{A numeric value the expense of the Trust}
+
+\item{ExpenseFixed}{A numeric value the fixed expenses of the Trust}
+
+\item{ExpensePeriodicity}{A numeric value the calender payment of expenses}
+
+\item{InitialReserveFund}{A numeric value the amount of the initial reserve fund}
 }
 \description{
 The RAID function creates the REMIC At Issuance Disclosure file
 }
 \examples{
-\dontrun{
-   MakeRAID(DealName = "BondLabPACInverse_test",
-   Issuer = "Bondlab",
-   DealPriceDate = "12-01-2012",
-   DealSettlementDate = "01-01-2013",
-   Underwriter = "Bondlab",
-   NumberofTranches = 4,
-   NumberPacSchedules = 1,
-   NumberofGroups = 1,
-   DealSize = 200000000,
-   CollateralAmount = 200000000)}
+\dontrun{need example}
 }
 

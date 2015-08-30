@@ -14,26 +14,69 @@ setMethod("initialize",
           function (.Object, 
                     DealName = "character",
                     Issuer = "character",
+                    DealNumber = "character",
                     DealPriceDate = "character",
                     DealSettlementDate = "character",
                     Underwriter = "character",
+                    Trustee = "character",
+                    PricingSpeed = numeric(),
+                    JumpReferenceSpeed1 = numeric(),
+                    JumpReferenceSpeed2 = numeric(),
+                    JumpReferenceSpeed3 = numeric(),
+                    JumpReferenceSpeed4 = numeric(),
                     NumberofTranches = numeric(),
-                    NumberPacSchedules = numeric(),
+                    NumberofComponentTranches = numeric(),
+                    NumberofCombinedTranches = numeric(),
+                    NumberofPools = numeric(),
+                    PacSchedulesIncluded = "logical",
+                    NumberofPacSchedules = numeric(),
                     NumberofGroups = numeric(),
                     DealSize = numeric(),
-                    CollateralAmount = numeric())
+                    CollateralAmount = numeric(),
+                    CollateralAvgLife = numeric(),
+                    BondValue = numeric(),
+                    BondValueMethod = "character",
+                    BondValueCap = numeric(),
+                    BondValueDiscountRate = numeric(),
+                    BondValueReinvestmentRate = numeric(),
+                    ExpenseBasisPointFee = numeric(),
+                    ExpenseFixed = numeric(),
+                    ExpensePeriodicity = numeric(),
+                    InitialReserveFund = numeric())
           {
             
             .Object@DealName = DealName
             .Object@Issuer = Issuer
+            .Object@DealNumber = DealNumber
             .Object@DealPriceDate = DealPriceDate
             .Object@DealSettlementDate = DealSettlementDate
             .Object@Underwriter = Underwriter
+            .Object@Trustee = Trustee
+            .Object@PricingSpeed = PricingSpeed
+            .Object@JumpReferenceSpeed1 = JumpReferenceSpeed1
+            .Object@JumpReferenceSpeed2 = JumpReferenceSpeed2
+            .Object@JumpReferenceSpeed3 = JumpReferenceSpeed3
+            .Object@JumpReferenceSpeed4 = JumpReferenceSpeed4
             .Object@NumberofTranches = NumberofTranches
-            .Object@NumberPacSchedules = NumberPacSchedules
+            .Object@NumberofComponentTranches = NumberofComponentTranches
+            .Object@NumberofCombinedTranches = NumberofCombinedTranches
+            .Object@NumberofPools = NumberofPools
+            .Object@PacSchedulesIncluded = PacSchedulesIncluded
+            .Object@NumberofGroups = NumberofGroups
+            .Object@NumberofPacSchedules = NumberofPacSchedules
             .Object@NumberofGroups = NumberofGroups
             .Object@DealSize = DealSize
             .Object@CollateralAmount = CollateralAmount
+            .Object@CollateralAvgLife = CollateralAvgLife
+            .Object@BondValue = BondValue
+            .Object@BondValueMethod = BondValueMethod
+            .Object@BondValueCap = BondValueCap
+            .Object@BondValueDiscountRate = BondValueDiscountRate
+            .Object@BondValueReinvestmentRate = BondValueReinvestmentRate
+            .Object@ExpenseBasisPointFee = ExpenseBasisPointFee
+            .Object@ExpenseFixed = ExpenseFixed
+            .Object@ExpensePeriodicity = ExpensePeriodicity
+            .Object@InitialReserveFund = InitialReserveFund
             
             return(.Object) 
             callNextMethod(.Object,...)               
@@ -45,57 +88,95 @@ setMethod("initialize",
           function(.Object,
                    DealName = "character",
                    TrancheNumber = "character",
+                   NumberofComponents = numeric(),
+                   ComponentofTranches = "character",
                    TrancheName = "character",
                    TranchePrincipal = "character",
-                   TrancheInterest = "character",
                    TranchePrincipalDesc = "character",
-                   TrancheInterestDesc = "character",
+                   TrancheInterestDesc = "character",     
+                   TrancheOtherDescription = "character",
                    Cusip = "character",
                    TrancheOrigBal = numeric(),
-                   TrancheDatedDate = "character",
+                   TrancheInterest = "character",
+                   TrancheCoupon = numeric(),
+                   AccrualRate = numeric(),
+                   TreasuryMaturity = numeric(),
+                   TreasuryYield = numeric(),
+                   TreasurySpread = numeric(),
+                   TrancheYield = numeric(),
+                   TranchePrice = mumeric(),
+                   TrancheProceedsWithInterest = numeric(),
+                   TrancheAvgLife = numeric(),
+                   TrancheDuration = numeric(),
+                   TrancheDatedDate = numeric(),
                    TrancheFirstPmtDate = "character",
                    TrancheLastPmtDate = "character",
                    TrancheNextPmtDate = "character",
-                   TrancheCoupon = numeric(),
+                   TrancheFinalPmtDate = "character",
                    Delay = numeric(),
-                   PrinPmtFrequency = numeric(),
                    InterestPmtFrequency = numeric(),
-                   FloaterIndex = "character",
-                   FloaterMargin = numeric(),
-                   FloaterCap = numeric(),
-                   FloaterFloor = numeric(),
-                   FloaterFormula = "function",
+                   PrinPmtFrequency = numeric(),
                    PacLowBand = numeric(),
                    PacHighBand = numeric(),
+                   FloaterIndex = "character",
+                   InitialIndexValue = numeric(),
+                   FloaterMargin = numeric(),
+                   FloaterMultiplier = numeric(),
+                   FloaterCap = numeric(),
+                   FloaterFloor = numeric(),
+                   FloaterInitialCoupon = numeric(),
+                   FloaterResetFrequency = numeric(),
+                   FloaterFirstResetDate = "character",
+                   FloaterFormula = "function",
                    Group = numeric(),
+                   TrancheType = "character",
                    Schedule = "logical",
                    Fixed = "logical"){
             
             .Object@DealName = DealName
             .Object@TrancheNumber = TrancheNumber
+            .Object@NumberofComponents = NumberofComponents
+            .Object@ComponentofTranches = ComponentofTranches
             .Object@TrancheName = TrancheName
             .Object@TranchePrincipal = TranchePrincipal
-            .Object@TrancheInterest = TrancheInterest
             .Object@TranchePrincipalDesc = TranchePrincipalDesc
-            .Object@TrancheInterestDesc = TrancheInterestDesc
+            .Object@TrancheInterestDesc = TrancheInterestDesc     
+            .Object@TrancheOtherDescription = TrancheOtherDescription
             .Object@Cusip = Cusip
             .Object@TrancheOrigBal = TrancheOrigBal
+            .Object@TrancheInterest = TrancheInterest
+            .Object@TrancheCoupon = TrancheCoupon
+            .Object@AccrualRate = AccrualRate
+            .Object@TreasuryMaturity = TreasuryMaturity
+            .Object@TreasuryYield = TreasuryYield
+            .Object@TreasurySpread = TreasurySpread
+            .Object@TrancheYield = TreasuryYield
+            .Object@TranchePrice = TranchePrice
+            .Object@TrancheProceedsWithInterest = TrancheProceedsWithInterest
+            .Object@TrancheAvgLife = TrancheAvgLife
+            .Object@TrancheDuration = TrancheDuration
             .Object@TrancheDatedDate = TrancheDatedDate
             .Object@TrancheFirstPmtDate = TrancheFirstPmtDate
             .Object@TrancheLastPmtDate = TrancheLastPmtDate
             .Object@TrancheNextPmtDate = TrancheNextPmtDate
-            .Object@TrancheCoupon = TrancheCoupon
+            .Object@TrancheFinalPmtDate = TrancheFinalPmtDate
             .Object@Delay = Delay
-            .Object@PrinPmtFrequency = PrinPmtFrequency
             .Object@InterestPmtFrequency = InterestPmtFrequency
-            .Object@FloaterIndex = FloaterIndex      
-            .Object@FloaterMargin = FloaterMargin
-            .Object@FloaterCap = FloaterCap
-            .Object@FloaterFloor = FloaterFloor
-            .Object@FloaterFormula = FloaterFormula
+            .Object@PrinPmtFrequency = PrinPmtFrequency
             .Object@PacLowBand = PacLowBand
             .Object@PacHighBand = PacHighBand
+            .Object@FloaterIndex = FloaterIndex
+            .Object@InitialIndexValue = InitialIndexValue
+            .Object@FloaterMargin = FloaterMargin
+            .Object@FloaterMultiplier = FloaterMultiplier
+            .Object@FloaterCap = FloaterCap
+            .Object@FloaterFloor = FloaterFloor
+            .Object@FloaterInitialCoupon = FloaterInitialCoupon
+            .Object@FloaterResetFrequency = FloaterResetFrequency
+            .Object@FloaterFirstResetDate = FloaterFirstResetDate
+            .Object@FloaterFormula = FloaterFormula
             .Object@Group = Group
+            .Object@TrancheType = TrancheType
             .Object@Schedule = Schedule
             .Object@Fixed = Fixed
             
@@ -234,31 +315,73 @@ setMethod("initialize",
           })
 
 
-  RAID <- function(DealName = "character",
+RAID <- function(DealName = "character",
                  Issuer = "character",
+                 DealNumber = "character",
                  DealPriceDate = "character",
                  DealSettlementDate = "character",
                  Underwriter = "character",
+                 Trustee = "character",
+                 PricingSpeed = numeric(),
+                 JumpReferenceSpeed1 = numeric(),
+                 JumpReferenceSpeed2 = numeric(),
+                 JumpReferenceSpeed3 = numeric(),
+                 JumpReferenceSpeed4 = numeric(),
                  NumberofTranches = numeric(),
-                 NumberPacSchedules = numeric(),
+                 NumberofComponentTranches = numeric(),
+                 NumberofCombinedTranches = numeric(),
+                 NumberofPools = numeric(),
+                 PacSchedulesIncluded = "logical",
+                 NumberofPacSchedules = numeric(),
                  NumberofGroups = numeric(),
                  DealSize = numeric(),
-                 CollateralAmount = numeric()
-                 ){
+                 CollateralAmount = numeric(),
+                 CollateralAvgLife = numeric(),
+                 BondValue = numeric(),
+                 BondValueMethod = "character",
+                 BondValueCap = numeric(),
+                 BondValueDiscountRate = numeric(),
+                 BondValueReinvestmentRate = numeric(),
+                 ExpenseBasisPointFee = numeric(),
+                 ExpenseFixed = numeric(),
+                 ExpensePeriodicity = numeric(),
+                 InitialReserveFund = numeric()
+){
   
-                 new("RAID",
-                     DealName = DealName,
-                     Issuer = Issuer,
-                     DealPriceDate = DealPriceDate,
-                     DealSettlementDate = DealSettlementDate,
-                     Underwriter = Underwriter,
-                     NumberofTranches = NumberofTranches,
-                     NumberPacSchedules = NumberPacSchedules,
-                     NumberofGroups = NumberofGroups,
-                     DealSize = DealSize,
-                     CollateralAmount = CollateralAmount
-                     )                 
-          }
+  new("RAID",
+      DealName = DealName,
+      Issuer = Issuer,
+      DealNumber = DealNumber,
+      DealPriceDate = DealPriceDate,
+      DealSettlementDate = DealSettlementDate,
+      Underwriter = Underwriter,
+      Trustee = Trustee,
+      PricingSpeed = PricingSpeed,
+      JumpReferenceSpeed1 = JumpReferenceSpeed1,
+      JumpReferenceSpeed2 = JumpReferenceSpeed2,
+      JumpReferenceSpeed3 = JumpReferenceSpeed3,
+      JumpReferenceSpeed4 = JumpReferenceSpeed4,
+      NumberofTranches = NumberofTranches,
+      NumberofComponentTranches = NumberofComponentTranches,
+      NumberofCombinedTranches = NumberofCombinedTranches,
+      NumberofPools = NumberofPools,
+      PacSchedulesIncluded = PacSchedulesIncluded,
+      NumberofPacSchedules = NumberofPacSchedules,
+      NumberofGroups = NumberofGroups,      
+      DealSize = DealSize,
+      CollateralAmount = CollateralAmount,
+      CollateralAvgLife = CollateralAvgLife,
+      BondValue = BondValue,
+      BondValueMethod = BondValueMethod,
+      BondValueCap = BondValueCap,
+      BondValueDiscountRate = BondValueDiscountRate,
+      BondValueReinvestmentRate = BondValueReinvestmentRate,
+      ExpenseBasisPointFee = ExpenseBasisPointFee,
+      ExpenseFixed = ExpenseFixed,
+      ExpensePeriodicity = ExpensePeriodicity,
+      InitialReserveFund = InitialReserveFund
+  )                 
+}
 
 
 #' A constructor function for the REMIC At Issuance Disclosure (RAID) file
@@ -266,48 +389,101 @@ setMethod("initialize",
 #'  The RAID function creates the REMIC At Issuance Disclosure file
 #'  @param DealName A character string the deal name
 #'  @param Issuer A character string the Isser Name
+#'  @param DealNumber A character string the Deal Number
 #'  @param DealPriceDate A character string the Deal Pricing Date
 #'  @param DealSettlementDate A character string the Deal Settlement Date
 #'  @param Underwriter A character string the Deal Underwriter
-#'  @param NumberofTranches A numeric string the Number of Tranches
-#'  @param NumberPacSchedules A numeric value the number of PAC schedules
+#'  @param Trustee A character string the deal Trustee
+#'  @param PricingSpeed A character string the deal pricing speed
+#'  @param JumpReferenceSpeed1 A numeric value the Jump Z speed
+#'  @param JumpReferenceSpeed2 A numeric value the Jump Z speed
+#'  @param JumpReferenceSpeed3 A numeric value the Jump Z speed
+#'  @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
+#'  @param NumberofTranches A numeric value the number of Tranches
+#'  @param NumberofComponentTranches A numeric value the number of component Tranches
+#'  @param NumberofCombinedTranches A numeric value the number of combined Tranches
+#'  @param NumberofPools A numeric value the number of pools
+#'  @param PacSchedulesIncluded A logical value TRUE/FALSE
+#'  @param NumberofPacSchedules A numeric value the number of PAC schedules
 #'  @param NumberofGroups A numeric value the number of groups
 #'  @param DealSize A numeric value the original balance of all tranches
 #'  @param CollateralAmount A numeric value the current face amount of the collateral
+#'  @param CollateralAvgLife A numeric value the avg life of the collateral 
+#'  @param BondValue A numeric value the bond price
+#'  @param BondValueMethod A character string the valuation method
+#'  @param BondValueCap A numeric value the Bond Coupon Cap Rate
+#'  @param BondValueDiscountRate A numeric value the Bond discount rate
+#'  @param BondValueReinvestmentRate A numeric value the assumed trust reinvestment rate
+#'  @param ExpenseBasisPointFee A numeric value the expense of the Trust
+#'  @param ExpenseFixed A numeric value the fixed expenses of the Trust
+#'  @param ExpensePeriodicity A numeric value the calender payment of expenses
+#'  @param InitialReserveFund A numeric value the amount of the initial reserve fund
 #'  @examples
-#'  \dontrun{
-#'    MakeRAID(DealName = "BondLabPACInverse_test", 
-#'    Issuer = "Bondlab", 
-#'    DealPriceDate = "12-01-2012", 
-#'    DealSettlementDate = "01-01-2013",
-#'    Underwriter = "Bondlab",
-#'    NumberofTranches = 4,
-#'    NumberPacSchedules = 1,
-#'    NumberofGroups = 1,
-#'    DealSize = 200000000,
-#'    CollateralAmount = 200000000)}
+#'  \dontrun{need example}
 #'@export
-  MakeRAID <- function(DealName = "character", 
-                     Issuer = "character", 
+MakeRAID <- function(DealName = "character", 
+                     Issuer = "character",
+                     DealNumber = "character",
                      DealPriceDate = "character", 
                      DealSettlementDate = "character",
                      Underwriter = "character",
+                     Trustee = "character",
+                     PricingSpeed = numeric(),
+                     JumpReferenceSpeed1 = numeric(),
+                     JumpReferenceSpeed2 = numeric(),
+                     JumpReferenceSpeed3 = numeric(),
+                     JumpReferenceSpeed4 = numeric(),
                      NumberofTranches = numeric(),
-                     NumberPacSchedules = numeric(),
+                     NumberofComponentTranches = numeric(),
+                     NumberofCombinedTranches = numeric(),
+                     NumberofPools = numeric(),
+                     PacSchedulesIncluded = "logical",
+                     NumberofPacSchedules = numeric(),
                      NumberofGroups = numeric(),
                      DealSize = numeric(),
-                     CollateralAmount = numeric()){
+                     CollateralAmount = numeric(),
+                     CollateralAvgLife = numeric(),
+                     BondValue = numeric(),
+                     BondValueMethod = "character",
+                     BondValueCap = numeric(),
+                     BondValueDiscountRate = numeric(),
+                     BondValueReinvestmentRate = numeric(),
+                     ExpenseBasisPointFee = numeric(),
+                     ExpenseFixed = numeric(),
+                     ExpensePeriodicity = numeric(),
+                     InitialReserveFund = numeric()){
   
   temp <-RAID(DealName = DealName,
               Issuer = Issuer,
+              DealNumber = DealNumber,
               DealPriceDate = DealPriceDate,
               DealSettlementDate = DealSettlementDate,
               Underwriter = Underwriter,
+              Trustee = Trustee,
+              PricingSpeed = PricingSpeed,
+              JumpReferenceSpeed1 = JumpReferenceSpeed1,
+              JumpReferenceSpeed2 = JumpReferenceSpeed2,
+              JumpReferenceSpeed3 = JumpReferenceSpeed3,
+              JumpReferenceSpeed4 = JumpReferenceSpeed4,
               NumberofTranches = NumberofTranches,
-              NumberPacSchedules = NumberPacSchedules,
+              NumberofComponentTranches = NumberofComponentTranches,
+              NumberofCombinedTranches = NumberofCombinedTranches,
+              NumberofPools = NumberofPools,
+              PacSchedulesIncluded = PacSchedulesIncluded,
+              NumberofPacSchedules = NumberofPacSchedules,
               NumberofGroups = NumberofGroups,
               DealSize = DealSize,
-              CollateralAmount = CollateralAmount)
+              CollateralAmount = CollateralAmount,
+              CollateralAvgLife = CollateralAvgLife,
+              BondValue = BondValue,
+              BondValueMethod = BondValueMethod,
+              BondValueCap = BondValueCap,
+              BondValueDiscountRate = BondValueDiscountRate,
+              BondValueReinvestmentRate = BondValueReinvestmentRate,
+              ExpenseBasisPointFee = ExpenseBasisPointFee,
+              ExpenseFixed = ExpenseFixed,
+              ExpensePeriodicity = ExpensePeriodicity,
+              InitialReserveFund = InitialReserveFund)
   
   SaveRAID(RAIDFile = temp)}
   
@@ -319,187 +495,256 @@ setMethod("initialize",
   #1)Tranched Details is a Constructor function to create Tranche data
   # it has no connections and is used by the function MakeTranches
 
-  TrancheDetails <- function( DealName = "character",
-                              TrancheNumber = "character",
-                              TrancheName = "character",
-                              TranchePrincipal = "character",
-                              TrancheInterest = "character",
-                              TranchePrincipalDesc = "character",
-                              TrancheInterestDesc = "character",
-                              Cusip = "character",
-                              TrancheOrigBal = numeric(),
-                              TrancheDatedDate = "character",
-                              TrancheFirstPmtDate = "character",
-                              TrancheLastPmtDate = "character",
-                              TrancheNextPmtDate = "character",
-                              TrancheCoupon = numeric(),
-                              Delay = numeric(),
-                              PrinPmtFrequency = numeric(),
-                              InterestPmtFrequency = numeric(),
-                              FloaterIndex = "character",
-                              FloaterMargin = numeric(),
-                              FloaterCap = numeric(),
-                              FloaterFloor = numeric(),
-                              FloaterFormula = "function",
-                              PacLowBand = numeric(),
-                              PacHighBand = numeric(),
-                              Group = numeric(),
-                              Schedule = "logical",
-                              Fixed = "logical"){
-    
-    new("TrancheDetails",
-        DealName = DealName,
-        TrancheNumber = TrancheNumber,
-        TrancheName = TrancheName,
-        TranchePrincipal = TranchePrincipal,
-        TrancheInterest = TrancheInterest,
-        TranchePrincipalDesc = TranchePrincipalDesc,
-        TrancheInterestDesc = TrancheInterestDesc,
-        Cusip = Cusip,
-        TrancheOrigBal = TrancheOrigBal,
-        TrancheDatedDate = TrancheDatedDate,
-        TrancheFirstPmtDate = TrancheFirstPmtDate,
-        TrancheLastPmtDate = TrancheLastPmtDate,
-        TrancheNextPmtDate = TrancheNextPmtDate,
-        TrancheCoupon = TrancheCoupon,
-        Delay = Delay,
-        PrinPmtFrequency = PrinPmtFrequency,
-        InterestPmtFrequency = InterestPmtFrequency,
-        FloaterIndex = FloaterIndex,
-        FloaterMargin = FloaterMargin,
-        FloaterCap = FloaterCap,
-        FloaterFloor = FloaterFloor,
-        FloaterFormula = FloaterFormula,
-        PacLowBand = PacLowBand,
-        PacHighBand = PacHighBand,
-        Group = Group,
-        Schedule = Schedule,
-        Fixed = Fixed)
-  }
+TrancheDetails <- function(DealName = "character",
+                           TrancheNumber = "character",
+                           NumberofComponents = numeric(),
+                           ComponentofTranches = "character",
+                           TrancheName = "character",
+                           TranchePrincipal = "character",
+                           TranchePrincipalDesc = "character",
+                           TrancheInterestDesc = "character",     
+                           TrancheOtherDescription = "character",
+                           Cusip = "character",
+                           TrancheOrigBal = numeric(),
+                           TrancheInterest = "character",
+                           TrancheCoupon = numeric(),
+                           AccrualRate = numeric(),
+                           TreasuryMaturity = numeric(),
+                           TreasuryYield = numeric(),
+                           TreasurySpread = numeric(),
+                           TrancheYield = numeric(),
+                           TranchePrice = numeric(),
+                           TrancheProceedsWithInterest = numeric(),
+                           TrancheAvgLife = numeric(),
+                           TrancheDuration = numeric(),
+                           TrancheDatedDate = numeric(),
+                           TrancheFirstPmtDate = "character",
+                           TrancheLastPmtDate = "character",
+                           TrancheNextPmtDate = "character",
+                           TrancheFinalPmtDate = "character",
+                           Delay = numeric(),
+                           InterestPmtFrequency = numeric(),
+                           PrinPmtFrequency = numeric(),
+                           PacLowBand = numeric(),
+                           PacHighBand = numeric(),
+                           FloaterIndex = "character",
+                           InitialIndexValue = numeric(),
+                           FloaterMargin = numeric(),
+                           FloaterMultiplier = numeric(),
+                           FloaterCap = numeric(),
+                           FloaterFloor = numeric(),
+                           FloaterInitialCoupon = numeric(),
+                           FloaterResetFrequency = numeric(),
+                           FloaterFirstResetDate = "character",
+                           FloaterFormula = "function",
+                           Group = numeric(),
+                           TrancheType = "character",
+                           Schedule = "logical",
+                           Fixed = "logical"){
   
-  
+  new("TrancheDetails",
+      DealName = DealName,
+      TrancheNumber = TrancheNumber,
+      NumberofComponents = NumberofComponents,
+      ComponentofTranches = ComponentofTranches,
+      TrancheName = TrancheName,
+      TranchePrincipal = TranchePrincipal,
+      TranchePrincipalDesc = TranchePrincipalDesc,
+      TrancheInterestDesc = TrancheInterestDesc,    
+      TrancheOtherDescription = TrancheOtherDescription,
+      Cusip = Cusip,
+      TrancheOrigBal = TrancheOrigBal,
+      TrancheInterest = TrancheInterest,
+      TrancheCoupon = TrancheCoupon,
+      AccrualRate = AccrualRate,
+      TreasuryMaturity = TreasuryMaturity,
+      TreasuryYield = TreasuryYield,
+      TreasurySpread = TreasurySpread,
+      TrancheYield = TreasuryYield,
+      TranchePrice = TranchePrice,
+      TrancheProceedsWithInterest = TrancheProceedsWithInterest,
+      TrancheAvgLife = TrancheAvgLife,
+      TrancheDuration = TrancheDuration,
+      TrancheDatedDate = TrancheDatedDate,
+      TrancheFirstPmtDate = TrancheFirstPmtDate,
+      TrancheLastPmtDate = TrancheLastPmtDate,
+      TrancheNextPmtDate = TrancheNextPmtDate,
+      TrancheFinalPmtDate = TrancheFinalPmtDate,
+      Delay = Delay,
+      InterestPmtFrequency = InterestPmtFrequency,
+      PrinPmtFrequency = PrinPmtFrequency,
+      PacLowBand = PacLowBand,
+      PacHighBand = PacHighBand,
+      FloaterIndex = FloaterIndex,
+      InitialIndexValue = InitialIndexValue,
+      FloaterMargin = FloaterMargin,
+      FloaterMultiplier = FloaterMultiplier,
+      FloaterCap = FloaterCap,
+      FloaterFloor = FloaterFloor,
+      FloaterInitialCoupon = FloaterInitialCoupon,
+      FloaterResetFrequency = FloaterResetFrequency,
+      FloaterFirstResetDate = FloaterFirstResetDate,
+      FloaterFormula = FloaterFormula,
+      Group = Group,
+      TrancheType = TrancheType,
+      Schedule = Schedule,
+      Fixed = Fixed)
+}
+
+
 # 2) Make tranche is actually a function which calls TrancheDetails 
-  #serialize the object TrancheDetails to the tranches directory
-  #note in the help file MakeTranche is refered to as constructor since
-  #the actual constructor TrancheDetails is not exposed to the user
+#serialize the object TrancheDetails to the tranches directory
+#note in the help file MakeTranche is refered to as constructor since
+#the actual constructor TrancheDetails is not exposed to the user
 
 #' A constructor function for REMIC tranche detail
 #' 
 #' MakeTranche a constructor function used to create a REMIC tranche
 #' @param DealName A character string the deal name
 #' @param TrancheNumber A character string the Tranche Number
+#' @param NumberofComponents A numeric value the number of components
+#' @param ComponentofTranches A string identifying component tranches
 #' @param TrancheName A character string the the Tranche Name
 #' @param TranchePrincipal A character string the principal type (pass-through, notional)
-#' @param TrancheInterest A character string the interest type (fixed or floating)
 #' @param TranchePrincipalDesc A character string the REMIC principal type (sequential, IO, PAC, etc.)
 #' @param TrancheInterestDesc A character string the REMIC interest type (Fixed, Floating, Variable)
+#' @param TrancheOtherDescription A character string the other REMIC descriptive information
 #' @param Cusip A character string the tranche cusip
 #' @param TrancheOrigBal A character numeric value the original balance
+#' @param TrancheInterest A character string the Tranche Interest Type
+#' @param TrancheCoupon A numeric value the tranche coupon
+#' @param AccrualRate A numeric value the accrual rate on the bond
+#' @param TreasuryMaturity A numeric value the maturity of the pricing benchmark (Treasury or Swap)
+#' @param TreasuryYield A numeric value the yield of the pricing benchmark (Treasury or Swap)
+#' @param TreasurySpread A numeric value the spread over the pricing bechmark (Treasury or Swap)
+#' @param TrancheYield A numeric value the new issue pricing yield to maturity
+#' @param TranchePrice A numeric value the new issue price
+#' @param TrancheProceedsWithInterest A numeric value the new issue proceeds
+#' @param TrancheAvgLife A numeric value the average life at pricing
+#' @param TrancheDuration A numeric value the duration (modified) at pricing
 #' @param TrancheDatedDate A character value the tranche dated date
 #' @param TrancheFirstPmtDate A character value the tranche first payment date
 #' @param TrancheLastPmtDate A character value the tranche last payment date
 #' @param TrancheNextPmtDate A character value the tranche next payment date
-#' @param TrancheCoupon A numeric value the tranche coupon
+#' @param TrancheFinalPmtDate A character value the tranche final payment date
 #' @param Delay A numeric value the delay days
+#' @param InterestPmtFrequency A numeric value the interest payment frequency 
 #' @param PrinPmtFrequency A numeric value the principal payment frequency
-#' @param InterestPmtFrequency A numeric value the interest payment frequency
-#' @param FloaterIndex A character value the floater index name
-#' @param FloaterMargin A numeric value the floater margin
-#' @param FloaterCap A numeric value the floater cap
-#' @param FloaterFloor A numeric value the floater floor
-#' @param FloaterFormula A function the floater coupon formula
 #' @param PacLowBand A numeric value the PAC Lower Band
 #' @param PacHighBand A numeric value the PAC Upper Band
+#' @param FloaterIndex A character value the floater index name
+#' @param InitialIndexValue A numeric value the value of the floater's reference index at issuance
+#' @param FloaterMargin A numeric value the floater margin
+#' @param FloaterMultiplier A numeric value the floater multiplier
+#' @param FloaterCap A numeric value the floater cap
+#' @param FloaterFloor A numeric value the floater floor
+#' @param FloaterInitialCoupon A numeric value the floater's new issue coupon
+#' @param FloaterResetFrequency A numeric value the reset frequency (12 is monthly)
+#' @param FloaterFirstResetDate A character string the first reset date following issuance
+#' @param FloaterFormula A function the floater coupon formula
 #' @param Group A numeric value the collateral group number
+#' @param TrancheType A character value the type of tranche (standard, exchangeable)
 #' @param Schedule A logical indicating the PAC/TAC schedule
 #' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
 #' @examples
-#' \dontrun{ 
-#'   MakeTranche(DealName = "BondLabPACInverse_test",
-#'  TrancheNumber = "1",
-#'  TrancheName = "A",
-#'  TranchePrincipal = "Pass_Through",
-#'  TrancheInterest = "Fix",
-#'  TranchePrincipalDesc = "PAC",
-#'  TrancheInterestDesc = "Fix",
-#'  Cusip = "BondLabPAC2",
-#'  TrancheOrigBal = 148769215,
-#'  TrancheDatedDate  = "01-01-2013",
-#'  TrancheFirstPmtDate = "01-15-2013",
-#'  TrancheLastPmtDate = "12-15-2042",
-#'  TrancheNextPmtDate = "01-15-2013",
-#'  TrancheCoupon = 2.25,
-#'  Delay = 15,
-#'  PrinPmtFrequency = 12,
-#'  InterestPmtFrequency = 12,
-#'  FloaterIndex = "999",
-#'  FloaterMargin = 0,
-#'  FloaterCap = 0,
-#'  FloaterFloor = 0,
-#'  FloaterFormula = function(){},
-#'  PacLowBand = 75,
-#'  PacHighBand = 250,
-#'  Group = 1,
-#'  Schedule = TRUE,
-#'  Fixed = TRUE)} 
+#' \dontrun{Need Example} 
 #'@export
-  MakeTranche <- function(  DealName = "character",
-                            TrancheNumber = "character",
-                            TrancheName = "character",
-                            TranchePrincipal = "character",
-                            TrancheInterest = "character",
-                            TranchePrincipalDesc = "character",
-                            TrancheInterestDesc = "character",
-                            Cusip = "character",
-                            TrancheOrigBal = numeric(),
-                            TrancheDatedDate = "character",
-                            TrancheFirstPmtDate = "character",
-                            TrancheLastPmtDate = "character",
-                            TrancheNextPmtDate = "character",
-                            TrancheCoupon = numeric(),
-                            Delay = numeric(),
-                            PrinPmtFrequency = numeric(),
-                            InterestPmtFrequency = numeric(),
-                            FloaterIndex = "character",
-                            FloaterMargin = numeric(),
-                            FloaterCap = numeric(),
-                            FloaterFloor = numeric(),
-                            FloaterFormula = "function",
-                            PacLowBand = numeric(),
-                            PacHighBand = numeric(),
-                            Group = numeric(),
-                            Schedule = "logical",
-                            Fixed = "logical") {
-    
-    temp <- TrancheDetails( DealName = DealName,
-                            TrancheNumber = TrancheNumber,
-                            TrancheName = TrancheName,
-                            TranchePrincipal = TranchePrincipal,
-                            TrancheInterest = TrancheInterest,
-                            TranchePrincipalDesc = TranchePrincipalDesc,
-                            TrancheInterestDesc = TrancheInterestDesc,
-                            Cusip = Cusip,
-                            TrancheOrigBal = TrancheOrigBal,
-                            TrancheDatedDate = TrancheDatedDate,
-                            TrancheFirstPmtDate = TrancheFirstPmtDate,
-                            TrancheLastPmtDate = TrancheLastPmtDate,
-                            TrancheNextPmtDate = TrancheNextPmtDate,
-                            TrancheCoupon = TrancheCoupon,
-                            Delay = Delay,
-                            PrinPmtFrequency = PrinPmtFrequency,
-                            InterestPmtFrequency = InterestPmtFrequency,
-                            FloaterIndex = FloaterIndex,
-                            FloaterMargin = FloaterMargin,
-                            FloaterCap = FloaterCap,
-                            FloaterFloor = FloaterFloor,
-                            FloaterFormula = FloaterFormula,
-                            PacLowBand = PacLowBand,
-                            PacHighBand = PacHighBand,
-                            Group = Group,
-                            Schedule = Schedule,
-                            Fixed = Fixed)
-    
-    SaveTranche(DealName = DealName, TrancheNumber = TrancheNumber, TrancheFile = temp)}
+MakeTranche <- function(  DealName = "character",
+                          TrancheNumber = "character",
+                          NumberofComponents = numeric(),
+                          ComponentofTranches = numeric(),
+                          TrancheName = "character",
+                          TranchePrincipal = "character",
+                          TranchePrincipalDesc = "character",
+                          TrancheInterestDesc = "character",     
+                          TrancheOtherDescription = "character",
+                          Cusip = "character",
+                          TrancheOrigBal = numeric(),
+                          TrancheInterest = "character",
+                          TrancheCoupon = numeric(),
+                          AccrualRate = numeric(),
+                          TreasuryMaturity = numeric(),
+                          TreasuryYield = numeric(),
+                          TreasurySpread = numeric(),
+                          TrancheYield = numeric(),
+                          TranchePrice = numeric(),
+                          TrancheProceedsWithInterest = numeric(),
+                          TrancheAvgLife = numeric(),
+                          TrancheDuration = numeric(),
+                          TrancheDatedDate = numeric(),
+                          TrancheFirstPmtDate = "character",
+                          TrancheLastPmtDate = "character",
+                          TrancheNextPmtDate = "character",
+                          TrancheFinalPmtDate = "character",
+                          Delay = numeric(),
+                          InterestPmtFrequency = numeric(),
+                          PrinPmtFrequency = numeric(),
+                          PacLowBand = numeric(),
+                          PacHighBand = numeric(),
+                          FloaterIndex = "character",
+                          InitialIndexValue = numeric(),
+                          FloaterMargin = numeric(),
+                          FloaterMultiplier = numeric(),
+                          FloaterCap = numeric(),
+                          FloaterFloor = numeric(),
+                          FloaterInitialCoupon = numeric(),
+                          FloaterResetFrequency = numeric(),
+                          FloaterFirstResetDate = "character",
+                          FloaterFormula = "function",
+                          Group = numeric(),
+                          TrancheType = "character",
+                          Schedule = "logical",
+                          Fixed = "logical") {
+  
+  temp <- TrancheDetails( DealName = DealName,
+                          TrancheNumber = TrancheNumber,
+                          NumberofComponents = NumberofComponents,
+                          ComponentofTranches = ComponentofTranches,
+                          TrancheName = TrancheName,
+                          TranchePrincipal = TranchePrincipal,
+                          TranchePrincipalDesc = TranchePrincipalDesc,
+                          TrancheInterestDesc = TrancheInterestDesc,    
+                          TrancheOtherDescription = TrancheOtherDescription,
+                          Cusip = Cusip,
+                          TrancheOrigBal = TrancheOrigBal,
+                          TrancheInterest = TrancheInterest,
+                          TrancheCoupon = TrancheCoupon,
+                          AccrualRate = AccrualRate,
+                          TreasuryMaturity = TreasuryMaturity,
+                          TreasuryYield = TreasuryYield,
+                          TreasurySpread = TreasurySpread,
+                          TrancheYield = TreasuryYield,
+                          TranchePrice = TranchePrice,
+                          TrancheProceedsWithInterest = TrancheProceedsWithInterest,
+                          TrancheAvgLife = TrancheAvgLife,
+                          TrancheDuration = TrancheDuration,
+                          TrancheDatedDate = TrancheDatedDate,
+                          TrancheFirstPmtDate = TrancheFirstPmtDate,
+                          TrancheLastPmtDate = TrancheLastPmtDate,
+                          TrancheNextPmtDate = TrancheNextPmtDate,
+                          TrancheFinalPmtDate = TrancheFinalPmtDate,
+                          Delay = Delay,
+                          InterestPmtFrequency = InterestPmtFrequency,
+                          PrinPmtFrequency = PrinPmtFrequency,
+                          PacLowBand = PacLowBand,
+                          PacHighBand = PacHighBand,
+                          FloaterIndex = FloaterIndex,
+                          InitialIndexValue = InitialIndexValue,
+                          FloaterMargin = FloaterMargin,
+                          FloaterMultiplier = FloaterMultiplier,
+                          FloaterCap = FloaterCap,
+                          FloaterFloor = FloaterFloor,
+                          FloaterInitialCoupon = FloaterInitialCoupon,
+                          FloaterResetFrequency = FloaterResetFrequency,
+                          FloaterFirstResetDate = FloaterFirstResetDate,
+                          FloaterFormula = FloaterFormula,
+                          Group = Group,
+                          TrancheType = TrancheType,
+                          Schedule = Schedule,
+                          Fixed = Fixed)
+  
+  SaveTranche(DealName = DealName, TrancheNumber = TrancheNumber, TrancheFile = temp)}
+
 
   # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
   # The function assembles multiple tranches associated with a deal 
@@ -687,7 +932,7 @@ setMethod("initialize",
 
   
   # 2) serialize the collateral information to the groups directory
-  #' A constructor function to create the collateal group file for a REMIC
+  #' A constructor function to create the collatreal group file for a REMIC
   #' 
   #' Makes Collateral Groups for REMIC structure currently only representative (aggregated collateral groups)
   #' is supported.  In the future multiple collateral pools or loans are envisioned.

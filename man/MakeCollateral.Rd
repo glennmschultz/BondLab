@@ -2,7 +2,7 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{MakeCollateral}
 \alias{MakeCollateral}
-\title{A constructor function to create the collateal group file for a REMIC}
+\title{A constructor function to create the collatreal group file for a REMIC}
 \usage{
 MakeCollateral(DealName = "character", Group = numeric(), Cusip = list(),
   OrigBal = list())

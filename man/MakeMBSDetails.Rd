@@ -15,9 +15,9 @@ MakeMBSDetails(Cusip = "character", ID = "character",
   AmortizationType = "character", AmortizationTerm = numeric(),
   Index = "character", Margin = numeric(), FirstPmtDate = "character",
   FinalPmtDate = "character", Servicing = numeric(), PMI = numeric(),
-  Gfee = numeric(), InitialInterest = "character",
+  Gfee = numeric(), InitialInterest = "logical",
   InterestOnlyPeriod = numeric(), FirstPrinPaymentDate = "character",
-  BalloonPmt = "character", BalloonDate = "character",
+  BalloonPmt = "logical", BalloonDate = "character",
   MBSFactor = numeric(), Model = "character", Burnout = numeric(),
   SATO = numeric())
 }
@@ -88,14 +88,14 @@ PMI provider}
 guarantee timely payment of principal and interest.  Applicable in the case of Fannie
 Mae, Freddie Mac, or Ginnie Mae pools.}
 
-\item{InitialInterest}{A character string indicating the note carries an interest only period}
+\item{InitialInterest}{A logical indicating the note carries an interest only period}
 
 \item{InterestOnlyPeriod}{A character string indicating the note's interest only period}
 
 \item{FirstPrinPaymentDate}{A character string indicating the first principal payment date
 due on an interest only mortgage.}
 
-\item{BalloonPmt}{A character string indicating the mortgage carries a balloon pmt.}
+\item{BalloonPmt}{A logical indicating the mortgage carries a balloon pmt.}
 
 \item{BalloonDate}{A character string the balloon payment date.}
 
@@ -141,10 +141,10 @@ This is a standard generic function used to construct a MBS pass through securit
  Servicing = 0.25,
  PMI = 0.25,
  Gfee = 0.25,
- InitialInterest = "no",
+ InitialInterest = FALSE,
  InterestOnlyPeriod = 0,
  FirstPrinPaymentDate = "1-01-2013",
- BalloonPmt = "no",
+ BalloonPmt = FALSE,
  BalloonDate = "00-00-0000",
  MBSFactor = 1,
  Model = "FH30.Generic",

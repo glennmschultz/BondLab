@@ -15,6 +15,7 @@ rates data}
 }
 \description{
 The function converts a .csv file of rates data to yield curve objects that can be read by the Term Structure wapper
+note date is entered in the file as YYYY-mm-dd.  "/" convention will result in an error.
 }
 \examples{
 \dontrun{

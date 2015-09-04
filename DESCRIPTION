@@ -20,5 +20,6 @@ Imports:  termstrc,
           optimx,
 Suggests: knitr,
           devtools,
+          roxygen2,
           testthat
 VignetteBuilder: knitr

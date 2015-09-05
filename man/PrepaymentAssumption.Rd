@@ -12,9 +12,9 @@ PrepaymentAssumption(bond.id = "character", TermStructure = "character",
   Severity = numeric())
 }
 \arguments{
-\item{bond.id}{A character string the bond id or cusip}
+\item{bond.id}{A character string referring to an object of the type MBSDetails}
 
-\item{TermStructure}{A character string the method used to fit the term structure}
+\item{TermStructure}{A character string referring to an object of the type TermStructure}
 
 \item{MortgageRate}{A character string the input value of mortgagerate.rds.  Prepayment Assumption does
 open Mtg.Rate connection directly rather takes the argument as an object.}

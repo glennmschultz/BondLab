@@ -344,8 +344,8 @@ setMethod("initialize",
   #' A contstructor function for the PrepaymentAssumption object
   #' 
   #' The function is a constructor function for the PrepaymentAssumption object
-  #' @param bond.id A character string the bond id or cusip
-  #' @param TermStructure A character string the method used to fit the term structure
+  #' @param bond.id A character string referring to an object of the type MBSDetails
+  #' @param TermStructure A character string referring to an object of the type TermStructure
   #' @param MortgageRate A character string the input value of mortgagerate.rds.  Prepayment Assumption does
   #' open Mtg.Rate connection directly rather takes the argument as an object.
   #' @param ModelTune A character string the prepayment model tune object

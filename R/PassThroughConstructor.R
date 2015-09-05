@@ -202,7 +202,9 @@ setMethod("initialize",
 #' @param GWac A numeric value the borrower's note rate
 #' @param OrigLoanBal A numeric value the original balance of the loan
 #' @param OrigLTV A numeric value the borrower's original loan to value ratio
-#' @param AmortizationType A character sting the type of the loan fixed or floating
+#' @param AmortizationType A character sting the type of the loan 'fixed' or 'arm'.
+#' These values are used by the prepayment model to drive the mortgage rate either fixed
+#' or adjustable mortgage rate
 #' @param AmortizationTerm A numeric value the term of the loan in years
 #' @param Index A character string if the amortization type is adjustable the Index 
 #' to which the note rate references

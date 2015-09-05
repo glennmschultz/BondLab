@@ -62,7 +62,9 @@ from the trust to the investor}
 
 \item{OrigLTV}{A numeric value the borrower's original loan to value ratio}
 
-\item{AmortizationType}{A character sting the type of the loan fixed or floating}
+\item{AmortizationType}{A character sting the type of the loan 'fixed' or 'arm'.
+These values are used by the prepayment model to drive the mortgage rate either fixed
+or adjustable mortgage rate}
 
 \item{AmortizationTerm}{A numeric value the term of the loan in years}
 

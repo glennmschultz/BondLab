@@ -224,7 +224,7 @@ setMethod("initialize",
 #' @param InitialInterest A logical indicating the note carries an interest only period
 #' @param InterestOnlyPeriod A character string indicating the note's interest only period
 #' @param FirstPrinPaymentDate A character string indicating the first principal payment date
-#' due on an interest only mortgage.
+#' due of the mortgage.
 #' @param BalloonPmt A logical indicating the mortgage carries a balloon pmt.
 #' @param BalloonDate A character string the balloon payment date.
 #' @param MBSFactor A numeric value the current factor of the MBS.

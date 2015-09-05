@@ -95,7 +95,7 @@ Mae, Freddie Mac, or Ginnie Mae pools.}
 \item{InterestOnlyPeriod}{A character string indicating the note's interest only period}
 
 \item{FirstPrinPaymentDate}{A character string indicating the first principal payment date
-due on an interest only mortgage.}
+due of the mortgage.}
 
 \item{BalloonPmt}{A logical indicating the mortgage carries a balloon pmt.}
 

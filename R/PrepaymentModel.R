@@ -344,8 +344,8 @@ setMethod("initialize",
   #' A contstructor function for the PrepaymentAssumption object
   #' 
   #' The function is a constructor function for the PrepaymentAssumption object
-  #' @param bond.id A character string the bond id or cusip
-  #' @param TermStructure A character string the method used to fit the term structure
+  #' @param bond.id A character string referring to an object of the type MBSDetails
+  #' @param TermStructure A character string referring to an object of the type TermStructure
   #' @param MortgageRate A character string the input value of mortgagerate.rds.  Prepayment Assumption does
   #' open Mtg.Rate connection directly rather takes the argument as an object.
   #' @param ModelTune A character string the prepayment model tune object
@@ -409,7 +409,7 @@ setMethod("initialize",
   Period = seq(from = 1, to = Remain.Term, by = 1)
   PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
   LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
-                                FirstPmtDate, units = "days")/days.in.month) + 1
+                                as.Date(FirstPmtDate), units = "days")/days.in.month) + 1
   
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))

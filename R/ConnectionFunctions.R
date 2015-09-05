@@ -48,7 +48,7 @@
     #' @export
     SaveMBS <- function(filename = "character"){
       connMBSDetails <- gzfile(description = paste(system.file(package = "BondLab"),
-                                                 "/BondData/",as.character(filename), "@ID", ".rds", sep = ""))
+                              "/BondData/",as.character(filename), "@ID", ".rds", sep = ""))
       saveRDS(temp, connMBSDetails)
       close(connMBSDetails)}
     
@@ -113,11 +113,12 @@
   #' @param bond.id A character string the bond id or cusip currently bond.id is supported
   #' @export
    ModelTune <- function(bond.id = "character"){
-                 ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-                                  "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
-                 ModelTune <- readRDS(ModelTune.Conn)
-                 on.exit(close.connection(ModelTune.Conn))
-                 return(ModelTune)
+                #Deal <- MBS(MBS.id = bond.id)
+                ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+                "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
+                ModelTune <- readRDS(ModelTune.Conn)
+                on.exit(close.connection(ModelTune.Conn))
+                return(ModelTune)
    }
    
    #----------------------------------------------------------------------------------------

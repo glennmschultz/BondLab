@@ -1,15 +1,15 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-# Initialize RAID class
-setMethod("initialize",
+  # Initialize RAID class
+  setMethod("initialize",
           signature("RAID"),
           function (.Object, 
                     DealName = "character",
@@ -82,8 +82,8 @@ setMethod("initialize",
             callNextMethod(.Object,...)               
           })
 
-# Initialize TrancheDetails
-setMethod("initialize",
+  # Initialize TrancheDetails
+  setMethod("initialize",
           signature("TrancheDetails"),
           function(.Object,
                    DealName = "character",
@@ -184,8 +184,8 @@ setMethod("initialize",
             callNextMethod(.Object,...)
           })
 
-# Initialize Tranches
-setMethod("initialize",
+  # Initialize Tranches
+  setMethod("initialize",
           signature("Tranches"),
           function(.Object,...,
                    Tranches = list())
@@ -197,8 +197,8 @@ setMethod("initialize",
             callNextMethod(.Object, ...)
           })
 
-# Initialize collateral  
-setMethod("initialize",
+  # Initialize collateral  
+  setMethod("initialize",
           signature ("Collateral"),
           function (.Object,
                     Group = numeric(),
@@ -213,8 +213,8 @@ setMethod("initialize",
             callNextMethod(.Object,...)
           })
 
-# Initialize collateralgroup
-setMethod("initialize",
+  # Initialize collateralgroup
+  setMethod("initialize",
           signature("CollateralGroup"),
           function (.Object,
                     Group = list()) 
@@ -225,8 +225,8 @@ setMethod("initialize",
             callNextMethod(.Object,...)  
           })
 
-# Initialize Schedule
-setMethod("initialize",
+  # Initialize Schedule
+  setMethod("initialize",
           signature("Schedule"),
           function (.Object,
                     DealName = "character",
@@ -245,8 +245,8 @@ setMethod("initialize",
                       callNextMethod(.Object,...)
                     })
 
-#Initialize RDME
-setMethod("initialize",
+  #Initialize RDME
+  setMethod("initialize",
           signature("RDME"),
           function(.Object,
                    Cusip = "character",
@@ -265,8 +265,8 @@ setMethod("initialize",
             
           })
 
-# Intitialize factors 
-setMethod("initialize",
+  # Intitialize factors 
+  setMethod("initialize",
           signature("TrancheFactors"),
           function(.Object,
                    FactorData = list())
@@ -277,38 +277,77 @@ setMethod("initialize",
             callNextMethod(.Object,...)  
           })
 
-# initialize REMIC structure superclass
-setMethod("initialize",
+  # initialize REMIC structure superclass
+  setMethod("initialize",
           signature("REMICStructure"),
           function(.Object,
                    DealName = "character",
                    Issuer = "character",
+                   DealNumber = "character",
                    DealPriceDate = "character",
                    DealSettlementDate = "character",
                    Underwriter = "character",
-                   NumberofTranches = numeric(),
-                   NumberPacSchedules = numeric(),
-                   NumberofGroups = numeric(),
-                   DealSize = numeric(),
+                   Trustee = "character",
+                   PricingSpeed = "numeric",
+                   JumpReferenceSpeed1 = "numeric",
+                   JumpReferenceSpeed2 = "numeric",
+                   JumpReferenceSpeed3 = "numeric",
+                   JumpReferenceSpeed4 = "numeric",
+                   NumberofTranches = "numeric",
+                   NumberofComponentTranches = "numeric",
+                   NumberofCombinedTranches = "numeric",
+                   NumberofPools = "numeric",
+                   PacSchedulesIncluded = "logical",
+                   NumberofPacSchedules = numeric(),
+                   NumberofGroups = numeric(),                   
+                   DealSize = numeric(),                   
                    CollateralAmount = numeric(),
+                   BondValue = "numeric",
+                   BondValueMethod = "character",
+                   BondValueCap = "numeric",
+                   BondValueDiscountRate = "numeric",
+                   BondValueReinvestmentRate = "numeric",
+                   ExpenseBasisPointFee = "numeric",
+                   ExpenseFixed = "numeric",
+                   ExpensePeriodicity = "numeric",
+                   InitialReserveFund = "numeric",
                    Tranches = "character",
                    CollateralGroup = "character",
                    TrancheFactors ="character")
-{
-            .Object@DealName = DealName
-            .Object@Issuer = Issuer
-            .Object@DealPriceDate = DealPriceDate
-            .Object@DealSettlementDate = DealSettlementDate
-            .Object@Underwriter = Underwriter
-            .Object@NumberofTranches = NumberofTranches
-            .Object@NumberPacSchedules = NumberPacSchedules
-            .Object@NumberofGroups = NumberofGroups
-            .Object@DealSize = DealSize
-            .Object@CollateralAmount = CollateralAmount
-            .Object@Tranches = Tranches
-            .Object@Group = CollateralGroup
-            .Object@FactorData = TrancheFactors
-            
+        {
+                    .Object@DealName = DealName
+                    .Object@Issuer = Issuer
+                    .Object@DealNumber = DealNumber
+                    .Object@DealPriceDate = DealPriceDate
+                    .Object@DealSettlementDate = DealSettlementDate
+                    .Object@Underwriter = Underwriter 
+                    .Object@Trustee = Trustee
+                    .Object@PricingSpeed = PricingSpeed
+                    .Object@JumpReferenceSpeed1 = JumpReferenceSpeed1
+                    .Object@JumpReferenceSpeed2 = JumpReferenceSpeed2
+                    .Object@JumpReferenceSpeed3 = JumpReferenceSpeed3
+                    .Object@JumpReferenceSpeed4 = JumpReferenceSpeed4
+                    .Object@NumberofTranches = NumberofTranches
+                    .Object@NumberofComponentTranches = NumberofComponentTranches
+                    .Object@NumberofCombinedTranches = NumberofCombinedTranches
+                    .Object@NumberofPools = NumberofPools
+                    .Object@PacSchedulesIncluded = PacSchedulesIncluded
+                    .Object@NumberofPacSchedules = NumberofPacSchedules
+                    .Object@NumberofGroups = NumberofGroups                   
+                    .Object@DealSize = DealSize                   
+                    .Object@CollateralAmount = CollateralAmount
+                    .Object@BondValue = BondValue
+                    .Object@BondValueMethod = BondValueMethod
+                    .Object@BondValueCap = BondValueCap
+                    .Object@BondValueDiscountRate = BondValueDiscountRate
+                    .Object@BondValueReinvestmentRate = BondValueReinvestmentRate
+                    .Object@ExpenseBasisPointFee = ExpenseBasisPointFee
+                    .Object@ExpenseFixed = ExpenseFixed
+                    .Object@ExpensePeriodicity = ExpensePeriodicity
+                    .Object@InitialReserveFund = InitialReserveFund
+                    .Object@Tranches = Tranches
+                    .Object@Group = CollateralGroup
+                    .Object@FactorData = TrancheFactors
             return(.Object)
             
             callNextMethod(.Object,...)           
@@ -1105,41 +1144,52 @@ MakeTranche <- function(  DealName = "character",
   RemicStructure <- function(DealName = "character"){
     
     RAID <- ReadRAID(RAIDFile = DealName)
-    #open connection to RAID files and instantiate RAID class
-    #connRAID <- gzfile(description = paste(system.file(package = "BondLab"), 
-    #                                       "/RAID/",DealName,".rds", sep = ""))
-    #RAID <- readRDS(connRAID)
-    #close connection to RAID
-    #close(connRAID) 
+    Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, 
+                        DealName = RAID@DealName)
     
-    Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
-    
-    CollateralGroupData <- CollateralGroup(NumberofGroups = RAID@NumberofGroups, DealName = RAID@DealName)
-    FactorData <- RDMEData(NumberofTranches = RAID@NumberofTranches, DealName = RAID@DealName)
+    CollateralGroupData <- CollateralGroup(NumberofGroups = RAID@NumberofGroups, 
+                                           DealName = RAID@DealName)
+    FactorData <- RDMEData(NumberofTranches = RAID@NumberofTranches, 
+                           DealName = RAID@DealName)
     
     REMIC <-new("REMICStructure", 
           
           DealName = RAID@DealName,
           Issuer = RAID@Issuer,
+          DealNumber = RAID@DealNumber,
           DealPriceDate = RAID@DealPriceDate,
           DealSettlementDate = RAID@DealSettlementDate,
           Underwriter = RAID@Underwriter,
+          Trustee = RAID@Trustee,
+          PricingSpeed = RAID@PricingSpeed,
+          JumpReferenceSpeed1 = RAID@JumpReferenceSpeed1,
+          JumpReferenceSpeed2 = RAID@JumpReferenceSpeed2,
+          JumpReferenceSpeed3 = RAID@JumpReferenceSpeed3,
+          JumpReferenceSpeed4 = RAID@JumpReferenceSpeed4,
           NumberofTranches = RAID@NumberofTranches,
-          NumberPacSchedules = RAID@NumberPacSchedules,
+          NumberofComponentTranches = RAID@NumberofComponentTranches,
+          NumberofCombinedTranches = RAID@NumberofCombinedTranches,
+          NumberofPools = RAID@NumberofPools,
+          PacSchedulesIncluded = RAID@PacSchedulesIncluded,
+          NumberofPacSchedules = RAID@NumberofPacSchedules,
           NumberofGroups = RAID@NumberofGroups,
           DealSize = RAID@DealSize,
-          CollateralAmount = RAID@CollateralAmount,
+          CollateralAmount = RAID@CollateralAmount,          
+          BondValue = RAID@BondValue,
+          BondValueMethod = RAID@BondValueMethod,
+          BondValueCap = RAID@BondValueCap,
+          BondValueDiscountRate = RAID@BondValueDiscountRate,
+          BondValueReinvestmentRate = RAID@BondValueReinvestmentRate,
+          ExpenseBasisPointFee = RAID@ExpenseBasisPointFee,
+          ExpenseFixed = RAID@ExpenseFixed,
+          ExpensePeriodicity = RAID@ExpensePeriodicity,
+          InitialReserveFund = RAID@InitialReserveFund,
           Tranches = Tranche@Tranches,
           CollateralGroup = CollateralGroupData@Group,
-          TrancheFactors = FactorData@FactorData
-        )
+          TrancheFactors = FactorData@FactorData)
     
-    SaveREMIC(DealName = DealName, file = REMIC)
-    #connREMIC <- gzfile(description = paste(system.file(package = "BondLab"),
-    #                                        "/REMICData/", DealName, ".rds", sep = ""))
-    #saveRDS(REMIC, connREMIC)
-    #close(connREMIC)
-        
+          SaveREMIC(DealName = DealName, file = REMIC)
+
   }
   
 

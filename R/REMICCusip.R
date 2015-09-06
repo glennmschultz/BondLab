@@ -11,6 +11,15 @@
 
 # This function creates cusip files for the Bond Data Directory
 # Used with the REMIC constructure once the tranches are established in the Tranche directory
+
+#' A function to move REMIC tranche data
+#' 
+#' This function moves REMIC tranche data from the Tranches data folder which is used
+#' by the REMIC constructor to the BondData folder.  This is the final step after the 
+#' REMIC structure has been validated.
+#' @param source.path A charachter string the source path to the Traches folder
+#' @param target.path A character string the target path to the BondData folder
+#' @export CusipRecord
 CusipRecord <- function(source.path = "character", target.path = "character"){
   
   cusip.list <- list.files(source.path)

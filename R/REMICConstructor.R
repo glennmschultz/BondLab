@@ -802,8 +802,6 @@ MakeTranche <- function(  DealName = "character",
     for(i in 1: NumberofTranches){
   
       Tranches <- SaveTranches(DealName = DealName, TrancheNumber = as.character(i))
-      #connTranches <- gzfile(description = paste("~/BondLab/Tranches/",DealName,"_","Tranche", "_",i,".rds", sep = "")) 
-      #Tranches <- readRDS(connTranches)
       
       TrancheList <- append(TrancheList, Tranches)}
     

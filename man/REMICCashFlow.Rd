@@ -43,6 +43,6 @@ The function is the constructor function for REMICCashFlow Object
 \dontrun{
 REMICCashFlow(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
 settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75,
-tranche.price = as.numeric(price[i]), PrepaymentAssumption = "CPR", CPR = 6)}
+tranche.price = 100, PrepaymentAssumption = "CPR", CPR = 6)}
 }
 

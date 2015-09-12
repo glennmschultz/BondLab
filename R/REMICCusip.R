@@ -34,5 +34,5 @@
 
   }
     
-    close(connCusip)
+    on.exit(close.connection(connCusip))
 } 

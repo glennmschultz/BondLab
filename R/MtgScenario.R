@@ -1,12 +1,10 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
 
   setMethod("initialize",
           signature("Mtg.ScenarioSet"),
@@ -130,30 +128,23 @@
   ScenarioResult <- list()
   
   # First step open mortgage rate functions
-  #connS1 <- gzfile(description = "~/BondLab/PrepaymentModel/MortgageRate.rds", open = "rb")
   MortgageRate <- MtgRate()
   
   #Call the desired curve from rates data folder
   trade.date = as.Date(trade.date, "%m-%d-%Y")
   
-  #connS2 <- gzfile(description = paste("~/BondLab/RatesData/", as.Date(trade.date, "%m-%d-%Y"), ".rds", sep = ""), open = "rb")
+ 
   rates.data <- Rates(trade.date = trade.date)
   
-  #Call Prepayment Model
-  #connS3 <- gzfile(description = paste("~/BondLab/PrepaymentModel/",bond.id@Model,".rds", sep = ""), open = "rb")
-  #ModelTune <- readRDS(connS3)
+
   ModelTune <- ModelTune(bond.id = bond.id)
   Burnout = bond.id@Burnout
   
   # ----------------------- Scenario Analysis --------------------------------  
   for(i in 1:length(scenario.set)){
     
-    #connS4 <- gzfile(description = paste("~/BondLab/Scenario/", as.character(scenario.set[i]), ".rds", sep =""), open = "rb")        
-    #connS4 <- gzfile(description = paste(system.file(package = "BondLab"), "/Scenario/", 
-    #                                     as.character(scenario.set[i]), ".rds", sep =""), open = "rb")
-    
     Scenario <- ScenarioCall(Scenario = scenario.set[i])
-    #Scenario <- readRDS(connS4) 
+
     
     # Third call the trade date rates data
     # Create variabel for the length of rates and rates data 
@@ -185,11 +176,15 @@
                                         PrepaymentAssumption = Prepayment)
     
     # Calculate static cash flow spread to the curve                                      
-    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
-    SpreadtoCurve = (MortgageCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, MortgageCashFlow@WAL )
+    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), 
+                              data = data.frame(rates.data))  
+    
+    SpreadtoCurve = (MortgageCashFlow@YieldToMaturity * 100) - predict(InterpolateCurve, 
+                                                                       MortgageCashFlow@WAL )
     
     # The second step will be to calculate the scenario effective duration and convexity
-    # I can do this with a different call that does not require BondTermStrucutre
+    # I can do this with a different call that does not require MortgageTerm Strucutre
+    # Replace with the function effective duration
     MortgageTermStructure = MtgTermStructure(bond.id = bond.id, 
                                              original.bal = original.bal, 
                                              Rate.Delta = 0.25, 
@@ -201,25 +196,37 @@
     
     # ---------------------------------------------------------------
     # Function to compute the horizon return 
-    ReturnAnalysis <- function(Scenario = "character", settlement.date = "character", proceeds = numeric(), 
-                               MortgageTermStructure = "character", spot.spread = numeric(), HrzMonths = numeric(), 
+    ReturnAnalysis <- function(Scenario = "character", 
+                               settlement.date = "character", 
+                               proceeds = numeric(), 
+                               MortgageTermStructure = "character", 
+                               spot.spread = numeric(), 
+                               HrzMonths = numeric(), 
                                ReinvestmentRate = numeric()) {
       
       # Need to error trap the reinvestment rate     
       # Reinvestment of cash flow  
       
       ReceivedCF = Scenario@TotalCashFlow[1:HrzMonths]
-      n.period = as.numeric(difftime(as.Date(Scenario@PmtDate[HrzMonths]), as.Date(Scenario@PmtDate[1:HrzMonths]), units = "days")/days.in.month)
+      n.period = as.numeric(difftime(as.Date(Scenario@PmtDate[HrzMonths]), 
+                as.Date(Scenario@PmtDate[1:HrzMonths]), units = "days")/days.in.month)
+      
       Reinvestment = ReceivedCF * (1 + (ReinvestmentRate/months.in.year)) ^ (n.period)
+      
       Reinvestment = sum(Reinvestment)
       
       # Price the tail cash flow priced at horizon
       # Forward month indexes to the cashflow array
       FwdMonth = (HrzMonths + 1)
+      
       FwdSettleDate = as.Date(settlement.date, "%m-%d-%Y")  %m+% months(HrzMonths)
+      
       FwdCashFlowPmtDate = Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]
+      
       RemainingCF = Scenario@TotalCashFlow[FwdMonth:length(Scenario@TotalCashFlow)]
-      n.period.fwd = as.numeric(difftime(as.Date(Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]), as.Date(FwdSettleDate), units = "days")/days.in.month)
+      
+      n.period.fwd = as.numeric(difftime(as.Date(Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]), 
+                                         as.Date(FwdSettleDate), units = "days")/days.in.month)
       
       # The approach bases the investor return on the forward rate curve and forward rates.
       DiscountRate =  
@@ -235,8 +242,13 @@
       
     }
     
-    HorizonReturn <- ReturnAnalysis(Scenario = MortgageCashFlow, MortgageTermStructure = MortgageTermStructure, proceeds = proceeds,
-                                    settlement.date = settlement.date, spot.spread = spot.spread, HrzMonths = 12, ReinvestmentRate = .0025)
+    HorizonReturn <- ReturnAnalysis(Scenario = MortgageCashFlow, 
+                                    MortgageTermStructure = MortgageTermStructure, 
+                                    proceeds = proceeds,
+                                    settlement.date = settlement.date, 
+                                    spot.spread = spot.spread, 
+                                    HrzMonths = 12, 
+                                    ReinvestmentRate = .0025)
     
     HorizonReturn = (HorizonReturn - 1) * 100
     
@@ -282,7 +294,7 @@
   new("Mtg.ScenarioSet", 
       Scenario = ScenarioResult)    
   
-} # scenario end function
+  } # scenario end function
 
 
 

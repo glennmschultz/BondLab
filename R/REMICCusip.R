@@ -5,14 +5,12 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-
+  
 
   # This function creates cusip files for the Bond Data Directory
   # Used with the REMIC constructure once the tranches are established in the Tranche directory
 
-  #' A function to move REMIC tranche data
+  #' A function to move REMIC tranche cusip data to the Bond Data Director
   #' 
   #' This function moves REMIC tranche data from the Tranches data folder which is used
   #' by the REMIC constructor to the BondData folder.  This is the final step after the 
@@ -35,4 +33,4 @@
   }
     
     on.exit(close.connection(connCusip))
-} 
+  } 

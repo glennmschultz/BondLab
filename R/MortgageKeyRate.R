@@ -1,14 +1,12 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-
-setGeneric("MortgageTermStructure", function(bond.id = "character", 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+ 
+  setGeneric("MortgageTermStructure", function(bond.id = "character", 
                                              original.bal = numeric(), 
                                              Rate.Delta = numeric(), 
                                              TermStructure = "character", 
@@ -18,7 +16,7 @@ setGeneric("MortgageTermStructure", function(bond.id = "character",
                                              cashflow = "character")
               {standardGeneric("MortgageTermStructure")})
 
-setMethod("initialize",
+  setMethod("initialize",
          signature("MortgageTermStructure"),
          function(.Object,
                   SpotSpread = "numeric",   
@@ -38,10 +36,10 @@ setMethod("initialize",
            callNextMethod(.Object,...)
          })
 
-# --------
-# Mortgage Key Rate Duration Calculation
-# ---------  
-MtgTermStructure <- function(bond.id = "character", 
+  # -------------------------------------------------------
+  # Mortgage Key Rate Duration Calculation
+  # -------------------------------------------------------  
+  MtgTermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 
                              TermStructure = "character", 
@@ -298,18 +296,25 @@ MtgTermStructure <- function(bond.id = "character",
     #-----------------------------------------------------------------------
     
     # Initialize the TermStructure Up and Down objects 
-    # Use the term strucutre object 
+    # Use the term strucutre object
+    # 24 is 2-year forward
+    # 120 is 10-year forward
+    # create variables and replace 24 and 120 in code
     
     Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
     
     Key.Rate.TS.Dwn@spotrate <- TermStructure@spotrate 
-    Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, FwdRate.Tenor = 24) 
-    Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, FwdRate.Tenor = 120)
+    Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
+                                               FwdRate.Tenor = 24) 
+    Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
+                                               FwdRate.Tenor = 120)
     
     Key.Rate.TS.Up@spotrate <- TermStructure@spotrate 
-    Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, FwdRate.Tenor = 24) 
-    Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, FwdRate.Tenor = 120)
+    Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
+                                              FwdRate.Tenor = 24) 
+    Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
+                                              FwdRate.Tenor = 120)
     
     # Run the prepayment model to derive the SMM vector given each Key Rate shift
     # =======================================================================   
@@ -323,8 +328,11 @@ MtgTermStructure <- function(bond.id = "character",
                                            Burnout = Burnout) 
     
     # Mortgage Cashflows call here requires that price as whole number passed
-    MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-                                               price = price.mtg.cashflow, PrepaymentAssumption = Prepayment.Dwn)
+    MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, 
+                                              original.bal = original.bal, 
+                                              settlement.date = settlement.date,
+                                               price = price.mtg.cashflow, 
+                                              PrepaymentAssumption = Prepayment.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
     for(cfd in 1:360){
@@ -342,8 +350,11 @@ MtgTermStructure <- function(bond.id = "character",
                                           Burnout = Burnout)
     
     # Mortgage Cashflows call here requires that price as whole number passed
-    MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, original.bal = original.bal, settlement.date = settlement.date,
-                                              price = price.mtg.cashflow, PrepaymentAssumption = Prepayment.Up)
+    MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, 
+                                             original.bal = original.bal, 
+                                             settlement.date = settlement.date,
+                                              price = price.mtg.cashflow, 
+                                             PrepaymentAssumption = Prepayment.Up)
     
     
     # Assign CashFlows into the cash flow array. This has to be done in a loop

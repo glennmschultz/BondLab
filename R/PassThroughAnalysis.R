@@ -5,10 +5,8 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-  
-setMethod("initialize",
+ 
+  setMethod("initialize",
           signature("PassThroughAnalytics"),
           function(.Object,
                    Cusip = "character",
@@ -198,30 +196,30 @@ setMethod("initialize",
 
   # This function analyzes a standard pass through security and serves as the constructor function
   #--------------------------------------
-#' Pass Through Analytics is the Analytic engine for a pass-through security
-#' 
-#' Analytic engine for pass through security returns pass through analytics object
-#' @param bond.id A character string the bond id or cusip
-#' @param original.bal A numeric value the original balance of the pass through
-#' @param price A numeric value the price of the pass through  
-#' @param trade.date A character string the trade date
-#' @param settlement.date A character string the settlement date
-#' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
-#' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
-#' For addiition details see the termstrc documentation.
-#' @param scenario.set A character vector listing the scenarios to run
-#' @param PrepaymentAssumption A character string the prepayment assumption used "MODEL", "PPC", or "CPR"
-#' @param ... Optional values when "PPC" or "CPR" is used
-#' @param begin.cpr A numeric value the beginning CPR assumption
-#' @param end.cpr A numeric value the ending CPR assumption
-#' @param seasoning.period A numeric value the length of the seasoning ramp
-#' @param CPR A numeric value the CPR assumption
-#' @examples 
-#' \dontrun{PassThroughAnalytics(bond.id = "bondlabMBS55", original.bal = 100000, 
-#' price = 107.5, trade.date = "01-10-2013", settlement.date = "01-13-2013", 
-#' scenario.set = c("DA25", "NC", "UA50", "UA100", "UA150", "UA200"), PrepaymentAssumption = "MODEL")}
+  #' Pass Through Analytics is the Analytic engine for a pass-through security
+  #' 
+  #' Analytic engine for pass through security returns pass through analytics object
+  #' @param bond.id A character string the bond id or cusip
+  #' @param original.bal A numeric value the original balance of the pass through
+  #' @param price A numeric value the price of the pass through  
+  #' @param trade.date A character string the trade date
+  #' @param settlement.date A character string the settlement date
+  #' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
+  #' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+  #' For addiition details see the termstrc documentation.
+  #' @param scenario.set A character vector listing the scenarios to run
+  #' @param PrepaymentAssumption A character string the prepayment assumption used "MODEL", "PPC", or "CPR"
+  #' @param ... Optional values when "PPC" or "CPR" is used
+  #' @param begin.cpr A numeric value the beginning CPR assumption
+  #' @param end.cpr A numeric value the ending CPR assumption
+  #' @param seasoning.period A numeric value the length of the seasoning ramp
+  #' @param CPR A numeric value the CPR assumption
+  #' @examples 
+  #' \dontrun{PassThroughAnalytics(bond.id = "bondlabMBS55", original.bal = 100000, 
+  #' price = 107.5, trade.date = "01-10-2013", settlement.date = "01-13-2013", 
+  #' scenario.set = c("DA25", "NC", "UA50", "UA100", "UA150", "UA200"), PrepaymentAssumption = "MODEL")}
 
-#' @export PassThroughAnalytics
+  #' @export PassThroughAnalytics
   PassThroughAnalytics <- function (bond.id = "character", 
                                     original.bal = numeric(), 
                                     price = numeric(), 

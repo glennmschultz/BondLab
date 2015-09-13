@@ -5,11 +5,11 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
-  # the book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+ 
 
-  # --- The following classes define standard bond analytics
-  
+  # ------------------------------------------------------------------------------------
+  # The following classes define standard bond analytics
+  # ------------------------------------------------------------------------------------
   setClass("BondDetails",
          representation(
            Cusip = "character",
@@ -55,8 +55,10 @@
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
 
-  #--- The folllowing classes define standard Mortgage Passthrough analytics
-
+  # ------------------------------------------------------------------------------- 
+  # The folllowing classes define standard Mortgage Passthrough analytics
+  # -------------------------------------------------------------------------------
+  
   setClass("MBSDetails", 
          representation(
            Cusip = "character",
@@ -240,11 +242,40 @@
            DiscValueofCarry = "numeric",
            FutureValuePrinCarry = "numeric",
            TotalFutureValue = "numeric",
-           DropImpliedValue = "numeric")) 
+           DropImpliedValue = "numeric"))
+  
+  # ------------------------------------------------------------------------------------------
+  # The following classes define the ATOMs Index Analytics classes
+  # ------------------------------------------------------------------------------------------
+  setClass("AtomsData",
+           representation(
+             ISpread = "numeric",
+             NSpread = "numeric",
+             ZSpread = "numeric",
+             ModDuration = "numeric",
+             Convexity = "numeric",
+             EffDuration = "numeric",
+             EffConvexity = "numeric",
+             KeyRateTenor = "numeric",
+             KeyRateDuration = "numeric",
+             KeyRateConvexity = "numeric",
+             OAD = "numeric",
+             OAC = "numeric",
+             USTOAS = "numeric",
+             USTZVSpread = "numeric",
+             LIBOROAS = "numeric",
+             LIBORZVSpread = "numeric"))
+  
+  setClass("AtomsScenario",
+           representation(
+             HorizonReturn = "numeric",
+             contains = "Scenario"))
 
-  # --- The following classes define rates and Prepayment model tune classes
-  # --- these classes are used to pass term strucuture information and prepayment model
-  # --- tuning paramaters  
+  # ------------------------------------------------------------------------------------------ 
+  # The following classes define rates and Prepayment model tune classes
+  # these classes are used to pass term strucuture information and prepayment model
+  # tuning paramaters  
+  # ------------------------------------------------------------------------------------------
 
   setClass("TermStructure",
          representation(
@@ -256,7 +287,9 @@
            TwoYearFwd = "numeric",
            TenYearFwd = "numeric"
          ))
-  #-- This is protype of function class to hold the prepayment model
+  # ---------------------------------------------------------------------
+  # This is protype of function class to hold the prepayment model
+  # ---------------------------------------------------------------------
   setClass("PrepaymentModel",
          representation(
            Turnover = "numeric",
@@ -304,12 +337,18 @@
            yr15 = "function"
          ))
   
+  # -------------------------------------------------------------------------
   # This is a prototype class for updated loan to value ratio calculation
+  # this most likely belongs with the prepayment model class as a function
+  # -------------------------------------------------------------------------
+  
   setClass("UpdatedLTV",
            representation(
              ULTV = "function"))
 
-  # ----- The following classes define rate of return and valuation classes
+  # ------------------------------------------------------------------------
+  # The following classes define rate of return and valuation classes
+  # ------------------------------------------------------------------------
 
   setClass("RateofReturn",
          representation(
@@ -321,7 +360,9 @@
            RemainingCF = "numeric",
            HorizonSpread = "numeric"))
 
-  #------ These classes the superclasses and providing the results of analytic runs
+  #--------------------------------------------------------------------------
+  # These classes the superclasses and providing the results of analytic runs
+  # -------------------------------------------------------------------------
 
   setClass("BondAnalytics", 
            representation(),
@@ -349,11 +390,17 @@
            contains = c("MBSDetails", 
                       "MortgageCashFlow", 
                       "MortgageOAS"))
-
+  
+  setClass("AtomsAnanlytics",
+           representation(),
+           contains = c("AtomsData",
+                        "AtomsScenario"))
+  # --------------------------------------------------------------------
   # REMIC Classes, these classes define a REMIC
   # In all, there are eight classes that define a REMIC structure
+  # -------------------------------------------------------------------
   
-  # ==== REMIC CashFlow Cashflow Class =======================
+  # REMIC CashFlow Cashflow Class
   setClass("REMICCashFlow",
            representation(
              DealName = "character",
@@ -382,7 +429,7 @@
              KeyRateDuration = "numeric",
              KeyRateConvexity = "numeric"))
 
-  # ==== The RAID class is the REMIC at issuance disclosure ===
+  # The RAID class is the REMIC at issuance disclosure 
   setClass("RAID",
            representation(
              DealName = "character", 
@@ -418,8 +465,8 @@
              InitialReserveFund = "numeric"))
   
 
-  # ============== This Class is the Tranche Class Tranche Belongs to Deal =========================
-  # ======== This Class contains all Tranche details that are related to the REMIC =================
+  # This Class is the Tranche Class Tranche Belongs to Deal
+  # This Class contains all Tranche details that are related to the REMIC
   setClass("TrancheDetails",
            representation(
              DealName = "character",
@@ -471,14 +518,14 @@
            ))
   
 
-  # ===== The Tranches Class is a list that holds the above tranche information
-  # ===== for the REMIC which are strucutred with many tranches GSEs deliver tranche detail
+  # The Tranches Class is a list that holds the above tranche information
+  # for the REMIC which are strucutred with many tranches GSEs deliver tranche detail
 
   setClass("Tranches",
          representation(
            Tranches = "list"))
 
-  # ==== Collateral Class is the representation of the collateral underlying a REMIC transaction
+  # Collateral Class is the representation of the collateral underlying a REMIC transaction
 
   setClass("Collateral",
          representation(
@@ -486,7 +533,7 @@
            Cusip = "list",
            OrigBal = "list"))
 
-  # ========== Collateral Group Class is an aggregator of the collateral class ================
+  # Collateral Group Class is an aggregator of the collateral class 
   # This function assembles multiple collateral groups into a list of collateral groups
   # building the collateral groups for the entire deal structure
 
@@ -494,7 +541,7 @@
          representation(
            Group = "list"))
   
-  # ========= Schedules is the projected schedule for a PAC/TAC Schedule
+  # Schedules is the projected schedule for a PAC/TAC Schedule
   setClass("Schedule",
           representation(
             DealName = "character",
@@ -504,7 +551,7 @@
             ScheduledPmt = "numeric"))
 
 
-  # ======== This class is the REMIC factor files and belongs to tranche information ==================
+  # This class is the REMIC factor files and belongs to tranche information 
   # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and is part of the assembly of the REMIC
 
   setClass("RDME",
@@ -514,14 +561,14 @@
            Coupon = "numeric",
            Factor = "numeric"))
 
-  # =============== The TrancheFactors class is an aggregator class ===================
-  # ============ The class aggregates the RDME classes for each associated trance ====
+  #  The TrancheFactors class is an aggregator class 
+  #  The class aggregates the RDME classes for each associated trance
 
   setClass("TrancheFactors",
          representation(
            FactorData = "list"))
 
-  #========== Superclass REMIC structure constructor for REMIC which will be called by the waterfall ==========
+  # Superclass REMIC structure constructor for REMIC which will be called by the waterfall 
   setClass("REMICStructure",
          representation(),
          contains = c("RAID", 
@@ -529,7 +576,7 @@
                       "CollateralGroup", 
                       "TrancheFactors")) 
   
-  #========= Superclass REMIC Analytics constructor for REMIC Analytics ===========================
+  # Superclass REMIC Analytics constructor for REMIC Analytics 
   setClass("REMICAnalytics",
            representation(),
            contains = c("TrancheDetails",

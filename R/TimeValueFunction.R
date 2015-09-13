@@ -1,33 +1,29 @@
-#Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  #Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
 
 
-#---------------------------------
-#Time value of money function
-#---------------------------------
-#' A function to compute the time value of money
-#'                  
-#' A standard generic function used to calculate time value of money
-#' @param interest.rate The interest rate used to determine the discount factor in decimal
-#' form (i.e. 4.0\% is input as 0.04)
-#' @param number.periods The number of discount periods.  For example, 
-#' in the case of a mortgage whose cash flow occurs monthly over 30 years the number of 
-#' periods is 360.
-#' @param frequency The frequency of interest payments.  For example the frequency of a
-#' mortgage whose payments occur monthly is 12
-#' @param type The type of calculation PV = present value, 
-#' PVA = present value of annuity, PVAD present value of annuity due,
-#' FV = future value, FVA = future value of annuity.
-#' @examples TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")
-#' @export TimeValue
-TimeValue <- function(interest.rate = numeric(), 
+
+  #' A function to compute the time value of money
+  #'                  
+  #' A standard generic function used to calculate time value of money
+  #' @param interest.rate The interest rate used to determine the discount factor in decimal
+  #' form (i.e. 4.0\% is input as 0.04)
+  #' @param number.periods The number of discount periods.  For example, 
+  #' in the case of a mortgage whose cash flow occurs monthly over 30 years the number of 
+  #' periods is 360.
+  #' @param frequency The frequency of interest payments.  For example the frequency of a
+  #' mortgage whose payments occur monthly is 12
+  #' @param type The type of calculation PV = present value, 
+  #' PVA = present value of annuity, PVAD present value of annuity due,
+  #' FV = future value, FVA = future value of annuity.
+  #' @examples TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")
+  #' @export TimeValue
+  TimeValue <- function(interest.rate = numeric(), 
                       number.periods = numeric(), 
                       frequency = numeric(), 
                       type = "character"){
@@ -64,9 +60,9 @@ TimeValue <- function(interest.rate = numeric(),
          FV =  (1+interest.rate)^number.periods,
          FVA =   (((1 + interest.rate)^(number.periods)) -1)/interest.rate)
   
-}
+  }
 
-setGeneric("TimeValue", function(interest.rate = numeric(), 
+  setGeneric("TimeValue", function(interest.rate = numeric(), 
                                  number.periods = numeric(), 
                                  frequency = numeric(), 
                                  type = "character")

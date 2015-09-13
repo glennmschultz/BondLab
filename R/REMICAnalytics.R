@@ -1,12 +1,11 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of Bond Lab software or 
-# the book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+
 
   setMethod("initialize",
             signature("REMICAnalytics"),
@@ -106,27 +105,27 @@
                     return(.Object)
                     callNextMethod(.Object,...)
                   })
-#' The REMIC Analytics engine the constructor function for REMIC Analytics
-#' 
-#' Cash flow analysis and risk metrics of REMIC Tranches including spot spread analysis
-#' effective duration, effective convexity, Key rate duration analysis
-#' @param bond.id A character string the bond.id or cusip number
-#' @param trade.date A character string the trade date
-#' @param settlement.date A character string the settlement date
-#' @param method A character string the method used to fit the term strucutre
-#' @param collateral.price A numeric value the price of the underlying collateral
-#' @param tranche.price A numeric value the price of the tranche
-#' @param PrepaymentAssumption A character string defining the prepayment assumption used
-#' @param begin.cpr optional, a numeric value used when applying a PPC assumption
-#' @param ... Optional values when CPR and PPC are input
-#' @param end.cpr optional, a numeric value used when applying a PPC assumption
-#' @param seasoning.period optional, a numeric value used when applying a PPC assumption
-#' @param CPR optional, a numeric value used when applying a CPR assumption
-#' @examples 
-#' \dontrun{REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
-#' settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75,
-#' tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)}
-#' @export REMICAnalytics
+  #' The REMIC Analytics engine the constructor function for REMIC Analytics
+  #' 
+  #' Cash flow analysis and risk metrics of REMIC Tranches including spot spread analysis
+  #' effective duration, effective convexity, Key rate duration analysis
+  #' @param bond.id A character string the bond.id or cusip number
+  #' @param trade.date A character string the trade date
+  #' @param settlement.date A character string the settlement date
+  #' @param method A character string the method used to fit the term strucutre
+  #' @param collateral.price A numeric value the price of the underlying collateral
+  #' @param tranche.price A numeric value the price of the tranche
+  #' @param PrepaymentAssumption A character string defining the prepayment assumption used
+  #' @param begin.cpr optional, a numeric value used when applying a PPC assumption
+  #' @param ... Optional values when CPR and PPC are input
+  #' @param end.cpr optional, a numeric value used when applying a PPC assumption
+  #' @param seasoning.period optional, a numeric value used when applying a PPC assumption
+  #' @param CPR optional, a numeric value used when applying a CPR assumption
+  #' @examples 
+  #' \dontrun{REMICAnalytics(bond.id = "BondLabSMBSIO", trade.date = "01-10-2013",
+  #' settlement.date = "01-13-2013", method = "ns", collateral.price = 105.75,
+  #' tranche.price = 25, PrepaymentAssumption = "CPR", CPR = 6)}
+  #' @export REMICAnalytics
   REMICAnalytics <- function(bond.id = "character", 
                            trade.date = "character",
                            settlement.date = "character",
@@ -224,9 +223,9 @@
       KeyRateDuration = REMICTermStructure@KeyRateDuration,
       KeyRateConvexity = REMICTermStructure@KeyRateConvexity
       )  
-}
+  }
   
-setGeneric("REMICAnalytics", function(bond.id = "character", 
+  setGeneric("REMICAnalytics", function(bond.id = "character", 
                                       trade.date = "character",
                                       settlement.date = "character",
                                       method = "character",

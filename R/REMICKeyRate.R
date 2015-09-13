@@ -1,25 +1,23 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
 
-#setGeneric("REMICTermStructure", function(bond.id = "character", 
-#                                             original.bal = numeric(), 
-#                                             Rate.Delta = numeric(), 
-#                                             TermStructure = "character",
-#                                             trade.date = "character",
-#                                             settlement.date = "character", 
-#                                             principal = numeric(), 
-#                                             price = numeric(), 
-#                                             cashflow = "character")
-#              {standardGeneric("REMICTermStructure")})
+  #setGeneric("REMICTermStructure", function(bond.id = "character", 
+  #                                             original.bal = numeric(), 
+  #                                             Rate.Delta = numeric(), 
+  #                                             TermStructure = "character",
+  #                                             trade.date = "character",
+  #                                             settlement.date = "character", 
+  #                                             principal = numeric(), 
+  #                                             price = numeric(), 
+  #                                             cashflow = "character")
+  #              {standardGeneric("REMICTermStructure")})
 
-setMethod("initialize",
+  setMethod("initialize",
          signature("REMICTermStructure"),
          function(.Object,
                   SpotSpread = "numeric",   
@@ -39,10 +37,10 @@ setMethod("initialize",
            callNextMethod(.Object,...)
          })
 
-# --------
-# Mortgage Key Rate Duration Calculation
-# ---------  
-REMICTermStructure <- function(bond.id = "character", 
+  # ---------------------------------------------------------------
+  # Mortgage Key Rate Duration Calculation
+  # ---------------------------------------------------------------  
+  REMICTermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 
                              TermStructure = "character", 
@@ -301,7 +299,9 @@ REMICTermStructure <- function(bond.id = "character",
     #-----------------------------------------------------------------------
     
     # Initialize the TermStructure Up and Down objects 
-    # Use the term strucutre object 
+    # Use the term strucutre object
+    # Clean this code up with new functions they are already
+    # used in mortgage keyrate
     
     Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
@@ -362,9 +362,9 @@ REMICTermStructure <- function(bond.id = "character",
       if(cfd > as.numeric(length(MortgageCashFlows.Dwn@TotalCashFlow))) {CashFlowArray[cfd,3] = 0} else 
       {CashFlowArray[cfd,3] = MortgageCashFlows.Dwn@TotalCashFlow[cfd]}
     }
-    # =======================================================================   
+    # ----------------------------------------------------------------------   
     # Key Rate Shift Up Prepayment Model and CashFlows
-    # ======================================================================
+    # ----------------------------------------------------------------------
     
     MortgageCashFlows.Up <- REMICCashFlow(bond.id = bond.id, 
                                           trade.date = trade.date,
@@ -380,7 +380,9 @@ REMICTermStructure <- function(bond.id = "character",
       {CashFlowArray[cfu,4] = MortgageCashFlows.Up@TotalCashFlow[cfu]}
     }
     
-    #============================== Calculate Key Rate Duration ============================================
+    # --------------------------------------------------------------------
+    #Calculate Key Rate Duration 
+    # --------------------------------------------------------------------
     KR.Duration[w-1,2] <- -EffectiveMeasures(
       rate.delta = Rate.Delta/100, 
       cashflow = CashFlowArray[,2],
@@ -416,6 +418,6 @@ REMICTermStructure <- function(bond.id = "character",
       KeyRateConvexity = KR.Duration[,3]
       
   )
-} # End the function
+  } # End the function
 
 

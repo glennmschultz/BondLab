@@ -354,7 +354,7 @@
           })
 
 
-RAID <- function(DealName = "character",
+  RAID <- function(DealName = "character",
                  Issuer = "character",
                  DealNumber = "character",
                  DealPriceDate = "character",
@@ -385,7 +385,7 @@ RAID <- function(DealName = "character",
                  ExpenseFixed = numeric(),
                  ExpensePeriodicity = numeric(),
                  InitialReserveFund = numeric()
-){
+  ){
   
   new("RAID",
       DealName = DealName,
@@ -420,47 +420,47 @@ RAID <- function(DealName = "character",
       ExpensePeriodicity = ExpensePeriodicity,
       InitialReserveFund = InitialReserveFund
   )                 
-}
+  }
 
 
-#' A constructor function for the REMIC At Issuance Disclosure (RAID) file
-#' 
-#'  The RAID function creates the REMIC At Issuance Disclosure file
-#'  @param DealName A character string the deal name
-#'  @param Issuer A character string the Isser Name
-#'  @param DealNumber A character string the Deal Number
-#'  @param DealPriceDate A character string the Deal Pricing Date
-#'  @param DealSettlementDate A character string the Deal Settlement Date
-#'  @param Underwriter A character string the Deal Underwriter
-#'  @param Trustee A character string the deal Trustee
-#'  @param PricingSpeed A character string the deal pricing speed
-#'  @param JumpReferenceSpeed1 A numeric value the Jump Z speed
-#'  @param JumpReferenceSpeed2 A numeric value the Jump Z speed
-#'  @param JumpReferenceSpeed3 A numeric value the Jump Z speed
-#'  @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
-#'  @param NumberofTranches A numeric value the number of Tranches
-#'  @param NumberofComponentTranches A numeric value the number of component Tranches
-#'  @param NumberofCombinedTranches A numeric value the number of combined Tranches
-#'  @param NumberofPools A numeric value the number of pools
-#'  @param PacSchedulesIncluded A logical value TRUE/FALSE
-#'  @param NumberofPacSchedules A numeric value the number of PAC schedules
-#'  @param NumberofGroups A numeric value the number of groups
-#'  @param DealSize A numeric value the original balance of all tranches
-#'  @param CollateralAmount A numeric value the current face amount of the collateral
-#'  @param CollateralAvgLife A numeric value the avg life of the collateral 
-#'  @param BondValue A numeric value the bond price
-#'  @param BondValueMethod A character string the valuation method
-#'  @param BondValueCap A numeric value the Bond Coupon Cap Rate
-#'  @param BondValueDiscountRate A numeric value the Bond discount rate
-#'  @param BondValueReinvestmentRate A numeric value the assumed trust reinvestment rate
-#'  @param ExpenseBasisPointFee A numeric value the expense of the Trust
-#'  @param ExpenseFixed A numeric value the fixed expenses of the Trust
-#'  @param ExpensePeriodicity A numeric value the calender payment of expenses
-#'  @param InitialReserveFund A numeric value the amount of the initial reserve fund
-#'  @examples
-#'  \dontrun{need example}
-#'@export
-MakeRAID <- function(DealName = "character", 
+  #' A constructor function for the REMIC At Issuance Disclosure (RAID) file
+  #' 
+  #'  The RAID function creates the REMIC At Issuance Disclosure file
+  #'  @param DealName A character string the deal name
+  #'  @param Issuer A character string the Isser Name
+  #'  @param DealNumber A character string the Deal Number
+  #'  @param DealPriceDate A character string the Deal Pricing Date
+  #'  @param DealSettlementDate A character string the Deal Settlement Date
+  #'  @param Underwriter A character string the Deal Underwriter
+  #'  @param Trustee A character string the deal Trustee
+  #'  @param PricingSpeed A character string the deal pricing speed
+  #'  @param JumpReferenceSpeed1 A numeric value the Jump Z speed
+  #'  @param JumpReferenceSpeed2 A numeric value the Jump Z speed
+  #'  @param JumpReferenceSpeed3 A numeric value the Jump Z speed
+  #'  @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
+  #'  @param NumberofTranches A numeric value the number of Tranches
+  #'  @param NumberofComponentTranches A numeric value the number of component Tranches
+  #'  @param NumberofCombinedTranches A numeric value the number of combined Tranches
+  #'  @param NumberofPools A numeric value the number of pools
+  #'  @param PacSchedulesIncluded A logical value TRUE/FALSE
+  #'  @param NumberofPacSchedules A numeric value the number of PAC schedules
+  #'  @param NumberofGroups A numeric value the number of groups
+  #'  @param DealSize A numeric value the original balance of all tranches
+  #'  @param CollateralAmount A numeric value the current face amount of the collateral
+  #'  @param CollateralAvgLife A numeric value the avg life of the collateral 
+  #'  @param BondValue A numeric value the bond price
+  #'  @param BondValueMethod A character string the valuation method
+  #'  @param BondValueCap A numeric value the Bond Coupon Cap Rate
+  #'  @param BondValueDiscountRate A numeric value the Bond discount rate
+  #'  @param BondValueReinvestmentRate A numeric value the assumed trust reinvestment rate
+  #'  @param ExpenseBasisPointFee A numeric value the expense of the Trust
+  #'  @param ExpenseFixed A numeric value the fixed expenses of the Trust
+  #'  @param ExpensePeriodicity A numeric value the calender payment of expenses
+  #'  @param InitialReserveFund A numeric value the amount of the initial reserve fund
+  #'  @examples
+  #'  \dontrun{need example}
+  #'@export
+  MakeRAID <- function(DealName = "character", 
                      Issuer = "character",
                      DealNumber = "character",
                      DealPriceDate = "character", 
@@ -534,7 +534,7 @@ MakeRAID <- function(DealName = "character",
   #1)Tranched Details is a Constructor function to create Tranche data
   # it has no connections and is used by the function MakeTranches
 
-TrancheDetails <- function(DealName = "character",
+  TrancheDetails <- function(DealName = "character",
                            TrancheNumber = "character",
                            NumberofComponents = numeric(),
                            ComponentofTranches = "character",
@@ -628,67 +628,67 @@ TrancheDetails <- function(DealName = "character",
       TrancheType = TrancheType,
       Schedule = Schedule,
       Fixed = Fixed)
-}
+  }
 
 
-# 2) Make tranche is actually a function which calls TrancheDetails 
-#serialize the object TrancheDetails to the tranches directory
-#note in the help file MakeTranche is refered to as constructor since
-#the actual constructor TrancheDetails is not exposed to the user
+  # 2) Make tranche is actually a function which calls TrancheDetails 
+  #serialize the object TrancheDetails to the tranches directory
+  #note in the help file MakeTranche is refered to as constructor since
+  #the actual constructor TrancheDetails is not exposed to the user
 
-#' A constructor function for REMIC tranche detail
-#' 
-#' MakeTranche a constructor function used to create a REMIC tranche
-#' @param DealName A character string the deal name
-#' @param TrancheNumber A character string the Tranche Number
-#' @param NumberofComponents A numeric value the number of components
-#' @param ComponentofTranches A string identifying component tranches
-#' @param TrancheName A character string the the Tranche Name
-#' @param TranchePrincipal A character string the principal type (pass-through, notional)
-#' @param TranchePrincipalDesc A character string the REMIC principal type (sequential, IO, PAC, etc.)
-#' @param TrancheInterestDesc A character string the REMIC interest type (Fixed, Floating, Variable)
-#' @param TrancheOtherDescription A character string the other REMIC descriptive information
-#' @param Cusip A character string the tranche cusip
-#' @param TrancheOrigBal A character numeric value the original balance
-#' @param TrancheInterest A character string the Tranche Interest Type
-#' @param TrancheCoupon A numeric value the tranche coupon
-#' @param AccrualRate A numeric value the accrual rate on the bond
-#' @param TreasuryMaturity A numeric value the maturity of the pricing benchmark (Treasury or Swap)
-#' @param TreasuryYield A numeric value the yield of the pricing benchmark (Treasury or Swap)
-#' @param TreasurySpread A numeric value the spread over the pricing bechmark (Treasury or Swap)
-#' @param TrancheYield A numeric value the new issue pricing yield to maturity
-#' @param TranchePrice A numeric value the new issue price
-#' @param TrancheProceedsWithInterest A numeric value the new issue proceeds
-#' @param TrancheAvgLife A numeric value the average life at pricing
-#' @param TrancheDuration A numeric value the duration (modified) at pricing
-#' @param TrancheDatedDate A character value the tranche dated date
-#' @param TrancheFirstPmtDate A character value the tranche first payment date
-#' @param TrancheLastPmtDate A character value the tranche last payment date
-#' @param TrancheNextPmtDate A character value the tranche next payment date
-#' @param TrancheFinalPmtDate A character value the tranche final payment date
-#' @param Delay A numeric value the delay days
-#' @param InterestPmtFrequency A numeric value the interest payment frequency 
-#' @param PrinPmtFrequency A numeric value the principal payment frequency
-#' @param PacLowBand A numeric value the PAC Lower Band
-#' @param PacHighBand A numeric value the PAC Upper Band
-#' @param FloaterIndex A character value the floater index name
-#' @param InitialIndexValue A numeric value the value of the floater's reference index at issuance
-#' @param FloaterMargin A numeric value the floater margin
-#' @param FloaterMultiplier A numeric value the floater multiplier
-#' @param FloaterCap A numeric value the floater cap
-#' @param FloaterFloor A numeric value the floater floor
-#' @param FloaterInitialCoupon A numeric value the floater's new issue coupon
-#' @param FloaterResetFrequency A numeric value the reset frequency (12 is monthly)
-#' @param FloaterFirstResetDate A character string the first reset date following issuance
-#' @param FloaterFormula A function the floater coupon formula
-#' @param Group A numeric value the collateral group number
-#' @param TrancheType A character value the type of tranche (standard, exchangeable)
-#' @param Schedule A logical indicating the PAC/TAC schedule
-#' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
-#' @examples
-#' \dontrun{Need Example} 
-#'@export
-MakeTranche <- function(  DealName = "character",
+  #' A constructor function for REMIC tranche detail
+  #' 
+  #' MakeTranche a constructor function used to create a REMIC tranche
+  #' @param DealName A character string the deal name
+  #' @param TrancheNumber A character string the Tranche Number
+  #' @param NumberofComponents A numeric value the number of components
+  #' @param ComponentofTranches A string identifying component tranches
+  #' @param TrancheName A character string the the Tranche Name
+  #' @param TranchePrincipal A character string the principal type (pass-through, notional)
+  #' @param TranchePrincipalDesc A character string the REMIC principal type (sequential, IO, PAC, etc.)
+  #' @param TrancheInterestDesc A character string the REMIC interest type (Fixed, Floating, Variable)
+  #' @param TrancheOtherDescription A character string the other REMIC descriptive information
+  #' @param Cusip A character string the tranche cusip
+  #' @param TrancheOrigBal A character numeric value the original balance
+  #' @param TrancheInterest A character string the Tranche Interest Type
+  #' @param TrancheCoupon A numeric value the tranche coupon
+  #' @param AccrualRate A numeric value the accrual rate on the bond
+  #' @param TreasuryMaturity A numeric value the maturity of the pricing benchmark (Treasury or Swap)
+  #' @param TreasuryYield A numeric value the yield of the pricing benchmark (Treasury or Swap)
+  #' @param TreasurySpread A numeric value the spread over the pricing bechmark (Treasury or Swap)
+  #' @param TrancheYield A numeric value the new issue pricing yield to maturity
+  #' @param TranchePrice A numeric value the new issue price
+  #' @param TrancheProceedsWithInterest A numeric value the new issue proceeds
+  #' @param TrancheAvgLife A numeric value the average life at pricing
+  #' @param TrancheDuration A numeric value the duration (modified) at pricing
+  #' @param TrancheDatedDate A character value the tranche dated date
+  #' @param TrancheFirstPmtDate A character value the tranche first payment date
+  #' @param TrancheLastPmtDate A character value the tranche last payment date
+  #' @param TrancheNextPmtDate A character value the tranche next payment date
+  #' @param TrancheFinalPmtDate A character value the tranche final payment date
+  #' @param Delay A numeric value the delay days
+  #' @param InterestPmtFrequency A numeric value the interest payment frequency 
+  #' @param PrinPmtFrequency A numeric value the principal payment frequency
+  #' @param PacLowBand A numeric value the PAC Lower Band
+  #' @param PacHighBand A numeric value the PAC Upper Band
+  #' @param FloaterIndex A character value the floater index name
+  #' @param InitialIndexValue A numeric value the value of the floater's reference index at issuance
+  #' @param FloaterMargin A numeric value the floater margin
+  #' @param FloaterMultiplier A numeric value the floater multiplier
+  #' @param FloaterCap A numeric value the floater cap
+  #' @param FloaterFloor A numeric value the floater floor
+  #' @param FloaterInitialCoupon A numeric value the floater's new issue coupon
+  #' @param FloaterResetFrequency A numeric value the reset frequency (12 is monthly)
+  #' @param FloaterFirstResetDate A character string the first reset date following issuance
+  #' @param FloaterFormula A function the floater coupon formula
+  #' @param Group A numeric value the collateral group number
+  #' @param TrancheType A character value the type of tranche (standard, exchangeable)
+  #' @param Schedule A logical indicating the PAC/TAC schedule
+  #' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
+  #' @examples
+  #' \dontrun{Need Example} 
+  #'@export
+  MakeTranche <- function(  DealName = "character",
                           TrancheNumber = "character",
                           NumberofComponents = numeric(),
                           ComponentofTranches = numeric(),
@@ -1127,18 +1127,18 @@ MakeTranche <- function(  DealName = "character",
     
   }
   
-# --- REMIC Constructor Function these functions are used to assemble the 
-# --- RAID, Tranches, RDME, and Collateral Groups into a single REMIC structure
+  # --- REMIC Constructor Function these functions are used to assemble the 
+  # --- RAID, Tranches, RDME, and Collateral Groups into a single REMIC structure
 
-#' The constructor function to build the REMIC deal from each of its elements 
-#' 
-#' The function Assembles the deal RAID, RDME, Tranches, and Groups files into a REMIC structure
-#' @param DealName A character string the deal's names
-#' @examples
-#' \dontrun{
-#' RemicStructure("BondLabPACInverse")  
-#' }
-#'@export
+  #' The constructor function to build the REMIC deal from each of its elements 
+  #' 
+  #' The function Assembles the deal RAID, RDME, Tranches, and Groups files into a REMIC structure
+  #' @param DealName A character string the deal's names
+  #' @examples
+  #' \dontrun{
+  #' RemicStructure("BondLabPACInverse")  
+  #' }
+  #'@export
   RemicStructure <- function(DealName = "character"){
     
     RAID <- ReadRAID(RAIDFile = DealName)

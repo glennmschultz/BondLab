@@ -1,28 +1,25 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-#--------------------------------------
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
 
 
-#' Calculate the price of a zero coupon bond using the closed form equation given by Cox, Ingersoll, and Ross
-#' 
-#' This function implements the CIR closed form solution to a bond price given the short-term rate
-#' @param shortrate A vector of simulated short-term rates
-#' @param T A numeric value the time over which the short-term rate is simulated
-#' @param step A numeric value the time step on the simulation
-#' @param kappa A numeric value the speed of mean reversion of the simulation
-#' @param lambda A numeric value the risk premium
-#' @param sigma A numeric value the volatility entered as a standard deviation
-#' @param theta A numeric vlaue the long term forward rate
-#' @param result A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit
-#' @export  
-CIRBondPrice <- function(shortrate = vector(), 
+  #' Calculate the price of a zero coupon bond using the closed form equation given by Cox, Ingersoll, and Ross
+  #' 
+  #' This function implements the CIR closed form solution to a bond price given the short-term rate
+  #' @param shortrate A vector of simulated short-term rates
+  #' @param T A numeric value the time over which the short-term rate is simulated
+  #' @param step A numeric value the time step on the simulation
+  #' @param kappa A numeric value the speed of mean reversion of the simulation
+  #' @param lambda A numeric value the risk premium
+  #' @param sigma A numeric value the volatility entered as a standard deviation
+  #' @param theta A numeric vlaue the long term forward rate
+  #' @param result A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit
+  #' @export  
+  CIRBondPrice <- function(shortrate = vector(), 
                          T = numeric(), 
                          step = numeric(), 
                          kappa = numeric(), 

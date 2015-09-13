@@ -1,21 +1,19 @@
-#Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  #Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
 
 
-#---------------------------------------------------
-#Term strucutre call term strc 
-#and holds forward and spot rates as slots to class Term Structure
-#---------------------------------------------------
+  #---------------------------------------------------
+  #Term strucutre call term strc 
+  #and holds forward and spot rates as slots to class Term Structure
+  #---------------------------------------------------
 
-# Initialize TermStructure
-setMethod("initialize",
+  # Initialize TermStructure
+  setMethod("initialize",
           signature("TermStructure"),
           function(.Object,...,
                    tradedate = "character",
@@ -37,27 +35,28 @@ setMethod("initialize",
             return(.Object)
             callNextMethod(.Object,...)
           })
-#' The TermStructure constructor function it is a wrapper function around the package termstrc
-#' 
-#' This is a wrapper function around the R package termstrc.  The function passes swap rate data
-#' cash flows the to termstrc and creates the TermStructure object used by Bondlab.
-#' The function call rates data processes the yield curve and derives cashflow
-#' for the daily close swap curve. A Rates object must be called in the local
-#' environment for this function to work.
-#' @param rates.data A character string representing the data for which the user
-#' would like to call the swap curve
-#' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
-#' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
-#' For addiition details see the termstrc documentation.
-#' @examples
-#' \dontrun{
-#' TermStructure(rates.data = "01-10-2013", method = "ns")}
-#' @importFrom lubridate %m+%
-#' @importFrom lubridate years
-#' @importFrom lubridate day
-#' @importFrom lubridate month
-#' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
-#' @export TermStructure
+
+  #' The TermStructure constructor function it is a wrapper function around the package termstrc
+  #' 
+  #' This is a wrapper function around the R package termstrc.  The function passes swap rate data
+  #' cash flows the to termstrc and creates the TermStructure object used by Bondlab.
+  #' The function call rates data processes the yield curve and derives cashflow
+  #' for the daily close swap curve. A Rates object must be called in the local
+  #' environment for this function to work.
+  #' @param rates.data A character string representing the data for which the user
+  #' would like to call the swap curve
+  #' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
+  #' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+  #' For addiition details see the termstrc documentation.
+  #' @examples
+  #' \dontrun{
+  #' TermStructure(rates.data = "01-10-2013", method = "ns")}
+  #' @importFrom lubridate %m+%
+  #' @importFrom lubridate years
+  #' @importFrom lubridate day
+  #' @importFrom lubridate month
+  #' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
+  #' @export TermStructure
   TermStructure <- function(rates.data = "character", method = "character"){
   
   #function(trade.date = "character", method = "character")  
@@ -161,7 +160,7 @@ setMethod("initialize",
                    ns = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1")]),
                    dl = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2")]),
                    sv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "beta3", "tau2")]),
-                   asv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "tau2", "tau3")]),
+                   asv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "tau2", "tau3")])
                    #cs = need to figure this out
   )
   

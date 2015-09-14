@@ -89,7 +89,8 @@
    USTTermStructure <- TermStructure(rates.data = USTCurve, method = method)
    
    # ----------------------------------------------------------------------------
-   # Run the prepayment model
+   # Run the prepayment model compute mortgage cash flow duration convexity
+   # key rate duration and effective convexity
    # ---------------------------------------------------------------------------
    PrepaymentAssumption <- PrepaymentAssumption(
      bond.id = Bond.id,
@@ -112,8 +113,23 @@
                                principal = principal,
                                price = price,
                                cashflow = MortgageCashFlow)
-   
+   # --------------------------------------------------------------------------------
+   # Compute the spread to the LIBOR curve ATOMs NSpread
+   # --------------------------------------------------------------------------------
    InterpolateLIBOR <- loess(as.numeric(LIBORCurve[1,2:12]) ~
                                 as.numeric(LIBORCurve[2,2:12]),
-                                data = data.frame(LIBORCurve))  
+                                data = data.frame(LIBORCurve))
+   
+   SpreadToLIBOR <- (MortgageCashFlow@YieldToMaturity -
+                       predict(InterpolateLIBOR, MortgageCashFlow@WAL))
+   
+   # --------------------------------------------------------------------------------
+   # Compute the spread to the UST curve ATOMs ISpread
+   # --------------------------------------------------------------------------------
+   InterpolateUST <- loess(as.numeric(USTCurve[1,2:12]) ~
+                               as.numeric(USTCurve[2,2:12]),
+                             data = data.frame(USTCurve))
+   
+   SpreadToUST <- (MortgageCashFlow@YieldToMaturity -
+                     predict(InterpolateUST, MortgageCashFlow@WAL))
  }

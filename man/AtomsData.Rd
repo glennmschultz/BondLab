@@ -6,7 +6,8 @@
 \usage{
 AtomsData(Bond.id = "character", original.bal = numeric(),
   price = numeric(), trade.date = "character",
-  settlement.date = "character", method = "character")
+  settlement.date = "character", swapspread = list(),
+  method = "character")
 }
 \arguments{
 \item{Bond.id}{A character vector the id or cusip of the bond}

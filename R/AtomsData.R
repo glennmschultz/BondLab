@@ -61,6 +61,7 @@
                              price = numeric(),
                              trade.date = "character",
                              settlement.date = "character",
+                             swapspread = list(),
                              method = "character"){
   
    # -----------------------------------------------------------------------------
@@ -69,7 +70,8 @@
    Bond.id = MBS(MBS.id = Bond.id)
    LIBORCurve <- Rates(trade.date = trade.date)
    USTCurve <- LIBORCurve
-   USTCurve[1,2:length(USTCurve[1,])] <- USTCurve[1,2:length(USTCurve[1,])] + 0 #This should be swap spread
+   USTCurve[1,2:length(USTCurve[1,])] <- USTCurve[1,2:length(USTCurve[1,])] - 
+    as.numeric(swapspread)
    Rate.Delta = rate.delta
    MortgageRate <- MtgRate()
    principal = original.bal * Bond.id@MBSFactor

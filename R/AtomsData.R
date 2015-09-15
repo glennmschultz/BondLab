@@ -118,11 +118,13 @@
    # --------------------------------------------------------------------------------
    # Compute the spread to the LIBOR curve ATOMs NSpread
    # --------------------------------------------------------------------------------
+   MtgYTM <- MortgageCashFlow@YieldToMaturity * price.basis
+   
    InterpolateLIBOR <- loess(as.numeric(LIBORCurve[1,2:12]) ~
                                 as.numeric(LIBORCurve[2,2:12]),
                                 data = data.frame(LIBORCurve))
    
-   SpreadToLIBOR <- (MortgageCashFlow@YieldToMaturity -
+   SpreadToLIBOR <<- (MtgYTM -
                        predict(InterpolateLIBOR, MortgageCashFlow@WAL))
    
    # --------------------------------------------------------------------------------
@@ -132,6 +134,7 @@
                                as.numeric(USTCurve[2,2:12]),
                              data = data.frame(USTCurve))
    
-   SpreadToUST <- (MortgageCashFlow@YieldToMaturity -
+   SpreadToUST <<- (MtgYTM -
                      predict(InterpolateUST, MortgageCashFlow@WAL))
+   yield <<- MortgageCashFlow@YieldToMaturity
  }

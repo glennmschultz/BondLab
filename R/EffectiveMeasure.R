@@ -8,7 +8,7 @@
 
   #' A function to compute effective duration and convexity
   #' 
-  #' Calculates the effective duration and based on discount vector (zero coupon)
+  #' Calculates the effective duration and convexity based on discount vector (zero coupon),
   #' cashflow vector, and rate delta
   #' @param Rate.Delta A numeric value the interest rate shift in basis points
   #' @param cashflow A numeric vector of cashflow

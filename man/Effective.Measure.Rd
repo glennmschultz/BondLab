@@ -19,7 +19,7 @@ Effective.Measure(Rate.Delta = numeric(), cashflow = vector(),
 \item{type}{A character vector to specify either duration or convexity}
 }
 \description{
-Calculates the effective duration and based on discount vector (zero coupon)
+Calculates the effective duration and convexity based on discount vector (zero coupon),
 cashflow vector, and rate delta
 }
 

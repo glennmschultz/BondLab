@@ -20,6 +20,8 @@ AtomsData(Bond.id = "character", original.bal = numeric(),
 
 \item{settlement.date}{A numeric value the settlement date}
 
+\item{swapspread}{A list the of swap spreads length of which matches swap rate curve}
+
 \item{method}{A character vector the method used to fit the term structure}
 }
 \description{

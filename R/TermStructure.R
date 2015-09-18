@@ -183,7 +183,7 @@
       period = as.numeric(period),
       date = as.character(date),
       spotrate = spot.rate.curve,
-      forwardrate = forward.rate.curve[1:360],
+      forwardrate = forward.rate.curve,
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
   )

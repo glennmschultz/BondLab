@@ -26,6 +26,7 @@
   rate.delta <- .25
   price.basis <- 100
   yield.basis <- 100
+  tolerance <- .0000000001
 
 #' @import methods
 NULL

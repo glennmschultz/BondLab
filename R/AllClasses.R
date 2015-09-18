@@ -391,7 +391,7 @@
                       "MortgageCashFlow", 
                       "MortgageOAS"))
   
-  setClass("AtomsAnanlytics",
+  setClass("AtomsAnalytics",
            representation(),
            contains = c("AtomsData",
                         "AtomsScenario"))

@@ -32,9 +32,9 @@
                     .Object@ModDuration = ModDuration
                     .Object@Convexity = Convexity
                     .Object@EffDuration = EffDuration
-                    .Obejct@EffConvexity = EffConvexity
+                    .Object@EffConvexity = EffConvexity
                     .Object@KeyRateTenor = KeyRateTenor
-                    .Object@KeyRateDuration = KeyRateTenor
+                    .Object@KeyRateDuration = KeyRateDuration
                     .Object@KeyRateConvexity = KeyRateConvexity
                     .Object@OAD = OAD
                     .Object@OAC = OAC
@@ -54,6 +54,7 @@
  #' @param price A numeric value the price of the pass-through security
  #' @param trade.date A numeric value the trade date
  #' @param settlement.date A numeric value the settlement date
+ #' @param swapspread A list the of swap spreads length of which matches swap rate curve
  #' @param method A character vector the method used to fit the term structure 
  #' @export
  AtomsData <- function(Bond.id = "character",
@@ -70,11 +71,12 @@
    Bond.id = MBS(MBS.id = Bond.id)
    LIBORCurve <- Rates(trade.date = trade.date)
    USTCurve <- LIBORCurve
-   USTCurve[1,2:length(USTCurve[1,])] <- USTCurve[1,2:length(USTCurve[1,])] - 
-    as.numeric(swapspread)
+   USTCurve[1,2:length(USTCurve[1,])] <- 
+     USTCurve[1,2:length(USTCurve[1,])] - as.numeric(swapspread)
    Rate.Delta = rate.delta
    MortgageRate <- MtgRate()
-   principal = original.bal * Bond.id@MBSFactor
+   principal <- original.bal * Bond.id@MBSFactor
+   proceeds <- principal * (price/price.basis)
    
    # ----------------------------------------------------------------------------
    # Call the prepayment model tuning parameters and 
@@ -88,7 +90,7 @@
    # ----------------------------------------------------------------------------
    
    LIBORTermStructure <- TermStructure(rates.data = LIBORCurve, method = method)
-   USTTermStructure <- TermStructure(rates.data = USTCurve, method = method)
+   USTTermStructure <<- TermStructure(rates.data = USTCurve, method = method)
    
    # ----------------------------------------------------------------------------
    # Run the prepayment model compute mortgage cash flow duration convexity
@@ -107,7 +109,8 @@
                                         settlement.date = settlement.date,
                                         price = price,
                                         PrepaymentAssumption = PrepaymentAssumption)
-   KeyRate <- MtgTermStructure(bond.id = Bond.id,
+
+   MortgageTermStructure <- MtgTermStructure(bond.id = Bond.id,
                                original.bal = original.bal,
                                Rate.Delta = Rate.Delta,
                                TermStructure = LIBORTermStructure,
@@ -115,6 +118,7 @@
                                principal = principal,
                                price = price,
                                cashflow = MortgageCashFlow)
+   
    # --------------------------------------------------------------------------------
    # Compute the spread to the LIBOR curve ATOMs NSpread
    # --------------------------------------------------------------------------------
@@ -124,17 +128,84 @@
                                 as.numeric(LIBORCurve[2,2:12]),
                                 data = data.frame(LIBORCurve))
    
-   SpreadToLIBOR <<- (MtgYTM -
+   SpreadToLIBOR <- (MtgYTM -
                        predict(InterpolateLIBOR, MortgageCashFlow@WAL))
    
    # --------------------------------------------------------------------------------
    # Compute the spread to the UST curve ATOMs ISpread
    # --------------------------------------------------------------------------------
    InterpolateUST <- loess(as.numeric(USTCurve[1,2:12]) ~
-                               as.numeric(USTCurve[2,2:12]),
-                             data = data.frame(USTCurve))
+                                as.numeric(USTCurve[2,2:12]),
+                                data = data.frame(USTCurve))
    
-   SpreadToUST <<- (MtgYTM -
+   SpreadToUST <- (MtgYTM -
                      predict(InterpolateUST, MortgageCashFlow@WAL))
-   yield <<- MortgageCashFlow@YieldToMaturity
+   
+   # --------------------------------------------------------------------------------
+   # Compute the Z spread to the LIBOR curve ATOMs LIBORZVSpread
+   # --------------------------------------------------------------------------------
+   cashflow.length <- length(MortgageCashFlow@TotalCashFlow)
+   
+   
+   SpotSpread <- function(spread = numeric(), 
+                          cashflow = vector(), 
+                          discount.rates = vector(), 
+                          t.period = vector(), 
+                          proceeds = numeric()){
+     
+     Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+     return(proceeds - Present.Value)}
+   
+   SolveSpotSpread <- uniroot(SpotSpread, 
+                              interval = c(-.75, .75), 
+                              tol = tolerance, 
+                              cashflow = MortgageCashFlow@TotalCashFlow,
+                              discount.rates = LIBORTermStructure@spotrate[1:cashflow.length]/yield.basis, 
+                              t.period = LIBORTermStructure@period[1:cashflow.length]/months.in.year , 
+                              proceeds = proceeds)$root
+   
+   LIBORZVspread <- SolveSpotSpread * 100
+   
+    # --------------------------------------------------------------------------------
+    # Compute the Z spread to the UST curve ATOMs USTZVSpread
+    # --------------------------------------------------------------------------------
+   
+   
+    SpotSpread <- function(spread = numeric(), 
+                           cashflow = vector(), 
+                           discount.rates = vector(), 
+                           t.period = vector(), 
+                           proceeds = numeric()){
+      
+                Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+                return(proceeds - Present.Value)}
+    
+    SolveSpotSpread <- uniroot(SpotSpread, 
+                              interval = c(-.75, .75), 
+                               tol = tolerance, 
+                               cashflow = MortgageCashFlow@TotalCashFlow,
+                               discount.rates = USTTermStructure@spotrate[1:cashflow.length]/yield.basis, 
+                               t.period = USTTermStructure@period[1:cashflow.length]/months.in.year , 
+                               proceeds = proceeds)$root
+    
+    USTZVspread <- SolveSpotSpread * 100
+    
+  
+    new("AtomsData",
+        ISpread = SpreadToUST,
+        NSpread = SpreadToLIBOR,
+        ZSpread = 9999,
+        ModDuration = MortgageCashFlow@ModDuration,
+        Convexity = MortgageCashFlow@Convexity,
+        EffDuration = MortgageTermStructure@EffDuration,
+        EffConvexity = MortgageTermStructure@EffConvexity,
+        KeyRateTenor = MortgageTermStructure@KeyRateTenor,
+        KeyRateDuration = MortgageTermStructure@KeyRateDuration,
+        KeyRateConvexity = MortgageTermStructure@KeyRateConvexity,
+        OAD = 9999,
+        OAC = 9999,
+        USTOAS = 9999,
+        USTZVSpread = USTZVspread,
+        LIBOROAS = 9999,
+        LIBORZVSpread = LIBORZVspread)
  }

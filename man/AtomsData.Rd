@@ -4,13 +4,14 @@
 \alias{AtomsData}
 \title{A Function to calculate ATOMs Index Analytics}
 \usage{
-AtomsData(Bond.id = "character", original.bal = numeric(),
+AtomsData(bond.id = "character", original.bal = numeric(),
   price = numeric(), trade.date = "character",
   settlement.date = "character", swapspread = list(),
-  method = "character")
+  method = "character", paths = "numeric", volatility = "numeric",
+  consensusPSA = "numeric")
 }
 \arguments{
-\item{Bond.id}{A character vector the id or cusip of the bond}
+\item{bond.id}{A character vector the id or cusip of the bond}
 
 \item{original.bal}{A numeric value the original balance}
 
@@ -23,6 +24,12 @@ AtomsData(Bond.id = "character", original.bal = numeric(),
 \item{swapspread}{A list the of swap spreads length of which matches swap rate curve}
 
 \item{method}{A character vector the method used to fit the term structure}
+
+\item{paths}{A numeric value the number of simulation paths}
+
+\item{volatility}{A numeric value the annualized volatility}
+
+\item{consensusPSA}{A numeric value the consensus PSA speed}
 }
 \description{
 AtomsAnalytics is the analytic function for the ATOMs Index

@@ -20,6 +20,7 @@
   days.in.year.360 <- 360
   weeks.in.year <- 52.25
   months.in.year <- 12
+  trading.days <- 240
   min.principal <- 100
   zero.coupon <- 0
   pmt.frequency <- 2
@@ -27,6 +28,7 @@
   price.basis <- 100
   yield.basis <- 100
   tolerance <- .0000000001
+  PSA.basis = 100
 
 #' @import methods
 NULL

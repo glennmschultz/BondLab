@@ -36,9 +36,19 @@
            callNextMethod(.Object,...)
          })
 
-  # -------------------------------------------------------
-  # Mortgage Key Rate Duration Calculation
-  # -------------------------------------------------------  
+#' A function to calculate mortgage key rate duration
+#' 
+#' This is a generic function used to construct the MortgageTermStructure object
+#' @param bond.id A character string refrencing an object of type MBS details
+#' @param original.bal A numeric value the original balance
+#' @param Rate.Delta A numeric value the rate delta used to calculate KRDs
+#' @param TermStructure A character string referencing an object of the type TermStructure
+#' @param settlement.date a character string the settlement date
+#' @param principal A numeric value the principal balance.  The principal balance is the 
+#' original balance multiplied by the MBS factor
+#' @param price A numeric value the price paid
+#' @param cashflow A character string referencing an object of the type MortgageCashFlow
+#' @export MtgTermStructure
   MtgTermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 
@@ -175,7 +185,7 @@
     
     # Time (t) at which the cashflow is received
     #Time period in which the cashflow was received for discounting
-    Key.Rate.Table [x,2] = x/12
+    Key.Rate.Table [x,2] = x/months.in.year
     
     #spot rates for discounting
     Key.Rate.Table[x,3] = SpotRate[x,1]/yield.basis

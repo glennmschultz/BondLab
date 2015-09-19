@@ -1,6 +1,6 @@
   # Bond Lab is a software application for the analysis of 
-  # fixed income securities it provides a suite of applications
-  # in addition to standard fixed income analysis bond lab provides 
+  # fixed income securities. it provides a suite of applications
+  # for fixed income analysis.  In addition bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
@@ -49,30 +49,48 @@
  #' A Function to calculate ATOMs Index Analytics
  #' 
  #' AtomsAnalytics is the analytic function for the ATOMs Index
- #' @param Bond.id A character vector the id or cusip of the bond
+ #' @param bond.id A character vector the id or cusip of the bond
  #' @param original.bal A numeric value the original balance
  #' @param price A numeric value the price of the pass-through security
  #' @param trade.date A numeric value the trade date
  #' @param settlement.date A numeric value the settlement date
  #' @param swapspread A list the of swap spreads length of which matches swap rate curve
- #' @param method A character vector the method used to fit the term structure 
+ #' @param method A character vector the method used to fit the term structure
+ #' @param paths A numeric value the number of simulation paths
+ #' @param volatility A numeric value the annualized volatility
+ #' @param consensusPSA A numeric value the consensus PSA speed
  #' @export
- AtomsData <- function(Bond.id = "character",
+ AtomsData <- function(bond.id = "character",
                              original.bal = numeric(),
                              price = numeric(),
                              trade.date = "character",
                              settlement.date = "character",
                              swapspread = list(),
-                             method = "character"){
+                             method = "character",
+                             paths = "numeric",
+                             volatility = "numeric",
+                             consensusPSA = "numeric"){
   
+   # -----------------------------------------------------------------------------
+   # de-annualize volatility for the OAS model
+   # -----------------------------------------------------------------------------
+   volatility <- volatility/sqrt(trading.days)
+   
+   # -----------------------------------------------------------------------------
+   # Define PPC Ramp for ATOMs ZSpread Calculation
+   # -----------------------------------------------------------------------------
+   BeginCPR <- .002 * (consensusPSA/PSA.basis)
+   EndCPR <- .06 * (consensusPSA/PSA.basis)
+   SeasoningPeriod = 30
+   
    # -----------------------------------------------------------------------------
    # call security data, coupon curve data, and mortgage rate model
    # -----------------------------------------------------------------------------
-   Bond.id = MBS(MBS.id = Bond.id)
+   Bond.id = MBS(MBS.id = bond.id)
    LIBORCurve <- Rates(trade.date = trade.date)
    USTCurve <- LIBORCurve
    USTCurve[1,2:length(USTCurve[1,])] <- 
-     USTCurve[1,2:length(USTCurve[1,])] - as.numeric(swapspread)
+   USTCurve[1,2:length(USTCurve[1,])] - as.numeric(swapspread)
    Rate.Delta = rate.delta
    MortgageRate <- MtgRate()
    principal <- original.bal * Bond.id@MBSFactor
@@ -90,7 +108,7 @@
    # ----------------------------------------------------------------------------
    
    LIBORTermStructure <- TermStructure(rates.data = LIBORCurve, method = method)
-   USTTermStructure <<- TermStructure(rates.data = USTCurve, method = method)
+   USTTermStructure <- TermStructure(rates.data = USTCurve, method = method)
    
    # ----------------------------------------------------------------------------
    # Run the prepayment model compute mortgage cash flow duration convexity
@@ -104,12 +122,31 @@
      Burnout = Burnout,
      PrepaymentAssumption = "MODEL")
    
+   ConsensusPSA <- PrepaymentAssumption(
+     bond.id = Bond.id,
+     TermStructure = LIBORTermStructure,
+     MortgageRate = MortgageRate,
+     ModelTune = ModelTune,
+     Burnout = Burnout,
+     PrepaymentAssumption = "PPC",
+     begin.cpr = BeginCPR,
+     end.cpr = EndCPR,
+     seasoning.period = SeasoningPeriod
+     )
+   
+   
    MortgageCashFlow <- MortgageCashFlow(bond.id = Bond.id,
                                         original.bal = original.bal,
                                         settlement.date = settlement.date,
                                         price = price,
                                         PrepaymentAssumption = PrepaymentAssumption)
-
+   MortgageCashFlowPSA <- MortgageCashFlow(bond.id = Bond.id,
+                                        original.bal = original.bal,
+                                        settlement.date = settlement.date,
+                                        price = price,
+                                        PrepaymentAssumption = ConsensusPSA)
+   
+   
    MortgageTermStructure <- MtgTermStructure(bond.id = Bond.id,
                                original.bal = original.bal,
                                Rate.Delta = Rate.Delta,
@@ -122,7 +159,7 @@
    # --------------------------------------------------------------------------------
    # Compute the spread to the LIBOR curve ATOMs NSpread
    # --------------------------------------------------------------------------------
-   MtgYTM <- MortgageCashFlow@YieldToMaturity * price.basis
+   MtgYTM <- MortgageCashFlow@YieldToMaturity * yield.basis
    
    InterpolateLIBOR <- loess(as.numeric(LIBORCurve[1,2:12]) ~
                                 as.numeric(LIBORCurve[2,2:12]),
@@ -141,60 +178,52 @@
    SpreadToUST <- (MtgYTM -
                      predict(InterpolateUST, MortgageCashFlow@WAL))
    
-   # --------------------------------------------------------------------------------
-   # Compute the Z spread to the LIBOR curve ATOMs LIBORZVSpread
-   # --------------------------------------------------------------------------------
-   cashflow.length <- length(MortgageCashFlow@TotalCashFlow)
-   
-   
-   SpotSpread <- function(spread = numeric(), 
-                          cashflow = vector(), 
-                          discount.rates = vector(), 
-                          t.period = vector(), 
-                          proceeds = numeric()){
-     
-     Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
-     return(proceeds - Present.Value)}
-   
-   SolveSpotSpread <- uniroot(SpotSpread, 
-                              interval = c(-.75, .75), 
-                              tol = tolerance, 
-                              cashflow = MortgageCashFlow@TotalCashFlow,
-                              discount.rates = LIBORTermStructure@spotrate[1:cashflow.length]/yield.basis, 
-                              t.period = LIBORTermStructure@period[1:cashflow.length]/months.in.year , 
-                              proceeds = proceeds)$root
-   
-   LIBORZVspread <- SolveSpotSpread * 100
-   
-    # --------------------------------------------------------------------------------
-    # Compute the Z spread to the UST curve ATOMs USTZVSpread
-    # --------------------------------------------------------------------------------
-   
-   
+
+    # -----------------------------------------------------------------------------------------
+    # Compute the ZSpread - The Atoms ZSpread is the spread to the UST spot curve using
+    # consensus PSA speed
+    # ----------------------------------------------------------------------------------------
+    cashflow.length <- length(MortgageCashFlow@TotalCashFlow)
     SpotSpread <- function(spread = numeric(), 
                            cashflow = vector(), 
                            discount.rates = vector(), 
                            t.period = vector(), 
                            proceeds = numeric()){
       
-                Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
-                return(proceeds - Present.Value)}
+      Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+      return(proceeds - Present.Value)}
     
     SolveSpotSpread <- uniroot(SpotSpread, 
-                              interval = c(-.75, .75), 
+                               interval = c(-.75, .75), 
                                tol = tolerance, 
-                               cashflow = MortgageCashFlow@TotalCashFlow,
+                               cashflow = MortgageCashFlowPSA@TotalCashFlow,
                                discount.rates = USTTermStructure@spotrate[1:cashflow.length]/yield.basis, 
                                t.period = USTTermStructure@period[1:cashflow.length]/months.in.year , 
                                proceeds = proceeds)$root
     
-    USTZVspread <- SolveSpotSpread * 100
+    Zspread <- SolveSpotSpread * yield.basis
+    
+    # ------------------------------------------------------------------------------------------
+    # LIBOR OAS Analysis
+    # ------------------------------------------------------------------------------------------
+
+    LIBOR.OAS <- Mortgage.OAS(bond.id = bond.id,
+                              trade.date = trade.date,
+                              settlement.date = settlement.date,
+                              original.bal = original.bal,
+                              price = price,
+                              sigma = volatility,
+                              paths = paths)
+    
+    LIBOROAS <- LIBOR.OAS@OAS * yield.basis
+    LIBORZVSpread <- LIBOR.OAS@ZVSpread * yield.basis
+    
     
   
     new("AtomsData",
         ISpread = SpreadToUST,
         NSpread = SpreadToLIBOR,
-        ZSpread = 9999,
+        ZSpread = Zspread,
         ModDuration = MortgageCashFlow@ModDuration,
         Convexity = MortgageCashFlow@Convexity,
         EffDuration = MortgageTermStructure@EffDuration,
@@ -205,7 +234,7 @@
         OAD = 9999,
         OAC = 9999,
         USTOAS = 9999,
-        USTZVSpread = USTZVspread,
-        LIBOROAS = 9999,
-        LIBORZVSpread = LIBORZVspread)
+        USTZVSpread = 9999,
+        LIBOROAS = LIBOROAS,
+        LIBORZVSpread = LIBORZVSpread)
  }

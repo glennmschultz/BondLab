@@ -6,9 +6,8 @@
 \usage{
 AtomsData(bond.id = "character", original.bal = numeric(),
   price = numeric(), trade.date = "character",
-  settlement.date = "character", swapspread = list(),
-  method = "character", paths = "numeric", volatility = "numeric",
-  consensusPSA = "numeric")
+  settlement.date = "character", swapspread = list(), paths = "numeric",
+  volatility = "numeric", consensusPSA = "numeric")
 }
 \arguments{
 \item{bond.id}{A character vector the id or cusip of the bond}
@@ -22,8 +21,6 @@ AtomsData(bond.id = "character", original.bal = numeric(),
 \item{settlement.date}{A numeric value the settlement date}
 
 \item{swapspread}{A list the of swap spreads length of which matches swap rate curve}
-
-\item{method}{A character vector the method used to fit the term structure}
 
 \item{paths}{A numeric value the number of simulation paths}
 

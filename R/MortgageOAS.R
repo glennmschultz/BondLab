@@ -7,7 +7,6 @@
   # Copyright (C) 2014  Glenn M Schultz, CFA
  
 
-
   #--------------------------------------------------------------------------
   # Mortgage OAS Function
   #--------------------------------------------------------------------------
@@ -55,8 +54,9 @@
   delay = bond.id@PaymentDelay
   factor = bond.id@MBSFactor
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+  principal = original.bal * factor
   
-  short.rate = as.numeric(rates.data[1,2])/100
+  short.rate = as.numeric(rates.data[1,2])/yield.basis
   
   # The spot spread function is used to solve for the spread to the spot curve to normalize discounting
   # This function is encapasulated in term structure
@@ -165,7 +165,8 @@
                                            kappa = kappa, 
                                            lambda = lambda, 
                                            theta = theta, sigma = sigma, 
-                                           T = 2, step = 0, 
+                                           T = 2, 
+                                           step = 0, 
                                            result = "y") * yield.basis)
     
     sim.cube[,7] <- as.vector(CIRBondPrice(shortrate = as.numeric(Simulation[, j]), 
@@ -200,9 +201,10 @@
                                        ModelTune = ModelTune, 
                                        Burnout = Burnout)
     
-    # Uncomment this line to get the prepayment vector from the model 
-    #prepayout <- cbind(prepayout, Prepayment@SMM)
-    
+    # ----------------------------------------------------------------------------------------
+    # Uncomment this line and # 239 to get the prepayment vector from the model 
+    # prepayout <- cbind(prepayout, Prepayment@SMM)
+    # ----------------------------------------------------------------------------------------
     
     
     MtgCashFlow <- MortgageCashFlow(bond.id = bond.id, 
@@ -233,10 +235,13 @@
     
   } # end of the OAS j loop
   
+  # ---------------------------------------------------------------------------------------------
   # uncomment this to get prepayment vectors
-  #vectors <<- prepayout
-  
+  # vectors <<- prepayout
+  # ---------------------------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------------------------
   # Calculate OAS spread find the spread such that the average proceeds is equal to proceeds
+  # ---------------------------------------------------------------------------------------------
   OAS <- function(spread = numeric(), 
                   DiscountMatrix = matrix(), 
                   CashFlowMatrix = matrix(), 
@@ -259,7 +264,9 @@
                         price = price,
                         paths = paths)$root
   
-  #Calculate OAS to price for price distribution
+  # -------------------------------------------------------------------------------------------------------
+  #Calculate OAS to price for price distribution analysis
+  # -------------------------------------------------------------------------------------------------------
   OAS.Price <- function(spread = numeric(), 
                         DiscountMatrix = matrix(), 
                         CashFlowMatrix = matrix(), 
@@ -274,28 +281,148 @@
   Price.Dist <- OAS.Price(OAS.Spread, 
                           DiscountMatrix = OAS.DiscMatrix, 
                           CashFlowMatrix = OAS.CashFlow,
-                          period = OAS.Term.Structure@period, proceeds = proceeds, paths = paths)
+                          period = OAS.Term.Structure@period, 
+                          proceeds = proceeds, 
+                          paths = paths)
   
   OAS.Out[,5] <- Price.Dist 
   
+  # --------------------------------------------------------------------------------------------------------------
   # Calculate static cash flow spread to the curve at zero volatility
   # Using the prepayment model this will always match the ZV spread indiciating the pricing benchmark is exact
   # In reality the spread to the curve will be based on the pricing speed used.
-  # This is a good check but the spread to the curve must be calculated in the PassThrough OAS and passed to 
-  # ZeroVolatility Object
+  # This is a good check
+  # --------------------------------------------------------------------------------------------------------------
                                   
     InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                                 as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
     
     SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * yield.basis) - 
                        predict(InterpolateCurve, MtgCashFlow@WAL ))/yield.basis
+    
 
-  
+   # --------------------------------------------------------------------------------------------------------------
+   # Key Rate Duration 
+   # --------------------------------------------------------------------------------------------------------------
+    
+   # Zero volatility single path CIR model returns the forward rate curve
+    
+    CIRFwd <- CIRSim(shortrate = short.rate,
+                     kappa = kappa,
+                     theta = theta,
+                     T = 40,
+                     step = 1/months.in.year,
+                     sigma = 0,
+                     N = 1)
+    
+    
+    # Calculate spot rate from the forward curve
+    
+    CIRFwdLen <- length(CIRFwd) 
+    CIRSpot <- ((1+CIRFwd[2:CIRFwdLen])/(1+CIRFwd[1:CIRFwdLen -1]) ^ (1/months.in.year))-1
+    
+    # Calculate the two year forward rate
+    
+    TwoYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
+                                       kappa = kappa, 
+                                       lambda = lambda, 
+                                       theta = theta, 
+                                       sigma = sigma, 
+                                       T = 2, 
+                                       step = 0, 
+                                       result = "y") * yield.basis)
+    
+    # Calculate the ten year forward rate
+    
+    TenYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
+                                       kappa = kappa, 
+                                       lambda = lambda, 
+                                       theta = theta, 
+                                       sigma = sigma, 
+                                       T = 10, 
+                                       step = 0, 
+                                       result = "y") * yield.basis)
+    
+    # time vectors for discounting
+    # time vectors for discounting are normally calculated from
+    # bond payment data but for key rate they are manually calculated
+    # a 30-year bond requires a 480 month forward curve to drive the prepayment model
+    
+    time.period <- seq(from = 1, to = CIRFwdLen, by = 1)
+    time.period <- time.period/12
+    timelength <- length(time.period)
+    
+    CIRTermStructure <- new("TermStructure",
+                            tradedate = "09-15-2015",
+                            period = time.period[2:timelength],
+                            date = unname(as.character(pmtdate)),
+                            spotrate = CIRSpot * yield.basis,
+                            forwardrate = CIRFwd[2:CIRFwdLen],
+                            TwoYearFwd = TwoYrFwd,
+                            TenYearFwd = TenYrFwd)
+    
+    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, 
+                                                 MortgageRate = MortgageRate,
+                                                 TermStructure = CIRTermStructure, 
+                                                 PrepaymentAssumption = "MODEL", 
+                                                 ModelTune = ModelTune, 
+                                                 Burnout = Burnout, 
+                                                 begin.cpr = begin.cpr, 
+                                                 end.cpr = end.cpr, 
+                                                 seasoning.period = seasoning.period, 
+                                                 CPR = CPR)
+    
+    #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, 
+    #Duration, Convexity and CashFlow.
+    MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
+                                         original.bal = original.bal, 
+                                         settlement.date = settlement.date, 
+                                         price = price, 
+                                         PrepaymentAssumption = PrepaymentAssumption)
+    
+    MortgageKeyRate <-MtgTermStructure(bond.id = bond.id,
+                                       original.bal = original.bal,
+                                       Rate.Delta = rate.delta,
+                                       TermStructure = CIRTermStructure,
+                                       settlement.date = settlement.date,
+                                       principal = principal,
+                                       price = price,
+                                       cashflow = MortgageCashFlow)
+    
+    # --------------------------------------------------------------------------------------------------------
+    # Solve for the zero volatility spread
+    # --------------------------------------------------------------------------------------------------------
+    
+    cashflow.length <- length(MortgageCashFlow@TotalCashFlow)
+    SpotSpread <- function(spread = numeric(), 
+                           cashflow = vector(), 
+                           discount.rates = vector(), 
+                           t.period = vector(), 
+                           proceeds = numeric()){
+      
+      Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+      return(proceeds - Present.Value)}
+    
+    SolveSpotSpread <- uniroot(SpotSpread, 
+                               interval = c(-.75, .75), 
+                               tol = tolerance, 
+                               cashflow = MortgageCashFlow@TotalCashFlow,
+                               discount.rates = CIRTermStructure@spotrate[1:cashflow.length]/yield.basis, 
+                               t.period = CIRTermStructure@period[1:cashflow.length] , 
+                               proceeds = proceeds)$root
+    
+    spot.spread <- SolveSpotSpread
+    
    
     new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),
        SpreadToCurve = SpreadtoCurve,
+       EffDuration = MortgageKeyRate@EffDuration,
+       EffConvexity = MortgageKeyRate@EffConvexity,
+       KeyRateTenor = MortgageKeyRate@KeyRateTenor,
+       KeyRateDuration = MortgageKeyRate@KeyRateDuration,
+       KeyRateConvexity = MortgageKeyRate@KeyRateConvexity,
        PathSpread = OAS.Out[,1],
        PathWAL = OAS.Out[,2],
        PathModDur = OAS.Out[,3],
@@ -303,7 +430,7 @@
        PriceDist = OAS.Out[,5])
 
   
-}
+  }
 
   setGeneric("Mortgage.OAS",function(bond.id = "character", 
                                      trade.date = "character", 
@@ -312,4 +439,5 @@
                                      price = numeric(), 
                                      sigma = numeric(), 
                                      paths = numeric()) 
-    {standardGeneric("Mortgage.OAS")})
+  
+  {standardGeneric("Mortgage.OAS")})

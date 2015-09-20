@@ -55,7 +55,6 @@
  #' @param trade.date A numeric value the trade date
  #' @param settlement.date A numeric value the settlement date
  #' @param swapspread A list the of swap spreads length of which matches swap rate curve
- #' @param method A character vector the method used to fit the term structure
  #' @param paths A numeric value the number of simulation paths
  #' @param volatility A numeric value the annualized volatility
  #' @param consensusPSA A numeric value the consensus PSA speed
@@ -66,7 +65,6 @@
                              trade.date = "character",
                              settlement.date = "character",
                              swapspread = list(),
-                             method = "character",
                              paths = "numeric",
                              volatility = "numeric",
                              consensusPSA = "numeric"){
@@ -89,12 +87,13 @@
    Bond.id = MBS(MBS.id = bond.id)
    LIBORCurve <- Rates(trade.date = trade.date)
    USTCurve <- LIBORCurve
-   USTCurve[1,2:length(USTCurve[1,])] <- 
+   USTCurve[1,2:length(USTCurve[1,])] <-
    USTCurve[1,2:length(USTCurve[1,])] - as.numeric(swapspread)
    Rate.Delta = rate.delta
    MortgageRate <- MtgRate()
    principal <- original.bal * Bond.id@MBSFactor
    proceeds <- principal * (price/price.basis)
+   LIBOR.short.rate <- LIBORCurve[1,2] 
    
    # ----------------------------------------------------------------------------
    # Call the prepayment model tuning parameters and 
@@ -104,11 +103,80 @@
    Burnout <- Bond.id@Burnout
   
    # ----------------------------------------------------------------------------
-   # Calculate the term strucutre
+   # Calculate the LIBOR term strucuture using the CIR model
+   # I need to decide how I want going to pass the swap spread data to the CIR model
+   # this needs to be UST curve fit
    # ----------------------------------------------------------------------------
    
-   LIBORTermStructure <- TermStructure(rates.data = LIBORCurve, method = method)
-   USTTermStructure <- TermStructure(rates.data = USTCurve, method = method)
+   Market.Fit <- CalibrateCIR(trade.date = trade.date, 
+                              sigma = volatility)
+   kappa  = Market.Fit$p1
+   lambda = Market.Fit$p2
+   theta  = Market.Fit$p3
+   
+   # ----------------------------------------------------------------------------
+   # Zero volatility single path CIR model returns the forward rate curve
+   # This is needed to drive the prepayment model for the calculation of the  
+   # UST Z-spread calculation needs to fit 
+   # ----------------------------------------------------------------------------
+   CIRFwd <- CIRSim(shortrate = LIBOR.short.rate/yield.basis,
+                    kappa = kappa,
+                    theta = theta,
+                    T = 40,
+                    step = 1/months.in.year,
+                    sigma = 0,
+                    N = 1)
+   
+   # ----------------------------------------------------------------------------
+   # Calculate the spot rate from the forward curve
+   # ----------------------------------------------------------------------------
+   CIRFwdLen <- length(CIRFwd) 
+   CIRSpot <- ((1+CIRFwd[2:CIRFwdLen])/(1+CIRFwd[1:CIRFwdLen -1]) ^ (1/months.in.year))-1
+   
+   
+   # ------------------------------------------------------------------------------
+   # Calculate the forward rates
+   # ------------------------------------------------------------------------------
+   TwoYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
+                                      kappa = kappa, 
+                                      lambda = lambda, 
+                                      theta = theta, 
+                                      sigma = volatility, 
+                                      T = 2, 
+                                      step = 0, 
+                                      result = "y") * yield.basis)
+   
+   TenYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
+                                      kappa = kappa, 
+                                      lambda = lambda, 
+                                      theta = theta, 
+                                      sigma = volatility, 
+                                      T = 10, 
+                                      step = 0, 
+                                      result = "y") * yield.basis)
+   
+   # time vectors for discounting
+   # time vectors for discounting are normally calculated from
+   # bond payment data but for key rate they are manually calculated
+   # a 30-year bond requires a 480 month forward curve to drive the prepayment model
+   
+   time.period <- seq(from = 1, to = CIRFwdLen, by = 1)
+   time.period <- time.period/12
+   timelength <- length(time.period)
+   
+   LIBORTermStructure <- new("TermStructure",
+                           tradedate = as.character(trade.date),
+                           period = time.period[2:timelength],
+                           date = unname(as.character(pmtdate)),
+                           spotrate = CIRSpot * yield.basis,
+                           forwardrate = CIRFwd[2:CIRFwdLen],
+                           TwoYearFwd = TwoYrFwd,
+                           TenYearFwd = TenYrFwd)
+   
+   # ----------------------------------------------------------------------------
+   # Fit the UST treasury curve using the single Factor CIR Model
+   # ----------------------------------------------------------------------------
+    # {Model fit code here}
    
    # ----------------------------------------------------------------------------
    # Run the prepayment model compute mortgage cash flow duration convexity
@@ -131,8 +199,7 @@
      PrepaymentAssumption = "PPC",
      begin.cpr = BeginCPR,
      end.cpr = EndCPR,
-     seasoning.period = SeasoningPeriod
-     )
+     seasoning.period = SeasoningPeriod)
    
    
    MortgageCashFlow <- MortgageCashFlow(bond.id = Bond.id,
@@ -140,26 +207,19 @@
                                         settlement.date = settlement.date,
                                         price = price,
                                         PrepaymentAssumption = PrepaymentAssumption)
+   
    MortgageCashFlowPSA <- MortgageCashFlow(bond.id = Bond.id,
                                         original.bal = original.bal,
                                         settlement.date = settlement.date,
                                         price = price,
                                         PrepaymentAssumption = ConsensusPSA)
    
-   
-   MortgageTermStructure <- MtgTermStructure(bond.id = Bond.id,
-                               original.bal = original.bal,
-                               Rate.Delta = Rate.Delta,
-                               TermStructure = LIBORTermStructure,
-                               settlement.date = settlement.date,
-                               principal = principal,
-                               price = price,
-                               cashflow = MortgageCashFlow)
+
    
    # --------------------------------------------------------------------------------
    # Compute the spread to the LIBOR curve ATOMs NSpread
    # --------------------------------------------------------------------------------
-   MtgYTM <- MortgageCashFlow@YieldToMaturity * yield.basis
+   MtgYTM <- MortgageCashFlowPSA@YieldToMaturity * yield.basis
    
    InterpolateLIBOR <- loess(as.numeric(LIBORCurve[1,2:12]) ~
                                 as.numeric(LIBORCurve[2,2:12]),
@@ -181,27 +241,27 @@
 
     # -----------------------------------------------------------------------------------------
     # Compute the ZSpread - The Atoms ZSpread is the spread to the UST spot curve using
-    # consensus PSA speed
+    # consensus PSA speed.  Need to fit the CIR model to UST
     # ----------------------------------------------------------------------------------------
-    cashflow.length <- length(MortgageCashFlow@TotalCashFlow)
-    SpotSpread <- function(spread = numeric(), 
-                           cashflow = vector(), 
-                           discount.rates = vector(), 
-                           t.period = vector(), 
-                           proceeds = numeric()){
+    #cashflow.length <- length(MortgageCashFlow@TotalCashFlow)
+    #SpotSpread <- function(spread = numeric(), 
+    #                       cashflow = vector(), 
+    #                       discount.rates = vector(), 
+    #                       t.period = vector(), 
+    #                       proceeds = numeric()){
       
-      Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
-      return(proceeds - Present.Value)}
+    #  Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
+    #  return(proceeds - Present.Value)}
     
-    SolveSpotSpread <- uniroot(SpotSpread, 
-                               interval = c(-.75, .75), 
-                               tol = tolerance, 
-                               cashflow = MortgageCashFlowPSA@TotalCashFlow,
-                               discount.rates = USTTermStructure@spotrate[1:cashflow.length]/yield.basis, 
-                               t.period = USTTermStructure@period[1:cashflow.length]/months.in.year , 
-                               proceeds = proceeds)$root
+    #SolveSpotSpread <- uniroot(SpotSpread, 
+    #                           interval = c(-.75, .75), 
+    #                           tol = tolerance, 
+    #                           cashflow = MortgageCashFlowPSA@TotalCashFlow,
+    #                           discount.rates = USTTermStructure@spotrate[1:cashflow.length]/yield.basis, 
+    #                           t.period = USTTermStructure@period[1:cashflow.length]/months.in.year , 
+    #                           proceeds = proceeds)$root
     
-    Zspread <- SolveSpotSpread * yield.basis
+    #Zspread <- SolveSpotSpread * yield.basis
     
     # ------------------------------------------------------------------------------------------
     # LIBOR OAS Analysis
@@ -223,14 +283,14 @@
     new("AtomsData",
         ISpread = SpreadToUST,
         NSpread = SpreadToLIBOR,
-        ZSpread = Zspread,
+        ZSpread = 999,
         ModDuration = MortgageCashFlow@ModDuration,
         Convexity = MortgageCashFlow@Convexity,
-        EffDuration = MortgageTermStructure@EffDuration,
-        EffConvexity = MortgageTermStructure@EffConvexity,
-        KeyRateTenor = MortgageTermStructure@KeyRateTenor,
-        KeyRateDuration = MortgageTermStructure@KeyRateDuration,
-        KeyRateConvexity = MortgageTermStructure@KeyRateConvexity,
+        EffDuration = LIBOR.OAS@EffDuration,
+        EffConvexity = LIBOR.OAS@EffConvexity,
+        KeyRateTenor = LIBOR.OAS@KeyRateTenor,
+        KeyRateDuration = LIBOR.OAS@KeyRateDuration,
+        KeyRateConvexity = LIBOR.OAS@KeyRateConvexity,
         OAD = 9999,
         OAC = 9999,
         USTOAS = 9999,

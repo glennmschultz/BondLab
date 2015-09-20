@@ -168,13 +168,9 @@
   period <- seq(from = 1, to = 492, by = 1)
   #Use the date from the cashflow file
   date <- seq(as.Date(rates.data[1,1]) %m+% months(1), as.Date(data[[3]][j]), by="1 months")
-  
   spot.rate.curve <- spotrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
-  
   forward.rate.curve <- forwardrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
-  
   Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:360]
-    
   Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:360]
 
   
@@ -187,9 +183,9 @@
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
   )
-} 
+  } 
 
 
-setGeneric("TermStructure",
+  setGeneric("TermStructure",
            function(rates.data = "character", method = "character")
            {standardGeneric("TermStructure")})

@@ -31,7 +31,7 @@
                          sigma = numeric(), 
                          paths = numeric()
                          ){
-  
+
   # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   bond.id = MBS(MBS.id = bond.id)
   
@@ -75,7 +75,8 @@
   # Set trade date and call the CalibrateCIR Model
   # trade.date = as.Date(trade.date, "%m-%d-%Y")
   
-  Market.Fit <- CalibrateCIR(trade.date = trade.date, sigma = sigma)
+  Market.Fit <- CalibrateCIR(trade.date = trade.date, 
+                             sigma = sigma)
   kappa  = Market.Fit$p1
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
@@ -353,7 +354,7 @@
     timelength <- length(time.period)
     
     CIRTermStructure <- new("TermStructure",
-                            tradedate = "09-15-2015",
+                            tradedate = trade.date,
                             period = time.period[2:timelength],
                             date = unname(as.character(pmtdate)),
                             spotrate = CIRSpot * yield.basis,
@@ -427,10 +428,7 @@
        PathWAL = OAS.Out[,2],
        PathModDur = OAS.Out[,3],
        PathYTM =OAS.Out[,4],
-       PriceDist = OAS.Out[,5])
-
-  
-  }
+       PriceDist = OAS.Out[,5])}
 
   setGeneric("Mortgage.OAS",function(bond.id = "character", 
                                      trade.date = "character", 

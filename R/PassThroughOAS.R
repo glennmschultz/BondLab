@@ -268,7 +268,7 @@
   Two.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
                                       kappa = kappa, 
                                       lambda = lambda, 
-                                      theta = theta, sigma = sigma, 
+                                      theta = theta, sigma = 0, 
                                       T = 2, step = 0, 
                                       result = "y") * yield.basis)
   
@@ -276,7 +276,7 @@
                                       kappa = kappa, 
                                       lambda = lambda, 
                                       theta = theta, 
-                                      sigma = sigma, 
+                                      sigma = 0, 
                                       T = 10, 
                                       step = 0, 
                                       result = "y") * yield.basis)

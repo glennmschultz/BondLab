@@ -111,11 +111,11 @@
    # this needs to be UST curve fit
    # ----------------------------------------------------------------------------
    
-   Market.Fit <- CalibrateCIR(trade.date = trade.date, 
+   Market.Fit <<- CalibrateCIR(trade.date = trade.date, 
                               sigma = volatility)
-   kappa  = Market.Fit$p1
-   lambda = Market.Fit$p2
-   theta  = Market.Fit$p3
+   kappa_U  = Market.Fit$p1
+   lambda_U = Market.Fit$p2
+   theta_U  = Market.Fit$p3
    
    # ----------------------------------------------------------------------------
    # Zero volatility single path CIR model returns the forward rate curve
@@ -123,8 +123,8 @@
    # UST Z-spread calculation needs to fit 
    # ----------------------------------------------------------------------------
    CIRFwd <- CIRSim(shortrate = LIBOR.short.rate/yield.basis,
-                    kappa = kappa,
-                    theta = theta,
+                    kappa = kappa_U,
+                    theta = theta_U,
                     T = 40,
                     step = 1/months.in.year,
                     sigma = 0,
@@ -142,18 +142,18 @@
    # ------------------------------------------------------------------------------
 
   TwoYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
-                                    kappa = kappa, 
-                                    lambda = lambda, 
-                                    theta = theta, 
+                                    kappa = kappa_U, 
+                                    lambda = lambda_U, 
+                                    theta = theta_U, 
                                     sigma = 0, 
                                     T = 2, 
                                     step = 0, 
                                     result = "y") * yield.basis)
    
    TenYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
-                                      kappa = kappa, 
-                                      lambda = lambda, 
-                                      theta = theta, 
+                                      kappa = kappa_U, 
+                                      lambda = lambda_U, 
+                                      theta = theta_U, 
                                       sigma = 0, 
                                       T = 10, 
                                       step = 0, 
@@ -301,6 +301,6 @@
         OAC = 9999,
         USTOAS = 9999,
         USTZVSpread = 9999,
-        LIBOROAS = LIBOROAS,
+        LIBOROAS = LIBOR.OAS@OAS,
         LIBORZVSpread = LIBORZVSpread)
  }

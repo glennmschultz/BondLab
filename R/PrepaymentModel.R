@@ -398,6 +398,8 @@ setMethod("initialize",
   LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
   FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
   NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+  Term = difftime(time1 = FinalPmtDate, time2 = FirstPmtDate, units = "days")/days.in.month
+  WALA = round((Term - difftime(time1 = FinalPmtDate, time2 = LastPmtDate, units = "days")/days.in.month),0)
   
   col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
   
@@ -409,7 +411,7 @@ setMethod("initialize",
   Period = seq(from = 1, to = Remain.Term, by = 1)
   PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
   LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
-                                FirstPmtDate, units = "days")/days.in.month) + 1
+                                FirstPmtDate, units = "days")/days.in.month) + (as.numeric(WALA) + 1)
   
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))

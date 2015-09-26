@@ -22,6 +22,9 @@
                    Maturity = "character",
                    LastPmtDate = "character",
                    NextPmtDate = "character",
+                   Term = "numeric",
+                   WALA = "numeric",
+                   WAM = "numeric",
                    PaymentDelay = "numeric",
                    Moody = "character",
                    SP = "character",
@@ -45,7 +48,9 @@
                    FirstPrinPaymentDate = "character",
                    BalloonPmt = "logical",
                    BalloonDate = "character",
+                   OriginalBal = "numeric",
                    MBSFactor = "numeric",
+                   CurrentBal = "numeric",
                    Model = "character",
                    Burnout = "numeric",
                    SATO = "numeric")
@@ -61,6 +66,9 @@
             .Object@Maturity = Maturity
             .Object@LastPmtDate = LastPmtDate
             .Object@NextPmtDate = NextPmtDate
+            .Object@Term = Term
+            .Object@WALA = WALA
+            .Object@WAM = WAM
             .Object@PaymentDelay = PaymentDelay
             .Object@Moody = Moody
             .Object@SP = SP
@@ -106,6 +114,9 @@
   Maturity = "character",
   LastPmtDate = "character",
   NextPmtDate = "character",
+  Term = numeric(),
+  WALA = numeric(),
+  WAM = numeric(),
   PaymentDelay = numeric(),
   Moody = "character",
   SP = "character",
@@ -146,6 +157,9 @@
       Maturity = Maturity,
       LastPmtDate = LastPmtDate,
       NextPmtDate = NextPmtDate,
+      Term = Term,
+      WALA = WALA,
+      WAM = WAM,
       PaymentDelay = PaymentDelay,
       Moody = Moody,
       SP = SP,
@@ -190,6 +204,9 @@
   #' in the case MBS the final payment data assuming 0 CPR.
   #' @param LastPmtDate A character string the date the last payment scheduled payment to the investor.
   #' @param NextPmtDate A character string the date of the next scheduled payment to the investor.
+  #' @param Term A numeric value the original term of the underlying mortgages
+  #' @param WALA A numeric value the weighted average loan age of the underlying mortgages
+  #' @param WAM A numeric value the weighted average maturity of the underlying mortgages
   #' @param PaymentDelay A numeric value in the case of MBS the delay of the payment 
   #' from the trust to the investor
   #' @param Moody A character string Moody's assigned credit rating
@@ -209,7 +226,7 @@
   #' @param Margin A numeric value the spread over the index used to determine 
   #' the borrower's note rate
   #' @param FirstPmtDate A character string the date of the first payment 
-  #' of the borrower's note.  In the case of an the first payment made to the bondholder
+  #' of the borrower's note.
   #' @param FinalPmtDate A character string the date of thee final payment 
   #' of the borrower's note.  In the case of an MBS the final payment made to the bondholder
   #' @param Servicing A numeric value the servicing spread from the Gross WAC to the servicer
@@ -242,6 +259,9 @@
   #'  Maturity = "01-01-2043",
   #'  LastPmtDate = "01-01-2013",
   #'  NextPmtDate = "02-01-2013",
+  #'  Term = 360,
+  #'  WALA = 0,
+  #'  WAM = 360,
   #'  PaymentDelay = 24,     
   #'  Moody = "Aaa",
   #'  SP = "AAA",
@@ -282,6 +302,9 @@
   Maturity = "character",
   LastPmtDate = "character",
   NextPmtDate = "character",
+  Term = numeric(),
+  WALA = numeric(),
+  WAM = numeric(),
   PaymentDelay = numeric(),
   Moody = "character",
   SP = "character",
@@ -322,6 +345,9 @@
     Maturity = Maturity,
     LastPmtDate = LastPmtDate,
     NextPmtDate = NextPmtDate,
+    Term = Term,
+    WALA = WALA,
+    WAM = WAM,
     PaymentDelay = PaymentDelay,
     Moody = Moody,
     SP = SP,
@@ -354,7 +380,7 @@
                                        "/BondData/",temp@ID,".rds", sep = ""))
    saveRDS(temp, connMBSDetails)
    close(connMBSDetails)
- #  SaveMBS(filename = "temp")
+
   }
 
   setGeneric("MakeMBSDetails", function(
@@ -368,6 +394,9 @@
   Maturity = "character",
   LastPmtDate = "character",
   NextPmtDate = "character",
+  Term = numeric(),
+  WALA = numeric(),
+  WAM = numeric(),
   PaymentDelay = numeric(),
   Moody = "character",
   SP = "character",
@@ -395,4 +424,5 @@
   Model = "character",
   Burnout = numeric(),
   SATO = numeric())
-{standardGeneric("MakeMBSDetails")})
+
+  {standardGeneric("MakeMBSDetails")})

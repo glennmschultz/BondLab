@@ -58,7 +58,48 @@
   # ------------------------------------------------------------------------------- 
   # The folllowing classes define standard Mortgage Passthrough analytics
   # -------------------------------------------------------------------------------
-  
+  #' An S4 class to represent a mortgage pass-through security
+  #' 
+  #' @slot Cusip A character string the pass-through cusip
+  #' @slot ID A character string identifying the agency and pool number
+  #' @slot BondType A character sting the bond type
+  #' @slot Sector A character string the sector
+  #' @slot Coupon A coupon a numeric value the annual coupon rate
+  #' @slot IssueDate A character string the issue date
+  #' @slot DatedDate A character string the dated date
+  #' @slot Maturity A character string the maturity date
+  #' @slot LastPmtDate A character string the last payment advanced
+  #' @slot NextPmtDate A character string the next payment date
+  #' @slot Term A numeric value the original term of the underlying mortgage
+  #' @slot WALA A numeric value the weighted average loan age
+  #' @slot WAM A numeric value the weighted average maturity
+  #' @slot PaymentDelay A numeric value the payment delay
+  #' @slot Moody A character string the Moody credit rating
+  #' @slot SP A character string the Standard and Poors credit rating
+  #' @slot BondLab A character string the BondLab credit rating
+  #' @slot Frequency A numeric value the frequency of payments (annual = 1, semi-annual = 2, monthly = 12)
+  #' @slot BondBasis A character string the day count used ("actual360",30360", etc.)
+  #' @slot GWac A numeric string the weighted average note rate
+  #' @slot OrigLoanBal A numeric value the original loan balance
+  #' @slot OrigLTV A numeric value the original loan to value ratio
+  #' @slot AmortizationType A character string "fixed" or "arm"
+  #' @slot AmortizationTerm A numeric value the term of the underlying mortgage
+  #' @slot Index A character string the index to which the arm coupon is related
+  #' @slot Margin A numeric value the spread (margin) over the index
+  #' @slot FirstPmtDate A character string the mortgage first payment date
+  #' @slot FinalPmtDate A character string the mortgage final payment date
+  #' @slot Servicing A numeric value the serving strip
+  #' @slot PMI A numeric value the primary mortgage insurance paid
+  #' @slot GFee A numeric value the guarantee fee paid
+  #' @slot InitialInterest A logical value TRUE or FALSE interest only mortgage
+  #' @slot FirstPrincipalPaymentDate A character string the date of the first principal payment
+  #' @slot BalloonPmt A logical value TRUE or FALSE a balloon payment due
+  #' @slot BalloonDate A character string the balloon payment date
+  #' @slot MBSFactor A numeric value the pass-through principal balance outstanding expressed as
+  #' a percentage of the original balance
+  #' @slot Model A character string the prepayment model tune file
+  #' @slot Burnout A numeric value the burnout value
+  #' @slot SATO A numeric value the mortgage rate spread at origination   
   setClass("MBSDetails", 
          representation(
            Cusip = "character",
@@ -71,6 +112,9 @@
            Maturity = "character",
            LastPmtDate = "character",
            NextPmtDate = "character",
+           Term = "numeric",
+           WALA = "numeric",
+           WAM = "numeric",
            PaymentDelay = "numeric",
            Moody = "character",
            SP = "character",
@@ -252,6 +296,24 @@
   # ------------------------------------------------------------------------------------------
   # The following classes define the ATOMs Index Analytics classes
   # ------------------------------------------------------------------------------------------
+  #' An S4 classs representing the results of the ATOMs analytics
+  #' 
+  #' @slot ISpread a numeric value the interpolated spread over the U.S. Treasury coupon curve using consensus PSA
+  #' @slot NSpread a numeric value the interpolated spread over the Swap coupon curve using consensus PSA
+  #' @slot ZSpread a numeric value the spread over the U.S. Treasury spot rate curve
+  #' @slot ModDuration a numeric value the modified duration based on the prepayment model vector
+  #' @slot Convexity a numeric value the convexity based on the prepayment model vector
+  #' @slot EffDuration a numeric value the sum of the key rate durations
+  #' @slot EffConvexity a numeric value the 
+  #' @slot KeyRate Tenor a length 11 numeric vector the tenors of the key rates
+  #' @slot KeyRateDuration a length 11 numeric vector the key rate durations
+  #' @slot KeyRateConvexity a length 11 numeric vector the key rate convexities
+  #' @slot OAD a numeric value the option adjusted duration
+  #' @slot OAC a numeric value the option adjusted convexity
+  #' @slot USTOAS a numeric value the OAS to the U.S. Treasury curve
+  #' @slot USTZVSpread a numeric value the zero volatltity OAS to the U.S.Treasury curve
+  #' @slot LIBOROAS a numeric value the OAS to the swap curve
+  #' @slot LIBORZVSpread a numeric value the zero volatility OAS to the swap curve
   setClass("AtomsData",
            representation(
              ISpread = "numeric",

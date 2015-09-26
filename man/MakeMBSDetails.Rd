@@ -8,18 +8,18 @@ MakeMBSDetails(Cusip = "character", ID = "character",
   BondType = "character", Sector = "character", Coupon = numeric(),
   IssueDate = "character", DatedDate = "character",
   Maturity = "character", LastPmtDate = "character",
-  NextPmtDate = "character", PaymentDelay = numeric(),
-  Moody = "character", SP = "character", BondLab = "character",
-  Frequency = numeric(), BondBasis = "character", GWac = numeric(),
-  OrigLoanBal = numeric(), OrigLTV = numeric(),
-  AmortizationType = "character", AmortizationTerm = numeric(),
-  Index = "character", Margin = numeric(), FirstPmtDate = "character",
-  FinalPmtDate = "character", Servicing = numeric(), PMI = numeric(),
-  Gfee = numeric(), InitialInterest = "logical",
-  InterestOnlyPeriod = numeric(), FirstPrinPaymentDate = "character",
-  BalloonPmt = "logical", BalloonDate = "character",
-  MBSFactor = numeric(), Model = "character", Burnout = numeric(),
-  SATO = numeric())
+  NextPmtDate = "character", Term = numeric(), WALA = numeric(),
+  WAM = numeric(), PaymentDelay = numeric(), Moody = "character",
+  SP = "character", BondLab = "character", Frequency = numeric(),
+  BondBasis = "character", GWac = numeric(), OrigLoanBal = numeric(),
+  OrigLTV = numeric(), AmortizationType = "character",
+  AmortizationTerm = numeric(), Index = "character", Margin = numeric(),
+  FirstPmtDate = "character", FinalPmtDate = "character",
+  Servicing = numeric(), PMI = numeric(), Gfee = numeric(),
+  InitialInterest = "logical", InterestOnlyPeriod = numeric(),
+  FirstPrinPaymentDate = "character", BalloonPmt = "logical",
+  BalloonDate = "character", MBSFactor = numeric(), Model = "character",
+  Burnout = numeric(), SATO = numeric())
 }
 \arguments{
 \item{Cusip}{A character the Pass Through MBS cusip.}
@@ -42,6 +42,12 @@ in the case MBS the final payment data assuming 0 CPR.}
 \item{LastPmtDate}{A character string the date the last payment scheduled payment to the investor.}
 
 \item{NextPmtDate}{A character string the date of the next scheduled payment to the investor.}
+
+\item{Term}{A numeric value the original term of the underlying mortgages}
+
+\item{WALA}{A numeric value the weighted average loan age of the underlying mortgages}
+
+\item{WAM}{A numeric value the weighted average maturity of the underlying mortgages}
 
 \item{PaymentDelay}{A numeric value in the case of MBS the delay of the payment
 from the trust to the investor}
@@ -75,7 +81,7 @@ to which the note rate references}
 the borrower's note rate}
 
 \item{FirstPmtDate}{A character string the date of the first payment
-of the borrower's note.  In the case of an the first payment made to the bondholder}
+of the borrower's note.}
 
 \item{FinalPmtDate}{A character string the date of thee final payment
 of the borrower's note.  In the case of an MBS the final payment made to the bondholder}
@@ -125,6 +131,9 @@ This is a standard generic function used to construct a MBS pass through securit
  Maturity = "01-01-2043",
  LastPmtDate = "01-01-2013",
  NextPmtDate = "02-01-2013",
+ Term = 360,
+ WALA = 0,
+ WAM = 360,
  PaymentDelay = 24,
  Moody = "Aaa",
  SP = "AAA",

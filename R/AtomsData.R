@@ -111,7 +111,7 @@
    # this needs to be UST curve fit
    # ----------------------------------------------------------------------------
    
-   Market.Fit <<- CalibrateCIR(trade.date = trade.date, 
+   Market.Fit <- CalibrateCIR(trade.date = trade.date, 
                               sigma = volatility)
    kappa_U  = Market.Fit$p1
    lambda_U = Market.Fit$p2

@@ -19,6 +19,9 @@
                    Maturity = "character",
                    LastPmtDate = "character",
                    NextPmtDate = "character",
+                   Term = "numeric",
+                   WALA = "numeric",
+                   WAM = "numeric",
                    PaymentDelay = "numeric",
                    Moody = "character",
                    SP = "character",
@@ -109,6 +112,9 @@
             .Object@Maturity = Maturity
             .Object@LastPmtDate = LastPmtDate
             .Object@NextPmtDate = NextPmtDate
+            .Object@Term = Term
+            .Object@WALA = WALA
+            .Object@WAM = WAM
             .Object@PaymentDelay = PaymentDelay
             .Object@Moody = Moody
             .Object@SP = SP
@@ -250,8 +256,6 @@
   
   # The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters
   
-  #conn1 <-  gzfile(description = paste("~/BondLab/BondData/",bond.id, ".rds", sep = ""), open = "rb")
-  #bond.id <- readRDS(conn1)
   
   bond.id <- MBS(MBS.id = bond.id)
   
@@ -335,6 +339,9 @@
       Maturity = bond.id@Maturity,
       LastPmtDate = bond.id@LastPmtDate,
       NextPmtDate = bond.id@NextPmtDate,
+      Term = bond.id@Term,
+      WALA = bond.id@WALA,
+      WAM = bond.id@WAM,
       PaymentDelay = bond.id@PaymentDelay,
       Moody = bond.id@Moody,
       SP = bond.id@SP,

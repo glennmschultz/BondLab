@@ -83,9 +83,8 @@
       Shiftbps = Shiftbps,
       Formula = Formula)
     
-    connScenario <- gzfile(description = paste("~/BondLab/Scenario/",temp@Name,".rds", sep = ""))
-    saveRDS(temp, connScenario)
-    close(connScenario)
+    SaveScenario(Scenario = Name, ScenarioFile = temp)
+
   }
 
   setGeneric("MakeScenario", function(

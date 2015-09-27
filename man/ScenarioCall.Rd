@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{ScenarioCall}
 \alias{ScenarioCall}
-\title{A connection function to the interest rate scenario data folder}
+\title{A read connection function to the interest rate scenario data folder}
 \usage{
 ScenarioCall(Scenario = "character")
 }

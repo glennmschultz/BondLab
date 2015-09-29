@@ -153,10 +153,10 @@
     # Fourth call the scenario 
     rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
     
-    # Caclulate the term strucute
+    # Caclulate the term structure
     TermStructure = TermStructure(rates.data = rates, method = method)
     
-    # Run the prpeayment model
+    # Run the prepayment model
     Prepayment = PrepaymentAssumption(bond.id = bond.id, 
                                       MortgageRate = MortgageRate, 
                                       TermStructure = TermStructure, 
@@ -171,7 +171,7 @@
     # Scenario Mortgage cash flow analysis 
     MortgageCashFlow = MortgageCashFlow(bond.id = bond.id, 
                                         original.bal = original.bal, 
-                                         settlement.date = settlement.date, 
+                                        settlement.date = settlement.date, 
                                         price = price, 
                                         PrepaymentAssumption = Prepayment)
     
@@ -183,14 +183,13 @@
                                                                        MortgageCashFlow@WAL )
     
     # The second step will be to calculate the scenario effective duration and convexity
-    # I can do this with a different call that does not require MortgageTerm Strucutre
-    # Replace with the function effective duration
+    # This can be done because the scenario shift is immediate
+
     MortgageTermStructure = MtgTermStructure(bond.id = bond.id, 
                                              original.bal = original.bal, 
-                                             Rate.Delta = 0.25, 
+                                             Rate.Delta = rate.delta, 
                                              TermStructure = TermStructure,
-                                             settlement.date = 
-                                             settlement.date, 
+                                             settlement.date = settlement.date, 
                                              principal = original.bal * bond.id@MBSFactor, 
                                              price = price, cashflow = MortgageCashFlow)
     
@@ -204,41 +203,40 @@
                                HrzMonths = numeric(), 
                                ReinvestmentRate = numeric()) {
       
-      # Need to error trap the reinvestment rate     
-      # Reinvestment of cash flow  
+    # Need to error trap the reinvestment rate     
+    # Reinvestment of cash flow  
       
-      ReceivedCF = Scenario@TotalCashFlow[1:HrzMonths]
-      n.period = as.numeric(difftime(as.Date(Scenario@PmtDate[HrzMonths]), 
-                as.Date(Scenario@PmtDate[1:HrzMonths]), units = "days")/days.in.month)
+    ReceivedCF = Scenario@TotalCashFlow[1:HrzMonths]
+    n.period = as.numeric(difftime(as.Date(Scenario@PmtDate[HrzMonths]), 
+               as.Date(Scenario@PmtDate[1:HrzMonths]), units = "days")/days.in.month)
       
-      Reinvestment = ReceivedCF * (1 + (ReinvestmentRate/months.in.year)) ^ (n.period)
+    Reinvestment = ReceivedCF * (1 + (ReinvestmentRate/months.in.year)) ^ (n.period)
+    Reinvestment = sum(Reinvestment)
+    
+    
+    # -----------------------------------------------------------------------------------------------
+    # The below code is the original code for return analysis it will be deleted
+    # -----------------------------------------------------------------------------------------------
+    # Price the tail cash flow priced at horizon
+    # Forward month indexes to the cashflow array
+    #FwdMonth = (HrzMonths + 1)
+    #FwdSettleDate = as.Date(settlement.date, "%m-%d-%Y")  %m+% months(HrzMonths)
+    #FwdCashFlowPmtDate = Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]
+    #RemainingCF = Scenario@TotalCashFlow[FwdMonth:length(Scenario@TotalCashFlow)]
+    #n.period.fwd = as.numeric(difftime(as.Date(Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]), 
+    #                                 as.Date(FwdSettleDate), units = "days")/days.in.month)
       
-      Reinvestment = sum(Reinvestment)
+    # The approach bases the investor return on the forward rate curve and forward rates.
+    #DiscountRate =  
+    # Spot rates at horizon to length of cashflows
+    #(1+((TermStructure@spotrate[FwdMonth:length(Scenario@TotalCashFlow)] + spot.spread)/1200))  ^
+    # Index time period to period less length of the horizon for discounting the forward price
+    #(-1 * n.period.fwd)
       
-      # Price the tail cash flow priced at horizon
-      # Forward month indexes to the cashflow array
-      FwdMonth = (HrzMonths + 1)
+    #DiscPV = sum(RemainingCF * DiscountRate)
+    #TotalHrzProceeds = Reinvestment + DiscPV
       
-      FwdSettleDate = as.Date(settlement.date, "%m-%d-%Y")  %m+% months(HrzMonths)
-      
-      FwdCashFlowPmtDate = Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]
-      
-      RemainingCF = Scenario@TotalCashFlow[FwdMonth:length(Scenario@TotalCashFlow)]
-      
-      n.period.fwd = as.numeric(difftime(as.Date(Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]), 
-                                         as.Date(FwdSettleDate), units = "days")/days.in.month)
-      
-      # The approach bases the investor return on the forward rate curve and forward rates.
-      DiscountRate =  
-        # Spot rates at horizon to length of cashflows
-        (1+((TermStructure@spotrate[FwdMonth:length(Scenario@TotalCashFlow)] + spot.spread)/1200))  ^
-        # Index time period to period less length of the horizon for discounting the forward price
-        (-1 * n.period.fwd)
-      
-      DiscPV = sum(RemainingCF * DiscountRate)
-      TotalHrzProceeds = Reinvestment + DiscPV
-      
-      Return = TotalHrzProceeds/proceeds 
+    #Return = TotalHrzProceeds/proceeds 
       
     }
     

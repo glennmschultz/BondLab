@@ -193,6 +193,7 @@
                                              principal = original.bal * bond.id@MBSFactor, 
                                              price = price, cashflow = MortgageCashFlow)
     
+    
     # ---------------------------------------------------------------
     # Function to compute the horizon return 
     ReturnAnalysis <- function(Scenario = "character", 

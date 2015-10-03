@@ -120,7 +120,7 @@
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks"))/weeks.in.year,0))
+                                               units = c("weeks")),0)/weeks.in.year)
     Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
     #pmt.frequency should be input 
     

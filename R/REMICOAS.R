@@ -206,15 +206,6 @@
                                 TwoYearFwd = as.numeric(sim.cube[,6]),
                                 TenYearFwd = as.numeric(sim.cube[,7]))
     
-    #else
-    #  OAS.Term.Structure <- new("TermStructure",
-    #                            tradedate = as.character(as.Date(trade.date, "%m-%d-%Y")),
-    #                            period = as.numeric(sim.cube[,1]),
-    #                            date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
-    #                            spotrate = as.numeric(sim.cube[,5]) * 100,
-    #                            forwardrate = as.numeric(Simulation[,j] * 100),
-    #                            TwoYearFwd = as.numeric(sim.cube[,6]),
-    #                            TenYearFwd = as.numeric(sim.cube[,7]))
      
     MtgCashFlow <- REMICCashFlow(bond.id = bond.id, 
                     trade.date = trade.date,

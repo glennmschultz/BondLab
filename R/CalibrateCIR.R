@@ -70,7 +70,7 @@
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks"))/weeks.in.year,0))
+                                               units = c("weeks")),0)/weeks.in.year)
     Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
     data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
@@ -84,9 +84,9 @@
   
   #set term strucutre input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
-  CashFlow <- TSInput[[1]]
-  CIR.CF.Matrix <- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
-  CIR.Mat.Matrix <- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
+  CashFlow <<- TSInput[[1]]
+  CIR.CF.Matrix <<- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
+  CIR.Mat.Matrix <<- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
   
   #Objective function for the origin to be inaccessable the followign condition must be met
   # 2 * kappa * theta <= sigma^2  
@@ -119,7 +119,7 @@
   fit <- optimx(par = c(.05, .05, .01), 
                 fn = CIRTune, 
                 method = "L-BFGS-B",
-                lower = c(.001, .001, .001),
+                lower = c(.01, .01, .01),
                 upper = c(.5, .1, .2) , 
                 shortrate = shortrate,
                 sigma = sigma,

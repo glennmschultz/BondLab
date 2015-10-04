@@ -4,8 +4,8 @@
 \alias{ForwardPassThrough}
 \title{A Function to "Roll Forward" the mortgage pass through cusip object (MBS Details)}
 \usage{
-ForwardPassThrough(bond.id = "character", ProjectedCashFlow = "character",
-  HorizonMonths = "numeric")
+ForwardPassThrough(bond.id = "character", original.bal = numeric(),
+  ProjectedCashFlow = "character", HorizonMonths = numeric())
 }
 \arguments{
 \item{bond.id}{A character string referring to an object type of MBSDetails}

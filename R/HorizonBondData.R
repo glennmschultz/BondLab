@@ -19,5 +19,25 @@
   #' @param bond.id A character string referring to an object type of MBSDetails
   #' @param ProjectedCashFlow A character string referring to an object type of MortgageCashFlows
   ForwardPassThrough <- function(bond.id = "character",
+                                 original.bal = numeric(),
                                  ProjectedCashFlow = "character",
-                                 HorizonMonths = "numeric"){}
+                                 HorizonMonths = numeric()){
+    TempBond <- bond.id
+    NextPeriod <- HorizonMonths + 1
+    SchedPrincipal <- ProjectedCashFlow@ScheduledPrin[1:HorizonMonths]
+    PrepaidPrincipal <- ProjectedCashFlow@PrepaidPrin[1:HorizonMonths]
+    DefaultedPrincipal <- ProjectedCashFlow@DefaultedPrin[1:HorizonMonths]
+    TotalPrincipal <- SchedPrincipal + PrepaidPrincipal + DefaultedPrincipal
+    
+    TempBond@LastPmtDate <- ProjectedCashFlow@PmtDate[HorizonMonths]
+    TempBond@NextPmtDate <- ProjectedCashFlow@PmtDate[NextPeriod]
+    TempBond@MBSFactor <- ((original.bal * bond.id@MBSFactor) - TotalPrincipal)/original.bal
+    TempBond@WAM <- bond.id@WAM + HorizonMonths
+    TempBond@WALA <- bond.id@WALA - HorizonMonths
+    
+    connTemp <-  gzfile(description = paste(system.file(package = "BondLab"),
+                                            "/Temp_BondData/","TempPassThrough.rds", sep = ""))
+    print(TempBond)
+    saveRDS(TempBond, connTemp)
+    close(connTemp)
+  }

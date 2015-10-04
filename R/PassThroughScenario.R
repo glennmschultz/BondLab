@@ -109,7 +109,8 @@
   Mtg.Scenario <- function(bond.id ="character", 
                          trade.date = "character", 
                          settlement.date = "character", 
-                         price = numeric(), proceeds = numeric(), 
+                         price = numeric(), 
+                         proceeds = numeric(), 
                          spot.spread = numeric(), 
                          original.bal = numeric(), 
                          scenario.set = vector(), 
@@ -191,7 +192,8 @@
                                              TermStructure = TermStructure,
                                              settlement.date = settlement.date, 
                                              principal = original.bal * bond.id@MBSFactor, 
-                                             price = price, cashflow = MortgageCashFlow)
+                                             price = price, 
+                                             cashflow = MortgageCashFlow)
     
     
     # ---------------------------------------------------------------
@@ -249,7 +251,7 @@
                                     HrzMonths = 12, 
                                     ReinvestmentRate = .0025)
     
-    HorizonReturn = (HorizonReturn - 1) * 100
+    HorizonReturn <- (HorizonReturn - 1) * 100
     
     
     temp <- new("Mtg.Scenario",  

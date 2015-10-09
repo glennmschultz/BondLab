@@ -149,7 +149,7 @@
    #--------------------------------------------------------------------------------------
    #' A save connection function to the interest rate scenario data folder
    #' 
-   #' Opens a connection to teh Scenarios folder to save user defined scenarios by name
+   #' Opens a connection to the Scenarios folder to save user defined scenarios by name
    #' @param Scenario A character string the name of the Scenario
    #' @param ScenarioFile the scenario file to save
    #' @export

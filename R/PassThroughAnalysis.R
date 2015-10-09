@@ -238,9 +238,7 @@
                                     begin.cpr = numeric(), 
                                     end.cpr = numeric(), 
                                     seasoning.period = numeric(), 
-                                    CPR = numeric()
-                                 ) 
-  {
+                                    CPR = numeric()) {
       
   #Error Trap Settlement Date and Trade Date order.  
   #This is not done in the Error Trap Function because that function is 
@@ -314,6 +312,7 @@
   spread.to.spot = MortgageTermStructure@SpotSpread
   proceeds = ((price/100) * (original.bal * bond.id@MBSFactor)) + MortgageCashFlow@Accrued
   
+
   # The sixth step in scenario based analysis
   Scenario <- Mtg.Scenario(scenario.set = scenario.set, 
                            bond.id = bond.id, 

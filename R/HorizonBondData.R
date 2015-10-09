@@ -17,7 +17,10 @@
   #' A standard generic function to roll forward MBS cusip detail to the scenario horizon
   #' for pricing using spot spread, nominal spread, or option adjusted spread
   #' @param bond.id A character string referring to an object type of MBSDetails
+  #' @param original.bal A numeric value the original balance
   #' @param ProjectedCashFlow A character string referring to an object type of MortgageCashFlows
+  #' @param HorizonMonths A numeric value the investment horizon in months
+  #' @export ForwardPassThrough
   ForwardPassThrough <- function(bond.id = "character",
                                  original.bal = numeric(),
                                  ProjectedCashFlow = "character",
@@ -37,7 +40,6 @@
     
     connTemp <-  gzfile(description = paste(system.file(package = "BondLab"),
                                             "/Temp_BondData/","TempPassThrough.rds", sep = ""))
-    print(TempBond)
     saveRDS(TempBond, connTemp)
     close(connTemp)
   }

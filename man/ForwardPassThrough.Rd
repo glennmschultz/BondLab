@@ -10,7 +10,11 @@ ForwardPassThrough(bond.id = "character", original.bal = numeric(),
 \arguments{
 \item{bond.id}{A character string referring to an object type of MBSDetails}
 
+\item{original.bal}{A numeric value the original balance}
+
 \item{ProjectedCashFlow}{A character string referring to an object type of MortgageCashFlows}
+
+\item{HorizonMonths}{A numeric value the investment horizon in months}
 }
 \description{
 A standard generic function to roll forward MBS cusip detail to the scenario horizon

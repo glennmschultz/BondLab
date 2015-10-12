@@ -120,7 +120,8 @@
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks")),0)/weeks.in.year)
+                                               units = c("weeks"))/weeks.in.year,0))
+
     Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
     #pmt.frequency should be input 
     
@@ -136,6 +137,7 @@
     data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
                           seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
                           as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+
     
   } #The Loop Ends here and the list is made
   

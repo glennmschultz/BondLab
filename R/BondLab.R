@@ -28,7 +28,8 @@
   price.basis <- 100
   yield.basis <- 100
   tolerance <- .0000000001
-  PSA.basis = 100
+  PSA.basis <- 100
+  par.price <- 100
 
 #' @import methods
 NULL

@@ -48,7 +48,7 @@
   #Error Trapping on Dates settlement date < next payment date or settlement date , issue date    
   if(settlement.date > nextpmt.date) stop ("Settlement Date is Greater Than Next Payment Date")
   if(settlement.date < issue.date) stop ("Settlement Date is Less Than Issue Date")
-  if(settlement.date < lastpmt.date) stop ("Settlment Date is Less Than Last Payment Date")
+  if(settlement.date < lastpmt.date) stop ("Settlement Date is Less Than Last Payment Date")
   #Error Trapping on frequency and payment dates
   
   #Error Trap the user's price input

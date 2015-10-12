@@ -26,7 +26,7 @@
                                  projected.cashflow = "character",
                                  horizon.months = numeric()){
     TempBond <- bond.id
-    CurrentPeriod <- bond.id@WAM + horizon.months
+    CurrentPeriod <- bond.id@WALA + horizon.months
     NextPeriod <-  CurrentPeriod + 1
     SchedPrincipal <- projected.cashflow@ScheduledPrin[1:horizon.months]
     PrepaidPrincipal <- projected.cashflow@PrepaidPrin[1:horizon.months]

@@ -157,9 +157,10 @@
     rates <- rates.data
 
     rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
-    
+
     TermStructure <- TermStructure(rates.data = rates, 
                                    method = method)
+
     
     Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
                                       MortgageRate = MortgageRate, 
@@ -183,7 +184,7 @@
     
     SpreadtoCurve <- (MortgageCashFlow@YieldToMaturity * yield.basis) - predict(InterpolateCurve, MortgageCashFlow@WAL)
     
-    proceeds <- MortgageCashFlow@Accrued + (original.bal * bond.id@MBSFactor * (price/price.basis))
+    proceeds <<- MortgageCashFlow@Accrued + (original.bal * bond.id@MBSFactor * (price/price.basis))
     principal <- original.bal * bond.id@MBSFactor
     
     MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
@@ -194,6 +195,7 @@
                                               principal = principal, 
                                               price = price, 
                                               cashflow = MortgageCashFlow)
+    print(MortgageTermStructure@SpotSpread)
     # =================================================================================================
     # Begin horizon mortgage pass-through analysis
     # =================================================================================================
@@ -203,7 +205,7 @@
     HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
 
     
-    HorizonTermStructure <- TermStructure(rates.data = HorizonCurve,
+    HorizonTermStructure <<- TermStructure(rates.data = HorizonCurve,
                                           method = "ns")
     
     ForwardPassThrough(bond.id = bond.id,
@@ -213,7 +215,7 @@
     
     HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
                                 "/Temp_BondData/","TempPassThrough.rds", sep = ""))
-    HorizonMBS <- readRDS(HorizonConn)
+    HorizonMBS <<- readRDS(HorizonConn)
     
     HorizonPrepaymentAssumption <- PrepaymentAssumption(bond.id = HorizonMBS,
                                                         TermStructure = HorizonTermStructure,
@@ -236,20 +238,43 @@
     NumberofCashFlow <- as.numeric(length(HorizonCashFlow@TotalCashFlow))
     reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
     
+    # ====================================================================================================
+    # Horizon present value of MBS pass through
+    # ====================================================================================================
     DiscountRate <-  1/((1+((HorizonTermStructure@spotrate[1:NumberofCashFlow] + horizon.spread)/1200)) ^ 
                           (HorizonTermStructure@period[1:NumberofCashFlow]))
     
     HorizonPresentValue <- DiscountRate[1:NumberofCashFlow] * HorizonCashFlow@TotalCashFlow
+    PresentValue <<- sum(HorizonPresentValue)
     
-    ReceivedCF <- MortgageCashFlow@TotalCashFlow[1:horizon.months]
+    # ====================================================================================================
+    # Coupon Income
+    # ====================================================================================================
+    
+    CouponIncome <<- sum(MortgageCashFlow@PassThroughInterest[1:horizon.months])
+    
+    # ====================================================================================================
+    # Reinvestment Income
+    # ====================================================================================================
+    ReceivedCashFlow <- MortgageCashFlow@TotalCashFlow[1:horizon.months]
     
     n.period <- as.numeric(difftime(as.Date(MortgageCashFlow@PmtDate[horizon.months]), 
                                     as.Date(MortgageCashFlow@PmtDate[1:horizon.months]), units = "days")/days.in.month)
     
-    Reinvestment <- ReceivedCF * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    TerminalValue <- ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    ReinvestmentIncome <<- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
+
+    # ==================================================================================================
+    # Principal Returned
+    # ==================================================================================================
     
-    HorizonValue <- sum(HorizonPresentValue) + sum(Reinvestment)
-    HorizonReturn <- HorizonValue/proceeds
+    PrincipalRepaid <<- sum(MortgageCashFlow@PrepaidPrin[1:horizon.months]) + 
+                        sum(MortgageCashFlow@ScheduledPrin[1:horizon.months])
+    
+    
+    
+    HorizonValue <<- CouponIncome + ReinvestmentIncome + PrincipalRepaid + PresentValue
+    HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
     HorizonReturn <- (HorizonReturn - 1) * yield.basis
     
     temp <- new("Mtg.Scenario",  

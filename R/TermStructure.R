@@ -182,9 +182,7 @@
       forwardrate = forward.rate.curve,
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
-  )
-  } 
-
+  )} 
 
   setGeneric("TermStructure",
            function(rates.data = "character", method = "character")

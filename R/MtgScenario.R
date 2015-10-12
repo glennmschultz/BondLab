@@ -241,12 +241,10 @@
     
     HorizonPresentValue <- DiscountRate[1:NumberofCashFlow] * HorizonCashFlow@TotalCashFlow
     
-    
     ReceivedCF <- MortgageCashFlow@TotalCashFlow[1:horizon.months]
     
     n.period <- as.numeric(difftime(as.Date(MortgageCashFlow@PmtDate[horizon.months]), 
                                     as.Date(MortgageCashFlow@PmtDate[1:horizon.months]), units = "days")/days.in.month)
-    
     
     Reinvestment <- ReceivedCF * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
     
@@ -285,7 +283,5 @@
                     Horizon = Scenario@Horizon,
                     ShiftType = Scenario@ShiftType,
                     Shiftbps = Scenario@Shiftbps,
-                    Formula = Scenario@Formula)                     
-
-  }
+                    Formula = Scenario@Formula)}
   

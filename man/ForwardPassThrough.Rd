@@ -5,16 +5,16 @@
 \title{A Function to "Roll Forward" the mortgage pass through cusip object (MBS Details)}
 \usage{
 ForwardPassThrough(bond.id = "character", original.bal = numeric(),
-  ProjectedCashFlow = "character", HorizonMonths = numeric())
+  projected.cashflow = "character", horizon.months = numeric())
 }
 \arguments{
 \item{bond.id}{A character string referring to an object type of MBSDetails}
 
 \item{original.bal}{A numeric value the original balance}
 
-\item{ProjectedCashFlow}{A character string referring to an object type of MortgageCashFlows}
+\item{projected.cashflow}{A character string referring to an object type of MortgageCashFlows}
 
-\item{HorizonMonths}{A numeric value the investment horizon in months}
+\item{horizon.months}{A numeric value the investment horizon in months}
 }
 \description{
 A standard generic function to roll forward MBS cusip detail to the scenario horizon

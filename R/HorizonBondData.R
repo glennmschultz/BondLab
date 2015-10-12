@@ -18,25 +18,26 @@
   #' for pricing using spot spread, nominal spread, or option adjusted spread
   #' @param bond.id A character string referring to an object type of MBSDetails
   #' @param original.bal A numeric value the original balance
-  #' @param ProjectedCashFlow A character string referring to an object type of MortgageCashFlows
-  #' @param HorizonMonths A numeric value the investment horizon in months
+  #' @param projected.cashflow A character string referring to an object type of MortgageCashFlows
+  #' @param horizon.months A numeric value the investment horizon in months
   #' @export ForwardPassThrough
   ForwardPassThrough <- function(bond.id = "character",
                                  original.bal = numeric(),
-                                 ProjectedCashFlow = "character",
-                                 HorizonMonths = numeric()){
+                                 projected.cashflow = "character",
+                                 horizon.months = numeric()){
     TempBond <- bond.id
-    NextPeriod <- HorizonMonths + 1
-    SchedPrincipal <- ProjectedCashFlow@ScheduledPrin[1:HorizonMonths]
-    PrepaidPrincipal <- ProjectedCashFlow@PrepaidPrin[1:HorizonMonths]
-    DefaultedPrincipal <- ProjectedCashFlow@DefaultedPrin[1:HorizonMonths]
-    TotalPrincipal <- SchedPrincipal + PrepaidPrincipal + DefaultedPrincipal
+    CurrentPeriod <- bond.id@WAM + horizon.months
+    NextPeriod <-  CurrentPeriod + 1
+    SchedPrincipal <- projected.cashflow@ScheduledPrin[1:horizon.months]
+    PrepaidPrincipal <- projected.cashflow@PrepaidPrin[1:horizon.months]
+    DefaultedPrincipal <- projected.cashflow@DefaultedPrin[1:horizon.months]
+    TotalPrincipal <- sum(SchedPrincipal) + sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
     
-    TempBond@LastPmtDate <- ProjectedCashFlow@PmtDate[HorizonMonths]
-    TempBond@NextPmtDate <- ProjectedCashFlow@PmtDate[NextPeriod]
+    TempBond@LastPmtDate <- as.character(format(as.Date(bond.id@FirstPmtDate, format = "%m-%d-%Y") %m+% months(CurrentPeriod), "%m-%d-%Y"))
+    TempBond@NextPmtDate <- as.character(format(as.Date(bond.id@FirstPmtDate, format = "%m-%d-%Y") %m+% months(NextPeriod), "%m-%d-%Y"))
     TempBond@MBSFactor <- ((original.bal * bond.id@MBSFactor) - TotalPrincipal)/original.bal
-    TempBond@WAM <- bond.id@WAM + HorizonMonths
-    TempBond@WALA <- bond.id@WALA - HorizonMonths
+    TempBond@WAM <- bond.id@WAM + horizon.months
+    TempBond@WALA <- bond.id@WALA - horizon.months
     
     connTemp <-  gzfile(description = paste(system.file(package = "BondLab"),
                                             "/Temp_BondData/","TempPassThrough.rds", sep = ""))

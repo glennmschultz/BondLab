@@ -112,89 +112,147 @@
   #' 
   #' A function to compute the total return of mortgage pass-throughs MBS
   #' @param bond.id A character string to object of type MBS details
+  #' @param settlement.date A charcter string the settlement date
   #' @param rates.data A character string the trade date mm-dd-yyyy
-  #' @param price A character string the trade date mm-dd-yyyy
+  #' @param price A numeric value the price
   #' @param original.bal A numeric value the price
   #' @param scenario A character string the scenario
+  #' @param horizon.months A numeric value the time horizon
+  #' @param horizon.spread A numeric value the horizon spread
   #' @param method A character string the method used to fit the term structure
+  #' @param prepayment A character string the prepayment assumption
+  #' @param ... Optional values when PSA or CPR is used
+  #' @param begin.cpr A numeric value the beginning CPR value
+  #' @param end.cpr A numeric value the ending CPR value
+  #' @param seasoning.period A numeric value the length of the seasoning ramp
+  #' @param CPR A numeric value the CPR speed
+  #' @export Mtg.Scenario
   Mtg.Scenario <- function(bond.id ="character",
+                           settlement.date = "character",
                            rates.data = "character",
                            price = numeric(), 
                            original.bal = numeric(),
                            scenario = "character",
-                           method = "character") { 
+                           horizon.months = numeric(),
+                           horizon.spread = numeric(),
+                           method = "character",
+                           prepayment = "character",
+                           ...,
+                           begin.cpr = numeric(),
+                           end.cpr = numeric(),
+                           seasoning.period = numeric(),
+                           CPR = numeric()) { 
   
-
-  bond.id <- bond.id
-
-  # First step open mortgage rate functions
-  MortgageRate <- MtgRate()
+  # =================================================================================================
+  # Mortgage Scenario analysis is done in two steps
+  # The first is calculated the expected cash-flows received over the investment horizon
+  # The second is to "roll" the pass through security forward and price the expected future cash-flows
+  # =================================================================================================
   
-  ModelTune <- ModelTune(bond.id = bond.id)
-  Burnout = bond.id@Burnout
-  
-  Scenario <- ScenarioCall(Scenario = scenario)
+    bond.id <- bond.id
+    MortgageRate <- MtgRate()
+    ModelTune <- ModelTune(bond.id = bond.id)
+    Burnout = bond.id@Burnout
+    Scenario <- ScenarioCall(Scenario = scenario)
+    rates <- rates.data
 
-  # Third call the trade date rates data
-  rates <- rates.data
+    rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
     
-  # Fourth call the scenario 
-  rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
+    TermStructure <- TermStructure(rates.data = rates, 
+                                   method = method)
     
-  # Caclulate the term strucute
-  TermStructure <- TermStructure(rates.data = rates, 
-                                 method = method)
+    Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
+                                      MortgageRate = MortgageRate, 
+                                      TermStructure = TermStructure, 
+                                      PrepaymentAssumption = prepayment, 
+                                      ModelTune = ModelTune, 
+                                      Burnout = Burnout, 
+                                      begin.cpr = begin.cpr, 
+                                      end.cpr = end.cpr, 
+                                      seasoning.period = seasoning.period, 
+                                      CPR = CPR)
     
-  # Run the prepayment model
-  Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
-                                    MortgageRate = MortgageRate, 
-                                    TermStructure = TermStructure, 
-                                    PrepaymentAssumption = PrepaymentAssumption, 
-                                    ModelTune = ModelTune, 
-                                    Burnout = Burnout, 
-                                    begin.cpr = begin.cpr, 
-                                    end.cpr = end.cpr, 
-                                    seasoning.period = seasoning.period, 
-                                    CPR = CPR)
+    MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
+                                        original.bal = original.bal, 
+                                        settlement.date = settlement.date, 
+                                        price = price, 
+                                        PrepaymentAssumption = Prepayment)
     
-  # Scenario Mortgage cash flow analysis 
-  MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
-                                      original.bal = original.bal, 
-                                      settlement.date = settlement.date, 
-                                      price = price, 
-                                      PrepaymentAssumption = Prepayment)
+    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), 
+                              data = data.frame(rates.data))  
     
-  # Calculate static cash flow spread to the curve                                      
-  InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), 
-                            data = data.frame(rates.data))  
+    SpreadtoCurve <- (MortgageCashFlow@YieldToMaturity * yield.basis) - predict(InterpolateCurve, MortgageCashFlow@WAL)
     
-  SpreadtoCurve <- (MortgageCashFlow@YieldToMaturity * yield.basis) - predict(InterpolateCurve, MortgageCashFlow@WAL)
+    proceeds <- MortgageCashFlow@Accrued + (original.bal * bond.id@MBSFactor * (price/price.basis))
+    principal <- original.bal * bond.id@MBSFactor
     
-  # The second step will be to calculate the scenario effective duration and convexity
-  MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
-                                            original.bal = original.bal, 
-                                            Rate.Delta = 0.25, 
-                                            TermStructure = TermStructure,
-                                            settlement.date = 
-                                            settlement.date, 
-                                            principal = original.bal * bond.id@MBSFactor, 
-                                            price = price, 
-                                            cashflow = MortgageCashFlow)
+    MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
+                                              original.bal = original.bal, 
+                                              Rate.Delta = rate.delta, 
+                                              TermStructure = TermStructure,
+                                              settlement.date = settlement.date, 
+                                              principal = principal, 
+                                              price = price, 
+                                              cashflow = MortgageCashFlow)
+    # =================================================================================================
+    # Begin horizon mortgage pass-through analysis
+    # =================================================================================================
+    
+    HorizonCurve <- rates
+    HorizonCurve[1,1] <- as.character(as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
+    HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
+
+    
+    HorizonTermStructure <- TermStructure(rates.data = HorizonCurve,
+                                          method = "ns")
     
     ForwardPassThrough(bond.id = bond.id,
                       original.bal = original.bal,
-                      ProjectedCashFlow = MortgageCashFlow,
-                      HorizonMonths = HorizonMonths)
+                      projected.cashflow = MortgageCashFlow,
+                      horizon.months = horizon.months)
+    
+    HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
+                                "/Temp_BondData/","TempPassThrough.rds", sep = ""))
+    HorizonMBS <- readRDS(HorizonConn)
+    
+    HorizonPrepaymentAssumption <- PrepaymentAssumption(bond.id = HorizonMBS,
+                                                        TermStructure = HorizonTermStructure,
+                                                        MortgageRate = MortgageRate,
+                                                        ModelTune = ModelTune,
+                                                        Burnout = Burnout,
+                                                        PrepaymentAssumption = prepayment)
+    
+    HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
+                                        original.bal = original.bal,
+                                        settlement.date = HorizonSettlement,
+                                        price = price,
+                                        PrepaymentAssumption = HorizonPrepaymentAssumption)
+    
+    # =====================================================================================================
+    # Calculate Total Return
+    # Cashflow Received + Reinvestment Income + Present Value at Horizon
+    # =====================================================================================================
+    
+    NumberofCashFlow <- as.numeric(length(HorizonCashFlow@TotalCashFlow))
+    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
+    
+    DiscountRate <-  1/((1+((HorizonTermStructure@spotrate[1:NumberofCashFlow] + horizon.spread)/1200)) ^ 
+                          (HorizonTermStructure@period[1:NumberofCashFlow]))
+    
+    HorizonPresentValue <- DiscountRate[1:NumberofCashFlow] * HorizonCashFlow@TotalCashFlow
     
     
-    HorizonReturn <- ReturnAnalysis(Scenario = MortgageCashFlow, 
-                                    proceeds = proceeds,
-                                    settlement.date = settlement.date, 
-                                    spot.spread = MortgageTermStructure@SpotSpread, 
-                                    HorizonMonths = 12, 
-                                    ReinvestmentRate = .0025)
+    ReceivedCF <- MortgageCashFlow@TotalCashFlow[1:horizon.months]
     
-    HorizonReturn = (HorizonReturn - 1) * 100
+    n.period <- as.numeric(difftime(as.Date(MortgageCashFlow@PmtDate[horizon.months]), 
+                                    as.Date(MortgageCashFlow@PmtDate[1:horizon.months]), units = "days")/days.in.month)
+    
+    
+    Reinvestment <- ReceivedCF * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    
+    HorizonValue <- sum(HorizonPresentValue) + sum(Reinvestment)
+    HorizonReturn <- HorizonValue/proceeds
+    HorizonReturn <- (HorizonReturn - 1) * yield.basis
     
     temp <- new("Mtg.Scenario",  
                     Period = MortgageCashFlow@Period,
@@ -228,68 +286,6 @@
                     ShiftType = Scenario@ShiftType,
                     Shiftbps = Scenario@Shiftbps,
                     Formula = Scenario@Formula)                     
-    
-    ScenarioResult <- append(ScenarioResult, temp)
-    
-  
-  } # scenario end function
-  
-  # =====================================================================================
-  # Function to compute the horizon return 
-  # =====================================================================================
-  
-  #' Function to compute the horizon return
-  #' 
-  #' A function to compute the horizon return of a PassThrough
-  #' @param Scenario a character string referring to scenario mortgage cashflow
-  #' @param settlement.date a character string the settlment date
-  #' @param proceeds a numeric value the investor initial outlay
-  #' @param spot.spread a numeric value the spread to the spot curve
-  #' @param HorizonMonths a numeric value the investment horizon in months
-  #' @param ReinvestmentRate a numeric value the reinvestment assumption 
-  ReturnAnalysis <- function(Scenario = "character", 
-                             settlement.date = "character", 
-                             proceeds = numeric(), 
-                             spot.spread = numeric(), 
-                             HorizonMonths = numeric(), 
-                             ReinvestmentRate = numeric()) {
-    
-    ReceivedCF <- Scenario@TotalCashFlow[1:HorizonMonths]
-    n.period <- as.numeric(difftime(as.Date(Scenario@PmtDate[HorizonMonths]), 
-                                    as.Date(Scenario@PmtDate[1:HorizonMonths]), units = "days")/days.in.month)
-    
-    
-    Reinvestment <- ReceivedCF * (1 + (ReinvestmentRate/months.in.year)) ^ (n.period)
-    
-    Reinvestment <- sum(Reinvestment)
-    
-    # ------------------------------------------------------------------------------------------
-    # this is code which is to be factored out
-    # Price the tail cash flow priced at horizon
-    # Forward month indexes to the cashflow array
-    FwdMonth <- (HorizonMonths + 1)
-    FwdSettleDate <- as.Date(settlement.date, "%m-%d-%Y")  %m+% months(HorizonMonths)
-    
-    FwdCashFlowPmtDate <- Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]
-    
-    RemainingCF <- Scenario@TotalCashFlow[FwdMonth:length(Scenario@TotalCashFlow)]
-    
-    n.period.fwd <- as.numeric(difftime(as.Date(Scenario@PmtDate[FwdMonth:length(Scenario@PmtDate)]), 
-                                        as.Date(FwdSettleDate), units = "days")/days.in.month)
-    
-    # The approach bases the investor return on the forward rate curve and forward rates.
-    DiscountRate <-  
-      # Spot rates at horizon to length of cashflows
-      (1+((TermStructure@spotrate[FwdMonth:length(Scenario@TotalCashFlow)] + spot.spread)/1200))  ^
-      # Index time period to period less length of the horizon for discounting the forward price
-      (-1 * n.period.fwd)
-    
-    DiscPV <- sum(RemainingCF * DiscountRate)
-    TotalHrzProceeds <- Reinvestment + DiscPV
-    
-    Return <- TotalHrzProceeds/proceeds 
-    # -------------------------------------------------------------------------------------------
+
   }
-
-
-
+  

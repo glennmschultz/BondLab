@@ -386,7 +386,7 @@
   if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
   #PPC function has error trapping feature so there is no need to error trap for PPC
   
-  #
+  
   NoteRate = bond.id@GWac
   sato = bond.id@SATO
   AmortizationTerm = bond.id@AmortizationTerm
@@ -448,20 +448,26 @@
   
   
   if(PrepaymentAssumption == "MODEL")
-  {SMM = Prepayment.Model(ModelTune = ModelTune, LoanAge = LoanAge, Month = as.numeric(format(PmtDate, "%m")), 
-                          incentive = Incentive, Burnout.maxincen = Burnout)} 
+  {SMM = Prepayment.Model(ModelTune = ModelTune, 
+                          LoanAge = LoanAge, 
+                          Month = as.numeric(format(PmtDate, "%m")), 
+                          incentive = 
+                          Incentive, 
+                          Burnout.maxincen = Burnout)} 
   else 
   {if(PrepaymentAssumption == "PPC") 
-  {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, end.cpr = end.cpr, 
-                                  season.period = seasoning.period, period = LoanAge))^(1/12))} 
+  {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, 
+                                  end.cpr = end.cpr, 
+                                  season.period = seasoning.period, 
+                                  period = LoanAge))^(1/12))} 
   else
   {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
   
   }
   
   
-  # this condition set default to zero when the prepayment model is not used 
-  # it allows for PSA and CPR assumptions
+  # this condition sets default to zero when the prepayment model is not used 
+  # it allows for standard PPC and CPR assumptions
   if(PrepaymentAssumption != "MODEL"){MDR <- rep(0, Remain.Term)} else
                         {MDR <- Default.Model(ModelTune = ModelTune,
                         OrigLoanBalance = OriginalLoanBalance,

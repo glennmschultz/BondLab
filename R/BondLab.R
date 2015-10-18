@@ -27,6 +27,7 @@
   rate.delta <- .25
   price.basis <- 100
   yield.basis <- 100
+  monthly.yield.basis <- 1200
   tolerance <- .0000000001
   PSA.basis <- 100
   par.price <- 100

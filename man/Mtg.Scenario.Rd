@@ -7,8 +7,9 @@
 Mtg.Scenario(bond.id = "character", settlement.date = "character",
   rates.data = "character", price = numeric(), original.bal = numeric(),
   scenario = "character", horizon.months = numeric(),
-  horizon.spread = numeric(), method = "character",
-  prepayment = "character", ..., begin.cpr = numeric(),
+  method = "character", prepayment = "character", ...,
+  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
+  horizon.OAS = NULL, horizon.price = NULL, begin.cpr = numeric(),
   end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
 }
 \arguments{
@@ -26,13 +27,19 @@ Mtg.Scenario(bond.id = "character", settlement.date = "character",
 
 \item{horizon.months}{A numeric value the time horizon}
 
-\item{horizon.spread}{A numeric value the horizon spread}
-
 \item{method}{A character string the method used to fit the term structure}
 
 \item{prepayment}{A character string the prepayment assumption}
 
 \item{...}{Optional values when PSA or CPR is used}
+
+\item{horizon.spot.spread}{A numeric value the horizon spread}
+
+\item{horizon.nominal.spread}{A numeric value the horizon spread}
+
+\item{horizon.OAS}{A numeric value the horizon option adjusted spread}
+
+\item{horizon.price}{A numeric value the horizon price in decimal form}
 
 \item{begin.cpr}{A numeric value the beginning CPR value}
 

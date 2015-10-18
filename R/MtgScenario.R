@@ -234,7 +234,7 @@
     
     HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
                                 "/Temp_BondData/","TempPassThrough.rds", sep = ""))
-    HorizonMBS <<- readRDS(HorizonConn)
+    HorizonMBS <- readRDS(HorizonConn)
     
     HorizonPrepaymentAssumption <- PrepaymentAssumption(bond.id = HorizonMBS,
                                                         TermStructure = HorizonTermStructure,
@@ -299,7 +299,7 @@
     }
     
    
-      PresentValue <<- switch(horizon.price.type,
+      PresentValue <- switch(horizon.price.type,
                              "spot" = Horizon.Spot.Value(HorizonTermStructure = HorizonTermStructure,
                                                          HorizonCashFlow = HorizonCashFlow,
                                                          HorizonSpotSpread = horizon.spot.spread,
@@ -311,6 +311,14 @@
                                                            HorizonPrice = horizon.price)
       )
     
+      HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
+        (PresentValue / (original.bal * HorizonMBS@MBSFactor)) * price.basis}
+      
+      HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
+                                          original.bal = original.bal,
+                                          settlement.date = HorizonSettlement,
+                                          price = HorizonPrice,
+                                          PrepaymentAssumption = HorizonPrepaymentAssumption)
     
     # ====================================================================================================
     # Coupon Income

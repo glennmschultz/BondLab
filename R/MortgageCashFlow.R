@@ -8,7 +8,7 @@
 
   setMethod("initialize",
           signature("MortgageCashFlow"),
-          function(.Object,       
+          function(.Object,...,       
                    Price = numeric(),
                    Accrued = numeric(),
                    YieldToMaturity = numeric(),
@@ -58,8 +58,8 @@
             .Object@GFeePremium = GFeePremium  
             .Object@TotalCashFlow = TotalCashFlow
             
+            callNextMethod(.Object,...)
             return(.Object)
-            callNextMethod(.Object,...)            
           })
 
 

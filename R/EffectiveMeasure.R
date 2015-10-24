@@ -6,6 +6,13 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  setGeneric("Effective.Measure", function(Rate.Delta = numeric(), 
+                                         cashflow = vector(), 
+                                         discount.rates = vector(), 
+                                         time.period = vector(),
+                                         type = "character")
+  {standardGeneric("Effective.Measure")})
+
   #' A function to compute effective duration and convexity
   #' 
   #' Calculates the effective duration and convexity based on discount vector (zero coupon),
@@ -34,9 +41,4 @@
 
   }
 
-  setGeneric("Effective.Measure", function(Rate.Delta = numeric(), 
-                                          cashflow = vector(), 
-                                          discount.rates = vector(), 
-                                          time.period = vector(),
-                                          type = "character")
-  {standardGeneric("Effective.Measure")})
+

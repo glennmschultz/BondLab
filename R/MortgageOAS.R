@@ -10,6 +10,49 @@
   #--------------------------------------------------------------------------
   # Mortgage OAS Function
   #--------------------------------------------------------------------------
+  
+  setGeneric("Mortgage.OAS",function(bond.id = "character", 
+                                     trade.date = "character", 
+                                     settlement.date = "character", 
+                                     original.bal = numeric(),
+                                     price = numeric(), 
+                                     sigma = numeric(), 
+                                     paths = numeric()) 
+    
+  {standardGeneric("Mortgage.OAS")})
+  
+  setMethod("initialize",
+            signature("MortgageOAS"),
+            function(.Object,
+                     OAS = "numeric",
+                     ZVSpread = "numeric",
+                     SpreadToCurve = "numeric",
+                     EffDuration = "numeric",
+                     EffConvexity = "numeric",
+                     KeyRateTenor = "numeric",
+                     KeyRateDuration = "numeric",
+                     KeyRateConvexity = "numeric",
+                     PriceDist = "vector",
+                     PathSpread = "vector",
+                     PathWAL = "vector",
+                     PathModDur = "vector",
+                     PathYTM = "vector"
+            ){
+              .Object@OAS = OAS
+              .Object@ZVSpread = ZVSpread
+              .Object@SpreadToCurve = SpreadToCurve
+              .Object@EffDuration = EffDuration
+              .Object@EffConvexity = EffConvexity
+              .Object@KeyRateTenor = KeyRateTenor
+              .Object@KeyRateConvexity = KeyRateConvexity
+              .Object@PriceDist = PriceDist
+              .Object@PathSpread = PathSpread
+              .Object@PathWAL = PathWAL
+              .Object@PathModDur = PathModDur
+              .Object@PathYTM = PathYTM
+              
+              return(.Object)
+            })
 
   #' Mortgage OAS the OAS engine for pass through OAS
   #' 
@@ -367,11 +410,8 @@
                                                  TermStructure = CIRTermStructure, 
                                                  PrepaymentAssumption = "MODEL", 
                                                  ModelTune = ModelTune, 
-                                                 Burnout = Burnout, 
-                                                 begin.cpr = begin.cpr, 
-                                                 end.cpr = end.cpr, 
-                                                 seasoning.period = seasoning.period, 
-                                                 CPR = CPR)
+                                                 Burnout = Burnout) 
+
     
     #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, 
     #Duration, Convexity and CashFlow.
@@ -429,13 +469,3 @@
        PathModDur = OAS.Out[,3],
        PathYTM =OAS.Out[,4],
        PriceDist = OAS.Out[,5])}
-
-  setGeneric("Mortgage.OAS",function(bond.id = "character", 
-                                     trade.date = "character", 
-                                     settlement.date = "character", 
-                                     original.bal = numeric(),
-                                     price = numeric(), 
-                                     sigma = numeric(), 
-                                     paths = numeric()) 
-  
-  {standardGeneric("Mortgage.OAS")})

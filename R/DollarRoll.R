@@ -6,6 +6,16 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  setGeneric("DollarRoll", function(bond.id = "character", 
+                                  price = numeric(), 
+                                  drop = numeric(), 
+                                  original.bal = numeric(), 
+                                  settlement.date = "character", 
+                                  fwd.settlement.date = "character", 
+                                  reinvestment.rate = numeric(), 
+                                  finance.rate = numeric(),
+                                  MortgageCashFlow = "character") 
+  {standardGeneric("DollarRoll")})
 
   setMethod("initialize",
           signature("DollarRoll"),
@@ -75,9 +85,8 @@
             .Object@FutureValuePrinCarry = FutureValuePrinCarry
             .Object@TotalFutureValue = TotalFutureValue
             .Object@DropImpliedValue = DropImpliedValue
-                        
+            
             return(.Object)
-            callNextMethod(.Object,....)
           })
   # ---------------- This function is the dollar roll analysis ---------------------------
   # ---------------- Currently the function calcualtes the 1 month roll ------------------
@@ -235,13 +244,3 @@
       TotalFutureValue = TotalFutureValue,
       DropImpliedValue = DropImpliedValue)}
 
-  setGeneric("DollarRoll", function(bond.id = "character", 
-                                  price = numeric(), 
-                                  drop = numeric(), 
-                                  original.bal = numeric(), 
-                                  settlement.date = "character", 
-                                  fwd.settlement.date = "character", 
-                                  reinvestment.rate = numeric(), 
-                                  finance.rate = numeric(),
-                                  MortgageCashFlow = "character") 
-{standardGeneric("DollarRoll")})

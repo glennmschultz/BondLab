@@ -4,7 +4,7 @@
 \alias{Forward.Rate}
 \title{A function to calculate forward rates}
 \usage{
-Forward.Rate(SpotRate.Curve = vector(), FwdRate.Tenor = numeric())
+Forward.Rate(SpotRate.Curve = vector(), FwdRate.Tenor)
 }
 \arguments{
 \item{SpotRate.Curve}{A vector of monthly spot rates}

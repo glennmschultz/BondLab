@@ -28,10 +28,8 @@
   REMIC.OAS <- function(bond.id = "character", 
                       trade.date = "character", 
                       settlement.date = "character", 
-                      #original.bal = numeric(),
                       tranche.price = numeric(),
                       collateral.price = numeric(),
-                      #short.rate = numeric(), 
                       sigma = numeric(), 
                       paths = numeric()){
   
@@ -196,7 +194,6 @@
     #When sigma is zero the simulated spot rates are compounded forward rates and the two and ten year
     #rates are calcualted from the calculated spot rate rate curve
     
-    #if (TermStructure != "TRUE")
       OAS.Term.Structure <- new("TermStructure",
                                 tradedate = as.character(trade.date),
                                 period = as.numeric(sim.cube[,3]),
@@ -213,11 +210,6 @@
                     collateral.price = collateral.price,
                     tranche.price = tranche.price,
                     PrepaymentAssumption = "MODEL",
-                    #...,
-                    #begin.cpr = begin.cpr,
-                    #end.cpr = end.cpr,
-                    #seasoning.period = seasoning.period,
-                    #CPR = CPR,
                     KeyRateTermStructure = OAS.Term.Structure)
         
    
@@ -301,36 +293,31 @@
   # Calculate static cash flow spread to the curve at zero volatility
   # Using the prepayment model this will always match the ZV spread indiciating the pricing benchmark is exact
   # In reality the spread to the curve will be based on the pricing speed used.
-  # This is a good check but in reality the spread to the curve must be calculated in the PassThrough OAS and passed to 
-  # ZeroVolatility Object
-  #if (paths != 1) {                                   
+                                  
     InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                                 as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
     
     SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * 100) - 
                        predict(InterpolateCurve, MtgCashFlow@WAL ))/100
 
+    
+    
+    TermStructure <- TermStructure(rates.data = rates.data, method = "ns")
+    
+
     new("MortgageOAS",
        OAS = OAS.Spread,
        ZVSpread = mean(OAS.Out[,1]),
        SpreadToCurve = SpreadtoCurve,
+       EffDuration = 999,
+       EffConvexity = 999,
+       KeyRateTenor = 999,
+       KeyRateDuration = 999,
+       KeyRateConvexity = 999,
        PathSpread = OAS.Out[,1],
        PathWAL = OAS.Out[,2],
        PathModDur = OAS.Out[,3],
        PathYTM = OAS.Out[,4],
        PriceDist = OAS.Out[,5]
-  )
-
+  )}
   
-  }
-  
-  setGeneric("REMIC.OAS", function(bond.id = "character", 
-                                   trade.date = "character", 
-                                   settlement.date = "character", 
-                                   #original.bal = numeric(),
-                                   tranche.price = numeric(),
-                                   collateral.price = numeric(),
-                                   #short.rate = numeric(), 
-                                   sigma = numeric(), 
-                                   paths = numeric())
-    {standardGeneric("REMIC.OAS")})

@@ -6,7 +6,15 @@
 # License GPL3 + File License
 # Copyright (C) 2014  Bond Lab Technologies, Inc.
 
-setMethod("initialize",
+  setGeneric("BondAnalytics", function (bond.id = "character", 
+                                      principal = numeric(), 
+                                      price = numeric(), 
+                                      trade.date = "character", 
+                                      settlement.date = "character", 
+                                      method = "character")
+  {standardGeneric("BondAnalytics")})
+  
+  setMethod("initialize",
           signature("BondAnalytics"),
           function(.Object,
                    Cusip = "character",
@@ -101,7 +109,7 @@ setMethod("initialize",
             .Object@TenYearFwd = TenYearFwd
             
             return(.Object)
-            callNextMethod(.Object,...)
+            
             
           })
 
@@ -159,7 +167,6 @@ setMethod("initialize",
                                               principal = principal, 
                                               price = price, cashflow = BondCashFlow)
        
-       closeAllConnections()
        
        new("BondAnalytics",
            Cusip = bond.id@Cusip,
@@ -210,10 +217,3 @@ setMethod("initialize",
            TenYearFwd = TermStructure@TenYearFwd)
       }
 
-  setGeneric("BondAnalytics", function (bond.id = "character", 
-                                        principal = numeric(), 
-                                        price = numeric(), 
-                                        trade.date = "character", 
-                                        settlement.date = "character", 
-                                        method = "character")
-    {standardGeneric("BondAnalytics")})

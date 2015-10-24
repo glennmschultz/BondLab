@@ -6,6 +6,13 @@
   # License GPL3
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("bondprice", function(yield.to.maturity = numeric(),
+                                 coupon = numeric(), 
+                                 coupon.frequency = numeric(), 
+                                 years.mat = numeric(), 
+                                 face.value = numeric())
+  {standardGeneric("bondprice")})
 
   #' Determine the price a bond on the interest payment date 
   #' 
@@ -38,13 +45,14 @@
   (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)
   }
 
-  setGeneric("bondprice", function(yield.to.maturity = numeric(),
-                                 coupon = numeric(), 
-                                 coupon.frequency = numeric(), 
-                                 years.mat = numeric(), 
-                                 face.value = numeric())
-  {standardGeneric("bondprice")})
-
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("EstimYTM", function(coupon = numeric(), 
+                                  coupon.frequency = numeric(), 
+                                  years.mat = numeric(), 
+                                  face.value = numeric(), 
+                                  price = numeric())
+  {standardGeneric("EstimYTM")})
+  
   #' A function to estimate the yield to maturity of a standard bond
   #' 
   #' Estimate a bond's yield to maturity given a price.  It is a 
@@ -72,13 +80,12 @@
   ((c * fv) + ((fv - (fv *p))/2)) / (((fv + (fv *p))/f))
   }
 
-  setGeneric("EstimYTM", function(coupon = numeric(), 
-                                coupon.frequency = numeric(), 
-                                years.mat = numeric(), 
-                                face.value = numeric(), 
-                                price = numeric())
-  {standardGeneric("EstimYTM")})
-
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("Mortgage.Monthly.Payment", function(orig.bal = numeric(),
+                                                  note.rate = numeric(),
+                                                  term.mos = numeric())
+  {standardGeneric("Mortgage.Monthly.Payment")})
+  
   #' A function to calculate the monthly payment of a mortgage
   #' 
   #' A standard generic function to compute the monthly payment of a mortgage
@@ -105,10 +112,12 @@
 
   }
 
-  setGeneric("Mortgage.Monthly.Payment", function(orig.bal = numeric(),
-                                                note.rate = numeric(),
-                                                term.mos = numeric())
-  {standardGeneric("Mortgage.Monthly.Payment")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("Sched.Prin", function(balance = numeric(),
+                                    note.rate = numeric(),
+                                    term.mos = numeric(),
+                                    period = numeric())
+  {standardGeneric("Sched.Prin")})
 
   #' A function to calculate the scheduled principal of mortgage
   #' 
@@ -134,12 +143,13 @@
   return(Scheduled.Prin)
   }
 
-  setGeneric("Sched.Prin", function(balance = numeric(),
-                                  note.rate = numeric(),
-                                  term.mos = numeric(),
-                                  period = numeric())
-  {standardGeneric("Sched.Prin")})
-
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("Remain.Balance", function(balance = numeric(), 
+                                        note.rate = numeric(), 
+                                        term.mos = numeric(), 
+                                        period = numeric())
+  {standardGeneric("Remain.Balance")})
+  
   #' A function to compute the remaining balance of a mortgage
   #' 
   #' A standard generic for the calculation of a mortgage remaining balance
@@ -159,11 +169,12 @@
   Remain.Balance
   }
 
-  setGeneric("Remain.Balance", function(balance = numeric(), 
-                                        note.rate = numeric(), 
-                                        term.mos = numeric(), 
-                                        period = numeric())
-  {standardGeneric("Remain.Balance")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("PPC.Ramp", function(season.period = numeric(),
+                                  begin.cpr = numeric(),
+                                  end.cpr = numeric(),
+                                  period = numeric())
+  {standardGeneric("PPC.Ramp")})
 
   #' A function to calculate the PPC ramp
   #' 
@@ -186,11 +197,9 @@
   return(cpr)
   }
 
-  setGeneric("PPC.Ramp", function(season.period = numeric(),
-                                begin.cpr = numeric(),
-                                end.cpr = numeric(),
-                                period = numeric())
-  {standardGeneric("PPC.Ramp")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("SMM.To.CPR", function(SMM = numeric())
+  {standardGeneric("SMM.To.CPR")})
 
   #' Convert the single monthly mortality rate SMM to CPR
   #' 
@@ -209,8 +218,9 @@
   return(SMM)
   }
 
-  setGeneric("SMM.To.CPR", function(SMM = numeric())
-  {standardGeneric("SMM.To.CPR")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("CPR.To.SMM", function(CPR = numeric())
+  {standardGeneric("CPR.To.SMM")})
 
   #' A function to convert the CPR to a single monthly mortality rate SMM
   #' 
@@ -230,8 +240,9 @@
   return(CPR)
   }
 
-  setGeneric("CPR.To.SMM", function(CPR = numeric())
-  {standardGeneric("CPR.To.SMM")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())
+  {standardGeneric("SMMVector.To.CPR")})
 
   #' A function to convert  a time series of SMM to CPR
   #' 
@@ -248,8 +259,12 @@
   SMMVector.to.CPR = 1-(1-SMM)^months.in.year 
   }
 
-  setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())
-    {standardGeneric("SMMVector.To.CPR")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("Effective.Duration", function(Rate.Delta = numeric(), 
+                                            cashflow = vector(), 
+                                            discount.rates = vector(), 
+                                            time.period = vector())
+  {standardGeneric("Effective.Duration")})
 
   #' A function to compute effective duration
   #' 
@@ -273,11 +288,12 @@
   (Price.UP - Price.DWN)/(2*Price.NC*Rate.Delta)
   }
   
-  setGeneric("Effective.Duration", function(Rate.Delta = numeric(), 
-                                            cashflow = vector(), 
-                                            discount.rates = vector(), 
-                                            time.period = vector())
-    {standardGeneric("Effective.Duration")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("Effective.Convexity", function(Rate.Delta = numeric(), 
+                                             cashflow = vector(), 
+                                             discount.rates = vector(), 
+                                             time.period = vector())
+  {standardGeneric("Effective.Convexity")})
 
   #' A function to compute effective convexity
   #' 
@@ -301,12 +317,10 @@
   (Price.UP + Price.DWN - (2*Price.NC))/(2*Price.NC*(Rate.Delta^2))
   }
   
-  
-  setGeneric("Effective.Convexity", function(Rate.Delta = numeric(), 
-                                            cashflow = vector(), 
-                                            discount.rates = vector(), 
-                                            time.period = vector())
-  {standardGeneric("Effective.Convexity")})
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("Forward.Rate", function(SpotRate.Curve = vector(),
+                                      FwdRate.Tenor = numeric())
+  {standardGeneric("Forward.Rate")})
 
 
   #' A function to calculate forward rates
@@ -325,7 +339,5 @@
                                 FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
                 Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
   }
-  setGeneric("Forward.Rate", function(SpotRate.Curve = vector(),
-                                      FwdRate.Tenor = numeric())
-    {standardGeneric("Forward.Rate")})
+
   

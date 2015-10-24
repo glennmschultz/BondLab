@@ -6,9 +6,16 @@
   # License GPL3 + File License
   # Copyright (C) 2014 Bond Lab Technologies, Inc
 
+  setGeneric("MortgageCashFlow", function(bond.id = "character", 
+                                        original.bal = numeric(), 
+                                        settlement.date = "character", 
+                                        price = numeric(), 
+                                        PrepaymentAssumption = "character") 
+  {standardGeneric("MortgageCashFlow")})
+
   setMethod("initialize",
           signature("MortgageCashFlow"),
-          function(.Object,...,       
+          function(.Object,       
                    Price = numeric(),
                    Accrued = numeric(),
                    YieldToMaturity = numeric(),
@@ -58,7 +65,6 @@
             .Object@GFeePremium = GFeePremium  
             .Object@TotalCashFlow = TotalCashFlow
             
-            callNextMethod(.Object,...)
             return(.Object)
           })
 
@@ -85,10 +91,10 @@
                              settlement.date = "character", 
                              price = numeric(), 
                              PrepaymentAssumption = "character"){
-  
+
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, 
-            principal = original.balance, 
+            principal = original.bal, 
             settlement.date = settlement.date, 
             price = price)
   
@@ -295,12 +301,7 @@
   )
   }
 
-  setGeneric("MortgageCashFlow", function(bond.id = "character", 
-                                        original.bal = numeric(), 
-                                        settlement.date = "character", 
-                                        price = numeric(), 
-                                        PrepaymentAssumption = "character") 
-  {standardGeneric("MortgageCashFlow")})
+
 
 
 

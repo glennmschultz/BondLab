@@ -6,10 +6,27 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
  
-
-  #======================  Set and create class Bond Details ==============================
-
-  # ---------------------       Inititialize BoneDetails     ------------------------------
+  setGeneric("MakeBondDetails", function(
+    Cusip = "character",                              
+    ID ="character",                              
+    BondType = "character",                              
+    Sector ="character",
+    Coupon = numeric(),
+    IssueDate = "character",
+    DatedDate = "character",
+    Maturity = "character",
+    LastPmtDate = "character",
+    NextPmtDate = "character",
+    Moody = "character",
+    SP = "character",
+    BondLab  = "character",
+    Frequency = numeric(),
+    BondBasis = "character",
+    Callable = "character",
+    Putable = "character",
+    SinkingFund = "character")
+  {standardGeneric("MakeBondDetails")})
+  
 
   setMethod("initialize",
           signature = ("BondDetails"),
@@ -52,8 +69,8 @@
               .Object@Putable = Putable
               .Object@SinkingFund = SinkingFund
               
-              return(.Object)
               callNextMethod(.Object,...)
+              return(.Object)
           })
 
   BondDetails <-function(
@@ -165,24 +182,5 @@
     close(connBondDetails)
   }
 
-  setGeneric("MakeBondDetails", function(
-    Cusip = "character",                              
-    ID ="character",                              
-    BondType = "character",                              
-    Sector ="character",
-    Coupon = numeric(),
-    IssueDate = "character",
-    DatedDate = "character",
-    Maturity = "character",
-    LastPmtDate = "character",
-    NextPmtDate = "character",
-    Moody = "character",
-    SP = "character",
-    BondLab  = "character",
-    Frequency = numeric(),
-    BondBasis = "character",
-    Callable = "character",
-    Putable = "character",
-    SinkingFund = "character")
-  {standardGeneric("MakeBondDetails")})
+
         

@@ -6,7 +6,11 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
-
+  setGeneric("TimeValue", function(interest.rate = numeric(), 
+                                 number.periods = numeric(), 
+                                 frequency = numeric(), 
+                                 type = "character")
+  {standardGeneric("TimeValue")})
 
   #' A function to compute the time value of money
   #'                  
@@ -59,11 +63,4 @@
          PVAD =   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate),  
          FV =  (1+interest.rate)^number.periods,
          FVA =   (((1 + interest.rate)^(number.periods)) -1)/interest.rate)
-  
   }
-
-  setGeneric("TimeValue", function(interest.rate = numeric(), 
-                                 number.periods = numeric(), 
-                                 frequency = numeric(), 
-                                 type = "character")
-  {standardGeneric("TimeValue")})

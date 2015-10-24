@@ -12,7 +12,10 @@
   #and holds forward and spot rates as slots to class Term Structure
   #---------------------------------------------------
 
-  # Initialize TermStructure
+  setGeneric("TermStructure",
+             function(rates.data = "character", method = "character")
+             {standardGeneric("TermStructure")})
+  
   setMethod("initialize",
           signature("TermStructure"),
           function(.Object,...,
@@ -33,7 +36,6 @@
             .Object@TenYearFwd = TenYearFwd
             
             return(.Object)
-            callNextMethod(.Object,...)
           })
 
   #' The TermStructure constructor function it is a wrapper function around the package termstrc
@@ -185,7 +187,3 @@
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
   )} 
-
-  setGeneric("TermStructure",
-           function(rates.data = "character", method = "character")
-           {standardGeneric("TermStructure")})

@@ -6,6 +6,15 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  setGeneric("PassThroughOAS", function(bond.id = "character", 
+                                      trade.date = "character", 
+                                      settlement.date = "character", 
+                                      original.bal = numeric(), 
+                                      price = numeric(), 
+                                      sigma = numeric(), 
+                                      paths = numeric())
+  {standardGeneric("PassThroughOAS")})
+  
   setMethod("initialize",
           signature("PassThroughOAS"),
           function(.Object,
@@ -148,9 +157,9 @@
             .Object@PathWAL = PathWAL
             .Object@PathModDur = PathModDur
             .Object@PathYTM = PathYTM
-          
+            
             return(.Object)
-            callNextMethod(.Object,...)})
+          })
 
   #' The constructor function for the passthrough OAS object 
   #' 
@@ -162,14 +171,8 @@
   #' @param price A numeric value the trade price
   #' @param sigma A numeric value interest rate volatility assumption
   #' @param paths A numeric value the number of simulated paths
-  #' @param PrepaymentAssumption A character string the prepayment assumption either CPR, PPC, or MODEL
-  #' @param ... optional values when CPR or PPC prepayment assumption is input
-  #' @param begin.cpr Optional, A numeric value the beginning value of the PPC ramp
-  #' @param end.cpr Optional, A numeric value the end value of the PPC ramp
-  #' @param seasoning.period Optional, A numeric value the length of the seasoning ramp
-  #' @param CPR Optional, the assumed CPR
   #' @examples PassThroughOAS(bond.id = "bondlabMBS4", trade.date = "01-10-2013", settlement.date = "01-13-2013", 
-  #' original.bal = 100000, price = 105.75, sigma = 0.015, paths = 200, PrepaymentAssumption = "MODEL") 
+  #' original.bal = 100000, price = 105.75, sigma = 0.015, paths = 200) 
   #' @export PassThroughOAS
   PassThroughOAS <- function(bond.id = "character", 
                            trade.date = "character", 
@@ -177,13 +180,7 @@
                            original.bal = numeric(), 
                            price = numeric(), 
                            sigma = numeric(), 
-                           paths = numeric(), 
-                           PrepaymentAssumption = "character", 
-                           ..., 
-                           begin.cpr = numeric(), 
-                           end.cpr = numeric(), 
-                           seasoning.period = numeric(), 
-                           CPR = numeric()){
+                           paths = numeric()){
   
   #Error Trap Settlement Date and Trade Date order.  
   #This is not done in the Error Trap Function because that function is 
@@ -301,7 +298,7 @@
   PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, 
                                                MortgageRate = MortgageRate, 
                                                TermStructure = TermStructure, 
-                                               PrepaymentAssumption = PrepaymentAssumption, 
+                                               PrepaymentAssumption = "MODEL", 
                                                ModelTune = ModelTune, 
                                                Burnout = Burnout)
   
@@ -401,17 +398,3 @@
       PathYTM = MortgageOAS@PathYTM)
   }
 
-  setGeneric("PassThroughOAS", function(bond.id = "character", 
-                                  trade.date = "character", 
-                                  settlement.date = "character", 
-                                  original.bal = numeric(), 
-                                  price = numeric(), 
-                                  sigma = numeric(), 
-                                  paths = numeric(), 
-                                  PrepaymentAssumption = "character", 
-                                  ..., 
-                                  begin.cpr = numeric(), 
-                                  end.cpr = numeric(), 
-                                  seasoning.period = numeric(), 
-                                  CPR = numeric())
-  {standardGeneric("PassThroughOAS")})

@@ -6,6 +6,24 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  setGeneric("DollarRollAnalytics", function(bond.id = "character", 
+                                           original.bal= numeric(), 
+                                           price = numeric(), 
+                                           drop = numeric(), 
+                                           trade.date = "character", 
+                                           settlement.date = "character", 
+                                           fwd.settlement.date = "character", 
+                                           reinvestment.rate = numeric(),  
+                                           finance.rate = numeric(), 
+                                           method = "ns", 
+                                           PrepaymentAssumption = "character", 
+                                           ...,
+                                           begin.cpr = numeric(), 
+                                           end.cpr = numeric(), 
+                                           seasoning.period = numeric(), 
+                                           CPR = numeric())
+  {standardGeneric("DollarRollAnalytics")})
+
   setMethod("initialize",
             signature("DollarRollAnalytics"),
             function(.Object,
@@ -145,8 +163,8 @@
               .Object@TotalFutureValue = TotalFutureValue
               .Object@DropImpliedValue = DropImpliedValue
               
-                return(.Object)
-                callNextMethod(.Object,...)})
+              return(.Object)
+                })
 
 
   #----------------------------------
@@ -318,20 +336,4 @@
       DropImpliedValue = DollarRoll@DropImpliedValue)
       }
   
-    setGeneric("DollarRollAnalytics", function(bond.id = "character", 
-                                               original.bal= numeric(), 
-                                               price = numeric(), 
-                                               drop = numeric(), 
-                                               trade.date = "character", 
-                                               settlement.date = "character", 
-                                               fwd.settlement.date = "character", 
-                                               reinvestment.rate = numeric(),  
-                                               finance.rate = numeric(), 
-                                               method = "ns", 
-                                               PrepaymentAssumption = "character", 
-                                               ...,
-                                               begin.cpr = numeric(), 
-                                               end.cpr = numeric(), 
-                                               seasoning.period = numeric(), 
-                                               CPR = numeric())
-               {standardGeneric("DollarRollAnalytics")})
+

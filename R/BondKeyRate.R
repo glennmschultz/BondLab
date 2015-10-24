@@ -7,6 +7,14 @@
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
  
 
+  setGeneric("BondTermStructure",function(bond.id = "character", 
+                                 Rate.Delta = numeric(), 
+                                 TermStructure = "character", 
+                                 principal = numeric(), 
+                                 price = numeric(), 
+                                 cashflow = "character")
+    {standardGeneric("BondTermStructure")})
+  
   setMethod("initialize",
             signature("BondTermStructure"),
             function(.Object,
@@ -24,9 +32,8 @@
                     .Object@KeyRateTenor = KeyRateTenor
                     .Object@KeyRateDuration = KeyRateDuration
                     .Object@KeyRateConvexity = KeyRateConvexity
-              
-              return(.Object)
-              callNextMethod(.Object,...)
+
+                    return(.Object)
             })
   
   

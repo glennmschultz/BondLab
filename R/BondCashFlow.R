@@ -6,7 +6,12 @@
   # License GPL3 + license
   # Copyright (C) 2014  Bond Lab Technologies, Inc
  
-
+  setGeneric("BondCashFlows", function (bond.id = "character", 
+                                      principal = numeric(), 
+                                      settlement.date = "character", 
+                                      price = numeric())
+  {standardGeneric("BondCashFlows")})
+  
   setMethod("initialize",
             signature("BondCashFlows"),
             function(.Object,
@@ -36,9 +41,8 @@
               .Object@PrincipalOutstanding = PrincipalOutstanding  
               .Object@CouponPmt = CouponPmt
               .Object@TotalCashFlow = TotalCashFlow
-              
+               
               return(.Object)
-              callNextMethod(.Object,...)
             })
   #' Bond cash flow engine for standard non-callable
   #' 
@@ -168,8 +172,4 @@
   )
 }
 
-  setGeneric("BondCashFlows", function (bond.id = "character", 
-                                        principal = numeric(), 
-                                        settlement.date = "character", 
-                                        price = numeric())
-  {standardGeneric("BondCashFlows")})
+

@@ -6,6 +6,18 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+
+  setGeneric("AtomsData",function(bond.id = "character",
+                                  original.bal = numeric(),
+                                  price = numeric(),
+                                  trade.date = "character",
+                                  settlement.date = "character",
+                                  swapspread = list(),
+                                  paths = "numeric",
+                                  volatility = "numeric",
+                                  consensusPSA = "numeric")
+  {standardGeneric("AtomsData")})
+  
   setMethod("initialize",
            signature("AtomsData"),
            function(.Object,
@@ -42,9 +54,9 @@
                     .Object@USTZVSpread = USTZVSpread
                     .Object@LIBOROAS = LIBOROAS
                     .Object@LIBORZVSpread = LIBORZVSpread
-           
+          
                     return(.Object)
-                    callNextMethod(.Object,...)})
+                    })
  
  #' A Function to calculate ATOMs Index Analytics
  #' 

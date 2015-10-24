@@ -5,6 +5,15 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
+
+
+  setGeneric("HPISim", function(shortrate = numeric(),
+                              LongTermGrowth = numeric(),
+                              T = numeric(),
+                              step = numeric(),
+                              sigma = numeric(),
+                              N = numeric())
+  {standardGeneric("HPISim")})
  
   #' A function to simulate home prices given a short-term rate
   #' 
@@ -53,11 +62,5 @@
   return(homesimulation)
   }
 
-  setGeneric("HPISim", function(shortrate = numeric(),
-                                LongTermGrowth = numeric(),
-                                T = numeric(),
-                                step = numeric(),
-                                sigma = numeric(),
-                                N = numeric())
-    {standardGeneric("HPISim")})
+
 

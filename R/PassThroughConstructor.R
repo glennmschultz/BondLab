@@ -6,9 +6,50 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
  
-  #======================  Set and create class MBS Details ==============================
-  # Do I need a generic for this?
-  # ---------------------       Inititialize MBSDetails     ------------------------------
+  setGeneric("MakeMBSDetails", function(
+    Cusip = "character",
+    ID = "character",
+    BondType = "character",
+    Sector ="character",
+    Coupon = numeric(),
+    IssueDate = "character",
+    DatedDate = "character",
+    Maturity = "character",
+    LastPmtDate = "character",
+    NextPmtDate = "character",
+    Term = numeric(),
+    WALA = numeric(),
+    WAM = numeric(),
+    PaymentDelay = numeric(),
+    Moody = "character",
+    SP = "character",
+    BondLab  = "character",
+    Frequency = numeric(),
+    BondBasis = "character",
+    GWac = numeric(),
+    OrigLoanBal = numeric(),
+    OrigLTV = numeric(),
+    AmortizationType = "character",
+    AmortizationTerm = numeric(),
+    Index = "character",
+    Margin = numeric(),
+    FirstPmtDate = "character",
+    FinalPmtDate = "character",
+    Servicing = numeric(),
+    PMI = numeric(),
+    Gfee = numeric(),
+    InitialInterest = "logical",
+    InterestOnlyPeriod = numeric(),
+    FirstPrinPaymentDate = "character",
+    BalloonPmt = "logical",
+    BalloonDate = "character",
+    MBSFactor = numeric(),
+    Model = "character",
+    Burnout = numeric(),
+    SATO = numeric())
+  
+  {standardGeneric("MakeMBSDetails")})
+  
   setMethod("initialize",
           signature("MBSDetails"),
           function(.Object,
@@ -98,7 +139,7 @@
             .Object@SATO = SATO
             
             return(.Object)
-            callNextMethod(.Object,...)
+
           })
 
 
@@ -383,46 +424,4 @@
 
   }
 
-  setGeneric("MakeMBSDetails", function(
-  Cusip = "character",
-  ID = "character",
-  BondType = "character",
-  Sector ="character",
-  Coupon = numeric(),
-  IssueDate = "character",
-  DatedDate = "character",
-  Maturity = "character",
-  LastPmtDate = "character",
-  NextPmtDate = "character",
-  Term = numeric(),
-  WALA = numeric(),
-  WAM = numeric(),
-  PaymentDelay = numeric(),
-  Moody = "character",
-  SP = "character",
-  BondLab  = "character",
-  Frequency = numeric(),
-  BondBasis = "character",
-  GWac = numeric(),
-  OrigLoanBal = numeric(),
-  OrigLTV = numeric(),
-  AmortizationType = "character",
-  AmortizationTerm = numeric(),
-  Index = "character",
-  Margin = numeric(),
-  FirstPmtDate = "character",
-  FinalPmtDate = "character",
-  Servicing = numeric(),
-  PMI = numeric(),
-  Gfee = numeric(),
-  InitialInterest = "logical",
-  InterestOnlyPeriod = numeric(),
-  FirstPrinPaymentDate = "character",
-  BalloonPmt = "logical",
-  BalloonDate = "character",
-  MBSFactor = numeric(),
-  Model = "character",
-  Burnout = numeric(),
-  SATO = numeric())
-
-  {standardGeneric("MakeMBSDetails")})
+  

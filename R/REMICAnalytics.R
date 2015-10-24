@@ -5,7 +5,20 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
-
+  
+  setGeneric("REMICAnalytics", function(bond.id = "character", 
+                                      trade.date = "character",
+                                      settlement.date = "character",
+                                      method = "character",
+                                      collateral.price = numeric(),
+                                      tranche.price = numeric(),
+                                      PrepaymentAssumption = "character",
+                                      ...,
+                                      begin.cpr = numeric(),
+                                      end.cpr = numeric(),
+                                      seasoning.period = numeric(),
+                                      CPR = numeric())
+  {standardGeneric("REMICAnalytics")})  
 
   setMethod("initialize",
             signature("REMICAnalytics"),
@@ -103,7 +116,7 @@
                     .Object@KeyRateConvexity = KeyRateConvexity
                     
                     return(.Object)
-                    callNextMethod(.Object,...)
+                    
                   })
   #' The REMIC Analytics engine the constructor function for REMIC Analytics
   #' 
@@ -225,16 +238,4 @@
       )  
   }
   
-  setGeneric("REMICAnalytics", function(bond.id = "character", 
-                                      trade.date = "character",
-                                      settlement.date = "character",
-                                      method = "character",
-                                      collateral.price = numeric(),
-                                      tranche.price = numeric(),
-                                      PrepaymentAssumption = "character",
-                                      ...,
-                                      begin.cpr = numeric(),
-                                      end.cpr = numeric(),
-                                      seasoning.period = numeric(),
-                                      CPR = numeric())
-           {standardGeneric("REMICAnalytics")})  
+ 

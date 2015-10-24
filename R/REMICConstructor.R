@@ -79,7 +79,7 @@
             .Object@InitialReserveFund = InitialReserveFund
             
             return(.Object) 
-            callNextMethod(.Object,...)               
+             
           })
 
   # Initialize TrancheDetails
@@ -181,7 +181,7 @@
             .Object@Fixed = Fixed
             
             return(.Object)
-            callNextMethod(.Object,...)
+
           })
 
   # Initialize Tranches
@@ -194,7 +194,6 @@
             
             return(.Object)
             
-            callNextMethod(.Object, ...)
           })
 
   # Initialize collateral  
@@ -210,7 +209,6 @@
             .Object@OrigBal = OrigBal
             return(.Object) 
             
-            callNextMethod(.Object,...)
           })
 
   # Initialize collateralgroup
@@ -221,8 +219,7 @@
           {
             .Object@Group = Group
             return(.Object)
-            
-            callNextMethod(.Object,...)  
+
           })
 
   # Initialize Schedule
@@ -242,7 +239,7 @@
                       .Object@ScheduledPmt = ScheduledPmt
                       
                       return(.Object)
-                      callNextMethod(.Object,...)
+
                     })
 
   #Initialize RDME
@@ -261,7 +258,6 @@
             
             return(.Object)
             
-            callNextMethod(.Object,...)  
             
           })
 
@@ -274,7 +270,6 @@
             .Object@FactorData = FactorData
             return(.Object)
             
-            callNextMethod(.Object,...)  
           })
 
   # initialize REMIC structure superclass
@@ -350,7 +345,6 @@
                     .Object@FactorData = TrancheFactors
             return(.Object)
             
-            callNextMethod(.Object,...)           
           })
 
 
@@ -946,9 +940,6 @@
                          
                          SaveSchedules(DealName = DealName, ScheduleFile = temp)
                          
-                         #connSched <- gzfile(description = paste("~/BondLab/Schedules/",
-                         #              DealName,"_","Group","_",temp@Group,"_", "Sch", ".rds", sep = ""))
-                         #saveRDS(temp, connSched)
 }
 
 
@@ -988,12 +979,8 @@
   MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
     
     temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
-    
     SaveCollGroup(FileName = temp, DealName = DealName, Group = Group)
-    
-    #connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",temp@Group,".rds", sep = ""))
-    #saveRDS(temp, connGroup)
-  }
+    }
   
   #------------------------------------------------------------------------------------------
   # 3) aggregator function for the REMIC structure called by REMIC constructor
@@ -1092,10 +1079,6 @@
     
     
     SaveRDME(FileName = temp, DealName = DealName, TrancheNumber = TrancheNumber)
-    #connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = ""))
-    #saveRDS(temp, connRDME)
-    #close(connRDME)
-    
   }
   
 

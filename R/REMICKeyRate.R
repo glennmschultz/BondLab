@@ -6,16 +6,16 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
-  #setGeneric("REMICTermStructure", function(bond.id = "character", 
-  #                                             original.bal = numeric(), 
-  #                                             Rate.Delta = numeric(), 
-  #                                             TermStructure = "character",
-  #                                             trade.date = "character",
-  #                                             settlement.date = "character", 
-  #                                             principal = numeric(), 
-  #                                             price = numeric(), 
-  #                                             cashflow = "character")
-  #              {standardGeneric("REMICTermStructure")})
+  setGeneric("REMICTermStructure", function(bond.id = "character", 
+                                               original.bal = numeric(), 
+                                               Rate.Delta = numeric(), 
+                                               TermStructure = "character",
+                                               trade.date = "character",
+                                               settlement.date = "character", 
+                                               principal = numeric(), 
+                                               price = numeric(), 
+                                               cashflow = "character")
+                {standardGeneric("REMICTermStructure")})
 
   setMethod("initialize",
          signature("REMICTermStructure"),

@@ -31,9 +31,9 @@
            .Object@KeyRateTenor = KeyRateTenor
            .Object@KeyRateDuration = KeyRateDuration
            .Object@KeyRateConvexity = KeyRateConvexity
-           
+           callNextMethod(.Object)
            return(.Object)
-           callNextMethod(.Object,...)
+
          })
 
 #' A function to calculate mortgage key rate duration

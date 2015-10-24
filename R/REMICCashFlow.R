@@ -6,6 +6,62 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+
+  setGeneric("REMICCashFlow", function(bond.id = "character", 
+                                     trade.date = "character",
+                                     settlement.date = "character",
+                                     collateral.price = numeric(),
+                                     tranche.price = numeric(),
+                                     PrepaymentAssumption = "character", 
+                                     ..., 
+                                     begin.cpr = numeric(), 
+                                     end.cpr = numeric(), 
+                                     seasoning.period = numeric(), 
+                                     CPR = numeric(),
+                                     KeyRateTermStructure = NULL)
+  {standardGeneric("REMICCashFlow")})  
+
+  setMethod("initialize",
+          signature("REMICCashFlow"),
+          function(.Object,
+                   DealName = "character",
+                   TrancheName = "character",
+                   TrancheNumber = "character",
+                   Price = numeric(),
+                   PrincipalProceeds = numeric(),
+                   Accrued = numeric(),
+                   YieldToMaturity = numeric(),
+                   WAL = numeric(),
+                   ModDuration = numeric(),
+                   Convexity = numeric(),
+                   Period = numeric(),
+                   PmtDate = "character",
+                   TimePeriod = numeric(),
+                   Interest = numeric(),
+                   Principal = numeric(),
+                   TotalCashFlow = numeric())
+          {
+            .Object@DealName = DealName
+            .Object@TrancheName = TrancheName
+            .Object@TrancheNumber = TrancheNumber
+            .Object@Price = Price
+            .Object@PrincipalProceeds = PrincipalProceeds
+            .Object@Accrued = Accrued
+            .Object@YieldToMaturity = YieldToMaturity
+            .Object@WAL = WAL
+            .Object@ModDuration = ModDuration
+            .Object@Convexity = Convexity
+            .Object@Period = Period
+            .Object@PmtDate = PmtDate
+            .Object@TimePeriod = TimePeriod
+            .Object@Interest = Interest
+            .Object@Principal = Principal
+            .Object@TotalCashFlow =TotalCashFlow
+            
+            return(.Object)
+            })
+
+
   #' The REMIC cash flow engine the constructor function for REMICCashFlow oject
   #' 
   #' The function is the constructor function for REMICCashFlow Object
@@ -51,11 +107,9 @@
   REMIC.Deal <- REMICDeal(remic.deal = REMIC.Tranche@DealName)
   
   TermStructure <- if(is.null(KeyRateTermStructure)) {TermStructure(rates.data = rates.data)} else {KeyRateTermStructure}
-  #TermStructure <- TermStructure(rates.data = rates.data)
-  
-  
-  #-- Note in REMIC data TrancheLastPmtDate is the tranche legal final payment date
-  #-- The last payment date is found in the REMIC Deal FactorData List
+
+  # Note: in REMIC data TrancheLastPmtDate is the tranche legal final payment date
+  # The last payment date is found in the REMIC Deal FactorData List
   
   lastpmt.date <- REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate[length(REMIC.Deal@FactorData[[as.numeric(REMIC.Tranche@TrancheNumber)]]@PaymentDate)]
     
@@ -84,6 +138,10 @@
                   CPR = CPR,
                   KeyRateTermStructure = KeyRateTermStructure)
 
+  TrancheBeginValue <- TrancheBeginValue <- array(data = 0, c(0, 0, 0))
+  # Note: TrancheBeginValue is dimmed in the waterfall script it is assigned here to pass CRAN check
+  # If a variable used in a function is not assigned before use CRAN issues a warning global variable not defined
+  
   REMIC.CashFlow <- do.call(source, 
                     list(file = REMICWaterFall(deal.name = as.character(REMIC.Tranche@DealName)), 
                     local = TRUE))
@@ -176,58 +234,4 @@
   
   }
   
-  setMethod("initialize",
-            signature("REMICCashFlow"),
-            function(.Object,
-                     DealName = "character",
-                     TrancheName = "character",
-                     TrancheNumber = "character",
-                     Price = numeric(),
-                     PrincipalProceeds = numeric(),
-                     Accrued = numeric(),
-                     YieldToMaturity = numeric(),
-                     WAL = numeric(),
-                     ModDuration = numeric(),
-                     Convexity = numeric(),
-                     Period = numeric(),
-                     PmtDate = "character",
-                     TimePeriod = numeric(),
-                     Interest = numeric(),
-                     Principal = numeric(),
-                     TotalCashFlow = numeric())
-  {
-              .Object@DealName = DealName
-              .Object@TrancheName = TrancheName
-              .Object@TrancheNumber = TrancheNumber
-              .Object@Price = Price
-              .Object@PrincipalProceeds = PrincipalProceeds
-              .Object@Accrued = Accrued
-              .Object@YieldToMaturity = YieldToMaturity
-              .Object@WAL = WAL
-              .Object@ModDuration = ModDuration
-              .Object@Convexity = Convexity
-              .Object@Period = Period
-              .Object@PmtDate = PmtDate
-              .Object@TimePeriod = TimePeriod
-              .Object@Interest = Interest
-              .Object@Principal = Principal
-              .Object@TotalCashFlow =TotalCashFlow
-              
-              return(.Object)
-              callNextMethod(.Object,...)  
-            })
-  
-  
-  setGeneric("REMICCashFlow", function(bond.id = "character", 
-                                       trade.date = "character",
-                                       settlement.date = "character",
-                                       collateral.price = numeric(),
-                                       tranche.price = numeric(),
-                                       PrepaymentAssumption = "character", 
-                                       ..., 
-                                       begin.cpr = numeric(), 
-                                       end.cpr = numeric(), 
-                                       seasoning.period = numeric(), 
-                                       CPR = numeric(),
-                                       KeyRateTermStructure = NULL)
-                          {standardGeneric("REMICCashFlow")})  
+ 

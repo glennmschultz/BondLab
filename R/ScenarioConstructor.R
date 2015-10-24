@@ -6,7 +6,15 @@
   # License GPL3 + License File
   # Copyright (C) 2014  Glenn M Schultz, CFA
  
-
+  setGeneric("MakeScenario", function(
+    Name = "character",
+    Type = "character",
+    Horizon = "character",
+    ShiftType = "character",
+    Shiftbps = "numeric",
+    Formula = "function")
+  {standardGeneric("MakeScenario")})
+  
   setMethod("initialize",
           signature("Scenario"),
           function(.Object,
@@ -84,14 +92,5 @@
       Formula = Formula)
     
     SaveScenario(Scenario = Name, ScenarioFile = temp)
-
   }
 
-  setGeneric("MakeScenario", function(
-                            Name = "character",
-                            Type = "character",
-                            Horizon = "character",
-                            ShiftType = "character",
-                            Shiftbps = "numeric",
-                            Formula = "function")
-    {standardGeneric("MakeScenario")})

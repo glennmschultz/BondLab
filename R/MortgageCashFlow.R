@@ -304,8 +304,7 @@
       PMIPremium = MBS.CF.Table[,14],    
       GFeePremium = MBS.CF.Table[,15],
       TotalCashFlow = MBS.CF.Table[,17]
-  )
-  }
+  )}
 
 
 

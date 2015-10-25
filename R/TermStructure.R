@@ -107,12 +107,14 @@
   data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
   
   data$MATURITYDATE <-
-    sapply(Mat.Years, function(Mat.Years = Mat.Years, Issue = Issue.Date) 
-    {Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
+    sapply(Mat.Years, function(Mat.Years = Mat.Years, 
+                               Issue = Issue.Date) {
+      Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
     {Issue %m+% years(as.numeric(Mat.Years))}
     return(as.character(Maturity))
     }) 
   
+  maturity <<- data$MATURITYDATE
   data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
   
   data$PRICE <-      ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)
@@ -122,8 +124,10 @@
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks"))/weeks.in.year,0))
-
+                                               units = c("weeks"))/weeks.in.year,5))
+    
+    Vector.Length <- ifelse(Vector.Length < 1, Vector.Length, round(Vector.Length,0))
+    print(Vector.Length)
     Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
     #pmt.frequency should be input 
     
@@ -148,6 +152,8 @@
   
   #set term strucuture input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
+  
+  #TS <<- TSInput
   
   #Fit the term structure of interest rates
   

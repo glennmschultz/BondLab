@@ -216,7 +216,6 @@
     MBS.CF.Table[x,17] = MBS.CF.Table[x,7] + MBS.CF.Table[x,8] + MBS.CF.Table[x,11] + MBS.CF.Table[x,16]
   }
   
-  
   #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
                                          start.date = start.date, 

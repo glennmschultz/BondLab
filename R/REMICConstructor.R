@@ -427,7 +427,7 @@
   #'  @param DealSettlementDate A character string the Deal Settlement Date
   #'  @param Underwriter A character string the Deal Underwriter
   #'  @param Trustee A character string the deal Trustee
-  #'  @param PricingSpeed A character string the deal pricing speed
+  #'  @param PricingSpeed A numeric value the deal pricing speed
   #'  @param JumpReferenceSpeed1 A numeric value the Jump Z speed
   #'  @param JumpReferenceSpeed2 A numeric value the Jump Z speed
   #'  @param JumpReferenceSpeed3 A numeric value the Jump Z speed

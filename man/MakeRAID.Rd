@@ -36,7 +36,7 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{Trustee}{A character string the deal Trustee}
 
-\item{PricingSpeed}{A character string the deal pricing speed}
+\item{PricingSpeed}{A numeric value the deal pricing speed}
 
 \item{JumpReferenceSpeed1}{A numeric value the Jump Z speed}
 

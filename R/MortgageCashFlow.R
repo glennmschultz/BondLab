@@ -216,7 +216,7 @@
     MBS.CF.Table[x,17] = MBS.CF.Table[x,7] + MBS.CF.Table[x,8] + MBS.CF.Table[x,11] + MBS.CF.Table[x,16]
   }
   
-
+  
   #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
                                          start.date = start.date, 
@@ -232,17 +232,24 @@
   
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
-  irr <- function(rate , time.period , cashflow , principal , price , accrued.interest){
+  irr <- function(rate , 
+                  time.period , 
+                  cashflow, 
+                  principal, 
+                  price, 
+                  accrued.interest){
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = try(uniroot(irr, interval = c(lower = -.75, upper = .75), tol =.0000000001, 
-                time.period = MBS.CF.Table[,3], 
-                cashflow = MBS.CF.Table[,17], 
-                principal = principal, 
-                price = price, 
-                accrued.interest = accrued.interest)$root)
+  ytm = try(uniroot(irr, 
+                    interval = c(lower = -.75, upper = .75), 
+                    tol =tolerance, 
+                    time.period = MBS.CF.Table[,3], 
+                    cashflow = MBS.CF.Table[,17], 
+                    principal = principal, 
+                    price = price, 
+                    accrued.interest = accrued.interest)$root)
 
   
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency

@@ -14,7 +14,6 @@
                    Scenario = "list")
             {.Object@Scenario = Scenario
              return(.Object)
-             callNextMethod("Mtg.ScenarioSet")
              })
   
   setMethod("initialize",
@@ -34,7 +33,7 @@
              .Object@Formula
              
              return(.Object)
-             callNextMethod(.Object,...)
+            
             })
 
   setMethod("initialize",

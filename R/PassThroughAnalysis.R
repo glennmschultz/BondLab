@@ -192,7 +192,7 @@ setMethod("initialize",
             .Object@Scenario = Scenario
             
             return(.Object)
-            callNextMethod(.Object,...)
+            
           })
 
 

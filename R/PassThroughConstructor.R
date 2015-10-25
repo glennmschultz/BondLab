@@ -92,7 +92,7 @@ setMethod("initialize",
             .Object@SATO = SATO
             
             return(.Object)
-            callNextMethod(.Object,...)
+           
           })
 
 

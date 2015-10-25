@@ -79,7 +79,7 @@ setMethod("initialize",
             .Object@DropImpliedValue = DropImpliedValue
                         
             return(.Object)
-            callNextMethod(.Object,....)
+            
           })
 # ---------------- This function is the dollar roll analysis ---------------------------
 # ---------------- Currently the function calcualtes the 1 month roll ------------------

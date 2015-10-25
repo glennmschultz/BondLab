@@ -40,7 +40,7 @@
               .Object@TotalCashFlow = TotalCashFlow
               
               return(.Object)
-              callNextMethod(.Object,...)
+              
             })
   #' Bond cash flow engine for standard non-callable
   #' 

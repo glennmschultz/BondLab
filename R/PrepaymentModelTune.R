@@ -70,7 +70,7 @@
             .Object@SATO.beta = SATO.beta
             
             return(.Object)
-            callNextMethod(.Object,...)
+           
           })
 
         ModelTuningParam <- function(

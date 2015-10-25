@@ -35,7 +35,7 @@ setMethod("initialize",
             .Object@TenYearFwd = TenYearFwd
             
             return(.Object)
-            callNextMethod(.Object,...)
+            
           })
 #' The TermStructure constructor function it is a wrapper function around the package termstrc
 #' 

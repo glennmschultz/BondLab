@@ -61,7 +61,7 @@ setMethod("initialize",
             .Object@TotalCashFlow = TotalCashFlow
             
             return(.Object)
-            callNextMethod(.Object,...)            
+                  
           })
 
 
@@ -90,7 +90,7 @@ MortgageCashFlow <- function(bond.id = "character",
   
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, 
-            principal = original.balance, 
+            principal = original.bal, 
             settlement.date = settlement.date, 
             price = price)
   

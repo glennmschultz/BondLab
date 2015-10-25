@@ -103,7 +103,7 @@ setMethod("initialize",
             .Object@TenYearFwd = TenYearFwd
             
             return(.Object)
-            callNextMethod(.Object,...)
+           
             
           })
 

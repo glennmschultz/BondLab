@@ -54,7 +54,7 @@
               .Object@SinkingFund = SinkingFund
               
               return(.Object)
-              callNextMethod(.Object,...)
+              
           })
 
   BondDetails <-function(

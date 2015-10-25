@@ -148,7 +148,7 @@
               .Object@DropImpliedValue = DropImpliedValue
               
                 return(.Object)
-                callNextMethod(.Object,...)})
+                })
 
 
   #----------------------------------

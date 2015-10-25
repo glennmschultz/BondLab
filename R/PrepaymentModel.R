@@ -46,7 +46,7 @@ setMethod("initialize",
             .Object@Severity = Severity
             
             return(.Object)
-            callNextMethod(.Object,....)
+            
           })
 
   #---------------------------------------------------------------------------------------

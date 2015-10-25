@@ -146,7 +146,7 @@ setMethod("initialize",
             .Object@PathYTM = PathYTM
           
             return(.Object)
-            callNextMethod(.Object,...)})
+            })
 
 #' The constructor function for the passthrough OAS object 
 #' 

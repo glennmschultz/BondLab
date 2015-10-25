@@ -35,7 +35,7 @@ setMethod("initialize",
            .Object@KeyRateConvexity = KeyRateConvexity
            
            return(.Object)
-           callNextMethod(.Object,...)
+           
          })
 
 # --------

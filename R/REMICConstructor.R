@@ -36,7 +36,7 @@ setMethod("initialize",
             .Object@CollateralAmount = CollateralAmount
             
             return(.Object) 
-            callNextMethod(.Object,...)               
+                        
           })
 
 # Initialize TrancheDetails

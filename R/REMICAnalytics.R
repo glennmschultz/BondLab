@@ -104,7 +104,7 @@
                     .Object@KeyRateConvexity = KeyRateConvexity
                     
                     return(.Object)
-                    callNextMethod(.Object,...)
+                    
                   })
 #' The REMIC Analytics engine the constructor function for REMIC Analytics
 #' 

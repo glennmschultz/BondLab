@@ -180,7 +180,7 @@
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
   
-  #' An S4 Class the a mortgage cashflow array
+  #' An S4 Class a mortgage cashflow array
   #' 
   #' @slot CashFlowArray an array of mortgage cashflows 
   setClass("MortgageCashFlowArray",

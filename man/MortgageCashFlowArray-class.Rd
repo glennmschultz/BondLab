@@ -3,9 +3,9 @@
 \docType{class}
 \name{MortgageCashFlowArray-class}
 \alias{MortgageCashFlowArray-class}
-\title{An S4 Class the a mortgage cashflow array}
+\title{An S4 Class a mortgage cashflow array}
 \description{
-An S4 Class the a mortgage cashflow array
+An S4 Class a mortgage cashflow array
 }
 \section{Slots}{
 

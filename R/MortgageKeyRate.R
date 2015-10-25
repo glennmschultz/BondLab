@@ -31,7 +31,7 @@
            .Object@KeyRateTenor = KeyRateTenor
            .Object@KeyRateDuration = KeyRateDuration
            .Object@KeyRateConvexity = KeyRateConvexity
-           callNextMethod(.Object)
+
            return(.Object)
 
          })

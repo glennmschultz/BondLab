@@ -180,7 +180,14 @@
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
   
-
+  #' An S4 Class the a mortgage cashflow array
+  #' 
+  #' @slot CashFlowArray an array of mortgage cashflows 
+  setClass("MortgageCashFlowArray",
+           representation(
+             CashFlowArray = "array"),
+           prototype = (CashFlowArray = array(numeric(), c(0,0,0))))
+  
   setClass("MortgageOAS",
          representation(
            OAS = "numeric",

@@ -38,8 +38,7 @@
                    ServicingIncome = numeric(),
                    PMIPremium = numeric(),
                    GFeePremium = numeric(),  
-                   TotalCashFlow = numeric()
-          ){
+                   TotalCashFlow = numeric()){
             
             .Object@Price = Price
             .Object@Accrued = Accrued

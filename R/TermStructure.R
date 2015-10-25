@@ -127,7 +127,6 @@
                                                units = c("weeks"))/weeks.in.year,5))
     
     Vector.Length <- ifelse(Vector.Length < 1, Vector.Length, round(Vector.Length,0))
-    print(Vector.Length)
     Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
     #pmt.frequency should be input 
     

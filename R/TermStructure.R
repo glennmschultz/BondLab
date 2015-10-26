@@ -114,7 +114,7 @@
     return(as.character(Maturity))
     }) 
   
-  maturity <<- data$MATURITYDATE
+  
   data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
   
   data$PRICE <-      ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)

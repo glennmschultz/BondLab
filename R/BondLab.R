@@ -6,8 +6,6 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
 
-
-
   options(digits = 8)
   utils::globalVariables(c("day", "month", "year"))
 

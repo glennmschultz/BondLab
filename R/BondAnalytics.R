@@ -6,14 +6,16 @@
 # License GPL3 + File License
 # Copyright (C) 2014  Bond Lab Technologies, Inc.
 
-  setGeneric("BondAnalytics", function (bond.id = "character", 
-                                      principal = numeric(), 
-                                      price = numeric(), 
-                                      trade.date = "character", 
-                                      settlement.date = "character", 
-                                      method = "character")
-  {standardGeneric("BondAnalytics")})
+
+  #' @include BondConstructor.R BondCashFlow.R BondKeyRate.R TermStructure.R
+  NULL
   
+  setClass("BondAnalytics", 
+           representation(),
+           contains = c("BondDetails", 
+                        "BondCashFlows", 
+                        "BondTermStructure", 
+                        "TermStructure"))
   setMethod("initialize",
           signature("BondAnalytics"),
           function(.Object,
@@ -108,10 +110,15 @@
             .Object@TwoYearFwd = TwoYearFwd
             .Object@TenYearFwd = TenYearFwd
             
-            return(.Object)
-            
-            
-          })
+            return(.Object)})
+  
+  setGeneric("BondAnalytics", function (bond.id = "character", 
+                                        principal = numeric(), 
+                                        price = numeric(), 
+                                        trade.date = "character", 
+                                        settlement.date = "character", 
+                                        method = "character")
+  {standardGeneric("BondAnalytics")})
 
       #'Bond Analytics is the Analytic engine for a standard non-callable bond 
       #'

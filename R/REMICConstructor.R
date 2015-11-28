@@ -6,7 +6,149 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
   # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+
+
+  setClass("RAID",
+         representation(
+           DealName = "character", 
+           Issuer = "character",
+           DealNumber = "character",
+           DealPriceDate = "character",
+           DealSettlementDate = "character",
+           Underwriter = "character",
+           Trustee = "character",
+           PricingSpeed = "numeric",
+           JumpReferenceSpeed1 = "numeric",
+           JumpReferenceSpeed2 = "numeric",
+           JumpReferenceSpeed3 = "numeric",
+           JumpReferenceSpeed4 = "numeric",
+           NumberofTranches = "numeric",
+           NumberofComponentTranches = "numeric",
+           NumberofCombinedTranches = "numeric",
+           NumberofPools = "numeric",
+           PacSchedulesIncluded = "logical",
+           NumberofPacSchedules = "numeric",
+           NumberofGroups = "numeric",
+           DealSize = "numeric",
+           CollateralAmount = "numeric",
+           CollateralAvgLife = "numeric",
+           BondValue = "numeric",
+           BondValueMethod = "character",
+           BondValueCap = "numeric",
+           BondValueDiscountRate = "numeric",
+           BondValueReinvestmentRate = "numeric",
+           ExpenseBasisPointFee = "numeric",
+           ExpenseFixed = "numeric",
+           ExpensePeriodicity = "numeric",
+           InitialReserveFund = "numeric"))
+
+
+  setClass("TrancheDetails",
+         representation(
+           DealName = "character",
+           TrancheNumber = "character",
+           NumberofComponents = "numeric",
+           ComponentofTranches = "character",
+           TrancheName = "character",
+           TranchePrincipal = "character",
+           TranchePrincipalDesc = "character",
+           TrancheInterestDesc = "character",     
+           TrancheOtherDescription = "character",
+           Cusip = "character",
+           TrancheOrigBal = "numeric",
+           TrancheInterest = "character",
+           TrancheCoupon = "numeric",
+           AccrualRate = "numeric",
+           TreasuryMaturity = "numeric",
+           TreasuryYield = "numeric",
+           TreasurySpread = "numeric",
+           TrancheYield = "numeric",
+           TranchePrice = "numeric",
+           TrancheProceedsWithInterest = "numeric",
+           TrancheAvgLife = "numeric",
+           TrancheDuration = "numeric",
+           TrancheDatedDate = "character",
+           TrancheFirstPmtDate = "character",
+           TrancheLastPmtDate = "character",
+           TrancheNextPmtDate = "character",
+           TrancheFinalPmtDate = "character",
+           Delay = "numeric",
+           InterestPmtFrequency = "numeric",
+           PrinPmtFrequency = "numeric",
+           PacLowBand = "numeric",
+           PacHighBand = "numeric",
+           FloaterIndex = "character",
+           InitialIndexValue = "numeric",
+           FloaterMargin = "numeric",
+           FloaterMultiplier = "numeric",
+           FloaterCap = "numeric",
+           FloaterFloor = "numeric",
+           FloaterInitialCoupon = "numeric",
+           FloaterResetFrequency = "numeric",
+           FloaterFirstResetDate = "character",
+           FloaterFormula = "function",
+           Group = "numeric",
+           TrancheType = "character",
+           Schedule = "logical",
+           Fixed = "logical"))
+
+
+  setClass("Tranches",
+         representation(
+           Tranches = "list"))
+
+
+  setClass("Collateral",
+         representation(
+           Group = "numeric",
+           Cusip = "list",
+           OrigBal = "list"))
+
+  # Collateral Group Class is an aggregator of the collateral class 
+  # This class assembles multiple collateral groups into a list of collateral groups
+  # building the collateral groups for the entire deal structure
+
+  setClass("CollateralGroup",
+         representation(
+           Group = "list"))
+
+  # Schedules is the projected schedule for a PAC/TAC Schedule
+
+  setClass("Schedule",
+         representation(
+           DealName = "character",
+           Group = "numeric",
+           PmtDate = "character",
+           Balance = "numeric",
+           ScheduledPmt = "numeric"))
+
+
+  # This class is the REMIC factor files and belongs to tranche information 
+  # REMIC Disclosure Month End (RDME) Class stores the tranch factor data and 
+  # is part of the assembly of the REMIC
+
+  setClass("RDME",
+         representation(
+           Cusip = "character",
+           PaymentDate = "character",
+           Coupon = "numeric",
+           Factor = "numeric"))
+
+  # The TrancheFactors class is an aggregator class 
+  # The class aggregates the RDME classes for each associated trance
+
+  setClass("TrancheFactors",
+         representation(
+           FactorData = "list"))
+
+  # Superclass REMIC structure constructor for REMIC which will be called by the waterfall 
+  setClass("REMICStructure",
+         representation(),
+         contains = c("RAID", 
+                      "Tranches", 
+                      "CollateralGroup", 
+                      "TrancheFactors")) 
 
   # Initialize RAID class
   setMethod("initialize",
@@ -104,7 +246,7 @@
                    TreasuryYield = numeric(),
                    TreasurySpread = numeric(),
                    TrancheYield = numeric(),
-                   TranchePrice = mumeric(),
+                   TranchePrice = numeric(),
                    TrancheProceedsWithInterest = numeric(),
                    TrancheAvgLife = numeric(),
                    TrancheDuration = numeric(),
@@ -417,43 +559,43 @@
   }
 
 
-  #' A constructor function for the REMIC At Issuance Disclosure (RAID) file
+  #' A constructor function for the REMIC At Issuance Disclosure file
   #' 
-  #'  The RAID function creates the REMIC At Issuance Disclosure file
-  #'  @param DealName A character string the deal name
-  #'  @param Issuer A character string the Isser Name
-  #'  @param DealNumber A character string the Deal Number
-  #'  @param DealPriceDate A character string the Deal Pricing Date
-  #'  @param DealSettlementDate A character string the Deal Settlement Date
-  #'  @param Underwriter A character string the Deal Underwriter
-  #'  @param Trustee A character string the deal Trustee
-  #'  @param PricingSpeed A numeric value the deal pricing speed
-  #'  @param JumpReferenceSpeed1 A numeric value the Jump Z speed
-  #'  @param JumpReferenceSpeed2 A numeric value the Jump Z speed
-  #'  @param JumpReferenceSpeed3 A numeric value the Jump Z speed
-  #'  @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
-  #'  @param NumberofTranches A numeric value the number of Tranches
-  #'  @param NumberofComponentTranches A numeric value the number of component Tranches
-  #'  @param NumberofCombinedTranches A numeric value the number of combined Tranches
-  #'  @param NumberofPools A numeric value the number of pools
-  #'  @param PacSchedulesIncluded A logical value TRUE/FALSE
-  #'  @param NumberofPacSchedules A numeric value the number of PAC schedules
-  #'  @param NumberofGroups A numeric value the number of groups
-  #'  @param DealSize A numeric value the original balance of all tranches
-  #'  @param CollateralAmount A numeric value the current face amount of the collateral
-  #'  @param CollateralAvgLife A numeric value the avg life of the collateral 
-  #'  @param BondValue A numeric value the bond price
-  #'  @param BondValueMethod A character string the valuation method
-  #'  @param BondValueCap A numeric value the Bond Coupon Cap Rate
-  #'  @param BondValueDiscountRate A numeric value the Bond discount rate
-  #'  @param BondValueReinvestmentRate A numeric value the assumed trust reinvestment rate
-  #'  @param ExpenseBasisPointFee A numeric value the expense of the Trust
-  #'  @param ExpenseFixed A numeric value the fixed expenses of the Trust
-  #'  @param ExpensePeriodicity A numeric value the calender payment of expenses
-  #'  @param InitialReserveFund A numeric value the amount of the initial reserve fund
-  #'  @examples
-  #'  \dontrun{need example}
-  #'@export
+  #' The RAID function creates the REMIC At Issuance Disclosure file
+  #' @param DealName A character string the deal name
+  #' @param Issuer A character string the Isser Name
+  #' @param DealNumber A character string the Deal Number
+  #' @param DealPriceDate A character string the Deal Pricing Date
+  #' @param DealSettlementDate A character string the Deal Settlement Date
+  #' @param Underwriter A character string the Deal Underwriter
+  #' @param Trustee A character string the deal Trustee
+  #' @param PricingSpeed A numeric value the deal pricing speed
+  #' @param JumpReferenceSpeed1 A numeric value the Jump Z speed
+  #' @param JumpReferenceSpeed2 A numeric value the Jump Z speed
+  #' @param JumpReferenceSpeed3 A numeric value the Jump Z speed
+  #' @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
+  #' @param NumberofTranches A numeric value the number of Tranches
+  #' @param NumberofComponentTranches A numeric value the number of component Tranches
+  #' @param NumberofCombinedTranches A numeric value the number of combined Tranches
+  #' @param NumberofPools A numeric value the number of pools
+  #' @param PacSchedulesIncluded A logical value TRUE/FALSE
+  #' @param NumberofPacSchedules A numeric value the number of PAC schedules
+  #' @param NumberofGroups A numeric value the number of groups
+  #' @param DealSize A numeric value the original balance of all tranches
+  #' @param CollateralAmount A numeric value the current face amount of the collateral
+  #' @param CollateralAvgLife A numeric value the avg life of the collateral 
+  #' @param BondValue A numeric value the bond price
+  #' @param BondValueMethod A character string the valuation method
+  #' @param BondValueCap A numeric value the Bond Coupon Cap Rate
+  #' @param BondValueDiscountRate A numeric value the Bond discount rate
+  #' @param BondValueReinvestmentRate A numeric value the assumed trust reinvestment rate
+  #' @param ExpenseBasisPointFee A numeric value the expense of the Trust
+  #' @param ExpenseFixed A numeric value the fixed expenses of the Trust
+  #' @param ExpensePeriodicity A numeric value the calender payment of expenses
+  #' @param InitialReserveFund A numeric value the amount of the initial reserve fund
+  #' @examples 
+  #' \dontrun{Need Example}
+  #' @export MakeRAID
   MakeRAID <- function(DealName = "character", 
                      Issuer = "character",
                      DealNumber = "character",
@@ -1036,34 +1178,33 @@
   #' @param Factor A numeric value the tranche's factor
   #' @examples
   #' \dontrun{
-  #'MakeRDME(DealName = "BondLabPACInverse",
-  #'TrancheNumber = 1,
-  #'Cusip = "BondLabPAC2",
-  #'"PaymentDate = "01-01-2013",
-  #'Coupon = 2.25,
-  #'Factor = 1)
+  #'  MakeRDME(DealName = "BondLabPACInverse",
+  #'  TrancheNumber = 1,
+  #'  Cusip = "BondLabPAC2",
+  #'  PaymentDate = "01-01-2013",
+  #'  Coupon = 2.25,
+  #'  Factor = 1)
   #'
-  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'  MakeRDME(DealName = "BondLabPACInverse",
   #'       TrancheNumber = 2,
   #'       Cusip = "BondLabFltr",
-  # '      PaymentDate = "1-01-2013",
+  #'       PaymentDate = "1-01-2013",
   #'       Coupon = 0.55,
   #'       Factor = 1)
   #'
-  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'  MakeRDME(DealName = "BondLabPACInverse",
   #'       TrancheNumber = 3,
   #'       Cusip = "BondLabCMP1",
   #'       PaymentDate = "1-01-2013",
   #'       Coupon = 9.21,
   #'       Factor = 1)
   #'
-  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'  MakeRDME(DealName = "BondLabPACInverse",
   #'       TrancheNumber = 4,
   #'       Cusip = "BondLabPACIO",
   #'       PaymentDate = "1-01-2013",
   #'       Coupon = 1.75,
-  #'       Factor = 1)
-  #' } 
+  #'       Factor = 1)} 
   #'@export
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),

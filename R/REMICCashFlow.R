@@ -7,6 +7,25 @@
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
 
+  setClass("REMICCashFlow",
+         representation(
+           DealName = "character",
+           TrancheName = "character",
+           TrancheNumber = "character",
+           Price = "numeric",
+           PrincipalProceeds = "numeric",
+           Accrued = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric",
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           Interest = "numeric",
+           Principal = "numeric",
+           TotalCashFlow = "numeric"))
+
   setGeneric("REMICCashFlow", function(bond.id = "character", 
                                      trade.date = "character",
                                      settlement.date = "character",

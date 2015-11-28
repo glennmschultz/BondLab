@@ -6,6 +6,23 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
  
+  #' An S4 class representing the bond term structure exposure
+  #' 
+  #' @slot SpotSpread a numeric value the spread to the spot curve
+  #' @slot EffDuration a numeric value the effective duration
+  #' @slot EffConvexity a numeric value the effective convexity
+  #' @slot KeyRateTenor a vector of values the key rate tenors
+  #' @slot KeyRateDuration a vector of values the key rate durations
+  #' @slot KeyRateConvexity a vector of values the key rate convexities
+  #' @exportClass BondTermStructure
+  setClass("BondTermStructure",
+         representation(
+           SpotSpread = "numeric",   
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric"))
 
   setGeneric("BondTermStructure",function(bond.id = "character", 
                                  Rate.Delta = numeric(), 

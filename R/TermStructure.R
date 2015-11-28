@@ -11,6 +11,27 @@
   #Term strucutre call term strc 
   #and holds forward and spot rates as slots to class Term Structure
   #---------------------------------------------------
+  
+  #' An S4 class the term structure data needed to price bonds
+  #' 
+  #' @slot tradedate A character string the trade date in the format
+  #' mm/dd/YYYY
+  #' @slot period A numeric value the period index of the next cash flow
+  #' @slot date A numeric value the date of the next cash flow
+  #' @slot spotrate A numeric value the one-month spot rate
+  #' @slot forwardrate A numeric value the one-month forward rate
+  #' @slot TwoYearFwd A numeric vlaue the two-year forward rate
+  #' @slot TenYearFwd A numeric value the ten-year forward rate
+  #' @exportClass TermStructure
+  setClass("TermStructure",
+           representation(
+             tradedate = "character",
+             period = "numeric",
+             date = "character",
+             spotrate = "numeric",
+             forwardrate = "numeric",
+             TwoYearFwd = "numeric",
+             TenYearFwd = "numeric"))
 
   setGeneric("TermStructure",
              function(rates.data = "character", method = "character")

@@ -5,6 +5,94 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
+
+
+  #' An S4 class to represent a mortgage pass-through security
+  #' 
+  #' @slot Cusip A character string the pass-through cusip
+  #' @slot ID A character string identifying the agency and pool number
+  #' @slot BondType A character sting the bond type
+  #' @slot Sector A character string the sector
+  #' @slot Coupon A coupon a numeric value the annual coupon rate
+  #' @slot IssueDate A character string the issue date
+  #' @slot DatedDate A character string the dated date
+  #' @slot Maturity A character string the maturity date
+  #' @slot LastPmtDate A character string the last payment advanced
+  #' @slot NextPmtDate A character string the next payment date
+  #' @slot Term A numeric value the original term of the underlying mortgage
+  #' @slot WALA A numeric value the weighted average loan age
+  #' @slot WAM A numeric value the weighted average maturity
+  #' @slot PaymentDelay A numeric value the payment delay
+  #' @slot Moody A character string the Moody credit rating
+  #' @slot SP A character string the Standard and Poors credit rating
+  #' @slot BondLab A character string the BondLab credit rating
+  #' @slot Frequency A numeric value the frequency of payments (annual = 1, semi-annual = 2, monthly = 12)
+  #' @slot BondBasis A character string the day count used ("actual360",30360", etc.)
+  #' @slot GWac A numeric string the weighted average note rate
+  #' @slot OrigLoanBal A numeric value the original loan balance
+  #' @slot OrigLTV A numeric value the original loan to value ratio
+  #' @slot AmortizationType A character string "fixed" or "arm"
+  #' @slot AmortizationTerm A numeric value the term of the underlying mortgage
+  #' @slot Index A character string the index to which the arm coupon is related
+  #' @slot Margin A numeric value the spread (margin) over the index
+  #' @slot FirstPmtDate A character string the mortgage first payment date
+  #' @slot FinalPmtDate A character string the mortgage final payment date
+  #' @slot Servicing A numeric value the serving strip
+  #' @slot PMI A numeric value the primary mortgage insurance paid
+  #' @slot Gfee A numeric value the guarantee fee paid
+  #' @slot InitialInterest A logical value TRUE or FALSE interest only mortgage
+  #' @slot InterestOnlyPeriod A numeric value the number of months the borrower pays only interest
+  #' @slot FirstPrincipalPaymentDate A character string the date of the first principal payment
+  #' @slot BalloonPmt A logical value TRUE or FALSE a balloon payment due
+  #' @slot BalloonDate A character string the balloon payment date
+  #' @slot MBSFactor A numeric value the pass-through principal balance outstanding expressed as
+  #' a percentage of the original balance
+  #' @slot Model A character string the prepayment model tune file
+  #' @slot Burnout A numeric value the burnout value
+  #' @slot SATO A numeric value the mortgage rate spread at origination
+  #' @exportClass MBSDetails   
+  setClass("MBSDetails", 
+         representation(
+           Cusip = "character",
+           ID = "character",
+           BondType = "character",
+           Sector ="character",
+           Coupon = "numeric",
+           IssueDate = "character",
+           DatedDate = "character",
+           Maturity = "character",
+           LastPmtDate = "character",
+           NextPmtDate = "character",
+           Term = "numeric",
+           WALA = "numeric",
+           WAM = "numeric",
+           PaymentDelay = "numeric",
+           Moody = "character",
+           SP = "character",
+           BondLab  = "character",
+           Frequency = "numeric",
+           BondBasis = "character",
+           GWac = "numeric",
+           OrigLoanBal = "numeric",
+           OrigLTV = "numeric",
+           AmortizationType = "character",
+           AmortizationTerm = "numeric",
+           Index = "character",
+           Margin = "numeric",
+           FirstPmtDate = "character",
+           FinalPmtDate = "character",
+           Servicing = "numeric",
+           PMI = "numeric",
+           Gfee = "numeric",
+           InitialInterest = "logical",
+           InterestOnlyPeriod = "numeric",
+           FirstPrinPaymentDate = "character",
+           BalloonPmt = "logical",
+           BalloonDate = "character",
+           MBSFactor = "numeric",
+           Model = "character",
+           Burnout = "numeric",
+           SATO = "numeric"))
  
   setGeneric("MakeMBSDetails", function(
     Cusip = "character",

@@ -5,6 +5,16 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
+
+
+  setClass("MortgageTermStructure",
+         representation(
+           SpotSpread = "numeric",   
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric"))
  
   setGeneric("MortgageTermStructure", function(bond.id = "character", 
                                              original.bal = numeric(), 

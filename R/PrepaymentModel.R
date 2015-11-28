@@ -7,6 +7,27 @@
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
 
+  setClass("PrepaymentAssumption",
+         representation(
+           PrepayAssumption = "character",
+           PPCStart = "numeric",
+           PPCEnd = "numeric",
+           PPCSeasoning = "numeric",
+           FirstPmtDate = "character",
+           LastPmtDate = "character",
+           FinalPmtDate = "character",
+           PmtDate = "character",
+           LoanAge = "numeric",
+           Period = "numeric",
+           NoteRate = "numeric",
+           MtgRateFwd = "numeric",
+           Incentive = "numeric",
+           SMM = "numeric",
+           MDR = "numeric",
+           Severity = "numeric"))
+
+
+
   setMethod("initialize",
           signature("PrepaymentAssumption"),
           function(.Object,
@@ -45,7 +66,6 @@
             .Object@Severity = Severity
             
             return(.Object)
-            callNextMethod(.Object,....)
           })
 
   #---------------------------------------------------------------------------------------

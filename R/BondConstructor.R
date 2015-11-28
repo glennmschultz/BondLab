@@ -6,6 +6,51 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
  
+  #' An S4 class representing the cusip detail of the a standard bond
+  #' 
+  #' @slot Cusip a character string of length 9 the bond's cusip
+  #' @slot ID a character string the ID of the bond
+  #' @slot BondType a character string the type of the bond UST, Corp
+  #' @slot Sector a character string the bond sector (Govt, Financial, Utility, etc.)
+  #' @slot Coupon a numeric value the bond's coupon
+  #' @slot IssueDate a character string the issue date in mm/dd/YYYY format
+  #' @slot DatedDate a character string the dated date in mm/dd/YYYY format
+  #' @slot Maturity a character string the maturity date in mm/dd/YYYY format
+  #' @slot LastPmtDate a character string the payment date the date of the last
+  #' payment received by the investor in mm/dd/YYYY format
+  #' @slot NextPmtDate a character string the payment date of the next scheduled
+  #' payment to be received by the investor
+  #' @slot Moody A character string the Moody credit rating
+  #' @slot SP A character string the S&P credit rating
+  #' @slot BondLab A character string the BondLab or investor assigned credit rating
+  #' @slot Frequency A numeric value the payment frequency of the bond 
+  #' (the number of payments made in one-year)
+  #' @slot BondBasis a character string the bond's interest calculation basis
+  #' @slot Callable a character string (should be made to a logical)
+  #' @slot Putable a character string (should be made to a logical)
+  #' @slot SinkingFund a character string (should be made to a logical)
+  #' @exportClass BondDetails 
+  setClass("BondDetails",
+         representation(
+           Cusip = "character",
+           ID = "character",
+           BondType = "character",
+           Sector ="character",
+           Coupon = "numeric",
+           IssueDate = "character",
+           DatedDate = "character",
+           Maturity = "character",
+           LastPmtDate = "character",
+           NextPmtDate = "character",
+           Moody = "character",
+           SP = "character",
+           BondLab  = "character",
+           Frequency = "numeric",
+           BondBasis = "character",
+           Callable = "character",
+           Putable = "character",
+           SinkingFund = "character"))
+  
   setGeneric("MakeBondDetails", function(
     Cusip = "character",                              
     ID ="character",                              
@@ -68,8 +113,7 @@
               .Object@Callable = Callable
               .Object@Putable = Putable
               .Object@SinkingFund = SinkingFund
-              
-              callNextMethod(.Object,...)
+
               return(.Object)
           })
 
@@ -134,8 +178,7 @@
 #' @param Callable A character string the bond's call schedule
 #' @param Putable A caracter string the bond's put schedule
 #' @param SinkingFund a character strign the bond sinking fund schedule
-#' @export
-
+#' @export MakeBondDetails
     MakeBondDetails <- function(    
     Cusip = "character",                              
     ID ="character",                              

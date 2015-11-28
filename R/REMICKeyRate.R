@@ -6,6 +6,15 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  setClass("REMICTermStructure",
+         representation(
+           SpotSpread = "numeric",
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric"))
+
   setGeneric("REMICTermStructure", function(bond.id = "character", 
                                                original.bal = numeric(), 
                                                Rate.Delta = numeric(), 
@@ -34,7 +43,7 @@
            .Object@KeyRateConvexity = KeyRateConvexity
            
            return(.Object)
-           callNextMethod(.Object,...)
+
          })
 
   # ---------------------------------------------------------------

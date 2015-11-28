@@ -6,6 +6,33 @@
   # License GPL3 + File License
   # Copyright (C) 2014 Bond Lab Technologies, Inc
 
+
+  setClass("MortgageCashFlow",
+         representation(
+           Price = "numeric",
+           Accrued = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric",
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           BeginningBal = "numeric",
+           MonthlyPmt = "numeric",
+           MonthlyInterest = "numeric",
+           PassThroughInterest = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           DefaultedPrin = "numeric",
+           LossAmount = "numeric",
+           RecoveredAmount = "numeric",
+           EndingBal = "numeric",
+           ServicingIncome = "numeric",
+           PMIPremium = "numeric",
+           GFeePremium = "numeric",  
+           TotalCashFlow = "numeric"))
+
   setGeneric("MortgageCashFlow", function(bond.id = "character", 
                                         original.bal = numeric(), 
                                         settlement.date = "character", 
@@ -68,7 +95,7 @@
           })
 
 
-  #'  A function to compute the cash flow of a pool of securitized mortgages
+  #' A function to compute the cash flow of a pool of securitized mortgages
   #' 
   #' This is a generic function used to construct the class object MortgageCashFlow
   #' For this function to work properly the classes MBSDetails and PrepaymentAssumption
@@ -79,11 +106,10 @@
   #' @param price The price traded.  Price is input as a whole number.
   #' For example $102 is input as 102.00 not 1.02.
   #' @param PrepaymentAssumption A character string referencing the class object
-  #'  PrepaymentAssumption
-  #'  @examples
-  #'  \dontrun{
-  #'   MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
-  #'   settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
+  #' PrepaymentAssumption
+  #' @examples 
+  #' \dontrun{MortgageCashFlow(bond.id = "bondlabMS4", original.bal = 1000000, 
+  #' settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
   #' @export MortgageCashFlow
   MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 

@@ -5,6 +5,39 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + license
   # Copyright (C) 2014  Bond Lab Technologies, Inc
+
+  #' An S4 class representing standard bond cash flows
+  #' 
+  #' @slot Price a numeric value the price of the bond
+  #' @slot Accrued a numeric value the accrued interest
+  #' @slot YieldToMaturity a numeric value the bond yield to maturity
+  #' @slot WAL a numeric value the weighted average life of the bond
+  #' @slot ModDuration a numeric value the bond duration
+  #' @slot Convexity a numeric value the bond convexity
+  #' @slot Period a numeric value an index of the payment to the investor
+  #' @slot PmtDate a character string the payment date to the investor format 
+  #' is mm/dd/YYYY
+  #' @slot TimePeriod a numeric value the time period between payments made
+  #' to the investor
+  #' @slot PrincipalOutstanding a numeric value the outstanding principal balance
+  #' @slot CouponPmt a numeric value the coupon payment amount
+  #' @slot TotalCashFlow a numeric value the sum of the principal and interest payment
+  #' made in each period
+  #' @exportClass BondCashFlows
+  setClass("BondCashFlows",
+         representation(
+           Price = "numeric",
+           Accrued = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric",
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           PrincipalOutstanding = "numeric",  
+           CouponPmt = "numeric",
+           TotalCashFlow = "numeric"))
  
   setGeneric("BondCashFlows", function (bond.id = "character", 
                                       principal = numeric(), 

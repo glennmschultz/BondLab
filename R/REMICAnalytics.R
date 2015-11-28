@@ -5,6 +5,14 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
+
+  #' @include REMICConstructor.R REMICCashFlow.R REMICKeyRate.R
+
+  setClass("REMICAnalytics",
+         representation(),
+         contains = c("TrancheDetails",
+                      "REMICCashFlow",
+                      "REMICTermStructure"))
   
   setGeneric("REMICAnalytics", function(bond.id = "character", 
                                       trade.date = "character",

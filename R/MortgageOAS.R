@@ -7,9 +7,21 @@
   # Copyright (C) 2014  Glenn M Schultz, CFA
  
 
-  #--------------------------------------------------------------------------
-  # Mortgage OAS Function
-  #--------------------------------------------------------------------------
+  setClass("MortgageOAS",
+         representation(
+           OAS = "numeric",
+           ZVSpread = "numeric",
+           SpreadToCurve = "numeric",
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric",
+           PriceDist = "vector",
+           PathSpread = "vector",
+           PathWAL = "vector",
+           PathModDur = "vector",
+           PathYTM = "vector"))
   
   setGeneric("Mortgage.OAS",function(bond.id = "character", 
                                      trade.date = "character", 
@@ -56,16 +68,16 @@
 
   #' Mortgage OAS the OAS engine for pass through OAS
   #' 
-  #'  Pass through OAS engine
-  #'  @param bond.id A character string the bond id or cusip number
-  #'  @param trade.date A character string the trade date
-  #'  @param settlement.date A character string the settlment date
-  #'  @param original.bal A numeric value the pool original balance
-  #'  @param price A numeric value the price of the pass through
-  #'  @param sigma A numeric value the volatility assumption (not annualized)
-  #'  @param paths A numeric value the number of paths
-  #'  @importFrom lubridate %m+%
-  #'  @export Mortgage.OAS
+  #' Pass through OAS engine
+  #' @param bond.id A character string the bond id or cusip number
+  #' @param trade.date A character string the trade date
+  #' @param settlement.date A character string the settlment date
+  #' @param original.bal A numeric value the pool original balance
+  #' @param price A numeric value the price of the pass through
+  #' @param sigma A numeric value the volatility assumption (not annualized)
+  #' @param paths A numeric value the number of paths
+  #' @importFrom lubridate %m+%
+  #' @export Mortgage.OAS
   Mortgage.OAS <- function(bond.id = "character", 
                          trade.date = "character", 
                          settlement.date = "character", 

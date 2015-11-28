@@ -6,6 +6,17 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+
+  #' @include PassThroughConstructor.R MortgageCashFlow.R MortgageOAS.R
+  NULL
+  
+  setClass("PassThroughOAS",
+         representation(),
+         contains = c("MBSDetails", 
+                      "MortgageCashFlow", 
+                      "MortgageOAS"))
+
+
   setGeneric("PassThroughOAS", function(bond.id = "character", 
                                       trade.date = "character", 
                                       settlement.date = "character", 

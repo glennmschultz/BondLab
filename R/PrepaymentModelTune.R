@@ -8,6 +8,38 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
+  setClass("PrepaymentModelTune",
+         representation(
+           TurnoverRate = "numeric",
+           Turnover.alpha = "numeric",
+           Turnover.beta = "numeric",
+           Turnover.theta = "numeric",
+           Seasonality.alpha = "numeric",
+           Seasonality.theta = "numeric",
+           Incentive.Fast.theta.1 = "numeric",
+           Incentive.Fast.theta.2 = "numeric",
+           Incentive.Fast.beta = "numeric",
+           Incentive.Fast.eta = "numeric",
+           Incentive.Slow.theta.1 = "numeric",
+           Incentive.Slow.theta.2 = "numeric",
+           Incentive.Slow.beta = "numeric",
+           Incentive.Slow.eta = "numeric",
+           Burnout.beta.1 = "numeric",
+           Burnout.beta.2 = "numeric",
+           BeginCDR = "numeric",
+           PeakCDR = "numeric",
+           EndCDR = "numeric",
+           PeakMonth = "numeric",
+           PlateauMonths = "numeric",
+           EndMonth = "numeric",
+           MinOrigLTV = "numeric",
+           MaxOrigLTV = "numeric",
+           MinOrigMultiplier = "numeric",
+           MaxOrigMultiplier = "numeric",
+           UpdatedLTV.beta = "numeric",
+           SATO.beta = "numeric"
+         ))
+
   setGeneric("MakeModelTune", function(
     ModelName = "character",
     TurnoverRate = "numeric",
@@ -104,7 +136,6 @@
             .Object@SATO.beta = SATO.beta
             
             return(.Object)
-            callNextMethod(.Object,...)
           })
 
         ModelTuningParam <- function(

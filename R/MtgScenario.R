@@ -6,6 +6,47 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+setClass("Mtg.ScenarioSet",
+         representation(
+           Scenario = "list"))
+
+  setClass("Scenario",
+         representation(
+           Name = "character",
+           Type = "character",
+           Horizon = "character",
+           ShiftType = "character",
+           Shiftbps = "numeric",
+           Formula = "function"
+         ))
+
+  setClass("Mtg.Scenario",
+         representation( 
+           Period = "numeric",
+           PmtDate = "character",
+           TimePeriod = "numeric",
+           BeginningBal = "numeric",
+           PassThroughInterest = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           EndingBal = "numeric",
+           TotalCashFlow = "numeric",
+           spotrate = "numeric",
+           forwardrate = "numeric",
+           SMM = "numeric",
+           YieldToMaturity = "numeric",
+           WAL = "numeric",
+           SpreadToInterCurve = "numeric",
+           ModDuration = "numeric",
+           Convexity = "numeric", 
+           EffDuration = "numeric",
+           EffConvexity = "numeric",
+           KeyRateTenor = "numeric",
+           KeyRateDuration = "numeric",
+           KeyRateConvexity = "numeric",
+           HorizonReturn = "numeric"),
+         contains = "Scenario")
+
   setMethod("initialize",
           signature("Mtg.ScenarioSet"),
           function(.Object,

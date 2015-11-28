@@ -6,6 +6,11 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+  setClass("DollarRollAnalytics",
+         representation(),
+         contains = c("MBSDetails",
+                      "DollarRoll"))
+
   setGeneric("DollarRollAnalytics", function(bond.id = "character", 
                                            original.bal= numeric(), 
                                            price = numeric(), 

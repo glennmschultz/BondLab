@@ -6,6 +6,42 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
+
+  setClass("DollarRoll",
+         representation(
+           SettlementDate = "character",
+           FwdSettlementDate = "character",  
+           GrossCoupon = "numeric",
+           NetCoupon = "numeric",
+           OriginalTerm = "numeric",
+           RemainingTerm = "numeric",
+           OrigBalance = "numeric",
+           CurrentBalance = "numeric",
+           Price = "numeric",
+           PrincipalProceeds = "numeric",
+           Accrued = "numeric",
+           TotalProceeds = "numeric",
+           DaysInterest = "numeric",
+           ReinvestmentIncome = "numeric",
+           ScheduledPrin = "numeric",
+           PrepaidPrin = "numeric",
+           PassThroughInterest = "numeric",
+           FutureValueHold = "numeric",
+           RemainingBalance = "numeric",
+           FuturePrincipalProceeds = "numeric",
+           FwdAccrued = "numeric",
+           Drop = "numeric",
+           FwdPrice = "numeric",
+           FinanceRate = "numeric",
+           ReinvestmentRate = "numeric",
+           HoldorRoll = "character",
+           Advantage = "numeric",
+           FutureValueRoll = "numeric",
+           DiscValueofCarry = "numeric",
+           FutureValuePrinCarry = "numeric",
+           TotalFutureValue = "numeric",
+           DropImpliedValue = "numeric"))
+
   setGeneric("DollarRoll", function(bond.id = "character", 
                                   price = numeric(), 
                                   drop = numeric(), 

@@ -42,10 +42,10 @@
   #' @slot Gfee A numeric value the guarantee fee paid
   #' @slot InitialInterest A logical value TRUE or FALSE interest only mortgage
   #' @slot InterestOnlyPeriod A numeric value the number of months the borrower pays only interest
-  #' @slot FirstPrincipalPaymentDate A character string the date of the first principal payment
+  #' @slot FirstPrinPaymentDate A character string the date of the first principal payment
   #' @slot BalloonPmt A logical value TRUE or FALSE a balloon payment due
   #' @slot BalloonDate A character string the balloon payment date
-  #' @slot MBSFactor A numeric value the pass-through principal balance outstanding expressed as
+  #' @slot MBSFactor A numeric value the pass-through principal balance outstanding expressed as 
   #' a percentage of the original balance
   #' @slot Model A character string the prepayment model tune file
   #' @slot Burnout A numeric value the burnout value

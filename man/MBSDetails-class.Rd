@@ -76,13 +76,13 @@ An S4 class to represent a mortgage pass-through security
 
 \item{\code{InterestOnlyPeriod}}{A numeric value the number of months the borrower pays only interest}
 
-\item{\code{FirstPrincipalPaymentDate}}{A character string the date of the first principal payment}
+\item{\code{FirstPrinPaymentDate}}{A character string the date of the first principal payment}
 
 \item{\code{BalloonPmt}}{A logical value TRUE or FALSE a balloon payment due}
 
 \item{\code{BalloonDate}}{A character string the balloon payment date}
 
-\item{\code{MBSFactor}}{A numeric value the pass-through principal balance outstanding expressed as
+\item{\code{MBSFactor}}{A numeric value the pass-through principal balance outstanding expressed as 
 a percentage of the original balance}
 
 \item{\code{Model}}{A character string the prepayment model tune file}

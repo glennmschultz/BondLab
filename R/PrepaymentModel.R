@@ -6,7 +6,33 @@
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
-
+  #' A S4 Class to hold prepayment vectors which are passed to cash flow engines
+  #' 
+  #' The PrepaymentAssumption class is used to pass the prepayment information and
+  #' SMM vectors to the MortgageCashFlow engine.  It must be called in advance for
+  #' cash flow calculations.
+  #' @slot PrepaymentAssumption A character string the type of prepayment assumption
+  #' used this may be "CPR", "PPC", or "MODEL"
+  #' @slot PPCStart A numeric value the PPC starting CPR assumption.  This is populated when
+  #' PPC option is choosen
+  #' @slot PPCEnd A numeric value the PPC ending CPR assumption.  This is populated when
+  #' PPC option is choosen
+  #' @slot PPCSeasoning A numeric value the length of the PPC ramp.  This is populated when 
+  #' PPC option is choosen
+  #' @slot FirstPmtDate A character string the first payment date
+  #' @slot LastPmtDate A character string the date of the last payment received by the investor
+  #' @slot FinalPmtDate A character string the date of the final payment received by the investor
+  #' @slot PmtDate A character string the payment date
+  #' @slot LoanAge A numeric vector the projected loan age at each payment date
+  #' @slot Period A numeric vector the index of the payment periods
+  #' @slot NoteRate A numeric vector the projected note rate of the MBS pool or loan
+  #' @slot MtgRateFwd A numeric vector the projected forward mortgage rate.
+  #' @slot Incentive A numeric vector the projected incentive faced by the borrower.  
+  #' The difference between the note rate and the prevailing mortgage rate
+  #' @slot SMM A numeric vector the projected SMM (Single Monthly Mortality).  
+  #' SMM is the measure of voluntary repayments 
+  #' @slot MDR A numeric vector the pojected MDR  (Monthly Default Rate)
+  #' @slot Severitiy A numeric vector the loss severity given default 
   setClass("PrepaymentAssumption",
          representation(
            PrepayAssumption = "character",

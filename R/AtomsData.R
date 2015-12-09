@@ -3,7 +3,7 @@
   # for fixed income analysis.  In addition bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License GPL3 + File License
+  # File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
   #' @include PassThroughConstructor.R MortgageCashFlow.R MortgageCashFlowArray.R MortgageKeyRate.R MtgScenario.R

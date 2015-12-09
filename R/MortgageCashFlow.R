@@ -3,7 +3,7 @@
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License GPL3 + File License
+  # File License
   # Copyright (C) 2014 Bond Lab Technologies, Inc
 
 
@@ -297,7 +297,7 @@
   MBS.CF.Table[,23] = MBS.CF.Table[,21] * MBS.CF.Table[,22] 
   
   #Weighted Average Life
-  WAL = sum((((MBS.CF.Table[,7]) + (MBS.CF.Table[,8])) * MBS.CF.Table[,3])/ sum((MBS.CF.Table[,7]) + (MBS.CF.Table[,8])))
+  WAL = sum(((MBS.CF.Table[,7] + MBS.CF.Table[,8] + MBS.CF.Table[,11]) * MBS.CF.Table[,3])/ sum(MBS.CF.Table[,7] + MBS.CF.Table[,8] + MBS.CF.Table[,11]))
   
   #Duration and Convexity
   Duration = apply(MBS.CF.Table, 2, sum)[20]

@@ -275,7 +275,7 @@
       BeginningBal = CashFlow@CashFlowArray[,"Begin Bal"],
       MonthlyPmt = CashFlow@CashFlowArray[,"Monthly Pmt"],
       MonthlyInterest = CashFlow@CashFlowArray[,"Scheduled Int"],
-      PassThroughInterest = CashFlow@CashFlowArray["Pass Through Interest"],
+      PassThroughInterest = CashFlow@CashFlowArray[,"Pass Through Interest"],
       ScheduledPrin = CashFlow@CashFlowArray[,"Scheduled Prin"],
       PrepaidPrin = CashFlow@CashFlowArray[,"Prepaid Prin"],
       DefaultedPrin = CashFlow@CashFlowArray[,"Defaulted Prin"],

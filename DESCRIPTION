@@ -52,6 +52,7 @@ Collate:
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
     'MakeRateScenario.R'
+    'MortgageCashFlow_KDS.R'
     'MortgageFunctions.R'
     'MortgageOAS.R'
     'MortgageRateFunctions.R'

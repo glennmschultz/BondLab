@@ -359,3 +359,7 @@ month	interest	principal	total	loss	OAS	interest_d	principal_d	total_d
 358	0	0	0	0	42.8163	0	0	0	
 359	0	0	0	0	42.8163	0	0	0	
 360	0	0	0	0	42.8163	0	0	0	
+
+#paths	price	loss
+
+20	AGENCY	109.313721	0

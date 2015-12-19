@@ -6,7 +6,7 @@
   # File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
-  #' @include PassThroughConstructor.R MortgageCashFlow.R MortgageCashFlowArray.R MortgageKeyRate.R MtgScenario.R
+  #' @include PassThroughConstructor.R MortgageCashFlow.R MortgageCashFlowArray.R MortgageKeyRate.R MortgageScenario.R
   NULL
   
   # ------------------------------------------------------------------------------------------
@@ -51,7 +51,6 @@
              LIBOROAS = "numeric",
              LIBORZVSpread = "numeric"))
   
-  
   #' An S4 class representing ATOMs Scenario results
   #' 
   #' contains the class Scenario which is defined in the file
@@ -75,8 +74,6 @@
            representation(),
            contains = c("AtomsData",
                         "AtomsScenario"))
-
-
 
 
   setGeneric("AtomsData",function(bond.id = "character",
@@ -219,12 +216,10 @@
   # ----------------------------------------------------------------------------
   CIRFwdLen <- length(CIRFwd) 
   CIRSpot <- ((1+CIRFwd[2:CIRFwdLen])/(1+CIRFwd[1:CIRFwdLen -1]) ^ (1/months.in.year))-1
-   
-   
+  
   # ------------------------------------------------------------------------------
   # Calculate the forward rates
   # ------------------------------------------------------------------------------
-
   TwoYrFwd <- as.vector(CIRBondPrice(shortrate = CIRSpot, 
                                     kappa = kappa_U, 
                                     lambda = lambda_U, 
@@ -299,10 +294,10 @@
                                         PrepaymentAssumption = PrepaymentAssumption)
    
   MortgageCashFlowPSA <- MortgageCashFlow(bond.id = Bond.id,
-                                        original.bal = original.bal,
-                                        settlement.date = settlement.date,
-                                        price = price,
-                                        PrepaymentAssumption = ConsensusPSA)
+                                            original.bal = original.bal,
+                                            settlement.date = settlement.date,
+                                            price = price,
+                                            PrepaymentAssumption = ConsensusPSA)
    
   
    

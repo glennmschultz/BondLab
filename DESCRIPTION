@@ -28,7 +28,7 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
-    'MtgScenario.R'
+    'MortgageScenario.R'
     'MortgageKeyRate.R'
     'MortgageCashFlowArray.R'
     'MortgageCashFlow.R'
@@ -52,7 +52,7 @@ Collate:
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
     'MakeRateScenario.R'
-    'MortgageCashFlow_KDS.R'
+    'MortgageCashFlow_Array.R'
     'MortgageFunctions.R'
     'MortgageOAS.R'
     'MortgageRateFunctions.R'

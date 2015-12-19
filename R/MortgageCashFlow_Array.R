@@ -28,8 +28,8 @@
   #' @examples 
   #' \dontrun{MortgageCashFlow_KDS(CashFlowData = "blx_test", price = 100, settlement.date = "01-10-2013", 
   #' original.bal = 102, bond.id = "bondlabMBS4")}
-  #' @export MortgageCashFlow_KDS
-  MortgageCashFlow_KDS <- function(CashFlowData = "character",
+  #' @export MortgageCashFlow_Array
+  MortgageCashFlow_Array <- function(CashFlowData = "character",
                                  price = numeric(),
                                  original.bal = numeric(),
                                  settlement.date = "character",

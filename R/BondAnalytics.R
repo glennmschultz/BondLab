@@ -6,7 +6,7 @@
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
   # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics"
 
 setMethod("initialize",
           signature("BondAnalytics"),
@@ -212,10 +212,10 @@ setMethod("initialize",
            TenYearFwd = TermStructure@TenYearFwd)
       }
 
-  setGeneric("BondAnalytics", function (bond.id = "character", 
-                                        principal = numeric(), 
-                                        price = numeric(), 
-                                        trade.date = "character", 
-                                        settlement.date = "character", 
-                                        method = "character")
-    {standardGeneric("BondAnalytics")})
+      setGeneric("BondAnalytics", function (bond.id = "character", 
+                                            principal = numeric(), 
+                                            price = numeric(), 
+                                            trade.date = "character", 
+                                            settlement.date = "character", 
+                                            method = "character")
+      {standardGeneric("BondAnalytics")})

@@ -8,12 +8,7 @@
 # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
 # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-  setGeneric("MortgageCashFlow", function(bond.id = "character", 
-                                        original.bal = numeric(), 
-                                        settlement.date = "character", 
-                                        price = numeric(), 
-                                        PrepaymentAssumption = "character") 
-  {standardGeneric("MortgageCashFlow")})
+
 
   setMethod("initialize",
           signature("MortgageCashFlow"),
@@ -304,7 +299,12 @@
 }
 
 
-
+  setGeneric("MortgageCashFlow", function(bond.id = "character", 
+                                          original.bal = numeric(), 
+                                          settlement.date = "character", 
+                                          price = numeric(), 
+                                          PrepaymentAssumption = "character") 
+  {standardGeneric("MortgageCashFlow")})
 
 
 

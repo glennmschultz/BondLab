@@ -231,7 +231,20 @@ MakeModelTune(ModelName = "FH30.Generic",
 
 ## Structuring
 
-The basic input is the mortgage loan.  In the agency MBS the most basic structure is the pass-through seccurity.  A MBS pass-through security represents a pool of mortgage loans and, as its name implies, passes through principal and interest payments to the investor.
+The basic input is the mortgage loan.  In the agency MBS sector the most basic structure is the pass-through seccurity. A MBS pass-through security represents a pool of mortgage loans and, as its name implies, passes through principal and interest payments to the investor.  The structuring vignette takes the reader through the steps required structure a REMIC.  Waterfally payment logic is scripted seperately.  The ready can examine the waterfall scripts to undestand the basic structure of a waterfall script.
+
+## Valuation
+
+The parametric measures which define the value of an MBS are:
+
+1. Yield
+1. Nominal spread
+1. Zero volatility spread
+1. Option adjusted spread
+1. Horizon expected total return
+
+Bond Lab can calcualte each.  Horizon totol return analysis assumes a constant zero volatiltiy spread and a 12 month horizon.
+
 
 
 

@@ -203,3 +203,5 @@ Once the objects are created and saved call the REMICStructure function.  This f
 ```    
 
 ## The last step is to write the waterfall and save in the Waterfall folder
+
+Examine the waterfall folder for examples of scripting REMIC waterfalls

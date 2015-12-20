@@ -1,15 +1,15 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # in addition to standard fixed income analysis bond lab provides 
+  # for the specific analysis of structured products residential mortgage backed securities, 
+  # asset backed securities, and commerical mortgage backed securities
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-# Initialize RAID class
-setMethod("initialize",
+  # Initialize RAID class
+  setMethod("initialize",
           signature("RAID"),
           function (.Object, 
                     DealName = "character",
@@ -39,8 +39,8 @@ setMethod("initialize",
                         
           })
 
-# Initialize TrancheDetails
-setMethod("initialize",
+  # Initialize TrancheDetails
+  setMethod("initialize",
           signature("TrancheDetails"),
           function(.Object,
                    DealName = "character",
@@ -100,11 +100,11 @@ setMethod("initialize",
             .Object@Fixed = Fixed
             
             return(.Object)
-            callNextMethod(.Object,...)
+           
           })
 
-# Initialize Tranches
-setMethod("initialize",
+  # Initialize Tranches
+  setMethod("initialize",
           signature("Tranches"),
           function(.Object,...,
                    Tranches = list())
@@ -113,11 +113,10 @@ setMethod("initialize",
             
             return(.Object)
             
-            callNextMethod(.Object, ...)
           })
 
-# Initialize collateral  
-setMethod("initialize",
+  # Initialize collateral  
+  setMethod("initialize",
           signature ("Collateral"),
           function (.Object,
                     Group = numeric(),
@@ -129,11 +128,10 @@ setMethod("initialize",
             .Object@OrigBal = OrigBal
             return(.Object) 
             
-            callNextMethod(.Object,...)
           })
 
-# Initialize collateralgroup
-setMethod("initialize",
+  # Initialize collateralgroup
+  setMethod("initialize",
           signature("CollateralGroup"),
           function (.Object,
                     Group = list()) 
@@ -141,11 +139,10 @@ setMethod("initialize",
             .Object@Group = Group
             return(.Object)
             
-            callNextMethod(.Object,...)  
           })
 
-# Initialize Schedule
-setMethod("initialize",
+  # Initialize Schedule
+  setMethod("initialize",
           signature("Schedule"),
           function (.Object,
                     DealName = "character",
@@ -161,11 +158,10 @@ setMethod("initialize",
                       .Object@ScheduledPmt = ScheduledPmt
                       
                       return(.Object)
-                      callNextMethod(.Object,...)
                     })
 
-#Initialize RDME
-setMethod("initialize",
+  #Initialize RDME
+  setMethod("initialize",
           signature("RDME"),
           function(.Object,
                    Cusip = "character",
@@ -180,12 +176,11 @@ setMethod("initialize",
             
             return(.Object)
             
-            callNextMethod(.Object,...)  
             
           })
 
-# Intitialize factors 
-setMethod("initialize",
+  # Intitialize factors 
+  setMethod("initialize",
           signature("TrancheFactors"),
           function(.Object,
                    FactorData = list())
@@ -193,11 +188,10 @@ setMethod("initialize",
             .Object@FactorData = FactorData
             return(.Object)
             
-            callNextMethod(.Object,...)  
           })
 
-# initialize REMIC structure superclass
-setMethod("initialize",
+  # initialize REMIC structure superclass
+  setMethod("initialize",
           signature("REMICStructure"),
           function(.Object,
                    DealName = "character",
@@ -213,7 +207,7 @@ setMethod("initialize",
                    Tranches = "character",
                    CollateralGroup = "character",
                    TrancheFactors ="character")
-{
+  {
             .Object@DealName = DealName
             .Object@Issuer = Issuer
             .Object@DealPriceDate = DealPriceDate
@@ -230,7 +224,6 @@ setMethod("initialize",
             
             return(.Object)
             
-            callNextMethod(.Object,...)           
           })
 
 
@@ -261,32 +254,32 @@ setMethod("initialize",
           }
 
 
-#' A constructor function for the REMIC At Issuance Disclosure (RAID) file
-#' 
-#'  The RAID function creates the REMIC At Issuance Disclosure file
-#'  @param DealName A character string the deal name
-#'  @param Issuer A character string the Isser Name
-#'  @param DealPriceDate A character string the Deal Pricing Date
-#'  @param DealSettlementDate A character string the Deal Settlement Date
-#'  @param Underwriter A character string the Deal Underwriter
-#'  @param NumberofTranches A numeric string the Number of Tranches
-#'  @param NumberPacSchedules A numeric value the number of PAC schedules
-#'  @param NumberofGroups A numeric value the number of groups
-#'  @param DealSize A numeric value the original balance of all tranches
-#'  @param CollateralAmount A numeric value the current face amount of the collateral
-#'  @examples
-#'  \dontrun{
-#'    MakeRAID(DealName = "BondLabPACInverse_test", 
-#'    Issuer = "Bondlab", 
-#'    DealPriceDate = "12-01-2012", 
-#'    DealSettlementDate = "01-01-2013",
-#'    Underwriter = "Bondlab",
-#'    NumberofTranches = 4,
-#'    NumberPacSchedules = 1,
-#'    NumberofGroups = 1,
-#'    DealSize = 200000000,
-#'    CollateralAmount = 200000000)}
-#'@export
+  #' A constructor function for the REMIC At Issuance Disclosure (RAID) file
+  #' 
+  #'  The RAID function creates the REMIC At Issuance Disclosure file
+  #' @param DealName A character string the deal name
+  #' @param Issuer A character string the Isser Name
+  #' @param DealPriceDate A character string the Deal Pricing Date
+  #' @param DealSettlementDate A character string the Deal Settlement Date
+  #' @param Underwriter A character string the Deal Underwriter
+  #' @param NumberofTranches A numeric string the Number of Tranches
+  #' @param NumberPacSchedules A numeric value the number of PAC schedules
+  #' @param NumberofGroups A numeric value the number of groups
+  #' @param DealSize A numeric value the original balance of all tranches
+  #' @param CollateralAmount A numeric value the current face amount of the collateral
+  #' @examples
+  #' \dontrun{
+  #'    MakeRAID(DealName = "BondLabPACInverse_test", 
+  #'    Issuer = "Bondlab", 
+  #'    DealPriceDate = "12-01-2012", 
+  #'    DealSettlementDate = "01-01-2013",
+  #'    Underwriter = "Bondlab",
+  #'    NumberofTranches = 4,
+  #'    NumberPacSchedules = 1,
+  #'    NumberofGroups = 1,
+  #'    DealSize = 200000000,
+  #'    CollateralAmount = 200000000)}
+  #' @export
   MakeRAID <- function(DealName = "character", 
                      Issuer = "character", 
                      DealPriceDate = "character", 
@@ -378,71 +371,71 @@ setMethod("initialize",
   }
   
   
-# 2) Make tranche is actually a function which calls TrancheDetails 
+  # 2) Make tranche is actually a function which calls TrancheDetails 
   #serialize the object TrancheDetails to the tranches directory
   #note in the help file MakeTranche is refered to as constructor since
   #the actual constructor TrancheDetails is not exposed to the user
 
-#' A constructor function for REMIC tranche detail
-#' 
-#' MakeTranche a constructor function used to create a REMIC tranche
-#' @param DealName A character string the deal name
-#' @param TrancheNumber A character string the Tranche Number
-#' @param TrancheName A character string the the Tranche Name
-#' @param TranchePrincipal A character string the principal type (pass-through, notional)
-#' @param TrancheInterest A character string the interest type (fixed or floating)
-#' @param TranchePrincipalDesc A character string the REMIC principal type (sequential, IO, PAC, etc.)
-#' @param TrancheInterestDesc A character string the REMIC interest type (Fixed, Floating, Variable)
-#' @param Cusip A character string the tranche cusip
-#' @param TrancheOrigBal A character numeric value the original balance
-#' @param TrancheDatedDate A character value the tranche dated date
-#' @param TrancheFirstPmtDate A character value the tranche first payment date
-#' @param TrancheLastPmtDate A character value the tranche last payment date
-#' @param TrancheNextPmtDate A character value the tranche next payment date
-#' @param TrancheCoupon A numeric value the tranche coupon
-#' @param Delay A numeric value the delay days
-#' @param PrinPmtFrequency A numeric value the principal payment frequency
-#' @param InterestPmtFrequency A numeric value the interest payment frequency
-#' @param FloaterIndex A character value the floater index name
-#' @param FloaterMargin A numeric value the floater margin
-#' @param FloaterCap A numeric value the floater cap
-#' @param FloaterFloor A numeric value the floater floor
-#' @param FloaterFormula A function the floater coupon formula
-#' @param PacLowBand A numeric value the PAC Lower Band
-#' @param PacHighBand A numeric value the PAC Upper Band
-#' @param Group A numeric value the collateral group number
-#' @param Schedule A logical indicating the PAC/TAC schedule
-#' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
-#' @examples
-#' \dontrun{ 
-#'   MakeTranche(DealName = "BondLabPACInverse_test",
-#'  TrancheNumber = "1",
-#'  TrancheName = "A",
-#'  TranchePrincipal = "Pass_Through",
-#'  TrancheInterest = "Fix",
-#'  TranchePrincipalDesc = "PAC",
-#'  TrancheInterestDesc = "Fix",
-#'  Cusip = "BondLabPAC2",
-#'  TrancheOrigBal = 148769215,
-#'  TrancheDatedDate  = "01-01-2013",
-#'  TrancheFirstPmtDate = "01-15-2013",
-#'  TrancheLastPmtDate = "12-15-2042",
-#'  TrancheNextPmtDate = "01-15-2013",
-#'  TrancheCoupon = 2.25,
-#'  Delay = 15,
-#'  PrinPmtFrequency = 12,
-#'  InterestPmtFrequency = 12,
-#'  FloaterIndex = "999",
-#'  FloaterMargin = 0,
-#'  FloaterCap = 0,
-#'  FloaterFloor = 0,
-#'  FloaterFormula = function(){},
-#'  PacLowBand = 75,
-#'  PacHighBand = 250,
-#'  Group = 1,
-#'  Schedule = TRUE,
-#'  Fixed = TRUE)} 
-#'@export
+  #' A constructor function for REMIC tranche detail
+  #' 
+  #' MakeTranche a constructor function used to create a REMIC tranche
+  #' @param DealName A character string the deal name
+  #' @param TrancheNumber A character string the Tranche Number
+  #' @param TrancheName A character string the the Tranche Name
+  #' @param TranchePrincipal A character string the principal type (pass-through, notional)
+  #' @param TrancheInterest A character string the interest type (fixed or floating)
+  #' @param TranchePrincipalDesc A character string the REMIC principal type (sequential, IO, PAC, etc.)
+  #' @param TrancheInterestDesc A character string the REMIC interest type (Fixed, Floating, Variable)
+  #' @param Cusip A character string the tranche cusip
+  #' @param TrancheOrigBal A character numeric value the original balance
+  #' @param TrancheDatedDate A character value the tranche dated date
+  #' @param TrancheFirstPmtDate A character value the tranche first payment date
+  #' @param TrancheLastPmtDate A character value the tranche last payment date
+  #' @param TrancheNextPmtDate A character value the tranche next payment date
+  #' @param TrancheCoupon A numeric value the tranche coupon
+  #' @param Delay A numeric value the delay days
+  #' @param PrinPmtFrequency A numeric value the principal payment frequency
+  #' @param InterestPmtFrequency A numeric value the interest payment frequency
+  #' @param FloaterIndex A character value the floater index name
+  #' @param FloaterMargin A numeric value the floater margin
+  #' @param FloaterCap A numeric value the floater cap
+  #' @param FloaterFloor A numeric value the floater floor
+  #' @param FloaterFormula A function the floater coupon formula
+  #' @param PacLowBand A numeric value the PAC Lower Band
+  #' @param PacHighBand A numeric value the PAC Upper Band
+  #' @param Group A numeric value the collateral group number
+  #' @param Schedule A logical indicating the PAC/TAC schedule
+  #' @param Fixed A logical indicating Fixed (TRUE) or Floating (FALSE) coupon
+  #' @examples
+  #' \dontrun{ 
+  #'   MakeTranche(DealName = "BondLabPACInverse_test",
+  #'  TrancheNumber = "1",
+  #'  TrancheName = "A",
+  #'  TranchePrincipal = "Pass_Through",
+  #'  TrancheInterest = "Fix",
+  #'  TranchePrincipalDesc = "PAC",
+  #'  TrancheInterestDesc = "Fix",
+  #'  Cusip = "BondLabPAC2",
+  #'  TrancheOrigBal = 148769215,
+  #'  TrancheDatedDate  = "01-01-2013",
+  #'  TrancheFirstPmtDate = "01-15-2013",
+  #'  TrancheLastPmtDate = "12-15-2042",
+  #'  TrancheNextPmtDate = "01-15-2013",
+  #'  TrancheCoupon = 2.25,
+  #'  Delay = 15,
+  #'  PrinPmtFrequency = 12,
+  #'  InterestPmtFrequency = 12,
+  #'  FloaterIndex = "999",
+  #'  FloaterMargin = 0,
+  #'  FloaterCap = 0,
+  #'  FloaterFloor = 0,
+  #'  FloaterFormula = function(){},
+  #'  PacLowBand = 75,
+  #'  PacHighBand = 250,
+  #'  Group = 1,
+  #'  Schedule = TRUE,
+  #'  Fixed = TRUE)} 
+  #'@export
   MakeTranche <- function(  DealName = "character",
                             TrancheNumber = "character",
                             TrancheName = "character",
@@ -767,34 +760,33 @@ setMethod("initialize",
   #' @param Factor A numeric value the tranche's factor
   #' @examples
   #' \dontrun{
-  #'MakeRDME(DealName = "BondLabPACInverse",
-  #'TrancheNumber = 1,
-  #'Cusip = "BondLabPAC2",
-  #'"PaymentDate = "01-01-2013",
-  #'Coupon = 2.25,
-  #'Factor = 1)
+  #'  MakeRDME(DealName = "BondLabPACInverse",
+  #'  TrancheNumber = 1,
+  #'  Cusip = "BondLabPAC2",
+  #'  PaymentDate = "01-01-2013",
+  #'  Coupon = 2.25,
+  #'  Factor = 1)
   #'
-  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'  MakeRDME(DealName = "BondLabPACInverse",
   #'       TrancheNumber = 2,
   #'       Cusip = "BondLabFltr",
-  # '      PaymentDate = "1-01-2013",
+  #'       PaymentDate = "1-01-2013",
   #'       Coupon = 0.55,
   #'       Factor = 1)
   #'
-  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'  MakeRDME(DealName = "BondLabPACInverse",
   #'       TrancheNumber = 3,
   #'       Cusip = "BondLabCMP1",
   #'       PaymentDate = "1-01-2013",
   #'       Coupon = 9.21,
   #'       Factor = 1)
   #'
-  #'MakeRDME(DealName = "BondLabPACInverse",
+  #'  MakeRDME(DealName = "BondLabPACInverse",
   #'       TrancheNumber = 4,
   #'       Cusip = "BondLabPACIO",
   #'       PaymentDate = "1-01-2013",
   #'       Coupon = 1.75,
-  #'       Factor = 1)
-  #' } 
+  #'       Factor = 1)} 
   #'@export
   MakeRDME <- function(DealName = "character",
                        TrancheNumber = numeric(),

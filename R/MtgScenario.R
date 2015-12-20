@@ -100,7 +100,7 @@
             .Object@Formula = Formula
             
             return(.Object)
-            callNextMethod(.Object,...)
+
   
           })
 

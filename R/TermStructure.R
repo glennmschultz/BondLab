@@ -121,24 +121,12 @@ setMethod("initialize",
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks"))/weeks.in.year,5))
-    
-    Vector.Length <- ifelse(Vector.Length < 1, Vector.Length, round(Vector.Length, digits = 0))
-    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
-    #pmt.frequency should be input 
-    
+                                               units = c("weeks"))/weeks.in.year,0))
+    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
-    
-    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
-              as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * min.principal, 
-              (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
-    
-    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) 
-    # this sets the month increment so that cashflows can handle discount bills
-    
-    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
-                          seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
-                          as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
+    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
     
   } #The Loop Ends here and the list is made
   

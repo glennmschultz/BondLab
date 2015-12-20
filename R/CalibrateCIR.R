@@ -86,7 +86,7 @@
   
   #set term strucutre input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
-  CashFlow <- TSInput[[1]]
+  CashFlow <<- TSInput[[1]]
   CIR.CF.Matrix <- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
   CIR.Mat.Matrix <- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
   

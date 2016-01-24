@@ -37,13 +37,13 @@
   # ----------------------------------------------------------------------
   # Parse the cashflow file read into CashFlow Data
   # ----------------------------------------------------------------------
-    ReadCashFlow <- "sed -i ''  '/^[\r#]/d; /AGENCY/d' %s/Temp_CashFlow/%s.cfm"
+  #  ReadCashFlow <- "sed -i ''  '/^[\r#]/d; /AGENCY/d' %s/Temp_CashFlow/%s.cfm"
     
-    cmd <- sprintf(ReadCashFlow, system.file(package = "BondLab"), CashFlowData)
-    system(cmd)
+  #  cmd <- sprintf(ReadCashFlow, system.file(package = "BondLab"), CashFlowData)
+  #  system(cmd)
     
     CashFlowData <- read.delim(
-      paste(system.file(package = "BondLab"),"/Temp_CashFlow/", CashFlowData, ".cfm", sep =""), header = TRUE, sep ="") 
+      paste(system.file(package = "BondLab"),"/Temp_CashFlow/", CashFlowData, ".csv", sep =""), header = TRUE, sep ="") 
   # ----------------------------------------------------------------------
   # Find the number of periods in the cashflow array
   # Note: Quan reports cashflow array length based on original term thus a seasoned

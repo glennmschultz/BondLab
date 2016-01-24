@@ -5,7 +5,8 @@
 \alias{MortgageCashFlowArray-class}
 \title{An S4 Class a mortgage cashflow array}
 \description{
-An S4 Class a mortgage cashflow array
+This function is used in MortgageCashFlow_Array to facilitate
+passing a cashflow array from an external cash flow engine
 }
 \section{Slots}{
 

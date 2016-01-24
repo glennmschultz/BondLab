@@ -172,7 +172,10 @@
     {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
   
   #step3 build the time period vector (n) for discounting the cashflows 
-  #nextpmt date is vector of payment dates to n for each period
+  #nextpmt date is vector of payment dates to n for each period.  The differnce between
+  #step 1 and step is that step 3 uses the payment date vector calculated above for the 
+  # next payment date and step 1 uses the end date as the next payment date.
+  
   time.period = BondBasisConversion(issue.date = issue.date, 
                                     start.date = start.date, 
                                     end.date = end.date, 

@@ -167,6 +167,28 @@
   CPR = 1-((1-CPR)^(1/months.in.year))
   return(CPR)
   }
+  
+  #-----------------------------------------------------------------------------------------------
+  setGeneric("CDR.To.MDR", function(MDR = numeric())
+  {standardGeneric("CDR.To.MDR")})
+  
+  #' A function to convert the CDR to a single monthly mortality rate MDR
+  #' 
+  #' Standard Generic Function used to convert CPR to SMM 
+  #' @param CDR A numeric value
+  #' @examples
+  #' CDR.To.MDR(CDR = .06)
+  #' @export CDR.To.MDR
+  CDR.To.MDR <- function(CDR = numeric()){
+    if (missing(CDR))
+      stop("Need to specify a SMM Value")
+    if (!is.numeric(CDR)  )
+      stop("No numeric SMM specified.")
+    if (CDR < 0 | CDR > 1)
+      stop("No SMM specified.")
+    MDR = 1-((1-CDR)^(1/months.in.year))
+    return(MDR)
+  }
 
   #-----------------------------------------------------------------------------------------------
   setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())

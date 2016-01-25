@@ -228,6 +228,7 @@
   delay = bond.id@PaymentDelay
   factor = bond.id@MBSFactor
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+  bondbasis = bond.id@BondBasis
   
   pmtdate.interval = months.in.year/frequency
   
@@ -243,7 +244,8 @@
                                     end.date = end.date, 
                                     settlement.date = settlement.date,
                                     lastpmt.date = lastpmt.date, 
-                                    nextpmt.date = pmtdate)
+                                    nextpmt.date = pmtdate,
+                                    type = bondbasis)
   
   #Compute the payment dates 
   pmtdate = as.Date(c(if(settlement.date == issue.date) 

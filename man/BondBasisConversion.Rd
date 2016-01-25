@@ -4,8 +4,10 @@
 \alias{BondBasisConversion}
 \title{Functions to convert bond payments to their interest payment basis}
 \usage{
-BondBasisConversion(issue.date, start.date, end.date, settlement.date,
-  lastpmt.date, nextpmt.date)
+BondBasisConversion(issue.date = "character", start.date = "character",
+  end.date = "character", settlement.date = "character",
+  lastpmt.date = "character", nextpmt.date = "character",
+  type = "character")
 }
 \arguments{
 \item{issue.date}{A character value the issue date of the security}
@@ -19,6 +21,8 @@ BondBasisConversion(issue.date, start.date, end.date, settlement.date,
 \item{lastpmt.date}{A character value the last payment date to the investor}
 
 \item{nextpmt.date}{A character value the next payment date to the investor}
+
+\item{type}{a character vector the interest basis day count type}
 }
 \description{
 Conversion for payment date (currently 30/360 is supported)

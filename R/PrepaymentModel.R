@@ -400,7 +400,8 @@
   #' @param begin.cpr A numeric value the beginning CPR assumption
   #' @param end.cpr A numeric value the ending CPR assumption
   #' @param seasoning.period A numeric value the length of the seasoning ramp
-  #' @param CPR A numeric value the CPR assumption
+  #' @param CPR A numeric value the CPR assumption (annual prepayment rate)
+  #' @param CDR A numeric value the CDR assumption (annual default rate)
   #' @param HomePrice NULL do not override value
   #' @param Severity A numeric value the loss severity given default
   #' @export
@@ -415,6 +416,7 @@
                                    end.cpr = numeric(), 
                                    seasoning.period = numeric(), 
                                    CPR = numeric(),
+                                   CDR = 0,
                                    HomePrice = NULL,
                                    Severity = numeric()){
   
@@ -514,7 +516,7 @@
   
   # this condition sets default to zero when the prepayment model is not used 
   # it allows for standard PPC and CPR assumptions
-  if(PrepaymentAssumption != "MODEL"){MDR <- rep(0, Remain.Term)} else
+  if(PrepaymentAssumption != "MODEL"){MDR <- rep(CDR.To.MDR(CDR = CDR), Remain.Term)} else
                         {MDR <- Default.Model(ModelTune = ModelTune,
                         OrigLoanBalance = OriginalLoanBalance,
                         NoteRate = NoteRate,

@@ -8,8 +8,8 @@ PrepaymentAssumption(bond.id = "character", TermStructure = "character",
   MortgageRate = "character", ModelTune = "character",
   Burnout = numeric(), PrepaymentAssumption = "character", ...,
   begin.cpr = numeric(), end.cpr = numeric(),
-  seasoning.period = numeric(), CPR = numeric(), HomePrice = NULL,
-  Severity = numeric())
+  seasoning.period = numeric(), CPR = numeric(), CDR = 0,
+  HomePrice = NULL, Severity = numeric())
 }
 \arguments{
 \item{bond.id}{A character string referring to an object of the type MBSDetails}
@@ -33,7 +33,9 @@ open Mtg.Rate connection directly rather takes the argument as an object.}
 
 \item{seasoning.period}{A numeric value the length of the seasoning ramp}
 
-\item{CPR}{A numeric value the CPR assumption}
+\item{CPR}{A numeric value the CPR assumption (annual prepayment rate)}
+
+\item{CDR}{A numeric value the CDR assumption (annual default rate)}
 
 \item{HomePrice}{NULL do not override value}
 

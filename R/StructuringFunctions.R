@@ -7,5 +7,6 @@
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
 
   RollingDelinquecy <- function(DelinquecyVector = numeric(), numperiods = numeric){
+    x = NULL
     rowSums(outer(1:(length(DelinquecyVector)-numperiods+1),1:numperiods,FUN=function(i,j){x[(j - 1) + i]}))
   }

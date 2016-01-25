@@ -110,6 +110,7 @@
   factor = bond.id@MBSFactor
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   principal = original.bal * factor
+  bondbasis = bond.id@BondBasis
   
   short.rate = as.numeric(rates.data[1,2])/yield.basis
   
@@ -144,7 +145,8 @@
                                    end.date = end.date, 
                                    settlement.date = settlement.date,
                                    lastpmt.date = lastpmt.date, 
-                                   nextpmt.date = end.date) 
+                                   nextpmt.date = end.date,
+                                   type = bondbasis) 
   
   # Build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -165,7 +167,8 @@
                                     end.date = end.date, 
                                     settlement.date = settlement.date,
                                     lastpmt.date = lastpmt.date, 
-                                    nextpmt.date = pmtdate)
+                                    nextpmt.date = pmtdate,
+                                    type = bondbasis)
   
   # step4 Count the number of cashflows 
   # num.periods is the total number of cashflows to be received

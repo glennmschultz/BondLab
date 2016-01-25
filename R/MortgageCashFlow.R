@@ -132,6 +132,7 @@
   frequency = bond.id@Frequency
   delay = bond.id@PaymentDelay
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+  bondbasis = bond.id@BondBasis
   
   #Mortgage specific inputs
   note.rate = bond.id@GWac
@@ -161,7 +162,8 @@
                                    end.date = end.date, 
                                    settlement.date = settlement.date,
                                    lastpmt.date = lastpmt.date, 
-                                   nextpmt.date = end.date) 
+                                   nextpmt.date = end.date,
+                                   type = bondbasis) 
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -181,7 +183,8 @@
                                     end.date = end.date, 
                                     settlement.date = settlement.date,
                                     lastpmt.date = lastpmt.date, 
-                                    nextpmt.date = pmtdate)
+                                    nextpmt.date = pmtdate,
+                                    type = bondbasis)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
@@ -251,7 +254,8 @@
                                          end.date = end.date, 
                                          settlement.date = settlement.date,
                                          lastpmt.date = lastpmt.date,
-                                         nextpmt.date = nextpmt.date)) * 360
+                                         nextpmt.date = nextpmt.date,
+                                         type = bondbasis)) * 360
   
   days.between.pmtdate = ((12/frequency)/12) * 360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 

@@ -37,7 +37,6 @@
                                   lastpmt.date = "character", 
                                   nextpmt.date = "character",
                                   type = "character"){
-  
   # This function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
   # It returns the number of payments that will be received, period, and n for discounting
   # issue.date is the issuance date of the bond

@@ -101,6 +101,7 @@
   coupon = bond.id@Coupon
   frequency = bond.id@Frequency       
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+  bondbasis = bond.id@BondBasis
   
   # This function error traps bond input information
   
@@ -117,7 +118,7 @@
   #Calculate the number of cashflows that will be paid from settlement date to maturity date 
   #step1 calculate the years to maturity  
   ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date) 
+                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date, type = bondbasis) 
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -128,14 +129,26 @@
   
   #step3 build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
   time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate)
+                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate, type = bondbasis)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
   #num.period is the period in which the cashflow is received
   num.periods = length(time.period)
-  col.names <- c("Period", "Date", "Time", "Principal Outstanding", "Coupon", "Coupon Income", "Principal Paid", "TotalCashFlow",
-                 "Present Value Factor", "Present Value", "Duration", "Convexity Time", "CashFlow Convexity", "Convexity")
+  col.names <- c("Period", 
+                 "Date", 
+                 "Time", 
+                 "Principal Outstanding", 
+                 "Coupon", 
+                 "Coupon Income", 
+                 "Principal Paid", 
+                 "TotalCashFlow",
+                 "Present Value Factor", 
+                 "Present Value", 
+                 "Duration", 
+                 "Convexity Time", 
+                 "CashFlow Convexity", 
+                 "Convexity")
   
   Bond.CF.Table <- array(data = NA, c(num.periods, 14), dimnames = list(seq(c(1:num.periods)),col.names))  
   for(i in 1:num.periods){
@@ -151,20 +164,25 @@
   
   #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
-                                         settlement.date = settlement.date, lastpmt.date = lastpmt.date, nextpmt.date = nextpmt.date)) * 360
+                                         settlement.date = settlement.date, lastpmt.date = lastpmt.date, 
+                                         nextpmt.date = nextpmt.date, type = bondbasis)) * 360
   
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = days.between.pmtdate - days.to.nextpmt
   accrued.interest = (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,6]
-  
+
+
   #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
-  #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
+  #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
+  
   irr <- function(rate , time.period , cashflow , principal , price , accrued.interest){
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
+  
   ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.000000001, time.period = Bond.CF.Table[,3], 
                 cashflow = Bond.CF.Table[,8], principal = principal, price = price, accrued.interest = accrued.interest)$root
+  
   Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
   
   #Step7 Present value of the cash flows Present Value Factors

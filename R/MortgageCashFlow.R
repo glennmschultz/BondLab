@@ -5,8 +5,8 @@
   # asset backed securities, and commerical mortgage backed securities
   # File License
   # Copyright (C) 2014 Bond Lab Technologies, Inc
-
-
+  
+  
   setClass("MortgageCashFlow",
          representation(
            Price = "numeric",
@@ -32,14 +32,14 @@
            PMIPremium = "numeric",
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
-
+  
   setGeneric("MortgageCashFlow", function(bond.id = "character", 
                                         original.bal = numeric(), 
                                         settlement.date = "character", 
                                         price = numeric(), 
                                         PrepaymentAssumption = "character") 
   {standardGeneric("MortgageCashFlow")})
-
+  
   setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
@@ -93,8 +93,8 @@
             
             return(.Object)
           })
-
-
+  
+  
   #' A function to compute the cash flow of a pool of securitized mortgages
   #' 
   #' This is a generic function used to construct the class object MortgageCashFlow
@@ -116,7 +116,7 @@
                              settlement.date = "character", 
                              price = numeric(), 
                              PrepaymentAssumption = "character"){
-
+  
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, 
             principal = original.bal, 

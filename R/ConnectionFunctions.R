@@ -14,13 +14,19 @@
   #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
   #' @export
   MBS <- function(MBS.id = "character"){
-    CusipList <- list.files(paste(system.file(package = "BondLab"),"/BondData/", sep =""))
+    #CusipList <- list.files(paste(system.file(package = "BondLab"),"/BondData/", sep =""))
+    #MBS <- if(nchar(MBS.id) == 9){grep(MBS.id, CusipList, useBytes = TRUE, value = TRUE)} 
+    #else {grep(MBS.id, CusipList, useBytes = TRUE, value = TRUE)}
+    #MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+    #                                       "/BondData/", MBS, sep = ""), open = "rb")          
     
-    MBS <- if(nchar(MBS.id) == 9){grep(MBS.id, CusipList, useBytes = TRUE, value = TRUE)} 
-    else {grep(MBS.id, CusipList, useBytes = TRUE, value = TRUE)}
+    MBS.Conn <- if(nchar(MBS.id) == 9) {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+      "/BondData/", MBS.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
+      } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+      "/BondData/", "*", MBS.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
+      }
     
-    MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-                                           "/BondData/", MBS, sep = ""), open = "rb")          
+    
     MBS <- readRDS(MBS.Conn)
     on.exit(close.connection(MBS.Conn))
     return(MBS)}

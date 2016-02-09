@@ -499,8 +499,7 @@
   {SMM = Prepayment.Model(ModelTune = ModelTune, 
                           LoanAge = LoanAge, 
                           Month = as.numeric(format(PmtDate, "%m")), 
-                          incentive = 
-                          Incentive, 
+                          incentive = Incentive, 
                           Burnout.maxincen = Burnout)} 
   else 
   {if(PrepaymentAssumption == "PPC") 

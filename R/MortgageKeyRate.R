@@ -345,7 +345,8 @@
                                            TermStructure = Key.Rate.TS.Dwn, 
                                            PrepaymentAssumption = "MODEL", 
                                            ModelTune = ModelTune, 
-                                           Burnout = Burnout) 
+                                           Burnout = Burnout,
+                                           Severity = 0) 
     
     # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, 
@@ -367,7 +368,8 @@
                                           TermStructure = Key.Rate.TS.Up, 
                                           PrepaymentAssumption = "MODEL", 
                                           ModelTune = ModelTune, 
-                                          Burnout = Burnout)
+                                          Burnout = Burnout,
+                                          Severity = 0)
     
     # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, 

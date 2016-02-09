@@ -5,8 +5,26 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Bond Lab Technologies, Inc.
-
-  RollingDelinquecy <- function(DelinquecyVector = numeric(), numperiods = numeric){
-    x = NULL
-    rowSums(outer(1:(length(DelinquecyVector)-numperiods+1),1:numperiods,FUN=function(i,j){x[(j - 1) + i]}))
-  }
+ 
+ 
+  # ====================================================================
+  # Cash flow functions to determine the beginning bal, ending bal, and 
+  # interest payment to each tranche/bond.  
+  # ====================================================================
+  
+  #' Function to assign the beginning principal balance to REMIC tranche
+  #'
+  #' This function takes the ending balance of the previous period and assigns
+  #' the value to the beginning balance in the current period
+  #' @param node 
+  BeginBal <- function(node, period = numeric()){
+    if(period == 1) {node$BeginBal[period] <- node$CurrBal
+    } else {node$BeginBal[period] <- node$EndingBal[period-1]}}
+  
+  Interest <- function(node, period = numeric()){
+    node$Interest = node$Coupon/(100 * 12) * node$BeginBal}
+  
+  EndingBal <- function(node, period = numeric()){
+    node$EndingBal[period] = as.numeric(node$BeginBal[period]) - (as.numeric(node$Senior_Prin[period]) + as.numeric(node$Sub_Prin[period]))}
+  
+ 

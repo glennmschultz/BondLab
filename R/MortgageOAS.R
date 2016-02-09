@@ -258,7 +258,8 @@
                                        MortgageRate = MortgageRate, 
                                        PrepaymentAssumption = "MODEL", 
                                        ModelTune = ModelTune, 
-                                       Burnout = Burnout)
+                                       Burnout = Burnout,
+                                       Severity = 0)
     
     # ----------------------------------------------------------------------------------------
     # Uncomment this line and # 239 to get the prepayment vector from the model 
@@ -425,7 +426,8 @@
                                                  TermStructure = CIRTermStructure, 
                                                  PrepaymentAssumption = "MODEL", 
                                                  ModelTune = ModelTune, 
-                                                 Burnout = Burnout) 
+                                                 Burnout = Burnout,
+                                                 Severity = 0) 
 
     
     #The fourth step is to call the bond cusip details and calculate Bond Yield to Maturity, 

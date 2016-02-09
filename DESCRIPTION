@@ -14,12 +14,13 @@ Description: The analysis of mortgage (MBS) and asset backed securities (ABS) is
     suite of software utilities for the analysis and valuation of Mortgage and Asset
     Backed securities.
 LazyLoad: yes
-License: GPL(>=3.0) + file LICENSE
+License: File LICENSE
 Imports:
     termstrc,
     lubridate,
     methods,
     optimx,
+    data.tree,
 Suggests:
     knitr,
     devtools,

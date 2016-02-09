@@ -32,3 +32,6 @@
 
 #' @import methods
 NULL
+
+#' @import data.tree
+NULL  

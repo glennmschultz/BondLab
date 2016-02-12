@@ -14,7 +14,8 @@
   #' the value to the beginning balance in the current period. Structuring functions
   #' run on a tree structure created by the package data.tree.  See data.tree for more details on the package.
   #' @param node The entry point of the deal's tree structure.
-  #' @param period A numeric value the period in which payment is recieved stated as an integer.  
+  #' @param period A numeric value the period in which payment is recieved stated as an integer.
+  #' @export BeginBal  
   BeginBal <- function(node, period = numeric()){
     if(period == 1) {node$BeginBal[period] <- node$CurrBal
     } else {node$BeginBal[period] <- node$EndingBal[period-1]}}
@@ -26,10 +27,10 @@
   #' deal's tree structure.  Structuring functions run on a tree structure created by the 
   #' package data.tree.  See data.tree for more details on the package.
   #' @param node The entry point of the deal's tree structure
-  #' @param frequency the number of payments received over the calendar year
   #' @param period A numeric value the period in which payment is received stated as integer
-  Interest <- function(node, frequency, period = numeric()){
-    node$Interest = node$Coupon/(yield.basis * frequency) * node$BeginBal}
+  #' @export Interest
+  Interest <- function(node, period = numeric()){
+    node$Interest[period] = (as.numeric(node$Coupon) / (yield.basis * node$PmtFrequency)) * node$BeginBal[period] }
   
   #' Function to assign the ending principal balance to REMIC tranche
   #' 
@@ -39,6 +40,7 @@
   #' Structuring functions run on a tree structure created by the package data.tree
   #' @param node The entry point of the deal's tree structure
   #' @param period A numeric value the period in which payment is received stated as integer
+  #' @export EndingBal
   EndingBal <- function(node, period = numeric()){
     node$EndingBal[period] = as.numeric(node$BeginBal[period]) - as.numeric(node$Principal[period])}
   

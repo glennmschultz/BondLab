@@ -4,12 +4,10 @@
 \alias{Interest}
 \title{Function to calculate interest in the current period based on Beginning Balance}
 \usage{
-Interest(node, frequency, period = numeric())
+Interest(node, period = numeric())
 }
 \arguments{
 \item{node}{The entry point of the deal's tree structure}
-
-\item{frequency}{the number of payments received over the calendar year}
 
 \item{period}{A numeric value the period in which payment is received stated as integer}
 }

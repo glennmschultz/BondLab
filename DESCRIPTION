@@ -43,6 +43,7 @@ Collate:
     'BondBasis.R'
     'BondFunctions.R'
     'BondLab.R'
+    'CAS_Principal.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
     'DollarRoll.R'

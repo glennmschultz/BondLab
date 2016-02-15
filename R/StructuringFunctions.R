@@ -30,7 +30,9 @@
   #' @param period A numeric value the period in which payment is received stated as integer
   #' @export Interest
   Interest <- function(node, period = numeric()){
-    node$CashFlow[period, "Interest"] = (as.numeric(node$Coupon) / (yield.basis * node$PmtFrequency)) * node$CashFlow[period, "BeginBal"] }
+    node$CashFlow[period, "Interest"] = (as.numeric(node$Coupon) /
+                                         (yield.basis * as.numeric(node$PmtFrequency)) * 
+                                           as.numeric(node$CashFlow[period, "BeginBal"]))}
   
   #' Function to assign the ending principal balance to REMIC tranche
   #' 
@@ -42,6 +44,7 @@
   #' @param period A numeric value the period in which payment is received stated as integer
   #' @export EndingBal
   EndingBal <- function(node, period = numeric()){
-    node$CashFlow[period, "EndingBal"] = as.numeric(node$CashFlow[period, "BeginBal"]) - as.numeric(node$CashFlow[period, "Principal"])}
+    node$CashFlow[period, "EndingBal"] = as.numeric(node$CashFlow[period, "BeginBal"]) - 
+      as.numeric(node$CashFlow[period, "Principal"])}
   
  

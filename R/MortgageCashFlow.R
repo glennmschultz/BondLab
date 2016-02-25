@@ -6,7 +6,35 @@
   # File License
   # Copyright (C) 2014 Bond Lab Technologies, Inc
   
-  
+  #' An S4 class MortgageCashFlow containing cashflow data 
+  #' for a mortgage pass-through security
+  #' 
+  #' @slot Price A numeric value the price of the pass-through.
+  #' @slot Accrued A numeric value the accrued interest as of settlement date.
+  #' @slot YieldToMaturity A numeric value the yield to maturity.
+  #' @slot WAL A numeric value the weighted average life of the pass-thorough.
+  #' @slot ModDuration A numeric value the Modified Duration pass-through.
+  #' @slot Convexity A numeric value the Convexity of the pass-through.
+  #' @slot Period A numeric value the period in which the cash-flow is received.
+  #' @slot PmtDate A character string the date in which the cash-flow is received.
+  #' @slot TimePeriod A numeric value the time weight to apply to the principal cash-flow
+  #' and discount factors.
+  #' @slot BeginningBal A numeric value the Beginning Balance in the period.
+  #' @slot MonthlyPmt A numeric value the borrower's monthly payment.
+  #' @slot MonthlyInterest A numeric value the borrower's monthly interest.
+  #' @slot PassThroughInterest A numeric value the pass-through interest paid
+  #' to the investor in the pool.
+  #' @slot ScheduledPrin A numeric value the scheduled principal due in the period.
+  #' @slot PrepaidPrin A numeric value the prepaid principal in the period.
+  #' @slot DefaultedPrin A numeric value the default principal in the period.
+  #' @slot LossAmount A numeric value the loss amount in the period.
+  #' @slot RecoveredAmount A numeric value the recovered amount in the period.
+  #' @slot EndingBal A numeric value the ending balance in the period.
+  #' @slot ServicingIncome A numeric value the servicing recevied in the period.
+  #' @slot PMIPremium A numeric value the PMI paid in the period.
+  #' @slot GFeePremium A numeric value the GFee paid in the period.
+  #' @slot TotalCashFlow A numeric value the total cashflow paid in the period. 
+  #' @exportClass MortgageCashFlow
   setClass("MortgageCashFlow",
          representation(
            Price = "numeric",

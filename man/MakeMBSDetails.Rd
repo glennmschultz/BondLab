@@ -43,15 +43,12 @@ in the case MBS the final payment data assuming 0 CPR.}
 
 \item{NextPmtDate}{A character string the date of the next scheduled payment to the investor.}
 
-<<<<<<< HEAD
 \item{Term}{A numeric value the original term of the underlying mortgages}
 
 \item{WALA}{A numeric value the weighted average loan age of the underlying mortgages}
 
 \item{WAM}{A numeric value the weighted average maturity of the underlying mortgages}
 
-=======
->>>>>>> master
 \item{PaymentDelay}{A numeric value in the case of MBS the delay of the payment 
 from the trust to the investor}
 
@@ -84,11 +81,7 @@ to which the note rate references}
 the borrower's note rate}
 
 \item{FirstPmtDate}{A character string the date of the first payment 
-<<<<<<< HEAD
 of the borrower's note.}
-=======
-of the borrower's note.  In the case of an the first payment made to the bondholder}
->>>>>>> master
 
 \item{FinalPmtDate}{A character string the date of thee final payment 
 of the borrower's note.  In the case of an MBS the final payment made to the bondholder}
@@ -108,11 +101,7 @@ Mae, Freddie Mac, or Ginnie Mae pools.}
 \item{InterestOnlyPeriod}{A character string indicating the note's interest only period}
 
 \item{FirstPrinPaymentDate}{A character string indicating the first principal payment date
-<<<<<<< HEAD
 due of the mortgage.}
-=======
-due on the mortgage. This field is used to compute LoanAge passed to the prepayment model}
->>>>>>> master
 
 \item{BalloonPmt}{A logical indicating the mortgage carries a balloon pmt.}
 
@@ -142,12 +131,9 @@ This is a standard generic function used to construct a MBS pass through securit
  Maturity = "01-01-2043",
  LastPmtDate = "01-01-2013",
  NextPmtDate = "02-01-2013",
-<<<<<<< HEAD
  Term = 360,
  WALA = 0,
  WAM = 360,
-=======
->>>>>>> master
  PaymentDelay = 24,     
  Moody = "Aaa",
  SP = "AAA",

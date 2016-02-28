@@ -88,20 +88,6 @@ MakeRAID(DealName = "character", Issuer = "character",
 The RAID function creates the REMIC At Issuance Disclosure file
 }
 \examples{
-<<<<<<< HEAD
 \dontrun{Need Example}
-=======
-\dontrun{
-   MakeRAID(DealName = "BondLabPACInverse_test", 
-   Issuer = "Bondlab", 
-   DealPriceDate = "12-01-2012", 
-   DealSettlementDate = "01-01-2013",
-   Underwriter = "Bondlab",
-   NumberofTranches = 4,
-   NumberPacSchedules = 1,
-   NumberofGroups = 1,
-   DealSize = 200000000,
-   CollateralAmount = 200000000)}
->>>>>>> master
 }
 

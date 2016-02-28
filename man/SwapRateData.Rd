@@ -15,16 +15,11 @@ rates data}
 }
 \description{
 The function converts a .csv file of rates data to yield curve objects that can be read by the Term Structure wapper
-note date is entered in the file as YYYY-mm-dd.  "/" convention will result in an error.
 }
 \examples{
 \dontrun{
-<<<<<<< HEAD
 SwapRateData(datafile = paste(system.file(package = "BondLab"), 
 "/RatesData/20150911.csv", sep = "". header = TRUE),
-=======
-SwapRateData(datafile = "RatesData.csv", 
->>>>>>> master
 maturity = c("",.0833, .25, .5, 1, 2, 3, 4, 5, 7, 10, 30))}
 }
 

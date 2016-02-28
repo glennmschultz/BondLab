@@ -2,11 +2,7 @@
 % Please edit documentation in R/REMICCusip.R
 \name{CusipRecord}
 \alias{CusipRecord}
-<<<<<<< HEAD
 \title{A function to move REMIC tranche cusip data to the Bond Data Director}
-=======
-\title{A function to move REMIC tranche data}
->>>>>>> master
 \usage{
 CusipRecord(source.path = "character", target.path = "character")
 }

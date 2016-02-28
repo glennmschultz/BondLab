@@ -155,27 +155,14 @@
    #--------------------------------------------------------------------------------------
    #' A save connection function to the interest rate scenario data folder
    #' 
-<<<<<<< HEAD
-   #' Opens a connection to the Scenarios folder to save user defined scenarios by name
-=======
-   #' Opens a connection to teh Scenarios folder to save user defined scenarios by name
->>>>>>> master
    #' @param Scenario A character string the name of the Scenario
    #' @param ScenarioFile the scenario file to save
    #' @export
    SaveScenario <- function(Scenario = "character", ScenarioFile = "character"){
-<<<<<<< HEAD
    connScenario <- gzfile(description = paste(system.file(package = "BondLab"),
                                               "/Scenario/",Scenario,".rds", sep = ""))
    on.exit(close.connection(connScenario))
-   saveRDS(ScenarioFile, connScenario)
-=======
-     connScenario <- gzfile(description = paste(system.file(package = "BondLab"),
-                                                "/Scenario/",Scenario,".rds", sep = ""))
-     on.exit(close.connection(connScenario))
-     saveRDS(ScenarioFile, connScenario)
->>>>>>> master
-   } 
+   saveRDS(ScenarioFile, connScenario)} 
      
   #-------------------------------------------------------------------------------------
   #' A read connection function to the REMICData folder

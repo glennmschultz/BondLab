@@ -27,12 +27,8 @@ For this function to work properly the classes MBSDetails and PrepaymentAssumpti
 must be present and loaded into the local environment
 }
 \examples{
-<<<<<<< HEAD
-\dontrun{MortgageCashFlow(bond.id = "bondlabMS4", original.bal = 1000000, 
-=======
 \dontrun{
 MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
->>>>>>> master
 settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
 }
 

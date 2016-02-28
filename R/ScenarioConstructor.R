@@ -1,12 +1,13 @@
-<<<<<<< HEAD
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License GPL3 + License File
-  # Copyright (C) 2014  Glenn M Schultz, CFA
- 
+  # File License
+  # Copyright (C) 2015  Bond Lab Technologies, Inc.
+
+
   setGeneric("MakeScenario", function(
     Name = "character",
     Type = "character",
@@ -17,20 +18,6 @@
   {standardGeneric("MakeScenario")})
   
   setMethod("initialize",
-=======
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# File License
-# Copyright (C) 2015  Bond Lab Technologies, Inc.
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-
-#======================  Set and create class Scenario ==============================
-setMethod("initialize",
->>>>>>> master
           signature("Scenario"),
           function(.Object,
                    Name = "character",
@@ -48,11 +35,6 @@ setMethod("initialize",
           .Object@Formula = Formula
           
           return(.Object)
-<<<<<<< HEAD
-  
-=======
-          
->>>>>>> master
           })
 
   Scenario <- function(
@@ -111,12 +93,5 @@ setMethod("initialize",
       Formula = Formula)
     
     SaveScenario(Scenario = Name, ScenarioFile = temp)
-<<<<<<< HEAD
-=======
-    
-    #connScenario <- gzfile(description = paste("~/BondLab/Scenario/",temp@Name,".rds", sep = ""))
-    #saveRDS(temp, connScenario)
-    #close(connScenario)
->>>>>>> master
   }
 

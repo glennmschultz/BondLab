@@ -1,23 +1,14 @@
-<<<<<<< HEAD
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License GPL3 + File License
-  # Copyright (C) 2014  Glenn M Schultz, CFA
- 
-=======
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# File License
-# Copyright (C) 2015  Bond Lab Technologies, Inc.
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
->>>>>>> master
+  # File License
+  # Copyright (C) 2015  Bond Lab Technologies, Inc.
+  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+
 
   setClass("MortgageOAS",
          representation(
@@ -78,13 +69,7 @@
               return(.Object)
             })
 
-<<<<<<< HEAD
-=======
-  #-----------------------------------
-  # Mortgage OAS Function
-  #___________________________________
 
->>>>>>> master
   #' Mortgage OAS the OAS engine for pass through OAS
   #' 
   #' Pass through OAS engine

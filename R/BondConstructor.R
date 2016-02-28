@@ -115,6 +115,10 @@
               .Object@SinkingFund = SinkingFund
 
               return(.Object)
+<<<<<<< HEAD
+=======
+              
+>>>>>>> master
           })
 
   BondDetails <-function(

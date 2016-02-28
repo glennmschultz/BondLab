@@ -125,6 +125,37 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 MakeTranche a constructor function used to create a REMIC tranche
 }
 \examples{
+<<<<<<< HEAD
 \dontrun{Need Example} 
+=======
+\dontrun{ 
+  MakeTranche(DealName = "BondLabPACInverse_test",
+ TrancheNumber = "1",
+ TrancheName = "A",
+ TranchePrincipal = "Pass_Through",
+ TrancheInterest = "Fix",
+ TranchePrincipalDesc = "PAC",
+ TrancheInterestDesc = "Fix",
+ Cusip = "BondLabPAC2",
+ TrancheOrigBal = 148769215,
+ TrancheDatedDate  = "01-01-2013",
+ TrancheFirstPmtDate = "01-15-2013",
+ TrancheLastPmtDate = "12-15-2042",
+ TrancheNextPmtDate = "01-15-2013",
+ TrancheCoupon = 2.25,
+ Delay = 15,
+ PrinPmtFrequency = 12,
+ InterestPmtFrequency = 12,
+ FloaterIndex = "999",
+ FloaterMargin = 0,
+ FloaterCap = 0,
+ FloaterFloor = 0,
+ FloaterFormula = function(){},
+ PacLowBand = 75,
+ PacHighBand = 250,
+ Group = 1,
+ Schedule = TRUE,
+ Fixed = TRUE)} 
+>>>>>>> master
 }
 

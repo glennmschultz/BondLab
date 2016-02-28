@@ -2,8 +2,13 @@ Package: BondLab
 Type: Package
 Title: BondLab is a package for the analysis of structured mortgage backed
     securities
+<<<<<<< HEAD
 Version: 0.0.0.9000
 Date: 2013-12-08
+=======
+Version: 0.0.1.9000
+Date: 2015-12-19
+>>>>>>> master
 Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>
 Copyright: BondLab Technologies, Inc.
@@ -14,12 +19,17 @@ Description: The analysis of mortgage (MBS) and asset backed securities (ABS) is
     suite of software utilities for the analysis and valuation of Mortgage and Asset
     Backed securities.
 LazyLoad: yes
+<<<<<<< HEAD
 License: file LICENSE
+=======
+License: File LICENSE
+>>>>>>> master
 Imports:
     termstrc,
     lubridate,
     methods,
     optimx,
+<<<<<<< HEAD
     data.tree
 Suggests:
     knitr,
@@ -69,3 +79,11 @@ Collate:
     'StructuringFunctions.R'
     'TimeValueFunction.R'
     'zzz.R'
+=======
+Suggests:
+    knitr,
+    devtools,
+    testthat
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
+>>>>>>> master

@@ -12,6 +12,10 @@ SaveScenario(Scenario = "character", ScenarioFile = "character")
 \item{ScenarioFile}{the scenario file to save}
 }
 \description{
+<<<<<<< HEAD
 Opens a connection to the Scenarios folder to save user defined scenarios by name
+=======
+Opens a connection to teh Scenarios folder to save user defined scenarios by name
+>>>>>>> master
 }
 

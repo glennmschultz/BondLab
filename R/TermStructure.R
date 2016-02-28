@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   #Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
@@ -5,6 +6,17 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
+=======
+# Bond Lab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+# File License
+# Copyright (C) 2015  Bond Lab Technologies, Inc.
+# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+>>>>>>> master
 
 
   #---------------------------------------------------
@@ -57,6 +69,10 @@
             .Object@TenYearFwd = TenYearFwd
             
             return(.Object)
+<<<<<<< HEAD
+=======
+            
+>>>>>>> master
           })
 
   #' The TermStructure constructor function it is a wrapper function around the package termstrc
@@ -145,6 +161,7 @@
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
+<<<<<<< HEAD
                                                units = c("weeks"))/weeks.in.year,5))
     
     Vector.Length <- ifelse(Vector.Length < 1, Vector.Length, round(Vector.Length,0))
@@ -164,6 +181,14 @@
                           seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
                           as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
 
+=======
+                                               units = c("weeks"))/weeks.in.year,0))
+    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
+    data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
+    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
+    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+>>>>>>> master
     
   } #The Loop Ends here and the list is made
   

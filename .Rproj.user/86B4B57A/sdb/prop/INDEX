@@ -38,9 +38,13 @@
 ~%2FBondLab%2FR%2FAllMethods.R="8EBF4213"
 ~%2FBondLab%2FR%2FAll_Class.R="79184107"
 ~%2FBondLab%2FR%2FAll_Classes.R="1CFCDD68"
+<<<<<<< HEAD
 ~%2FBondLab%2FR%2FAtomsAnalytics.R="8B169EED"
 ~%2FBondLab%2FR%2FAtomsData.R="47A91F8A"
 ~%2FBondLab%2FR%2FAtomsScenario.R="A6FC1038"
+=======
+~%2FBondLab%2FR%2FAtomsData.R="197CE34B"
+>>>>>>> master
 ~%2FBondLab%2FR%2FBond.R="1155BDB9"
 ~%2FBondLab%2FR%2FBondAnalytics.R="BDB25FB7"
 ~%2FBondLab%2FR%2FBondBasis.R="75F51A33"
@@ -84,9 +88,13 @@
 ~%2FBondLab%2FR%2FMakeMBSDetails.R="4479FB42"
 ~%2FBondLab%2FR%2FMakeRateScenario.R="D671CC26"
 ~%2FBondLab%2FR%2FMortgageCashFlow.R="4F93A60B"
+<<<<<<< HEAD
 ~%2FBondLab%2FR%2FMortgageCashFlowArray.R="C2CD1AC7"
 ~%2FBondLab%2FR%2FMortgageCashFlow_Array.R="9F824151"
 ~%2FBondLab%2FR%2FMortgageCashFlow_KDS.R="52554EFB"
+=======
+~%2FBondLab%2FR%2FMortgageCashFlow_Array.R="BEB108A7"
+>>>>>>> master
 ~%2FBondLab%2FR%2FMortgageCredit.R="4CE6C756"
 ~%2FBondLab%2FR%2FMortgageFunctions="2A6B5A98"
 ~%2FBondLab%2FR%2FMortgageFunctions.R="430A269B"

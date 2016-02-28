@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
@@ -5,6 +6,17 @@
   # asset backed securities, and commerical mortgage backed securities
   # License GPL3 + File License
   # Copyright (C) 2014  Glenn M Schultz, CFA
+=======
+# Bond Lab is a software application for the analysis of 
+# fixed income securities it provides a suite of applications
+# in addition to standard fixed income analysis bond lab provides 
+# for the specific analysis of structured products residential mortgage backed securities, 
+# asset backed securities, and commerical mortgage backed securities
+# File License
+# Copyright (C) 2015  Bond Lab Technologies, Inc.
+# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
+# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+>>>>>>> master
 
   #' A S4 Class to hold prepayment vectors which are passed to cash flow engines
   #' 
@@ -92,6 +104,10 @@
             .Object@Severity = Severity
             
             return(.Object)
+<<<<<<< HEAD
+=======
+            
+>>>>>>> master
           })
 
   #---------------------------------------------------------------------------------------
@@ -445,7 +461,12 @@
   LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
   FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
   NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+<<<<<<< HEAD
   WALA = as.numeric(bond.id@WALA)
+=======
+  Term = difftime(time1 = FinalPmtDate, time2 = FirstPmtDate, units = "days")/days.in.month
+  WALA = round((Term - difftime(time1 = FinalPmtDate, time2 = LastPmtDate, units = "days")/days.in.month),0)
+>>>>>>> master
   
   col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
   
@@ -457,7 +478,11 @@
   Period = seq(from = 1, to = Remain.Term, by = 1)
   PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
   LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
+<<<<<<< HEAD
                                 as.Date(FirstPmtDate), units = "days")/days.in.month) + (WALA + 1)
+=======
+                                FirstPmtDate, units = "days")/days.in.month) + (as.numeric(WALA) + 1)
+>>>>>>> master
   
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))

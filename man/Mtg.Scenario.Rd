@@ -4,42 +4,34 @@
 \alias{Mtg.Scenario}
 \title{Mortgage Scenario Analysis}
 \usage{
-Mtg.Scenario(bond.id = "character", trade.date = "character",
-  settlement.date = "character", price = numeric(), proceeds = numeric(),
-  spot.spread = numeric(), original.bal = numeric(),
-  scenario.set = vector(), rates.data = "character", method = "character",
-  PrepaymentAssumption = "character", ..., ModelTune = "character",
-  Burnout = numeric(), begin.cpr = numeric(), end.cpr = numeric(),
-  seasoning.period = numeric(), CPR = numeric())
+Mtg.Scenario(bond.id = "character", settlement.date = "character",
+  rates.data = "character", price = numeric(), original.bal = numeric(),
+  scenario = "character", horizon.months = numeric(),
+  method = "character", prepayment = "character", ...,
+  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
+  horizon.OAS = NULL, horizon.price = NULL, begin.cpr = numeric(),
+  end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
 }
 \arguments{
 \item{bond.id}{A character string to object of type MBS details}
 
 \item{settlement.date}{A charcter string the settlement date}
 
+\item{rates.data}{A character string the trade date mm-dd-yyyy}
+
 \item{price}{A numeric value the price}
 
 \item{original.bal}{A numeric value the price}
-
-\item{rates.data}{A character string the trade date mm-dd-yyyy}
-
-\item{method}{A character string the method used to fit the term structure}
-
-\item{...}{Optional values when PSA or CPR is used}
-
-\item{begin.cpr}{A numeric value the beginning CPR value}
-
-\item{end.cpr}{A numeric value the ending CPR value}
-
-\item{seasoning.period}{A numeric value the length of the seasoning ramp}
-
-\item{CPR}{A numeric value the CPR speed}
 
 \item{scenario}{A character string the scenario}
 
 \item{horizon.months}{A numeric value the time horizon}
 
+\item{method}{A character string the method used to fit the term structure}
+
 \item{prepayment}{A character string the prepayment assumption}
+
+\item{...}{Optional values when PSA or CPR is used}
 
 \item{horizon.spot.spread}{A numeric value the horizon spread}
 
@@ -48,6 +40,14 @@ Mtg.Scenario(bond.id = "character", trade.date = "character",
 \item{horizon.OAS}{A numeric value the horizon option adjusted spread}
 
 \item{horizon.price}{A numeric value the horizon price in decimal form}
+
+\item{begin.cpr}{A numeric value the beginning CPR value}
+
+\item{end.cpr}{A numeric value the ending CPR value}
+
+\item{seasoning.period}{A numeric value the length of the seasoning ramp}
+
+\item{CPR}{A numeric value the CPR speed}
 }
 \description{
 A function to compute the total return of mortgage pass-throughs MBS

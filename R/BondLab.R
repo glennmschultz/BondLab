@@ -34,8 +34,5 @@
   PSA.basis <- 100
   par.price <- 100
 
-#' @import methods
-NULL
-
-#' @import data.tree
-NULL  
+  #' @import methods
+  NULL

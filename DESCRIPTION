@@ -19,8 +19,7 @@ Imports:
     termstrc,
     lubridate,
     methods,
-    optimx,
-    data.tree
+    optimx
 Suggests:
     knitr,
     devtools,
@@ -28,7 +27,6 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
-    'AllClasses.R'
     'MortgageScenario.R'
     'MortgageKeyRate.R'
     'MortgageCashFlowArray.R'
@@ -43,9 +41,6 @@ Collate:
     'BondBasis.R'
     'BondFunctions.R'
     'BondLab.R'
-    'CIRBondPrice.R'
-    'CIRSimulation.R'
-    'CalibrateCIR.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
     'DollarRoll.R'
@@ -53,7 +48,6 @@ Collate:
     'EffectiveMeasure.R'
     'ErrorTrap.R'
     'ExtractScenario.R'
-    'Functions.R'
     'HomePriceSim.R'
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
@@ -62,17 +56,12 @@ Collate:
     'MortgageFunctions.R'
     'MortgageOAS.R'
     'MortgageRateFunctions.R'
-    'MtgScenario.R'
     'PassThroughOAS.R'
     'PaymentDateFunctions.R'
     'PrepaymentModel.R'
     'PrepaymentModelTune.R'
-    'REMICAnalytics.R'
-    'REMICCashFlow.R'
-    'REMICCollateral.R'
     'REMICConstructor.R'
     'REMICCusip.R'
-    'REMICKeyRate.R'
     'RatesData.R'
     'ScenarioConstructor.R'
     'StructuringFunctions.R'

@@ -1,11 +1,11 @@
-<<<<<<< HEAD
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
   # File License
-  # Copyright (C) 2014 Bond Lab Technologies, Inc
+  # Copyright (C) 2015 Bond Lab Technologies, Inc
   
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security
@@ -69,20 +69,7 @@
                                         PrepaymentAssumption = "character") 
   {standardGeneric("MortgageCashFlow")})
   
-=======
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# File License
-# Copyright (C) 2015  Bond Lab Technologies, Inc.
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-
-
->>>>>>> master
   setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
@@ -135,18 +122,10 @@
             .Object@TotalCashFlow = TotalCashFlow
             
             return(.Object)
-<<<<<<< HEAD
-          })
-  
-  
-  #' A function to compute the cash flow of a pool of securitized mortgages
-=======
-                  
           })
 
 
   #'  A function to compute the cash flow of a pool of securitized mortgages
->>>>>>> master
   #' 
   #' This is a generic function used to construct the class object MortgageCashFlow
   #' For this function to work properly the classes MBSDetails and PrepaymentAssumption
@@ -158,14 +137,9 @@
   #' For example $102 is input as 102.00 not 1.02.
   #' @param PrepaymentAssumption A character string referencing the class object
   #' PrepaymentAssumption
-<<<<<<< HEAD
-  #' @examples 
-  #' \dontrun{MortgageCashFlow(bond.id = "bondlabMS4", original.bal = 1000000, 
-=======
   #' @examples
   #' \dontrun{
   #' MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
->>>>>>> master
   #' settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
   #' @export MortgageCashFlow
   MortgageCashFlow <- function(bond.id = "character", 
@@ -395,14 +369,6 @@
       TotalCashFlow = MBS.CF.Table[,17]
   )}
 
-
-
-  setGeneric("MortgageCashFlow", function(bond.id = "character", 
-                                          original.bal = numeric(), 
-                                          settlement.date = "character", 
-                                          price = numeric(), 
-                                          PrepaymentAssumption = "character") 
-  {standardGeneric("MortgageCashFlow")})
 
 
 

@@ -3,23 +3,19 @@
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-<<<<<<< HEAD
-  # License GPL3 + File License
-  # Copyright (C) 2014  Bond Lab Technologies, Inc.
-  
-  
-  
-  setGeneric("BondBasisConversion", function(issue.date, start.date, end.date, settlement.date, 
-                                           lastpmt.date, nextpmt.date)
-  {standardGeneric("BondBasisConversion")})
-  
-=======
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics"
+  
+  
+  setGeneric("BondBasisConversion", function(issue.date, 
+                                             start.date, 
+                                             end.date, 
+                                             settlement.date,
+                                             lastpmt.date,
+                                             nextpmt.date)
+  {standardGeneric("BondBasisConversion")})
+  
 
->>>>>>> master
   #----------------------------
   #Bond basis function This function set the interest payment day count basis 
   #----------------------------

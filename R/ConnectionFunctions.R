@@ -1,25 +1,13 @@
-<<<<<<< HEAD
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License GPL3 + File License
-  # Copyright (C) 2014  Glenn M Schultz, CFA
- 
-=======
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# File License
-# Copyright (C) 2015  Bond Lab Technologies, Inc.
-# Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-# book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # File License
+  # Copyright (C) 2015  Bond Lab Technologies, Inc.
 
->>>>>>> master
-  
+
   #------------------------------------------------------------------------------------
   #' A connection function to BondData calling MBS cusips
   #' 
@@ -27,12 +15,6 @@
   #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
   #' @export
   MBS <- function(MBS.id = "character"){
-    #CusipList <- list.files(paste(system.file(package = "BondLab"),"/BondData/", sep =""))
-    #MBS <- if(nchar(MBS.id) == 9){grep(MBS.id, CusipList, useBytes = TRUE, value = TRUE)} 
-    #else {grep(MBS.id, CusipList, useBytes = TRUE, value = TRUE)}
-    #MBS.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-    #                                       "/BondData/", MBS, sep = ""), open = "rb")          
-    
     MBS.Conn <- if(nchar(MBS.id) == 9) {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
       "/BondData/", MBS.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
       } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),

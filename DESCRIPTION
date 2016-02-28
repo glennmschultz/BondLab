@@ -2,13 +2,8 @@ Package: BondLab
 Type: Package
 Title: BondLab is a package for the analysis of structured mortgage backed
     securities
-<<<<<<< HEAD
 Version: 0.0.0.9000
-Date: 2013-12-08
-=======
-Version: 0.0.1.9000
 Date: 2015-12-19
->>>>>>> master
 Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>
 Copyright: BondLab Technologies, Inc.
@@ -19,26 +14,21 @@ Description: The analysis of mortgage (MBS) and asset backed securities (ABS) is
     suite of software utilities for the analysis and valuation of Mortgage and Asset
     Backed securities.
 LazyLoad: yes
-<<<<<<< HEAD
 License: file LICENSE
-=======
-License: File LICENSE
->>>>>>> master
 Imports:
     termstrc,
     lubridate,
     methods,
     optimx,
-<<<<<<< HEAD
     data.tree
 Suggests:
     knitr,
     devtools,
-    roxygen2,
     testthat
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
+    'AllClasses.R'
     'MortgageScenario.R'
     'MortgageKeyRate.R'
     'MortgageCashFlowArray.R'
@@ -53,6 +43,9 @@ Collate:
     'BondBasis.R'
     'BondFunctions.R'
     'BondLab.R'
+    'CIRBondPrice.R'
+    'CIRSimulation.R'
+    'CalibrateCIR.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
     'DollarRoll.R'
@@ -60,6 +53,7 @@ Collate:
     'EffectiveMeasure.R'
     'ErrorTrap.R'
     'ExtractScenario.R'
+    'Functions.R'
     'HomePriceSim.R'
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
@@ -68,22 +62,21 @@ Collate:
     'MortgageFunctions.R'
     'MortgageOAS.R'
     'MortgageRateFunctions.R'
+    'MtgScenario.R'
+    'PassThroughAnalysis.R'
     'PassThroughOAS.R'
     'PaymentDateFunctions.R'
     'PrepaymentModel.R'
     'PrepaymentModelTune.R'
+    'REMICAnalytics.R'
+    'REMICCashFlow.R'
+    'REMICCollateral.R'
     'REMICConstructor.R'
     'REMICCusip.R'
+    'REMICKeyRate.R'
+    'REMICOAS.R'
     'RatesData.R'
     'ScenarioConstructor.R'
     'StructuringFunctions.R'
     'TimeValueFunction.R'
     'zzz.R'
-=======
-Suggests:
-    knitr,
-    devtools,
-    testthat
-VignetteBuilder: knitr
-RoxygenNote: 5.0.1
->>>>>>> master

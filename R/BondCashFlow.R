@@ -3,16 +3,11 @@
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-<<<<<<< HEAD
-  # License GPL3 + license
-  # Copyright (C) 2014  Bond Lab Technologies, Inc
-=======
   # File license
   # Copyright (C) 2015  Bond Lab Technologies, Inc
   # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
   # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
->>>>>>> master
 
   #' An S4 class representing standard bond cash flows
   #' 
@@ -84,11 +79,8 @@
               .Object@TotalCashFlow = TotalCashFlow
                
               return(.Object)
-<<<<<<< HEAD
-=======
-              
->>>>>>> master
             })
+  
   #' Bond cash flow engine for standard non-callable
   #' 
   #' Cashflow engine for standard non-callable bond

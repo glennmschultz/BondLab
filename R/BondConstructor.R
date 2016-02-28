@@ -3,8 +3,7 @@
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # License GPL3 + File License
-  # Copyright (C) 2014  Bond Lab Technologies, Inc.
+  # Copyright (C) 2015  Bond Lab Technologies, Inc.
  
   #' An S4 class representing the cusip detail of the a standard bond
   #' 
@@ -115,10 +114,6 @@
               .Object@SinkingFund = SinkingFund
 
               return(.Object)
-<<<<<<< HEAD
-=======
-              
->>>>>>> master
           })
 
   BondDetails <-function(
@@ -161,28 +156,29 @@
         Putable = Putable,
         SinkingFund = SinkingFund)
   }
-#' A constuctor function to create standard bond cusip information
-#' 
-#' This is a standard generic function used to construct a tradtional bond
-#' @param Cusip A character string the bond's cusip number
-#' @param ID A character string the bond's ID
-#' @param BondType A character string the type of bond
-#' @param Sector A character string the bond sector
-#' @param Coupon A character string the coupon (interest rate) paid to the investor
-#' @param IssueDate A character string the issue date of the bond
-#' @param DatedDate A character string the bond's dated date
-#' @param Maturity A character string the bond's maturity date of final principal payment date
-#' @param LastPmtDate A character string the most recent payment date to the investor
-#' @param NextPmtDate A character string the next payment date due to the investor
-#' @param Moody A character string the Moody assigned rating
-#' @param SP A character string the SP assigned rating
-#' @param BondLab A character string the Bond Lab assigned rating
-#' @param Frequency A numeric value the payment frequency
-#' @param BondBasis A character string the interest calculation basis
-#' @param Callable A character string the bond's call schedule
-#' @param Putable A caracter string the bond's put schedule
-#' @param SinkingFund a character strign the bond sinking fund schedule
-#' @export MakeBondDetails
+
+  #' A constuctor function to create standard bond cusip information
+  #' 
+  #' This is a standard generic function used to construct a tradtional bond
+  #' @param Cusip A character string the bond's cusip number
+  #' @param ID A character string the bond's ID
+  #' @param BondType A character string the type of bond
+  #' @param Sector A character string the bond sector
+  #' @param Coupon A character string the coupon (interest rate) paid to the investor
+  #' @param IssueDate A character string the issue date of the bond
+  #' @param DatedDate A character string the bond's dated date
+  #' @param Maturity A character string the bond's maturity date of final principal payment date
+  #' @param LastPmtDate A character string the most recent payment date to the investor
+  #' @param NextPmtDate A character string the next payment date due to the investor
+  #' @param Moody A character string the Moody assigned rating
+  #' @param SP A character string the SP assigned rating
+  #' @param BondLab A character string the Bond Lab assigned rating
+  #' @param Frequency A numeric value the payment frequency
+  #' @param BondBasis A character string the interest calculation basis
+  #' @param Callable A character string the bond's call schedule
+  #' @param Putable A caracter string the bond's put schedule
+  #' @param SinkingFund a character strign the bond sinking fund schedule
+  #' @export MakeBondDetails
     MakeBondDetails <- function(    
     Cusip = "character",                              
     ID ="character",                              

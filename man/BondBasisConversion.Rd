@@ -14,7 +14,7 @@ BondBasisConversion(issue.date = "character", start.date = "character",
 
 \item{start.date}{A character value the start date for interest payment (dated date)}
 
-\item{end.date}{A character value the last payment date}
+\item{end.date}{A character value the final payment date}
 
 \item{settlement.date}{A character value the settlement date}
 

@@ -20,7 +20,7 @@ Imports:
     lubridate,
     methods,
     optimx,
-    data.tree,
+    data.tree
 Suggests:
     knitr,
     devtools,
@@ -43,7 +43,6 @@ Collate:
     'BondBasis.R'
     'BondFunctions.R'
     'BondLab.R'
-    'CAS_Principal.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
     'DollarRoll.R'
@@ -60,6 +59,7 @@ Collate:
     'MortgageOAS.R'
     'MortgageRateFunctions.R'
     'PassThroughOAS.R'
+    'PaymentDateFunctions.R'
     'PrepaymentModel.R'
     'PrepaymentModelTune.R'
     'REMICConstructor.R'

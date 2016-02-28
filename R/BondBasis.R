@@ -22,7 +22,7 @@
   #' Conversion for payment date (currently 30/360 is supported)
   #' @param issue.date A character value the issue date of the security
   #' @param start.date A character value the start date for interest payment (dated date)
-  #' @param end.date A character value the last payment date
+  #' @param end.date A character value the final payment date
   #' @param settlement.date A character value the settlement date
   #' @param lastpmt.date  A character value the last payment date to the investor
   #' @param nextpmt.date A character value the next payment date to the investor

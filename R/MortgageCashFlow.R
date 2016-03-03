@@ -268,7 +268,7 @@
     {MBS.CF.Table[x,8] = 0}
   
     if(x!= num.periods) {MBS.CF.Table[x,9] = PrepaymentAssumption@MDR[x] * MBS.CF.Table[x,4]} else {MBS.CF.Table[x,9] = 0}
-    MBS.CF.Table[x,10] = MBS.CF.Table[x,9] * PrepaymentAssumption@Severity
+    MBS.CF.Table[x,10] = MBS.CF.Table[x,9] * PrepaymentAssumption@Severity[x]
     MBS.CF.Table[x,11] = MBS.CF.Table[x,9] - MBS.CF.Table[x,10]
 
     MBS.CF.Table[x,12] = MBS.CF.Table[x,4] - (MBS.CF.Table[x,7] + MBS.CF.Table[x,8] + MBS.CF.Table[x,9])

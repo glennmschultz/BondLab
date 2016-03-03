@@ -422,7 +422,7 @@
                                    CPR = numeric(),
                                    CDR = 0,
                                    HomePrice = NULL,
-                                   Severity = numeric()){
+                                   Severity = 0){
   
   # Severity is optional value passed to the model the default is 35%.  Should build a severity
   # model class like mortgage rate and scenario for severity.
@@ -505,16 +505,20 @@
                           LoanAge = LoanAge, 
                           Month = as.numeric(format(PmtDate, "%m")), 
                           incentive = Incentive, 
-                          Burnout.maxincen = Burnout)} 
+                          Burnout.maxincen = Burnout)
+  Severity = rep(Severity, Remain.Term)
+  } 
   else 
   {if(PrepaymentAssumption == "PPC") 
   {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, 
                                   end.cpr = end.cpr, 
                                   season.period = seasoning.period, 
-                                  period = LoanAge))^(1/12))} 
+                                  period = LoanAge))^(1/12))
+  Severity = rep(Severity, Remain.Term)
+  } 
   else
   {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
-  
+  Severity = rep(Severity, Remain.Term)
   }
   
   

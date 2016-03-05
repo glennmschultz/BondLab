@@ -3,11 +3,8 @@
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # File License
-  # Copyright (C) 2015  Bond Lab Technologies, Inc.
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-
+  # License GPL3 + File License
+  # Copyright (C) 2014  Glenn M Schultz, CFA
 
 
   setClass("MortgageTermStructure",
@@ -46,6 +43,7 @@
            .Object@KeyRateConvexity = KeyRateConvexity
 
            return(.Object)
+
          })
 
 #' A function to calculate mortgage key rate duration
@@ -102,7 +100,7 @@
  
   
   #Error Trap the user's price input
-  if(price <= 1) {price = price} else {price = price/100}
+  if(price <= 1) {price = price} else {price = price/yield.basis}
   if(price <=0) stop("No valid bond price")
   
   # calcuate proceeds the order of operation is important
@@ -134,11 +132,8 @@
   
   
   #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
-  Spot.Spread <- function(spread = numeric(), 
-                          cashflow = vector(), 
-                          discount.rates = vector(), 
-                          t.period = vector(), 
-                          proceeds = numeric()){
+  Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
+                          t.period = vector(), proceeds = numeric()){
     Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
     return(proceeds - Present.Value)
   }
@@ -203,7 +198,7 @@
     Key.Rate.Table [x,2] = x/months.in.year
     
     #spot rates for discounting
-    Key.Rate.Table[x,3] = SpotRate[x,1]/yield.basis
+    Key.Rate.Table[x,3] = SpotRate[x,1]/100
     
     #Align Cash Flows and populated the CashFlowArray
     #Step One: Make sure all cash flows are set to zero
@@ -222,28 +217,29 @@
   
   
   # This code solves for the spread to spot curve to equal price
-  spot.spread <- uniroot(Spot.Spread, 
-                         interval = c(-.75, .75), 
-                         tol = .0000000001, 
-                         CashFlowArray[,2],
+  spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), 
+                         tol = .0000000001, CashFlowArray[,2],
                          discount.rates = Key.Rate.Table[,3], 
-                         t.period = Key.Rate.Table[,2],
+                         t.period = Key.Rate.Table[,2] , 
                          proceeds)$root
   
+  #convert the spot spread to the frequency of the bond
+  #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
   
   #------------- Step three add the spot spread to the spot curve 
   # This yields the discount rates that are need for the key rate duration calculation
   # at a minimum the cash flow array should be 360 months
   
   for(i in 1:360){
-    Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
+    Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread
+    #print(Key.Rate.Table[i,4])
   }
   
   #========= Populate KRIndex Table =========================
   # The key rate index table will serve as the control table for the looping
   # using this table allows for incremental looping of discontinous segments of the
   # spot rate curve and is proprietary to bondlab
-
+  # This table was dimensioned on lines 646 - 648
   
   # Step 1 populate Period (n)
   KRIndex[1:KRCount,1] <- round(as.numeric(KR) * months.in.year,0)
@@ -257,8 +253,7 @@
   # the key rate index table (KRIndex) is used to populate the key rate table (KRTable)
   for (j in 1:KRCount){                                   
     for (i in 1:360){
-      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,3] = Key.Rate.Table[i,3]
-      } else {KRIndex[j,3] = KRIndex[j,3]}
+      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,3] = Key.Rate.Table[i,3]} else {KRIndex[j,3] = KRIndex[j,3]}
     }
   }
   
@@ -266,8 +261,7 @@
   # these will be the reference points for the appropriate key rate shifts
   for (j in 1:KRCount){                                   
     for (i in 1:360){
-      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,4] = Key.Rate.Table[i,4]
-      } else {KRIndex[j,3] = KRIndex[j,3]}
+      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {KRIndex[j,4] = Key.Rate.Table[i,4]} else {KRIndex[j,3] = KRIndex[j,3]}
     }
   }
   
@@ -334,17 +328,15 @@
     Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
     
-    Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100,
-                                  ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
-                                  
+    Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
+    ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
     Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
                                                FwdRate.Tenor = 24) 
     Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
                                                FwdRate.Tenor = 120)
     
     Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
-                                 ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
-    
+    ((TermStructure@spotrate[361:492])) + (spot.spread * 0)) 
     Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
                                               FwdRate.Tenor = 24) 
     Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
@@ -359,19 +351,20 @@
                                            TermStructure = Key.Rate.TS.Dwn, 
                                            PrepaymentAssumption = "MODEL", 
                                            ModelTune = ModelTune, 
-                                           Burnout = Burnout) 
+                                           Burnout = Burnout,
+                                           Severity = 0) 
     
     # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Dwn <- MortgageCashFlow(bond.id = bond.id, 
                                               original.bal = original.bal, 
                                               settlement.date = settlement.date,
-                                              price = price.mtg.cashflow, 
+                                               price = price.mtg.cashflow, 
                                               PrepaymentAssumption = Prepayment.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
     for(cfd in 1:360){
-      if(cfd > as.numeric(length(MortgageCashFlows.Dwn@TotalCashFlow))) {CashFlowArray[cfd,3] = 0
-      } else {CashFlowArray[cfd,3] = MortgageCashFlows.Dwn@TotalCashFlow[cfd]}
+      if(cfd > as.numeric(length(MortgageCashFlows.Dwn@TotalCashFlow))) {CashFlowArray[cfd,3] = 0} else 
+      {CashFlowArray[cfd,3] = MortgageCashFlows.Dwn@TotalCashFlow[cfd]}
     }
     # =======================================================================   
     # Key Rate Shift Up Prepayment Model and CashFlows
@@ -381,20 +374,21 @@
                                           TermStructure = Key.Rate.TS.Up, 
                                           PrepaymentAssumption = "MODEL", 
                                           ModelTune = ModelTune, 
-                                          Burnout = Burnout)
+                                          Burnout = Burnout,
+                                          Severity = 0)
     
     # Mortgage Cashflows call here requires that price as whole number passed
     MortgageCashFlows.Up <- MortgageCashFlow(bond.id = bond.id, 
                                              original.bal = original.bal, 
                                              settlement.date = settlement.date,
-                                             price = price.mtg.cashflow, 
+                                              price = price.mtg.cashflow, 
                                              PrepaymentAssumption = Prepayment.Up)
     
     
     # Assign CashFlows into the cash flow array. This has to be done in a loop
     for(cfu in 1:360){
-      if(cfu > as.numeric(length(MortgageCashFlows.Up@TotalCashFlow))) {CashFlowArray[cfu,4] = 0
-      } else {CashFlowArray[cfu,4] = MortgageCashFlows.Up@TotalCashFlow[cfu]}
+      if(cfu > as.numeric(length(MortgageCashFlows.Up@TotalCashFlow))) {CashFlowArray[cfu,4] = 0} else 
+      {CashFlowArray[cfu,4] = MortgageCashFlows.Up@TotalCashFlow[cfu]}
     }
     
     #============================== Calculate Key Rate Duration ============================================

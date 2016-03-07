@@ -114,6 +114,13 @@
   # b is the intercept of the function
   # c is the point where the max CPR is achieved
   #---------------------------------------------------------------------------------------
+  #' A function to define the mortgage seasoning ramp
+  #' 
+  #' @param alpha a numeric value
+  #' @param beta a numeric value
+  #' @param theta a numeric value
+  #' @param LoanAge a numeric value
+  #' @export Seasoning
   Seasoning <- function(alpha = numeric(), 
                         beta = numeric(), 
                         theta = numeric(), 

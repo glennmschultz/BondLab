@@ -1,4 +1,10 @@
 {
     "TabSet1" : 2,
+<<<<<<< .merge_file_IsuGnR
     "TabSet2" : 0
+=======
+    "TabSet2" : 0,
+    "TabZoom" : {
+    }
+>>>>>>> .merge_file_lLSfJr
 }

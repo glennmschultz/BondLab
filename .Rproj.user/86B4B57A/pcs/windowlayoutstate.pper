@@ -1,5 +1,6 @@
 {
     "left" : {
+<<<<<<< .merge_file_Zh5sjd
         "panelheight" : 1206,
         "splitterpos" : 607,
         "topwindowstate" : "NORMAL",
@@ -10,5 +11,17 @@
         "splitterpos" : 609,
         "topwindowstate" : "NORMAL",
         "windowheight" : 1244
+=======
+        "panelheight" : 1207,
+        "splitterpos" : 606,
+        "topwindowstate" : "NORMAL",
+        "windowheight" : 1245
+    },
+    "right" : {
+        "panelheight" : 1207,
+        "splitterpos" : 608,
+        "topwindowstate" : "NORMAL",
+        "windowheight" : 1245
+>>>>>>> .merge_file_FuxGBA
     }
 }

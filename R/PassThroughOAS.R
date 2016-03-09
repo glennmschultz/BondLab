@@ -316,12 +316,7 @@
                                                TermStructure = TermStructure, 
                                                PrepaymentAssumption = "MODEL", 
                                                ModelTune = ModelTune, 
-<<<<<<< .merge_file_GqDj2h
-                                               Burnout = Burnout,
-                                               Severity = 0)
-=======
                                                Burnout = Burnout)
->>>>>>> .merge_file_hfB26A
   
   #The fourth step is to call the bond cusip details and calculate 
   #Bond Yield to Maturity, Duration, Convexity and CashFlow.

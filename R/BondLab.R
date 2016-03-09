@@ -13,14 +13,7 @@
   options(digits = 8)
   utils::globalVariables(c("day", "month", "year"))
 
-  # =======================================================================================
-  #Bond Lab MBS Constants
-  # =======================================================================================
-<<<<<<< .merge_file_PrLDIJ
 
-=======
-  
->>>>>>> .merge_file_Qudbq4
   days.in.month <- 30.44
   days.in.year <- 365.28
   days.in.year.360 <- 360

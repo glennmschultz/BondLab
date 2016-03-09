@@ -9,11 +9,7 @@ PrepaymentAssumption(bond.id = "character", TermStructure = "character",
   Burnout = numeric(), PrepaymentAssumption = "character", ...,
   begin.cpr = numeric(), end.cpr = numeric(),
   seasoning.period = numeric(), CPR = numeric(), CDR = 0,
-<<<<<<< .merge_file_EvuBhs
-  HomePrice = NULL, Severity = numeric())
-=======
   HomePrice = NULL, Severity = 0)
->>>>>>> .merge_file_9OrjNT
 }
 \arguments{
 \item{bond.id}{A character string referring to an object of the type MBSDetails}

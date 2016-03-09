@@ -3,16 +3,10 @@
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-<<<<<<< .merge_file_Lo6ua8
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
   # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
   # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
-
-=======
-  # License GPL3 + File License
-  # Copyright (C) 2014  Glenn M Schultz, CFA
->>>>>>> .merge_file_KWsbSr
 
 
   setClass("MortgageTermStructure",
@@ -100,23 +94,16 @@
   accrued = cashflow@Accrued
   
   #Class name variable.  This will set the class name for the new class to be initilized
-<<<<<<< .merge_file_Lo6ua8
-  ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
-=======
   ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")
     } else {as.character("MortgageTermStructure")}
->>>>>>> .merge_file_KWsbSr
+
   
   # create price for mortgage cash flow call in key rate
   price.mtg.cashflow <- price
  
   
   #Error Trap the user's price input
-<<<<<<< .merge_file_Lo6ua8
-  if(price <= 1) {price = price} else {price = price/100}
-=======
   if(price <= 1) {price = price} else {price = price/yield.basis}
->>>>>>> .merge_file_KWsbSr
   if(price <=0) stop("No valid bond price")
   
   # calcuate proceeds the order of operation is important
@@ -135,20 +122,16 @@
                                 discount.rates.up, 
                                 discount.rates.dwn, 
                                 t.period, 
-                                proceeds, 
                                 type){
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
     Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)
     
     switch(type,
-<<<<<<< .merge_file_Lo6ua8
-           duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
-           convexity =  (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
-=======
+
            duration = (Price.UP - Price.DWN)/(2*Price.NC*rate.delta),
            convexity =  (Price.UP + Price.DWN - (2*Price.NC))/(2 * Price.NC * rate.delta^2)
->>>>>>> .merge_file_KWsbSr
+
     )
   }
   
@@ -220,11 +203,8 @@
     Key.Rate.Table [x,2] = x/months.in.year
     
     #spot rates for discounting
-<<<<<<< .merge_file_Lo6ua8
     Key.Rate.Table[x,3] = SpotRate[x,1]/yield.basis
-=======
-    Key.Rate.Table[x,3] = SpotRate[x,1]/100
->>>>>>> .merge_file_KWsbSr
+
     
     #Align Cash Flows and populated the CashFlowArray
     #Step One: Make sure all cash flows are set to zero
@@ -243,16 +223,12 @@
   
   
   # This code solves for the spread to spot curve to equal price
-<<<<<<< .merge_file_Lo6ua8
-  spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), tol = .0000000001, CashFlowArray[,2],
-                         discount.rates = Key.Rate.Table[,3], t.period = Key.Rate.Table[,2] , proceeds)$root
-=======
   spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), 
                          tol = .0000000001, CashFlowArray[,2],
                          discount.rates = Key.Rate.Table[,3], 
                          t.period = Key.Rate.Table[,2] , 
                          proceeds)$root
->>>>>>> .merge_file_KWsbSr
+
   
   #convert the spot spread to the frequency of the bond
   #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
@@ -262,13 +238,8 @@
   # at a minimum the cash flow array should be 360 months
   
   for(i in 1:360){
-<<<<<<< .merge_file_Lo6ua8
-    Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread                                  
-=======
     Key.Rate.Table[i,4] = Key.Rate.Table[i,3] + spot.spread
-    #print(Key.Rate.Table[i,4])
->>>>>>> .merge_file_KWsbSr
-  }
+    }
   
   #========= Populate KRIndex Table =========================
   # The key rate index table will serve as the control table for the looping
@@ -362,24 +333,18 @@
     
     Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
-    
-<<<<<<< .merge_file_Lo6ua8
-    Key.Rate.TS.Dwn@spotrate <- TermStructure@spotrate 
-=======
+
     Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
     ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
->>>>>>> .merge_file_KWsbSr
+    
     Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
                                                FwdRate.Tenor = 24) 
     Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
                                                FwdRate.Tenor = 120)
     
-<<<<<<< .merge_file_Lo6ua8
-    Key.Rate.TS.Up@spotrate <- TermStructure@spotrate 
-=======
     Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
     ((TermStructure@spotrate[361:492])) + (spot.spread * 0)) 
->>>>>>> .merge_file_KWsbSr
+
     Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
                                               FwdRate.Tenor = 24) 
     Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
@@ -444,12 +409,7 @@
       discount.rates.up = Key.Rate.Table[,6],
       discount.rates.dwn = Key.Rate.Table[,5],
       t.period = Key.Rate.Table[,2],
-<<<<<<< .merge_file_Lo6ua8
-      type = "duration",
-      proceeds = proceeds
-=======
       type = "duration"
->>>>>>> .merge_file_KWsbSr
     ) 
     
     KR.Duration[w-1,3] <- EffectiveMeasures(
@@ -461,12 +421,8 @@
       discount.rates.up = Key.Rate.Table[,6],
       discount.rates.dwn = Key.Rate.Table[,5],
       t.period = Key.Rate.Table[,2],
-<<<<<<< .merge_file_Lo6ua8
-      type = "convexity",
-      proceeds = proceeds
-=======
       type = "convexity"
->>>>>>> .merge_file_KWsbSr
+
     ) 
   } # Outer Loop around KRIndex
   new(as.character(ClassName),

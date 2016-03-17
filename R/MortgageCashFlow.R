@@ -201,8 +201,8 @@
   pmtdate.interval = months.in.year/frequency
   # then compute the payment dates
   pmtdate = as.Date(c(if(settlement.date == issue.date) 
-  {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} else 
-    {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
+  {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))
+    } else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
   
   #step3 build the time period vector (n) for discounting the cashflows 
   #nextpmt date is vector of payment dates to n for each period.  The differnce between

@@ -86,8 +86,6 @@
   # Open connection to the Mortgage Model function
   MortgageRate <- MtgRate()
   
-  #Burnout = bond.id@Burnout
-  
   #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
   frequency = bond.id@Frequency
   maturity = bond.id@Maturity
@@ -130,8 +128,7 @@
     switch(type,
 
            duration = (Price.UP - Price.DWN)/(2*Price.NC*rate.delta),
-           convexity =  (Price.UP + Price.DWN - (2*Price.NC))/(2 * Price.NC * rate.delta^2)
-
+           convexity =  (Price.UP + Price.DWN - (2*Price.NC))/(2 * Price.NC * (rate.delta^2))
     )
   }
   
@@ -422,8 +419,8 @@
       discount.rates.dwn = Key.Rate.Table[,5],
       t.period = Key.Rate.Table[,2],
       type = "convexity"
-
-    ) 
+    )
+    
   } # Outer Loop around KRIndex
   new(as.character(ClassName),
       SpotSpread = spot.spread * 100,

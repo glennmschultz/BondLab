@@ -5,32 +5,25 @@
 \title{A function to compute the cash flow of a pool of securitized mortgages}
 \usage{
 MortgageCashFlow(bond.id = "character", original.bal = numeric(),
-  settlement.date = "character", PrepaymentAssumption = "character", ...,
-  price = numeric(), spread = numeric(), prepay = "character")
+  settlement.date = "character", price = numeric(),
+  PrepaymentAssumption = "character")
 }
 \arguments{
-\item{bond.id}{A character string referencing the object MBSDetails}
+\item{bond.id}{A character string referencing the object MBSDetails.}
 
-\item{original.bal}{The original balance of the MBS pool}
+\item{original.bal}{The original balance of the MBS pool.}
 
-\item{settlement.date}{The settlment date of the MBS trade
+\item{settlement.date}{The settlment date of the MBS trade.
 For example $102 is input as 102.00 not 1.02.}
-
-\item{PrepaymentAssumption}{A character string referencing the class object}
-
-\item{...}{Optional values follow}
 
 \item{price}{A numeric value the price traded.  Price is input as a whole number.}
 
-\item{spread}{A numeric value the spread to the interpolated curve}
-
-\item{prepay}{A character string the prepayment assumption used either CPR or PSA
-PrepaymentAssumption}
+\item{PrepaymentAssumption}{A character string referencing the class object.}
 }
 \description{
-This is a generic function used to construct the class object MortgageCashFlow
-For this function to work properly the classes MBSDetails and PrepaymentAssumption
-must be present and loaded into the local environment
+This is a generic function used to construct the class object MortgageCashFlow.
+For this function to work properly the classes MBSDetails and PrepaymentAssumption.
+must be present and loaded into the local environment.
 }
 \examples{
 \dontrun{

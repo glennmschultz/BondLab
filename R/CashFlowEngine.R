@@ -19,7 +19,7 @@
   #' @param principal A numeric value the principal balance
   #' @param PrepaymentAssumption A character string referencing 
   #' an object type PrepaymentAssumption
-
+  #' @export
   CashFlowEngine <- function (bond.id = "character",
                               settlement.date = "character",
                               principal = numeric(), 

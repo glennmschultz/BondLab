@@ -200,7 +200,7 @@
   
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(MBS.CF.Table[1, "Pass Through Interest"])
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * ((bond.id@Coupon/yield.basis)/frequency) * AdjPrincipal
  
   # Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
@@ -218,12 +218,12 @@
                       interval = c(lower = -.75, upper = .75), 
                       tol = tolerance, 
                       time.period = as.numeric(MBS.CF.Table[,"Time"]), 
-                      cashflow = as.numeric(MBS.CF.Table[,"Investor CashFlow"]), 
+                      cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),8), 
                       principal = AdjPrincipal, 
                       price = price, 
                       accrued.interest = accrued.interest)$root)
-
-  #Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+    
+  # Because I use the time weights here the is no need to make adjustment 
     Yield.To.Maturity = ytm
   
   #Step7 Present value of the cash flows Present Value Factors

@@ -5,10 +5,30 @@
   # asset backed securities, and commerical mortgage backed securities
   # Copyright (C) 2014  Glenn M Schultz, CFA
 
-setClass("Mtg.ScenarioSet",
+
+
+  #' An S4 Class A list of Scenario outcomes
+  #'
+  #' The class Mtg.ScenarioSet is a list of classes Scenario
+  #' @slot Scenario A list of the class Scenario
+  #' @exportClass Mtg.ScenarioSet
+  setClass("Mtg.ScenarioSet",
          representation(
            Scenario = "list"))
 
+  #' An S4 Class representing scenario analysis details
+  #' 
+  #' The class Scenario is the representation of the 
+  #' scenario run by the investor
+  #' @slot Name A character the name of the scenario
+  #' @slot Type A character the type of the scenario
+  #' @slot Horizon A character the time horizon over which the 
+  #' scenario is run
+  #' @slot ShiftType A character the interest rate shift type (e.g.
+  #' twist, parallel, bull flatten, or bull steepen)
+  #' @slot Shiftbps A numeric value the scenario shift in basis points
+  #' @slot Formula A function represnting the shift which applied to the term structure
+  #' @exportClass Scenario
   setClass("Scenario",
          representation(
            Name = "character",
@@ -18,7 +38,37 @@ setClass("Mtg.ScenarioSet",
            Shiftbps = "numeric",
            Formula = "function"
          ))
-
+  
+  #' An S4 Class representing the results of mortgage return scenario analysis
+  #' 
+  #' The class Mtg. Scenario holds the results of a scenario analysis run
+  #' @slot Period A numeric value the period number forward from current
+  #' @slot PmtDate A character the payment date on which the cashflow is expected to be received
+  #' @slot TimePeriod A numeric value the period stated as a unit of time
+  #' @slot BeginningBal A numeric value the forecasted beginning balance in the period
+  #' @slot PassThroughInterest A numeric value the interest paid through to the investor
+  #' @slot ScheduledPrin A numeric value the scheduled principal due in the period
+  #' @slot PrepaidPrin A numeric value the forecasted prepaid principal in the period
+  #' @slot EndingBal A numeric value the forecasted ending balance in the period
+  #' @slot TotalCashFlow A numeric value the forecasted total cashflow received by
+  #' the investor in the period
+  #' @slot spotrate A numeric vector the spot rate curve
+  #' @slot forwardrate A numeric vector the forward rate curve
+  #' @slot SMM A numeric vector the forecasted SMM vector
+  #' @slot YieldToMaturity A numeric value the scenario yield to maturity
+  #' @slot WAL A numeric value the scenario weighted average life
+  #' @slot SpreadToInterCurve A numeric value the spread to the interpolated curve
+  #' @slot ModDuration A numeric value the scenario modified duration
+  #' @slot Convexity A numeric value the scenario convexity
+  #' @slot EffDuration A numeric value the effective duration which is the sum of the
+  #' key rate durations
+  #' @slot EffConvexity A numeric value the effective duration which is teh sum of the
+  #' key rate convexities
+  #' @slot KeyRateTenor A numeric vector the key rate tenors
+  #' @slot KeyRateDuration A numeric vector the duration of each key rate tenor
+  #' @slot KeyRateConvexity A numeric vector the convexity of each each key rate tenor
+  #' @slot HorizonReturn A numeric value the horizon total return
+  #' @exportClass Mtg.Scenario     
   setClass("Mtg.Scenario",
          representation( 
            Period = "numeric",
@@ -147,46 +197,46 @@ setClass("Mtg.ScenarioSet",
   # Calls the bond.id and applies the scenario
   #---------------------------------------------------------
   
-#' Mortgage Scenario Analysis
-#' 
-#' A function to compute the total return of mortgage pass-throughs MBS
-#' @param bond.id A character string to object of type MBS details
-#' @param settlement.date A charcter string the settlement date
-#' @param rates.data A character string the trade date mm-dd-yyyy
-#' @param price A numeric value the price
-#' @param original.bal A numeric value the price
-#' @param scenario A character string the scenario
-#' @param horizon.months A numeric value the time horizon
-#' @param method A character string the method used to fit the term structure
-#' @param prepayment A character string the prepayment assumption
-#' @param ... Optional values when PSA or CPR is used
-#' @param horizon.spot.spread A numeric value the horizon spread
-#' @param horizon.nominal.spread A numeric value the horizon spread
-#' @param horizon.OAS A numeric value the horizon option adjusted spread
-#' @param horizon.price A numeric value the horizon price in decimal form
-#' @param begin.cpr A numeric value the beginning CPR value
-#' @param end.cpr A numeric value the ending CPR value
-#' @param seasoning.period A numeric value the length of the seasoning ramp
-#' @param CPR A numeric value the CPR speed
-#' @export Mtg.Scenario
-Mtg.Scenario <- function(bond.id ="character",
-                         settlement.date = "character",
-                         rates.data = "character",
-                         price = numeric(), 
-                         original.bal = numeric(),
-                         scenario = "character",
-                         horizon.months = numeric(),
-                         method = "character",
-                         prepayment = "character",
-                         ...,
-                         horizon.spot.spread = NULL,
-                         horizon.nominal.spread = NULL,
-                         horizon.OAS = NULL,
-                         horizon.price = NULL,
-                         begin.cpr = numeric(),
-                         end.cpr = numeric(),
-                         seasoning.period = numeric(),
-                         CPR = numeric()) { 
+  #' Mortgage Scenario Analysis
+  #' 
+  #' A function to compute the total return of mortgage pass-throughs MBS
+  #' @param bond.id A character string to object of type MBS details
+  #' @param settlement.date A charcter string the settlement date
+  #' @param rates.data A character string the trade date mm-dd-yyyy
+  #' @param price A numeric value the price
+  #' @param original.bal A numeric value the price
+  #' @param scenario A character string the scenario
+  #' @param horizon.months A numeric value the time horizon
+  #' @param method A character string the method used to fit the term structure
+  #' @param prepayment A character string the prepayment assumption
+  #' @param ... Optional values when PSA or CPR is used
+  #' @param horizon.spot.spread A numeric value the horizon spread
+  #' @param horizon.nominal.spread A numeric value the horizon spread
+  #' @param horizon.OAS A numeric value the horizon option adjusted spread
+  #' @param horizon.price A numeric value the horizon price in decimal form
+  #' @param begin.cpr A numeric value the beginning CPR value
+  #' @param end.cpr A numeric value the ending CPR value
+  #' @param seasoning.period A numeric value the length of the seasoning ramp
+  #' @param CPR A numeric value the CPR speed
+  #' @export Mtg.Scenario
+  Mtg.Scenario <- function(bond.id ="character",
+                           settlement.date = "character",
+                           rates.data = "character",
+                           price = numeric(), 
+                           original.bal = numeric(),
+                           scenario = "character",
+                           horizon.months = numeric(),
+                           method = "character",
+                           prepayment = "character",
+                           ...,
+                           horizon.spot.spread = NULL,
+                           horizon.nominal.spread = NULL,
+                           horizon.OAS = NULL,
+                           horizon.price = NULL,
+                           begin.cpr = numeric(),
+                           end.cpr = numeric(),
+                           seasoning.period = numeric(),
+                           CPR = numeric()) { 
   
   # =================================================================================================
   # Mortgage Scenario analysis is done in two steps
@@ -204,7 +254,7 @@ Mtg.Scenario <- function(bond.id ="character",
     horizon.price.type <- "price"
   }
   
-  print(horizon.price.type)
+
   
   bond.id <- bond.id
   MortgageRate <- MtgRate()
@@ -274,6 +324,7 @@ Mtg.Scenario <- function(bond.id ="character",
   
   HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
                               "/Temp_BondData/","TempPassThrough.rds", sep = ""))
+  
   HorizonMBS <- readRDS(HorizonConn)
   
   HorizonPrepaymentAssumption <- PrepaymentAssumption(bond.id = HorizonMBS,
@@ -391,7 +442,7 @@ Mtg.Scenario <- function(bond.id ="character",
   HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
   HorizonReturn <- (HorizonReturn - 1) * yield.basis
   
-  temp <- new("Mtg.Scenario",  
+              new("Mtg.Scenario",  
               Period = MortgageCashFlow@Period,
               PmtDate = MortgageCashFlow@PmtDate,
               TimePeriod = MortgageCashFlow@TimePeriod,

@@ -170,15 +170,25 @@
   if(price <= 1) {price = price} else {price = price/100}
   
   # calcualte beginning balance (principal) from the MBS pool factor
+  # accrued interest is calculated using the current factor
   factor = bond.id@MBSFactor
   principal = original.bal * factor
   
+  # The factor must be adjusted by the prepayment assumption so the 
+  # investor estimated cashflow is accurately projected following
+  # TBA settlement
+  
+  if(PrepaymentAssumption@PrepayAssumption == "CPR"){
+    AdjFactor = factor - PrepaymentAssumption@SMM[1]
+  } else {AdjFactor = factor}
+  
+  AdjPrincipal = original.bal * AdjFactor
+  
   MBS.CF.Table = CashFlowEngine(bond.id = bond.id,
                                 settlement.date = settlement.date,
-                                principal = principal,
+                                principal = AdjPrincipal,
                                 PrepaymentAssumption = PrepaymentAssumption)
 
-  
   #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
                                          start.date = start.date, 
@@ -190,8 +200,7 @@
   
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(MBS.CF.Table[1,"Pass Through Interest"])
-  
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(MBS.CF.Table[1, "Pass Through Interest"])
  
   # Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
@@ -210,11 +219,12 @@
                       tol = tolerance, 
                       time.period = as.numeric(MBS.CF.Table[,"Time"]), 
                       cashflow = as.numeric(MBS.CF.Table[,"Investor CashFlow"]), 
-                      principal = principal, 
+                      principal = AdjPrincipal, 
                       price = price, 
                       accrued.interest = accrued.interest)$root)
 
-  Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+  #Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+    Yield.To.Maturity = ytm
   
   #Step7 Present value of the cash flows Present Value Factors
   MBS.CF.Table[,"Present Value Factor"] = 1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * frequency))

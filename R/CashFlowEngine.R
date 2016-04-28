@@ -47,6 +47,7 @@
     #Build a vector of dates for the payment schedule
     # first get the pmtdate interval
     pmtdate.interval = months.in.year/frequency
+    
     # then compute the payment dates
     pmtdate = as.Date(c(if(settlement.date == issue.date) 
     {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))
@@ -63,7 +64,7 @@
     time.period = BondBasisConversion(issue.date = issue.date, 
                                     start.date = start.date, 
                                     end.date = end.date, 
-                                    settlement.date = settlement.date,
+                                    settlement.date = lastpmt.date,
                                     lastpmt.date = lastpmt.date, 
                                     nextpmt.date = pmtdate,
                                     type = bondbasis)

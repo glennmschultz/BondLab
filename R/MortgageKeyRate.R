@@ -227,8 +227,8 @@
                          proceeds)$root
 
   
-  #convert the spot spread to the frequency of the bond
-  #spot.spread = (((1+spot.spread)^(1/frequency))-1) * frequency
+  # The spot spread does not need to be converted to semi-bond 
+  # because time weights are used rather than period weights
   
   #------------- Step three add the spot spread to the spot curve 
   # This yields the discount rates that are need for the key rate duration calculation

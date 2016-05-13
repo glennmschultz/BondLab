@@ -69,7 +69,36 @@
                                         PrepaymentAssumption = "character") 
   {standardGeneric("MortgageCashFlow")})
   
-
+  #' A standard generic function to access the slot Price
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Price", function(object)
+  {standardGeneric("Price")})
+  
+  #' A standard generic function to access the slot Accrued
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Accrued", function(object)
+  {standardGeneric("Accrued")})
+  
+  #' A standard generic function to access the slot YieldToMaturity
+  #' @param  object an S4 class object
+  #' @export
+  setGeneric("YieldToMaturity", function(object)
+  {standardGeneric("YieldToMaturity")})
+  
+  #' A standard generic function to access the slot WAL
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("WAL", function(object)
+  {standardGeneric("WAL")})
+  
+  #' A standard generic function to access the slot PrepaidPrin
+  #' @param object an object whose method signature is KDS_PassThrough
+  #' @export
+  setGeneric("PrepaidPrin", function(object)
+  {standardGeneric("PrepaidPrin")})
+  
   setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
@@ -124,6 +153,35 @@
             return(.Object)
           })
 
+  #' Method to extract Price from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod Price
+  setMethod("Price", signature("MortgageCashFlow"),
+            function(object){object@Price})
+  
+  #' Method to extract Accrued from S4 class
+  #' @param object the nameof the S4 object
+  #' @exportMethod Accrued
+  setMethod("Accrued", signature = ("MortgageCashFlow"),
+            function(object){object@Accrued})
+  
+  #' Method to extract YieldToMaturity from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod YieldToMaturity
+  setMethod("YieldToMaturity", signature = ("MortgageCashFlow"),
+            function(object){object@YieldToMaturity})
+  
+  #' Method to extract WAL from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod WAL
+  setMethod("WAL", signature = ("MortgageCashFlow"),
+            function(object){object@WAL})
+  
+  #' Method to extract Prepaid Principal from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod PrepaidPrin
+  setMethod("PrepaidPrin", signature("MortgageCashFlow"),
+            function(object){object@PrepaidPrin})
 
   #'  A function to compute the cash flow of a pool of securitized mortgages
   #' 
@@ -203,7 +261,8 @@
   accrued.interest = (days.of.accrued/days.between.pmtdate) * ((bond.id@Coupon/yield.basis)/frequency) * AdjPrincipal
  
   # Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
-  # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value 
+  # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
+
   irr <- function(rate, 
                   time.period, 
                   cashflow, 
@@ -214,6 +273,8 @@
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
+  
+    # create logic for the time weight between Time (neo) Period (classic)
     ytm = try(uniroot(irr, 
                       interval = c(lower = -.75, upper = .75), 
                       tol = tolerance, 
@@ -223,7 +284,8 @@
                       price = price, 
                       accrued.interest = accrued.interest)$root)
     
-  # Because I use the time weights here the is no need to make adjustment 
+  # Because I use the time weights here the is no need to make adjustment
+  # If we use period weights we will need an adjustment  
     Yield.To.Maturity = ytm
   
   #Step7 Present value of the cash flows Present Value Factors

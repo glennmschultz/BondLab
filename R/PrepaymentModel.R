@@ -390,6 +390,13 @@
 
     MDR = pmin(1, Monthly.Default * exp(Multiplier))
     return(MDR)}
+  
+  
+  # This function propogates the mortgage rate
+  # Here the switch function is used to determine the mortgage function to propogate the forward mortgage rate
+  # switch is used because there will be more than 2 or 3 rates in the future and if else will get messy
+  
+  
 
 
 
@@ -474,20 +481,19 @@
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))
   
-  # Here the switch function is used to determine the mortgage function to propogate the forward mortgage rate
-  # switch is used because there will be more than 2 or 3 rates in the future and if else will get messy
-  # the switch function is encapsulated with prepayment assumption for now
-  
-  Mtg.Rate <- function(TermStructure = "character", type = "character", term = numeric()) {
-    term = as.character(term)
+  Mtg.Rate <- function(TermStructure = "character", 
+                       type = "character", 
+                       term = numeric()) {
+    if(term >= 25) {term = as.character(30)
+    } else {term = as.character(15)}
     switch( type, 
             fixed = switch(term,
-            "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
-                                     ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
-                                     sato = sato),
-            "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
-                                     ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
-                                     sato = sato)
+                           "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
+                                                    ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
+                                                    sato = sato),
+                           "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
+                                                    ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
+                                                    sato = sato)
             ), # end first nested switch statement
             arm = switch(term, 
                          "30" = 0 ) # end second nested switch statement

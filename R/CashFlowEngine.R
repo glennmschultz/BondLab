@@ -55,12 +55,13 @@
   
     #  Validate the coupon and note rate passed through the error trapping function
     #  This validates that the correct unit is passed into the Bond Cash Flow function
-    if(coupon > 1) {coupon = coupon/100} else {coupon = coupon}
-    if(note.rate > 1) {note.rate = note.rate/100} else {note.rate = note.rate}
+    if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
+    if(note.rate > 1) {note.rate = note.rate/yield.basis} else {note.rate = note.rate}
     
-    #Build the time period vector (n) for discounting the cashflows 
-    #nextpmt date is vector of payment dates to n for each period.  The differnce between
-    
+    # Build the time period vector (n) for discounting the cashflows 
+    # nextpmt date is vector of payment dates to n for each period.  The differnce between
+    # need TBA versus T + 3 settlement date logic
+    # if T + 3 then settlement date is equal to settlement date
     time.period = BondBasisConversion(issue.date = issue.date, 
                                     start.date = start.date, 
                                     end.date = end.date, 

@@ -10,7 +10,6 @@
   # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
-
   #' An S4 class to represent a mortgage pass-through security
   #' 
   #' @slot Cusip A character string the pass-through cusip
@@ -186,55 +185,56 @@
                    CurrentBal = "numeric",
                    Model = "character",
                    Burnout = "numeric",
-                   SATO = "numeric")
-          
-  {
-            .Object@Cusip = Cusip
-            .Object@ID = ID
-            .Object@BondType = BondType
-            .Object@Sector = Sector
-            .Object@Coupon = Coupon
-            .Object@IssueDate = IssueDate
-            .Object@DatedDate = DatedDate
-            .Object@Maturity = Maturity
-            .Object@LastPmtDate = LastPmtDate
-            .Object@NextPmtDate = NextPmtDate
-            .Object@Term = Term
-            .Object@WALA = WALA
-            .Object@WAM = WAM
-            .Object@PaymentDelay = PaymentDelay
-            .Object@Moody = Moody
-            .Object@SP = SP
-            .Object@BondLab = BondLab
-            .Object@Frequency = Frequency
-            .Object@BondBasis = BondBasis
-            .Object@GWac = GWac
-            .Object@OrigLoanBal = OrigLoanBal
-            .Object@OrigLTV = OrigLTV
-            .Object@AmortizationType = AmortizationType
-            .Object@AmortizationTerm = AmortizationTerm
-            .Object@Index = Index
-            .Object@Margin = Margin
-            .Object@FirstPmtDate = FirstPmtDate
-            .Object@FinalPmtDate = FinalPmtDate
-            .Object@Servicing = Servicing
-            .Object@PMI = PMI
-            .Object@Gfee = Gfee
-            .Object@InitialInterest = InitialInterest
-            .Object@InterestOnlyPeriod = InterestOnlyPeriod
-            .Object@FirstPrinPaymentDate = FirstPrinPaymentDate
-            .Object@BalloonPmt = BalloonPmt
-            .Object@BalloonDate = BalloonDate
-            .Object@MBSFactor = MBSFactor
-            .Object@Model = Model
-            .Object@Burnout = Burnout
-            .Object@SATO = SATO
-            
-            return(.Object)
+                   SATO = "numeric",
+                   ...){
+            callNextMethod(.Object,
+                           Cusip = Cusip,
+                           ID = ID,
+                           BondType = BondType,
+                           Sector = Sector,
+                           Coupon = Coupon,
+                           IssueDate = IssueDate,
+                           DatedDate = DatedDate,
+                           Maturity = Maturity,
+                           LastPmtDate = LastPmtDate,
+                           NextPmtDate = NextPmtDate,
+                           Term = Term,
+                           WALA = WALA,
+                           WAM = WAM,
+                           PaymentDelay = PaymentDelay,
+                           Moody = Moody,
+                           SP = SP,
+                           BondLab = BondLab,
+                           Frequency = Frequency,
+                           BondBasis = BondBasis,
+                           GWac = GWac,
+                           OrigLoanBal = OrigLoanBal,
+                           OrigLTV = OrigLTV,
+                           AmortizationType = AmortizationType,
+                           AmortizationTerm = AmortizationTerm,
+                           Index = Index,
+                           Margin = Margin,
+                           FirstPmtDate = FirstPmtDate,
+                           FinalPmtDate = FinalPmtDate,
+                           Servicing = Servicing,
+                           PMI = PMI,
+                           Gfee = Gfee,
+                           InitialInterest = InitialInterest,
+                           InterestOnlyPeriod = InterestOnlyPeriod,
+                           FirstPrinPaymentDate = FirstPrinPaymentDate,
+                           BalloonPmt = BalloonPmt,
+                           BalloonDate = BalloonDate,
+                           MBSFactor = MBSFactor,
+                           Model = Model,
+                           Burnout = Burnout,
+                           SATO = SATO,
+            ...)
           })
 
 
 
+  
+  
   MBSDetails <- function(
   Cusip = "character",
   ID = "character",

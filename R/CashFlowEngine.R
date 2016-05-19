@@ -59,15 +59,15 @@
     if(note.rate > 1) {note.rate = note.rate/yield.basis} else {note.rate = note.rate}
     
     # Build the time period vector (n) for discounting the cashflows 
-    # nextpmt date is vector of payment dates to n for each period.  The differnce between
+    # nextpmt date is vector of payment dates to n for each period.  
     # need TBA versus T + 3 settlement date logic
     # if T + 3 then settlement date is equal to settlement date
     time.period = BondBasisConversion(issue.date = issue.date, 
                                     start.date = start.date, 
                                     end.date = end.date, 
-                                    settlement.date = lastpmt.date,
-                                    lastpmt.date = lastpmt.date, 
-                                    nextpmt.date = pmtdate,
+                                    settlement.date = lastpmt.date + delay,
+                                    lastpmt.date = lastpmt.date + delay, 
+                                    nextpmt.date = pmtdate + delay,
                                     type = bondbasis)
     
     #Count the number of cashflows 

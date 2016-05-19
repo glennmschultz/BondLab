@@ -124,33 +124,33 @@
                    ServicingIncome = numeric(),
                    PMIPremium = numeric(),
                    GFeePremium = numeric(),  
-                   TotalCashFlow = numeric()){
-            
-            .Object@Price = Price
-            .Object@Accrued = Accrued
-            .Object@YieldToMaturity = YieldToMaturity
-            .Object@WAL = WAL
-            .Object@ModDuration = ModDuration
-            .Object@Convexity = Convexity
-            .Object@Period = Period
-            .Object@PmtDate = PmtDate
-            .Object@TimePeriod = TimePeriod
-            .Object@BeginningBal = BeginningBal
-            .Object@MonthlyPmt = MonthlyPmt
-            .Object@MonthlyInterest = MonthlyInterest
-            .Object@PassThroughInterest = PassThroughInterest
-            .Object@ScheduledPrin = ScheduledPrin
-            .Object@PrepaidPrin = PrepaidPrin
-            .Object@DefaultedPrin = DefaultedPrin
-            .Object@LossAmount = LossAmount
-            .Object@RecoveredAmount = RecoveredAmount
-            .Object@EndingBal = EndingBal
-            .Object@ServicingIncome = ServicingIncome
-            .Object@PMIPremium = PMIPremium
-            .Object@GFeePremium = GFeePremium  
-            .Object@TotalCashFlow = TotalCashFlow
-            
-            return(.Object)
+                   TotalCashFlow = numeric(),
+                   ...){
+            callNextMethod(.Object,
+                           Price = Price,
+                           Accrued = Accrued,
+                           YieldToMaturity = YieldToMaturity,
+                           WAL = WAL,
+                           ModDuration = ModDuration,
+                           Convexity = Convexity,
+                           Period = Period,
+                           PmtDate = PmtDate,
+                           TimePeriod = TimePeriod,
+                           BeginningBal = BeginningBal,
+                           MonthlyPmt = MonthlyPmt,
+                           MonthlyInterest = MonthlyInterest,
+                           PassThroughInterest = PassThroughInterest,
+                           ScheduledPrin = ScheduledPrin,
+                           PrepaidPrin = PrepaidPrin,
+                           DefaultedPrin = DefaultedPrin,
+                           LossAmount = LossAmount,
+                           RecoveredAmount = RecoveredAmount,
+                           EndingBal = EndingBal,
+                           ServicingIncome = ServicingIncome,
+                           PMIPremium = PMIPremium,
+                           GFeePremium = GFeePremium,
+                           TotalCashFlow = TotalCashFlow,
+                           ...)
           })
 
   #' Method to extract Price from S4 class

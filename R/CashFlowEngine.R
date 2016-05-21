@@ -119,7 +119,7 @@
   
     for(x in 1:num.periods){
       MBS.CF.Table[x,"Period"] = x
-      MBS.CF.Table[x,"Date"] = pmtdate[x] #+ delay
+      MBS.CF.Table[x,"Date"] = pmtdate[x] 
       MBS.CF.Table[x,"Time"] = time.period[x]
       if (MBS.CF.Table[x,"Period"] == 1) {MBS.CF.Table[x,"Begin Bal"] = principal
       } else {MBS.CF.Table[x,"Begin Bal"] = MBS.CF.Table[x-1,"Ending Bal"]}
@@ -151,7 +151,9 @@
     
     # Settlement period adjustment to period vector
     # this will sync up the period vector to the time period vector
+    # and complete the cash flow table adjusted for settlement date
     MBS.CF.Table[x,"Period"] = MBS.CF.Table[x,"Period"] + remain.period
+    
     return(MBS.CF.Table)
 }
 

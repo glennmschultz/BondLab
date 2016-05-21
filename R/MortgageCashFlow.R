@@ -171,6 +171,48 @@
   setGeneric("DefaultedPrin", function(object)
   {standardGeneric("DefaultedPrin")})
   
+  #' A standard generic function to access the slot LossAmount
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("LossAmount", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot RecoveredAmount
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("RecoveredAmount", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot EndingBalance
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("EndingBalance", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot of ServicingIncome
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("ServicingIncome", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot of PMIPremium
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("PMIPremium", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot of GFeePremium
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("GFeePremium", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot of TotalCashFlow
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("TotalCashFlow", function(object)
+    {standardGeneric})
+  
   setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
@@ -310,11 +352,52 @@
             function(object){object@PrepaidPrin})
   
   #' Method to extract the Defaulted Principal from class MortgageCashFlow
-  #' @param object the name ofthe object of type MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
   #' @exportMethod DefaultedPrin
   setMethod("DefaultedPrin", signature("MortgageCashFlow"),
             function(object){object@DefaultedPrin})
-
+  
+  #' Method to extract the Defaulted Principal from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod LossAmount
+  setMethod("LossAmount", signature("MortgageCashFlow"),
+            function(object){object@LossAmount})
+  
+  #' Method to extract the Recovered Amount from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod RecoveredAmount
+  setMethod("RecoveredAmount", signature("MortgageCashFlow"),
+            function(object){object@RecoveredAmount})
+  
+  #' Method to extract the Ending Balance from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod EndingBalance
+  setMethod("EndingBalance", signature("MortgageCashFlow"),
+            function(object){object@EndingBalance})
+  
+  #' Method to extract the Servicing Income from the class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod ServicingIncome
+  setMethod("ServicingIncome", signature("MortgageCashFlow"),
+            function(object){object@ServicingIncome})
+  
+  #' Method to extract the PMIPremium from the class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod PMIPremium
+  setMethod("PMIPremium", signature("MortgageCashFlow"),
+            function(object){object@PMIPremium})
+  
+  #' Method to extract the GFeePremium from the class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod GFeePremium
+  setMethod("GFeePremium", signature("MortgageCashFlow"),
+            function(object){object@GFeePremium})
+  
+  #' Method to extract the TotalCashFlow from the class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod TotalCashFlow
+  setMethod("TotalCashFlow", signature("MortgageCashFlow"),
+            function(object){object@TotalCashFlow})
   
   #'  A function to compute the cash flow of a pool of securitized mortgages
   #' 
@@ -362,7 +445,7 @@
   #  This validates that the correct unit is passed into the Bond Cash Flow function
   if(price <= 1) {price = price} else {price = price/price.basis}
   
-  # calcualte beginning balance (principal) from the MBS pool factor
+  # calculate beginning balance (principal) from the MBS pool factor
   # accrued interest is calculated using the current factor
   factor = bond.id@MBSFactor
   principal = original.bal * factor
@@ -409,24 +492,24 @@
                   principal, 
                   price, 
                   accrued.interest){
-    #pv = cashflow * exp(rate * -time.period)
-    pv = cashflow * 1/(1+rate) ^ time.period
-    proceeds = principal * price
-    sum(pv) - (proceeds + accrued.interest)}
+  #pv = cashflow * exp(rate * -time.period)
+  pv = cashflow * 1/(1+rate) ^ time.period
+  proceeds = principal * price
+  sum(pv) - (proceeds + accrued.interest)}
   
   
-    # note: create an XIRR type function to replace uniroot
-    ytm = try(uniroot(irr, 
-                      interval = c(lower = -.75, upper = .75), 
-                      tol = tolerance, 
-                      time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
-                      cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
-                      principal = AdjPrincipal, 
-                      price = price, 
-                      accrued.interest = accrued.interest)$root)
+  # note: create an XIRR type function to replace uniroot
+  ytm = try(uniroot(irr, 
+                  interval = c(lower = -.75, upper = .75), 
+                  tol = tolerance, 
+                  time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
+                  cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
+                  principal = AdjPrincipal, 
+                  price = price, 
+                  accrued.interest = accrued.interest)$root)
     
-    # Convert to semi-bond equivalent
-    Yield.To.Maturity = (((1 + ytm) ^ (1/2)) -1) * 2
+  # Convert to semi-bond equivalent
+  Yield.To.Maturity = (((1 + ytm) ^ (1/2)) -1) * 2
   
   #Step7 Present value of the cash flows Present Value Factors
   MBS.CF.Table[,"Present Value Factor"] = round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * frequency))),12)
@@ -448,7 +531,6 @@
     ((principal * price) + accrued.interest)
   
   MBS.CF.Table[,"Convexity"] = MBS.CF.Table[,"Convexity Time"] * MBS.CF.Table[,"CashFlow Convexity"] 
-  
   
   #Duration and Convexity
   Duration = apply(MBS.CF.Table, 2, sum)["Duration"]

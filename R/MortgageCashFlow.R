@@ -409,6 +409,7 @@
                   principal, 
                   price, 
                   accrued.interest){
+    #pv = cashflow * exp(rate * -time.period)
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
@@ -424,9 +425,8 @@
                       price = price, 
                       accrued.interest = accrued.interest)$root)
     
-  # Because I use the time weights irr function there is no need to make semi-bond adjustment
-  # using period weights requires an adjustment  
-    Yield.To.Maturity = ytm
+    # Convert to semi-bond equivalent
+    Yield.To.Maturity = (((1 + ytm) ^ (1/2)) -1) * 2
   
   #Step7 Present value of the cash flows Present Value Factors
   MBS.CF.Table[,"Present Value Factor"] = round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * frequency))),12)

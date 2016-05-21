@@ -50,8 +50,8 @@
     
     # then compute the payment dates
     pmtdate = as.Date(c(if(settlement.date == issue.date) 
-    {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))
-    } else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
+    {seq(start.date + delay, end.date + delay, by = paste(pmtdate.interval, "months"))
+    } else {seq(nextpmt.date + delay, end.date + delay, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
   
     #  Validate the coupon and note rate passed through the error trapping function
     #  This validates that the correct unit is passed into the Bond Cash Flow function
@@ -65,10 +65,24 @@
     time.period = BondBasisConversion(issue.date = issue.date, 
                                     start.date = start.date, 
                                     end.date = end.date, 
-                                    settlement.date = lastpmt.date + delay,
-                                    lastpmt.date = lastpmt.date + delay, 
-                                    nextpmt.date = pmtdate + delay,
+                                    settlement.date = settlement.date,
+                                    lastpmt.date = lastpmt.date, 
+                                    nextpmt.date = pmtdate,
                                     type = bondbasis)
+    
+    # step5 calculate accrued interest for the period this is also
+    # the remain time period used to adjust the period vector 
+    days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
+                                           start.date = start.date, 
+                                           end.date = end.date, 
+                                           settlement.date = settlement.date,
+                                           lastpmt.date = lastpmt.date,
+                                           nextpmt.date = nextpmt.date,
+                                           type = bondbasis)) * days.in.year.360
+    
+    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
+    days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
+    remain.period = days.of.accrued/days.in.year.360
     
     #Count the number of cashflows 
     #num.periods is the total number of cashflows to be received
@@ -105,7 +119,7 @@
   
     for(x in 1:num.periods){
       MBS.CF.Table[x,"Period"] = x
-      MBS.CF.Table[x,"Date"] = pmtdate[x] + delay
+      MBS.CF.Table[x,"Date"] = pmtdate[x] #+ delay
       MBS.CF.Table[x,"Time"] = time.period[x]
       if (MBS.CF.Table[x,"Period"] == 1) {MBS.CF.Table[x,"Begin Bal"] = principal
       } else {MBS.CF.Table[x,"Begin Bal"] = MBS.CF.Table[x-1,"Ending Bal"]}
@@ -135,7 +149,9 @@
       MBS.CF.Table[x,"Recovered Amount"] + MBS.CF.Table[x,"Pass Through Interest"]
     }
     
-    
+    # Settlement period adjustment to period vector
+    # this will sync up the period vector to the time period vector
+    MBS.CF.Table[x,"Period"] = MBS.CF.Table[x,"Period"] + remain.period
     return(MBS.CF.Table)
 }
 

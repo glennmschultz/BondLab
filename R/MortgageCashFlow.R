@@ -1,11 +1,17 @@
 
   # Bond Lab is a software application for the analysis of 
-  # fixed income securities it provides a suite of applications
-  # in addition to standard fixed income analysis bond lab provides 
-  # for the specific analysis of structured products residential mortgage backed securities, 
+  # fixed income securities.  It provides a suite of applications for fixed income
+  # In addition to standard fixed income analysis Bond Lab is designed for the 
+  # specific analysis of structured products residential mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
-  # File License
+  # See the File License 
   # Copyright (C) 2015 Bond Lab Technologies, Inc
+
+  # The following script analyzes a pass-through security.  To create the script 
+  # the standard procedure is followed set class, set generics, set methods, functions
+  # the generics and methods are getters for the class MortgageCashFlow and the initialize
+  # method for the class.  This class is a subclass of the following: (document the superclasses)
+  # for the most part this script is requiring only modest changes.
   
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security
@@ -93,11 +99,77 @@
   setGeneric("WAL", function(object)
   {standardGeneric("WAL")})
   
-  #' A standard generic function to access the slot PrepaidPrin
-  #' @param object an object whose method signature is KDS_PassThrough
+  #' A standard generic function to access the slot ModDuration
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("ModDuration", function(object)
+    {standardGeneric("ModDuration")})
+  
+  #' A standard generic function to access the slot Convexity
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("Convexity", function(object)
+    {standardGeneric("Convexity")})
+  
+  #' A standard generic function to access the slot Period
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("Period", function(object)
+    {standardGeneric("Period")})
+  
+  #' A standard generic function to access the slot PmtDate
+  #' @param object an S4 class object of type MortgageCashFlow 
+  #' @export
+  setGeneric("PmtDate", function(object)
+    {standardGeneric("PmtDate")})
+
+  #' A standard generic function to access the slot TimePeriod
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("TimePeriod", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot BeginningBal
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("BeginningBal", function(object)
+    {standardGeneric})
+  
+  #' A standard generic function to access the slot MonthlyPmt
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("MonthlyPmt", function(object)
+    {standardGeneric})
+  
+  #' A generic function to access the slot MonthlyInterest
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("MonthlyInterest", function(object)
+    {standardGeneric})
+  
+  #' A generic function to access the slot PassThroughInterest
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("PassThroughInterest", function(object)
+    {standardGeneric})
+  
+  #' A generic function to access the slot ScheduledPrin
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export
+  setGeneric("ScheduledPrin", function(object)
+    {standardGeneric})
+  
+  #' A generic function to access to the slot PrepaidPrin
+  #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("PrepaidPrin", function(object)
-  {standardGeneric("PrepaidPrin")})
+    {standardGeneric})
+    
+  #' A standard generic function to access the slot DefaultedPrin
+  #' @param object an S4 class object of type MortgageCashFlow
+  #' @export
+  setGeneric("DefaultedPrin", function(object)
+  {standardGeneric("DefaultedPrin")})
   
   setMethod("initialize",
           signature("MortgageCashFlow"),
@@ -177,12 +249,73 @@
   setMethod("WAL", signature = ("MortgageCashFlow"),
             function(object){object@WAL})
   
+  #' Method to extract Modified Duration from S4 class 
+  #' @param object the name of the S4 object
+  #' @exportMethod ModDuration
+  setMethod("ModDuration", signature = ("MortgageCashFlow"),
+            function(object){object@WAL})
+  
+  #' Method to extract Period from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod Period
+  setMethod("Period", signature = ("MortgageCashFlow"),
+            function(object){object@PrepaidPrin})
+  
+  #' Method to extract PmtDate from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod PmtDate
+  setMethod("PmtDate", signature = ("MortgageCashFlow"),
+            function(object){object@PmtDate})
+  
+  #' Method to extract the TimePeriod from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod TimePeriod
+  setMethod("TimePeriod", signature = ("MortgageCashFlow"),
+            function(object){object@TimePeriod})
+  
+  #' Method to extract the PrepaidPrin from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod PrepaidPrin
+  setMethod("BeginningBal", signature = ("MortgageCashFlow"),
+            function(object){object@BeginningBal})
+  
+  #' Method to extract the MonthlyPmt from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod MonthlyPmt
+  setMethod("MonthlyPmt", signature = ("MortgageCashFlow"),
+            function(object){object@MonthlyPmt})
+  
+  #' Method to extract the MonthlyInterest from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod MonthlyInterest
+  setMethod("MonthlyInterest", signature = ("MortgageCashFlow"),
+            function(object){object@MonthlyInterest})
+  
+  #' Method to extract the PassThroughInterest from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod PassThroughInterest
+  setMethod("PassThroughInterest", signature("MortgageCashFlow"),
+            function(object){object@PassThroughInterest})
+  
+  #' Method to extract the ScheduledPrin from class MortgageCashFlow
+  #' @param object the name of the object of type MortgageCashFlow
+  #' @exportMethod ScheduledPrin
+  setMethod("ScheduledPrin", signature("MortgageCashFlow"),
+             function(object){object@ScheduledPrin})
+  
   #' Method to extract Prepaid Principal from class MortgageCashFlow
   #' @param object the name of the object of type MortgageCashFlow
   #' @exportMethod PrepaidPrin
   setMethod("PrepaidPrin", signature("MortgageCashFlow"),
             function(object){object@PrepaidPrin})
+  
+  #' Method to extract the Defaulted Principal from class MortgageCashFlow
+  #' @param object the name ofthe object of type MortgageCashFlow
+  #' @exportMethod DefaultedPrin
+  setMethod("DefaultedPrin", signature("MortgageCashFlow"),
+            function(object){object@DefaultedPrin})
 
+  
   #'  A function to compute the cash flow of a pool of securitized mortgages
   #' 
   #' This is a generic function used to construct the class object MortgageCashFlow.
@@ -221,11 +354,13 @@
   delay = bond.id@PaymentDelay
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   bondbasis = bond.id@BondBasis
+  note.rate = bond.id@GWac
+  WAM = bond.id@WAM
   
   
   #  Validate the price and coupon passed through the error trapping function
   #  This validates that the correct unit is passed into the Bond Cash Flow function
-  if(price <= 1) {price = price} else {price = price/100}
+  if(price <= 1) {price = price} else {price = price/price.basis}
   
   # calcualte beginning balance (principal) from the MBS pool factor
   # accrued interest is calculated using the current factor
@@ -236,8 +371,13 @@
   # investor estimated cashflow is accurately projected following
   # TBA settlement
   
+  SchedSMM = Sched.Prin(balance = 1, 
+                        note.rate = note.rate,
+                        term.mos = WAM,
+                        period =1)
+  
   if(PrepaymentAssumption@PrepayAssumption == "CPR"){
-    AdjFactor = factor - PrepaymentAssumption@SMM[1]
+    AdjFactor = factor - PrepaymentAssumption@SMM[1] - SchedSMM
   } else {AdjFactor = factor}
   
   AdjPrincipal = original.bal * AdjFactor
@@ -258,7 +398,7 @@
   
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * ((bond.id@Coupon/yield.basis)/frequency) * AdjPrincipal
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * ((bond.id@Coupon/yield.basis)/frequency) * principal
  
   # Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
@@ -274,25 +414,25 @@
     sum(pv) - (proceeds + accrued.interest)}
   
   
-    # create logic for the time weight between Time (neo) Period (classic)
+    # note: create an XIRR type function to replace uniroot
     ytm = try(uniroot(irr, 
                       interval = c(lower = -.75, upper = .75), 
                       tol = tolerance, 
-                      time.period = as.numeric(MBS.CF.Table[,"Time"]), 
-                      cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),8), 
+                      time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
+                      cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
                       principal = AdjPrincipal, 
                       price = price, 
                       accrued.interest = accrued.interest)$root)
     
-  # Because I use the time weights here the is no need to make adjustment
-  # If we use period weights we will need an adjustment  
+  # Because I use the time weights irr function there is no need to make semi-bond adjustment
+  # using period weights requires an adjustment  
     Yield.To.Maturity = ytm
   
   #Step7 Present value of the cash flows Present Value Factors
-  MBS.CF.Table[,"Present Value Factor"] = 1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * frequency))
+  MBS.CF.Table[,"Present Value Factor"] = round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * frequency))),12)
   
   #Present Value of the cash flows
-  MBS.CF.Table[,"Present Value"] = MBS.CF.Table[,"Investor CashFlow"] * MBS.CF.Table[,"Present Value Factor"]
+  MBS.CF.Table[,"Present Value"] = round(MBS.CF.Table[,"Investor CashFlow"] * MBS.CF.Table[,"Present Value Factor"],12)
   
   #Step8 Risk measures Duration Factors
   MBS.CF.Table[,"Duration"] = MBS.CF.Table[,"Time"] * (MBS.CF.Table[,"Present Value"]/((principal * price) + accrued.interest))

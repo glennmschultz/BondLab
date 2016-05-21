@@ -297,11 +297,17 @@
   setMethod("ModDuration", signature = ("MortgageCashFlow"),
             function(object){object@WAL})
   
+  #' Method to extract Convexity from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod Convexity
+  setMethod("Convexity", signature("MortgageCashFlow"),
+            function(object){object@Convexity})
+  
   #' Method to extract Period from S4 class
   #' @param object the name of the S4 object
   #' @exportMethod Period
   setMethod("Period", signature = ("MortgageCashFlow"),
-            function(object){object@PrepaidPrin})
+            function(object){object@Period})
   
   #' Method to extract PmtDate from S4 class
   #' @param object the name of the S4 object
@@ -373,7 +379,7 @@
   #' @param object the name of the object of type MortgageCashFlow
   #' @exportMethod EndingBalance
   setMethod("EndingBalance", signature("MortgageCashFlow"),
-            function(object){object@EndingBalance})
+            function(object){object@EndingBal})
   
   #' Method to extract the Servicing Income from the class MortgageCashFlow
   #' @param object the name of the object of type MortgageCashFlow

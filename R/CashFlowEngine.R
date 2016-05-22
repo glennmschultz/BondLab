@@ -149,10 +149,6 @@
       MBS.CF.Table[x,"Recovered Amount"] + MBS.CF.Table[x,"Pass Through Interest"]
     }
     
-    # Settlement period adjustment to period vector
-    # this will sync up the period vector to the time period vector
-    # and complete the cash flow table adjusted for settlement date
-    MBS.CF.Table[x,"Period"] = MBS.CF.Table[x,"Period"] + remain.period
     
     return(MBS.CF.Table)
 }

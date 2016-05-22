@@ -323,7 +323,7 @@
   
   #' Method to extract the PrepaidPrin from class MortgageCashFlow
   #' @param object the name of the object of type MortgageCashFlow
-  #' @exportMethod PrepaidPrin
+  #' @exportMethod BeginningBal
   setMethod("BeginningBal", signature = ("MortgageCashFlow"),
             function(object){object@BeginningBal})
   

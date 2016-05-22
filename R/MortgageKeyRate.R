@@ -77,31 +77,67 @@
                   EffConvexity = "numeric",
                   KeyRateTenor = "numeric",
                   KeyRateDuration = "numeric",
-                  KeyRateConvexity = "numeric"){
-           .Object@SpotSpread = SpotSpread
-           .Object@EffDuration = EffDuration
-           .Object@EffConvexity = EffConvexity
-           .Object@KeyRateTenor = KeyRateTenor
-           .Object@KeyRateDuration = KeyRateDuration
-           .Object@KeyRateConvexity = KeyRateConvexity
-
-           return(.Object)
-
+                  KeyRateConvexity = "numeric",
+                  ...){
+          callNextMethod(.Object,
+                  SpotSpread = SpotSpread,
+                  EffDuration = EffDuration,
+                  EffConvexity = EffConvexity,
+                  KeyRateTenor = KeyRateTenor,
+                  KeyRateDuration = KeyRateDuration,
+                  KeyRateConvexity = KeyRateConvexity,
+           ...)
          })
-
-#' A function to calculate mortgage key rate duration
-#' 
-#' This is a generic function used to construct the MortgageTermStructure object
-#' @param bond.id A character string refrencing an object of type MBS details
-#' @param original.bal A numeric value the original balance
-#' @param Rate.Delta A numeric value the rate delta used to calculate KRDs
-#' @param TermStructure A character string referencing an object of the type TermStructure
-#' @param settlement.date a character string the settlement date
-#' @param principal A numeric value the principal balance.  The principal balance is the 
-#' original balance multiplied by the MBS factor
-#' @param price A numeric value the price paid
-#' @param cashflow A character string referencing an object of the type MortgageCashFlow
-#' @export MtgTermStructure
+  
+  #' Method to extract SpotSpread from S4 class
+  #' @param object The name of the S4 object of type MortgageTermStructure
+  #' @exportMethod SpotSpread
+  setMethod("SpotSpread", signature("MortgageTermStructure"),
+            function(object){object@SpotSpread})
+  
+  #' Method to extract EffDuration from S4 class
+  #' @param object The name of the S4 object of type MortgageTermStructure
+  #' @exportMethod EffDuration
+  setMethod("EffDuration", signature("MortgageTermStructure"),
+            function(object){object@EffDuration})
+  
+  #' Method to extract EffConvexity from S4 class
+  #' @param object The name of the S4 object of type MortgageTermStructure
+  #' @exportMethod EffConvexity
+  setMethod("EffConvexity", signature("MortgageTermStructure"),
+            function(object){object@EffConvexity})
+  
+  #' Method to extract the KeyRateTenor from S4 class
+  #' @param object The name of the S4 object of type MortgageTermStructure
+  #' @exportMethod KeyRateTenor
+  setMethod("KeyRateTenor", signature("MortgageTermStructure"),
+            function(object){object@KeyRateTenor})
+  
+  #' Method to extract the KeyRateDuration from S4 class
+  #' @param object The name of the S4 object of type MortgageTermStructure
+  #' @exportMethod KeyRateDuration
+  setMethod("KeyRateDuration", signature("MortgageTermStructure"),
+            function(object){object@KeyRateDuration})
+  
+  #' Method to extract the KeyRateConvexity from S4 class
+  #' @param object The name of the S4 object of type MortgageTermStructure
+  #' @exportMethod KeyRateConvexity
+  setMethod("KeyRateConvexity", signature("MortgageTermStructure"),
+            function(object){object@KeyRateConvexity})
+  
+  #' A function to calculate mortgage key rate duration
+  #' 
+  #' This is a generic function used to construct the MortgageTermStructure object
+  #' @param bond.id A character string refrencing an object of type MBS details
+  #' @param original.bal A numeric value the original balance
+  #' @param Rate.Delta A numeric value the rate delta used to calculate KRDs
+  #' @param TermStructure A character string referencing an object of the type TermStructure
+  #' @param settlement.date a character string the settlement date
+  #' @param principal A numeric value the principal balance.  The principal balance is the 
+  #' original balance multiplied by the MBS factor
+  #' @param price A numeric value the price paid
+  #' @param cashflow A character string referencing an object of the type MortgageCashFlow
+  #' @export MtgTermStructure
   MtgTermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 

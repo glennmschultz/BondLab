@@ -65,6 +65,5 @@ Collate:
     'REMICCusip.R'
     'RatesData.R'
     'ScenarioConstructor.R'
-    'StructuringFunctions.R'
     'TimeValueFunction.R'
     'zzz.R'

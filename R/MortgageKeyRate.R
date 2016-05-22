@@ -9,6 +9,11 @@
   # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
 
+  # The following script is used to calculate Term Structure
+  # metrics for mortgage backed securities.  To create the script
+  # the standard procedure is followed set class, set generics,
+  # set methods, functions.  This class is a sub class (document superclass)
+
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
@@ -27,7 +32,43 @@
                                              price = numeric(), 
                                              cashflow = "character")
               {standardGeneric("MortgageTermStructure")})
-
+  
+  #' A standard generic function to access the slot SpotSpread
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("SpotSpread", function(object)
+    {standardGeneric("SpotSpread")})
+  
+  #' A standard generic function to access the slot EffDuration
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("EffDuration", function(object)
+    {standardGeneric("EffDuration")})
+  
+  #' A standard generic function to access the slot EffConvexity
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("EffConvexity", function(object)
+    {standardGeneric("EffConvexity")})
+  
+  #' A standard generic function to access the slot KeyRateTenor
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("KeyRateTenor", function(object)
+    {standardGeneric("KeyRateTenor")})
+  
+  #' A standard generic function to access the slot KeyRateDuration
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("KeyRateDuration", function(object)
+    {standardGeneric("KeyRateDuration")})
+  
+  #' A standard generic function to access the slot KeyRateConvexity
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("KeyRateConvexity", function(object)
+    {standardGeneric("KeyRateConvexity")})
+  
   setMethod("initialize",
          signature("MortgageTermStructure"),
          function(.Object,

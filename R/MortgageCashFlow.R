@@ -295,7 +295,7 @@
   #' @param object the name of the S4 object
   #' @exportMethod ModDuration
   setMethod("ModDuration", signature = ("MortgageCashFlow"),
-            function(object){object@WAL})
+            function(object){object@ModDuration})
   
   #' Method to extract Convexity from S4 class
   #' @param object the name of the S4 object

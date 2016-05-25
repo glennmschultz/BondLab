@@ -8,13 +8,12 @@
   # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
   # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
 
-
   # The following script is used to calculate Term Structure
   # metrics for mortgage backed securities.  To create the script
   # the standard procedure is followed set class, set generics,
   # set methods, functions.  This class is a sub class (document superclass)
 
-  #' An S4 class MortgageTermStructure containing term structure data
+  #' An S4 class MortgageTermStructure
   #' 
   #' @slot SpotSpread A numeric value the spread to the spot rate curve
   #' @slot EffDuration A numeric value the effective duration
@@ -22,7 +21,7 @@
   #' @slot KeyRateTenor A numeric value the Key Rate Tenor
   #' @slot KeyRateDuration A numeric value the Key Rate Duration
   #' @slot KeyRateConvexity A numeric value the Key Rate Convexity
-  #' @export MortgageTermStructure
+  #' @exportClass MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
@@ -31,16 +30,17 @@
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
- 
-  setGeneric("MortgageTermStructure", function(bond.id = "character", 
-                                             original.bal = numeric(), 
-                                             Rate.Delta = numeric(), 
-                                             TermStructure = "character", 
-                                             settlement.date = "character", 
-                                             principal = numeric(), 
-                                             price = numeric(), 
-                                             cashflow = "character")
-              {standardGeneric("MortgageTermStructure")})
+  
+  setGeneric("MtgTermStructure", function(bond.id = "character", 
+                                          original.bal = numeric(), 
+                                          Rate.Delta = numeric(), 
+                                          TermStructure = "character", 
+                                          settlement.date = "character", 
+                                          principal = numeric(), 
+                                          price = numeric(), 
+                                          cashflow = "character")
+  {standardGeneric("MtgTermStructure")})
+
   
   #' A standard generic function to access the slot SpotSpread
   #' @param object an S4 class object
@@ -156,15 +156,6 @@
                              price = numeric(), 
                              cashflow = "character"){
   
-  # Depends on objects:
-  # bond.id
-  # Term Strucuture
-  # Mortgage or Bond CashFlows    
-  
-
-  # Open connections to prepayment model tune parameters and  mortgage rate model
-
-  
   # Open connection to the prepayment model tuning library
   ModelTune <- ModelTune(bond.id = bond.id)
   Burnout = bond.id@Burnout
@@ -176,21 +167,16 @@
   frequency = bond.id@Frequency
   maturity = bond.id@Maturity
   accrued = cashflow@Accrued
-  
-  #Class name variable.  This will set the class name for the new class to be initilized
-  ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")
-    } else {as.character("MortgageTermStructure")}
 
-  
   # create price for mortgage cash flow call in key rate
   price.mtg.cashflow <- price
  
-  
   #Error Trap the user's price input
   if(price <= 1) {price = price} else {price = price/yield.basis}
   if(price <=0) stop("No valid bond price")
   
   # calcuate proceeds the order of operation is important
+  
   # calculate price basis and then proceeds based on the correct price basis
   proceeds = (principal * price) + accrued 
   #========== Set the functions that will be used ==========
@@ -508,7 +494,7 @@
     )
     
   } # Outer Loop around KRIndex
-  new(as.character(ClassName),
+  new("MortgageTermStructure",
       SpotSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3]),

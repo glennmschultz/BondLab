@@ -3,9 +3,9 @@
 \docType{class}
 \name{MortgageTermStructure-class}
 \alias{MortgageTermStructure-class}
-\title{An S4 class MortgageTermStructure containing term structure data}
+\title{An S4 class MortgageTermStructure}
 \description{
-An S4 class MortgageTermStructure containing term structure data
+An S4 class MortgageTermStructure
 }
 \section{Slots}{
 

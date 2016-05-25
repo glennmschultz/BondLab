@@ -14,6 +14,15 @@
   # the standard procedure is followed set class, set generics,
   # set methods, functions.  This class is a sub class (document superclass)
 
+  #' An S4 class MortgageTermStructure containing term structure data
+  #' 
+  #' @slot SpotSpread A numeric value the spread to the spot rate curve
+  #' @slot EffDuration A numeric value the effective duration
+  #' @slot EffConvexity A numeric value the effective convexity
+  #' @slot KeyRateTenor A numeric value the Key Rate Tenor
+  #' @slot KeyRateDuration A numeric value the Key Rate Duration
+  #' @slot KeyRateConvexity A numeric value the Key Rate Convexity
+  #' @export MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(
            SpotSpread = "numeric",   
@@ -35,37 +44,37 @@
   
   #' A standard generic function to access the slot SpotSpread
   #' @param object an S4 class object
-  #' @export
+  #' @export SpotSpread
   setGeneric("SpotSpread", function(object)
     {standardGeneric("SpotSpread")})
   
   #' A standard generic function to access the slot EffDuration
   #' @param object an S4 class object
-  #' @export
+  #' @export EffDuration
   setGeneric("EffDuration", function(object)
     {standardGeneric("EffDuration")})
   
   #' A standard generic function to access the slot EffConvexity
   #' @param object an S4 class object
-  #' @export
+  #' @export EffConvexity
   setGeneric("EffConvexity", function(object)
     {standardGeneric("EffConvexity")})
   
   #' A standard generic function to access the slot KeyRateTenor
   #' @param object an S4 class object
-  #' @export
+  #' @export KeyRateTenor
   setGeneric("KeyRateTenor", function(object)
     {standardGeneric("KeyRateTenor")})
   
   #' A standard generic function to access the slot KeyRateDuration
   #' @param object an S4 class object
-  #' @export
+  #' @export KeyRateDuration
   setGeneric("KeyRateDuration", function(object)
     {standardGeneric("KeyRateDuration")})
   
   #' A standard generic function to access the slot KeyRateConvexity
   #' @param object an S4 class object
-  #' @export
+  #' @export KeyRateConvexity
   setGeneric("KeyRateConvexity", function(object)
     {standardGeneric("KeyRateConvexity")})
   

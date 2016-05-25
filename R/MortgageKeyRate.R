@@ -2,7 +2,7 @@
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
   # for the specific analysis of structured products residential mortgage backed securities, 
-  # asset backed securities, and commerical mortgage backed securities
+  # asset backed securities, and commercial mortgage backed securities
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
   # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
@@ -389,9 +389,6 @@
     # Derive Key Rate Up and Key Rate Down Cash Flows
     # For MBS Cashflows two term strucutre objects are created the up and down term strucutres
     # are used to drive the key rate scenario foward rates and the up and down MBS cashflows
-    # This suggests a separate Bond Term Structure for each; Bond Non-Callable, Bond Callable, and  Mortgage Term Strucutre
-    # I have the original Bond Non-Callable Term Structure Code
-    # Each can be incorporated to a final BondLab call using a switch command
     #-----------------------------------------------------------------------
     
     # Initialize the TermStructure Up and Down objects 

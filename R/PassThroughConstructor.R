@@ -96,7 +96,7 @@
            Model = "character",
            Burnout = "numeric",
            SATO = "numeric"))
- 
+  
   setGeneric("MakeMBSDetails", function(
     Cusip = "character",
     ID = "character",
@@ -140,6 +140,27 @@
     SATO = numeric())
   
   {standardGeneric("MakeMBSDetails")})
+  
+  #' A standard generic function to access the slot Cusip
+  #' @param object an S4 class object
+  #' @export Cusip
+  setGeneric("Cusip", function(object)
+    {standardGeneric("Cusip")})
+  
+  setGeneric("ID", function(object)
+    {standardGeneric("ID")})
+  
+  setGeneric("BondType", function(object)
+    {standardGeneric("BondType")})
+  
+  setGeneric("Sector", function(object)
+    {standardGeneric("Sector")})
+  
+  setGeneric("Coupon", function(object)
+    {standardGeneric("Coupon")})
+  
+  setGeneric("IssueDate", function(object)
+    {standardGeneric("IssueDate")})
   
   setMethod("initialize",
           signature("MBSDetails"),
@@ -231,8 +252,23 @@
             ...)
           })
 
-
-
+  setMethod("Cusip", signature("MBSDetails"),
+            function(object){object@MBSDetails})
+  
+  setMethod("ID", signature("MBSDetails"),
+            function(object){object@MBSDetails})
+  
+  setMethod("BondType", signature("MBSDetails"),
+            function(object){object@MBSDetails})
+  
+  setMethod("BondType", signature("MBSDetails"),
+            function(object){object@MBSDetails})
+  
+  setMethod("Coupon", signature("MBSDetails"),
+            function(object){object@MBSDetails})
+  
+  setMethod("IssueDate", signature("MBSDetails"),
+            function(object){object@MBSDetails})
   
   
   MBSDetails <- function(

@@ -82,7 +82,11 @@ An S4 class to represent a mortgage pass-through security
 
 \item{\code{BalloonDate}}{A character string the balloon payment date}
 
-\item{\code{MBSFactor}}{A numeric value the pass-through principal balance outstanding expressed as 
+\item{\code{MBSFactor}}{A numeric value the pass-through principal balance outstanding expressed as percent of the original balance}
+
+\item{\code{OriginalBal}}{A numeric value the pass-though original balance}
+
+\item{\code{CurrentBal}}{A numeric value the pass-through current balance 
 a percentage of the original balance}
 
 \item{\code{Model}}{A character string the prepayment model tune file}

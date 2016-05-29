@@ -18,7 +18,8 @@ MakeMBSDetails(Cusip = "character", ID = "character",
   Servicing = numeric(), PMI = numeric(), Gfee = numeric(),
   InitialInterest = "logical", InterestOnlyPeriod = numeric(),
   FirstPrinPaymentDate = "character", BalloonPmt = "logical",
-  BalloonDate = "character", MBSFactor = numeric(), Model = "character",
+  BalloonDate = "character", MBSFactor = numeric(),
+  OriginalBal = numeric(), CurrentBal = numeric(), Model = "character",
   Burnout = numeric(), SATO = numeric())
 }
 \arguments{
@@ -87,7 +88,7 @@ of the borrower's note.}
 of the borrower's note.  In the case of an MBS the final payment made to the bondholder}
 
 \item{Servicing}{A numeric value the servicing spread from the Gross WAC to the servicer
-of hte mortgage pool's underlying loans.}
+of the mortgage pool's underlying loans.}
 
 \item{PMI}{A numeric value the primary mortage insurance paid by the borrower to the 
 PMI provider}
@@ -108,6 +109,10 @@ due of the mortgage.}
 \item{BalloonDate}{A character string the balloon payment date.}
 
 \item{MBSFactor}{A numeric value the current factor of the MBS.}
+
+\item{OriginalBal}{A numeric value the original balance of the MBS.}
+
+\item{CurrentBal}{A numeric value the current balance of the MBS.}
 
 \item{Model}{A character string the prepayment model to use.}
 
@@ -158,6 +163,8 @@ This is a standard generic function used to construct a MBS pass through securit
  BalloonPmt = FALSE,
  BalloonDate = "00-00-0000",
  MBSFactor = 1,
+ OriginalBal = 1000000,
+ CurrentBal = 1000000,
  Model = "FH30.Generic",
  Burnout = 25,
  SATO = 0.75)} 

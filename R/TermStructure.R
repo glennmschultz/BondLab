@@ -14,25 +14,28 @@
   #Term strucutre call term strc 
   #and holds forward and spot rates as slots to class Term Structure
   #---------------------------------------------------
+
+  #' @include MortgageCashFlow.R
+  NULL
   
   #' An S4 class the term structure data needed to price bonds
   #' 
-  #' @slot tradedate A character string the trade date in the format
+  #' @slot TradeDate A character string the trade date in the format
   #' mm/dd/YYYY
-  #' @slot period A numeric value the period index of the next cash flow
-  #' @slot date A numeric value the date of the next cash flow
-  #' @slot spotrate A numeric value the one-month spot rate
-  #' @slot forwardrate A numeric value the one-month forward rate
+  #' @slot Period A numeric value the period index of the next cash flow
+  #' @slot Date A numeric value the date of the next cash flow
+  #' @slot SpotRate A numeric value the one-month spot rate
+  #' @slot ForwardRate A numeric value the one-month forward rate
   #' @slot TwoYearFwd A numeric vlaue the two-year forward rate
   #' @slot TenYearFwd A numeric value the ten-year forward rate
   #' @exportClass TermStructure
   setClass("TermStructure",
            representation(
-             tradedate = "character",
-             period = "numeric",
-             date = "character",
-             spotrate = "numeric",
-             forwardrate = "numeric",
+             TradeDate = "character",
+             Period = "numeric",
+             Date = "character",
+             SpotRate = "numeric",
+             ForwardRate = "numeric",
              TwoYearFwd = "numeric",
              TenYearFwd = "numeric"))
 
@@ -40,27 +43,109 @@
              function(rates.data = "character", method = "character")
              {standardGeneric("TermStructure")})
   
+  #' A generic function to access the slot tradedate
+  #' @param object an S4 class object
+  #' @export TradeDate
+  setGeneric("TradeDate", function(object)
+    {standardGeneric("TradeDate")})
+  
+  # Note: Both Object@Period standard generic is found in MortgageCashFlow.R
+  
+  #' A generic function to access the slot Date
+  #' @param object an S4 class object
+  #' @export ForwardDate
+  setGeneric("ForwardDate", function(object)
+    {standardGeneric("ForwardDate")})
+  
+  #' A generic function to access the slot SpotRate
+  #' @param object an S4 class object
+  #' @export SpotRate
+  setGeneric("SpotRate", function(object)
+    {standardGeneric("SpotRate")})
+  
+  #' A generic function to access the slot ForwardRate
+  #' @param object an S4 class object
+  #' @export ForwardRate
+  setGeneric("ForwardRate", function(object)
+    {standardGeneric("ForwardRate")})
+  
+  #' A generic function to access the slot TwoYearForward
+  #' @param object an S4 class object
+  #' @export TwoYearForward
+  setGeneric("TwoYearForward", function(object)
+    {standardGeneric("TwoYearForward")})
+  
+  #' A generic function to access the slot TenYearForward
+  #' @param object an S4 class object
+  #' @export TenYearForward
+  setGeneric("TenYearForward", function(object)
+    {standardGeneric("TenYearForward")})
+  
   setMethod("initialize",
           signature("TermStructure"),
-          function(.Object,...,
-                   tradedate = "character",
-                   period = "numeric",
-                   date = "character",
-                   spotrate = "numeric",
-                   forwardrate = "numeric",
+          function(.Object,
+                   TradeDate = "character",
+                   Period = "numeric",
+                   Date = "character",
+                   SpotRate = "numeric",
+                   ForwardRate = "numeric",
                    TwoYearFwd = "numeric",
-                   TenYearFwd = "numeric")
+                   TenYearFwd = "numeric",
+                   ...)
           {
-            .Object@tradedate = tradedate
-            .Object@period = period
-            .Object@date = date
-            .Object@spotrate = spotrate
-            .Object@forwardrate = forwardrate
-            .Object@TwoYearFwd = TwoYearFwd
-            .Object@TenYearFwd = TenYearFwd
+            callNextMethod(.Object,
+                           TradeDate = TradeDate,
+                           Period = Period,
+                           Date = Date,
+                           SpotRate = SpotRate,
+                           ForwardRate = ForwardRate,
+                           TwoYearFwd = TwoYearFwd,
+                           TenYearFwd = TenYearFwd,
+            ...)
             
-            return(.Object)
           })
+  
+  #' Method to extract TradeDate from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @exportMethod TradeDate
+  setMethod("TradeDate", signature("TermStructure"),
+            function(object){object@TradeDate})
+  
+  #' Method to extract Period from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod Period
+  setMethod("Period", signature("TermStructure"),
+            function(object){object@Period})
+  
+  #' Method to extract Date from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @exportMethod ForwardDate
+  setMethod("ForwardDate", signature("TermStructure"),
+            function(object){object@Date})
+  
+  #' Method to extract SpotRate from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @exportMethod SpotRate
+  setMethod("SpotRate", signature("TermStructure"),
+            function(object){object@SpotRate})
+  
+  #' Method to extract SpotRate from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @exportMethod ForwardRate
+  setMethod("ForwardRate", signature("TermStructure"),
+            function(object){object@ForwardRate})
+  
+  #' Method to extract the TwoYearForward from the class TermStructure
+  #' @param object the name of the object of the type TermStructure
+  #' @exportMethod TwoYearForward
+  setMethod("TwoYearForward", signature("TermStructure"),
+            function(object){object@TwoYearFwd})
+  
+  #' Method to extract the TenYearForward from the class TermStructure
+  #' @param object the name of the object of the type TermStructure
+  #' @exportMethod TenYearForward
+  setMethod("TenYearForward", signature("TermStructure"),
+            function(object){object@TenYearFwd})
 
   #' The TermStructure constructor function it is a wrapper function around the package termstrc
   #' 
@@ -207,11 +292,11 @@
 
   
   new("TermStructure",
-      tradedate = as.character(rates.data[1,1]),
-      period = as.numeric(period),
-      date = as.character(date),
-      spotrate = spot.rate.curve,
-      forwardrate = forward.rate.curve,
+      TradeDate = as.character(rates.data[1,1]),
+      Period = as.numeric(period),
+      Date = as.character(date),
+      SpotRate = spot.rate.curve,
+      ForwardRate = forward.rate.curve,
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
   )} 

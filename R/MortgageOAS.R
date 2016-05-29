@@ -248,11 +248,11 @@
     
    
       OAS.Term.Structure <- new("TermStructure",
-                                tradedate = as.character(trade.date),
-                                period = as.numeric(sim.cube[,3]),
-                                date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
-                                spotrate = as.numeric(sim.cube[,5]),
-                                forwardrate = as.numeric(Simulation[,j]),
+                                TradeDate = as.character(trade.date),
+                                Period = as.numeric(sim.cube[,3]),
+                                Date = unname(as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
+                                SpotRate = as.numeric(sim.cube[,5]),
+                                ForwardRate = as.numeric(Simulation[,j]),
                                 TwoYearFwd = as.numeric(sim.cube[,6]),
                                 TenYearFwd = as.numeric(sim.cube[,7]))
     
@@ -289,8 +289,8 @@
     OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), 
                             tol = .0000000001, 
                             cashflow = MtgCashFlow@TotalCashFlow,
-                            discount.rates = OAS.Term.Structure@spotrate, 
-                            t.period = OAS.Term.Structure@period, 
+                            discount.rates = OAS.Term.Structure@SpotRate, 
+                            t.period = OAS.Term.Structure@Period, 
                             proceeds)$root
     
     OAS.Out[j,2] <- MtgCashFlow@WAL
@@ -323,7 +323,7 @@
                         tol = .000000001, 
                         DiscountMatrix = OAS.DiscMatrix, 
                         CashFlowMatrix = OAS.CashFlow,
-                        period = OAS.Term.Structure@period, 
+                        period = OAS.Term.Structure@Period, 
                         proceeds = proceeds,
                         price = price,
                         paths = paths)$root
@@ -345,7 +345,7 @@
   Price.Dist <- OAS.Price(OAS.Spread, 
                           DiscountMatrix = OAS.DiscMatrix, 
                           CashFlowMatrix = OAS.CashFlow,
-                          period = OAS.Term.Structure@period, 
+                          period = OAS.Term.Structure@Period, 
                           proceeds = proceeds, 
                           paths = paths)
   
@@ -417,11 +417,11 @@
     timelength <- length(time.period)
     
     CIRTermStructure <- new("TermStructure",
-                            tradedate = trade.date,
-                            period = time.period[2:timelength],
-                            date = unname(as.character(pmtdate)),
-                            spotrate = CIRSpot * yield.basis,
-                            forwardrate = CIRFwd[2:CIRFwdLen],
+                            TradeDate = trade.date,
+                            Period = time.period[2:timelength],
+                            Date = unname(as.character(pmtdate)),
+                            SpotRate = CIRSpot * yield.basis,
+                            ForwardRate = CIRFwd[2:CIRFwdLen],
                             TwoYearFwd = TwoYrFwd,
                             TenYearFwd = TenYrFwd)
     
@@ -469,8 +469,8 @@
                                interval = c(-.75, .75), 
                                tol = tolerance, 
                                cashflow = MortgageCashFlow@TotalCashFlow,
-                               discount.rates = CIRTermStructure@spotrate[1:cashflow.length]/yield.basis, 
-                               t.period = CIRTermStructure@period[1:cashflow.length] , 
+                               discount.rates = CIRTermStructure@SpotRate[1:cashflow.length]/yield.basis, 
+                               t.period = CIRTermStructure@Period[1:cashflow.length] , 
                                proceeds = proceeds)$root
     
     spot.spread <- SolveSpotSpread

@@ -256,7 +256,7 @@
   
   # Initialze the spot rate array for key rate duration calculations
   # The spot rate must be passed from Term Strucuture object to Bond Term Strucuture
-  SpotRate <- as.matrix(TermStructure@spotrate)
+  SpotRate <- as.matrix(TermStructure@SpotRate)
   
   
   # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS coefficients from Term Stucture
@@ -400,20 +400,20 @@
     Key.Rate.TS.Dwn <- TermStructure
     Key.Rate.TS.Up <- TermStructure
 
-    Key.Rate.TS.Dwn@spotrate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
-    ((TermStructure@spotrate[361:492])) + (spot.spread * 0))
+    Key.Rate.TS.Dwn@SpotRate <- c((Key.Rate.Table[,5]-spot.spread) * 100, 
+    ((TermStructure@SpotRate[361:492])) + (spot.spread * 0))
     
-    Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
+    Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@SpotRate, 
                                                FwdRate.Tenor = 24) 
-    Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@spotrate, 
+    Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Dwn@SpotRate, 
                                                FwdRate.Tenor = 120)
     
-    Key.Rate.TS.Up@spotrate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
-    ((TermStructure@spotrate[361:492])) + (spot.spread * 0)) 
+    Key.Rate.TS.Up@SpotRate <- c((Key.Rate.Table[,6]-spot.spread) * 100, 
+    ((TermStructure@SpotRate[361:492])) + (spot.spread * 0)) 
 
-    Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
+    Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@SpotRate, 
                                               FwdRate.Tenor = 24) 
-    Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@spotrate, 
+    Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(SpotRate.Curve = Key.Rate.TS.Up@SpotRate, 
                                               FwdRate.Tenor = 120)
     
     # Run the prepayment model to derive the SMM vector given each Key Rate shift

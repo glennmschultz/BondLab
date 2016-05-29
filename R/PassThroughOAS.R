@@ -99,79 +99,80 @@
                    PathSpread = "vector",
                    PathWAL = "vector",
                    PathModDur = "vector",
-                   PathYTM = "vector"){
-            
-            .Object@Cusip = Cusip
-            .Object@ID = ID
-            .Object@BondType = BondType
-            .Object@Sector = Sector
-            .Object@Coupon = Coupon
-            .Object@IssueDate = IssueDate
-            .Object@DatedDate = DatedDate
-            .Object@Maturity = Maturity
-            .Object@LastPmtDate = LastPmtDate
-            .Object@NextPmtDate = NextPmtDate
-            .Object@Term = Term
-            .Object@WALA = WALA
-            .Object@WAM = WAM
-            .Object@PaymentDelay = PaymentDelay
-            .Object@Moody = Moody
-            .Object@SP = SP
-            .Object@BondLab  = BondLab
-            .Object@Frequency = Frequency
-            .Object@BondBasis = BondBasis
-            .Object@GWac = GWac
-            .Object@AmortizationType = AmortizationType
-            .Object@AmortizationTerm = AmortizationTerm
-            .Object@Index = Index
-            .Object@Margin = Margin
-            .Object@FirstPmtDate = FirstPmtDate
-            .Object@FinalPmtDate = FinalPmtDate
-            .Object@Servicing = Servicing
-            .Object@PMI = PMI
-            .Object@Gfee = Gfee
-            .Object@InitialInterest = InitialInterest
-            .Object@InterestOnlyPeriod = InterestOnlyPeriod
-            .Object@FirstPrinPaymentDate = FirstPrinPaymentDate
-            .Object@BalloonPmt = BalloonPmt
-            .Object@BalloonDate = BalloonDate
-            .Object@MBSFactor = MBSFactor
-            .Object@Model = Model
-            .Object@Burnout = Burnout
-            .Object@SATO = SATO
-            .Object@Price = Price
-            .Object@Accrued = Accrued
-            .Object@YieldToMaturity = YieldToMaturity
-            .Object@WAL = WAL
-            .Object@ModDuration = ModDuration
-            .Object@Convexity = Convexity
-            .Object@Period = Period
-            .Object@PmtDate = PmtDate
-            .Object@TimePeriod = TimePeriod
-            .Object@BeginningBal = BeginningBal
-            .Object@MonthlyPmt = MonthlyPmt
-            .Object@MonthlyInterest = MonthlyInterest
-            .Object@PassThroughInterest = PassThroughInterest
-            .Object@ScheduledPrin = ScheduledPrin
-            .Object@PrepaidPrin = PrepaidPrin
-            .Object@DefaultedPrin = DefaultedPrin
-            .Object@LossAmount = LossAmount
-            .Object@RecoveredAmount = RecoveredAmount
-            .Object@EndingBal = EndingBal
-            .Object@ServicingIncome = ServicingIncome
-            .Object@PMIPremium = PMIPremium
-            .Object@GFeePremium = GFeePremium 
-            .Object@TotalCashFlow = TotalCashFlow
-            .Object@OAS = OAS
-            .Object@ZVSpread = ZVSpread
-            .Object@SpreadToCurve = SpreadToCurve
-            .Object@PriceDist = PriceDist
-            .Object@PathSpread = PathSpread
-            .Object@PathWAL = PathWAL
-            .Object@PathModDur = PathModDur
-            .Object@PathYTM = PathYTM
-            
-            return(.Object)
+                   PathYTM = "vector",
+                   ...)
+          {callNextMethod(.Object,
+                          Cusip = Cusip,
+                          ID = ID,
+                          BondType = BondType,
+                          Sector = Sector,
+                          Coupon = Coupon,
+                          IssueDate = IssueDate,
+                          DatedDate = DatedDate,
+                          Maturity = Maturity,
+                          LastPmtDate = LastPmtDate,
+                          NextPmtDate = NextPmtDate,
+                          Term = Term,
+                          WALA = WALA,
+                          WAM = WAM,
+                          PaymentDelay = PaymentDelay,
+                          Moody = Moody,
+                          SP = SP,
+                          BondLab  = BondLab,
+                          Frequency = Frequency,
+                          BondBasis = BondBasis,
+                          GWac = GWac,
+                          AmortizationType = AmortizationType,
+                          AmortizationTerm = AmortizationTerm,
+                          Index = Index,
+                          Margin = Margin,
+                          FirstPmtDate = FirstPmtDate,
+                          FinalPmtDate = FinalPmtDate,
+                          Servicing = Servicing,
+                          PMI = PMI,
+                          Gfee = Gfee,
+                          InitialInterest = InitialInterest,
+                          InterestOnlyPeriod = InterestOnlyPeriod,
+                          FirstPrinPaymentDate = FirstPrinPaymentDate,
+                          BalloonPmt = BalloonPmt,
+                          BalloonDate = BalloonDate,
+                          MBSFactor = MBSFactor,
+                          Model = Model,
+                          Burnout = Burnout,
+                          SATO = SATO,
+                          Price = Price,
+                          Accrued = Accrued,
+                          YieldToMaturity = YieldToMaturity,
+                          WAL = WAL,
+                          ModDuration = ModDuration,
+                          Convexity = Convexity,
+                          Period = Period,
+                          PmtDate = PmtDate,
+                          TimePeriod = TimePeriod,
+                          BeginningBal = BeginningBal,
+                          MonthlyPmt = MonthlyPmt,
+                          MonthlyInterest = MonthlyInterest,
+                          PassThroughInterest = PassThroughInterest,
+                          ScheduledPrin = ScheduledPrin,
+                          PrepaidPrin = PrepaidPrin,
+                          DefaultedPrin = DefaultedPrin,
+                          LossAmount = LossAmount,
+                          RecoveredAmount = RecoveredAmount,
+                          EndingBal = EndingBal,
+                          ServicingIncome = ServicingIncome,
+                          PMIPremium = PMIPremium,
+                          GFeePremium = GFeePremium,
+                          TotalCashFlow = TotalCashFlow,
+                          OAS = OAS,
+                          ZVSpread = ZVSpread,
+                          SpreadToCurve = SpreadToCurve,
+                          PriceDist = PriceDist,
+                          PathSpread = PathSpread,
+                          PathWAL = PathWAL,
+                          PathModDur = PathModDur,
+                          PathYTM = PathYTM,
+            ...)
+
           })
 
 
@@ -185,8 +186,10 @@
   #' @param price A numeric value the trade price
   #' @param sigma A numeric value interest rate volatility assumption
   #' @param paths A numeric value the number of simulated paths
-  #' @examples PassThroughOAS(bond.id = "bondlabMBS4", trade.date = "01-10-2013", settlement.date = "01-13-2013", 
-  #' original.bal = 100000, price = 105.75, sigma = 0.015, paths = 200) 
+  #' @examples 
+  #' \dontrun{
+  #' PassThroughOAS(bond.id = "bondlabMBS4", trade.date = "01-10-2013", settlement.date = "01-13-2013", 
+  #' original.bal = 100000, price = 105.75, sigma = 0.015, paths = 200)} 
   #' @export PassThroughOAS
   PassThroughOAS <- function(bond.id = "character", 
                            trade.date = "character", 
@@ -301,11 +304,11 @@
                                       result = "y") * yield.basis)
 
   TermStructure <- new("TermStructure",
-                       tradedate = as.character(trade.date),
-                       period = as.numeric(time.period),
-                       date = as.character(as.Date(pmtdate, origin = "1970-01-01")),
-                       spotrate = as.numeric(Spot.Rate),
-                       forwardrate = as.numeric(Sim.Rate),
+                       TradeDate = as.character(trade.date),
+                       Period = as.numeric(time.period),
+                       Date = as.character(as.Date(pmtdate, origin = "1970-01-01")),
+                       SpotRate = as.numeric(Spot.Rate),
+                       ForwardRate = as.numeric(Sim.Rate),
                        TwoYearFwd = as.numeric(Two.Year.Fwd),
                        TenYearFwd = as.numeric(Ten.Year.Fwd))
   

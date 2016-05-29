@@ -13,6 +13,7 @@
   # method for the class.  This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
+  
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security
   #' 
@@ -112,7 +113,7 @@
     {standardGeneric("Convexity")})
   
   #' A standard generic function to access the slot Period
-  #' @param object an S4 class object of type MortgageCashFlow
+  #' @param object an S4 class object
   #' @export
   setGeneric("Period", function(object)
     {standardGeneric("Period")})
@@ -122,12 +123,12 @@
   #' @export
   setGeneric("PmtDate", function(object)
     {standardGeneric("PmtDate")})
-
-  #' A standard generic function to access the slot TimePeriod
-  #' @param object an S4 class object of type MortgageCashFlow
+  
+  #' A standard generic function to access the slot PmtDate
+  #' @param object an S4 class object of type MortgageCashFlow 
   #' @export
   setGeneric("TimePeriod", function(object)
-    {standardGeneric})
+  {standardGeneric("TimePeriod")})
   
   #' A standard generic function to access the slot BeginningBal
   #' @param object an S4 class object of type MortgageCashFlow
@@ -306,7 +307,7 @@
   #' Method to extract Period from S4 class
   #' @param object the name of the S4 object
   #' @exportMethod Period
-  setMethod("Period", signature = ("MortgageCashFlow"),
+  setMethod("Period", signature("MortgageCashFlow"),
             function(object){object@Period})
   
   #' Method to extract PmtDate from S4 class
@@ -433,18 +434,18 @@
             settlement.date = settlement.date, 
             price = price)
   
-  issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
-  start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
-  end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
-  lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-  nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-  coupon = bond.id@Coupon
-  frequency = bond.id@Frequency
-  delay = bond.id@PaymentDelay
+  issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+  start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+  end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+  lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+  nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+  coupon = Coupon(bond.id)
+  frequency = Frequency(bond.id)
+  delay = PaymentDelay(bond.id)
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
-  bondbasis = bond.id@BondBasis
-  note.rate = bond.id@GWac
-  WAM = bond.id@WAM
+  bondbasis = BondBasis(bond.id)
+  note.rate = GWac(bond.id)
+  WAM = WAM(bond.id)
   
   
   #  Validate the price and coupon passed through the error trapping function
@@ -453,7 +454,7 @@
   
   # calculate beginning balance (principal) from the MBS pool factor
   # accrued interest is calculated using the current factor
-  factor = bond.id@MBSFactor
+  factor = MBSFactor(bond.id)
   principal = original.bal * factor
   
   # The factor must be adjusted by the prepayment assumption so the 
@@ -487,7 +488,7 @@
   
   days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * ((bond.id@Coupon/yield.basis)/frequency) * principal
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * ((coupon/yield.basis)/frequency) * principal
  
   # Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
   # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value

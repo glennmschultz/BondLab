@@ -10,16 +10,16 @@ An S4 class the term structure data needed to price bonds
 \section{Slots}{
 
 \describe{
-\item{\code{tradedate}}{A character string the trade date in the format
+\item{\code{TradeDate}}{A character string the trade date in the format
 mm/dd/YYYY}
 
-\item{\code{period}}{A numeric value the period index of the next cash flow}
+\item{\code{Period}}{A numeric value the period index of the next cash flow}
 
-\item{\code{date}}{A numeric value the date of the next cash flow}
+\item{\code{Date}}{A numeric value the date of the next cash flow}
 
-\item{\code{spotrate}}{A numeric value the one-month spot rate}
+\item{\code{SpotRate}}{A numeric value the one-month spot rate}
 
-\item{\code{forwardrate}}{A numeric value the one-month forward rate}
+\item{\code{ForwardRate}}{A numeric value the one-month forward rate}
 
 \item{\code{TwoYearFwd}}{A numeric vlaue the two-year forward rate}
 

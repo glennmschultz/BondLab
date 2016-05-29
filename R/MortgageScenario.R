@@ -362,9 +362,9 @@
                                  HorizonCashFlow = "character",
                                  HorizonSpotSpread = numeric(),
                                  NumberofCashFlow = numeric()){
-    DiscountRate <- 1/((1+((HorizonTermStructure@spotrate[1:NumberofCashFlow] + 
+    DiscountRate <- 1/((1+((HorizonTermStructure@SpotRate[1:NumberofCashFlow] + 
                               horizon.spot.spread)/monthly.yield.basis)) ^ 
-                         (HorizonTermStructure@period[1:NumberofCashFlow]))
+                         (HorizonTermStructure@Period[1:NumberofCashFlow]))
     
     HorizonPresentValue <- DiscountRate[1:NumberofCashFlow] * HorizonCashFlow@TotalCashFlow
     PresentValue <- sum(HorizonPresentValue)
@@ -380,7 +380,7 @@
     HorizonYield <- predict(InterpolateCurve, HorizonCashFlow@WAL) + horizon.nominal.spread
     HorizonYield <- rep(HorizonYield, NumberofCashFlow)
     DiscountRate <- 1/((1 + (HorizonYield/monthly.yield.basis))^
-                         (HorizonTermStructure@period[1:NumberofCashFlow]))
+                         (HorizonTermStructure@Period[1:NumberofCashFlow]))
     HorizonPresentValue <- DiscountRate * HorizonCashFlow@TotalCashFlow
     PresentValue <- sum(HorizonPresentValue)
     return(PresentValue)}
@@ -454,8 +454,8 @@
               TotalCashFlow = (MortgageCashFlow@PassThroughInterest + 
                                  MortgageCashFlow@ScheduledPrin + 
                                  MortgageCashFlow@PrepaidPrin),
-              spotrate = TermStructure@spotrate,
-              forwardrate = TermStructure@forwardrate,
+              spotrate = TermStructure@SpotRate,
+              forwardrate = TermStructure@ForwardRate,
               SMM = Prepayment@SMM,
               YieldToMaturity = MortgageCashFlow@YieldToMaturity,
               WAL = MortgageCashFlow@WAL,

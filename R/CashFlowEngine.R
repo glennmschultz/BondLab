@@ -25,11 +25,11 @@
                               principal = numeric(), 
                               PrepaymentAssumption = "character"){
     
-    issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
-    start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
-    end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
-    lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-    nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+    issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+    start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+    end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+    lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+    nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
     coupon = bond.id@Coupon
     frequency = bond.id@Frequency
     delay = bond.id@PaymentDelay
@@ -37,12 +37,12 @@
     bondbasis = bond.id@BondBasis
     
     #Mortgage specific inputs
-    note.rate = bond.id@GWac
-    FirstPmtDate = bond.id@FirstPmtDate
-    FinalPmtDate = bond.id@FinalPmtDate
-    servicing.fee = bond.id@Servicing
-    pmi = bond.id@PMI
-    g.fee = bond.id@Gfee
+    note.rate = GWac(bond.id)
+    FirstPmtDate = FirstPmtDate(bond.id)
+    FinalPmtDate = FinalPmtDate(bond.id)
+    servicing.fee = Servicing(bond.id)
+    pmi = PMI(bond.id)
+    g.fee = GFee(bond.id)
   
     #Build a vector of dates for the payment schedule
     # first get the pmtdate interval

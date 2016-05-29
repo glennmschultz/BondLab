@@ -70,7 +70,7 @@ An S4 class to represent a mortgage pass-through security
 
 \item{\code{PMI}}{A numeric value the primary mortgage insurance paid}
 
-\item{\code{Gfee}}{A numeric value the guarantee fee paid}
+\item{\code{GFeePremium}}{A numeric value the guarantee fee paid}
 
 \item{\code{InitialInterest}}{A logical value TRUE or FALSE interest only mortgage}
 

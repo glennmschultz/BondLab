@@ -15,7 +15,7 @@ MakeMBSDetails(Cusip = "character", ID = "character",
   OrigLTV = numeric(), AmortizationType = "character",
   AmortizationTerm = numeric(), Index = "character", Margin = numeric(),
   FirstPmtDate = "character", FinalPmtDate = "character",
-  Servicing = numeric(), PMI = numeric(), Gfee = numeric(),
+  Servicing = numeric(), PMI = numeric(), GFeePremium = numeric(),
   InitialInterest = "logical", InterestOnlyPeriod = numeric(),
   FirstPrinPaymentDate = "character", BalloonPmt = "logical",
   BalloonDate = "character", MBSFactor = numeric(),
@@ -93,7 +93,7 @@ of the mortgage pool's underlying loans.}
 \item{PMI}{A numeric value the primary mortage insurance paid by the borrower to the 
 PMI provider}
 
-\item{Gfee}{A numeric value the guarantee fee taken from the borrower's note rate to
+\item{GFeePremium}{A numeric value the guarantee fee taken from the borrower's note rate to
 guarantee timely payment of principal and interest.  Applicable in the case of Fannie
 Mae, Freddie Mac, or Ginnie Mae pools.}
 
@@ -156,7 +156,7 @@ This is a standard generic function used to construct a MBS pass through securit
  FinalPmtDate = "01-01-2043",
  Servicing = 0.25,
  PMI = 0.25,
- Gfee = 0.25,
+ GFeePremium = 0.25,
  InitialInterest = FALSE,
  InterestOnlyPeriod = 0,
  FirstPrinPaymentDate = "1-01-2013",

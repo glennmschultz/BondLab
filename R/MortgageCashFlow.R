@@ -13,6 +13,8 @@
   # method for the class.  This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
+  #' @include PassThroughConstructor.R
+  NULL
   
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security
@@ -202,11 +204,8 @@
   setGeneric("PMIPremium", function(object)
     {standardGeneric})
   
-  #' A standard generic function to access the slot of GFeePremium
-  #' @param object an S4 class object of the type MortgageCashFlow
-  #' @export
-  setGeneric("GFeePremium", function(object)
-    {standardGeneric})
+  
+  #Note: generic function GFeePremium is defined in PassThroughConstructor.R
   
   #' A standard generic function to access the slot of TotalCashFlow
   #' @param object an S4 class object of the type MortgageCashFlow

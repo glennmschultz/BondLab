@@ -42,7 +42,7 @@
     FinalPmtDate = FinalPmtDate(bond.id)
     servicing.fee = Servicing(bond.id)
     pmi = PMI(bond.id)
-    g.fee = GFee(bond.id)
+    g.fee = GFeePremium(bond.id)
   
     #Build a vector of dates for the payment schedule
     # first get the pmtdate interval

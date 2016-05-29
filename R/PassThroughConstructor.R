@@ -42,7 +42,7 @@
   #' @slot FinalPmtDate A character string the mortgage final payment date
   #' @slot Servicing A numeric value the serving strip
   #' @slot PMI A numeric value the primary mortgage insurance paid
-  #' @slot Gfee A numeric value the guarantee fee paid
+  #' @slot GFeePremium A numeric value the guarantee fee paid
   #' @slot InitialInterest A logical value TRUE or FALSE interest only mortgage
   #' @slot InterestOnlyPeriod A numeric value the number of months the borrower pays only interest
   #' @slot FirstPrinPaymentDate A character string the date of the first principal payment
@@ -88,7 +88,7 @@
            FinalPmtDate = "character",
            Servicing = "numeric",
            PMI = "numeric",
-           Gfee = "numeric",
+           GFeePremium = "numeric",
            InitialInterest = "logical",
            InterestOnlyPeriod = "numeric",
            FirstPrinPaymentDate = "character",
@@ -132,7 +132,7 @@
     FinalPmtDate = "character",
     Servicing = numeric(),
     PMI = numeric(),
-    Gfee = numeric(),
+    GFeePremium = numeric(),
     InitialInterest = "logical",
     InterestOnlyPeriod = numeric(),
     FirstPrinPaymentDate = "character",
@@ -328,11 +328,11 @@
   setGeneric("PMI", function(object)
     {standardGeneric("PMI")})
   
-  #' A standard generic function to access the slot GFee
-  #' @param object S4 class object
-  #' @export GFee
-  setGeneric("GFee", function(object)
-             {standardGeneric("GFee")})
+  #' A standard generic function to access the slot of GFeePremium
+  #' @param object an S4 class object of the type MortgageCashFlow
+  #' @export GFeePremium
+  setGeneric("GFeePremium", function(object)
+  {standardGeneric})
   
   #' A standard generic function to access the slot InitialInterest
   #' @param object S4 class object
@@ -433,7 +433,7 @@
                    FinalPmtDate = "character",
                    Servicing = "numeric",
                    PMI = "numeric",
-                   Gfee = "numeric",
+                   GFeePremium = "numeric",
                    InitialInterest = "logical",
                    InterestOnlyPeriod = "numeric",
                    FirstPrinPaymentDate = "character",
@@ -477,7 +477,7 @@
                            FinalPmtDate = FinalPmtDate,
                            Servicing = Servicing,
                            PMI = PMI,
-                           Gfee = Gfee,
+                           GFeePremium = GFeePremium,
                            InitialInterest = InitialInterest,
                            InterestOnlyPeriod = InterestOnlyPeriod,
                            FirstPrinPaymentDate = FirstPrinPaymentDate,
@@ -674,9 +674,9 @@
   
   #' Method to extract the slot GFee from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
-  #' @exportMethod GFee
-  setMethod("GFee", signature("MBSDetails"),
-            function(object){object@Gfee})
+  #' @exportMethod GFeePremium
+  setMethod("GFeePremium", signature("MBSDetails"),
+            function(object){object@GFeePremium})
   
   #' Method to extract the slot InitialInterest from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
@@ -775,7 +775,7 @@
   FinalPmtDate = "character",
   Servicing = numeric(),
   PMI = numeric(),
-  Gfee = numeric(),
+  GFeePremium = numeric(),
   InitialInterest = "logical",
   InterestOnlyPeriod = numeric(),
   FirstPrinPaymentDate = "character",
@@ -820,7 +820,7 @@
       FinalPmtDate = FinalPmtDate,
       Servicing = Servicing,
       PMI = PMI,
-      Gfee = Gfee,
+      GFeePremium = GFeePremium,
       InitialInterest = InitialInterest,
       InterestOnlyPeriod = InterestOnlyPeriod,
       FirstPrinPaymentDate = FirstPrinPaymentDate,
@@ -877,7 +877,7 @@
   #' of the mortgage pool's underlying loans.
   #' @param PMI A numeric value the primary mortage insurance paid by the borrower to the 
   #' PMI provider
-  #' @param Gfee A numeric value the guarantee fee taken from the borrower's note rate to
+  #' @param GFeePremium A numeric value the guarantee fee taken from the borrower's note rate to
   #' guarantee timely payment of principal and interest.  Applicable in the case of Fannie
   #' Mae, Freddie Mac, or Ginnie Mae pools.
   #' @param InitialInterest A logical indicating the note carries an interest only period
@@ -925,7 +925,7 @@
   #'  FinalPmtDate = "01-01-2043",
   #'  Servicing = 0.25,
   #'  PMI = 0.25,
-  #'  Gfee = 0.25,
+  #'  GFeePremium = 0.25,
   #'  InitialInterest = FALSE,
   #'  InterestOnlyPeriod = 0,
   #'  FirstPrinPaymentDate = "1-01-2013",
@@ -969,7 +969,7 @@
   FinalPmtDate = "character",
   Servicing = numeric(),
   PMI = numeric(),
-  Gfee = numeric(),
+  GFeePremium = numeric(),
   InitialInterest = "logical",
   InterestOnlyPeriod = numeric(),
   FirstPrinPaymentDate = "character",
@@ -1014,7 +1014,7 @@
     FinalPmtDate = FinalPmtDate,
     Servicing = Servicing,
     PMI = PMI,
-    Gfee = Gfee,
+    GFeePremium = GFeePremium,
     InitialInterest = InitialInterest,
     InterestOnlyPeriod = InterestOnlyPeriod,
     FirstPrinPaymentDate = FirstPrinPaymentDate,

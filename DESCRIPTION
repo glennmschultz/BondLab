@@ -27,12 +27,8 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
-    'MortgageScenario.R'
-    'MortgageKeyRate.R'
-    'MortgageCashFlowArray.R'
     'PassThroughConstructor.R'
     'MortgageCashFlow.R'
-    'AtomsData.R'
     'TermStructure.R'
     'BondKeyRate.R'
     'BondCashFlow.R'
@@ -53,10 +49,13 @@ Collate:
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
     'MakeRateScenario.R'
+    'MortgageCashFlowArray.R'
     'MortgageCashFlow_Array.R'
     'MortgageFunctions.R'
+    'MortgageKeyRate.R'
     'MortgageOAS.R'
     'MortgageRateFunctions.R'
+    'MortgageScenario.R'
     'PassThroughOAS.R'
     'PaymentDateFunctions.R'
     'PrepaymentModel.R'

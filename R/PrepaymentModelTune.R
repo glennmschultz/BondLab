@@ -70,9 +70,176 @@
     SATO.beta = "numeric")
   
   {standardGeneric("MakeModelTune")})
-
-
-    setMethod("initialize",
+  
+  #' A standard generic function to access the slot TuroverRate
+  #' @param object an S4 object
+  #' @export TurnoverRate
+  setGeneric("TurnoverRate", function(object)
+    {standardGeneric("TurnoverRate")})
+  
+  #' A standard generic function to access the slot Turnover.alpha
+  #' @param object an S4 object
+  #' @export TurnoverAlpha
+  setGeneric("TurnoverAlpha", function(object)
+    {standardGeneric("TurnoverAlpha")})
+  
+  #' A standard generic function to access the slot Turnover.beta
+  #' @param object an S4 object
+  #' @export TurnoverBeta
+  setGeneric("TurnoverBeta", function(object)
+  {standardGeneric("TurnoverBeta")})
+  
+  #' A standard generic function to access the slot Turnover.theta
+  #' @param object an S4 object
+  #' @export TurnoverTheta
+  setGeneric("TurnoverTheta", function(object)
+  {standardGeneric("TurnoverTheta")})
+  
+  #' A standard generic function to access the slot Seasonality.alpha
+  #' @param object an S4 object
+  #' @export SeasonalityAlpha
+  setGeneric("SeasonalityAlpha", function(object)
+  {standardGeneric("SeasonalityAlpha")})
+  
+  #' A standard generic function to access the slot Seasonality.theta
+  #' @param object an S4 object
+  #' @export SeasonalityTheta
+  setGeneric("SeasonalityTheta", function(object)
+  {standardGeneric("SeasonalityTheta")})
+  
+  #' A standard generic function to access the slot Incentive.Fast.theta.1
+  #' @param object an S4 object
+  #' @export IncentiveFastThetaOne
+  setGeneric("IncentiveFastThetaOne", function(object)
+  {standardGeneric("IncentiveFastThetaOne")})
+  
+  #' A standard generic function to access the slot Incentive.Fast.theta.2
+  #' @param object an S4 object
+  #' @export IncentiveFastThetaTwo
+  setGeneric("IncentiveFastThetaTwo", function(object)
+  {standardGeneric("IncentiveFastThetaTwo")})
+  
+  #' A standard generic function to access the slot Incentive.Fast.beta
+  #' @param object an S4 object
+  #' @export IncentiveFastBeta
+  setGeneric("IncentiveFastBeta", function(object)
+  {standardGeneric("IncentiveFastBeta")})
+  
+  #' A standard generic function to access the slot Incentive.Fast.eta
+  #' @param object an S4 object
+  #' @export IncentiveFastEta
+  setGeneric("IncentiveFastEta", function(object)
+  {standardGeneric("IncentiveFastEta")})
+  
+  #' A standard generic function to access the slot Incentive.Slow.theta.1
+  #' @param object an S4 object
+  #' @export IncentiveSlowThetaOne
+  setGeneric("IncentiveSlowThetaOne", function(object)
+  {standardGeneric("IncentiveSlowThetaOne")})
+  
+  #' A standard generic function to access the slot Incentive.Slow.theta.2
+  #' @param object an S4 object
+  #' @export IncentiveSlowThetaTwo
+  setGeneric("IncentiveSlowThetaTwo", function(object)
+  {standardGeneric("IncentiveSlowThetaTwo")})
+  
+  #' A standard generic function to access the slot Incentive.Slow.beta
+  #' @param object an S4 object
+  #' @export IncentiveSlowBeta
+  setGeneric("IncentiveSlowBeta", function(object)
+    {standardGeneric("IncentiveSlowBeta")})
+  
+  #' A standard generic function to access the slot Incentive.Slow.beta
+  #' @param object an S4 object
+  #' @export IncentiveSlowEta
+  setGeneric("IncentiveSlowEta", function(object)
+  {standardGeneric("IncentiveSlowEta")})
+  
+  #' A standard generic functin to access the slot Burnout.beta.1
+  #' @param object an S4 object
+  #' @export BurnoutBetaOne
+  setGeneric("BurnoutBetaOne", function(object)
+    {standardGeneric("BurnoutBetaOne")})
+  
+  #' A standard generic function to access the slot Burnout.beta.e
+  #' @param object an S4 object
+  #' @export BurnoutBetaTwo
+  setGeneric("BurnoutBetaTwo", function(object)
+    {standardGeneric("BurnoutBetaTwo")})
+  
+  #' A standard generic function to access the slot BeginCDR
+  #' @param object an S4 object
+  #' @export BeginCDR
+  setGeneric("BeginCDR", function(object)
+    {standardGeneric("BeginCDR")})
+  
+  #' A standard generic functin to access the slot PeakCDR
+  #' @param object an S4 object
+  #' @export PeakCDR
+  setGeneric("PeakCDR", function(object)
+    {standardGeneric("PeakCDR")})
+  
+  #' A standard generic function to access the slot EndCDR
+  #' @param object an S4 object
+  #' @export EndCDR
+  setGeneric("EndCDR", function(object)
+    {standardGeneric("EndCDR")})
+  
+  #' A standard generic function to access the slot PeakMonth
+  #' @param object an S4 object
+  #' @export PeakMonth
+  setGeneric("PeakMonth", function(object)
+    {standardGeneric("PeakMonth")})
+  
+  #' A standard generic function to access the slot PlateauMonths
+  #' @param object an S4 object
+  #' @export PlateauMonths
+  setGeneric("PlateauMonths", function(object)
+    {standardGeneric("PlateauMonths")})
+  
+  #' A standard generic function to access the slot EndMonth
+  #' @param object an S4 object
+  #' @export EndMonth
+  setGeneric("EndMonth", function(object)
+    {standardGeneric("EndMonth")})
+  
+  #' A standard generic function to access the slot MinOrigLTV
+  #' @param object an S4 object
+  #' @export MinOrigLTV
+  setGeneric("MinOrigLTV", function(object)
+    {standardGeneric("MinOrigLTV")})
+  
+  #' A standard generic functin to access the slot MaxOrigLTV
+  #' @param object an S4 object
+  #' @export MaxOrigLTV
+  setGeneric("MaxOrigLTV", function(object)
+    {standardGeneric("MaxOrigLTV")})
+  
+  #' A standard generic function to access the slot MinOrigMultiplier
+  #' @param object an S4 object
+  #' @export MinOrigMultiplier
+  setGeneric("MinOrigMultiplier", function(object)
+    {standardGeneric("MinOrigMultiplier")})
+  
+  #' A standard generic function to access the slot MaxOrigMultiplier
+  #' @param object an S4 object
+  #' @export MaxOrigMultiplier
+  setGeneric("MaxOrigMultiplier", function(object)
+    {standardGeneric("MaxOrigMultiplier")})
+  
+  #' A standard generic function to access the slot UpdatedLTV.beta
+  #' @param object an S4 object
+  #' @export UpdatedLTVBeta
+  setGeneric("UpdatedLTVBeta", function(object)
+  {standardGeneric("UpdatedLTVBeta")})
+  
+  #' A standard generic function to access the slot SATO.beta
+  #' @param object an S4 object
+  #' @export SATOBeta
+  setGeneric("SATOBeta", function(object)
+  {standardGeneric("SATOBeta")})
+ 
+  setMethod("initialize",
           signature("PrepaymentModelTune"),
           function(.Object,
                    TurnoverRate = "numeric",
@@ -102,40 +269,201 @@
                    MinOrigMultiplier = "numeric",
                    MaxOrigMultiplier = "numeric",
                    UpdatedLTV.beta = "numeric",
-                   SATO.beta = "numeric"){
-            
-            .Object@TurnoverRate = TurnoverRate
-            .Object@Turnover.alpha = Turnover.alpha
-            .Object@Turnover.beta = Turnover.beta
-            .Object@Turnover.theta = Turnover.theta
-            .Object@Seasonality.alpha = Seasonality.alpha
-            .Object@Seasonality.theta = Seasonality.theta
-            .Object@Incentive.Fast.theta.1 = Incentive.Fast.theta.1
-            .Object@Incentive.Fast.theta.2 = Incentive.Fast.theta.2
-            .Object@Incentive.Fast.beta = Incentive.Fast.beta
-            .Object@Incentive.Fast.eta = Incentive.Fast.eta
-            .Object@Incentive.Slow.theta.1 = Incentive.Slow.theta.1
-            .Object@Incentive.Slow.theta.2 = Incentive.Slow.theta.2
-            .Object@Incentive.Slow.beta = Incentive.Slow.beta
-            .Object@Incentive.Slow.eta = Incentive.Slow.eta
-            .Object@Burnout.beta.1 = Burnout.beta.1
-            .Object@Burnout.beta.2 = Burnout.beta.2
-            .Object@BeginCDR = BeginCDR
-            .Object@PeakCDR = PeakCDR
-            .Object@EndCDR = EndCDR
-            .Object@PeakMonth = PeakMonth
-            .Object@PlateauMonths = PlateauMonths
-            .Object@EndMonth = EndMonth
-            .Object@MinOrigLTV = MinOrigLTV
-            .Object@MaxOrigLTV = MaxOrigLTV
-            .Object@MinOrigMultiplier = MinOrigMultiplier
-            .Object@MaxOrigMultiplier = MaxOrigMultiplier
-            .Object@UpdatedLTV.beta = UpdatedLTV.beta
-            .Object@SATO.beta = SATO.beta
-            
-            return(.Object)
+                   SATO.beta = "numeric")
+          {
+            callNextMethod(.Object,
+            TurnoverRate = TurnoverRate,
+            Turnover.alpha = Turnover.alpha,
+            Turnover.beta = Turnover.beta,
+            Turnover.theta = Turnover.theta,
+            Seasonality.alpha = Seasonality.alpha,
+            Seasonality.theta = Seasonality.theta,
+            Incentive.Fast.theta.1 = Incentive.Fast.theta.1,
+            Incentive.Fast.theta.2 = Incentive.Fast.theta.2,
+            Incentive.Fast.beta = Incentive.Fast.beta,
+            Incentive.Fast.eta = Incentive.Fast.eta,
+            Incentive.Slow.theta.1 = Incentive.Slow.theta.1,
+            Incentive.Slow.theta.2 = Incentive.Slow.theta.2,
+            Incentive.Slow.beta = Incentive.Slow.beta,
+            Incentive.Slow.eta = Incentive.Slow.eta,
+            Burnout.beta.1 = Burnout.beta.1,
+            Burnout.beta.2 = Burnout.beta.2,
+            BeginCDR = BeginCDR,
+            PeakCDR = PeakCDR,
+            EndCDR = EndCDR,
+            PeakMonth = PeakMonth,
+            PlateauMonths = PlateauMonths,
+            EndMonth = EndMonth,
+            MinOrigLTV = MinOrigLTV,
+            MaxOrigLTV = MaxOrigLTV,
+            MinOrigMultiplier = MinOrigMultiplier,
+            MaxOrigMultiplier = MaxOrigMultiplier,
+            UpdatedLTV.beta = UpdatedLTV.beta,
+            SATO.beta = SATO.beta)
           })
-
+  #' A method to extract TurnoverRate from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod TurnoverRate
+  setMethod("TurnoverRate", signature("PrepaymentModelTune"),
+            function(object){object@TurnoverRate})
+  
+  #' A method to extract Turnover.alpha from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod TurnoverAlpha
+  setMethod("TurnoverAlpha", signature("PrepaymentModelTune"),
+            function(object){object@Turnover.alpha})
+  
+  #' A method to extract Turnover.beta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod TurnoverBeta
+  setMethod("TurnoverBeta", signature("PrepaymentModelTune"),
+            function(object){object@Turnover.beta})
+  
+  #' A method to extract Turnover.theta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod TurnoverTheta
+  setMethod("TurnoverTheta", signature("PrepaymentModelTune"),
+            function(object){object@Turnover.theta})
+  
+  #' A method to extract Seasonality.alpha from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod SeasonalityAlpha
+  setMethod("SeasonalityAlpha", signature("PrepaymentModelTune"),
+            function(object){object@Seasonality.alpha})
+  
+  #' A method to extract Seasonality.theta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod SeasonalityTheta
+  setMethod("SeasonalityTheta", signature("PrepaymentModelTune"),
+            function(object){object@Seasonality.theta})
+  
+  #' A method to extract Incentive.Fast.theta.1 from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveFastThetaOne
+  setMethod("IncentiveFastThetaOne", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Fast.theta.1})
+  
+  #' A method to extract Incentive.Fast.theta.2 from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveFastThetaTwo
+  setMethod("IncentiveFastThetaTwo", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Fast.theta.2})
+  
+  #' A method to extract Incentive.Fast.beta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveFastBeta
+  setMethod("IncentiveFastBeta", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Fast.beta})
+  
+  #' A method to extract Incentive.Slow.theta.1 from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveSlowThetaOne
+  setMethod("IncentiveSlowThetaOne", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Slow.theta.1})
+  
+  #' A method to extract Incentive.Slow.theta.2 from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveSlowThetaTwo
+  setMethod("IncentiveSlowThetaTwo", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Slow.theta.2})
+  
+  #' A method to extract Incentive.Slow.beta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveSlowBeta
+  setMethod("IncentiveSlowBeta", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Slow.beta})
+  
+  #' A method to extract Incentive.Slow.eta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveSlowEta
+  setMethod("IncentiveSlowEta", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Slow.eta})
+  
+  #' A method to extract Burnout.beta.1 from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod BurnoutBetaOne
+  setMethod("BurnoutBetaOne", signature("PrepaymentModelTune"),
+            function(object){object@Burnout.beta.1})
+  
+  #' A method to extract Burnout.beta.2 from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod BurnoutBetaTwo
+  setMethod("BurnoutBetaTwo", signature("PrepaymentModelTune"),
+            function(object){object@Burnout.beta.2})
+  
+  #' A method to extract BeginCDR from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod BeginCDR
+  setMethod("BeginCDR", signature("PrepaymentModelTune"),
+            function(object){object@BeginCDR})
+  
+  #' A method to extract PeakCDR from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod PeakCDR
+  setMethod("PeakCDR", signature("PrepaymentModelTune"),
+            function(object){object@PeakCDR})
+  
+  #' A method to extract EndCDR from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod EndCDR
+  setMethod("EndCDR", signature("PrepaymentModelTune"),
+            function(object){object@EndCDR})
+  
+  #' A method to extract PeakMonth from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod PeakMonth
+  setMethod("PeakMonth", signature("PrepaymentModelTune"),
+            function(object){object@PeakMonth})
+  
+  #' A method to extract PlateauMonths from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod PlateauMonths
+  setMethod("PlateauMonths", signature("PrepaymentModelTune"),
+            function(object){object@PlateauMonths})
+  
+  #' A method to extract EndMonth from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod EndMonth
+  setMethod("EndMonth", signature("PrepaymentModelTune"),
+            function(object){object@EndMonth})
+  
+  #' A method to extract the MinOrigLTV from class PrepaymentModelTune
+  #' @param object the name of the object of class PrepaymentModelTune
+  #' @exportMethod MinOrigLTV
+  setMethod("MinOrigLTV", signature("PrepaymentModelTune"),
+            function(object){object@MinOrigLTV})
+  
+  #' A method to extract the MaxOrigLTV from class PrepaymentModelTune
+  #' @param object the name of the object of class PrepaymentModelTune
+  #' @exportMethod MaxOrigLTV
+  setMethod("MaxOrigLTV", signature("PrepaymentModelTune"),
+            function(object){object@MinOrigLTV})
+  
+  
+  #' A method to extract the MinOrigMultiplier from class PrepaymentModelTune
+  #' @param object the name of the object of class PrepaymentModelTune
+  #' @exportMethod MinOrigMultiplier
+  setMethod("MinOrigMultiplier", signature("PrepaymentModelTune"),
+            function(object){object@MinOrigMultiplier})
+  
+  #' A method to extract the MaxOrigMultiplier from class PrepaymentModelTune
+  #' @param object the name of the object of class PrepaymentModelTune
+  #' @exportMethod MaxOrigMultiplier
+  setMethod("MaxOrigMultiplier", signature("PrepaymentModelTune"),
+            function(object){object@MaxOrigMultiplier})
+  
+  #' A method to extract the UpdatedLTV.beta from class PrepaymentModelTune
+  #' @param object the name of the object of class PrepaymentModelTune
+  #' @exportMethod UpdatedLTVBeta
+  setMethod("UpdatedLTVBeta", signature("PrepaymentModelTune"),
+            function(object){object@UpdatedLTV.beta})
+  
+  #' A method to extract the SATO.beta from class PrepaymentModelTune
+  #' @param object the name of the object of class PrepaymentModelTune
+  #' @exportMethod SATOBeta
+  setMethod("SATOBeta", signature("PrepaymentModelTune"),
+            function(object){object@SATOBeta})
+  
         ModelTuningParam <- function(
         TurnoverRate = "numeric",
         Turnover.alpha = "numeric",
@@ -328,10 +656,7 @@
        )
      
      SaveModelTune(ModelFile = temp, ModelName = ModelName)
-       
-     #ModelTuneConn <- gzfile(description = paste("~/BondLab/PrepaymentModel/", ModelName, ".rds", sep =""))
-     #saveRDS(temp, ModelTuneConn)
-     #close(ModelTuneConn)
+     
      }
     
      

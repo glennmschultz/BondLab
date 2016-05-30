@@ -77,25 +77,24 @@
                    SMM = "numeric",
                    MDR = "numeric",
                    Severity = "numeric")
-          {
-            .Object@PrepayAssumption = PrepayAssumption
-            .Object@PPCStart = PPCStart
-            .Object@PPCEnd = PPCEnd
-            .Object@PPCSeasoning = PPCSeasoning
-            .Object@FirstPmtDate = FirstPmtDate
-            .Object@LastPmtDate = LastPmtDate
-            .Object@FinalPmtDate = FinalPmtDate
-            .Object@PmtDate = PmtDate
-            .Object@LoanAge = LoanAge
-            .Object@Period = Period
-            .Object@NoteRate = NoteRate
-            .Object@MtgRateFwd = MtgRateFwd
-            .Object@Incentive = Incentive
-            .Object@SMM = SMM
-            .Object@MDR = MDR
-            .Object@Severity = Severity
-            
-            return(.Object)
+          { 
+            callNextMethod(.Object,
+                           PrepayAssumption = PrepayAssumption,
+                           PPCStart = PPCStart,
+                           PPCEnd = PPCEnd,
+                           PPCSeasoning = PPCSeasoning,
+                           FirstPmtDate = FirstPmtDate,
+                           LastPmtDate = LastPmtDate,
+                           FinalPmtDate = FinalPmtDate,
+                           PmtDate = PmtDate,
+                           LoanAge = LoanAge,
+                           Period = Period,
+                           NoteRate = NoteRate,
+                           MtgRateFwd = MtgRateFwd,
+                           Incentive = Incentive,
+                           SMM = SMM,
+                           MDR = MDR,
+                           Severity = Severity)
           })
 
   #---------------------------------------------------------------------------------------
@@ -155,7 +154,9 @@
   # Month is the calendar month (1..., 12) numeric
   # b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
   #------------------------------------------------------------------------------------------
-  Seasonality <- function( alpha = numeric(), Month = numeric(), theta= numeric()){
+  Seasonality <- function( alpha = numeric(), 
+                           Month = numeric(), 
+                           theta= numeric()){
   
   if (missing(alpha))
     stop("Need to specify alpha tuning parameter.")

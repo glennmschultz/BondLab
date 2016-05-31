@@ -6,6 +6,7 @@
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
 
+ 
   setClass("PrepaymentModelTune",
          representation(
            TurnoverRate = "numeric",
@@ -443,7 +444,7 @@
   #' @param object the name of the object of class PrepaymentModelTune
   #' @exportMethod MaxOrigLTV
   setMethod("MaxOrigLTV", signature("PrepaymentModelTune"),
-            function(object){object@MinOrigLTV})
+            function(object){object@MaxOrigLTV})
   
   
   #' A method to extract the MinOrigMultiplier from class PrepaymentModelTune
@@ -468,7 +469,7 @@
   #' @param object the name of the object of class PrepaymentModelTune
   #' @exportMethod SATOBeta
   setMethod("SATOBeta", signature("PrepaymentModelTune"),
-            function(object){object@SATOBeta})
+            function(object){object@SATO.beta})
   
         ModelTuningParam <- function(
         TurnoverRate = "numeric",

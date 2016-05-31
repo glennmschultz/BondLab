@@ -355,6 +355,12 @@
   setMethod("IncentiveFastBeta", signature("PrepaymentModelTune"),
             function(object){object@Incentive.Fast.beta})
   
+  #' A method to extract Incentive.Fast.beta from class PrepaymentModelTune
+  #' @param object The name of the object of class PrepaymentModelTune
+  #' @exportMethod IncentiveFastEta
+  setMethod("IncentiveFastEta", signature("PrepaymentModelTune"),
+            function(object){object@Incentive.Fast.eta})
+  
   #' A method to extract Incentive.Slow.theta.1 from class PrepaymentModelTune
   #' @param object The name of the object of class PrepaymentModelTune
   #' @exportMethod IncentiveSlowThetaOne

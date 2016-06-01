@@ -3,7 +3,7 @@
 \docType{methods}
 \name{SeasoningRamp,PrepaymentModelFunctions-method}
 \alias{SeasoningRamp,PrepaymentModelFunctions-method}
-\title{A method to extract the slot Seasoning from the object PrepaymentModelFunctions}
+\title{A method to extract the slot SeasoningRamp from the object PrepaymentModelFunctions}
 \usage{
 \S4method{SeasoningRamp}{PrepaymentModelFunctions}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an S4 object of the class PrepaymentModelFunctions}
 }
 \description{
-A method to extract the slot Seasoning from the object PrepaymentModelFunctions
+A method to extract the slot SeasoningRamp from the object PrepaymentModelFunctions
 }
 

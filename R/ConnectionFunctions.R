@@ -126,7 +126,7 @@
    }
    
    #----------------------------------------------------------------------------------------
-   #' A connection function to sace the PrepaymentModel model tuning parameters
+   #' A connection function to save the PrepaymentModel model tuning parameters
    #' 
    #' Opens a connection to the PrepaymentModel folder to save the prepayment model tuning
    #' @param ModelFile A character string the model tuning default value is temp

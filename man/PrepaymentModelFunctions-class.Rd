@@ -12,8 +12,28 @@ for building an agency prepayment model
 \section{Slots}{
 
 \describe{
-\item{\code{TurnoverRate}}{an numeric value the Turnover Rate}
+\item{\code{TurnoverRate}}{an numeric value the turnover rate}
 
 \item{\code{SeasoningRamp}}{a function defining the seasoning ramp}
+
+\item{\code{Curtailment}}{a function defining borrower curtailment}
+
+\item{\code{SeasonalFactors}}{a function defining the seasonal factors}
+
+\item{\code{ArcTanIncentive}}{a three-factor arc tangent function used to define
+the borrower response to refinancing incentive}
+
+\item{\code{BorrowerBurnout}}{a function defining the borrower burnout rate}
+
+\item{\code{DefaultRamp}}{a function defining the default ramp}
+
+\item{\code{DefaultOrigLTVMult}}{a function defining the default multipliers
+for orig. LTV that are applied to the default ramp}
+
+\item{\code{DefaultUpdatedLTVMult}}{a function defining the default multipliers
+for change in LTV that are applied to the default ramp}
+
+\item{\code{DefaultSATOMult}}{a function defining the default multipliers
+for borrower SATO that are applied to the default ramp}
 }}
 

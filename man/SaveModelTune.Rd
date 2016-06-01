@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{SaveModelTune}
 \alias{SaveModelTune}
-\title{A connection function to sace the PrepaymentModel model tuning parameters}
+\title{A connection function to save the PrepaymentModel model tuning parameters}
 \usage{
 SaveModelTune(ModelFile = "character", ModelName = "character")
 }

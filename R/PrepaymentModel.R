@@ -56,8 +56,6 @@
            MDR = "numeric",
            Severity = "numeric"))
 
-
-
   setMethod("initialize",
           signature("PrepaymentAssumption"),
           function(.Object,
@@ -97,17 +95,7 @@
                            Severity = Severity)
           })
 
-  #---------------------------------------------------------------------------------------
-  #Prepayment Model Functions.  These functions are used to build the base prepayment model
-  #Funtion include those for voluntary repayment and defaults
-  #---------------------------------------------------------------------------------------
-
-  #---------------------------------------------------------------------------------------
-  #This section is the voluntary repayment functions
-  #---------------------------------------------------------------------------------------
-
-  #---------------------------------------------------------------------------------------
-  # Seasoning function is a 3-parameter asymtote exponential function where
+ # Seasoning function is a 3-parameter asymtote exponential function where
   # The three parameter asymptote is equivalent to the PPC ramp
   # a is the asymptote of the function
   # b is the intercept of the function
@@ -252,34 +240,41 @@
   # The Bond Lab base voluntary prepayment model
   # Tuning parameters are called from the PrepaymentModelTune Class
   #-----------------------------------------------------------------------------------
-  Prepayment.Model <- function(ModelTune = "character", 
+  Prepayment.Model <- function(ModelTune = "character",
                                LoanAge = vector(), 
                                Month = vector(), 
                                incentive = vector(), 
                                Burnout.maxincen = numeric()){
   
-  TurnoverRate        = ModelTune@TurnoverRate                       
-  Seasoning.alpha     = ModelTune@Turnover.alpha
-  Seasoning.beta      = ModelTune@Turnover.beta 
-  Seasoning.theta     = ModelTune@Turnover.theta
-  Seasonality.alpha   = ModelTune@Seasonality.alpha
-  Seasonality.theta   = ModelTune@Seasonality.theta
-  Fast.theta1         = ModelTune@Incentive.Fast.theta.1  
-  Fast.theta2         = ModelTune@Incentive.Fast.theta.2 
-  Fast.beta           = ModelTune@Incentive.Fast.beta 
-  Fast.location       = ModelTune@Incentive.Fast.eta
-  Slow.theta1         = ModelTune@Incentive.Slow.theta.1 
-  Slow.theta2         = ModelTune@Incentive.Slow.theta.2 
-  Slow.beta           = ModelTune@Incentive.Slow.beta 
-  Slow.location       = ModelTune@Incentive.Slow.eta
-  Burnout.beta1       = ModelTune@Burnout.beta.1 
-  Burnout.beta2       = ModelTune@Burnout.beta.2
+  PPMFunctions <- ModelFunctions()
+      
+  TurnoverRate        = TurnoverRate(ModelTune)                       
+  Seasoning.alpha     = TurnoverAlpha(ModelTune)
+  Seasoning.beta      = TurnoverBeta(ModelTune) 
+  Seasoning.theta     = TurnoverTheta(ModelTune)
+  Seasonality.alpha   = SeasonalityAlpha(ModelTune)
+  Seasonality.theta   = SeasonalityTheta(ModelTune)
+  Fast.theta1         = IncentiveFastThetaOne(ModelTune)  
+  Fast.theta2         = IncentiveFastThetaTwo(ModelTune) 
+  Fast.beta           = IncentiveFastBeta(ModelTune)
+  Fast.location       = IncentiveFastEta(ModelTune)
+  Slow.theta1         = IncentiveSlowThetaOne(ModelTune)
+  Slow.theta2         = IncentiveSlowThetaTwo(ModelTune) 
+  Slow.beta           = IncentiveSlowBeta(ModelTune)
+  Slow.location       = IncentiveSlowEta(ModelTune)
+  Burnout.beta1       = BurnoutBetaOne(ModelTune)
+  Burnout.beta2       = BurnoutBetaTwo(ModelTune)
   
   Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
+  SeasoningRamp <- SeasoningRamp(PPMFunctions)(alpha = TurnoverAlpha(ModelTune),
+                                                    beta = TurnoverBeta(ModelTune),
+                                                    theta = TurnoverTheta(ModelTune),
+                                                    LoanAge = LoanAge)
+  SeasonalFactor <- SeasonalFactors(PPMFunctions)(alpha = SeasonalityAlpha(ModelTune),
+                                                  theta = SeasonalityTheta(ModelTune),
+                                                  Month = Month)
   
-  Turnover <- Turnover.Rate * 
-  Seasoning(alpha = Seasoning.alpha, beta = Seasoning.beta, theta = Seasoning.theta, LoanAge = LoanAge) *
-  Seasonality(alpha = Seasonality.alpha, Seasonality.theta, Month = Month)
+  Turnover <- Turnover.Rate * SeasoningRamp * SeasonalFactor
   
   # Calculate the Borrower Refinance Response
   Fast <- Borrower.Incentive(incentive = incentive, 
@@ -319,18 +314,18 @@
                             HomePrice = NULL){
     
     # -------------------- Default Model Tune Parameter -------------------------
-    BeginCDR      = ModelTune@BeginCDR
-    PeakCDR       = ModelTune@PeakCDR
-    EndCDR        = ModelTune@EndCDR
-    PeakMonth     = ModelTune@PeakMonth
-    PlateauMonths = ModelTune@PlateauMonths
-    EndMonth      = ModelTune@EndMonth
-    MinOrigLTV    = ModelTune@MinOrigLTV
-    MaxOrigLTV    = ModelTune@MaxOrigLTV
-    MinOrigMultiplier = ModelTune@MinOrigMultiplier
-    MaxOrigMultiplier = ModelTune@MaxOrigMultiplier
-    SATO.beta =         ModelTune@SATO.beta
-    UpdatedLTV.beta =   ModelTune@UpdatedLTV.beta
+    BeginCDR      = BeginCDR(ModelTune)
+    PeakCDR       = PeakCDR(ModelTune)
+    EndCDR        = EndCDR(ModelTune)
+    PeakMonth     = PeakMonth(ModelTune)
+    PlateauMonths = PlateauMonths(ModelTune)
+    EndMonth      = EndMonth(ModelTune)
+    MinOrigLTV    = MinOrigLTV(ModelTune)
+    MaxOrigLTV    = MaxOrigLTV(ModelTune)
+    MinOrigMultiplier = MinOrigMultiplier(ModelTune)
+    MaxOrigMultiplier = MaxOrigMultiplier(ModelTune)
+    SATO.beta =         SATOBeta(ModelTune)
+    UpdatedLTV.beta =   UpdatedLTVBeta(ModelTune)
   
     # This function returns the amortization vector of a mortgage it is exact for a fixed rate mortage but only an
     # estimate of the vector for an adjustable rate mortage sufficent for updated LTV due to amortization.

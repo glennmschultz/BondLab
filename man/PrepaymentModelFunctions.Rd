@@ -6,16 +6,24 @@
 \usage{
 PrepaymentModelFunctions(TurnoverRate = "numeric",
   SeasoningRamp = "function", Curtailment = "function",
-  ArcTanIncentive = "function", BorrowerBurnout = "function",
-  DefaultRamp = "function", DefaultOrigLTVMult = "function",
-  DefaultUpdatedLTVMult = "function", DefaultSATOMult = "function")
+  SeasonalFactors = "function", ArcTanIncentive = "function",
+  BorrowerBurnout = "function", DefaultRamp = "function",
+  DefaultOrigLTVMult = "function", DefaultUpdatedLTVMult = "function",
+  DefaultSATOMult = "function")
 }
 \arguments{
-\item{TurnoverRate}{a function defining the turnover rate}
+\item{TurnoverRate}{a numeric value the turnover rate}
 
-\item{SeasoningRamp}{a function defining the seasoning ramp}
+\item{SeasoningRamp}{a function defining the seasoning ramp.  The input
+variables are alpha the aymptote, beta the intercept, theta the point of
+maximum curvature.}
 
 \item{Curtailment}{a function defining the curtailment}
+
+\item{SeasonalFactors}{a function defining the seasonal pattern of prepayments
+the input variables are alpha the function's maximum value, Month the numeric
+value of the month of the year, theta the point at which the function reaches 
+its maximum value}
 
 \item{ArcTanIncentive}{a function defining the borrower incentive response}
 

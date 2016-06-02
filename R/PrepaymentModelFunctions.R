@@ -62,7 +62,7 @@
   #' @export SeasoningRamp
   setGeneric("SeasoningRamp", function(object)
     {standardGeneric("SeasoningRamp")})
-  
+ 
   #' A standard generic function to access the slot Curatialment from the class
   #' PrepaymentModelFunctions
   #' @param object an S4 object
@@ -126,6 +126,7 @@
                      TurnoverRate ="numeric",
                      SeasoningRamp = "function",
                      Curtailment = "function",
+                     SeasonalFactors = "function",
                      ArcTanIncentive = "function",
                      BorrowerBurnout = "function",
                      DefaultRamp = "function",
@@ -137,6 +138,7 @@
                              TurnoverRate = TurnoverRate,
                              SeasoningRamp = SeasoningRamp,
                              Curtailment = Curtailment,
+                             SeasonalFactors = SeasonalFactors,
                              ArcTanIncentive = ArcTanIncentive,
                              BorrowerBurnout = BorrowerBurnout,
                              DefaultRamp = DefaultRamp,
@@ -162,6 +164,13 @@
   #' @exportMethod Curtailment
   setMethod("Curtailment", signature("PrepaymentModelFunctions"),
             function(object){object@Curtailment})
+  
+  #' A method to extract the slot SeasonalFactors from the object PrepaymentModelFunctions
+  #' @param object an S4 object of the class PrepaymentModelFunctions
+  #' @exportMethod SeasonalFactors
+  setMethod("SeasonalFactors", signature("PrepaymentModelFunctions"),
+            function(object){object@SeasonalFactors})
+  
   
   #' A method to extract the slot ArcTanIncentive from the object PrepaymentModelFunctions
   #' @param object an S4 object of the class PrepaymentModelFunctions
@@ -202,9 +211,15 @@
   
   #' A constructor function for the class ModelFunctions
   #'  
-  #' @param TurnoverRate a function defining the turnover rate
-  #' @param SeasoningRamp a function defining the seasoning ramp
+  #' @param TurnoverRate a numeric value the turnover rate
+  #' @param SeasoningRamp a function defining the seasoning ramp.  The input
+  #' variables are alpha the aymptote, beta the intercept, theta the point of
+  #' maximum curvature.
   #' @param Curtailment a function defining the curtailment
+  #' @param SeasonalFactors a function defining the seasonal pattern of prepayments
+  #' the input variables are alpha the function's maximum value, Month the numeric
+  #' value of the month of the year, theta the point at which the function reaches 
+  #' its maximum value
   #' @param ArcTanIncentive a function defining the borrower incentive response
   #' @param BorrowerBurnout a function defining borrower burnout 
   #' @param DefaultRamp a function defining the default ramp
@@ -215,6 +230,7 @@
     TurnoverRate = "numeric",
     SeasoningRamp = "function",
     Curtailment = "function",
+    SeasonalFactors = "function",
     ArcTanIncentive = "function",
     BorrowerBurnout = "function",
     DefaultRamp = "function",
@@ -227,6 +243,7 @@
         TurnoverRate = TurnoverRate,
         SeasoningRamp = SeasoningRamp,
         Curtailment = Curtailment,
+        SeasonalFactors = SeasonalFactors,
         ArcTanIncentive = ArcTanIncentive,
         BorrowerBurnout = BorrowerBurnout,
         DefaultRamp = DefaultRamp,
@@ -254,6 +271,12 @@
                              theta = numeric(),
                              LoanAge = numeric())
       {alpha - beta * exp(-theta * LoanAge)},
+      
+      SeasonalFactors = function(alpha = numeric(), 
+                                 Month = numeric(), 
+                                 theta = numeric())
+        {(1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))},
+      
       
       ArcTanIncentive = function(incentive = numeric(),
                                  theta1 = numeric(),

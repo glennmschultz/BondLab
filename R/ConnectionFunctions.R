@@ -117,7 +117,6 @@
   #' @param bond.id A character string the bond id or cusip currently bond.id is supported
   #' @export
    ModelTune <- function(bond.id = "character"){
-                #Deal <- MBS(MBS.id = bond.id)
                 ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
                 "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
                 ModelTune <- readRDS(ModelTune.Conn)
@@ -137,6 +136,33 @@
                                     "/PrepaymentModel/", ModelName, ".rds", sep =""))
     on.exit(close.connection(ModelTuneConn))
      saveRDS(ModelFile, ModelTuneConn)
+   }
+   
+   
+   #--------------------------------------------------------------------------------------
+   #' A connection function read the Prepayment Model Folder ModelFunctions class
+   #' 
+   #' Opens a connection to the PrepaymentModel folder to read the ModelFunctions class
+   #' @export
+   ModelFunctions <- function(){
+     ModelFunctionConn <- gzfile(description = paste(system.file(package = "BondLab"),
+                                      "/PrepaymentModel/ModelFunctions.rds", sep =""))
+     ModelFunctions <- readRDS(ModelFunctionConn)
+     on.exit(close.connection(ModelFunctionConn))
+     return(ModelFunctions)
+   }
+   
+   #--------------------------------------------------------------------------------------
+   #' A connection function to save the Prepayment Model ModelFunctions class
+   #' 
+   #' Opens a connection to the PrepaymentModel folder to save the ModelFunctions class
+   #' @param ModelFile A character string the model functions class default value is temp
+   #' @export
+   SaveModelFunctions <-function(ModelFile = "character"){
+     ModelFunctionConn <-gzfile(description = paste(system.file(package = "BondLab"),
+                                                    "/PrepaymentModel/ModelFunctions.rds", sep =""))
+     on.exit(close.connection(ModelFunctionConn))
+     saveRDS(ModelFile, ModelFunctionConn)
    }
 
    #---------------------------------------------------------------------------------------

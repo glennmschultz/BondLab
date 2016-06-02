@@ -42,8 +42,8 @@
   setGeneric("PrepaymentModelFunctions", function(
              TurnoverRate = "numeric",
              SeasoningRamp = "function",
-             SeasonalFactors = "function",
              Curtailment = "function",
+             SeasonalFactors = "function",
              ArcTanIncentive = "function",
              BorrowerBurnout = "function",
              DefaultRamp = "function",
@@ -125,7 +125,7 @@
             function(.Object,
                      TurnoverRate ="numeric",
                      SeasoningRamp = "function",
-                     Curatilment = "function",
+                     Curtailment = "function",
                      ArcTanIncentive = "function",
                      BorrowerBurnout = "function",
                      DefaultRamp = "function",
@@ -199,6 +199,18 @@
   setMethod("DefaultSATOMult", signature("PrepaymentModelFunctions"),
             function(object){object@DefaultSATOMult})
   
+  
+  #' A constructor function for the class ModelFunctions
+  #'  
+  #' @param TurnoverRate a function defining the turnover rate
+  #' @param SeasoningRamp a function defining the seasoning ramp
+  #' @param Curtailment a function defining the curtailment
+  #' @param ArcTanIncentive a function defining the borrower incentive response
+  #' @param BorrowerBurnout a function defining borrower burnout 
+  #' @param DefaultRamp a function defining the default ramp
+  #' @param DefaultOrigLTVMult a function defining the orig. LTV multipliers
+  #' @param DefaultUpdatedLTVMult a function defining the updated LTV default multipliers
+  #' @param DefaultSATOMult a function defining the SATO multipliers on the default curve
   PrepaymentModelFunctions <- function(
     TurnoverRate = "numeric",
     SeasoningRamp = "function",
@@ -291,13 +303,9 @@
         exp(beta * SATO)}
     )
     
-    SaveModelFunctions <-function(ModelFile = "character"){
-      ModelFunctionConn <-gzfile(description = paste(system.file(package = "BondLab"),
-                                                 "/PrepaymentModel/ModelFunctions.rds", sep =""))
-      on.exit(close.connection(ModelFunctionConn))
-      saveRDS(ModelFile, ModelFunctionConn)
-    }
+
     
+    SaveModelFunctions(ModelFile = temp)
   }
      
     

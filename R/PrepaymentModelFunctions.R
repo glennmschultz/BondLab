@@ -278,7 +278,7 @@
         {(1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))},
       
       
-      ArcTanIncentive = function(incentive = numeric(),
+      ArcTanIncentive = function(incentive = vector(),
                                  theta1 = numeric(),
                                  theta2 = numeric(),
                                  beta = numeric(),
@@ -318,7 +318,7 @@
       DefaultUpdatedLTVMult = function(beta = numeric(), 
                                        OrigLTV = numeric(), 
                                        ULTV = numeric()){
-        chgLTV = (OrigLTV - ULTV)/100
+        chgLTV = (OrigLTV - ULTV)/ltv.basis
         exp(-beta * chgLTV)},
       
       DefaultSATOMult = function(beta = numeric(), 

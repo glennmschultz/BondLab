@@ -1,13 +1,9 @@
 
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # in addition to standard fixed income analysis bond lab provides 
-  # for the specific analysis of structured products residential mortgage backed securities, 
-  # asset backed securities, and commerical mortgage backed securities
-  # File License
-  # Copyright (C) 2015  Bond Lab Technologies, Inc.
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
+
 
 
   #' A S4 Class to hold prepayment vectors which are passed to cash flow engines
@@ -95,94 +91,6 @@
                            Severity = Severity)
           })
 
- # Seasoning function is a 3-parameter asymtote exponential function where
-  # The three parameter asymptote is equivalent to the PPC ramp
-  # a is the asymptote of the function
-  # b is the intercept of the function
-  # c is the point where the max CPR is achieved
-  #---------------------------------------------------------------------------------------
-  #' A function to define the mortgage seasoning ramp
-  #' 
-  #' @param alpha a numeric value
-  #' @param beta a numeric value
-  #' @param theta a numeric value
-  #' @param LoanAge a numeric value
-  #' @export Seasoning
-  Seasoning <- function(alpha = numeric(), 
-                        beta = numeric(), 
-                        theta = numeric(), 
-                        LoanAge = numeric()){
-
-  
-  if (missing(alpha))
-    stop("Need to specify alpha tuning parameter.")
-  if (!is.numeric(alpha)  )
-    stop("No numeric alpha specified.")
-  
-  if (missing(beta))
-    stop("Need to specify beta tuning parameter.")
-  if (!is.numeric(beta)  )
-    stop("No numeric beta specified.")
-  
-  if (missing(theta))
-    stop("Need to specify theta tuning parameter.")
-  if (!is.numeric(theta)  )
-    stop("No numeric theta specified.")
-  
-  if (missing(LoanAge))
-    stop("Need to specify theta tuning parameter.")
-  if (!is.numeric(LoanAge)  )
-    stop("No numeric theta specified.")
-  
-  alpha - beta * exp(-theta * LoanAge)}
-
-  #------------------------------------------------------------------------------------------
-  # Seasonality is modeled as a sin wave
-  # a is the amplitude of the wave an set the maximum seasonal factor
-  # Month is the calendar month (1..., 12) numeric
-  # b is a location parameter shifts the peak values > 1 shift left values < 1 shift right
-  #------------------------------------------------------------------------------------------
-  Seasonality <- function( alpha = numeric(), 
-                           Month = numeric(), 
-                           theta= numeric()){
-  
-  if (missing(alpha))
-    stop("Need to specify alpha tuning parameter.")
-  if (!is.numeric(alpha)  )
-    stop("No numeric alpha specified.")
-  
-  if (missing(Month))
-    stop("Need to specify Month variable.")
-  if (!is.numeric(Month)  )
-    stop("No numeric alpha specified.")
-  
-  if (missing(theta))
-    stop("Need to specify Month variable.")
-  if (!is.numeric(theta)  )
-    stop("No numeric alpha specified.")
-  
-  (1  + alpha *sin((pi/2 * (Month + theta - 3)) / 3 - 1))}
-
-  #--------------------------------------------------------------------------------------
-  # arctanget function with a location parameter
-  #--------------------------------------------------------------------------------------
-  Borrower.Incentive <- function(incentive = numeric(), 
-                                 theta1 = numeric(), 
-                                 theta2 = numeric(), 
-                                 beta = numeric(), 
-                                 location = numeric()){ 
-  theta1 + theta2 * atan(incentive + pi * (beta * ((location - atan(incentive))/pi)))}
-
-  #-------------------------------------------------------------------------------------
-  # Burnout is an exponentially decreasing function
-  # a is the coefficient on the burnout varaible and b is the measure of burnout
-  #-------------------------------------------------------------------------------------
-  Burnout <- function(beta1 = numeric(), 
-                      beta2= numeric(), 
-                      MaxIncen = numeric(), 
-                      LoanAge = numeric()){
-  exp(beta1 * LoanAge +  beta2 * MaxIncen)}
-
 
   #-------------------------------------------------------------------------------------
   #This section is the involuntary (default) repayment functions
@@ -248,24 +156,9 @@
   
   PPMFunctions <- ModelFunctions()
       
-  TurnoverRate        = TurnoverRate(ModelTune)                       
-  Seasoning.alpha     = TurnoverAlpha(ModelTune)
-  Seasoning.beta      = TurnoverBeta(ModelTune) 
-  Seasoning.theta     = TurnoverTheta(ModelTune)
-  Seasonality.alpha   = SeasonalityAlpha(ModelTune)
-  Seasonality.theta   = SeasonalityTheta(ModelTune)
-  Fast.theta1         = IncentiveFastThetaOne(ModelTune)  
-  Fast.theta2         = IncentiveFastThetaTwo(ModelTune) 
-  Fast.beta           = IncentiveFastBeta(ModelTune)
-  Fast.location       = IncentiveFastEta(ModelTune)
-  Slow.theta1         = IncentiveSlowThetaOne(ModelTune)
-  Slow.theta2         = IncentiveSlowThetaTwo(ModelTune) 
-  Slow.beta           = IncentiveSlowBeta(ModelTune)
-  Slow.location       = IncentiveSlowEta(ModelTune)
-  Burnout.beta1       = BurnoutBetaOne(ModelTune)
-  Burnout.beta2       = BurnoutBetaTwo(ModelTune)
+
+  Turnover.Rate <- 1-(1 - TurnoverRate(ModelTune))^(1/12)
   
-  Turnover.Rate <- 1-(1 - TurnoverRate)^(1/12)
   SeasoningRamp <- SeasoningRamp(PPMFunctions)(alpha = TurnoverAlpha(ModelTune),
                                                     beta = TurnoverBeta(ModelTune),
                                                     theta = TurnoverTheta(ModelTune),
@@ -277,18 +170,20 @@
   Turnover <- Turnover.Rate * SeasoningRamp * SeasonalFactor
   
   # Calculate the Borrower Refinance Response
-  Fast <- Borrower.Incentive(incentive = incentive, 
-                             theta1 = Fast.theta1, 
-                             theta2 = Fast.theta2, 
-                             beta = Fast.beta, 
-                             location = Fast.location)
-  Slow <- Borrower.Incentive(incentive = incentive, 
-                             theta1 = Slow.theta1, 
-                             theta2 = Slow.theta2, 
-                             beta = Slow.beta, 
-                             location = Slow.location)
-  Burnout <-Burnout(beta1 = Burnout.beta1, 
-                    beta2 = Burnout.beta2, 
+  Fast <- ArcTanIncentive(PPMFunctions)(incentive = incentive,
+                                        theta1 = IncentiveFastThetaOne(ModelTune),
+                                        theta2 = IncentiveFastThetaTwo(ModelTune),
+                                        beta = IncentiveFastBeta(ModelTune),
+                                        location = IncentiveFastEta(ModelTune))
+
+  Slow <- ArcTanIncentive(PPMFunctions)(incentive = incentive, 
+                             theta1 = IncentiveSlowThetaOne(ModelTune), 
+                             theta2 = IncentiveSlowThetaTwo(ModelTune), 
+                             beta = IncentiveSlowBeta(ModelTune), 
+                             location = IncentiveSlowEta(ModelTune))
+  
+  Burnout <- BorrowerBurnout(PPMFunctions)(beta1 = BurnoutBetaOne(ModelTune), 
+                    beta2 = BurnoutBetaTwo(ModelTune), 
                     MaxIncen = Burnout.maxincen, 
                     LoanAge = LoanAge)
   
@@ -313,6 +208,8 @@
                             ...,
                             HomePrice = NULL){
     
+    PPMFunctions <- ModelFunctions()
+    
     # -------------------- Default Model Tune Parameter -------------------------
     BeginCDR      = BeginCDR(ModelTune)
     PeakCDR       = PeakCDR(ModelTune)
@@ -327,26 +224,27 @@
     SATO.beta =         SATOBeta(ModelTune)
     UpdatedLTV.beta =   UpdatedLTVBeta(ModelTune)
   
-    # This function returns the amortization vector of a mortgage it is exact for a fixed rate mortage but only an
-    # estimate of the vector for an adjustable rate mortage sufficent for updated LTV due to amortization.
+    # This function returns the amortization vector of a mortgage it is 
+    # exact for a fixed rate mortage but only an estimate of the vector 
+    # for an adjustable rate mortage sufficent for updated LTV due to amortization.
     
     AmortizationBalance = function(OrigLoanBalance = numeric(), 
                                    NoteRate = numeric(), 
                                    TermMos = numeric(), 
                                    LoanAge = numeric()){
-    NoteRate = NoteRate/(months.in.year * 100)
+    NoteRate = NoteRate/(months.in.year * yield.basis)
     Term = TermMos
     Remain.Balance = OrigLoanBalance * 
       (((1+NoteRate)^Term - ((1+NoteRate)^LoanAge))/(((1+NoteRate)^Term)-1))
     }
     
     
-          Default <- CDR.Baseline(BeginCDR = BeginCDR,
-                                  PeakCDR = PeakCDR,
-                                  EndCDR = EndCDR,
-                                  PeakMonth = PeakMonth,
-                                  PlateauMonths = PlateauMonths,
-                                  EndMonth = EndMonth,
+          Default <-  DefaultRamp(PPMFunctions)(BeginCDR = BeginCDR(ModelTune),
+                                  PeakCDR = PeakCDR(ModelTune),
+                                  EndCDR = EndCDR(ModelTune),
+                                  PeakMonth = PeakMonth(ModelTune),
+                                  PlateauMonths = PlateauMonths(ModelTune),
+                                  EndMonth = EndMonth(ModelTune),
                                   LoanAge = LoanAge)
    
     #--------------------------------------------------------------------------
@@ -354,18 +252,17 @@
     #--------------------------------------------------------------------------
     
     #----------------------------Calculate Updated LTV ------------------------
-    EstimatedSalePrice <- OrigLoanBalance/(OrigLTV/100)
+    EstimatedSalePrice <- OrigLoanBalance/(OrigLTV/ltv.basis)
     ScheduledBalance <- AmortizationBalance(OrigLoanBalance = OrigLoanBalance,
                                             NoteRate = NoteRate,
                                             TermMos = Term,
                                             LoanAge = LoanAge)
    
-    if(is.null(HomePrice) == TRUE) {UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * 100} else
-    {UpdatedLTV = (ScheduledBalance / (EstimatedSalePrice * HomePrice)) * 100}
+    if(is.null(HomePrice) == TRUE) {UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * price.basis
+    } else {UpdatedLTV = (ScheduledBalance / (EstimatedSalePrice * HomePrice)) * price.basis}
     
-    Monthly.Default <- 1-(1 - (Default/100))^(1/12)
-    
-
+    Monthly.Default <- 1-(1 - (Default/PSA.basis))^(1/months.in.year)
+  
     OrigCoeff <- OrigMultiplier(OrigLTV = OrigLTV,
                                 MinOLTV = MinOrigLTV,
                                 MaxOLTV = MaxOrigLTV,
@@ -387,15 +284,6 @@
     MDR = pmin(1, Monthly.Default * exp(Multiplier))
     return(MDR)}
   
-  
-  # This function propogates the mortgage rate
-  # Here the switch function is used to determine the mortgage function to propogate the forward mortgage rate
-  # switch is used because there will be more than 2 or 3 rates in the future and if else will get messy
-  
-  
-
-
-
   # ----------------------------------------------------------------------------
   #This section begins the bond lab prepayment model
   #The constructor for the prepayment model vector starts below

@@ -91,23 +91,7 @@
                            Severity = Severity)
           })
 
-  #------------------------------------------------------------------------------------
-  #Updated Loan to Value Default Multiplier Function
-  #------------------------------------------------------------------------------------
-  UpdatedLTVMultiplier <- function(beta = numeric(), 
-                                  OrigLTV = numeric(), 
-                                  ULTV = numeric()){
-  chgLTV = (OrigLTV - ULTV)/100
-  exp(-beta * chgLTV)}
-
-  #-----------------------------------------------------------------------------------
-  #SATO Default Multiplier Function
-  #-----------------------------------------------------------------------------------
-
-  SATOMultiplier <- function(beta = numeric(), 
-                             SATO = numeric()) {
-  exp(beta * SATO)}
-
+ 
   #-----------------------------------------------------------------------------------
   # The Bond Lab base voluntary prepayment model
   # Tuning parameters are called from the PrepaymentModelTune Class
@@ -121,7 +105,7 @@
   PPMFunctions <- ModelFunctions()
       
 
-  Turnover.Rate <- 1-(1 - TurnoverRate(ModelTune))^(1/12)
+  Turnover.Rate <- 1-(1 - TurnoverRate(ModelTune))^(1/months.in.year)
   
   SeasoningRamp <- SeasoningRamp(PPMFunctions)(alpha = TurnoverAlpha(ModelTune),
                                                     beta = TurnoverBeta(ModelTune),
@@ -283,9 +267,8 @@
   PrepayAssumption <- PrepaymentAssumption    
   
   #Error Trap the CPR assumption
-  if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/100} else {CPR = CPR}
+  if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/PSA.basis} else {CPR = CPR}
   #PPC function has error trapping feature so there is no need to error trap for PPC
-  
   
   NoteRate = GWac(bond.id)
   sato = SATO(bond.id)
@@ -308,10 +291,9 @@
   Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/days.in.month) + 1
   Period = seq(from = 1, to = Remain.Term, by = 1)
   PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
-  LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)), 
+  LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)),
                                 as.Date(FirstPmtDate), units = "days")/days.in.month) + (WALA + 1)
 
-  
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))
   
@@ -344,8 +326,7 @@
   #This is why I need to make class classflow array maybe l- or sapply works here
   
   Incentive =  as.numeric(NoteRate - Mtg.Rate)
-  Burnout = pmax(bond.id@Burnout,(Incentive * 100)-(sato * 100))
-  
+  Burnout = pmax(bond.id@Burnout,(Incentive * yield.basis)-(sato * yield.basis))
   
   if(PrepaymentAssumption == "MODEL")
   {SMM = Prepayment.Model(ModelTune = ModelTune, 
@@ -360,7 +341,7 @@
   {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, 
                                   end.cpr = end.cpr, 
                                   season.period = seasoning.period, 
-                                  period = LoanAge))^(1/12))
+                                  period = LoanAge))^(1/months.in.year))
   Severity = rep(Severity, Remain.Term)
   } 
   else

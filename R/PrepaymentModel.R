@@ -5,7 +5,6 @@
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
 
-
   #' A S4 Class to hold prepayment vectors which are passed to cash flow engines
   #' 
   #' The PrepaymentAssumption class is used to pass the prepayment information and
@@ -21,7 +20,8 @@
   #' PPC option is choosen
   #' @slot FirstPmtDate A character string the first payment date
   #' @slot LastPmtDate A character string the date of the last payment received by the investor
-  #' @slot FinalPmtDate A character string the date of the final payment received by the investor
+  #' @slot FinalPmtDate A character string the date of the final payment received 
+  #' by the investor
   #' @slot PmtDate A character string the payment date
   #' @slot LoanAge A numeric vector the projected loan age at each payment date
   #' @slot Period A numeric vector the index of the payment periods
@@ -32,7 +32,8 @@
   #' @slot SMM A numeric vector the projected SMM (Single Monthly Mortality).  
   #' SMM is the measure of voluntary repayments 
   #' @slot MDR A numeric vector the pojected MDR  (Monthly Default Rate)
-  #' @slot Severitiy A numeric vector the loss severity given default 
+  #' @slot Severitiy A numeric vector the loss severity given default
+  #' @exportClass PrepaymentAssumption 
   setClass("PrepaymentAssumption",
          representation(
            PrepayAssumption = "character",
@@ -91,12 +92,26 @@
                            Severity = Severity)
           })
 
- 
+  setGeneric("PrepaymentModel", function(bond.id = "character", 
+                                         TermStructure = "character", 
+                                         MortgageRate = "character",
+                                         ModelTune = "character", 
+                                         Burnout = numeric(), 
+                                         PrepaymentAssumption = "character", 
+                                         ...,
+                                         begin.cpr = numeric(), 
+                                         end.cpr = numeric(), 
+                                         seasoning.period = numeric(), 
+                                         CPR = numeric(),
+                                         CDR = 0,
+                                         HomePrice = NULL,
+                                         Severity = 0)
+             {standardGeneric("PrepaymentModel")})
   #-----------------------------------------------------------------------------------
   # The Bond Lab base voluntary prepayment model
   # Tuning parameters are called from the PrepaymentModelTune Class
   #-----------------------------------------------------------------------------------
-  Prepayment.Model <- function(ModelTune = "character",
+  Voluntary.Model <- function(ModelTune = "character",
                                LoanAge = vector(), 
                                Month = vector(), 
                                incentive = vector(), 
@@ -240,21 +255,21 @@
   #' @param CDR A numeric value the CDR assumption (annual default rate)
   #' @param HomePrice NULL do not override value
   #' @param Severity A numeric value the loss severity given default
-  #' @export
-  PrepaymentAssumption <- function(bond.id = "character", 
-                                   TermStructure = "character", 
-                                   MortgageRate = "character",
-                                   ModelTune = "character", 
-                                   Burnout = numeric(), 
-                                   PrepaymentAssumption = "character", 
-                                   ...,
-                                   begin.cpr = numeric(), 
-                                   end.cpr = numeric(), 
-                                   seasoning.period = numeric(), 
-                                   CPR = numeric(),
-                                   CDR = 0,
-                                   HomePrice = NULL,
-                                   Severity = 0){
+  #' @export PrepaymentModel
+  PrepaymentModel <- function(bond.id = "character", 
+                              TermStructure = "character", 
+                              MortgageRate = "character",
+                              ModelTune = "character", 
+                              Burnout = numeric(), 
+                              PrepaymentAssumption = "character", 
+                              ...,
+                              begin.cpr = numeric(), 
+                              end.cpr = numeric(), 
+                              seasoning.period = numeric(), 
+                              CPR = numeric(),
+                              CDR = 0,
+                              HomePrice = NULL,
+                              Severity = 0){
   
   # Severity is optional value passed to the model the default is 35%.  Should build a severity
   # model class like mortgage rate and scenario for severity.
@@ -329,11 +344,11 @@
   Burnout = pmax(bond.id@Burnout,(Incentive * yield.basis)-(sato * yield.basis))
   
   if(PrepaymentAssumption == "MODEL")
-  {SMM = Prepayment.Model(ModelTune = ModelTune, 
-                          LoanAge = LoanAge, 
-                          Month = as.numeric(format(PmtDate, "%m")), 
-                          incentive = Incentive, 
-                          Burnout.maxincen = Burnout)
+  {SMM = Voluntary.Model(ModelTune = ModelTune, 
+                         LoanAge = LoanAge, 
+                         Month = as.numeric(format(PmtDate, "%m")), 
+                         incentive = Incentive, 
+                         Burnout.maxincen = Burnout)
   Severity = rep(Severity, Remain.Term)
   } 
   else 
@@ -364,7 +379,7 @@
                        HomePrice = HomePrice)}
 
   new("PrepaymentAssumption",
-      PrepayAssumption = as.character(PrepayAssumption),
+      PrepayAssumption = as.character(PrepaymentAssumption),
       PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
       PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
       PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period} else {0},

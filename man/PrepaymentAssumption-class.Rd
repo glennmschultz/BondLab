@@ -28,7 +28,8 @@ PPC option is choosen}
 
 \item{\code{LastPmtDate}}{A character string the date of the last payment received by the investor}
 
-\item{\code{FinalPmtDate}}{A character string the date of the final payment received by the investor}
+\item{\code{FinalPmtDate}}{A character string the date of the final payment received 
+by the investor}
 
 \item{\code{PmtDate}}{A character string the payment date}
 

@@ -1,11 +1,8 @@
-
+  
   # Bond Lab is a software application for the analysis of 
-  # fixed income securities.  It provides a suite of applications for fixed income
-  # In addition to standard fixed income analysis Bond Lab is designed for the 
-  # specific analysis of structured products residential mortgage backed securities, 
-  # asset backed securities, and commerical mortgage backed securities
-  # See the File License 
-  # Copyright (C) 2015 Bond Lab Technologies, Inc
+  # fixed income securities it provides a suite of applications
+  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
   # The following script analyzes a pass-through security.  To create the script 
   # the standard procedure is followed set class, set generics, set methods, functions

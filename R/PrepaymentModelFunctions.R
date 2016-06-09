@@ -247,7 +247,7 @@
         ArcTanIncentive = ArcTanIncentive,
         BorrowerBurnout = BorrowerBurnout,
         DefaultRamp = DefaultRamp,
-        DefaultOrigLTVMult = DefaultUpdatedLTVMult,
+        DefaultOrigLTVMult = DefaultOrigLTVMult,
         DefaultUpdatedLTVMult = DefaultUpdatedLTVMult,
         DefaultSATOMult = DefaultSATOMult)
   }

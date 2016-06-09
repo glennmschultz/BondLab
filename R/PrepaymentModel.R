@@ -91,42 +91,6 @@
                            Severity = Severity)
           })
 
-
-  #-------------------------------------------------------------------------------------
-  #This section is the involuntary (default) repayment functions
-  #-------------------------------------------------------------------------------------
-
-  #-------------------------------------------------------------------------------------
-  # Default Baseline is a piece wise function.
-  # The user selects the begining, peak CDR, the peak month, ramp plateau, and end End CDR
-  #-------------------------------------------------------------------------------------
-  CDR.Baseline <- function(BeginCDR = numeric(),
-                           PeakCDR = numeric(),
-                           EndCDR = numeric(),
-                           PeakMonth = numeric(),
-                           PlateauMonths = numeric(),
-                           EndMonth = numeric(),
-                           LoanAge = numeric()) {
-  
-  UpRamp = PeakCDR - BeginCDR  
-  DownRamp = EndCDR - PeakCDR
-  DownRampMonths = EndMonth - (PeakMonth + PlateauMonths)
-  PlateauEnd = PeakMonth + PlateauMonths
-  ifelse(LoanAge <= PeakMonth, 0 + ((LoanAge-1) * (UpRamp / (PeakMonth - 1))),
-  ifelse(LoanAge > PeakMonth & LoanAge <= PlateauEnd ,PeakCDR, 
-  ifelse(LoanAge > PlateauEnd & LoanAge <= EndMonth, PeakCDR + (LoanAge - PlateauEnd) * (DownRamp/DownRampMonths),EndCDR)))}
-
-  #------------------------------------------------------------------------------------
-  #Original Loan to Value Default Multipliers
-  #------------------------------------------------------------------------------------
-  OrigMultiplier <- function(OrigLTV = numeric(),
-                             MinOLTV = numeric(),
-                             MaxOLTV = numeric(),
-                             MinOrigMultiplier = numeric(),
-                             MaxOrigMultiplier = numeric()){
-    ifelse(OrigLTV > MaxOLTV, MaxOrigMultiplier,
-    ifelse(OrigLTV > MinOLTV & OrigLTV <= MaxOLTV, 1.0, MinOrigMultiplier))}
-
   #------------------------------------------------------------------------------------
   #Updated Loan to Value Default Multiplier Function
   #------------------------------------------------------------------------------------
@@ -209,20 +173,6 @@
                             HomePrice = NULL){
     
     PPMFunctions <- ModelFunctions()
-    
-    # -------------------- Default Model Tune Parameter -------------------------
-    BeginCDR      = BeginCDR(ModelTune)
-    PeakCDR       = PeakCDR(ModelTune)
-    EndCDR        = EndCDR(ModelTune)
-    PeakMonth     = PeakMonth(ModelTune)
-    PlateauMonths = PlateauMonths(ModelTune)
-    EndMonth      = EndMonth(ModelTune)
-    MinOrigLTV    = MinOrigLTV(ModelTune)
-    MaxOrigLTV    = MaxOrigLTV(ModelTune)
-    MinOrigMultiplier = MinOrigMultiplier(ModelTune)
-    MaxOrigMultiplier = MaxOrigMultiplier(ModelTune)
-    SATO.beta =         SATOBeta(ModelTune)
-    UpdatedLTV.beta =   UpdatedLTVBeta(ModelTune)
   
     # This function returns the amortization vector of a mortgage it is 
     # exact for a fixed rate mortage but only an estimate of the vector 
@@ -263,21 +213,21 @@
     
     Monthly.Default <- 1-(1 - (Default/PSA.basis))^(1/months.in.year)
   
-    OrigCoeff <- OrigMultiplier(OrigLTV = OrigLTV,
-                                MinOLTV = MinOrigLTV,
-                                MaxOLTV = MaxOrigLTV,
-                                MinOrigMultiplier = MinOrigMultiplier,
-                                MaxOrigMultiplier = MaxOrigMultiplier)
-   
-    SATOCoeff <- SATOMultiplier(beta = SATO.beta, 
-                                SATO = SATO)
+    OrigCoeff <- DefaultOrigLTVMult(PPMFunctions)(OrigLTV = OrigLTV,
+                                                  MinOLTV = MinOrigLTV(ModelTune),
+                                                  MaxOLTV = MaxOrigLTV(ModelTune),
+                                                  MinOrigMultiplier= MinOrigMultiplier(ModelTune),
+                                                  MaxOrigMultiplier = MaxOrigMultiplier(ModelTune))
 
     
-    UpdatedCoeff <- UpdatedLTVMultiplier(beta = UpdatedLTV.beta, 
-                                         OrigLTV = OrigLTV, 
-                                         ULTV = UpdatedLTV)
-   
+    UpdatedCoeff <- DefaultUpdatedLTVMult(PPMFunctions)(beta = UpdatedLTVBeta(ModelTune), 
+                                          OrigLTV = OrigLTV,
+                                          ULTV = UpdatedLTV)
+           
+    SATOCoeff <- DefaultSATOMult(PPMFunctions)(beta = SATOBeta(ModelTune), 
+                                               SATO = SATO)
 
+    
     Multiplier = log(OrigCoeff) + log(SATOCoeff) + log(UpdatedCoeff)
 
 
@@ -337,17 +287,17 @@
   #PPC function has error trapping feature so there is no need to error trap for PPC
   
   
-  NoteRate = bond.id@GWac
-  sato = bond.id@SATO
-  AmortizationTerm = bond.id@AmortizationTerm
-  AmortizationType = bond.id@AmortizationType
-  OriginalLoanBalance = bond.id@OrigLoanBal
-  OrigLTV = bond.id@OrigLTV
-  FirstPmtDate = as.Date(bond.id@FirstPrinPaymentDate, "%m-%d-%Y")
-  LastPmtDate = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-  FinalPmtDate = as.Date(bond.id@FinalPmtDate, "%m-%d-%Y")
-  NextPmtDate = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-  WALA = as.numeric(bond.id@WALA)
+  NoteRate = GWac(bond.id)
+  sato = SATO(bond.id)
+  AmortizationTerm = AmortizationTerm(bond.id)
+  AmortizationType = AmortizationType(bond.id)
+  OriginalLoanBalance = OrigLoanBal(bond.id)
+  OrigLTV = OrigLTV(bond.id)
+  FirstPmtDate = as.Date(FirstPrinPaymentDate(bond.id), "%m-%d-%Y")
+  LastPmtDate = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+  FinalPmtDate = as.Date(FinalPmtDate(bond.id), "%m-%d-%Y")
+  NextPmtDate = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+  WALA = as.numeric(WALA(bond.id))
   
   col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
   

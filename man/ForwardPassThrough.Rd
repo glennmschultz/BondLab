@@ -12,7 +12,8 @@ ForwardPassThrough(bond.id = "character", original.bal = numeric(),
 
 \item{original.bal}{A numeric value the original balance}
 
-\item{projected.cashflow}{A character string referring to an object type of MortgageCashFlows}
+\item{projected.cashflow}{A character string referring to an object type 
+of MortgageCashFlows}
 
 \item{horizon.months}{A numeric value the investment horizon in months}
 }

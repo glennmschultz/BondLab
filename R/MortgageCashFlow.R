@@ -469,8 +469,8 @@
                         term.mos = WAM,
                         period =1)
   
-  if(PrepaymentAssumption@PrepayAssumption == "CPR"){
-    AdjFactor = factor - PrepaymentAssumption@SMM[1] - SchedSMM
+  if(PrepaymentAssumption(PrepaymentAssumption) == "CPR"){
+    AdjFactor = factor - SMM(PrepaymentAssumption)[1] - SchedSMM
   } else {AdjFactor = factor}
   
   AdjPrincipal = original.bal * AdjFactor

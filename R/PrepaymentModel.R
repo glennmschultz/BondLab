@@ -4,6 +4,8 @@
   # mortgage backed, asset backed securities, and commerical mortgage backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
+  #' @include PassThroughConstructor.R MortgageCashFlow.R
+  NULL
 
   #' A S4 Class to hold prepayment vectors which are passed to cash flow engines
   #' 
@@ -32,11 +34,11 @@
   #' @slot SMM A numeric vector the projected SMM (Single Monthly Mortality).  
   #' SMM is the measure of voluntary repayments 
   #' @slot MDR A numeric vector the pojected MDR  (Monthly Default Rate)
-  #' @slot Severitiy A numeric vector the loss severity given default
+  #' @slot Severity A numeric vector the loss severity given default
   #' @exportClass PrepaymentAssumption 
   setClass("PrepaymentAssumption",
          representation(
-           PrepayAssumption = "character",
+           PrepaymentAssumption = "character",
            PPCStart = "numeric",
            PPCEnd = "numeric",
            PPCSeasoning = "numeric",
@@ -53,28 +55,117 @@
            MDR = "numeric",
            Severity = "numeric"))
 
+  setGeneric("PrepaymentModel", function(bond.id = "character", 
+                                         TermStructure = "character", 
+                                         MortgageRate = "character",
+                                         ModelTune = "character", 
+                                         Burnout = numeric(), 
+                                         PrepaymentAssumption = "character", 
+                                         ...,
+                                         begin.cpr = numeric(), 
+                                         end.cpr = numeric(), 
+                                         seasoning.period = numeric(), 
+                                         CPR = numeric(),
+                                         CDR = 0,
+                                         HomePrice = NULL,
+                                         Severity = 0)
+  {standardGeneric("PrepaymentModel")})
+  
+  #' A standard generic function to access the slot PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' export PrepaymentAssumption 
+  setGeneric("PrepaymentAssumption", function(object)
+  {standardGeneric("PrepaymentAssumption")})
+  
+  #' A standard generic function to access the slot PPCstart
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' export PPCStart
+  setGeneric("PPCStart", function(object)
+  {standardGeneric("PPCStart")})
+  
+  #' A standard generic function to access the slot PPCEnd
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' export PPCEnd
+  setGeneric("PPCEnd", function(object)
+  {standardGeneric("PPCEnd")})
+  
+  #' A standard generic function to access the slot PPCSeasoning
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' export PPCSeasoning
+  setGeneric("PPCSeasoning", function(object)
+  {standardGeneric("PPCSeasoning")})
+  
+  # Note: FirstPmtDate generic is defined in PassThroughConstructor.R
+  # Note: LastPmtDate generic is defined in PassThroughConstructor.R
+  # Note: FinalPmtdate generic is defined in the PassThroughConstructor.R
+  # Note: PmtDate generic is defined in MortgageCashFlow.R 
+  
+  #' A standard generic function to access the slot LoanAge
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export LoanAge
+  setGeneric("LoanAge", function(object)
+    {standardGeneric("LoanAge")})
+  
+  # Note: Period generic is defined MortgageCashFlow.R
+  
+  #' A standard generic function to access the slot NoteRate
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export NoteRate
+  setGeneric("NoteRate", function(object)
+    {standardGeneric("NoteRate")})
+  
+  #' A standard generic function to access the slot MtgRateFwd
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export MtgRateFwd 
+  setGeneric("MtgRateFwd", function(object)
+    {standardGeneric("MtgRateFwd")})
+  
+  #' A standard generic function to access the slot Incentive
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export Incentive
+  setGeneric("Incentive", function(object)
+    {standardGeneric("Incentive")})
+  
+  #' A standard generic function to access the slot SMM
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export SMM
+  setGeneric("SMM", function(object)
+    {standardGeneric("SMM")})
+  
+  #' A standard generic function to access the slot MDR
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export MDR
+  setGeneric("MDR", function(object)
+    {standardGeneric("MDR")})
+  
+  #' A standard generic function to access the slot Severity
+  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @export Severity
+  setGeneric("Severity", function(object)
+    {standardGeneric("Severity")})
+  
   setMethod("initialize",
           signature("PrepaymentAssumption"),
           function(.Object,
-                   PrepayAssumption = "character",
-                   PPCStart = "numeric",
-                   PPCEnd = "numeric",
-                   PPCSeasoning = "numeric",
+                   PrepaymentAssumption = "character",
+                   PPCStart = numeric(),
+                   PPCEnd = numeric(),
+                   PPCSeasoning = numeric(),
                    FirstPmtDate = "character",
                    LastPmtDate = "character",
                    FinalPmtDate = "character",
                    PmtDate = "character",
-                   LoanAge = "numeric",
-                   Period = "numeric",
-                   NoteRate = "numeric",
-                   MtgRateFwd = "numeric",
-                   Incentive = "numeric",
-                   SMM = "numeric",
-                   MDR = "numeric",
-                   Severity = "numeric")
+                   LoanAge = numeric(),
+                   Period = numeric(),
+                   NoteRate = numeric(),
+                   MtgRateFwd = numeric(),
+                   Incentive = numeric(),
+                   SMM = numeric(),
+                   MDR = numeric(),
+                   Severity = numeric())
           { 
             callNextMethod(.Object,
-                           PrepayAssumption = PrepayAssumption,
+                           PrepaymentAssumption = PrepaymentAssumption,
                            PPCStart = PPCStart,
                            PPCEnd = PPCEnd,
                            PPCSeasoning = PPCSeasoning,
@@ -91,22 +182,103 @@
                            MDR = MDR,
                            Severity = Severity)
           })
-
-  setGeneric("PrepaymentModel", function(bond.id = "character", 
-                                         TermStructure = "character", 
-                                         MortgageRate = "character",
-                                         ModelTune = "character", 
-                                         Burnout = numeric(), 
-                                         PrepaymentAssumption = "character", 
-                                         ...,
-                                         begin.cpr = numeric(), 
-                                         end.cpr = numeric(), 
-                                         seasoning.period = numeric(), 
-                                         CPR = numeric(),
-                                         CDR = 0,
-                                         HomePrice = NULL,
-                                         Severity = 0)
-             {standardGeneric("PrepaymentModel")})
+  
+  #' A method to extact PrepaymentAssumption from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod PrepaymentAssumption
+  setMethod("PrepaymentAssumption", signature("PrepaymentAssumption"),
+            function(object){object@PrepaymentAssumption})
+  
+  #' A method to extract PPCStart from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod PPCStart
+  setMethod("PPCStart", signature("PrepaymentAssumption"),
+            function(object){object@PPCStart})
+  
+  #' A method to extract PPCEnd from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod PPCEnd
+  setMethod("PPCEnd", signature("PrepaymentAssumption"),
+            function(object){object@PPCEnd})
+  
+  #' A method to extract PPCSeasoning from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod PPCSeasoning
+  setMethod("PPCSeasoning", signature("PrepaymentAssumption"),
+            function(object){object@PPCSeasoning})
+  
+  #' A method to extract FirstPmtDate from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod FirstPmtDate
+  setMethod("FirstPmtDate", signature("PrepaymentAssumption"),
+            function(object){object@FirstPmtDate})
+  
+  #' A method to extract LastPmtDate from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod LastPmtDate
+  setMethod("LastPmtDate", signature("PrepaymentAssumption"),
+            function(object){object@LastPmtDate})
+  
+  #' A method to extract FinalPmtDate from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod FinalPmtDate
+  setMethod("FinalPmtDate", signature("PrepaymentAssumption"),
+            function(object){object@FinalPmtDate})
+  
+  #' A method to extract PmtDate from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod PmtDate
+  setMethod("PmtDate", signature("PrepaymentAssumption"),
+            function(object){object@PmtDate})
+  
+  #' A method to extract LoanAge from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod LoanAge
+  setMethod("LoanAge", signature("PrepaymentAssumption"),
+            function(object){object@LoanAge})
+  
+  #' A method to extract Period from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod Period
+  setMethod("Period", signature("PrepaymentAssumption"),
+            function(object){object@Period})
+  
+  #' A method to extract NoteRate from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod NoteRate
+  setMethod("NoteRate", signature("PrepaymentAssumption"),
+            function(object){object@NoteRate})
+  
+  #' A method to extract MtgRateFwd from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod MtgRateFwd
+  setMethod("MtgRateFwd", signature("PrepaymentAssumption"),
+            function(object){object@MtgRateFwd})
+  
+  #' A method to extract Incentive from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod Incentive
+  setMethod("Incentive", signature("PrepaymentAssumption"),
+            function(object){object@Incentive})
+  
+  #' A method to extract SMM from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod SMM
+  setMethod("SMM", signature("PrepaymentAssumption"),
+            function(object){object@SMM})
+  
+  #' A method to extract MDR from S4 class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod MDR
+  setMethod("MDR", signature("PrepaymentAssumption"),
+            function(object){object@MDR})
+  
+  #' A method to extract Severity from class PrepaymentAssumption
+  #' @param object the name of the S4 class
+  #' @exportMethod Severity
+  setMethod("Severity", signature("PrepaymentAssumption"),
+            function(object){object@Severity}) 
+  
   #-----------------------------------------------------------------------------------
   # The Bond Lab base voluntary prepayment model
   # Tuning parameters are called from the PrepaymentModelTune Class
@@ -279,7 +451,7 @@
     
   #Check for a valid prepayment assumption
   if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
-  PrepayAssumption <- PrepaymentAssumption    
+  PrepaymentAssumption <- PrepaymentAssumption    
   
   #Error Trap the CPR assumption
   if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/PSA.basis} else {CPR = CPR}
@@ -299,15 +471,17 @@
   
   col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
   
-  #Here Mtg.Term is the term of the pass-through and may differ from the actual amortozation term
-  #reported in the MBS details because loans as typicall seasoned a few months before pooling
+  # Here Mtg.Term is the term of the pass-through and may differ from the actual amortozation term
+  # reported in the MBS details because loans as typicall seasoned a few months before pooling
+  # note LoanAge is subtracted by 1 since the WALA is reported for the factor date WALA which is one
+  # month behind the current month
   
   Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/days.in.month) + 1
   Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/days.in.month) + 1
   Period = seq(from = 1, to = Remain.Term, by = 1)
   PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
   LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)),
-                                as.Date(FirstPmtDate), units = "days")/days.in.month) + (WALA + 1)
+                                as.Date(FirstPmtDate), units = "days")/days.in.month) - 1
 
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))
@@ -351,7 +525,7 @@
                          Burnout.maxincen = Burnout)
   Severity = rep(Severity, Remain.Term)
   } 
-  else 
+  else
   {if(PrepaymentAssumption == "PPC") 
   {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, 
                                   end.cpr = end.cpr, 
@@ -379,7 +553,7 @@
                        HomePrice = HomePrice)}
 
   new("PrepaymentAssumption",
-      PrepayAssumption = as.character(PrepaymentAssumption),
+      PrepaymentAssumption = as.character(PrepaymentAssumption),
       PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
       PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
       PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period} else {0},

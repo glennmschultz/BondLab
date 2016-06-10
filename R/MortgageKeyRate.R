@@ -420,7 +420,7 @@
     # =======================================================================   
     # Key Rate Shift Down Prepayment Model and CashFlows
     # ======================================================================
-    Prepayment.Dwn <- PrepaymentAssumption(bond.id = bond.id, 
+    Prepayment.Dwn <- PrepaymentModel(bond.id = bond.id, 
                                            MortgageRate = MortgageRate, 
                                            TermStructure = Key.Rate.TS.Dwn, 
                                            PrepaymentAssumption = "MODEL", 
@@ -443,7 +443,7 @@
     # =======================================================================   
     # Key Rate Shift Up Prepayment Model and CashFlows
     # ======================================================================
-    Prepayment.Up <- PrepaymentAssumption(bond.id = bond.id, 
+    Prepayment.Up <- PrepaymentModel(bond.id = bond.id, 
                                           MortgageRate = MortgageRate, 
                                           TermStructure = Key.Rate.TS.Up, 
                                           PrepaymentAssumption = "MODEL", 

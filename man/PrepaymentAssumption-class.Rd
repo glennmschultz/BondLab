@@ -49,6 +49,6 @@ SMM is the measure of voluntary repayments}
 
 \item{\code{MDR}}{A numeric vector the pojected MDR  (Monthly Default Rate)}
 
-\item{\code{Severitiy}}{A numeric vector the loss severity given default}
+\item{\code{Severity}}{A numeric vector the loss severity given default}
 }}
 

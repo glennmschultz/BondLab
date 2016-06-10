@@ -269,7 +269,7 @@
                                  method = method)
   
   
-  Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
+  Prepayment <- PrepaymentModel(bond.id = bond.id, 
                                      MortgageRate = MortgageRate, 
                                      TermStructure = TermStructure, 
                                      PrepaymentAssumption = prepayment, 
@@ -327,7 +327,7 @@
   
   HorizonMBS <- readRDS(HorizonConn)
   
-  HorizonPrepaymentAssumption <- PrepaymentAssumption(bond.id = HorizonMBS,
+  HorizonPrepaymentAssumption <- PrepaymentModel(bond.id = HorizonMBS,
                                                       TermStructure = HorizonTermStructure,
                                                       MortgageRate = MortgageRate,
                                                       ModelTune = ModelTune,

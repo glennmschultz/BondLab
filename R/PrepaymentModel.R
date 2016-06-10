@@ -302,7 +302,7 @@
                                                   theta = SeasonalityTheta(ModelTune),
                                                   Month = Month)
   
-  Turnover <- Turnover.Rate * SeasoningRamp * SeasonalFactor
+  #Turnover <- Turnover.Rate * SeasoningRamp * SeasonalFactor
   
   # Calculate the Borrower Refinance Response
   Fast <- ArcTanIncentive(PPMFunctions)(incentive = incentive,
@@ -322,10 +322,13 @@
                     MaxIncen = Burnout.maxincen, 
                     LoanAge = LoanAge)
   
-  Refinance <- (Fast * Burnout) + (Slow * (1-Burnout))
   
-  SMM = Refinance + Turnover    
-  SMM <-pmax(0, SMM)    
+  Refinance <- (log(Fast) * Burnout) + (log(Slow) * (1-Burnout))
+  SeasoningRamp = log(SeasoningRamp)
+  SeasonalFactor = log(SeasonalFactor)
+  Curtailment = log(exp(pmax(0, LoanAge - 300) * .04))
+  
+  SMM = Turnover.Rate * exp(Refinance + SeasoningRamp + SeasonalFactor + Curtailment) 
   }
 
 

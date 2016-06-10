@@ -6,7 +6,39 @@
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
 
- 
+  #' An S4 class representing the prepayment model tuning parameters
+  #' 
+  #' @slot TurnoverRate A numeric value the estimated housing turnover rate
+  #' @slot Turnover.alpha A numeric value the asypmtote of the seasoning ramp
+  #' @slot Turnover.beta A numeric value the intercept of the seasoning ramp
+  #' @slot Turnover.theta A numeric value the point of maximum curvature of 
+  #' the seasoning ramp
+  #' @slot Seasonality.alpha A numeric value setting the maximum value
+  #' @slot Seasonality.theta A numeric value setting the point at which the 
+  #' function reaches its maximum value
+  #' @slot Incentive.Fast.theta.1 A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Fast.theta.2 A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Fast.beta A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Fast.eta A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Slow.theta.1 A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Slow.theta.2 A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Slow.beta A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Incentive.Slow.eta A numeric value used to tune the ArcTanIncentive Function
+  #' @slot Burnout.beta.1 A numeric value used to tune the Burnout Function
+  #' @slot Burnout.beta.2 A numeric value used to tune the Burnout Function
+  #' @slot BeginCDR A numeric value beginning CDR of the default ramp
+  #' @slot PeakCDR A numeric value the Peak CDR of the default ramp
+  #' @slot EndCDR A numeric value the Ending CDR of the default ramp
+  #' @slot PeakMonth A numeric value the month at which the default ramp peaks
+  #' @slot PlateauMonths A numeric value the number of months before the CDR declines
+  #' @slot EndMonth A numeric value the ending point of the CDR ramp decline
+  #' @slot MinOrigLTV the minimum LTV for which to apply the default multiplier
+  #' @slot MaxOrigLTV the maximum LTV for which to apply the default multiplier
+  #' @slot MaxOrigMultiplier the maximum orig LTV multiplier
+  #' @slot MinOrigMultiplier the minimum orig LTV multiplier
+  #' @slot UpdatedLTV.beta A numeric value the beta of ULTV function
+  #' @slot SATO.beta A numeric value the beta of the SATO function
+  #' @exportClass PrepaymentModelTune
   setClass("PrepaymentModelTune",
          representation(
            TurnoverRate = "numeric",

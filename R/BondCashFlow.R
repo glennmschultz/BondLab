@@ -5,7 +5,7 @@
   # mortgage backed, asset backed securities, and commerical mortgage backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
-
+  #'@include MortgageCashFlow.R
 
   #' An S4 class representing standard bond cash flows
   #' 
@@ -46,6 +46,29 @@
                                       price = numeric())
   {standardGeneric("BondCashFlows")})
   
+  # Note: standard generic Price is defined in MortgageCashFlow.R
+  # Note: standard generic Accrued is defined in MortgageCashFlow.R
+  # Note: standard generic YieldToMaturity is defined in MortgageCashFlow.R
+  # Note: standard generic WAL is defined in MortgageCashFlow.R
+  # Note: standard generic ModDuration is defined in MortgageCashFlow.R
+  # Note: standard generic Convexity is defined in MortgageCashFlow.R
+  # Note: standard generic Period is defined in MortgageCashFlow.R
+  # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
+  
+  #' A standard generic function to access the slot PrincipalOutstanding
+  #' @param object An S4 class object
+  #' @export PrincipalOutstanding
+  setGeneric("PrincipalOutstanding", function(object)
+             {standardGeneric})
+  
+  #' A standard generic function to access the slot CouponPmt
+  #' @param object An S4 class object
+  #' @export CouponPmt
+  setGeneric("CouponPmt", function(object)
+    {standardGeneric})
+  
+  # Note: standard generic TotalCashFlow is defined in MortgageCashFlow.R 
+  
   setMethod("initialize",
             signature("BondCashFlows"),
             function(.Object,
@@ -63,21 +86,94 @@
             TotalCashFlow = "numeric")
             
             {
-              .Object@Price = Price
-              .Object@Accrued = Accrued
-              .Object@YieldToMaturity = YieldToMaturity
-              .Object@WAL = WAL
-              .Object@ModDuration = ModDuration
-              .Object@Convexity = Convexity
-              .Object@Period = Period
-              .Object@PmtDate = PmtDate
-              .Object@TimePeriod = TimePeriod
-              .Object@PrincipalOutstanding = PrincipalOutstanding  
-              .Object@CouponPmt = CouponPmt
-              .Object@TotalCashFlow = TotalCashFlow
+              callNextMethod(.Object,
+                             Price = Price,
+                             Accrued = Accrued,
+                             YieldToMaturity = YieldToMaturity,
+                             WAL = WAL,
+                             ModDuration = ModDuration,
+                             Convexity = Convexity,
+                             Period = Period,
+                             PmtDate = PmtDate,
+                             TimePeriod = TimePeriod,
+                             PrincipalOutstanding = PrincipalOutstanding,
+                             CouponPmt = CouponPmt,
+                             TotalCashFlow = TotalCashFlow)
                
-              return(.Object)
             })
+  
+  #' Method to extract Price from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod Price
+  setMethod("Price", signature("BondCashFlows"),
+            function(object){object@Price})
+  
+  #' Method to extract Accrued from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod Accrued
+  setMethod("Accrued", signature("BondCashFlows"),
+            function(object){object@Accrued})
+  
+  #' Method to extract YieldToMaturity from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod YieldToMaturity
+  setMethod("YieldToMaturity", signature("BondCashFlows"),
+            function(object){object@YieldToMaturity})
+  
+  #' Method to extract WAL from S4 class
+  #' @param object the name of the S4 object
+  #' @exportMethod WAL
+  setMethod("WAL", signature("BondCashFlows"),
+            function(object){object@WAL})
+  
+  #' Method to extract ModDuration from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod ModDuration
+  setMethod("ModDuration", signature("BondCashFlows"),
+            function(object){object@ModDuration})
+  
+  #' Method to extract Convexity from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod Convexity
+  setMethod("Convexity", signature("BondCashFlows"),
+            function(object){object@Convexity})
+  
+  #' Method to extract Period from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod Period
+  setMethod("Period", signature("BondCashFlows"),
+            function(object){object@Period})
+  
+  #' Method to extract PmtDate from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod PmtDate
+  setMethod("PmtDate", signature("BondCashFlows"),
+            function(object){object@PmtDate})
+  
+  #' Method to extract TimePeriod from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod TimePeriod
+  setMethod("TimePeriod", signature("BondCashFlows"),
+            function(object){object@TimePeriod})
+  
+  #' Method to extract PrincipalOutstanding from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod PrincipalOutstanding
+  setMethod("PrincipalOutstanding", signature("BondCashFlows"),
+            function(object){object@PrincipalOutstanding})
+  
+  #' Method to extract CouponPmt from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod CouponPmt
+  setMethod("CouponPmt", signature("BondCashFlows"),
+            function(object){object@CouponPmt})
+  
+  #' Method to extract TotalCashFlow from S4 class BondCashFlows
+  #' @param object the name of the S4 object
+  #' @exportMethod TotalCashFlow
+  setMethod("TotalCashFlow", signature("BondCashFlows"),
+            function(object){object@TotalCashFlow})
+  
   
   #' Bond cash flow engine for standard non-callable
   #' 
@@ -89,7 +185,7 @@
   #' @examples
   #' \dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000, 
   #' settlement.date = "1-13-2013", price = 100)}
-  #' @export
+  #' @export BondCashFlows
   BondCashFlows <- function (bond.id = "character", 
                              principal = numeric(), 
                              settlement.date = "character", 
@@ -114,8 +210,8 @@
   
   #  Validate the price and coupon passed through the error trapping function
   #  This validates that the correct unit is passed into the Bond Cash Flow function
-  if(price <= 1) {price = price} else {price = price/100}
-  if(coupon > 1) {coupon = coupon/100} else {coupon = coupon}
+  if(price <= 1) {price = price} else {price = price/price.basis}
+  if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
   
   #Calculate the number of cashflows that will be paid from settlement date to maturity date 
   #step1 calculate the years to maturity  
@@ -174,18 +270,32 @@
   accrued.interest = (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,6]
 
 
-  #Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
-  #it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
+  # Step6 solve for yield to maturity given the price of the bond.  
+  # irr is an internal function used to solve for yield to maturity
+  # it is internal so that the bond's yield to maturity is not passed to a 
+  # global variable that may inadvertantly use the value
   
-  irr <- function(rate , time.period , cashflow , principal , price , accrued.interest){
+  irr <- function(rate , 
+                  time.period , 
+                  cashflow , 
+                  principal , 
+                  price , 
+                  accrued.interest){
     pv = cashflow * 1/(1+rate) ^ time.period
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
-  ytm = uniroot(irr, interval = c(lower = -1, upper = 1), tol =.000000001, time.period = Bond.CF.Table[,3], 
-                cashflow = Bond.CF.Table[,8], principal = principal, price = price, accrued.interest = accrued.interest)$root
+  ytm = uniroot(irr, 
+                interval = c(lower = -1, upper = 1), 
+                tol =.000000001, 
+                time.period = Bond.CF.Table[,3], 
+                cashflow = Bond.CF.Table[,8], 
+                principal = principal, 
+                price = price, 
+                accrued.interest = accrued.interest)$root
   
-  Yield.To.Maturity = (((1 + ytm)^(1/frequency))-1) * frequency
+  # convert to semi-bond equivalent yield
+  Yield.To.Maturity = (((1 + ytm)^(1/2))-1) * 2
   
   #Step7 Present value of the cash flows Present Value Factors
   Bond.CF.Table[,9] = 1/((1+(Yield.To.Maturity/frequency))^(Bond.CF.Table[,3] * frequency))

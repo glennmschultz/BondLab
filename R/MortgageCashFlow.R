@@ -265,49 +265,49 @@
                            ...)
           })
 
-  #' Method to extract Price from S4 class
+  #' Method to extract Price from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod Price
   setMethod("Price", signature("MortgageCashFlow"),
             function(object){object@Price})
   
-  #' Method to extract Accrued from S4 class
+  #' Method to extract Accrued from S4 class MortgageCashFlow
   #' @param object the nameof the S4 object
   #' @exportMethod Accrued
   setMethod("Accrued", signature = ("MortgageCashFlow"),
             function(object){object@Accrued})
   
-  #' Method to extract YieldToMaturity from S4 class
+  #' Method to extract YieldToMaturity from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod YieldToMaturity
   setMethod("YieldToMaturity", signature = ("MortgageCashFlow"),
             function(object){object@YieldToMaturity})
   
-  #' Method to extract WAL from S4 class
+  #' Method to extract WAL from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod WAL
   setMethod("WAL", signature = ("MortgageCashFlow"),
             function(object){object@WAL})
   
-  #' Method to extract Modified Duration from S4 class 
+  #' Method to extract Modified Duration from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod ModDuration
   setMethod("ModDuration", signature = ("MortgageCashFlow"),
             function(object){object@ModDuration})
   
-  #' Method to extract Convexity from S4 class
+  #' Method to extract Convexity from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod Convexity
   setMethod("Convexity", signature("MortgageCashFlow"),
             function(object){object@Convexity})
   
-  #' Method to extract Period from S4 class
+  #' Method to extract Period from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod Period
   setMethod("Period", signature("MortgageCashFlow"),
             function(object){object@Period})
   
-  #' Method to extract PmtDate from S4 class
+  #' Method to extract PmtDate from S4 class MortgageCashFlow
   #' @param object the name of the S4 object
   #' @exportMethod PmtDate
   setMethod("PmtDate", signature = ("MortgageCashFlow"),

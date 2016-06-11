@@ -326,7 +326,7 @@
   Refinance <- (log(Fast) * Burnout) + (log(Slow) * (1-Burnout))
   SeasoningRamp = log(SeasoningRamp)
   SeasonalFactor = log(SeasonalFactor)
-  Curtailment = log(exp(pmax(0, LoanAge - 300) * .04))
+  Curtailment = log(Curtailment(PPMFunctions)(LoanAge = LoanAge))
   
   SMM = Turnover.Rate * exp(Refinance + SeasoningRamp + SeasonalFactor + Curtailment) 
   }

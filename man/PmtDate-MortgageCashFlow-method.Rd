@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PmtDate,MortgageCashFlow-method}
 \alias{PmtDate,MortgageCashFlow-method}
-\title{Method to extract PmtDate from S4 class}
+\title{Method to extract PmtDate from S4 class MortgageCashFlow}
 \usage{
 \S4method{PmtDate}{MortgageCashFlow}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract PmtDate from S4 class
+Method to extract PmtDate from S4 class MortgageCashFlow
 }
 

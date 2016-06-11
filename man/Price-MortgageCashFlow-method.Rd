@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Price,MortgageCashFlow-method}
 \alias{Price,MortgageCashFlow-method}
-\title{Method to extract Price from S4 class}
+\title{Method to extract Price from S4 class MortgageCashFlow}
 \usage{
 \S4method{Price}{MortgageCashFlow}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract Price from S4 class
+Method to extract Price from S4 class MortgageCashFlow
 }
 

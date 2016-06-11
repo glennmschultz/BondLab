@@ -115,6 +115,7 @@
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   principal = original.bal * factor
   bondbasis = bond.id@BondBasis
+  Burnout = bond.id@Burnout
   
   short.rate = as.numeric(rates.data[1,2])/yield.basis
   
@@ -257,7 +258,7 @@
                                 TenYearFwd = as.numeric(sim.cube[,7]))
     
     
-    Prepayment <- PrepaymentAssumption(bond.id = bond.id, 
+    Prepayment <- PrepaymentModel(bond.id = bond.id, 
                                        TermStructure = OAS.Term.Structure, 
                                        MortgageRate = MortgageRate, 
                                        PrepaymentAssumption = "MODEL", 
@@ -425,7 +426,7 @@
                             TwoYearFwd = TwoYrFwd,
                             TenYearFwd = TenYrFwd)
     
-    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id, 
+    PrepaymentAssumption <- PrepaymentModel(bond.id = bond.id, 
                                                  MortgageRate = MortgageRate,
                                                  TermStructure = CIRTermStructure, 
                                                  PrepaymentAssumption = "MODEL", 

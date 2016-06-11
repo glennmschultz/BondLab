@@ -266,11 +266,7 @@
                                LoanAge = numeric())
       {alpha - beta * exp(-theta * LoanAge)},
       
-      Curtailment = function(alpha = numeric(),
-                             beta = numeric(),
-                             theta = numeric(),
-                             LoanAge = numeric())
-      {alpha - beta * exp(-theta * LoanAge)},
+      Curtailment = function(LoanAge){exp(pmax(0, LoanAge - 330) * .04)},
       
       SeasonalFactors = function(alpha = numeric(), 
                                  Month = numeric(), 

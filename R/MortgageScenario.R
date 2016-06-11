@@ -1,11 +1,8 @@
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # in addition to standard fixed income analysis bond lab provides 
-  # for the specific analysis of structured products residential mortgage backed securities, 
-  # asset backed securities, and commerical mortgage backed securities
-  # Copyright (C) 2014  Glenn M Schultz, CFA
-
-
+  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
   #' An S4 Class A list of Scenario outcomes
   #'
@@ -15,6 +12,26 @@
   setClass("Mtg.ScenarioSet",
          representation(
            Scenario = "list"))
+  
+  #' A standard generic function to extract the slot Scenario
+  #' @param object An S4 class object 
+  setGeneric("Mtg.ScenarioSet", function(object)
+  {standardGeneric("Mtg.ScenarioSet")})
+  
+  setMethod("initialize",
+            signature("Mtg.ScenarioSet"),
+            function(.Object,
+                     Scenario = "list")
+            {.Object@Scenario = Scenario
+            
+            return(.Object)
+            })
+  
+  #' A method to extract the Scenario list from S4 class Mtg.ScenarioSet
+  #' @param object the name of the S4 object
+  #' @exportMethod Mtg.ScenarioSet
+  setMethod("Mtg.ScenarioSet", signature("Mtg.ScenarioSet"),
+            function(object){object@Scenario})
 
   #' An S4 Class representing scenario analysis details
   #' 
@@ -96,14 +113,7 @@
            HorizonReturn = "numeric"),
          contains = "Scenario")
 
-  setMethod("initialize",
-          signature("Mtg.ScenarioSet"),
-          function(.Object,
-                   Scenario = "list")
-            {.Object@Scenario = Scenario
-            
-             return(.Object)
-             })
+ 
   
   setMethod("initialize",
             signature("Scenario"),

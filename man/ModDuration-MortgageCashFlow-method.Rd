@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ModDuration,MortgageCashFlow-method}
 \alias{ModDuration,MortgageCashFlow-method}
-\title{Method to extract Modified Duration from S4 class}
+\title{Method to extract Modified Duration from S4 class MortgageCashFlow}
 \usage{
 \S4method{ModDuration}{MortgageCashFlow}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract Modified Duration from S4 class
+Method to extract Modified Duration from S4 class MortgageCashFlow
 }
 

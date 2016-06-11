@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Period,MortgageCashFlow-method}
 \alias{Period,MortgageCashFlow-method}
-\title{Method to extract Period from S4 class}
+\title{Method to extract Period from S4 class MortgageCashFlow}
 \usage{
 \S4method{Period}{MortgageCashFlow}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract Period from S4 class
+Method to extract Period from S4 class MortgageCashFlow
 }
 

@@ -53,20 +53,21 @@
                      PathModDur = "vector",
                      PathYTM = "vector"
             ){
-              .Object@OAS = OAS
-              .Object@ZVSpread = ZVSpread
-              .Object@SpreadToCurve = SpreadToCurve
-              .Object@EffDuration = EffDuration
-              .Object@EffConvexity = EffConvexity
-              .Object@KeyRateTenor = KeyRateTenor
-              .Object@KeyRateConvexity = KeyRateConvexity
-              .Object@PriceDist = PriceDist
-              .Object@PathSpread = PathSpread
-              .Object@PathWAL = PathWAL
-              .Object@PathModDur = PathModDur
-              .Object@PathYTM = PathYTM
-              
-              return(.Object)
+              callNextMethod(.Object,
+                             OAS = OAS,
+                             ZVSpread = ZVSpread,
+                             SpreadToCurve = SpreadToCurve,
+                             EffDuration = EffDuration,
+                             EffConvexity = EffConvexity,
+                             KeyRateTenor = KeyRateTenor,
+                             KeyRateConvexity = KeyRateConvexity,
+                             PriceDist = PriceDist,
+                             PathSpread = PathSpread,
+                             PathWAL = PathWAL,
+                             PathModDur = PathModDur,
+                             PathYTM = PathYTM,
+                             ...)
+
             })
 
 
@@ -352,12 +353,12 @@
   
   OAS.Out[,5] <- Price.Dist 
   
-  # --------------------------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------
   # Calculate static cash flow spread to the curve at zero volatility
   # Using the prepayment model this will always match the ZV spread indiciating the pricing benchmark is exact
   # In reality the spread to the curve will be based on the pricing speed used.
   # This is a good check
-  # --------------------------------------------------------------------------------------------------------------
+  # --------------------------------------------------------------------------------------------------------
                                   
     InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                                 as.numeric(rates.data[2,2:12]), data = data.frame(rates.data))  
@@ -366,9 +367,9 @@
                        predict(InterpolateCurve, MtgCashFlow@WAL ))/yield.basis
     
 
-   # --------------------------------------------------------------------------------------------------------------
+   # --------------------------------------------------------------------------------------------------------
    # Key Rate Duration 
-   # --------------------------------------------------------------------------------------------------------------
+   # --------------------------------------------------------------------------------------------------------
     
    # Zero volatility single path CIR model returns the forward rate curve
     

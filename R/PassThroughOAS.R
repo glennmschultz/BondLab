@@ -211,7 +211,7 @@
   #It is trapped here because this is the first use of trade date
   if(trade.date > settlement.date) stop ("Trade Date Must be less than settlement date")
   
-  #Rate Delta is set to 1 (100 basis points) for effective convexity calculation                          
+                        
   Rate.Delta = rate.delta
   
   #The first step is to read in the Bond Detail, rates, and Prepayment Model Tuning Parameters

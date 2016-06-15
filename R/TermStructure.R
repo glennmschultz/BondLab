@@ -235,8 +235,8 @@
                                                data[[2]][j],
                                                units = c("weeks"))/weeks.in.year,5))
     
-    Vector.Length <- ifelse(Vector.Length < 1, Vector.Length, round(Vector.Length,0))
-    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
+    Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , round(Vector.Length * pmt.frequency))
+    #Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
     #pmt.frequency should be input 
     
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
@@ -260,7 +260,7 @@
   #set term strucuture input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
   
-  #TS <<- TSInput
+  TS <<- TSInput
   
   #Fit the term structure of interest rates
   

@@ -238,35 +238,45 @@
   data = NULL
   data$ISIN <- colnames(rates.data[2:ColCount])
   data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
-  
   data$MATURITYDATE <-
     sapply(Mat.Years, function(Mat.Years = Mat.Years, Issue = Issue.Date) 
     {Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
     {Issue %m+% years(as.numeric(Mat.Years))}
     return(as.character(Maturity))
     }) 
-  
   data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
-  
-  #data$PRICE <- rep(100, ColCount -1)
   data$PRICE <- ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)
-  
   data$ACCRUED <- rep(0, ColCount -1)
+  
   
   for(j in 1:(ColCount-1)){
     Vector.Length <- as.numeric(round(difftime(data[[3]][j],
                                                data[[2]][j],
-                                               units = c("weeks")),0)/weeks.in.year)
-    Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  #pmt.frequency should be input 
+                                               units = c("weeks"))/weeks.in.year,5))
+    
+    Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , round(Vector.Length * pmt.frequency))
+    #Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)
+    
+    
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
-    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
-    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) # this sets the month increment so that cashflows can handle discount bills
-    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+    
+    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
+                                as.numeric(c(rep((data[[4]][j]/100/pmt.frequency),Vector.Length-1) * min.principal, 
+                                (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+    
+    
+    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6)
+    
+    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
+                                  seq(as.Date(data[[2]][j]) %m+% months(as.numeric(by.months)), 
+                                      as.Date(data[[3]][j]), 
+                                      by = as.character(paste(by.months, "months", sep = " "))))
     
   } #The Loop Ends here and the list is made
   
   data$TODAY <- as.Date(rates.data[1,1])
   TSInput[[as.character(rates.data[1,1])]] <- c(data)
+  
   
   #set term strucutre input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
@@ -302,10 +312,10 @@
   }
   
   # Fit the model to the market   
-  fit <- optimx(par = c(.05, .05, .01), 
+  fit <- optimx(par = c(.01, .05, .01), 
                 fn = CIRTune, 
                 method = "L-BFGS-B",
-                lower = c(.01, .01, .01),
+                lower = c(.01, 0, 0),
                 upper = c(.5, .1, .2) , 
                 shortrate = shortrate,
                 sigma = sigma,

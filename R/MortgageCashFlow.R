@@ -175,31 +175,31 @@
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("LossAmount", function(object)
-    {standardGeneric})
+    {standardGeneric("LossAmount")})
   
   #' A standard generic function to access the slot RecoveredAmount
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("RecoveredAmount", function(object)
-    {standardGeneric})
+    {standardGeneric("RecoveredAmount")})
   
   #' A standard generic function to access the slot EndingBalance
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("EndingBalance", function(object)
-    {standardGeneric})
+    {standardGeneric("EndingBalance")})
   
   #' A standard generic function to access the slot of ServicingIncome
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("ServicingIncome", function(object)
-    {standardGeneric})
+    {standardGeneric("ServicingIncome")})
   
   #' A standard generic function to access the slot of PMIPremium
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("PMIPremium", function(object)
-    {standardGeneric})
+    {standardGeneric("PMIPremium")})
   
   #Note: generic function GFeePremium is defined in PassThroughConstructor.R
   
@@ -207,7 +207,7 @@
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("TotalCashFlow", function(object)
-    {standardGeneric})
+    {standardGeneric("TotalCashFlow")})
   
   #Note: generic for FirstPrinPaymentDate is defined in PassThroughConstructor.R
   

@@ -8,7 +8,7 @@
 \S4method{Mtg.ScenarioSet}{Mtg.ScenarioSet}(object)
 }
 \arguments{
-\item{object}{the name of the S4 object}
+\item{object}{the name of the S4 object of the type Scenario}
 }
 \description{
 A method to extract the Scenario list from S4 class Mtg.ScenarioSet

@@ -14,21 +14,22 @@
            Scenario = "list"))
   
   #' A standard generic function to extract the slot Scenario
-  #' @param object An S4 class object 
+  #' @param object An S4 class object of the type Mtg.ScenarioSet
   setGeneric("Mtg.ScenarioSet", function(object)
   {standardGeneric("Mtg.ScenarioSet")})
   
   setMethod("initialize",
             signature("Mtg.ScenarioSet"),
             function(.Object,
-                     Scenario = "list")
-            {.Object@Scenario = Scenario
-            
-            return(.Object)
-            })
+                     Scenario = "list",
+                     ...)
+            {callNextMethod(.Object,
+                            Scenario = Scenario,
+                            ...)}
+            )
   
   #' A method to extract the Scenario list from S4 class Mtg.ScenarioSet
-  #' @param object the name of the S4 object
+  #' @param object the name of the S4 object of the type Scenario
   #' @exportMethod Mtg.ScenarioSet
   setMethod("Mtg.ScenarioSet", signature("Mtg.ScenarioSet"),
             function(object){object@Scenario})
@@ -53,8 +54,81 @@
            Horizon = "character",
            ShiftType = "character",
            Shiftbps = "numeric",
-           Formula = "function"
-         ))
+           Formula = "function"))
+  
+  #' A standard generic to access the slot Name
+  #' @param object An S4 class object of the type Scenario
+  setGeneric("Name", function(object)
+    {standardGeneric("Name")})
+  
+  #' A standard generic to access the slot Type
+  #' @param object An S4 class object of the type Scenario
+  setGeneric("Type", function(object)
+    {standardGeneric("Type")})
+  
+  #' A standard generic to access the slot Horizon
+  #' @param object An S4 class object of the type Scenario
+  setGeneric("Horizon", function(object)
+    {standardGeneric("Horizon")})
+  
+  #' A standard generic to access the slot ShiftType
+  #' @param object An S4 class object of the type Scenario
+  setGeneric("ShiftType", function(object)
+    {standardGeneric("ShiftType")})
+  
+  #' A standard generic to access the slot Formula
+  #' @param object An S4 class object of the type Scenario
+  setGeneric("Formula", function(object)
+    {standardGeneric("Formula")})
+  
+  setMethod("initialize",
+            signature("Scenario"),
+            function(.Object,
+              Name = "character",
+              Type = "character",
+              Horizon = "character",
+              ShiftType = "character",
+              Shiftbps = "character",
+              Formula = "function",
+              ...)
+            {callNextMethod(.Object,
+                            Name = Name,
+                            Type = Type,
+                            Horizon = Horizon,
+                            ShiftType = ShiftType,
+                            Shiftbps = Shiftbps,
+                            Formula = Formula,
+                            ...)})
+  
+  #' A Method to extract scenario name from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Name
+  setMethod("Name", signature("Scenario"),
+            function(object){object@Name})
+  
+  #' A Method to extract scenario type from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Type
+  setMethod("Type", signature("Scenario"),
+            function(object){object@Type})
+  
+  #' A Method to extract scenario Horizon from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Horizon
+  setMethod("Horizon", signature("Scenario"),
+            function(object){object@Horizon})
+  
+  #' A Method to extract ShiftType from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod ShiftType
+  setMethod("ShiftType", signature("Scenario"),
+            function(object){object@ShiftType})
+  
+  #' A Mthod to extract the shift Formula from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Formula
+  setMethod("Formula", signature("Scenario"),
+            function(object){object@Formula})
   
   #' An S4 Class representing the results of mortgage return scenario analysis
   #' 
@@ -113,8 +187,6 @@
            HorizonReturn = "numeric"),
          contains = "Scenario")
 
- 
-  
   setMethod("initialize",
             signature("Scenario"),
             function(.Object,
@@ -166,41 +238,39 @@
           Horizon = "character",
           ShiftType = "character",
           Shiftbps = "numeric",
-          Formula = "function")
-          {
-            .Object@Period = Period
-            .Object@PmtDate = PmtDate
-            .Object@TimePeriod = TimePeriod
-            .Object@BeginningBal = BeginningBal
-            .Object@PassThroughInterest = PassThroughInterest
-            .Object@ScheduledPrin = ScheduledPrin
-            .Object@PrepaidPrin = PrepaidPrin
-            .Object@EndingBal = EndingBal
-            .Object@TotalCashFlow = TotalCashFlow
-            .Object@spotrate = spotrate
-            .Object@forwardrate = forwardrate
-            .Object@SMM = SMM
-            .Object@YieldToMaturity = YieldToMaturity
-            .Object@WAL = WAL
-            .Object@SpreadToInterCurve = SpreadToInterCurve
-            .Object@ModDuration = ModDuration
-            .Object@Convexity = Convexity 
-            .Object@EffDuration = EffDuration
-            .Object@EffConvexity = EffConvexity
-            .Object@KeyRateTenor = KeyRateTenor
-            .Object@KeyRateDuration = KeyRateDuration
-            .Object@KeyRateConvexity = KeyRateConvexity
-            .Object@HorizonReturn = HorizonReturn
-            .Object@Name = Name
-            .Object@Type = Type
-            .Object@Horizon = Horizon
-            .Object@ShiftType = ShiftType
-            .Object@Shiftbps = Shiftbps
-            .Object@Formula = Formula
-            
-            return(.Object)
-  
-          })
+          Formula = "function",
+          ...){
+            callNextMethod(.Object,
+            PmtDate = PmtDate,
+            TimePeriod = TimePeriod,
+            BeginningBal = BeginningBal,
+            PassThroughInterest = PassThroughInterest,
+            ScheduledPrin = ScheduledPrin,
+            PrepaidPrin = PrepaidPrin,
+            EndingBal = EndingBal,
+            TotalCashFlow = TotalCashFlow,
+            spotrate = spotrate,
+            forwardrate = forwardrate,
+            SMM = SMM,
+            YieldToMaturity = YieldToMaturity,
+            WAL = WAL,
+            SpreadToInterCurve = SpreadToInterCurve,
+            ModDuration = ModDuration,
+            Convexity = Convexity, 
+            EffDuration = EffDuration,
+            EffConvexity = EffConvexity,
+            KeyRateTenor = KeyRateTenor,
+            KeyRateDuration = KeyRateDuration,
+            KeyRateConvexity = KeyRateConvexity,
+            HorizonReturn = HorizonReturn,
+            Name = Name,
+            Type = Type,
+            Horizon = Horizon,
+            ShiftType = ShiftType,
+            Shiftbps = Shiftbps,
+            Formula = Formula,
+            ...)
+            })
 
   #---------------------------------------------------------
   # Scenario Total Return Analysis

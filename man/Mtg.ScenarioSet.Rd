@@ -7,7 +7,7 @@
 Mtg.ScenarioSet(object)
 }
 \arguments{
-\item{object}{An S4 class object}
+\item{object}{An S4 class object of the type Mtg.ScenarioSet}
 }
 \description{
 A standard generic function to extract the slot Scenario

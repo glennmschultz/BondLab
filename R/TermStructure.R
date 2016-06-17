@@ -260,7 +260,7 @@
   #set term strucuture input (TSInput) to class couponbonds
   class(TSInput) <- "couponbonds"
   
-  TS <<- TSInput
+  TS <- TSInput
   
   #Fit the term structure of interest rates
   

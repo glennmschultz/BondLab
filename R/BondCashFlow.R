@@ -6,7 +6,8 @@
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
   #'@include MortgageCashFlow.R
-
+  NULL
+  
   #' An S4 class representing standard bond cash flows
   #' 
   #' @slot Price a numeric value the price of the bond
@@ -53,6 +54,7 @@
   # Note: standard generic ModDuration is defined in MortgageCashFlow.R
   # Note: standard generic Convexity is defined in MortgageCashFlow.R
   # Note: standard generic Period is defined in MortgageCashFlow.R
+  # Note: standard generic PmtDate is defined in MortgageCashFlow.R
   # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
   
   #' A standard generic function to access the slot PrincipalOutstanding

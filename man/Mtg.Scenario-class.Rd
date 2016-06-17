@@ -29,9 +29,9 @@ The class Mtg. Scenario holds the results of a scenario analysis run
 \item{\code{TotalCashFlow}}{A numeric value the forecasted total cashflow received by
 the investor in the period}
 
-\item{\code{spotrate}}{A numeric vector the spot rate curve}
+\item{\code{SpotRate}}{A numeric vector the spot rate curve}
 
-\item{\code{forwardrate}}{A numeric vector the forward rate curve}
+\item{\code{ForwardRate}}{A numeric vector the forward rate curve}
 
 \item{\code{SMM}}{A numeric vector the forecasted SMM vector}
 

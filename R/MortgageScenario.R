@@ -4,6 +4,9 @@
   # mortgage backed, asset backed securities, and commerical mortgage backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
+  #' @include MortgageCashFlow.R TermStructure.R PrepaymentModel.R MortgageKeyRate.R
+  NULL
+
   #' An S4 Class A list of Scenario outcomes
   #'
   #' The class Mtg.ScenarioSet is a list of classes Scenario
@@ -143,8 +146,8 @@
   #' @slot EndingBal A numeric value the forecasted ending balance in the period
   #' @slot TotalCashFlow A numeric value the forecasted total cashflow received by
   #' the investor in the period
-  #' @slot spotrate A numeric vector the spot rate curve
-  #' @slot forwardrate A numeric vector the forward rate curve
+  #' @slot SpotRate A numeric vector the spot rate curve
+  #' @slot ForwardRate A numeric vector the forward rate curve
   #' @slot SMM A numeric vector the forecasted SMM vector
   #' @slot YieldToMaturity A numeric value the scenario yield to maturity
   #' @slot WAL A numeric value the scenario weighted average life
@@ -171,8 +174,8 @@
            PrepaidPrin = "numeric",
            EndingBal = "numeric",
            TotalCashFlow = "numeric",
-           spotrate = "numeric",
-           forwardrate = "numeric",
+           SpotRate = "numeric",
+           ForwardRate = "numeric",
            SMM = "numeric",
            YieldToMaturity = "numeric",
            WAL = "numeric",
@@ -186,26 +189,58 @@
            KeyRateConvexity = "numeric",
            HorizonReturn = "numeric"),
          contains = "Scenario")
+  
+  setGeneric("Mtg.Scenario", function(bond.id ="character",
+                                      settlement.date = "character",
+                                      rates.data = "character",
+                                      price = numeric(), 
+                                      original.bal = numeric(),
+                                      scenario = "character",
+                                      horizon.months = numeric(),
+                                      method = "character",
+                                      prepayment = "character",
+                                      ...,
+                                      horizon.spot.spread = NULL,
+                                      horizon.nominal.spread = NULL,
+                                      horizon.OAS = NULL,
+                                      horizon.price = NULL,
+                                      begin.cpr = numeric(),
+                                      end.cpr = numeric(),
+                                      seasoning.period = numeric(),
+                                      CPR = numeric())
+  {standardGeneric("Mtg.Scenario")})
+  
+  # Note: standard generic period is defined in MortgageCashFlow.R
+  # Note: standard generic PmtDate is defined in MortgageCashFlow.R
+  # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
+  # Note: standard generic BeginningBal is defined in MortgageCashFlow.R
+  # Note: standard generic PassThroughInterest is defined in MortgageCashFlow.R
+  # Note: standard generic ScheduledPrin is defined in MortgageCashFlow.R
+  # Note: standard generic PrepaidPrin is defined in MortgageCashFlow.R
+  # Note: standard generic EndingBal is defined in MortgageCashFlow.R
+  # Note: standard generic TotalCashFlow is defined in MortgageCashFlow.R
+  # Note: standard generic SpotRate is defined in MortgageCashFlow.R
+  # Note: standard generic ForwardRate is defined in MortgageCashFlow.R
+  # Note: standard generic SMM is defined in PrepaymentModel.R
+  # Note: standard generic YieldToMaturity is defined in MortgageCashFlow.R
+  # Note: standard generic WAL is defined in MortgageCashFlow.R
+  # Note: standard generic ModDuration is defined in MortgageCashFlow.R
+  # Note: standard generic Convexity is defined in MortgageCashFlow.R
+  # Note: standard generic EffDuration is defined in MortgageKeyRate.R
+  # Note: standard generic EffConvexity is defined in MortgageKeyRate.R
+  
+  #' A standard generic function to access the slot HorizonRetrun
+  #' @param object An S4 object of type Mtg.Scenario
+  setGeneric("HorizonReturn", function(object)
+             {standardGeneric("HorizonReturn")})
+  
+  # Note: standard generic function Name is defined above
+  # Note: standard generic function Type is defined above
+  # Note: standard generic function Horizon is defined above
+  # Note: standard generic function ShiftType is defined above
+  # Note: standard generic function Shiftbps is defined above
+  # Note: standard generic function Formula is defined above
 
-  setMethod("initialize",
-            signature("Scenario"),
-            function(.Object,
-                    Name = "character",
-                    Type = "character",
-                    Horizon = "character",
-                    ShiftType = "character",
-                    Shiftbps = "numeric",
-                    Formula = "function")
-            {.Object@Name = Name
-             .Object@Type = Type
-             .Object@Horizon = Horizon
-             .Object@ShiftType
-             .Object@Shiftbps
-             .Object@Formula
-             
-             return(.Object)
-
-            })
 
   setMethod("initialize",
           signature("Mtg.Scenario"),
@@ -219,8 +254,8 @@
           PrepaidPrin = "numeric",
           EndingBal = "numeric",
           TotalCashFlow = "numeric",
-          spotrate = "numeric",
-          forwardrate = "numeric",
+          SpotRate = "numeric",
+          ForwardRate = "numeric",
           SMM = "numeric",
           YieldToMaturity = "numeric",
           WAL = "numeric",
@@ -249,8 +284,8 @@
             PrepaidPrin = PrepaidPrin,
             EndingBal = EndingBal,
             TotalCashFlow = TotalCashFlow,
-            spotrate = spotrate,
-            forwardrate = forwardrate,
+            SpotRate = SpotRate,
+            ForwardRate = ForwardRate,
             SMM = SMM,
             YieldToMaturity = YieldToMaturity,
             WAL = WAL,
@@ -534,8 +569,8 @@
               TotalCashFlow = (MortgageCashFlow@PassThroughInterest + 
                                  MortgageCashFlow@ScheduledPrin + 
                                  MortgageCashFlow@PrepaidPrin),
-              spotrate = TermStructure@SpotRate,
-              forwardrate = TermStructure@ForwardRate,
+              SpotRate = TermStructure@SpotRate,
+              ForwardRate = TermStructure@ForwardRate,
               SMM = Prepayment@SMM,
               YieldToMaturity = MortgageCashFlow@YieldToMaturity,
               WAL = MortgageCashFlow@WAL,

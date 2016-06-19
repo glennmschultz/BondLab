@@ -79,6 +79,11 @@
   setGeneric("ShiftType", function(object)
     {standardGeneric("ShiftType")})
   
+  #' A standard generic to access the slot Shiftbps
+  #' @param object An S4 class object of the type Scenario
+  setGeneric("Shiftbps", function(object)
+    {standardGeneric("Shiftbps")})
+  
   #' A standard generic to access the slot Formula
   #' @param object An S4 class object of the type Scenario
   setGeneric("Formula", function(object)
@@ -127,6 +132,12 @@
   setMethod("ShiftType", signature("Scenario"),
             function(object){object@ShiftType})
   
+  #' A Method to extract Shiftbps from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Shiftbps
+  setMethod("Shiftbps", signature("Scenario"),
+            function(object){object@Shiftbps})
+  
   #' A Mthod to extract the shift Formula from an S4 class Scenario
   #' @param object The name of the object of the S4 class of type Scenario
   #' @exportMethod Formula
@@ -143,7 +154,7 @@
   #' @slot PassThroughInterest A numeric value the interest paid through to the investor
   #' @slot ScheduledPrin A numeric value the scheduled principal due in the period
   #' @slot PrepaidPrin A numeric value the forecasted prepaid principal in the period
-  #' @slot EndingBal A numeric value the forecasted ending balance in the period
+  #' @slot EndingBalance A numeric value the forecasted ending balance in the period
   #' @slot TotalCashFlow A numeric value the forecasted total cashflow received by
   #' the investor in the period
   #' @slot SpotRate A numeric vector the spot rate curve
@@ -172,7 +183,7 @@
            PassThroughInterest = "numeric",
            ScheduledPrin = "numeric",
            PrepaidPrin = "numeric",
-           EndingBal = "numeric",
+           EndingBalance = "numeric",
            TotalCashFlow = "numeric",
            SpotRate = "numeric",
            ForwardRate = "numeric",
@@ -234,13 +245,17 @@
   setGeneric("HorizonReturn", function(object)
              {standardGeneric("HorizonReturn")})
   
+  #' A standard generic function to access the slot SpreadToInterCurve
+  #' @param object An S4 object of type Mtg.Scenario
+  setGeneric("SpreadToInterCurve", function(object)
+             {standardGeneric("SpreadToInterCurve")})
+  
   # Note: standard generic function Name is defined above
   # Note: standard generic function Type is defined above
   # Note: standard generic function Horizon is defined above
   # Note: standard generic function ShiftType is defined above
   # Note: standard generic function Shiftbps is defined above
   # Note: standard generic function Formula is defined above
-
 
   setMethod("initialize",
           signature("Mtg.Scenario"),
@@ -252,7 +267,7 @@
           PassThroughInterest = "numeric",
           ScheduledPrin = "numeric",
           PrepaidPrin = "numeric",
-          EndingBal = "numeric",
+          EndingBalance = "numeric",
           TotalCashFlow = "numeric",
           SpotRate = "numeric",
           ForwardRate = "numeric",
@@ -276,37 +291,180 @@
           Formula = "function",
           ...){
             callNextMethod(.Object,
-            PmtDate = PmtDate,
-            TimePeriod = TimePeriod,
-            BeginningBal = BeginningBal,
-            PassThroughInterest = PassThroughInterest,
-            ScheduledPrin = ScheduledPrin,
-            PrepaidPrin = PrepaidPrin,
-            EndingBal = EndingBal,
-            TotalCashFlow = TotalCashFlow,
-            SpotRate = SpotRate,
-            ForwardRate = ForwardRate,
-            SMM = SMM,
-            YieldToMaturity = YieldToMaturity,
-            WAL = WAL,
-            SpreadToInterCurve = SpreadToInterCurve,
-            ModDuration = ModDuration,
-            Convexity = Convexity, 
-            EffDuration = EffDuration,
-            EffConvexity = EffConvexity,
-            KeyRateTenor = KeyRateTenor,
-            KeyRateDuration = KeyRateDuration,
-            KeyRateConvexity = KeyRateConvexity,
-            HorizonReturn = HorizonReturn,
-            Name = Name,
-            Type = Type,
-            Horizon = Horizon,
-            ShiftType = ShiftType,
-            Shiftbps = Shiftbps,
-            Formula = Formula,
-            ...)
+                           Period = Period,
+                           PmtDate = PmtDate,
+                           TimePeriod = TimePeriod,
+                           BeginningBal = BeginningBal,
+                           PassThroughInterest = PassThroughInterest,
+                           ScheduledPrin = ScheduledPrin,
+                           PrepaidPrin = PrepaidPrin,
+                           EndingBalance = EndingBalance,
+                           TotalCashFlow = TotalCashFlow,
+                           SpotRate = SpotRate,
+                           ForwardRate = ForwardRate,
+                           SMM = SMM,
+                           YieldToMaturity = YieldToMaturity,
+                           WAL = WAL,
+                           SpreadToInterCurve = SpreadToInterCurve,
+                           ModDuration = ModDuration,
+                           Convexity = Convexity, 
+                           EffDuration = EffDuration,
+                           EffConvexity = EffConvexity,
+                           KeyRateTenor = KeyRateTenor,
+                           KeyRateDuration = KeyRateDuration,
+                           KeyRateConvexity = KeyRateConvexity,
+                           HorizonReturn = HorizonReturn,
+                           Name = Name,
+                           Type = Type,
+                           Horizon = Horizon,
+                           ShiftType = ShiftType,
+                           Shiftbps = Shiftbps,
+                           Formula = Formula,
+                           ...)
             })
+  
 
+  
+  #' A method to extract PmtDate from S4 class Mtg.Scenario
+  #' @param object The name of an S4 class of type Mtg.Scenario
+  setMethod("PmtDate", signature("Mtg.Scenario"),
+            function(object){object@PmtDate})
+  
+  #' A method to extract TimePeriod from S4 class Mtg.Scenario
+  #' @param object The name of an S4 class of type Mtg.Scenario
+  setMethod("TimePeriod", signature("Mtg.Scenario"),
+            function(object){object@TimePeriod})
+  
+  #' A method to extract BeginningBal from S4 class Mtg.Scenario
+  #' @param object The name of an S4 class of type Mtg.Scenario
+  setMethod("BeginningBal", signature("Mtg.Scenario"),
+            function(object){object@BeginningBal})
+  
+  #' A method to extract PassThroughInterest from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("PassThroughInterest", signature("Mtg.Scenario"),
+            function(object){object@PassThroughInterest})
+  
+  #' A method to extract ScheduledPrin from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("ScheduledPrin", signature("Mtg.Scenario"),
+            function(object){object@ScheduledPrin})
+  
+  #' A method to extract PrepaidPrin from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("PrepaidPrin", signature("Mtg.Scenario"),
+            function(object){object@PrepaidPrin})
+  
+  #' A method to extract EndingBalance from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("EndingBalance", signature("Mtg.Scenario"),
+            function(object){object@EndingBalance})
+  
+  #' A method to extract TotalCashFlow from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("TotalCashFlow", signature("Mtg.Scenario"),
+            function(object){object@TotalCashFlow})
+  
+  #' A method to extract SpotRate curve from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("SpotRate", signature("Mtg.Scenario"),
+            function(object){object@SpotRate})
+  
+  #' A method to extract ForwardRate curve from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("ForwardRate", signature("Mtg.Scenario"),
+            function(object){object@ForwardRate})
+  
+  #' A method to extract SMM from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("SMM", signature("Mtg.Scenario"),
+            function(object){object@SMM})
+  
+  #' A method to extract YieldToMaturity from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("YieldToMaturity", signature("Mtg.Scenario"),
+            function(object){object@YieldToMaturity})
+  
+  #' A method to extract WAL from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("WAL", signature("Mtg.Scenario"),
+            function(object){object@WAL})
+  
+  #' A method to extract SpreadToInterCurve from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("SpreadToInterCurve", signature("Mtg.Scenario"),
+            function(object){object@SpreadToInterCurve})
+  
+  #' A method to extract ModDuration from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("ModDuration", signature("Mtg.Scenario"),
+            function(object){object@ModDuration})
+  
+  #' A method to extract Convexity from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("Convexity", signature("Mtg.Scenario"),
+            function(object){object@Convexity})
+  
+  #' A method to extract EffDuration from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("EffDuration", signature("Mtg.Scenario"),
+            function(object){object@EffDuration})
+  
+  #' A method to extract EffConvexity from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("EffConvexity", signature("Mtg.Scenario"),
+            function(object){object@EffConvexity})
+  
+  #' A method to extract KeyRateTenor from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("KeyRateTenor", signature("Mtg.Scenario"),
+            function(object){object@KeyRateTenor})
+  
+  #' A method to extract KeyRateDuration from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("KeyRateDuration", signature("Mtg.Scenario"),
+            function(object){object@KeyRateDuration})
+  
+  #' A method to extract KeyRateConvexity from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("KeyRateConvexity", signature("Mtg.Scenario"),
+            function(object){object@KeyRateConvexity})
+  
+  #' A method to extract HorizonReturn from S4 class Mtg.Scenario
+  #' @param object the name of the an S4 class of type Mtg.Scenario
+  setMethod("HorizonReturn", signature("Mtg.Scenario"),
+            function(object){object@HorizonReturn})
+  
+  #' A method to extract Name (scenario name from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("Name", signature("Mtg.Scenario"),
+            function(object){object@Name})
+  
+  #' A method to extract Type (scenario type) from S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("Type", signature("Mtg.Scenario"),
+            function(object){object@Type})
+  
+  #' A method to extract Horizon (horizon period) from an S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type of Mtg.Scenario
+  setMethod("Horizon", signature("Mtg.Scenario"),
+            function(object){object@Horizon})
+  
+  #' A method to extract ShiftType from an S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("ShiftType", signature("Mtg.Scenario"),
+            function(object){object@ShiftType})
+  
+  #' A method to extract Shiftbps from an S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("Shiftbps", signature("Mtg.Scenario"),
+            function(object){object@Shiftbps})
+  
+  #' A method to extract Formula from an S4 class Mtg.Scenario
+  #' @param object the name of an S4 class of type Mtg.Scenario
+  setMethod("Formula", signature("Mtg.Scenario"),
+            function(object){object@Formula})
+  
   #---------------------------------------------------------
   # Scenario Total Return Analysis
   # Calls the bond.id and applies the scenario
@@ -566,9 +724,7 @@
               ScheduledPrin = MortgageCashFlow@ScheduledPrin,
               PrepaidPrin = MortgageCashFlow@PrepaidPrin,
               EndingBal = MortgageCashFlow@EndingBal,
-              TotalCashFlow = (MortgageCashFlow@PassThroughInterest + 
-                                 MortgageCashFlow@ScheduledPrin + 
-                                 MortgageCashFlow@PrepaidPrin),
+              TotalCashFlow = MortgageCashFlow@TotalCashFlow,
               SpotRate = TermStructure@SpotRate,
               ForwardRate = TermStructure@ForwardRate,
               SMM = Prepayment@SMM,

@@ -2,7 +2,8 @@
 % Please edit documentation in R/MortgageScenario.R
 \name{Mtg.Scenario}
 \alias{Mtg.Scenario}
-\title{Mortgage Scenario Analysis}
+\title{A method to extract Shiftbps from an S4 class 
+Mortgage Scenario Analysis}
 \usage{
 Mtg.Scenario(bond.id = "character", settlement.date = "character",
   rates.data = "character", price = numeric(), original.bal = numeric(),

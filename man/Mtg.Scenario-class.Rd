@@ -24,7 +24,7 @@ The class Mtg. Scenario holds the results of a scenario analysis run
 
 \item{\code{PrepaidPrin}}{A numeric value the forecasted prepaid principal in the period}
 
-\item{\code{EndingBal}}{A numeric value the forecasted ending balance in the period}
+\item{\code{EndingBalance}}{A numeric value the forecasted ending balance in the period}
 
 \item{\code{TotalCashFlow}}{A numeric value the forecasted total cashflow received by
 the investor in the period}

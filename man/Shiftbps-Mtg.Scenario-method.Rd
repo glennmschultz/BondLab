@@ -8,7 +8,7 @@
 \S4method{Shiftbps}{Mtg.Scenario}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type Mtg.Scenario}
+\item{object}{The name of an S4 class of type Mtg.Scenario}
 }
 \description{
 A method to extract Shiftbps from an S4 class Mtg.Scenario

@@ -16,6 +16,9 @@
          representation(
            Scenario = "list"))
   
+  setGeneric("Mtg.ScenarioSet", function(Scenario = "list")
+    {standardGeneric("Mtg.ScenarioSet")})
+  
   #' A standard generic function to extract the slot Scenario
   #' @param object An S4 class object of the type Mtg.ScenarioSet
   setGeneric("Mtg.ScenarioSet", function(object)
@@ -26,9 +29,11 @@
             function(.Object,
                      Scenario = "list",
                      ...)
-            {callNextMethod(.Object,
+            {
+              callNextMethod(.Object,
                             Scenario = Scenario,
-                            ...)}
+                            ...)
+              }
             )
   
   #' A method to extract the Scenario list from S4 class Mtg.ScenarioSet
@@ -58,6 +63,14 @@
            ShiftType = "character",
            Shiftbps = "numeric",
            Formula = "function"))
+  
+  setGeneric("Scenario", function(Name = "character",
+                                  Type = "character",
+                                  Horizon = "character",
+                                  ShiftType = "character",
+                                  Shiftbps = "character",
+                                  Formula = "function")
+    {standardGeneric("Scenario")})
   
   #' A standard generic to access the slot Name
   #' @param object An S4 class object of the type Scenario
@@ -99,14 +112,16 @@
               Shiftbps = "character",
               Formula = "function",
               ...)
-            {callNextMethod(.Object,
+            {
+              callNextMethod(.Object,
                             Name = Name,
                             Type = Type,
                             Horizon = Horizon,
                             ShiftType = ShiftType,
                             Shiftbps = Shiftbps,
                             Formula = Formula,
-                            ...)})
+                            ...)
+              })
   
   #' A Method to extract scenario name from an S4 class Scenario
   #' @param object The name of the object of the S4 class of type Scenario
@@ -154,7 +169,7 @@
   #' @slot PassThroughInterest A numeric value the interest paid through to the investor
   #' @slot ScheduledPrin A numeric value the scheduled principal due in the period
   #' @slot PrepaidPrin A numeric value the forecasted prepaid principal in the period
-  #' @slot EndingBalance A numeric value the forecasted ending balance in the period
+  #' @slot EndingBal A numeric value the forecasted ending balance in the period
   #' @slot TotalCashFlow A numeric value the forecasted total cashflow received by
   #' the investor in the period
   #' @slot SpotRate A numeric vector the spot rate curve
@@ -183,7 +198,7 @@
            PassThroughInterest = "numeric",
            ScheduledPrin = "numeric",
            PrepaidPrin = "numeric",
-           EndingBalance = "numeric",
+           EndingBal = "numeric",
            TotalCashFlow = "numeric",
            SpotRate = "numeric",
            ForwardRate = "numeric",
@@ -201,26 +216,7 @@
            HorizonReturn = "numeric"),
          contains = "Scenario")
   
-  setGeneric("Mtg.Scenario", function(bond.id ="character",
-                                      settlement.date = "character",
-                                      rates.data = "character",
-                                      price = numeric(), 
-                                      original.bal = numeric(),
-                                      scenario = "character",
-                                      horizon.months = numeric(),
-                                      method = "character",
-                                      prepayment = "character",
-                                      ...,
-                                      horizon.spot.spread = NULL,
-                                      horizon.nominal.spread = NULL,
-                                      horizon.OAS = NULL,
-                                      horizon.price = NULL,
-                                      begin.cpr = numeric(),
-                                      end.cpr = numeric(),
-                                      seasoning.period = numeric(),
-                                      CPR = numeric())
-  {standardGeneric("Mtg.Scenario")})
-  
+   
   # Note: standard generic period is defined in MortgageCashFlow.R
   # Note: standard generic PmtDate is defined in MortgageCashFlow.R
   # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
@@ -240,6 +236,27 @@
   # Note: standard generic EffDuration is defined in MortgageKeyRate.R
   # Note: standard generic EffConvexity is defined in MortgageKeyRate.R
   
+  setGeneric("MtgScenario", function(bond.id ="character",
+                                      settlement.date = "character",
+                                      rates.data = "character",
+                                      price = numeric(), 
+                                      original.bal = numeric(),
+                                      scenario = "character",
+                                      horizon.months = numeric(),
+                                      method = "character",
+                                      prepayment = "character",
+                                      ...,
+                                      horizon.spot.spread = NULL,
+                                      horizon.nominal.spread = NULL,
+                                      horizon.OAS = NULL,
+                                      horizon.price = NULL,
+                                      begin.cpr = numeric(),
+                                      end.cpr = numeric(),
+                                      seasoning.period = numeric(),
+                                      CPR = numeric())
+  {standardGeneric("MtgScenario")})
+  
+  
   #' A standard generic function to access the slot HorizonRetrun
   #' @param object An S4 object of type Mtg.Scenario
   setGeneric("HorizonReturn", function(object)
@@ -258,72 +275,77 @@
   # Note: standard generic function Formula is defined above
 
   setMethod("initialize",
-          signature("Mtg.Scenario"),
-          function(.Object,
-          Period = "numeric",
-          PmtDate = "character",
-          TimePeriod = "numeric",
-          BeginningBal = "numeric",
-          PassThroughInterest = "numeric",
-          ScheduledPrin = "numeric",
-          PrepaidPrin = "numeric",
-          EndingBalance = "numeric",
-          TotalCashFlow = "numeric",
-          SpotRate = "numeric",
-          ForwardRate = "numeric",
-          SMM = "numeric",
-          YieldToMaturity = "numeric",
-          WAL = "numeric",
-          SpreadToInterCurve = "numeric",
-          ModDuration = "numeric",
-          Convexity = "numeric", 
-          EffDuration = "numeric",
-          EffConvexity = "numeric",
-          KeyRateTenor = "numeric",
-          KeyRateDuration = "numeric",
-          KeyRateConvexity = "numeric",
-          HorizonReturn = "numeric",
-          Name = "character",
-          Type = "character",
-          Horizon = "character",
-          ShiftType = "character",
-          Shiftbps = "numeric",
-          Formula = "function",
-          ...){
-            callNextMethod(.Object,
-                           Period = Period,
-                           PmtDate = PmtDate,
-                           TimePeriod = TimePeriod,
-                           BeginningBal = BeginningBal,
-                           PassThroughInterest = PassThroughInterest,
-                           ScheduledPrin = ScheduledPrin,
-                           PrepaidPrin = PrepaidPrin,
-                           EndingBalance = EndingBalance,
-                           TotalCashFlow = TotalCashFlow,
-                           SpotRate = SpotRate,
-                           ForwardRate = ForwardRate,
-                           SMM = SMM,
-                           YieldToMaturity = YieldToMaturity,
-                           WAL = WAL,
-                           SpreadToInterCurve = SpreadToInterCurve,
-                           ModDuration = ModDuration,
-                           Convexity = Convexity, 
-                           EffDuration = EffDuration,
-                           EffConvexity = EffConvexity,
-                           KeyRateTenor = KeyRateTenor,
-                           KeyRateDuration = KeyRateDuration,
-                           KeyRateConvexity = KeyRateConvexity,
-                           HorizonReturn = HorizonReturn,
-                           Name = Name,
-                           Type = Type,
-                           Horizon = Horizon,
-                           ShiftType = ShiftType,
-                           Shiftbps = Shiftbps,
-                           Formula = Formula,
-                           ...)
+            signature("Mtg.Scenario"),
+            function(.Object,
+                     Period = "numeric",
+                     PmtDate = "character",
+                     TimePeriod = "numeric",
+                     BeginningBal = "numeric",
+                     PassThroughInterest = "numeric",
+                     ScheduledPrin = "numeric",
+                     PrepaidPrin = "numeric",
+                     EndingBal = "numeric",
+                     TotalCashFlow = "numeric",
+                     SpotRate = "numeric",
+                     ForwardRate = "numeric",
+                     SMM = "numeric",
+                     YieldToMaturity = "numeric",
+                     WAL = "numeric",
+                     SpreadToInterCurve = "numeric",
+                     ModDuration = "numeric",
+                     Convexity = "numeric", 
+                     EffDuration = "numeric",
+                     EffConvexity = "numeric",
+                     KeyRateTenor = "numeric",
+                     KeyRateDuration = "numeric",
+                     KeyRateConvexity = "numeric",
+                     HorizonReturn = "numeric",
+                     Name = "character",
+                     Type = "character",
+                     Horizon = "character",
+                     ShiftType = "character",
+                     Shiftbps = "numeric",
+                     Formula = "function",
+                     ...)
+            {
+              callNextMethod(.Object,
+                             Period = Period,
+                             PmtDate = PmtDate,
+                             TimePeriod = TimePeriod,
+                             BeginningBal = BeginningBal,
+                             PassThroughInterest = PassThroughInterest,
+                             ScheduledPrin = ScheduledPrin,
+                             PrepaidPrin = PrepaidPrin,
+                             EndingBal = EndingBal,
+                             TotalCashFlow = TotalCashFlow,
+                             SpotRate = SpotRate,
+                             ForwardRate = ForwardRate,
+                             SMM = SMM,
+                             YieldToMaturity = YieldToMaturity,
+                             WAL = WAL,
+                             SpreadToInterCurve = SpreadToInterCurve,
+                             ModDuration = ModDuration,
+                             Convexity = Convexity, 
+                             EffDuration = EffDuration,
+                             EffConvexity = EffConvexity,
+                             KeyRateTenor = KeyRateTenor,
+                             KeyRateDuration = KeyRateDuration,
+                             KeyRateConvexity = KeyRateConvexity,
+                             HorizonReturn = HorizonReturn,
+                             Name = Name,
+                             Type = Type,
+                             Horizon = Horizon,
+                             ShiftType = ShiftType,
+                             Shiftbps = Shiftbps,
+                             Formula = Formula,
+                             ...)
             })
   
 
+  #' A method to extract Period from S4 class Mtg.Scenario
+  #' @param object The name of an S4 class of type Mtg.Scenario
+  setMethod("Period", signature("Mtg.Scenario"),
+            function(object){object@Period})
   
   #' A method to extract PmtDate from S4 class Mtg.Scenario
   #' @param object The name of an S4 class of type Mtg.Scenario
@@ -358,7 +380,7 @@
   #' A method to extract EndingBalance from S4 class Mtg.Scenario
   #' @param object the name of an S4 class of type Mtg.Scenario
   setMethod("EndingBalance", signature("Mtg.Scenario"),
-            function(object){object@EndingBalance})
+            function(object){object@EndingBal})
   
   #' A method to extract TotalCashFlow from S4 class Mtg.Scenario
   #' @param object the name of an S4 class of type Mtg.Scenario
@@ -456,7 +478,7 @@
             function(object){object@ShiftType})
   
   #' A method to extract Shiftbps from an S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
+  #' @param object The name of an S4 class of type Mtg.Scenario
   setMethod("Shiftbps", signature("Mtg.Scenario"),
             function(object){object@Shiftbps})
   
@@ -491,8 +513,8 @@
   #' @param end.cpr A numeric value the ending CPR value
   #' @param seasoning.period A numeric value the length of the seasoning ramp
   #' @param CPR A numeric value the CPR speed
-  #' @export Mtg.Scenario
-  Mtg.Scenario <- function(bond.id ="character",
+  #' @export MtgScenario
+  MtgScenario <- function(bond.id ="character",
                            settlement.date = "character",
                            rates.data = "character",
                            price = numeric(), 
@@ -528,7 +550,6 @@
   }
   
 
-  
   bond.id <- bond.id
   MortgageRate <- MtgRate()
   ModelTune <- ModelTune(bond.id = bond.id)
@@ -559,7 +580,7 @@
                                        settlement.date = settlement.date, 
                                        price = price, 
                                        PrepaymentAssumption = Prepayment)
-  
+
   InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), 
                             data = data.frame(rates.data))  
   
@@ -613,7 +634,7 @@
                                       settlement.date = HorizonSettlement,
                                       price = price,
                                       PrepaymentAssumption = HorizonPrepaymentAssumption)
-  
+
   # =====================================================================================================
   # This section begins the calculation of horizon total return
   # Cashflow Received + Reinvestment Income + Present Value at Horizon
@@ -709,39 +730,38 @@
   PrincipalRepaid <- sum(MortgageCashFlow@PrepaidPrin[1:horizon.months]) + 
     sum(MortgageCashFlow@ScheduledPrin[1:horizon.months])
   
-  
-  
   HorizonValue <- CouponIncome + ReinvestmentIncome + PrincipalRepaid + PresentValue
   HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
   HorizonReturn <- (HorizonReturn - 1) * yield.basis
-  
-              new("Mtg.Scenario",  
-              Period = MortgageCashFlow@Period,
-              PmtDate = MortgageCashFlow@PmtDate,
-              TimePeriod = MortgageCashFlow@TimePeriod,
-              BeginningBal = MortgageCashFlow@BeginningBal,
-              PassThroughInterest = MortgageCashFlow@PassThroughInterest,
-              ScheduledPrin = MortgageCashFlow@ScheduledPrin,
-              PrepaidPrin = MortgageCashFlow@PrepaidPrin,
-              EndingBal = MortgageCashFlow@EndingBal,
-              TotalCashFlow = MortgageCashFlow@TotalCashFlow,
-              SpotRate = TermStructure@SpotRate,
-              ForwardRate = TermStructure@ForwardRate,
-              SMM = Prepayment@SMM,
-              YieldToMaturity = MortgageCashFlow@YieldToMaturity,
-              WAL = MortgageCashFlow@WAL,
-              SpreadToInterCurve = SpreadtoCurve,
-              ModDuration = MortgageCashFlow@ModDuration,
-              Convexity = MortgageCashFlow@Convexity,
-              EffDuration = MortgageTermStructure@EffDuration,
-              EffConvexity =  MortgageTermStructure@EffConvexity,
-              KeyRateTenor =  MortgageTermStructure@KeyRateTenor,
-              KeyRateDuration =  MortgageTermStructure@KeyRateDuration,
-              KeyRateConvexity =  MortgageTermStructure@KeyRateConvexity,
-              HorizonReturn = HorizonReturn,
-              Name = Scenario@Name,
-              Type = Scenario@Type,
-              Horizon = Scenario@Horizon,
-              ShiftType = Scenario@ShiftType,
-              Shiftbps = Scenario@Shiftbps,
-              Formula = Scenario@Formula)}
+
+  new("Mtg.Scenario",
+      Period = Period(MortgageCashFlow),
+      PmtDate = PmtDate(MortgageCashFlow),
+      TimePeriod = TimePeriod(MortgageCashFlow),
+      BeginningBal = BeginningBal(MortgageCashFlow),
+      PassThroughInterest = PassThroughInterest(MortgageCashFlow),
+      ScheduledPrin = ScheduledPrin(MortgageCashFlow),
+      PrepaidPrin = PrepaidPrin(MortgageCashFlow),
+      EndingBal = EndingBalance(MortgageCashFlow),
+      TotalCashFlow = TotalCashFlow(MortgageCashFlow),
+      SpotRate = SpotRate(TermStructure),
+      ForwardRate = ForwardDate(TermStructure),
+      SMM = SMM(Prepayment),
+      YieldToMaturity = YieldToMaturity(MortgageCashFlow),
+      WAL = WAL(MortgageCashFlow),
+      SpreadToInterCurve = SpreadtoCurve,
+      ModDuration = ModDuration(MortgageCashFlow),
+      Convexity = Convexity(MortgageCashFlow), 
+      EffDuration = EffDuration(MortgageTermStructure),
+      EffConvexity = EffConvexity(MortgageTermStructure),
+      KeyRateTenor = KeyRateTenor(MortgageTermStructure),
+      KeyRateDuration = KeyRateDuration(MortgageTermStructure),
+      KeyRateConvexity = KeyRateConvexity(MortgageTermStructure),
+      HorizonReturn = HorizonReturn,
+      Name = Name(Scenario),
+      Type = Type(Scenario),
+      Horizon = horizon.months,
+      ShiftType = ShiftType(Scenario),
+      Shiftbps = Shiftbps(Scenario),
+      Formula = Formula(Scenario))        
+  }

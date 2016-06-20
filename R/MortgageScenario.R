@@ -1,4 +1,3 @@
-
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # mortgage backed, asset backed securities, and commerical mortgage backed securities
@@ -6,21 +5,23 @@
 
   #' @include MortgageCashFlow.R TermStructure.R PrepaymentModel.R MortgageKeyRate.R
   NULL
-
+  
+  
   #' An S4 Class A list of Scenario outcomes
   #'
   #' The class Mtg.ScenarioSet is a list of classes Scenario
   #' @slot Scenario A list of the class Scenario
   #' @exportClass Mtg.ScenarioSet
   setClass("Mtg.ScenarioSet",
-         representation(
-           Scenario = "list"))
+           representation(
+             Scenario = "list"))
   
   setGeneric("Mtg.ScenarioSet", function(Scenario = "list")
-    {standardGeneric("Mtg.ScenarioSet")})
+  {standardGeneric("Mtg.ScenarioSet")})
   
   #' A standard generic function to extract the slot Scenario
   #' @param object An S4 class object of the type Mtg.ScenarioSet
+  #' @export
   setGeneric("Mtg.ScenarioSet", function(object)
   {standardGeneric("Mtg.ScenarioSet")})
   
@@ -31,17 +32,17 @@
                      ...)
             {
               callNextMethod(.Object,
-                            Scenario = Scenario,
-                            ...)
-              }
-            )
+                             Scenario = Scenario,
+                             ...)
+            }
+  )
   
   #' A method to extract the Scenario list from S4 class Mtg.ScenarioSet
   #' @param object the name of the S4 object of the type Scenario
   #' @exportMethod Mtg.ScenarioSet
   setMethod("Mtg.ScenarioSet", signature("Mtg.ScenarioSet"),
             function(object){object@Scenario})
-
+  
   #' An S4 Class representing scenario analysis details
   #' 
   #' The class Scenario is the representation of the 
@@ -56,72 +57,78 @@
   #' @slot Formula A function represnting the shift which applied to the term structure
   #' @exportClass Scenario
   setClass("Scenario",
-         representation(
-           Name = "character",
-           Type = "character",
-           Horizon = "character",
-           ShiftType = "character",
-           Shiftbps = "numeric",
-           Formula = "function"))
+           representation(
+             Name = "character",
+             Type = "character",
+             Horizon = "character",
+             ShiftType = "character",
+             Shiftbps = "numeric",
+             Formula = "function"))
   
   setGeneric("Scenario", function(Name = "character",
                                   Type = "character",
                                   Horizon = "character",
                                   ShiftType = "character",
-                                  Shiftbps = "character",
+                                  Shiftbps = numeric(),
                                   Formula = "function")
-    {standardGeneric("Scenario")})
+  {standardGeneric("Scenario")})
   
   #' A standard generic to access the slot Name
   #' @param object An S4 class object of the type Scenario
+  #' @export Name
   setGeneric("Name", function(object)
-    {standardGeneric("Name")})
+  {standardGeneric("Name")})
   
   #' A standard generic to access the slot Type
   #' @param object An S4 class object of the type Scenario
+  #' @export Type
   setGeneric("Type", function(object)
-    {standardGeneric("Type")})
+  {standardGeneric("Type")})
   
   #' A standard generic to access the slot Horizon
   #' @param object An S4 class object of the type Scenario
+  #' @export Horizon
   setGeneric("Horizon", function(object)
-    {standardGeneric("Horizon")})
+  {standardGeneric("Horizon")})
   
   #' A standard generic to access the slot ShiftType
   #' @param object An S4 class object of the type Scenario
+  #' @export ShiftType
   setGeneric("ShiftType", function(object)
-    {standardGeneric("ShiftType")})
+  {standardGeneric("ShiftType")})
   
   #' A standard generic to access the slot Shiftbps
   #' @param object An S4 class object of the type Scenario
+  #' @export Shiftbps
   setGeneric("Shiftbps", function(object)
-    {standardGeneric("Shiftbps")})
+  {standardGeneric("Shiftbps")})
   
   #' A standard generic to access the slot Formula
   #' @param object An S4 class object of the type Scenario
-  setGeneric("Formula", function(object)
-    {standardGeneric("Formula")})
+  #' @export ScenarioFormula
+  setGeneric("ScenarioFormula", function(object)
+  {standardGeneric("ScenarioFormula")})
   
   setMethod("initialize",
             signature("Scenario"),
             function(.Object,
-              Name = "character",
-              Type = "character",
-              Horizon = "character",
-              ShiftType = "character",
-              Shiftbps = "character",
-              Formula = "function",
-              ...)
+                     Name = "character",
+                     Type = "character",
+                     Horizon = "character",
+                     ShiftType = "character",
+                     Shiftbps = numeric(),
+                     Formula = "function",
+                     ...)
             {
               callNextMethod(.Object,
-                            Name = Name,
-                            Type = Type,
-                            Horizon = Horizon,
-                            ShiftType = ShiftType,
-                            Shiftbps = Shiftbps,
-                            Formula = Formula,
-                            ...)
-              })
+                             Name = Name,
+                             Type = Type,
+                             Horizon = Horizon,
+                             ShiftType = ShiftType,
+                             Shiftbps = Shiftbps,
+                             Formula = Formula,
+                             ...)
+            })
   
   #' A Method to extract scenario name from an S4 class Scenario
   #' @param object The name of the object of the S4 class of type Scenario
@@ -153,11 +160,14 @@
   setMethod("Shiftbps", signature("Scenario"),
             function(object){object@Shiftbps})
   
-  #' A Mthod to extract the shift Formula from an S4 class Scenario
+  #' A Method to extract the scenario formula from an S4 class Scenario
   #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod Formula
-  setMethod("Formula", signature("Scenario"),
+  #' @exportMethod ScenarioFormula
+  setMethod("ScenarioFormula", signature("Scenario"),
             function(object){object@Formula})
+  
+
+  
   
   #' An S4 Class representing the results of mortgage return scenario analysis
   #' 
@@ -188,35 +198,37 @@
   #' @slot KeyRateDuration A numeric vector the duration of each key rate tenor
   #' @slot KeyRateConvexity A numeric vector the convexity of each each key rate tenor
   #' @slot HorizonReturn A numeric value the horizon total return
-  #' @exportClass Mtg.Scenario     
-  setClass("Mtg.Scenario",
-         representation( 
-           Period = "numeric",
-           PmtDate = "character",
-           TimePeriod = "numeric",
-           BeginningBal = "numeric",
-           PassThroughInterest = "numeric",
-           ScheduledPrin = "numeric",
-           PrepaidPrin = "numeric",
-           EndingBal = "numeric",
-           TotalCashFlow = "numeric",
-           SpotRate = "numeric",
-           ForwardRate = "numeric",
-           SMM = "numeric",
-           YieldToMaturity = "numeric",
-           WAL = "numeric",
-           SpreadToInterCurve = "numeric",
-           ModDuration = "numeric",
-           Convexity = "numeric", 
-           EffDuration = "numeric",
-           EffConvexity = "numeric",
-           KeyRateTenor = "numeric",
-           KeyRateDuration = "numeric",
-           KeyRateConvexity = "numeric",
-           HorizonReturn = "numeric"),
-         contains = "Scenario")
+  #' @slot HorizonMos A numeric value the number of months to the scenario horizon date
+  #' @exportClass MtgScenario    
+  setClass("MtgScenario",
+           representation( 
+             Period = "numeric",
+             PmtDate = "character",
+             TimePeriod = "numeric",
+             BeginningBal = "numeric",
+             PassThroughInterest = "numeric",
+             ScheduledPrin = "numeric",
+             PrepaidPrin = "numeric",
+             EndingBal = "numeric",
+             TotalCashFlow = "numeric",
+             SpotRate = "numeric",
+             ForwardRate = "numeric",
+             SMM = "numeric",
+             YieldToMaturity = "numeric",
+             WAL = "numeric",
+             SpreadToInterCurve = "numeric",
+             ModDuration = "numeric",
+             Convexity = "numeric", 
+             EffDuration = "numeric",
+             EffConvexity = "numeric",
+             KeyRateTenor = "numeric",
+             KeyRateDuration = "numeric",
+             KeyRateConvexity = "numeric",
+             HorizonReturn = "numeric",
+             HorizonMos = "numeric"),
+           contains = "Scenario")
   
-   
+  
   # Note: standard generic period is defined in MortgageCashFlow.R
   # Note: standard generic PmtDate is defined in MortgageCashFlow.R
   # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
@@ -237,35 +249,42 @@
   # Note: standard generic EffConvexity is defined in MortgageKeyRate.R
   
   setGeneric("MtgScenario", function(bond.id ="character",
-                                      settlement.date = "character",
-                                      rates.data = "character",
-                                      price = numeric(), 
-                                      original.bal = numeric(),
-                                      scenario = "character",
-                                      horizon.months = numeric(),
-                                      method = "character",
-                                      prepayment = "character",
-                                      ...,
-                                      horizon.spot.spread = NULL,
-                                      horizon.nominal.spread = NULL,
-                                      horizon.OAS = NULL,
-                                      horizon.price = NULL,
-                                      begin.cpr = numeric(),
-                                      end.cpr = numeric(),
-                                      seasoning.period = numeric(),
-                                      CPR = numeric())
+                                     settlement.date = "character",
+                                     rates.data = "character",
+                                     price = numeric(), 
+                                     original.bal = numeric(),
+                                     scenario = "character",
+                                     horizon.months = numeric(),
+                                     method = "character",
+                                     prepayment = "character",
+                                     ...,
+                                     horizon.spot.spread = NULL,
+                                     horizon.nominal.spread = NULL,
+                                     horizon.OAS = NULL,
+                                     horizon.price = NULL,
+                                     begin.cpr = numeric(),
+                                     end.cpr = numeric(),
+                                     seasoning.period = numeric(),
+                                     CPR = numeric())
   {standardGeneric("MtgScenario")})
   
-  
   #' A standard generic function to access the slot HorizonRetrun
-  #' @param object An S4 object of type Mtg.Scenario
+  #' @param object An S4 object of type MtgScenario
+  #' @export
   setGeneric("HorizonReturn", function(object)
-             {standardGeneric("HorizonReturn")})
+  {standardGeneric("HorizonReturn")})
+  
+  #' A standard generic function to access the slot HorizonMos
+  #' @param object An S4 object of type MtgScenario
+  #' @export
+  setGeneric("HorizonMos", function(object)
+    {standardGeneric("HorizonMos")})
   
   #' A standard generic function to access the slot SpreadToInterCurve
-  #' @param object An S4 object of type Mtg.Scenario
+  #' @param object An S4 object of type MtgScenario
+  #' @export
   setGeneric("SpreadToInterCurve", function(object)
-             {standardGeneric("SpreadToInterCurve")})
+  {standardGeneric("SpreadToInterCurve")})
   
   # Note: standard generic function Name is defined above
   # Note: standard generic function Type is defined above
@@ -273,38 +292,40 @@
   # Note: standard generic function ShiftType is defined above
   # Note: standard generic function Shiftbps is defined above
   # Note: standard generic function Formula is defined above
-
+  
+  
   setMethod("initialize",
-            signature("Mtg.Scenario"),
+            signature("MtgScenario"),
             function(.Object,
-                     Period = "numeric",
+                     Period = numeric(),
                      PmtDate = "character",
-                     TimePeriod = "numeric",
-                     BeginningBal = "numeric",
-                     PassThroughInterest = "numeric",
-                     ScheduledPrin = "numeric",
-                     PrepaidPrin = "numeric",
-                     EndingBal = "numeric",
-                     TotalCashFlow = "numeric",
-                     SpotRate = "numeric",
-                     ForwardRate = "numeric",
-                     SMM = "numeric",
-                     YieldToMaturity = "numeric",
-                     WAL = "numeric",
-                     SpreadToInterCurve = "numeric",
-                     ModDuration = "numeric",
-                     Convexity = "numeric", 
-                     EffDuration = "numeric",
-                     EffConvexity = "numeric",
-                     KeyRateTenor = "numeric",
-                     KeyRateDuration = "numeric",
-                     KeyRateConvexity = "numeric",
-                     HorizonReturn = "numeric",
+                     TimePeriod = numeric(),
+                     BeginningBal = numeric(),
+                     PassThroughInterest = numeric(),
+                     ScheduledPrin = numeric(),
+                     PrepaidPrin = numeric(),
+                     EndingBal = numeric(),
+                     TotalCashFlow = numeric(),
+                     SpotRate = numeric(),
+                     ForwardRate = numeric(),
+                     SMM = numeric(),
+                     YieldToMaturity = numeric(),
+                     WAL = numeric(),
+                     SpreadToInterCurve = numeric(),
+                     ModDuration = numeric(),
+                     Convexity = numeric(), 
+                     EffDuration = numeric(),
+                     EffConvexity = numeric(),
+                     KeyRateTenor = numeric(),
+                     KeyRateDuration = numeric(),
+                     KeyRateConvexity = numeric(),
+                     HorizonReturn = numeric(),
+                     HorizonMos = numeric(),
                      Name = "character",
                      Type = "character",
                      Horizon = "character",
                      ShiftType = "character",
-                     Shiftbps = "numeric",
+                     Shiftbps = numeric(),
                      Formula = "function",
                      ...)
             {
@@ -332,6 +353,7 @@
                              KeyRateDuration = KeyRateDuration,
                              KeyRateConvexity = KeyRateConvexity,
                              HorizonReturn = HorizonReturn,
+                             HorizonMos = HorizonMos,
                              Name = Name,
                              Type = Type,
                              Horizon = Horizon,
@@ -341,150 +363,184 @@
                              ...)
             })
   
-
-  #' A method to extract Period from S4 class Mtg.Scenario
-  #' @param object The name of an S4 class of type Mtg.Scenario
-  setMethod("Period", signature("Mtg.Scenario"),
+  #' A method to extract Period from S4 class MtgScenario
+  #' @param object The name of an S4 class of type MtgScenario
+  #' @exportMethod  Period
+  setMethod("Period", signature("MtgScenario"),
             function(object){object@Period})
   
-  #' A method to extract PmtDate from S4 class Mtg.Scenario
-  #' @param object The name of an S4 class of type Mtg.Scenario
-  setMethod("PmtDate", signature("Mtg.Scenario"),
+  #' A method to extract PmtDate from S4 class MtgScenario
+  #' @param object The name of an S4 class of type MtgScenario
+  #' @exportMethod PmtDate
+  setMethod("PmtDate", signature("MtgScenario"),
             function(object){object@PmtDate})
   
-  #' A method to extract TimePeriod from S4 class Mtg.Scenario
-  #' @param object The name of an S4 class of type Mtg.Scenario
-  setMethod("TimePeriod", signature("Mtg.Scenario"),
+  #' A method to extract TimePeriod from S4 class MtgScenario
+  #' @param object The name of an S4 class of type MtgScenario
+  #' @exportMethod TimePeriod
+  setMethod("TimePeriod", signature("MtgScenario"),
             function(object){object@TimePeriod})
   
-  #' A method to extract BeginningBal from S4 class Mtg.Scenario
-  #' @param object The name of an S4 class of type Mtg.Scenario
-  setMethod("BeginningBal", signature("Mtg.Scenario"),
+  #' A method to extract BeginningBal from S4 class MtgScenario
+  #' @param object The name of an S4 class of type MtgScenario
+  #' @exportMethod BeginningBal
+  setMethod("BeginningBal", signature("MtgScenario"),
             function(object){object@BeginningBal})
   
-  #' A method to extract PassThroughInterest from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("PassThroughInterest", signature("Mtg.Scenario"),
+  #' A method to extract PassThroughInterest from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod PassThroughInterest
+  setMethod("PassThroughInterest", signature("MtgScenario"),
             function(object){object@PassThroughInterest})
   
-  #' A method to extract ScheduledPrin from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("ScheduledPrin", signature("Mtg.Scenario"),
+  #' A method to extract ScheduledPrin from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ScheduledPrin
+  setMethod("ScheduledPrin", signature("MtgScenario"),
             function(object){object@ScheduledPrin})
   
-  #' A method to extract PrepaidPrin from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("PrepaidPrin", signature("Mtg.Scenario"),
+  #' A method to extract PrepaidPrin from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod PrepaidPrin
+  setMethod("PrepaidPrin", signature("MtgScenario"),
             function(object){object@PrepaidPrin})
   
-  #' A method to extract EndingBalance from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("EndingBalance", signature("Mtg.Scenario"),
+  #' A method to extract EndingBalance from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod EndingBalance
+  setMethod("EndingBalance", signature("MtgScenario"),
             function(object){object@EndingBal})
   
-  #' A method to extract TotalCashFlow from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("TotalCashFlow", signature("Mtg.Scenario"),
+  #' A method to extract TotalCashFlow from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod TotalCashFlow
+  setMethod("TotalCashFlow", signature("MtgScenario"),
             function(object){object@TotalCashFlow})
   
-  #' A method to extract SpotRate curve from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("SpotRate", signature("Mtg.Scenario"),
+  #' A method to extract SpotRate curve from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod SpotRate
+  setMethod("SpotRate", signature("MtgScenario"),
             function(object){object@SpotRate})
   
-  #' A method to extract ForwardRate curve from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("ForwardRate", signature("Mtg.Scenario"),
+  #' A method to extract ForwardRate curve from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ForwardRate
+  setMethod("ForwardRate", signature("MtgScenario"),
             function(object){object@ForwardRate})
   
-  #' A method to extract SMM from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("SMM", signature("Mtg.Scenario"),
+  #' A method to extract SMM from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod SMM
+  setMethod("SMM", signature("MtgScenario"),
             function(object){object@SMM})
   
-  #' A method to extract YieldToMaturity from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("YieldToMaturity", signature("Mtg.Scenario"),
+  #' A method to extract YieldToMaturity from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod YieldToMaturity
+  setMethod("YieldToMaturity", signature("MtgScenario"),
             function(object){object@YieldToMaturity})
   
-  #' A method to extract WAL from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("WAL", signature("Mtg.Scenario"),
+  #' A method to extract WAL from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod WAL
+  setMethod("WAL", signature("MtgScenario"),
             function(object){object@WAL})
   
-  #' A method to extract SpreadToInterCurve from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("SpreadToInterCurve", signature("Mtg.Scenario"),
+  #' A method to extract SpreadToInterCurve from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod SpreadToInterCurve
+  setMethod("SpreadToInterCurve", signature("MtgScenario"),
             function(object){object@SpreadToInterCurve})
   
-  #' A method to extract ModDuration from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("ModDuration", signature("Mtg.Scenario"),
+  #' A method to extract ModDuration from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ModDuration
+  setMethod("ModDuration", signature("MtgScenario"),
             function(object){object@ModDuration})
   
-  #' A method to extract Convexity from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("Convexity", signature("Mtg.Scenario"),
+  #' A method to extract Convexity from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod Convexity
+  setMethod("Convexity", signature("MtgScenario"),
             function(object){object@Convexity})
   
-  #' A method to extract EffDuration from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("EffDuration", signature("Mtg.Scenario"),
+  #' A method to extract EffDuration from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod EffDuration
+  setMethod("EffDuration", signature("MtgScenario"),
             function(object){object@EffDuration})
   
-  #' A method to extract EffConvexity from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("EffConvexity", signature("Mtg.Scenario"),
+  #' A method to extract EffConvexity from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod EffConvexity
+  setMethod("EffConvexity", signature("MtgScenario"),
             function(object){object@EffConvexity})
   
-  #' A method to extract KeyRateTenor from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("KeyRateTenor", signature("Mtg.Scenario"),
+  #' A method to extract KeyRateTenor from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod KeyRateTenor
+  setMethod("KeyRateTenor", signature("MtgScenario"),
             function(object){object@KeyRateTenor})
   
-  #' A method to extract KeyRateDuration from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("KeyRateDuration", signature("Mtg.Scenario"),
+  #' A method to extract KeyRateDuration from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod KeyRateDuration
+  setMethod("KeyRateDuration", signature("MtgScenario"),
             function(object){object@KeyRateDuration})
   
-  #' A method to extract KeyRateConvexity from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("KeyRateConvexity", signature("Mtg.Scenario"),
+  #' A method to extract KeyRateConvexity from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod KeyRateConvexity
+  setMethod("KeyRateConvexity", signature("MtgScenario"),
             function(object){object@KeyRateConvexity})
   
-  #' A method to extract HorizonReturn from S4 class Mtg.Scenario
-  #' @param object the name of the an S4 class of type Mtg.Scenario
-  setMethod("HorizonReturn", signature("Mtg.Scenario"),
+  #' A method to extract HorizonReturn from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod HorizonReturn
+  setMethod("HorizonReturn", signature("MtgScenario"),
             function(object){object@HorizonReturn})
   
-  #' A method to extract Name (scenario name from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("Name", signature("Mtg.Scenario"),
+  #' A method to extract HorizonMos from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod HorizonMos
+  setMethod("HorizonMos", signature("MtgScenario"),
+            function(object){object@HorizonMos})
+  
+  #' A method to extract Name (scenario name from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod Name
+  setMethod("Name", signature("MtgScenario"),
             function(object){object@Name})
   
-  #' A method to extract Type (scenario type) from S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("Type", signature("Mtg.Scenario"),
+  #' A method to extract Type (scenario type) from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod Type
+  setMethod("Type", signature("MtgScenario"),
             function(object){object@Type})
   
-  #' A method to extract Horizon (horizon period) from an S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type of Mtg.Scenario
-  setMethod("Horizon", signature("Mtg.Scenario"),
+  #' A method to extract Horizon (horizon period) from an S4 class MtgScenario
+  #' @param object the name of an S4 class of type of MtgScenario
+  #' @exportMethod Horizon
+  setMethod("Horizon", signature("MtgScenario"),
             function(object){object@Horizon})
   
-  #' A method to extract ShiftType from an S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("ShiftType", signature("Mtg.Scenario"),
+  #' A method to extract ShiftType from an S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ShiftType
+  setMethod("ShiftType", signature("MtgScenario"),
             function(object){object@ShiftType})
   
-  #' A method to extract Shiftbps from an S4 class Mtg.Scenario
-  #' @param object The name of an S4 class of type Mtg.Scenario
-  setMethod("Shiftbps", signature("Mtg.Scenario"),
+  #' A method to extract Shiftbps from an S4 class MtgScenario
+  #' @param object The name of an S4 class of type MtgScenario
+  #' @exportMethod Shiftbps
+  setMethod("Shiftbps", signature("MtgScenario"),
             function(object){object@Shiftbps})
   
-  #' A method to extract Formula from an S4 class Mtg.Scenario
-  #' @param object the name of an S4 class of type Mtg.Scenario
-  setMethod("Formula", signature("Mtg.Scenario"),
+  #' A method to extract Formula from an S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ScenarioFormula
+  setMethod("ScenarioFormula", signature("MtgScenario"),
             function(object){object@Formula})
   
   #---------------------------------------------------------
@@ -515,253 +571,262 @@
   #' @param CPR A numeric value the CPR speed
   #' @export MtgScenario
   MtgScenario <- function(bond.id ="character",
-                           settlement.date = "character",
-                           rates.data = "character",
-                           price = numeric(), 
-                           original.bal = numeric(),
-                           scenario = "character",
-                           horizon.months = numeric(),
-                           method = "character",
-                           prepayment = "character",
-                           ...,
-                           horizon.spot.spread = NULL,
-                           horizon.nominal.spread = NULL,
-                           horizon.OAS = NULL,
-                           horizon.price = NULL,
-                           begin.cpr = numeric(),
-                           end.cpr = numeric(),
-                           seasoning.period = numeric(),
-                           CPR = numeric()) { 
-  
-  # =================================================================================================
-  # Mortgage Scenario analysis is done in two steps
-  # The first is calculated the expected cash-flows received over the investment horizon
-  # The second is to "roll" the pass through security forward and price the expected future cash-flows
-  # =================================================================================================
-  
-  if(is.null(horizon.spot.spread) != TRUE) {
-    horizon.price.type <- "spot"
-  } else if(is.null(horizon.nominal.spread) != TRUE) {
-    horizon.price.type <- "nominal"  
-  } else if(is.null(horizon.OAS) != TRUE) {
-    horizon.price.type <- "oas"  
-  } else {
-    horizon.price.type <- "price"
-  }
-  
-
-  bond.id <- bond.id
-  MortgageRate <- MtgRate()
-  ModelTune <- ModelTune(bond.id = bond.id)
-  Burnout = bond.id@Burnout
-  Scenario <- ScenarioCall(Scenario = scenario)
-  rates <- rates.data
-  
-  rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
-  
-  TermStructure <- TermStructure(rates.data = rates, 
-                                 method = method)
-  
-  
-  Prepayment <- PrepaymentModel(bond.id = bond.id, 
-                                     MortgageRate = MortgageRate, 
-                                     TermStructure = TermStructure, 
-                                     PrepaymentAssumption = prepayment, 
-                                     ModelTune = ModelTune,
-                                     Severity = 0,
-                                     Burnout = Burnout, 
-                                     begin.cpr = begin.cpr, 
-                                     end.cpr = end.cpr, 
-                                     seasoning.period = seasoning.period, 
-                                     CPR = CPR)
-  
-  MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
-                                       original.bal = original.bal, 
-                                       settlement.date = settlement.date, 
-                                       price = price, 
-                                       PrepaymentAssumption = Prepayment)
-
-  InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), 
-                            data = data.frame(rates.data))  
-  
-  SpreadtoCurve <- (MortgageCashFlow@YieldToMaturity * yield.basis) - predict(InterpolateCurve, MortgageCashFlow@WAL)
-  
-  proceeds <- MortgageCashFlow@Accrued + (original.bal * bond.id@MBSFactor * (price/price.basis))
-  principal <- original.bal * bond.id@MBSFactor
-  
-  MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
-                                            original.bal = original.bal, 
-                                            Rate.Delta = rate.delta, 
-                                            TermStructure = TermStructure,
-                                            settlement.date = settlement.date, 
-                                            principal = principal, 
-                                            price = price, 
-                                            cashflow = MortgageCashFlow)
-  
-  # =================================================================================================
-  # Begin horizon mortgage pass-through analysis
-  # =================================================================================================
-  
-  HorizonCurve <- rates
-  HorizonCurve[1,1] <- as.character(as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
-  HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
-  
-  
-  HorizonTermStructure <- TermStructure(rates.data = HorizonCurve,
-                                        method = "ns")
-  
-  
-  ForwardPassThrough(bond.id = bond.id,
-                     original.bal = original.bal,
-                     projected.cashflow = MortgageCashFlow,
-                     horizon.months = horizon.months)
-  
-  HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
-                              "/Temp_BondData/","TempPassThrough.rds", sep = ""))
-  
-  HorizonMBS <- readRDS(HorizonConn)
-  
-  HorizonPrepaymentAssumption <- PrepaymentModel(bond.id = HorizonMBS,
-                                                      TermStructure = HorizonTermStructure,
-                                                      MortgageRate = MortgageRate,
-                                                      ModelTune = ModelTune,
-                                                      Burnout = Burnout,
-                                                      PrepaymentAssumption = prepayment,
-                                                      Severity = 0)
-  
-  HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
-                                      original.bal = original.bal,
-                                      settlement.date = HorizonSettlement,
-                                      price = price,
-                                      PrepaymentAssumption = HorizonPrepaymentAssumption)
-
-  # =====================================================================================================
-  # This section begins the calculation of horizon total return
-  # Cashflow Received + Reinvestment Income + Present Value at Horizon
-  # =====================================================================================================
-  
-  NumberofCashFlow <- as.numeric(length(HorizonCashFlow@TotalCashFlow))
-  reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
-  
-  # ====================================================================================================
-  # Horizon present value of MBS pass through using spot spread, nominal spread or OAS
-  # use switch here to compute the horizon present value based and on either spot spread, nominal spread, 
-  # or horizon price. (At this time there is no OAS to price module)
-  # The functions Horizon.Spot.Value, Horizon.Nominal.Value, and Horizon.Price.Value are used to determine the
-  # present value of the remaining cash flows are the horizon date.  The switch function determines which
-  # function is called based on horizon.price.type
-  # ====================================================================================================
-  
-  Horizon.Spot.Value <- function(HorizonTermStructure = "character",
-                                 HorizonCashFlow = "character",
-                                 HorizonSpotSpread = numeric(),
-                                 NumberofCashFlow = numeric()){
-    DiscountRate <- 1/((1+((HorizonTermStructure@SpotRate[1:NumberofCashFlow] + 
-                              horizon.spot.spread)/monthly.yield.basis)) ^ 
-                         (HorizonTermStructure@Period[1:NumberofCashFlow]))
+                          settlement.date = "character",
+                          rates.data = "character",
+                          price = numeric(), 
+                          original.bal = numeric(),
+                          scenario = "character",
+                          horizon.months = numeric(),
+                          method = "character",
+                          prepayment = "character",
+                          ...,
+                          horizon.spot.spread = NULL,
+                          horizon.nominal.spread = NULL,
+                          horizon.OAS = NULL,
+                          horizon.price = NULL,
+                          begin.cpr = numeric(),
+                          end.cpr = numeric(),
+                          seasoning.period = numeric(),
+                          CPR = numeric()) { 
     
-    HorizonPresentValue <- DiscountRate[1:NumberofCashFlow] * HorizonCashFlow@TotalCashFlow
-    PresentValue <- sum(HorizonPresentValue)
-    return(PresentValue)}
-  
-  Horizon.Nominal.Value <- function(HorizonCurve = "character",
-                                    HorizonTermStructure = "character",
-                                    HorizonCashFlow = "character"){
-    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
-                                as.numeric(rates.data[2,2:12]),
-                              data = data.frame(HorizonCurve))
+    # =================================================================================================
+    # Mortgage Scenario analysis is done in two steps
+    # The first is calculated the expected cash-flows received over the investment horizon
+    # The second is to "roll" the pass through security forward and price the expected future cash-flows
+    # =================================================================================================
     
-    HorizonYield <- predict(InterpolateCurve, HorizonCashFlow@WAL) + horizon.nominal.spread
-    HorizonYield <- rep(HorizonYield, NumberofCashFlow)
-    DiscountRate <- 1/((1 + (HorizonYield/monthly.yield.basis))^
-                         (HorizonTermStructure@Period[1:NumberofCashFlow]))
-    HorizonPresentValue <- DiscountRate * HorizonCashFlow@TotalCashFlow
-    PresentValue <- sum(HorizonPresentValue)
-    return(PresentValue)}
-  
-  Horizon.Price.Value <- function(HorizonBond = "character",
-                                  HorizonPrice = numeric()){
-    original.bal * HorizonBond@MBSFactor * (HorizonPrice/price.basis)
+    if(is.null(horizon.spot.spread) != TRUE) {
+      horizon.price.type <- "spot"
+    } else if(is.null(horizon.nominal.spread) != TRUE) {
+      horizon.price.type <- "nominal"  
+    } else if(is.null(horizon.OAS) != TRUE) {
+      horizon.price.type <- "oas"  
+    } else {
+      horizon.price.type <- "price"
+    }
+    
+    
+    bond.id <- bond.id
+    MortgageRate <- MtgRate()
+    ModelTune <- ModelTune(bond.id = bond.id)
+    Burnout = bond.id@Burnout
+    Scenario <- ScenarioCall(Scenario = scenario)
+    rates <- rates.data
+    
+    rates[1,2:length(rates)] <- Scenario@Formula(rates[1,1:length(rates)], Shiftbps = Scenario@Shiftbps)
+    
+    TermStructure <- TermStructure(rates.data = rates, 
+                                   method = method)
+    
+    
+    Prepayment <- PrepaymentModel(bond.id = bond.id, 
+                                  MortgageRate = MortgageRate, 
+                                  TermStructure = TermStructure, 
+                                  PrepaymentAssumption = prepayment, 
+                                  ModelTune = ModelTune,
+                                  Severity = 0,
+                                  Burnout = Burnout, 
+                                  begin.cpr = begin.cpr, 
+                                  end.cpr = end.cpr, 
+                                  seasoning.period = seasoning.period, 
+                                  CPR = CPR)
+    
+    MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
+                                         original.bal = original.bal, 
+                                         settlement.date = settlement.date, 
+                                         price = price, 
+                                         PrepaymentAssumption = Prepayment)
+    
+    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ as.numeric(rates.data[2,2:12]), 
+                              data = data.frame(rates.data))  
+    
+    SpreadtoCurve <- (MortgageCashFlow@YieldToMaturity * yield.basis) - predict(InterpolateCurve, MortgageCashFlow@WAL)
+    
+    proceeds <- MortgageCashFlow@Accrued + (original.bal * bond.id@MBSFactor * (price/price.basis))
+    principal <- original.bal * bond.id@MBSFactor
+    
+    MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
+                                              original.bal = original.bal, 
+                                              Rate.Delta = rate.delta, 
+                                              TermStructure = TermStructure,
+                                              settlement.date = settlement.date, 
+                                              principal = principal, 
+                                              price = price, 
+                                              cashflow = MortgageCashFlow)
+    
+    # =================================================================================================
+    # Begin horizon mortgage pass-through analysis
+    # =================================================================================================
+    
+    HorizonCurve <- rates
+    HorizonCurve[1,1] <- as.character(as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
+    HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
+    
+    
+    HorizonTermStructure <- TermStructure(rates.data = HorizonCurve,
+                                          method = "ns")
+    
+    
+    ForwardPassThrough(bond.id = bond.id,
+                       original.bal = original.bal,
+                       projected.cashflow = MortgageCashFlow,
+                       horizon.months = horizon.months)
+    
+    HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
+                                "/Temp_BondData/","TempPassThrough.rds", sep = ""))
+    
+    HorizonMBS <- readRDS(HorizonConn)
+    
+    HorizonPrepaymentAssumption <- PrepaymentModel(bond.id = HorizonMBS,
+                                                   TermStructure = HorizonTermStructure,
+                                                   MortgageRate = MortgageRate,
+                                                   ModelTune = ModelTune,
+                                                   Burnout = Burnout,
+                                                   PrepaymentAssumption = prepayment,
+                                                   Severity = 0)
+    
+    HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
+                                        original.bal = original.bal,
+                                        settlement.date = HorizonSettlement,
+                                        price = price,
+                                        PrepaymentAssumption = HorizonPrepaymentAssumption)
+    
+    # =====================================================================================================
+    # This section begins the calculation of horizon total return
+    # Cashflow Received + Reinvestment Income + Present Value at Horizon
+    # =====================================================================================================
+    
+    NumberofCashFlow <- as.numeric(length(HorizonCashFlow@TotalCashFlow))
+    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
+    
+    # ====================================================================================================
+    # Horizon present value of MBS pass through using spot spread, nominal spread or OAS
+    # use switch here to compute the horizon present value based and on either spot spread, nominal spread, 
+    # or horizon price. (At this time there is no OAS to price module)
+    # The functions Horizon.Spot.Value, Horizon.Nominal.Value, and Horizon.Price.Value are used to determine the
+    # present value of the remaining cash flows are the horizon date.  The switch function determines which
+    # function is called based on horizon.price.type
+    # ====================================================================================================
+    
+    Horizon.Spot.Value <- function(HorizonTermStructure = "character",
+                                   HorizonCashFlow = "character",
+                                   HorizonSpotSpread = numeric(),
+                                   NumberofCashFlow = numeric()){
+      DiscountRate <- 1/((1+((HorizonTermStructure@SpotRate[1:NumberofCashFlow] + 
+                                horizon.spot.spread)/monthly.yield.basis)) ^ 
+                           (HorizonTermStructure@Period[1:NumberofCashFlow]))
+      
+      HorizonPresentValue <- DiscountRate[1:NumberofCashFlow] * HorizonCashFlow@TotalCashFlow
+      PresentValue <- sum(HorizonPresentValue)
+      return(PresentValue)}
+    
+    Horizon.Nominal.Value <- function(HorizonCurve = "character",
+                                      HorizonTermStructure = "character",
+                                      HorizonCashFlow = "character"){
+      InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
+                                  as.numeric(rates.data[2,2:12]),
+                                data = data.frame(HorizonCurve))
+      
+      HorizonYield <- predict(InterpolateCurve, HorizonCashFlow@WAL) + horizon.nominal.spread
+      HorizonYield <- rep(HorizonYield, NumberofCashFlow)
+      DiscountRate <- 1/((1 + (HorizonYield/monthly.yield.basis))^
+                           (HorizonTermStructure@Period[1:NumberofCashFlow]))
+      HorizonPresentValue <- DiscountRate * HorizonCashFlow@TotalCashFlow
+      PresentValue <- sum(HorizonPresentValue)
+      return(PresentValue)}
+    
+    Horizon.Price.Value <- function(HorizonBond = "character",
+                                    HorizonPrice = numeric()){
+      original.bal * HorizonBond@MBSFactor * (HorizonPrice/price.basis)
+    }
+    
+    
+    PresentValue <- switch(horizon.price.type,
+                           "spot" = Horizon.Spot.Value(HorizonTermStructure = HorizonTermStructure,
+                                                       HorizonCashFlow = HorizonCashFlow,
+                                                       HorizonSpotSpread = horizon.spot.spread,
+                                                       NumberofCashFlow = NumberofCashFlow),
+                           "nominal" = Horizon.Nominal.Value(HorizonCurve = HorizonCurve,
+                                                             HorizonTermStructure = HorizonTermStructure,
+                                                             HorizonCashFlow = HorizonCashFlow),
+                           "price" = Horizon.Price.Value(HorizonBond = HorizonMBS,
+                                                         HorizonPrice = horizon.price)
+    )
+    
+    HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
+      (PresentValue / (original.bal * HorizonMBS@MBSFactor)) * price.basis}
+    
+    HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
+                                        original.bal = original.bal,
+                                        settlement.date = HorizonSettlement,
+                                        price = HorizonPrice,
+                                        PrepaymentAssumption = HorizonPrepaymentAssumption)
+    
+    # ====================================================================================================
+    # Coupon Income
+    # ====================================================================================================
+    
+    CouponIncome <- sum(MortgageCashFlow@PassThroughInterest[1:horizon.months])
+    
+    # ====================================================================================================
+    # Reinvestment Income
+    # ====================================================================================================
+    ReceivedCashFlow <- MortgageCashFlow@TotalCashFlow[1:horizon.months]
+    
+    n.period <- as.numeric(difftime(as.Date(MortgageCashFlow@PmtDate[horizon.months]), 
+                                    as.Date(MortgageCashFlow@PmtDate[1:horizon.months]), units = "days")/days.in.month)
+    
+    TerminalValue <- ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
+    
+    # ==================================================================================================
+    # Principal Returned
+    # ==================================================================================================
+    
+    PrincipalRepaid <- sum(MortgageCashFlow@PrepaidPrin[1:horizon.months]) + 
+      sum(MortgageCashFlow@ScheduledPrin[1:horizon.months])
+    
+    HorizonValue <- CouponIncome + ReinvestmentIncome + PrincipalRepaid + PresentValue
+    HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
+    HorizonReturn <- (HorizonReturn - 1) * yield.basis
+    
+    new("MtgScenario",
+        Period = Period(MortgageCashFlow),
+        PmtDate = PmtDate(MortgageCashFlow),
+        TimePeriod = TimePeriod(MortgageCashFlow),
+        BeginningBal = BeginningBal(MortgageCashFlow),
+        PassThroughInterest = PassThroughInterest(MortgageCashFlow),
+        ScheduledPrin = ScheduledPrin(MortgageCashFlow),
+        PrepaidPrin = PrepaidPrin(MortgageCashFlow),
+        EndingBal = EndingBalance(MortgageCashFlow),
+        TotalCashFlow = TotalCashFlow(MortgageCashFlow),
+        SpotRate = SpotRate(TermStructure),
+        ForwardRate = ForwardRate(TermStructure),
+        SMM = SMM(Prepayment),
+        YieldToMaturity = YieldToMaturity(MortgageCashFlow),
+        WAL = WAL(MortgageCashFlow),
+        SpreadToInterCurve = SpreadtoCurve,
+        ModDuration = ModDuration(MortgageCashFlow),
+        Convexity = Convexity(MortgageCashFlow), 
+        EffDuration = EffDuration(MortgageTermStructure),
+        EffConvexity = EffConvexity(MortgageTermStructure),
+        KeyRateTenor = KeyRateTenor(MortgageTermStructure),
+        KeyRateDuration = KeyRateDuration(MortgageTermStructure),
+        KeyRateConvexity = KeyRateConvexity(MortgageTermStructure),
+        HorizonReturn = HorizonReturn,
+        HorizonMos = horizon.months,
+        Name = Name(Scenario),
+        Type = Type(Scenario),
+        Horizon = Horizon(Scenario),
+        ShiftType = ShiftType(Scenario),
+        Shiftbps = Shiftbps(Scenario),
+        Formula = ScenarioFormula(Scenario))        
   }
   
+   
   
-  PresentValue <- switch(horizon.price.type,
-                         "spot" = Horizon.Spot.Value(HorizonTermStructure = HorizonTermStructure,
-                                                     HorizonCashFlow = HorizonCashFlow,
-                                                     HorizonSpotSpread = horizon.spot.spread,
-                                                     NumberofCashFlow = NumberofCashFlow),
-                         "nominal" = Horizon.Nominal.Value(HorizonCurve = HorizonCurve,
-                                                           HorizonTermStructure = HorizonTermStructure,
-                                                           HorizonCashFlow = HorizonCashFlow),
-                         "price" = Horizon.Price.Value(HorizonBond = HorizonMBS,
-                                                       HorizonPrice = horizon.price)
-  )
   
-  HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
-    (PresentValue / (original.bal * HorizonMBS@MBSFactor)) * price.basis}
   
-  HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
-                                      original.bal = original.bal,
-                                      settlement.date = HorizonSettlement,
-                                      price = HorizonPrice,
-                                      PrepaymentAssumption = HorizonPrepaymentAssumption)
   
-  # ====================================================================================================
-  # Coupon Income
-  # ====================================================================================================
   
-  CouponIncome <- sum(MortgageCashFlow@PassThroughInterest[1:horizon.months])
   
-  # ====================================================================================================
-  # Reinvestment Income
-  # ====================================================================================================
-  ReceivedCashFlow <- MortgageCashFlow@TotalCashFlow[1:horizon.months]
-  
-  n.period <- as.numeric(difftime(as.Date(MortgageCashFlow@PmtDate[horizon.months]), 
-                                  as.Date(MortgageCashFlow@PmtDate[1:horizon.months]), units = "days")/days.in.month)
-  
-  TerminalValue <- ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
-  ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
-  
-  # ==================================================================================================
-  # Principal Returned
-  # ==================================================================================================
-  
-  PrincipalRepaid <- sum(MortgageCashFlow@PrepaidPrin[1:horizon.months]) + 
-    sum(MortgageCashFlow@ScheduledPrin[1:horizon.months])
-  
-  HorizonValue <- CouponIncome + ReinvestmentIncome + PrincipalRepaid + PresentValue
-  HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
-  HorizonReturn <- (HorizonReturn - 1) * yield.basis
-
-  new("Mtg.Scenario",
-      Period = Period(MortgageCashFlow),
-      PmtDate = PmtDate(MortgageCashFlow),
-      TimePeriod = TimePeriod(MortgageCashFlow),
-      BeginningBal = BeginningBal(MortgageCashFlow),
-      PassThroughInterest = PassThroughInterest(MortgageCashFlow),
-      ScheduledPrin = ScheduledPrin(MortgageCashFlow),
-      PrepaidPrin = PrepaidPrin(MortgageCashFlow),
-      EndingBal = EndingBalance(MortgageCashFlow),
-      TotalCashFlow = TotalCashFlow(MortgageCashFlow),
-      SpotRate = SpotRate(TermStructure),
-      ForwardRate = ForwardDate(TermStructure),
-      SMM = SMM(Prepayment),
-      YieldToMaturity = YieldToMaturity(MortgageCashFlow),
-      WAL = WAL(MortgageCashFlow),
-      SpreadToInterCurve = SpreadtoCurve,
-      ModDuration = ModDuration(MortgageCashFlow),
-      Convexity = Convexity(MortgageCashFlow), 
-      EffDuration = EffDuration(MortgageTermStructure),
-      EffConvexity = EffConvexity(MortgageTermStructure),
-      KeyRateTenor = KeyRateTenor(MortgageTermStructure),
-      KeyRateDuration = KeyRateDuration(MortgageTermStructure),
-      KeyRateConvexity = KeyRateConvexity(MortgageTermStructure),
-      HorizonReturn = HorizonReturn,
-      Name = Name(Scenario),
-      Type = Type(Scenario),
-      Horizon = horizon.months,
-      ShiftType = ShiftType(Scenario),
-      Shiftbps = Shiftbps(Scenario),
-      Formula = Formula(Scenario))        
-  }

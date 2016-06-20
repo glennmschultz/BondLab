@@ -7,7 +7,7 @@
 SpreadToInterCurve(object)
 }
 \arguments{
-\item{object}{An S4 object of type Mtg.Scenario}
+\item{object}{An S4 object of type MtgScenario}
 }
 \description{
 A standard generic function to access the slot SpreadToInterCurve

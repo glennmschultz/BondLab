@@ -2,7 +2,7 @@
 % Please edit documentation in R/ScenarioConstructor.R
 \name{MakeScenario}
 \alias{MakeScenario}
-\title{A constructor funtion of the class MakeScenario}
+\title{A constructor funtion of the class Scenario}
 \usage{
 MakeScenario(Name = "character", Type = "character",
   Horizon = "character", ShiftType = "character", Shiftbps = "numeric",

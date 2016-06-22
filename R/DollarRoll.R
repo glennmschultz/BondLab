@@ -5,9 +5,6 @@
   # mortgage backed, asset backed securities, and commerical mortgage backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
-
-
-
   setClass("DollarRoll",
          representation(
            SettlementDate = "character",

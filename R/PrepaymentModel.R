@@ -1,35 +1,37 @@
 
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
   #' @include PassThroughConstructor.R MortgageCashFlow.R
   NULL
 
-  #' A S4 Class to hold prepayment vectors which are passed to cash flow engines
+  #' A S4 Class prepayment vectors which are passed to cash flow engines
   #' 
-  #' The PrepaymentAssumption class is used to pass the prepayment information and
-  #' SMM vectors to the MortgageCashFlow engine.  It must be called in advance for
-  #' cash flow calculations.
-  #' @slot PrepaymentAssumption A character string the type of prepayment assumption
-  #' used this may be "CPR", "PPC", or "MODEL"
-  #' @slot PPCStart A numeric value the PPC starting CPR assumption.  This is populated when
-  #' PPC option is choosen
-  #' @slot PPCEnd A numeric value the PPC ending CPR assumption.  This is populated when
-  #' PPC option is choosen
-  #' @slot PPCSeasoning A numeric value the length of the PPC ramp.  This is populated when 
-  #' PPC option is choosen
+  #' The PrepaymentAssumption class is used to pass the prepayment information 
+  #' and SMM vectors to the MortgageCashFlow engine.  It must be called in 
+  #' advance for cash flow calculations.
+  #' @slot PrepaymentAssumption A character string the type of 
+  #' prepayment assumption used this may be "CPR", "PPC", or "MODEL"
+  #' @slot PPCStart A numeric value the PPC starting CPR assumption.
+  #' This is populated when PPC option is choosen
+  #' @slot PPCEnd A numeric value the PPC ending CPR assumption.
+  #' This is populated when PPC option is choosen
+  #' @slot PPCSeasoning A numeric value the length of the PPC ramp.
+  #' This is populated when PPC option is choosen
   #' @slot FirstPmtDate A character string the first payment date
-  #' @slot LastPmtDate A character string the date of the last payment received by the investor
-  #' @slot FinalPmtDate A character string the date of the final payment received 
-  #' by the investor
+  #' @slot LastPmtDate A character string the date of the last payment 
+  #' received by the investor
+  #' @slot FinalPmtDate A character string the date of the final payment 
+  #' received by the investor
   #' @slot PmtDate A character string the payment date
   #' @slot LoanAge A numeric vector the projected loan age at each payment date
   #' @slot Period A numeric vector the index of the payment periods
-  #' @slot NoteRate A numeric vector the projected note rate of the MBS pool or loan
+  #' @slot NoteRate A numeric vector the note rate of the MBS pool or loan
   #' @slot MtgRateFwd A numeric vector the projected forward mortgage rate.
-  #' @slot Incentive A numeric vector the projected incentive faced by the borrower.  
+  #' @slot Incentive A numeric vector the projected incentive (refinance).  
   #' The difference between the note rate and the prevailing mortgage rate
   #' @slot SMM A numeric vector the projected SMM (Single Monthly Mortality).  
   #' SMM is the measure of voluntary repayments 
@@ -279,10 +281,11 @@
   setMethod("Severity", signature("PrepaymentAssumption"),
             function(object){object@Severity}) 
   
-  #-----------------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
   # The Bond Lab base voluntary prepayment model
   # Tuning parameters are called from the PrepaymentModelTune Class
-  #-----------------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
+  
   Voluntary.Model <- function(ModelTune = "character",
                                LoanAge = vector(), 
                                Month = vector(), 
@@ -294,48 +297,53 @@
 
   Turnover.Rate <- 1-(1 - TurnoverRate(ModelTune))^(1/months.in.year)
   
-  SeasoningRamp <- SeasoningRamp(PPMFunctions)(alpha = TurnoverAlpha(ModelTune),
-                                                    beta = TurnoverBeta(ModelTune),
-                                                    theta = TurnoverTheta(ModelTune),
-                                                    LoanAge = LoanAge)
-  SeasonalFactor <- SeasonalFactors(PPMFunctions)(alpha = SeasonalityAlpha(ModelTune),
-                                                  theta = SeasonalityTheta(ModelTune),
-                                                  Month = Month)
+  SeasoningRamp <- SeasoningRamp(PPMFunctions)(
+    alpha = TurnoverAlpha(ModelTune),
+    beta = TurnoverBeta(ModelTune),
+    theta = TurnoverTheta(ModelTune),
+    LoanAge = LoanAge)
   
-  #Turnover <- Turnover.Rate * SeasoningRamp * SeasonalFactor
-  
-  # Calculate the Borrower Refinance Response
-  Fast <- ArcTanIncentive(PPMFunctions)(incentive = incentive,
-                                        theta1 = IncentiveFastThetaOne(ModelTune),
-                                        theta2 = IncentiveFastThetaTwo(ModelTune),
-                                        beta = IncentiveFastBeta(ModelTune),
-                                        location = IncentiveFastEta(ModelTune))
+  SeasonalFactor <- SeasonalFactors(PPMFunctions)(
+    alpha = SeasonalityAlpha(ModelTune),
+    theta = SeasonalityTheta(ModelTune),
+    Month = Month)
 
-  Slow <- ArcTanIncentive(PPMFunctions)(incentive = incentive, 
-                             theta1 = IncentiveSlowThetaOne(ModelTune), 
-                             theta2 = IncentiveSlowThetaTwo(ModelTune), 
-                             beta = IncentiveSlowBeta(ModelTune), 
-                             location = IncentiveSlowEta(ModelTune))
+  # Calculate the Borrower Refinance Response
+  Fast <- ArcTanIncentive(PPMFunctions)(
+    incentive = incentive,
+    theta1 = IncentiveFastThetaOne(ModelTune),
+    theta2 = IncentiveFastThetaTwo(ModelTune),
+    beta = IncentiveFastBeta(ModelTune),
+    location = IncentiveFastEta(ModelTune))
+
+  Slow <- ArcTanIncentive(PPMFunctions)(
+    incentive = incentive,
+    theta1 = IncentiveSlowThetaOne(ModelTune),
+    theta2 = IncentiveSlowThetaTwo(ModelTune),
+    beta = IncentiveSlowBeta(ModelTune),
+    location = IncentiveSlowEta(ModelTune))
   
-  Burnout <- BorrowerBurnout(PPMFunctions)(beta1 = BurnoutBetaOne(ModelTune), 
-                    beta2 = BurnoutBetaTwo(ModelTune), 
-                    MaxIncen = Burnout.maxincen, 
-                    LoanAge = LoanAge)
-  
-  
+  Burnout <- BorrowerBurnout(PPMFunctions)(
+    beta1 = BurnoutBetaOne(ModelTune), 
+    beta2 = BurnoutBetaTwo(ModelTune), 
+    MaxIncen = Burnout.maxincen, 
+    LoanAge = LoanAge)
+
   Refinance <- (log(Fast) * Burnout) + (log(Slow) * (1-Burnout))
   SeasoningRamp = log(SeasoningRamp)
   SeasonalFactor = log(SeasonalFactor)
   Curtailment = log(Curtailment(PPMFunctions)(LoanAge = LoanAge))
   
-  SMM = Turnover.Rate * exp(Refinance + SeasoningRamp + SeasonalFactor + Curtailment) 
+  SMM = Turnover.Rate * 
+    exp(Refinance + SeasoningRamp + SeasonalFactor + Curtailment)
   }
 
 
-  #-------------------------------------------------------------------------------
+  #----------------------------------------------------------------------------
   #Bond Lab base default model
-  #The default model tuning parameters are called from the prepayment model tune class
-  #-------------------------------------------------------------------------------
+  #The default model tuning parameters are called from the prepayment 
+  #model tune class
+  #----------------------------------------------------------------------------
   Default.Model <- function(ModelTune = "character",
                             OrigLoanBalance = numeric(),
                             NoteRate = numeric(),
@@ -348,22 +356,20 @@
     
     PPMFunctions <- ModelFunctions()
   
-    # This function returns the amortization vector of a mortgage it is 
-    # exact for a fixed rate mortage but only an estimate of the vector 
-    # for an adjustable rate mortage sufficent for updated LTV due to amortization.
+  # This function returns the amortization vector of a mortgage it is 
+  # exact for a fixed rate mortage but only an estimate of the vector 
+  # for an adjustable rate mortage sufficent for updated LTV due to amortization.
     
-    AmortizationBalance = function(OrigLoanBalance = numeric(), 
-                                   NoteRate = numeric(), 
-                                   TermMos = numeric(), 
+    AmortizationBalance = function(OrigLoanBalance = numeric(),
+                                   NoteRate = numeric(),
+                                   TermMos = numeric(),
                                    LoanAge = numeric()){
     NoteRate = NoteRate/(months.in.year * yield.basis)
     Term = TermMos
     Remain.Balance = OrigLoanBalance * 
       (((1+NoteRate)^Term - ((1+NoteRate)^LoanAge))/(((1+NoteRate)^Term)-1))
     }
-    
-    
-          Default <-  DefaultRamp(PPMFunctions)(BeginCDR = BeginCDR(ModelTune),
+  Default <-  DefaultRamp(PPMFunctions)(BeginCDR = BeginCDR(ModelTune),
                                   PeakCDR = PeakCDR(ModelTune),
                                   EndCDR = EndCDR(ModelTune),
                                   PeakMonth = PeakMonth(ModelTune),
@@ -371,57 +377,64 @@
                                   EndMonth = EndMonth(ModelTune),
                                   LoanAge = LoanAge)
    
-    #--------------------------------------------------------------------------
-    #convert to a monthly default rate (hazard) before applying default multipliers
-    #--------------------------------------------------------------------------
+  #--------------------------------------------------------------------------
+  #convert to a monthly default rate before applying default multipliers
+  #--------------------------------------------------------------------------
     
-    #----------------------------Calculate Updated LTV ------------------------
-    EstimatedSalePrice <- OrigLoanBalance/(OrigLTV/ltv.basis)
-    ScheduledBalance <- AmortizationBalance(OrigLoanBalance = OrigLoanBalance,
+  #----------------------------Calculate Updated LTV ------------------------
+  EstimatedSalePrice <- OrigLoanBalance/(OrigLTV/ltv.basis)
+  ScheduledBalance <- AmortizationBalance(OrigLoanBalance = OrigLoanBalance,
                                             NoteRate = NoteRate,
                                             TermMos = Term,
                                             LoanAge = LoanAge)
    
-    if(is.null(HomePrice) == TRUE) {UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * price.basis
-    } else {UpdatedLTV = (ScheduledBalance / (EstimatedSalePrice * HomePrice)) * price.basis}
+  if(is.null(HomePrice) == TRUE) 
+    {UpdatedLTV = (ScheduledBalance / EstimatedSalePrice) * price.basis
+  } else {UpdatedLTV = (ScheduledBalance / (EstimatedSalePrice * HomePrice)) *
+      price.basis}
     
-    Monthly.Default <- 1-(1 - (Default/PSA.basis))^(1/months.in.year)
+  Monthly.Default <- 1-(1 - (Default/PSA.basis))^(1/months.in.year)
   
-    OrigCoeff <- DefaultOrigLTVMult(PPMFunctions)(OrigLTV = OrigLTV,
-                                                  MinOLTV = MinOrigLTV(ModelTune),
-                                                  MaxOLTV = MaxOrigLTV(ModelTune),
-                                                  MinOrigMultiplier= MinOrigMultiplier(ModelTune),
-                                                  MaxOrigMultiplier = MaxOrigMultiplier(ModelTune))
+  OrigCoeff <- DefaultOrigLTVMult(PPMFunctions)(
+    OrigLTV = OrigLTV,
+    MinOLTV = MinOrigLTV(ModelTune),
+    MaxOLTV = MaxOrigLTV(ModelTune),
+    MinOrigMultiplier= MinOrigMultiplier(ModelTune),
+    MaxOrigMultiplier = MaxOrigMultiplier(ModelTune))
 
-    
-    UpdatedCoeff <- DefaultUpdatedLTVMult(PPMFunctions)(beta = UpdatedLTVBeta(ModelTune), 
-                                          OrigLTV = OrigLTV,
-                                          ULTV = UpdatedLTV)
-           
-    SATOCoeff <- DefaultSATOMult(PPMFunctions)(beta = SATOBeta(ModelTune), 
-                                               SATO = SATO)
+    UpdatedCoeff <- 
+      DefaultUpdatedLTVMult(PPMFunctions)(
+        beta = UpdatedLTVBeta(ModelTune), 
+         OrigLTV = OrigLTV,
+         ULTV = UpdatedLTV)
 
-    
+    SATOCoeff <- DefaultSATOMult(PPMFunctions)(
+      beta = SATOBeta(ModelTune),
+      SATO = SATO)
+
     Multiplier = log(OrigCoeff) + log(SATOCoeff) + log(UpdatedCoeff)
 
-
-    MDR = pmin(1, Monthly.Default * exp(Multiplier))
+    MDR = pmax(0, Monthly.Default * exp(Multiplier))
     return(MDR)}
   
-  # ----------------------------------------------------------------------------
+  # --------------------------------------------------------------------------
   #This section begins the bond lab prepayment model
   #The constructor for the prepayment model vector starts below
-  # ----------------------------------------------------------------------------
+  # --------------------------------------------------------------------------
   #' A contstructor function for the PrepaymentAssumption object
   #' 
   #' The function is a constructor function for the PrepaymentAssumption object
-  #' @param bond.id A character string referring to an object of the type MBSDetails
-  #' @param TermStructure A character string referring to an object of the type TermStructure
-  #' @param MortgageRate A character string the input value of mortgagerate.rds.  Prepayment Assumption does
+  #' @param bond.id A character string referring to an object 
+  #' of the type MBSDetails
+  #' @param TermStructure A character string referring to an object 
+  #' of the type TermStructure
+  #' @param MortgageRate A character string the input value of 
+  #' mortgagerate.rds.  Prepayment Assumption does not
   #' open Mtg.Rate connection directly rather takes the argument as an object.
   #' @param ModelTune A character string the prepayment model tune object
   #' @param Burnout A numeric value the burnout variable
-  #' @param PrepaymentAssumption A character string the prepayment assumption used "MODEL", "PPC", or "CPR"
+  #' @param PrepaymentAssumption A character string the prepayment assumption 
+  #' used "MODEL", "PPC", or "CPR"
   #' @param ... Optional values when "PPC" or "CPR" is used
   #' @param begin.cpr A numeric value the beginning CPR assumption
   #' @param end.cpr A numeric value the ending CPR assumption
@@ -446,19 +459,22 @@
                               HomePrice = NULL,
                               Severity = 0){
   
-  # Severity is optional value passed to the model the default is 35%.  Should build a severity
-  # model class like mortgage rate and scenario for severity.
-  # Mortgage Rate is the call the to MortgageRDS.rds in the Prepayment Model folder.  
-  # Prepayment Assumption does not open a connection
-  # to the MortgageRate.rds it must be open by the function that is calling Prepayment Model
+  # Severity is optional value passed to the model the default is 35%.  
+  # Should build a severity model class like mortgage rate and scenario for 
+  # severity. Mortgage Rate is the call the to MortgageRDS.rds in the 
+  # Prepayment Model folder. Prepayment Assumption does not open a connection
+  # to the MortgageRate.rds it must be open by the function that is calling 
+  # Prepayment Model
     
   #Check for a valid prepayment assumption
-  if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop("Not a Valid Prepayment Assumption")
+  if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop
+    ("Not a Valid Prepayment Assumption")
   PrepaymentAssumption <- PrepaymentAssumption    
   
   #Error Trap the CPR assumption
-  if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/PSA.basis} else {CPR = CPR}
-  #PPC function has error trapping feature so there is no need to error trap for PPC
+  if(PrepaymentAssumption == "CPR") if(CPR >=1) {CPR = CPR/PSA.basis
+  } else {CPR = CPR}
+  # Need Error trap for PPC inputs
   
   NoteRate = GWac(bond.id)
   sato = SATO(bond.id)
@@ -472,94 +488,111 @@
   NextPmtDate = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
   WALA = as.numeric(WALA(bond.id))
   
-  col.names <- c("Period", "PmtDate", "LoanAge", "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
+  col.names <- c("Period", "PmtDate", "LoanAge", 
+                 "TwoYearFwd", "TenYearFwd", "MtgRateFwd", "SMM")
   
-  # Here Mtg.Term is the term of the pass-through and may differ from the actual amortozation term
-  # reported in the MBS details because loans as typicall seasoned a few months before pooling
-  # note LoanAge is subtracted by 1 since the WALA is reported for the factor date WALA which is one
-  # month behind the current month
+  # Here Mtg.Term is the term of the pass-through and may differ 
+  # from the actual amortozation term
+  # reported in the MBS details because loans as typicall seasoned a 
+  # few months before pooling
+  # note LoanAge is subtracted by 1 since the WALA is reported for the 
+  # factor date WALA which is one month behind the current month
   
-  Mtg.Term = as.integer(difftime(FinalPmtDate, FirstPmtDate, units = "days")/days.in.month) + 1
-  Remain.Term = as.integer(difftime(FinalPmtDate, LastPmtDate, units = "days")/days.in.month) + 1
+  Mtg.Term = as.integer(difftime(FinalPmtDate,
+                            FirstPmtDate, units = "days")/days.in.month) + 1
+  
+  Remain.Term = as.integer(difftime(FinalPmtDate,
+                              LastPmtDate, units = "days")/days.in.month) + 1
+  
   Period = seq(from = 1, to = Remain.Term, by = 1)
-  PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1, by = 1)) 
-  LoanAge = as.integer(difftime(as.Date(NextPmtDate)  %m+% months(seq(from = 1, to = Remain.Term, by = 1)),
-                                as.Date(FirstPmtDate), units = "days")/days.in.month) - 1
+  
+  PmtDate = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = Remain.Term-1,
+                                                  by = 1)) 
+  
+  LoanAge = as.integer(difftime(as.Date(NextPmtDate) %m+% 
+              months(seq(from = 1, to = Remain.Term, by = 1)),
+               as.Date(FirstPmtDate), units = "days")/days.in.month) - 1
 
   NoteRate =  as.numeric(rep(NoteRate, length(LoanAge)))
   sato = as.numeric(rep(sato, length(LoanAge)))
   
-  Mtg.Rate <- function(TermStructure = "character", 
-                       type = "character", 
-                       term = numeric()) {
-    if(term >= 25) {term = as.character(30)
-    } else {term = as.character(15)}
-    switch( type, 
+  Mtg.Rate <- function(TermStructure = "character",
+                       type = "character",
+                       term = numeric()){
+    term = as.character(term)
+    switch( type,
             fixed = switch(term,
-                           "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
-                                                    ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
-                                                    sato = sato),
-                           "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)], 
-                                                    ten = TermStructure@TenYearFwd[1:length(LoanAge)], 
-                                                    sato = sato)
+  "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
+                           ten = TermStructure@TenYearFwd[1:length(LoanAge)],
+                           sato = sato),
+  "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
+                           ten = TermStructure@TenYearFwd[1:length(LoanAge)],
+                           sato = sato)
             ), # end first nested switch statement
             arm = switch(term, 
-                         "30" = 0 ) # end second nested switch statement
+                         "30" = 0) # end second nested switch statement
     ) # end of "n" the switch logic
     
   }
-  
+
   Mtg.Rate <- Mtg.Rate(TermStructure = TermStructure, 
                        type = AmortizationType, 
                        term = AmortizationTerm)
   
   Mtg.Rate <- Mtg.Rate[1:length(LoanAge)] 
   #Length of mortgage rate is set to loan age vector.
-  #This is why I need to make class classflow array maybe l- or sapply works here
+  #This is why I need to make class classflow array 
+  #maybe l- or sapply works here
   
   Incentive =  as.numeric(NoteRate - Mtg.Rate)
+  Incentive <- ifelse(Incentive <= -4 , 
+                      pmax(-4, Incentive), 
+                      ifelse(Incentive >= 4, pmin(4, Incentive), Incentive))
+
   Burnout = pmax(bond.id@Burnout,(Incentive * yield.basis)-(sato * yield.basis))
   
   if(PrepaymentAssumption == "MODEL")
-  {SMM = Voluntary.Model(ModelTune = ModelTune, 
-                         LoanAge = LoanAge, 
-                         Month = as.numeric(format(PmtDate, "%m")), 
-                         incentive = Incentive, 
-                         Burnout.maxincen = Burnout)
+  {SMM = round(Voluntary.Model(ModelTune = ModelTune,
+                         LoanAge = LoanAge,
+                         Month = as.numeric(format(PmtDate, "%m")),
+                         incentive = Incentive,
+                         Burnout.maxincen = Burnout),8)
   Severity = rep(Severity, Remain.Term)
   } 
   else
   {if(PrepaymentAssumption == "PPC") 
-  {SMM = as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr, 
-                                  end.cpr = end.cpr, 
-                                  season.period = seasoning.period, 
-                                  period = LoanAge))^(1/months.in.year))
+  {SMM = round(as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr,
+                                  end.cpr = end.cpr,
+                                  season.period = seasoning.period,
+                                  period = LoanAge))^(1/months.in.year)),8)
   Severity = rep(Severity, Remain.Term)
   } 
   else
-  {SMM = rep(1-(1-CPR)^(1/12), Remain.Term)}
+  {SMM = round(rep(1-(1-CPR)^(1/12), Remain.Term),8)}
   Severity = rep(Severity, Remain.Term)
   }
   
   
   # this condition sets default to zero when the prepayment model is not used 
   # it allows for standard PPC and CPR assumptions
-  if(PrepaymentAssumption != "MODEL"){MDR <- rep(CDR.To.MDR(CDR = CDR), Remain.Term)} else
-                        {MDR <- Default.Model(ModelTune = ModelTune,
-                        OrigLoanBalance = OriginalLoanBalance,
-                        NoteRate = NoteRate,
-                        Term = AmortizationTerm * months.in.year,
-                        OrigLTV = OrigLTV, 
-                        SATO = sato,  
-                        LoanAge = LoanAge,
-                       ...,
-                       HomePrice = HomePrice)}
+  if(PrepaymentAssumption != "MODEL"){
+    MDR <- round(rep(CDR.To.MDR(CDR = CDR), Remain.Term),8)} else {
+      MDR <- round(Default.Model(ModelTune = ModelTune,
+                           OrigLoanBalance = OriginalLoanBalance,
+                           NoteRate = NoteRate,
+                           Term = AmortizationTerm * months.in.year,
+                           OrigLTV = OrigLTV,
+                           SATO = sato,
+                           LoanAge = LoanAge,
+                           ...,
+                           HomePrice = HomePrice),8)}
 
   new("PrepaymentAssumption",
       PrepaymentAssumption = as.character(PrepaymentAssumption),
       PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
       PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
-      PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period} else {0},
+      PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period
+        } else {0},
       NoteRate = as.numeric(NoteRate),
       FirstPmtDate = as.character(FirstPmtDate),
       LastPmtDate = as.character(LastPmtDate),

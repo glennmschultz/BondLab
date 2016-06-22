@@ -89,7 +89,21 @@
       MtgRate <- readRDS(MtgRate.Conn)
       on.exit(close.connection(MtgRate.Conn))
       return(MtgRate)
-    }
+   }
+   
+   #' A connection function to the horzon MBS pass-though object
+   #' 
+   #' A read connection function to the horizon MBS details.  No inputs are required
+   #' @examples 
+   #' \dontrun{
+   #' HorizonMBS()}
+   #' @export
+   HorizonMBS <- function(){HorizonConn <- gzfile(paste(system.file(package = "BondLab"),
+                                                        "/Temp_BondData/","TempPassThrough.rds", sep = ""))
+   
+   HorizonMBS <- readRDS(HorizonConn)
+   on.exit(close.connection(HorizonConn))
+   return(HorizonMBS)}
  
    #----------------------------------------------------------------------------------
    #' Function to calculate the updated loan to value

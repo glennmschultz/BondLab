@@ -1,7 +1,8 @@
 
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # mortgage backed, asset backed securities, and commerical 
+  # mortgage backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
 
@@ -49,37 +50,44 @@
     
     # then compute the payment dates
     pmtdate = as.Date(c(if(settlement.date == issue.date) 
-    {seq(start.date + delay, end.date + delay, by = paste(pmtdate.interval, "months"))
-    } else {seq(nextpmt.date + delay, end.date + delay, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
+    {seq(start.date + delay, end.date + delay, 
+         by = paste(pmtdate.interval, "months"))
+    } else {seq(nextpmt.date + delay, end.date + delay, 
+                by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
   
-    #  Validate the coupon and note rate passed through the error trapping function
-    #  This validates that the correct unit is passed into the Bond Cash Flow function
-    if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
-    if(note.rate > 1) {note.rate = note.rate/yield.basis} else {note.rate = note.rate}
+  #  Validate the coupon and note rate passed through the error 
+  #  trapping function This validates that the correct unit is 
+  #  passed into the Bond Cash Flow function
+  if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
+  if(note.rate > 1) {note.rate = note.rate/yield.basis
+  } else {note.rate = note.rate}
     
     # Build the time period vector (n) for discounting the cashflows 
     # nextpmt date is vector of payment dates to n for each period.  
     # need TBA versus T + 3 settlement date logic
     # if T + 3 then settlement date is equal to settlement date
-    time.period = BondBasisConversion(issue.date = issue.date, 
-                                    start.date = start.date, 
-                                    end.date = end.date, 
+    time.period = BondBasisConversion(issue.date = issue.date,
+                                    start.date = start.date,
+                                    end.date = end.date,
                                     settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, 
+                                    lastpmt.date = lastpmt.date,
                                     nextpmt.date = pmtdate,
                                     type = bondbasis)
     
     # step5 calculate accrued interest for the period this is also
     # the remain time period used to adjust the period vector 
-    days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
-                                           start.date = start.date, 
-                                           end.date = end.date, 
-                                           settlement.date = settlement.date,
-                                           lastpmt.date = lastpmt.date,
-                                           nextpmt.date = nextpmt.date,
-                                           type = bondbasis)) * days.in.year.360
+    days.to.nextpmt = (BondBasisConversion(
+      issue.date = issue.date,
+      start.date = start.date,
+      end.date = end.date,
+      settlement.date = settlement.date,
+      lastpmt.date = lastpmt.date,
+      nextpmt.date = nextpmt.date,
+      type = bondbasis)) * days.in.year.360
     
-    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
+    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * 
+      days.in.year.360
+    
     days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
     remain.period = days.of.accrued/days.in.year.360
     
@@ -116,39 +124,53 @@
                           c(num.periods, 23), 
                           dimnames = list(seq(c(1:num.periods)),col.names))  
   
-    for(x in 1:num.periods){
-      MBS.CF.Table[x,"Period"] = x
-      MBS.CF.Table[x,"Date"] = pmtdate[x] 
-      MBS.CF.Table[x,"Time"] = time.period[x]
-      if (MBS.CF.Table[x,"Period"] == 1) {MBS.CF.Table[x,"Begin Bal"] = principal
-      } else {MBS.CF.Table[x,"Begin Bal"] = MBS.CF.Table[x-1,"Ending Bal"]}
-
-      MBS.CF.Table[x,"Monthly Pmt"] = Mortgage.Monthly.Payment(orig.bal = MBS.CF.Table[x,"Begin Bal"], 
-                                                               note.rate = note.rate, term.mos = (num.periods - MBS.CF.Table[x,"Period"] + 1))
-      MBS.CF.Table[x,"Scheduled Int"] = MBS.CF.Table[x,"Begin Bal"] * (note.rate/months.in.year)
-      MBS.CF.Table[x,"Scheduled Prin"] = Sched.Prin(balance = MBS.CF.Table[x,"Begin Bal"], note.rate = note.rate, 
-                                                    term.mos = (num.periods - MBS.CF.Table[x,"Period"] + 1), period = 1)
+  for(x in 1:num.periods){
+    MBS.CF.Table[x,"Period"] = x
+    MBS.CF.Table[x,"Date"] = pmtdate[x]
+    MBS.CF.Table[x,"Time"] = time.period[x]
+    if (MBS.CF.Table[x,"Period"] == 1) {MBS.CF.Table[x,"Begin Bal"] = principal
+    } else {MBS.CF.Table[x,"Begin Bal"] = MBS.CF.Table[x-1,"Ending Bal"]}
+    MBS.CF.Table[x,"Monthly Pmt"] = 
+      Mortgage.Monthly.Payment(orig.bal = MBS.CF.Table[x,"Begin Bal"],
+              note.rate = note.rate,
+              term.mos = (num.periods - MBS.CF.Table[x,"Period"] + 1))
+    MBS.CF.Table[x,"Scheduled Int"] = 
+      MBS.CF.Table[x,"Begin Bal"] * (note.rate/months.in.year)
+    MBS.CF.Table[x,"Scheduled Prin"] =
+      Sched.Prin(balance = MBS.CF.Table[x,"Begin Bal"],
+                 note.rate = note.rate,
+                 term.mos = (num.periods - MBS.CF.Table[x,"Period"] + 1), 
+                 period = 1)
+    if(x != num.periods) {MBS.CF.Table[x,"Prepaid Prin"] = 
+      PrepaymentAssumption@SMM[x] * (MBS.CF.Table[x,"Begin Bal"] - 
+                                       MBS.CF.Table[x,"Scheduled Prin"])
+    } else {MBS.CF.Table[x,"Prepaid Prin"] = 0}
       
-      if(x != num.periods) {MBS.CF.Table[x,"Prepaid Prin"] = PrepaymentAssumption@SMM[x] * (MBS.CF.Table[x,"Begin Bal"] - MBS.CF.Table[x,"Scheduled Prin"])
-      } else {MBS.CF.Table[x,"Prepaid Prin"] = 0}
-      
-      if(x!= num.periods) {MBS.CF.Table[x,"Defaulted Prin"] = PrepaymentAssumption@MDR[x] * MBS.CF.Table[x,"Begin Bal"]
+    if(x!= num.periods) {MBS.CF.Table[x,"Defaulted Prin"] = 
+      PrepaymentAssumption@MDR[x] * MBS.CF.Table[x,"Begin Bal"]
       } else {MBS.CF.Table[x,"Defaulted Prin"] = 0}
       
-      MBS.CF.Table[x,"Loss Amount"] = MBS.CF.Table[x,"Defaulted Prin"] * PrepaymentAssumption@Severity[x]
+    MBS.CF.Table[x,"Loss Amount"] = MBS.CF.Table[x,"Defaulted Prin"] *
+      PrepaymentAssumption@Severity[x]
       
-      MBS.CF.Table[x,"Recovered Amount"] = MBS.CF.Table[x,"Defaulted Prin"] - MBS.CF.Table[x,"Loss Amount"]
-      
-      MBS.CF.Table[x,"Ending Bal"] = MBS.CF.Table[x,"Begin Bal"] - (MBS.CF.Table[x,"Scheduled Prin"] + MBS.CF.Table[x,"Prepaid Prin"] + MBS.CF.Table[x,"Defaulted Prin"])
-      MBS.CF.Table[x,"Servicing"] = MBS.CF.Table[x,"Begin Bal"] * (servicing.fee/monthly.yield.basis)
-      MBS.CF.Table[x,"PMI"] = MBS.CF.Table[x,"Begin Bal"] * (pmi/monthly.yield.basis)
-      MBS.CF.Table[x,"GFee"] = MBS.CF.Table[x,"Begin Bal"] * (g.fee/monthly.yield.basis)
-      MBS.CF.Table[x,"Pass Through Interest"] = MBS.CF.Table[x,"Begin Bal"] * (coupon/months.in.year)
-      MBS.CF.Table[x,"Investor CashFlow"] = MBS.CF.Table[x,"Scheduled Prin"] + MBS.CF.Table[x,"Prepaid Prin"] + 
-      MBS.CF.Table[x,"Recovered Amount"] + MBS.CF.Table[x,"Pass Through Interest"]
-    }
+    MBS.CF.Table[x,"Recovered Amount"] = MBS.CF.Table[x,"Defaulted Prin"] -
+      MBS.CF.Table[x,"Loss Amount"]
     
-    
+   MBS.CF.Table[x,"Ending Bal"] = MBS.CF.Table[x,"Begin Bal"] -
+     (MBS.CF.Table[x,"Scheduled Prin"] + MBS.CF.Table[x,"Prepaid Prin"] +
+        MBS.CF.Table[x,"Defaulted Prin"])
+  MBS.CF.Table[x,"Servicing"] = MBS.CF.Table[x,"Begin Bal"] *
+    (servicing.fee/monthly.yield.basis)
+  MBS.CF.Table[x,"PMI"] = MBS.CF.Table[x,"Begin Bal"] * 
+    (pmi/monthly.yield.basis)
+  MBS.CF.Table[x,"GFee"] = MBS.CF.Table[x,"Begin Bal"] * 
+    (g.fee/monthly.yield.basis)
+  MBS.CF.Table[x,"Pass Through Interest"] = MBS.CF.Table[x,"Begin Bal"] * 
+    (coupon/months.in.year)
+  MBS.CF.Table[x,"Investor CashFlow"] = MBS.CF.Table[x,"Scheduled Prin"] + 
+    MBS.CF.Table[x,"Prepaid Prin"] + 
+  MBS.CF.Table[x,"Recovered Amount"] + MBS.CF.Table[x,"Pass Through Interest"]
+  }
     return(MBS.CF.Table)
 }
 

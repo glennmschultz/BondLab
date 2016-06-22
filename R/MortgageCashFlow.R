@@ -1,13 +1,15 @@
   
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
-  # The following script analyzes a pass-through security.  To create the script 
-  # the standard procedure is followed set class, set generics, set methods, functions
-  # the generics and methods are getters for the class MortgageCashFlow and the initialize
-  # method for the class.  This class is a subclass of the following: (document the superclasses)
+  # The following script analyzes a pass-through security.  
+  # To create the script the standard procedure is followed set class, 
+  # set generics, set methods, functions the generics and methods are getters 
+  # for the class MortgageCashFlow and the initialize method for the class.  
+  # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
   #' @include PassThroughConstructor.R
@@ -23,15 +25,15 @@
   #' @slot ModDuration A numeric value the Modified Duration pass-through.
   #' @slot Convexity A numeric value the Convexity of the pass-through.
   #' @slot Period A numeric value the period in which the cash-flow is received.
-  #' @slot PmtDate A character string the date in which the cash-flow is received.
-  #' @slot TimePeriod A numeric value the time weight to apply to the principal cash-flow
-  #' and discount factors.
+  #' @slot PmtDate A character the date in which the cash-flow is received.
+  #' @slot TimePeriod A numeric value the time weight applied to 
+  #' the principal cash-flow and discount factors.
   #' @slot BeginningBal A numeric value the Beginning Balance in the period.
   #' @slot MonthlyPmt A numeric value the borrower's monthly payment.
   #' @slot MonthlyInterest A numeric value the borrower's monthly interest.
   #' @slot PassThroughInterest A numeric value the pass-through interest paid
   #' to the investor in the pool.
-  #' @slot ScheduledPrin A numeric value the scheduled principal due in the period.
+  #' @slot ScheduledPrin A numeric value scheduled principal due in the period.
   #' @slot PrepaidPrin A numeric value the prepaid principal in the period.
   #' @slot DefaultedPrin A numeric value the default principal in the period.
   #' @slot LossAmount A numeric value the loss amount in the period.
@@ -209,7 +211,8 @@
   setGeneric("TotalCashFlow", function(object)
     {standardGeneric("TotalCashFlow")})
   
-  #Note: generic for FirstPrinPaymentDate is defined in PassThroughConstructor.R
+  # Note: generic for FirstPrinPaymentDate is 
+  # defined in PassThroughConstructor.R
   
   setMethod("initialize",
           signature("MortgageCashFlow"),
@@ -411,19 +414,25 @@
   
   #'  A function to compute the cash flow of a pool of securitized mortgages
   #' 
-  #' This is a generic function used to construct the class object MortgageCashFlow.
-  #' For this function to work properly the classes MBSDetails and PrepaymentAssumption.
-  #' must be present and loaded into the local environment.
+  #' This is a generic function used to construct the class 
+  #' object MortgageCashFlow. For this function to work properly the classes 
+  #' MBSDetails and PrepaymentAssumption. must be present and loaded into 
+  #' the local environment.
   #' @param bond.id A character string referencing the object MBSDetails.
   #' @param original.bal The original balance of the MBS pool.
   #' @param settlement.date The settlment date of the MBS trade.
   #' For example $102 is input as 102.00 not 1.02.
-  #' @param price A numeric value the price traded.  Price is input as a whole number.
-  #' @param PrepaymentAssumption A character string referencing the class object.
+  #' @param price A numeric value the price traded.  Price is input as a 
+  #' whole number.
+  #' @param PrepaymentAssumption A character string referencing the 
+  #' class object.
   #' @examples
   #' \dontrun{
-  #' MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
-  #' settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
+  #' MortgageCashFlow(bond.id = "bondlabMBS4", 
+  #' original.bal = 1000000000,
+  #' settlement.date = "01-13-2013", 
+  #' price = 104.00, 
+  #' PrepaymentAssumption = "Prepayment")}
   #' @export MortgageCashFlow
   MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 
@@ -480,6 +489,7 @@
                                 principal = AdjPrincipal,
                                 PrepaymentAssumption = PrepaymentAssumption)
 
+
   #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
                                          start.date = start.date, 
@@ -489,12 +499,16 @@
                                          nextpmt.date = nextpmt.date,
                                          type = bondbasis)) * days.in.year.360
   
-  days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
+  days.between.pmtdate = 
+    ((months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * ((coupon/yield.basis)/frequency) * principal
+  accrued.interest = (days.of.accrued/days.between.pmtdate) * 
+  ((coupon/yield.basis)/frequency) * principal
  
-  # Step6 solve for yield to maturity given the price of the bond.  irr is an internal function used to solve for yield to maturity
-  # it is internal so that the bond's yield to maturity is not passed to a global variable that may inadvertantly use the value
+  # Step6 solve for yield to maturity given the price of the bond.  
+  # irr is an internal function used to solve for yield to maturity
+  # it is internal so that the bond's yield to maturity is not passed to a 
+  # global variable that may inadvertantly use the value
 
   irr <- function(rate, 
                   time.period, 
@@ -509,38 +523,53 @@
   
   
   # note: create an XIRR type function to replace uniroot
-  ytm = try(uniroot(irr, 
-                  interval = c(lower = -.75, upper = .75), 
-                  tol = tolerance, 
-                  time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
-                  cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
-                  principal = AdjPrincipal, 
-                  price = price, 
-                  accrued.interest = accrued.interest)$root)
+  ytm = try(
+    uniroot(irr,
+          interval = c(lower = -.75, upper = .75),
+          tol = tolerance, 
+          time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
+          cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
+          principal = AdjPrincipal, 
+          price = price, 
+          accrued.interest = accrued.interest)$root)
     
   # Convert to semi-bond equivalent
   Yield.To.Maturity = (((1 + ytm) ^ (1/2)) -1) * 2
   
   #Step7 Present value of the cash flows Present Value Factors
-  MBS.CF.Table[,"Present Value Factor"] = round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * frequency))),12)
+  MBS.CF.Table[,"Present Value Factor"] = 
+    round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * 
+                                                   frequency))),12)
   
   #Present Value of the cash flows
-  MBS.CF.Table[,"Present Value"] = round(MBS.CF.Table[,"Investor CashFlow"] * MBS.CF.Table[,"Present Value Factor"],12)
+  MBS.CF.Table[,"Present Value"] = 
+    round(MBS.CF.Table[,"Investor CashFlow"] * 
+    MBS.CF.Table[,"Present Value Factor"],12)
   
   #Step8 Risk measures Duration Factors
-  MBS.CF.Table[,"Duration"] = MBS.CF.Table[,"Time"] * (MBS.CF.Table[,"Present Value"]/((principal * price) + accrued.interest))
+  MBS.CF.Table[,"Duration"] = 
+    MBS.CF.Table[,"Time"] * 
+    (MBS.CF.Table[,"Present Value"]/((principal * price) + accrued.interest))
   
   # Weighted Average Life 
-  WAL = sum(((MBS.CF.Table[,"Scheduled Prin"] + MBS.CF.Table[,"Prepaid Prin"] + MBS.CF.Table[,"Recovered Amount"]) * MBS.CF.Table[,"Time"])/ 
-              sum(MBS.CF.Table[,"Scheduled Prin"] + MBS.CF.Table[,"Prepaid Prin"] + MBS.CF.Table[,"Recovered Amount"]))
+  WAL = 
+    sum(((
+      MBS.CF.Table[,"Scheduled Prin"] + MBS.CF.Table[,"Prepaid Prin"] + 
+        MBS.CF.Table[,"Recovered Amount"]) * MBS.CF.Table[,"Time"])/ 
+        sum(MBS.CF.Table[,"Scheduled Prin"] + MBS.CF.Table[,"Prepaid Prin"] + 
+              MBS.CF.Table[,"Recovered Amount"]))
   
   #Convexity Factors
-  MBS.CF.Table[,"Convexity Time"] = MBS.CF.Table[,"Time"] *(MBS.CF.Table[,"Time"] + 1)
+  MBS.CF.Table[,"Convexity Time"] = 
+    MBS.CF.Table[,"Time"] *(MBS.CF.Table[,"Time"] + 1)
   
-  MBS.CF.Table[,"CashFlow Convexity"] = (MBS.CF.Table[,"Investor CashFlow"]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((MBS.CF.Table[,"Time"] + 2) * frequency)))/ 
+  MBS.CF.Table[,"CashFlow Convexity"] = 
+  (MBS.CF.Table[,"Investor CashFlow"]/((1 + ((Yield.To.Maturity)/frequency)) ^ 
+    ((MBS.CF.Table[,"Time"] + 2) * frequency)))/ 
     ((principal * price) + accrued.interest)
   
-  MBS.CF.Table[,"Convexity"] = MBS.CF.Table[,"Convexity Time"] * MBS.CF.Table[,"CashFlow Convexity"] 
+  MBS.CF.Table[,"Convexity"] = 
+    MBS.CF.Table[,"Convexity Time"] * MBS.CF.Table[,"CashFlow Convexity"] 
   
   #Duration and Convexity
   Duration = apply(MBS.CF.Table, 2, sum)["Duration"]
@@ -556,7 +585,8 @@
       ModDuration = Modified.Duration,
       Convexity = Convexity,
       Period = MBS.CF.Table[,"Period"],
-      PmtDate = as.character(as.Date(MBS.CF.Table[,"Date"], origin = "1970-01-01")),
+      PmtDate = as.character(as.Date(MBS.CF.Table[,"Date"], 
+                                     origin = "1970-01-01")),
       TimePeriod = MBS.CF.Table[,"Time"],
       BeginningBal = MBS.CF.Table[,"Begin Bal"],
       MonthlyPmt = MBS.CF.Table[,"Monthly Pmt"],

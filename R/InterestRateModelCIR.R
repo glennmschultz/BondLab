@@ -17,7 +17,8 @@
 
   #' The Cox, Ingersoll, Ross simulation of the short term forward rate
   #' 
-  #' The function simulates the short-term forward rate according to Cox, Ingersoll, and Ross
+  #' The function simulates the short-term forward rate according to Cox,
+  #' Ingersoll, and Ross
   #' @param shortrate A numeric value the shortrate
   #' @param kappa A numeric value the rate of mean reversion
   #' @param theta A numeric value the long term forward rate
@@ -41,8 +42,8 @@
   #N is the number of simulations
   
   #Error Trap Model Parameters
-  #if(2*kappa*theta <= sigma^2) 
-  #  stop("Invaild parameterization origin is inaccessible")
+  if(2*kappa*theta <= sigma^2) 
+  stop("Invaild parameterization origin is inaccessible")
   
   dt <- step
   nrow <-  T/dt

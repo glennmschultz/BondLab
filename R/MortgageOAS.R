@@ -467,8 +467,9 @@
        KeyRateTenor = KeyRateTenor(MortgageKeyRate),
        KeyRateDuration = KeyRateDuration(MortgageKeyRate),
        KeyRateConvexity = KeyRateConvexity(MortgageKeyRate),
-       PathSpread = OAS.Out[,1],
-       PathWAL = OAS.Out[,2],
-       PathModDur = OAS.Out[,3],
-       PathYTM =OAS.Out[,4],
-       PriceDist = OAS.Out[,5])}
+       PathSpread = unname(OAS.Out[,1]),
+       PathWAL = unname(OAS.Out[,2]),
+       PathModDur = unname(OAS.Out[,3]),
+       PathYTM = unname(OAS.Out[,4]),
+       PriceDist = unname(OAS.Out[,5]))
+    }

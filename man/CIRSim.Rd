@@ -23,6 +23,7 @@ CIRSim(shortrate = numeric(), kappa = numeric(), theta = numeric(),
 \item{N}{the number of paths}
 }
 \description{
-The function simulates the short-term forward rate according to Cox, Ingersoll, and Ross
+The function simulates the short-term forward rate according to Cox,
+Ingersoll, and Ross
 }
 

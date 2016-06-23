@@ -3,33 +3,34 @@
 \docType{class}
 \name{PrepaymentAssumption-class}
 \alias{PrepaymentAssumption-class}
-\title{A S4 Class to hold prepayment vectors which are passed to cash flow engines}
+\title{A S4 Class prepayment vectors which are passed to cash flow engines}
 \description{
-The PrepaymentAssumption class is used to pass the prepayment information and
-SMM vectors to the MortgageCashFlow engine.  It must be called in advance for
-cash flow calculations.
+The PrepaymentAssumption class is used to pass the prepayment information 
+and SMM vectors to the MortgageCashFlow engine.  It must be called in 
+advance for cash flow calculations.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{PrepaymentAssumption}}{A character string the type of prepayment assumption
-used this may be "CPR", "PPC", or "MODEL"}
+\item{\code{PrepaymentAssumption}}{A character string the type of 
+prepayment assumption used this may be "CPR", "PPC", or "MODEL"}
 
-\item{\code{PPCStart}}{A numeric value the PPC starting CPR assumption.  This is populated when
-PPC option is choosen}
+\item{\code{PPCStart}}{A numeric value the PPC starting CPR assumption.
+This is populated when PPC option is choosen}
 
-\item{\code{PPCEnd}}{A numeric value the PPC ending CPR assumption.  This is populated when
-PPC option is choosen}
+\item{\code{PPCEnd}}{A numeric value the PPC ending CPR assumption.
+This is populated when PPC option is choosen}
 
-\item{\code{PPCSeasoning}}{A numeric value the length of the PPC ramp.  This is populated when 
-PPC option is choosen}
+\item{\code{PPCSeasoning}}{A numeric value the length of the PPC ramp.
+This is populated when PPC option is choosen}
 
 \item{\code{FirstPmtDate}}{A character string the first payment date}
 
-\item{\code{LastPmtDate}}{A character string the date of the last payment received by the investor}
+\item{\code{LastPmtDate}}{A character string the date of the last payment 
+received by the investor}
 
-\item{\code{FinalPmtDate}}{A character string the date of the final payment received 
-by the investor}
+\item{\code{FinalPmtDate}}{A character string the date of the final payment 
+received by the investor}
 
 \item{\code{PmtDate}}{A character string the payment date}
 
@@ -37,11 +38,11 @@ by the investor}
 
 \item{\code{Period}}{A numeric vector the index of the payment periods}
 
-\item{\code{NoteRate}}{A numeric vector the projected note rate of the MBS pool or loan}
+\item{\code{NoteRate}}{A numeric vector the note rate of the MBS pool or loan}
 
 \item{\code{MtgRateFwd}}{A numeric vector the projected forward mortgage rate.}
 
-\item{\code{Incentive}}{A numeric vector the projected incentive faced by the borrower.
+\item{\code{Incentive}}{A numeric vector the projected incentive (refinance).
 The difference between the note rate and the prevailing mortgage rate}
 
 \item{\code{SMM}}{A numeric vector the projected SMM (Single Monthly Mortality).

@@ -26,10 +26,10 @@ for a mortgage pass-through security
 
 \item{\code{Period}}{A numeric value the period in which the cash-flow is received.}
 
-\item{\code{PmtDate}}{A character string the date in which the cash-flow is received.}
+\item{\code{PmtDate}}{A character the date in which the cash-flow is received.}
 
-\item{\code{TimePeriod}}{A numeric value the time weight to apply to the principal cash-flow
-and discount factors.}
+\item{\code{TimePeriod}}{A numeric value the time weight applied to 
+the principal cash-flow and discount factors.}
 
 \item{\code{BeginningBal}}{A numeric value the Beginning Balance in the period.}
 
@@ -40,7 +40,7 @@ and discount factors.}
 \item{\code{PassThroughInterest}}{A numeric value the pass-through interest paid
 to the investor in the pool.}
 
-\item{\code{ScheduledPrin}}{A numeric value the scheduled principal due in the period.}
+\item{\code{ScheduledPrin}}{A numeric value scheduled principal due in the period.}
 
 \item{\code{PrepaidPrin}}{A numeric value the prepaid principal in the period.}
 

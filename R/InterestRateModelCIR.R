@@ -1,10 +1,10 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# in addition to standard fixed income analysis bond lab provides 
-# for the specific analysis of structured products residential mortgage backed securities, 
-# asset backed securities, and commerical mortgage backed securities
-# License GPL3 + File License
-# Copyright (C) 2014  Glenn M Schultz, CFA
+  
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
+
 
   setGeneric("CIRSim", function(shortrate = numeric(), 
                               kappa = numeric(), 
@@ -52,31 +52,31 @@
                         theta = numeric(), 
                         dt = numeric(), 
                         sigma = numeric()){
-    #Populate the first element of each path with the short rate
-    #Euler discretization of the CIR model.  The discretization causes negative interest rates when 
-    #when the short term rate approaches the origin.  
-    #To solve this problem take the absolute value of square root process
-    #Still at high volatility the model occasionally produces negative interest rates
-    (kappa * (theta - simulation[i-1,j]) * dt) + (sigma * sqrt(abs(simulation[i-1,j])) * rnorm(1,0,1))}  
+  # Populate the first element of each path with the short rate
+  # Euler discretization of the CIR model.  The discretization causes 
+  # negative interest rates when when the short term rate approaches the 
+  # origin. To solve this problem take the absolute value of square root 
+  # process.
+   
+  round((kappa * (theta - simulation[i-1,j]) * dt) + 
+  (sigma * sqrt(abs(simulation[i-1,j])) * rnorm(1,0,1)),8)}  
   
-  #Matrix to hold the short rate paths - 
-  #I can dimnames here rather than colnames same as mortgage oas (rename N to paths?)
+  # Matrix to hold the short rate paths - )
+
   simulation = array(data = 0, c((nrow + 1), N))
-  simulation[1,] = shortrate
+  simulation[1,] = round(shortrate,8)
   
   for(j in 1:N){
     for(i in 2:(nrow + 1)){        
-      simulation[i,j] <- simulation[i-1, j] + deltarate(kappa = kappa, 
+    simulation[i,j] <- max(0,round(simulation[i-1, j] + deltarate(kappa = kappa, 
                                                         theta = theta, 
                                                         dt = dt, 
-                                                        sigma = sigma)    
+                                                        sigma = sigma),8))    
     }
   }
-  
   colnames(simulation) <- c(rep((paste("path", seq(1:N)))))
   return(simulation)
   }
-
 
   setGeneric("CIRBondPrice", function(shortrate = vector(), 
                                       T = numeric(), 
@@ -88,17 +88,20 @@
                                       result = character)
   {standardGeneric("CIRBondPrice")})
 
-  #' Calculate the price of a zero coupon bond using the closed form equation given by Cox, Ingersoll, and Ross
+  #' Calculate the price of a zero coupon bond using the closed form equation 
+  #' given by Cox, Ingersoll, and Ross
   #' 
-  #' This function implements the CIR closed form solution to a bond price given the short-term rate
+  #' This function implements the CIR closed form solution to a bond price 
+  #' given the short-term rate
   #' @param shortrate A vector of simulated short-term rates
-  #' @param T A numeric value the time over which the short-term rate is simulated
+  #' @param T A numeric value time over which the short-term rate is simulated
   #' @param step A numeric value the time step on the simulation
   #' @param kappa A numeric value the speed of mean reversion of the simulation
   #' @param lambda A numeric value the risk premium
   #' @param sigma A numeric value the volatility entered as a standard deviation
   #' @param theta A numeric vlaue the long term forward rate
-  #' @param result A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit
+  #' @param result A character string the desired output either 
+  #' "p" - Price, "y" - Yield, or "l" - Limit
   #' @export  
   CIRBondPrice <- function(shortrate = vector(), 
                          T = numeric(), 
@@ -113,8 +116,9 @@
   if (missing(shortrate))
     stop("Need to specify shortrate.")
   
-  # This error throws a warning in OAS if the short rate is nominally negative this is the foating point proble
-  #if (shortrate < 0 | shortrate > 1)
+  # This error throws a warning in OAS if the short rate is nominally 
+  # negative this is the foating point proble
+  # if (shortrate < 0 | shortrate > 1)
   #  stop("No valid interest.rate specified.")
   
   if (missing(T))
@@ -150,32 +154,34 @@
   if(missing(result))
     result = "p"  
   
-  #T is the maturity is the zero coupon bond. To price a coupon paying bond this is the maturity of the bond
-  #step the time between each payment of a coupon paying bond
+  #T is the maturity is the zero coupon bond. To price a coupon paying bond 
+  # this is the maturity of the bond
+  # step the time between each payment of a coupon paying bond
   
-  #kappa is the rate of mean reversion  
-  #lambda is the market risk premium (lambda must be negative)
-  #sigma is interest rate variance - specificlly sigma^2
-  #theta is the mean interest rate level
-  #T is the vector of maturities of the yield curve each cash flow is treated as a zero coupon bond  
-  #T = c(seq(from = step, to = T, by = step))
+  # kappa is the rate of mean reversion  
+  # lambda is the market risk premium (lambda must be negative)
+  # sigma is interest rate variance - specificlly sigma^2
+  # theta is the mean interest rate level
+  # T is the vector of maturities of the yield curve each cash flow is 
+  # treated as a zero coupon bond  
+  # T = c(seq(from = step, to = T, by = step))
   
   T = if(step != 0) {c(seq(from = step, to = T, by = step))} else {T}
   
-  #t is the start period this is the first step of the simulation as well as the step size
-  #for example from t = 0 to the next period is 0 + step
+  # t is the start period this is the first step of the simulation as well as 
+  # the step size
+  # for example from t = 0 to the next period is 0 + step
   t = step
   
-  #The below are the functions to determine the closed form solution to the CIR Model
+  # The below are the functions to determine the closed form solution 
+  # to the CIR Model
   gamma = ((kappa + lambda)^2 + (2 * (sigma^2))) ^ (1/2)
+  A.CIR = ((2 * gamma * exp(((kappa + lambda + gamma) * (T-t))/2))/
+  ((gamma + lambda + kappa) * (exp(gamma * (T-t)) - 1) + (2 * gamma))) ^
+    ((2 * kappa * theta)/(sigma^2))
   
-  A.CIR = ((2 * gamma * exp(((kappa + lambda + gamma) * (T-t))/2)) 
-           /
-             ((gamma + lambda + kappa) * (exp(gamma * (T-t)) - 1) + (2 * gamma))) ^ ((2 * kappa * theta)/(sigma^2))
-  
-  B.CIR = ((2 * (exp(gamma * (T-t)) - 1))
-           /
-             ((gamma + lambda + kappa) * (exp(gamma * (T-t)) - 1) + (2 * gamma)))
+  B.CIR = ((2 * (exp(gamma * (T-t)) - 1))/
+        ((gamma + lambda + kappa) * (exp(gamma * (T-t)) - 1) + (2 * gamma)))
   
   Price = A.CIR * exp((B.CIR * -1) * shortrate) 
   Yield = (shortrate * B.CIR  - log(A.CIR))/(T-t)
@@ -184,11 +190,8 @@
   CIRBondPrice = switch(result,
                         p = Price,
                         y = Yield,
-                        l = Limit)  
-  
+                        l = Limit)
   }
-
-
 
   setGeneric("CalibrateCIR", function(trade.date = character, 
                                       sigma = numeric())
@@ -204,7 +207,8 @@
   #' @importFrom termstrc create_cashflows_matrix create_maturities_matrix
   #' @import optimx
   #' @param trade.date A numeric value the trade date
-  #' @param sigma the volatility in absolute percent the annualized value is sigma times sqrt(240)
+  #' @param sigma the volatility in absolute percent the annualized value is 
+  #' sigma times sqrt(240)
   #' @export  
   CalibrateCIR <- function(trade.date = character, 
                          sigma = numeric()){
@@ -285,7 +289,8 @@
   CIR.CF.Matrix <- create_cashflows_matrix(TSInput[[1]], include_price = TRUE)
   CIR.Mat.Matrix <- create_maturities_matrix(TSInput[[1]], include_price = TRUE )
   
-  #Objective function for the origin to be inaccessable the followign condition must be met
+  #Objective function for the origin to be inaccessable the followign 
+  #condition must be met
   # 2 * kappa * theta <= sigma^2  
   CIRTune <- function(param = numeric(), 
                       shortrate = numeric(), 
@@ -317,7 +322,7 @@
                 fn = CIRTune, 
                 method = "L-BFGS-B",
                 lower = c(.01, 0, 0),
-                upper = c(.5, .1, .2) , 
+                upper = c(.02, .1, .2) , 
                 shortrate = shortrate,
                 sigma = sigma,
                 cfmatrix = CIR.CF.Matrix, 

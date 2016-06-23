@@ -12,18 +12,22 @@ PrepaymentModel(bond.id = "character", TermStructure = "character",
   HomePrice = NULL, Severity = 0)
 }
 \arguments{
-\item{bond.id}{A character string referring to an object of the type MBSDetails}
+\item{bond.id}{A character string referring to an object 
+of the type MBSDetails}
 
-\item{TermStructure}{A character string referring to an object of the type TermStructure}
+\item{TermStructure}{A character string referring to an object 
+of the type TermStructure}
 
-\item{MortgageRate}{A character string the input value of mortgagerate.rds.  Prepayment Assumption does
+\item{MortgageRate}{A character string the input value of 
+mortgagerate.rds.  Prepayment Assumption does not
 open Mtg.Rate connection directly rather takes the argument as an object.}
 
 \item{ModelTune}{A character string the prepayment model tune object}
 
 \item{Burnout}{A numeric value the burnout variable}
 
-\item{PrepaymentAssumption}{A character string the prepayment assumption used "MODEL", "PPC", or "CPR"}
+\item{PrepaymentAssumption}{A character string the prepayment assumption 
+used "MODEL", "PPC", or "CPR"}
 
 \item{...}{Optional values when "PPC" or "CPR" is used}
 

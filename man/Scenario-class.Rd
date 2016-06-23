@@ -23,6 +23,7 @@ twist, parallel, bull flatten, or bull steepen)}
 
 \item{\code{Shiftbps}}{A numeric value the scenario shift in basis points}
 
-\item{\code{Formula}}{A function represnting the shift which applied to the term structure}
+\item{\code{Formula}}{A function represnting the shift which applied to 
+the term structure}
 }}
 

@@ -55,13 +55,13 @@
                              EffDuration = EffDuration,
                              EffConvexity = EffConvexity,
                              KeyRateTenor = KeyRateTenor,
+                             KeyRateDuration = KeyRateDuration,
                              KeyRateConvexity = KeyRateConvexity,
                              PriceDist = PriceDist,
                              PathSpread = PathSpread,
                              PathWAL = PathWAL,
                              PathModDur = PathModDur,
                              PathYTM = PathYTM)
-
             })
 
 
@@ -317,7 +317,7 @@
   # Calculate OAS spread find the spread such that the average 
   # proceeds is equal to proceeds
   # --------------------------------------------------------------------------
-  OAS <- function(spread = numeric(), 
+   OAS <- function(spread = numeric(), 
                   DiscountMatrix = matrix(), 
                   CashFlowMatrix = matrix(), 
                   period = vector(), 
@@ -325,20 +325,12 @@
                   price = numeric(),
                   paths = numeric()) {
     
-  OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread)^ period)) *
+    OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread)^ period)) *
                                 CashFlowMatrix[,]))
     OAS.Proceeds <- colSums(OAS.Proceeds/curr.bal) * price.basis
     return(mean(OAS.Proceeds) - price)}
   
-  OAS.Spread <- uniroot(OAS, 
-                        interval = c(-1,1), 
-                        tol = .000000001, 
-                        DiscountMatrix = OAS.DiscMatrix, 
-                        CashFlowMatrix = OAS.CashFlow,
-                        period = OAS.Term.Structure@Period, 
-                        proceeds = proceeds,
-                        price = price,
-                        paths = paths)$root
+   OAS.Spread <- mean(OAS.Out[,1])
   
   # -------------------------------------------------------------------------
   #Calculate OAS to price for price distribution analysis
@@ -421,7 +413,6 @@
                                           Burnout = Burnout,
                                           Severity = 0) 
 
-    
     #The fourth step is to call the bond cusip details and calculate 
     #Bond Yield to Maturity, 
     #Duration, Convexity and CashFlow.
@@ -463,21 +454,19 @@
     cashflow = MortgageCashFlow@TotalCashFlow,
     discount.rates = CIRTermStructure@SpotRate[1:cashflow.length]/yield.basis,
     t.period = MortgageCashFlow@TimePeriod,
-    #t.period = CIRTermStructure@Period[1:cashflow.length] , 
     proceeds = proceeds)$root
     
     spot.spread <- SolveSpotSpread
     
-   
     new("MortgageOAS",
-       OAS = OAS.Spread,
+       OAS = mean(OAS.Out[,1]),
        ZVSpread = spot.spread,
        SpreadToCurve = SpreadtoCurve,
-       EffDuration = MortgageKeyRate@EffDuration,
-       EffConvexity = MortgageKeyRate@EffConvexity,
-       KeyRateTenor = MortgageKeyRate@KeyRateTenor,
-       KeyRateDuration = MortgageKeyRate@KeyRateDuration,
-       KeyRateConvexity = MortgageKeyRate@KeyRateConvexity,
+       EffDuration = EffDuration(MortgageKeyRate),
+       EffConvexity = EffConvexity(MortgageKeyRate),
+       KeyRateTenor = KeyRateTenor(MortgageKeyRate),
+       KeyRateDuration = KeyRateDuration(MortgageKeyRate),
+       KeyRateConvexity = KeyRateConvexity(MortgageKeyRate),
        PathSpread = OAS.Out[,1],
        PathWAL = OAS.Out[,2],
        PathModDur = OAS.Out[,3],

@@ -12,22 +12,28 @@ The class Mtg. Scenario holds the results of a scenario analysis run
 \describe{
 \item{\code{Period}}{A numeric value the period number forward from current}
 
-\item{\code{PmtDate}}{A character the payment date on which the cashflow is expected to be received}
+\item{\code{PmtDate}}{A character the payment date on which the cashflow is 
+expected to be received}
 
 \item{\code{TimePeriod}}{A numeric value the period stated as a unit of time}
 
-\item{\code{BeginningBal}}{A numeric value the forecasted beginning balance in the period}
+\item{\code{BeginningBal}}{A numeric value the forecasted beginning balance 
+in the period}
 
-\item{\code{PassThroughInterest}}{A numeric value the interest paid through to the investor}
+\item{\code{PassThroughInterest}}{A numeric value the interest paid through 
+to the investor}
 
-\item{\code{ScheduledPrin}}{A numeric value the scheduled principal due in the period}
+\item{\code{ScheduledPrin}}{A numeric value the scheduled principal due 
+in the period}
 
-\item{\code{PrepaidPrin}}{A numeric value the forecasted prepaid principal in the period}
+\item{\code{PrepaidPrin}}{A numeric value the forecasted prepaid principal 
+in the period}
 
-\item{\code{EndingBal}}{A numeric value the forecasted ending balance in the period}
+\item{\code{EndingBal}}{A numeric value the forecasted ending balance 
+in the period}
 
-\item{\code{TotalCashFlow}}{A numeric value the forecasted total cashflow received by
-the investor in the period}
+\item{\code{TotalCashFlow}}{A numeric value the forecasted total cashflow 
+received by the investor in the period}
 
 \item{\code{SpotRate}}{A numeric vector the spot rate curve}
 
@@ -39,26 +45,29 @@ the investor in the period}
 
 \item{\code{WAL}}{A numeric value the scenario weighted average life}
 
-\item{\code{SpreadToInterCurve}}{A numeric value the spread to the interpolated curve}
+\item{\code{SpreadToInterCurve}}{A numeric value the spread to the 
+interpolated curve}
 
 \item{\code{ModDuration}}{A numeric value the scenario modified duration}
 
 \item{\code{Convexity}}{A numeric value the scenario convexity}
 
-\item{\code{EffDuration}}{A numeric value the effective duration which is the sum of the
-key rate durations}
+\item{\code{EffDuration}}{A numeric value the effective duration which is 
+the sum of the key rate durations}
 
-\item{\code{EffConvexity}}{A numeric value the effective duration which is teh sum of the
-key rate convexities}
+\item{\code{EffConvexity}}{A numeric value the effective duration which is 
+the sum of the key rate convexities}
 
 \item{\code{KeyRateTenor}}{A numeric vector the key rate tenors}
 
 \item{\code{KeyRateDuration}}{A numeric vector the duration of each key rate tenor}
 
-\item{\code{KeyRateConvexity}}{A numeric vector the convexity of each each key rate tenor}
+\item{\code{KeyRateConvexity}}{A numeric vector the convexity of 
+each key rate tenor}
 
 \item{\code{HorizonReturn}}{A numeric value the horizon total return}
 
-\item{\code{HorizonMos}}{A numeric value the number of months to the scenario horizon date}
+\item{\code{HorizonMos}}{A numeric value the number of months to 
+the scenario horizon date}
 }}
 

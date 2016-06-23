@@ -495,9 +495,9 @@
       SpotSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3]),
-      KeyRateTenor = KR.Duration[,1],
-      KeyRateDuration = KR.Duration[,2],
-      KeyRateConvexity = KR.Duration[,3]
+      KeyRateTenor = unname(KR.Duration[,1]),
+      KeyRateDuration = unname(KR.Duration[,2]),
+      KeyRateConvexity = unname(KR.Duration[,3])
       
   )
 } # End the function

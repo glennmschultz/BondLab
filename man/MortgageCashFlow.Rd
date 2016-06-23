@@ -16,18 +16,24 @@ MortgageCashFlow(bond.id = "character", original.bal = numeric(),
 \item{settlement.date}{The settlment date of the MBS trade.
 For example $102 is input as 102.00 not 1.02.}
 
-\item{price}{A numeric value the price traded.  Price is input as a whole number.}
+\item{price}{A numeric value the price traded.  Price is input as a 
+whole number.}
 
-\item{PrepaymentAssumption}{A character string referencing the class object.}
+\item{PrepaymentAssumption}{A character string referencing the 
+class object.}
 }
 \description{
-This is a generic function used to construct the class object MortgageCashFlow.
-For this function to work properly the classes MBSDetails and PrepaymentAssumption.
-must be present and loaded into the local environment.
+This is a generic function used to construct the class 
+object MortgageCashFlow. For this function to work properly the classes 
+MBSDetails and PrepaymentAssumption. must be present and loaded into 
+the local environment.
 }
 \examples{
 \dontrun{
-MortgageCashFlow(bond.id = "bondlabMBS4", original.bal = 1000000000,
-settlement.date = "01-13-2013", price = 104.00, PrepaymentAssumption = "Prepayment")}
+MortgageCashFlow(bond.id = "bondlabMBS4", 
+original.bal = 1000000000,
+settlement.date = "01-13-2013", 
+price = 104.00, 
+PrepaymentAssumption = "Prepayment")}
 }
 

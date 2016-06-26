@@ -2,7 +2,8 @@
 % Please edit documentation in R/InterestRateModelCIR.R
 \name{CIRBondPrice}
 \alias{CIRBondPrice}
-\title{Calculate the price of a zero coupon bond using the closed form equation given by Cox, Ingersoll, and Ross}
+\title{Calculate the price of a zero coupon bond using the closed form equation 
+given by Cox, Ingersoll, and Ross}
 \usage{
 CIRBondPrice(shortrate = vector(), T = numeric(), step = numeric(),
   kappa = numeric(), lambda = numeric(), sigma = numeric(),
@@ -11,7 +12,7 @@ CIRBondPrice(shortrate = vector(), T = numeric(), step = numeric(),
 \arguments{
 \item{shortrate}{A vector of simulated short-term rates}
 
-\item{T}{A numeric value the time over which the short-term rate is simulated}
+\item{T}{A numeric value time over which the short-term rate is simulated}
 
 \item{step}{A numeric value the time step on the simulation}
 
@@ -23,9 +24,11 @@ CIRBondPrice(shortrate = vector(), T = numeric(), step = numeric(),
 
 \item{theta}{A numeric vlaue the long term forward rate}
 
-\item{result}{A character string the desired output either "p" - Price, "y" - Yield, or "l" - Limit}
+\item{result}{A character string the desired output either 
+"p" - Price, "y" - Yield, or "l" - Limit}
 }
 \description{
-This function implements the CIR closed form solution to a bond price given the short-term rate
+This function implements the CIR closed form solution to a bond price 
+given the short-term rate
 }
 

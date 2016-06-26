@@ -76,7 +76,7 @@
                                         price = numeric(), 
                                         PrepaymentAssumption = "character") 
   {standardGeneric("MortgageCashFlow")})
-  
+
   #' A standard generic function to access the slot Price
   #' @param object an S4 class object
   #' @export

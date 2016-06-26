@@ -9,7 +9,8 @@ CalibrateCIR(trade.date = character, sigma = numeric())
 \arguments{
 \item{trade.date}{A numeric value the trade date}
 
-\item{sigma}{the volatility in absolute percent the annualized value is sigma times sqrt(240)}
+\item{sigma}{the volatility in absolute percent the annualized value is 
+sigma times sqrt(240)}
 }
 \description{
 The function calibrates the CIR Model to daily swap curve data

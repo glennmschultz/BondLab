@@ -459,9 +459,9 @@
     spot.spread <- SolveSpotSpread
     
     new("MortgageOAS",
-       OAS = mean(OAS.Out[,1]),
-       ZVSpread = spot.spread,
-       SpreadToCurve = SpreadtoCurve,
+       OAS = mean(OAS.Out[,1]) * yield.basis,
+       ZVSpread = spot.spread * yield.basis,
+       SpreadToCurve = SpreadtoCurve * yield.basis,
        EffDuration = EffDuration(MortgageKeyRate),
        EffConvexity = EffConvexity(MortgageKeyRate),
        KeyRateTenor = KeyRateTenor(MortgageKeyRate),

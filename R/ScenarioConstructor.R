@@ -11,7 +11,7 @@
   # for the class MortgageCashFlow and the initialize method for the class.  
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
-
+  
   #' An S4 class Scenario to describing the interest rate scenario
   #' and interest rate shift function applied the curve
   #' @slot Name A character the name of the scenario
@@ -34,13 +34,50 @@
            Formula = "function"
          ))
   
-  setGeneric("MakeScenario", function(Name = "character",
+  setGeneric("Scenario", function(Name = "character",
                                       Type = "character",
                                       Horizon = "character",
                                       ShiftType = "character",
                                       Shiftbps = "character",
                                       Formula = "function")
-  {standardGeneric("MakeScenario")})
+  {standardGeneric("Scenario")})
+  
+  #' A standard generic to access the slot Name
+  #' @param object An S4 class object of the type Scenario
+  #' @export Name
+  setGeneric("Name", function(object)
+  {standardGeneric("Name")})
+  
+  #' A standard generic to access the slot Type
+  #' @param object An S4 class object of the type Scenario
+  #' @export Type
+  setGeneric("Type", function(object)
+  {standardGeneric("Type")})
+  
+  #' A standard generic to access the slot Horizon
+  #' @param object An S4 class object of the type Scenario
+  #' @export Horizon
+  setGeneric("Horizon", function(object)
+  {standardGeneric("Horizon")})
+  
+  #' A standard generic to access the slot ShiftType
+  #' @param object An S4 class object of the type Scenario
+  #' @export ShiftType
+  setGeneric("ShiftType", function(object)
+  {standardGeneric("ShiftType")})
+  
+  #' A standard generic to access the slot Shiftbps
+  #' @param object An S4 class object of the type Scenario
+  #' @export Shiftbps
+  setGeneric("Shiftbps", function(object)
+  {standardGeneric("Shiftbps")})
+  
+  #' A standard generic to access the slot Formula
+  #' @param object An S4 class object of the type Scenario
+  #' @export ScenarioFormula
+  setGeneric("ScenarioFormula", function(object)
+  {standardGeneric("ScenarioFormula")})
+  
 
   setMethod("initialize",
           signature("Scenario"),
@@ -61,6 +98,43 @@
                           Formula = Formula,
                           ...)
                           })
+  
+  #' A Method to extract scenario name from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Name
+  setMethod("Name", signature("Scenario"),
+            function(object){object@Name})
+  
+  #' A Method to extract scenario type from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Type
+  setMethod("Type", signature("Scenario"),
+            function(object){object@Type})
+  
+  #' A Method to extract scenario Horizon from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Horizon
+  setMethod("Horizon", signature("Scenario"),
+            function(object){object@Horizon})
+  
+  #' A Method to extract ShiftType from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod ShiftType
+  setMethod("ShiftType", signature("Scenario"),
+            function(object){object@ShiftType})
+  
+  #' A Method to extract Shiftbps from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod Shiftbps
+  setMethod("Shiftbps", signature("Scenario"),
+            function(object){object@Shiftbps})
+  
+  #' A Method to extract the scenario formula from an S4 class Scenario
+  #' @param object The name of the object of the S4 class of type Scenario
+  #' @exportMethod ScenarioFormula
+  setMethod("ScenarioFormula", signature("Scenario"),
+            function(object){object@Formula})
+  
 
   RateScenario <- function(
     Name = "character",
@@ -76,27 +150,7 @@
         Horizon = Horizon,
         ShiftType = ShiftType,
         Shiftbps = Shiftbps,
-        Formula = function(rates.data, Shiftbps){
-        as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
-                       Shiftbps/yield.basis)
-      })}
-
-  Scenario <- function(
-  Name = "character",
-  Type = "character",
-  Horizon = "character",
-  ShiftType = "character",
-  Shiftbps = "character",
-  Formula = "function"){
-  
-  new("Scenario",
-      Name = Name,
-      Type = Type,
-      Horizon = Horizon,
-      ShiftType = ShiftType,
-      Shiftbps = Shiftbps,
-      Formula = Formula)
-  }
+        Formula = Formula)}
 
   #' A constructor function of the class Scenario
   #' 
@@ -125,8 +179,8 @@
   #' Formula = function(rates.data, Shiftbps){
   #' as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
   #' Shiftbps/yield.basis)})}  
-  #' @export MakeScenario
-  MakeScenario <- function(
+  #' @export Scenario
+  Scenario <- function(
   Name = "character",
   Type = "character",
   Horizon = "character",
@@ -134,7 +188,7 @@
   Shiftbps = "character",
   Formula = "function")
   {
-  temp <- Scenario(
+  temp <- RateScenario(
     Name = Name,
     Type = Type,
     Horizon = Horizon,

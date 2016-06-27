@@ -4,31 +4,31 @@
   # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
-  #' @include MortgageCashFlow.R TermStructure.R PrepaymentModel.R 
-  #' MortgageKeyRate.R
+  #' @include ScenarioConstructor.R MortgageCashFlow.R TermStructure.R 
+  #' @include PrepaymentModel.R MortgageKeyRate.R
   NULL
   
   
   #' An S4 Class A list of Scenario outcomes
   #'
-  #' The class Mtg.ScenarioSet is a list of classes Scenario
+  #' The class MtgScenarioSet is a list of classes Scenario
   #' @slot Scenario A list of the class Scenario
-  #' @exportClass Mtg.ScenarioSet
-  setClass("Mtg.ScenarioSet",
+  #' @exportClass MtgScenarioSet
+  setClass("MtgScenarioSet",
            representation(
              Scenario = "list"))
   
-  setGeneric("Mtg.ScenarioSet", function(Scenario = "list")
-  {standardGeneric("Mtg.ScenarioSet")})
+  setGeneric("MtgScenarioSet", function(Scenario = "list")
+  {standardGeneric("MtgScenarioSet")})
   
   #' A standard generic function to extract the slot Scenario
-  #' @param object An S4 class object of the type Mtg.ScenarioSet
+  #' @param object An S4 class object of the type MtgScenarioSet
   #' @export
-  setGeneric("Mtg.ScenarioSet", function(object)
-  {standardGeneric("Mtg.ScenarioSet")})
+  setGeneric("ScenarioSet", function(object)
+  {standardGeneric("ScenarioSet")})
   
   setMethod("initialize",
-            signature("Mtg.ScenarioSet"),
+            signature("MtgScenarioSet"),
             function(.Object,
                      Scenario = "list",
                      ...)
@@ -39,136 +39,12 @@
             }
   )
   
-  #' A method to extract the Scenario list from S4 class Mtg.ScenarioSet
+  #' A method to extract the Scenario list from S4 class MtgScenarioSet
   #' @param object the name of the S4 object of the type Scenario
-  #' @exportMethod Mtg.ScenarioSet
-  setMethod("Mtg.ScenarioSet", signature("Mtg.ScenarioSet"),
+  #' @exportMethod ScenarioSet
+  setMethod("ScenarioSet", signature("MtgScenarioSet"),
             function(object){object@Scenario})
-  
-  #' An S4 Class representing scenario analysis details
-  #' 
-  #' The class Scenario is the representation of the 
-  #' scenario run by the investor
-  #' @slot Name A character the name of the scenario
-  #' @slot Type A character the type of the scenario
-  #' @slot Horizon A character the time horizon over which the 
-  #' scenario is run
-  #' @slot ShiftType A character the interest rate shift type (e.g.
-  #' twist, parallel, bull flatten, or bull steepen)
-  #' @slot Shiftbps A numeric value the scenario shift in basis points
-  #' @slot Formula A function represnting the shift which applied to 
-  #' the term structure
-  #' @exportClass Scenario
-  setClass("Scenario",
-           representation(
-             Name = "character",
-             Type = "character",
-             Horizon = "character",
-             ShiftType = "character",
-             Shiftbps = "numeric",
-             Formula = "function"))
-  
-  setGeneric("Scenario", function(Name = "character",
-                                  Type = "character",
-                                  Horizon = "character",
-                                  ShiftType = "character",
-                                  Shiftbps = numeric(),
-                                  Formula = "function")
-  {standardGeneric("Scenario")})
-  
-  #' A standard generic to access the slot Name
-  #' @param object An S4 class object of the type Scenario
-  #' @export Name
-  setGeneric("Name", function(object)
-  {standardGeneric("Name")})
-  
-  #' A standard generic to access the slot Type
-  #' @param object An S4 class object of the type Scenario
-  #' @export Type
-  setGeneric("Type", function(object)
-  {standardGeneric("Type")})
-  
-  #' A standard generic to access the slot Horizon
-  #' @param object An S4 class object of the type Scenario
-  #' @export Horizon
-  setGeneric("Horizon", function(object)
-  {standardGeneric("Horizon")})
-  
-  #' A standard generic to access the slot ShiftType
-  #' @param object An S4 class object of the type Scenario
-  #' @export ShiftType
-  setGeneric("ShiftType", function(object)
-  {standardGeneric("ShiftType")})
-  
-  #' A standard generic to access the slot Shiftbps
-  #' @param object An S4 class object of the type Scenario
-  #' @export Shiftbps
-  setGeneric("Shiftbps", function(object)
-  {standardGeneric("Shiftbps")})
-  
-  #' A standard generic to access the slot Formula
-  #' @param object An S4 class object of the type Scenario
-  #' @export ScenarioFormula
-  setGeneric("ScenarioFormula", function(object)
-  {standardGeneric("ScenarioFormula")})
-  
-  setMethod("initialize",
-            signature("Scenario"),
-            function(.Object,
-                     Name = "character",
-                     Type = "character",
-                     Horizon = "character",
-                     ShiftType = "character",
-                     Shiftbps = numeric(),
-                     Formula = "function",
-                     ...)
-            {
-              callNextMethod(.Object,
-                             Name = Name,
-                             Type = Type,
-                             Horizon = Horizon,
-                             ShiftType = ShiftType,
-                             Shiftbps = Shiftbps,
-                             Formula = Formula,
-                             ...)
-            })
-  
-  #' A Method to extract scenario name from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod Name
-  setMethod("Name", signature("Scenario"),
-            function(object){object@Name})
-  
-  #' A Method to extract scenario type from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod Type
-  setMethod("Type", signature("Scenario"),
-            function(object){object@Type})
-  
-  #' A Method to extract scenario Horizon from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod Horizon
-  setMethod("Horizon", signature("Scenario"),
-            function(object){object@Horizon})
-  
-  #' A Method to extract ShiftType from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod ShiftType
-  setMethod("ShiftType", signature("Scenario"),
-            function(object){object@ShiftType})
-  
-  #' A Method to extract Shiftbps from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod Shiftbps
-  setMethod("Shiftbps", signature("Scenario"),
-            function(object){object@Shiftbps})
-  
-  #' A Method to extract the scenario formula from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod ScenarioFormula
-  setMethod("ScenarioFormula", signature("Scenario"),
-            function(object){object@Formula})
-  
+
   #' An S4 Class representing the results of mortgage return scenario analysis
   #' 
   #' The class Mtg. Scenario holds the results of a scenario analysis run
@@ -839,4 +715,5 @@
       Shiftbps = Shiftbps(Scenario),
       Formula = ScenarioFormula(Scenario))
   }
+  
   

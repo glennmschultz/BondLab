@@ -2,28 +2,34 @@
 % Please edit documentation in R/ScenarioConstructor.R
 \name{MakeScenario}
 \alias{MakeScenario}
-\title{A constructor funtion of the class Scenario}
+\title{A constructor function of the class Scenario}
 \usage{
 MakeScenario(Name = "character", Type = "character",
-  Horizon = "character", ShiftType = "character", Shiftbps = "numeric",
+  Horizon = "character", ShiftType = "character", Shiftbps = "character",
   Formula = "function")
 }
 \arguments{
-\item{Name}{A character string indicating the unique name which identifies the scenario}
+\item{Name}{A character string indicating the unique name which 
+identifies the scenario}
 
-\item{Type}{A character string indicating the type of scenario "aggressive", "moderate"}
+\item{Type}{A character string indicating the type of scenario 
+"aggressive", "moderate"}
 
-\item{Horizon}{A character string indicating the time horizon over wich the scenario evolves}
+\item{Horizon}{A character string indicating the time horizon over 
+which the scenario evolves}
 
-\item{ShiftType}{A character sting indicating the type interest rate shift "Parallel", "Twist", "etc"}
+\item{ShiftType}{A character string indicating the type interest rate 
+shift "Parallel", "Twist", "etc"}
 
-\item{Shiftbps}{A numeric vector indicating the shift applied to each point on the curve}
+\item{Shiftbps}{A numeric vector indicating the shift applied to each 
+point on the curve}
 
 \item{Formula}{A function to apply the shift to each pont on the curve}
 }
 \description{
 This is a standard generic function used to construct the class Scenario.
-The Scenario class is applied to the yield curve and is passed to the scenario.set variable
+The Scenario class is applied to the yield curve and is passed to 
+the scenario.set variable
 }
 \examples{
 \dontrun{
@@ -33,6 +39,7 @@ Horizon = "Immediate",
 ShiftType = "Twist",
 Shiftbps = c(rep(25,7),0, rep(-25,3)),
 Formula = function(rates.data, Shiftbps){
-as.character(as.numeric(rates.data[1,2:length(rates.data)]) + Shiftbps/100)})}  
+as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
+Shiftbps/yield.basis)})}  
 }
 

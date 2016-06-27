@@ -8,10 +8,10 @@ Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>
 Copyright: BondLab Technologies, Inc.
 Description: The analysis of mortgage (MBS) and asset backed securities (ABS) is
-    complex. The valuation framework requires the investor to develop interest 
-    rate, prepayment, and cash flow models. The valaution framework views 
-    MBS and ABS cash flow as a series of zero coupon bonds. BondLab 
-    is an R package providing a suite of software utilities for the analysis 
+    complex. The valuation framework requires the investor to develop interest
+    rate, prepayment, and cash flow models. The valaution framework views
+    MBS and ABS cash flow as a series of zero coupon bonds. BondLab
+    is an R package providing a suite of software utilities for the analysis
     and valuation of Mortgage and Asset Backed securities.
 LazyLoad: yes
 License: file LICENSE
@@ -51,7 +51,6 @@ Collate:
     'HomePriceSim.R'
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
-    'MakeRateScenario.R'
     'MortgageCashFlowArray.R'
     'MortgageCashFlow_Array.R'
     'MortgageFunctions.R'

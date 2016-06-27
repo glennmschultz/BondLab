@@ -101,8 +101,8 @@
   #' A constructor function of the class Scenario
   #' 
   #' This is a standard generic function used to construct the class Scenario.
-  #' The Scenario class is applied to the yield curve and is passed to 
-  #' the scenario.set variable
+  #' The Scenario class is applied to the either a Rates object or a 
+  #' TermStructure object
   #' 
   #' @param Name A character string indicating the unique name which 
   #' identifies the scenario

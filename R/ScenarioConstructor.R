@@ -15,10 +15,7 @@
   #' An S4 class Scenario to describing the interest rate scenario
   #' and interest rate shift function applied the curve
   #' @slot Name A character the name of the scenario
-  #' @slot Type A character the type of scenario eg("Aggressive", "Gradual",
-  #' "Immediate")
-  #' @slot Horizon A character indicating the time horizon over which the 
-  #' scenario evolves
+  #' @slot Type A character the type of scenario eg("Immediate", "Gradual")
   #' @slot ShiftType A character indicating the type shift 
   #' eg("Parallel", "Twist") 
   #' @slot Shiftbps A numeric value the interest rate shift in bps
@@ -28,7 +25,6 @@
          representation(
            Name = "character",
            Type = "character",
-           Horizon = "character",
            ShiftType = "character",
            Shiftbps = "character",
            Formula = "function"
@@ -36,7 +32,6 @@
   
   setGeneric("Scenario", function(Name = "character",
                                       Type = "character",
-                                      Horizon = "character",
                                       ShiftType = "character",
                                       Shiftbps = "character",
                                       Formula = "function")
@@ -54,11 +49,6 @@
   setGeneric("Type", function(object)
   {standardGeneric("Type")})
   
-  #' A standard generic to access the slot Horizon
-  #' @param object An S4 class object of the type Scenario
-  #' @export Horizon
-  setGeneric("Horizon", function(object)
-  {standardGeneric("Horizon")})
   
   #' A standard generic to access the slot ShiftType
   #' @param object An S4 class object of the type Scenario
@@ -84,7 +74,6 @@
           function(.Object,
                    Name = "character",
                    Type = "character",
-                   Horizon = "character",
                    ShiftType = "character",
                    Shiftbps = "character",
                    Formula = "function",
@@ -92,7 +81,6 @@
             callNextMethod(.Object,
                           Name = Name,
                           Type = Type,
-                          Horizon = Horizon,
                           ShiftType = ShiftType,
                           Shiftbps = Shiftbps,
                           Formula = Formula,
@@ -110,12 +98,7 @@
   #' @exportMethod Type
   setMethod("Type", signature("Scenario"),
             function(object){object@Type})
-  
-  #' A Method to extract scenario Horizon from an S4 class Scenario
-  #' @param object The name of the object of the S4 class of type Scenario
-  #' @exportMethod Horizon
-  setMethod("Horizon", signature("Scenario"),
-            function(object){object@Horizon})
+
   
   #' A Method to extract ShiftType from an S4 class Scenario
   #' @param object The name of the object of the S4 class of type Scenario
@@ -139,7 +122,6 @@
   RateScenario <- function(
     Name = "character",
     Type = "character",
-    Horizon = "character",
     ShiftType = "character",
     Shiftbps = "character",
     Formula = "function")
@@ -147,7 +129,6 @@
     new("Scenario",
         Name = Name,
         Type = Type,
-        Horizon = Horizon,
         ShiftType = ShiftType,
         Shiftbps = Shiftbps,
         Formula = Formula)}
@@ -162,8 +143,6 @@
   #' identifies the scenario
   #' @param Type A character string indicating the type of scenario 
   #' "aggressive", "moderate"
-  #' @param Horizon A character string indicating the time horizon over 
-  #' which the scenario evolves
   #' @param ShiftType A character string indicating the type interest rate 
   #' shift "Parallel", "Twist", "etc"
   #' @param Shiftbps A numeric vector indicating the shift applied to each 
@@ -172,10 +151,9 @@
   #' @examples
   #' \dontrun{
   #' MakeScenario(Name = "Flat50",
-  #' Type = "Agrressive",
-  #' Horizon = "Immediate",
+  #' Type = "Immediate",
   #' ShiftType = "Twist",
-  #' Shiftbps = c(rep(25,7),0, rep(-25,3)),
+  #' Shiftbps = -75,
   #' Formula = function(rates.data, Shiftbps){
   #' as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
   #' Shiftbps/yield.basis)})}  
@@ -183,7 +161,6 @@
   Scenario <- function(
   Name = "character",
   Type = "character",
-  Horizon = "character",
   ShiftType = "character",
   Shiftbps = "character",
   Formula = "function")
@@ -191,7 +168,6 @@
   temp <- RateScenario(
     Name = Name,
     Type = Type,
-    Horizon = Horizon,
     ShiftType = ShiftType,
     Shiftbps = Shiftbps,
     Formula = Formula)

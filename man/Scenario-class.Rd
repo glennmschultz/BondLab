@@ -14,11 +14,7 @@ and interest rate shift function applied the curve
 \describe{
 \item{\code{Name}}{A character the name of the scenario}
 
-\item{\code{Type}}{A character the type of scenario eg("Aggressive", "Gradual",
-"Immediate")}
-
-\item{\code{Horizon}}{A character indicating the time horizon over which the 
-scenario evolves}
+\item{\code{Type}}{A character the type of scenario eg("Immediate", "Gradual")}
 
 \item{\code{ShiftType}}{A character indicating the type shift 
 eg("Parallel", "Twist")}

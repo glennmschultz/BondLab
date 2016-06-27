@@ -208,7 +208,6 @@
                      HorizonMos = numeric(),
                      Name = "character",
                      Type = "character",
-                     Horizon = "character",
                      ShiftType = "character",
                      Shiftbps = numeric(),
                      Formula = "function",
@@ -241,7 +240,6 @@
                              HorizonMos = HorizonMos,
                              Name = Name,
                              Type = Type,
-                             Horizon = Horizon,
                              ShiftType = ShiftType,
                              Shiftbps = Shiftbps,
                              Formula = Formula,
@@ -403,12 +401,6 @@
   #' @exportMethod Type
   setMethod("Type", signature("MtgScenario"),
             function(object){object@Type})
-  
-  #' A method to extract Horizon (horizon period) from an S4 class MtgScenario
-  #' @param object the name of an S4 class of type of MtgScenario
-  #' @exportMethod Horizon
-  setMethod("Horizon", signature("MtgScenario"),
-            function(object){object@Horizon})
   
   #' A method to extract ShiftType from an S4 class MtgScenario
   #' @param object the name of an S4 class of type MtgScenario
@@ -710,7 +702,6 @@
       HorizonMos = horizon.months,
       Name = Name(Scenario),
       Type = Type(Scenario),
-      Horizon = Horizon(Scenario),
       ShiftType = ShiftType(Scenario),
       Shiftbps = Shiftbps(Scenario),
       Formula = ScenarioFormula(Scenario))

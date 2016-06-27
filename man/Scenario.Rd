@@ -4,8 +4,8 @@
 \alias{Scenario}
 \title{A constructor function of the class Scenario}
 \usage{
-Scenario(Name = "character", Type = "character", Horizon = "character",
-  ShiftType = "character", Shiftbps = "character", Formula = "function")
+Scenario(Name = "character", Type = "character", ShiftType = "character",
+  Shiftbps = "character", Formula = "function")
 }
 \arguments{
 \item{Name}{A character string indicating the unique name which 
@@ -13,9 +13,6 @@ identifies the scenario}
 
 \item{Type}{A character string indicating the type of scenario 
 "aggressive", "moderate"}
-
-\item{Horizon}{A character string indicating the time horizon over 
-which the scenario evolves}
 
 \item{ShiftType}{A character string indicating the type interest rate 
 shift "Parallel", "Twist", "etc"}
@@ -33,10 +30,9 @@ TermStructure object
 \examples{
 \dontrun{
 MakeScenario(Name = "Flat50",
-Type = "Agrressive",
-Horizon = "Immediate",
+Type = "Immediate",
 ShiftType = "Twist",
-Shiftbps = c(rep(25,7),0, rep(-25,3)),
+Shiftbps = -75,
 Formula = function(rates.data, Shiftbps){
 as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
 Shiftbps/yield.basis)})}  

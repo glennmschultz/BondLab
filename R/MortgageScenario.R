@@ -171,13 +171,11 @@
   setGeneric("SpreadToInterCurve", function(object)
   {standardGeneric("SpreadToInterCurve")})
   
-  # Note: standard generic function Name is defined above
-  # Note: standard generic function Type is defined above
-  # Note: standard generic function Horizon is defined above
-  # Note: standard generic function ShiftType is defined above
-  # Note: standard generic function Shiftbps is defined above
-  # Note: standard generic function Formula is defined above
-  
+  # Note: standard generic  Name is defined in ScenarioConstructor.R
+  # Note: standard generic  Type is defined in ScenarioConstructor.R
+  # Note: standard generic  ShiftType is defined in ScenarioConstructor.R
+  # Note: standard generic  Shiftbps is defined in ScenarioConstructor.R
+  # Note: standard generic  Formula is defined in ScenarioConstructor.R
   
   setMethod("initialize",
             signature("MtgScenario"),
@@ -435,16 +433,19 @@
   #' @param original.bal A numeric value the price
   #' @param scenario A character string the scenario
   #' @param horizon.months A numeric value the time horizon
-  #' @param method A character string the method used to fit the term structure
   #' @param prepayment A character string the prepayment assumption
-  #' @param ... Optional values when PSA or CPR is used
+  #' @param ... Optional values when PSA or CPR is used or Yield Curve
+  #' is used
+  #' @param method A character string the method used to fit the 
+  #' term structure
   #' @param horizon.spot.spread A numeric value the horizon spread
   #' @param horizon.nominal.spread A numeric value the horizon spread
   #' @param horizon.OAS A numeric value the horizon option adjusted spread
   #' @param horizon.price A numeric value the horizon price in decimal form
   #' @param begin.cpr A numeric value the beginning CPR value
   #' @param end.cpr A numeric value the ending CPR value
-  #' @param seasoning.period A numeric value the length of the seasoning ramp
+  #' @param seasoning.period A numeric value the length of the 
+  #' seasoning ramp
   #' @param CPR A numeric value the CPR speed
   #' @export MtgScenario
   MtgScenario <- function(bond.id ="character",

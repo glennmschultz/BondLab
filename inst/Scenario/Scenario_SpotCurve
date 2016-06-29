@@ -1,0 +1,255 @@
+
+    # This file is used to create the total return scenario objects
+    # Spot rates are passed to the scenario analysis and the spot rate
+    # curve is shifted according to object function
+
+    Scenario(
+    Name = "NCs",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "0",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U25s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "25",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U50s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "50",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U75s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "75",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U100s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "100",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U125s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "125",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U150s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "150",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U175s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "175",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U200s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "200",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U225s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "225",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U250s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "250",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U275s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "275",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "U300s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "300",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+     Scenario(
+    Name = "D25s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-25",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D50s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-50",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D75s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-75",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D100s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-100",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D125s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-125",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D150s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-150",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D175s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-175",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D200s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-200",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D225s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-225",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D250s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-250",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D275s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-275",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+
+    Scenario(
+    Name = "D300s",
+    Type = "Immediate",
+    ShiftType = "Parallel",
+    Shiftbps = "-300",
+    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    yield.basis = 100
+    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    })
+

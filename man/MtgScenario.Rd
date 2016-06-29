@@ -27,11 +27,13 @@ MtgScenario(bond.id = "character", settlement.date = "character",
 
 \item{horizon.months}{A numeric value the time horizon}
 
-\item{method}{A character string the method used to fit the term structure}
+\item{method}{A character string the method used to fit the 
+term structure}
 
 \item{prepayment}{A character string the prepayment assumption}
 
-\item{...}{Optional values when PSA or CPR is used}
+\item{...}{Optional values when PSA or CPR is used or Yield Curve
+is used}
 
 \item{horizon.spot.spread}{A numeric value the horizon spread}
 
@@ -45,7 +47,8 @@ MtgScenario(bond.id = "character", settlement.date = "character",
 
 \item{end.cpr}{A numeric value the ending CPR value}
 
-\item{seasoning.period}{A numeric value the length of the seasoning ramp}
+\item{seasoning.period}{A numeric value the length of the 
+seasoning ramp}
 
 \item{CPR}{A numeric value the CPR speed}
 }

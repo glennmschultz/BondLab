@@ -496,6 +496,7 @@
       ScenarioFormula(Scenario)(rates[1,1:length(rates)], 
                                 Shiftbps = Shiftbps(Scenario))
     
+    
     TermStructure <- TermStructure(rates.data = rates, 
                                    method = method)
     
@@ -543,10 +544,8 @@
     # =========================================================================
     
     HorizonCurve <- rates
-    HorizonCurve[1,1] <- as.character(as.Date(HorizonCurve[1,1]) %m+% 
-      months(horizon.months))
-    HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% 
-      months(horizon.months)
+    HorizonCurve[1,1] <- as.character(as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
+    HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
     
     
     HorizonTermStructure <- TermStructure(rates.data = HorizonCurve,

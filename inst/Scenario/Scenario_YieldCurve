@@ -9,7 +9,7 @@
   ShiftType = "Parallel",
   Shiftbps = "0",
   Formula = function(rates.data, Shiftbps){
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -19,7 +19,7 @@
   Shiftbps = "-25",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -29,7 +29,7 @@
   Shiftbps = "-50",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -39,7 +39,7 @@
   Shiftbps = "-75",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
     
   Scenario(
@@ -49,7 +49,7 @@
   Shiftbps = "-100",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -59,7 +59,7 @@
   Shiftbps = "-125",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -69,7 +69,7 @@
   Shiftbps = "-150",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
 
   Scenario(
@@ -79,7 +79,7 @@
   Shiftbps = "-175",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -89,7 +89,7 @@
   Shiftbps = "-200",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -99,7 +99,7 @@
   Shiftbps = "-225",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -109,7 +109,7 @@
   Shiftbps = "-250",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -119,7 +119,7 @@
   Shiftbps = "-275",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -129,7 +129,7 @@
   Shiftbps = "-300",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0,as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -139,7 +139,7 @@
   Shiftbps = "25",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -149,7 +149,7 @@
   Shiftbps = "50",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -159,7 +159,7 @@
   Shiftbps = "75",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -169,7 +169,7 @@
   Shiftbps = "100",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -179,7 +179,7 @@
   Shiftbps = "125",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -189,7 +189,7 @@
   Shiftbps = "150",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -199,7 +199,7 @@
   Shiftbps = "175",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -209,7 +209,7 @@
   Shiftbps = "200",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -219,7 +219,7 @@
   Shiftbps = "225",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -229,7 +229,7 @@
   Shiftbps = "250",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -239,7 +239,7 @@
   Shiftbps = "275",
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(
@@ -247,9 +247,9 @@
   Type = "Immediate",
   ShiftType = "Parallel",
   Shiftbps = "300",
-  Formula = function(rates.data, Shiftbps){
+  Formula = function(rates.data = "character", Shiftbps ="character"){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)
+  as.character(pmax(0.01,as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
   })
   
   Scenario(Name = "S50",
@@ -258,14 +258,16 @@
   Shiftbps = c(rep("-25",7),0, rep("25",3)),
   Formula = function(rates.data, Shiftbps){
   yield.basis = 100
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)})
+  as.character(pmax(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
+  })
 
   Scenario(Name = "F50",
   Type = "Immediate",
   ShiftType = "Twist",
   Shiftbps = c(rep("25",7),0, rep("-25",3)),
   Formula = function(rates.data, Shiftbps){
-  as.character(as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis)})
+  as.character(max(0.01, as.numeric(rates.data[1,2:length(rates.data)]) + as.numeric(Shiftbps)/yield.basis))
+  })
 
 
 

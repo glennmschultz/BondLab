@@ -8,9 +8,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "0",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = vector(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -18,9 +18,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "25",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -28,9 +28,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "50",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -38,9 +38,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "75",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -48,9 +48,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "100",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -58,9 +58,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "125",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -68,9 +68,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "150",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -78,9 +78,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "175",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -88,9 +88,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "200",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -98,9 +98,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "225",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -108,9 +108,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "250",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -118,9 +118,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "275",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -128,9 +128,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "300",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
      Scenario(
@@ -138,9 +138,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-25",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -148,9 +148,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-50",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -158,9 +158,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-75",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -168,9 +168,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-100",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -178,9 +178,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-125",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -188,9 +188,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-150",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -198,9 +198,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-175",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -208,9 +208,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-200",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -218,9 +218,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-225",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -228,9 +228,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-250",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -238,9 +238,9 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-275",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -248,8 +248,8 @@
     Type = "Immediate",
     ShiftType = "Parallel",
     Shiftbps = "-300",
-    Formula = function(RatesData = numeric(), Shiftbps = "character"){
+    Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    RatesData + (as.numeric(Shiftbps)/yield.basis)
+    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
     })
 

@@ -51,23 +51,39 @@
   
   # Note: Both Object@Period standard generic is found in MortgageCashFlow.R
   
-  #' A generic function to access the slot Date
+  #' A generic function to access the slot ForwardDate in class TermStructure
   #' @param object an S4 class object
   #' @export ForwardDate
   setGeneric("ForwardDate", function(object)
     {standardGeneric("ForwardDate")})
-  
+
   #' A generic function to access the slot SpotRate
   #' @param object an S4 class object
   #' @export SpotRate
   setGeneric("SpotRate", function(object)
     {standardGeneric("SpotRate")})
   
+  #' A generic function to replace slot SpotRate
+  #' @param object an S4 class object
+  #' @param value the value of the replacement
+  #' @export SpotRate<-
+  setGeneric("SpotRate<-", function(object, value)
+    {standardGeneric("SpotRate<-")})
+    
+  
   #' A generic function to access the slot ForwardRate
   #' @param object an S4 class object
   #' @export ForwardRate
   setGeneric("ForwardRate", function(object)
     {standardGeneric("ForwardRate")})
+  
+  #' A generic function to replace the ForwardRate in class TermStructure
+  #' @param object an S4 class object
+  #' @param value the value of the replacement
+  #' @export ForwardRate<-
+  setGeneric("ForwardRate<-", function(object, value)
+  {standardGeneric("ForwardRate<-")})
+  
   
   #' A generic function to access the slot TwoYearForward
   #' @param object an S4 class object
@@ -129,11 +145,29 @@
   setMethod("SpotRate", signature("TermStructure"),
             function(object){object@SpotRate})
   
+  #' Method to replace SpotRate in the class TermStructure
+  #' @param object the name of the object of the type TermStructure
+  #' @param value the replacement value
+  #' @exportMethod SpotRate<-
+  setReplaceMethod("SpotRate", signature("TermStructure"),
+                   function(object, value){
+                     object@SpotRate <- value
+                     return(object)})
+  
   #' Method to extract SpotRate from the class TermStructure
   #' @param object the name of the object of type TermStructure
   #' @exportMethod ForwardRate
   setMethod("ForwardRate", signature("TermStructure"),
             function(object){object@ForwardRate})
+  
+  #' Method to replace ForwardRate in the class TermStructure
+  #' @param object the name of the object of the type TermStructure
+  #' @param value the replacement value
+  #' @exportMethod ForwardRate<-
+  setReplaceMethod("ForwardRate", signature("TermStructure"),
+                   function(object, value){
+                     object@ForwardRate <- value
+                     return(object)})
   
   #' Method to extract the TwoYearForward from the class TermStructure
   #' @param object the name of the object of the type TermStructure

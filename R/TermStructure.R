@@ -63,6 +63,13 @@
   setGeneric("SpotRate", function(object)
     {standardGeneric("SpotRate")})
   
+  #' A generic function to replace the SpotRate in class TermStructure
+  #' @param object an S4 class object
+  #' @param value the replacement value
+  #' @export SpotRate<-
+  setGeneric("SpotRate<-", function(object, value)
+    {standardGeneric("SpotRate<-")})
+  
   #' A generic function to access the slot ForwardRate
   #' @param object an S4 class object
   #' @export ForwardRate
@@ -128,6 +135,16 @@
   #' @exportMethod SpotRate
   setMethod("SpotRate", signature("TermStructure"),
             function(object){object@SpotRate})
+  
+  #' Method to replace SpotRate in the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @param value the replacement value
+  #' @exportMethod SpotRate<-
+  setReplaceMethod("SpotRate", signature("TermStructure"),
+                   function(object, value){
+                     object@SpotRate <- value
+                     return(object)
+                   })
   
   #' Method to extract SpotRate from the class TermStructure
   #' @param object the name of the object of type TermStructure

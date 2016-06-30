@@ -2,16 +2,16 @@
 % Please edit documentation in R/TermStructure.R
 \name{SpotRate<-}
 \alias{SpotRate<-}
-\title{A generic function to replace the SpotRate in class TermStructure}
+\title{A generic function to replace slot SpotRate}
 \usage{
 SpotRate(object) <- value
 }
 \arguments{
 \item{object}{an S4 class object}
 
-\item{value}{the replacement value}
+\item{value}{the value of the replacement}
 }
 \description{
-A generic function to replace the SpotRate in class TermStructure
+A generic function to replace slot SpotRate
 }
 

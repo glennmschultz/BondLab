@@ -8,7 +8,7 @@
 \S4method{SpotRate}{TermStructure}(object) <- value
 }
 \arguments{
-\item{object}{the name of the object of type TermStructure}
+\item{object}{the name of the object of the type TermStructure}
 
 \item{value}{the replacement value}
 }

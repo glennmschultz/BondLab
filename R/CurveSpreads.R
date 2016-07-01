@@ -64,6 +64,7 @@
   #'@param rates.data A character string the trade date mm-dd-YYYY
   #'@param MortgageCashFlow A character string the for object of type
   #'MortgageCashFlow
+  #'@export CurveSpreads
   CurveSpreads <- function(rates.data = "character",
                            MortgageCashFlow = "character"){
 

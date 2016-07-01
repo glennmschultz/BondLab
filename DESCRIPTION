@@ -43,6 +43,7 @@ Collate:
     'CashFlowEngine.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
+    'CurveSpreads.R'
     'DollarRoll.R'
     'DollarRollAnalytics.R'
     'EffectiveMeasure.R'

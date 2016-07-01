@@ -70,6 +70,7 @@
 ~%2FBondLab%2FR%2FConstants.R="14B42020"
 ~%2FBondLab%2FR%2FConvertToCashFlowTable.R="9A5DB8A7"
 ~%2FBondLab%2FR%2FCovertToArray.R="E618C374"
+~%2FBondLab%2FR%2FCurveSpreads.R="B8F300E7"
 ~%2FBondLab%2FR%2FDollarRoll.R="C9B555DE"
 ~%2FBondLab%2FR%2FDollarRollAnalytics.R="A08C5231"
 ~%2FBondLab%2FR%2FEffectiveMeasure.R="28ADB409"

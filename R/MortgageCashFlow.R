@@ -580,7 +580,7 @@
   new("MortgageCashFlow",
       Price = price * price.basis,
       Accrued = accrued.interest,
-      YieldToMaturity = Yield.To.Maturity,
+      YieldToMaturity = Yield.To.Maturity * yield.basis,
       WAL = WAL,
       ModDuration = unname(Modified.Duration),
       Convexity = unname(Convexity),

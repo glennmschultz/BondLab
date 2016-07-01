@@ -1,18 +1,15 @@
 
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # in addition to standard fixed income analysis bond lab provides 
-  # for the specific analysis of structured products residential mortgage backed securities, 
-  # asset backed securities, and commerical mortgage backed securities
-  # File License
-  # Copyright (C) 2015  Bond Lab Technologies, Inc.
-  # Fair use of the Bond Lab trademark is limited to promotion of the use of the software or 
-  # book "Investing in Mortgage Backed Securities Using Open Source Analytics" 
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc. 
 
 
   #---------------------------------------------------
-  #Term strucutre call term strc 
-  #and holds forward and spot rates as slots to class Term Structure
+  # Term strucutre calls package termstrc 
+  # and holds forward and spot rates as slots to class Term Structure
   #---------------------------------------------------
 
   #' @include MortgageCashFlow.R
@@ -56,8 +53,15 @@
   #' @export ForwardDate
   setGeneric("ForwardDate", function(object)
     {standardGeneric("ForwardDate")})
+  
+  #' A generic function to replace slot ForwardDate in class TermStructure
+  #' @param object an S4 class object
+  #' @param value the value of the replacement
+  #' @export ForwardDate<-
+  setGeneric("ForwardDate<-", function(object, value)
+  {standardGeneric("ForwardDate<-")})
 
-  #' A generic function to access the slot SpotRate
+  #' A generic function to access the slot SpotRate in class TermStructure
   #' @param object an S4 class object
   #' @export SpotRate
   setGeneric("SpotRate", function(object)
@@ -69,8 +73,7 @@
   #' @export SpotRate<-
   setGeneric("SpotRate<-", function(object, value)
     {standardGeneric("SpotRate<-")})
-    
-  
+
   #' A generic function to access the slot ForwardRate
   #' @param object an S4 class object
   #' @export ForwardRate
@@ -84,18 +87,33 @@
   setGeneric("ForwardRate<-", function(object, value)
   {standardGeneric("ForwardRate<-")})
   
-  
-  #' A generic function to access the slot TwoYearForward
+  #' A generic function to access the slot TwoYearForward in class TermStructure
   #' @param object an S4 class object
   #' @export TwoYearForward
   setGeneric("TwoYearForward", function(object)
     {standardGeneric("TwoYearForward")})
   
-  #' A generic function to access the slot TenYearForward
+  #' A generic function to replace the slot TwoYearForward in class 
+  #' TermStructure
+  #' @param object an S4 class object
+  #' @param value the value of the replacement
+  #' @export TwoYearForward<-
+  setGeneric("TwoYearForward<-", function(object, value)
+  {standardGeneric("TwoYearForward<-")})
+  
+  #' A generic function to access the slot TenYearForward in class TermStructure
   #' @param object an S4 class object
   #' @export TenYearForward
   setGeneric("TenYearForward", function(object)
     {standardGeneric("TenYearForward")})
+  
+  #' A generic function to replace the slot TenYearForward in class 
+  #' TermStructure
+  #' @param object an S4 class object
+  #' @param value the value of the replacement
+  #' @export TenYearForward<-
+  setGeneric("TenYearForward<-", function(object, value)
+    {standardGeneric("TenYearForward<-")})
   
   setMethod("initialize",
           signature("TermStructure"),
@@ -133,11 +151,21 @@
   setMethod("Period", signature("TermStructure"),
             function(object){object@Period})
   
-  #' Method to extract Date from the class TermStructure
+  #' Method to extract ForwardDate from the class TermStructure
   #' @param object the name of the object of type TermStructure
   #' @exportMethod ForwardDate
   setMethod("ForwardDate", signature("TermStructure"),
             function(object){object@Date})
+  
+  #' Method to replace ForwardDate from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @param value the value of the replacement
+  #' @exportMethod ForwardDate<-
+  setReplaceMethod("ForwardDate", signature("TermStructure"),
+                   function(object, value){
+                     object@ForwardDate <- value
+                     return(object)
+                   })
   
   #' Method to extract SpotRate from the class TermStructure
   #' @param object the name of the object of type TermStructure
@@ -152,7 +180,8 @@
   setReplaceMethod("SpotRate", signature("TermStructure"),
                    function(object, value){
                      object@SpotRate <- value
-                     return(object)})
+                     return(object)
+                     })
   
   #' Method to extract SpotRate from the class TermStructure
   #' @param object the name of the object of type TermStructure
@@ -167,7 +196,8 @@
   setReplaceMethod("ForwardRate", signature("TermStructure"),
                    function(object, value){
                      object@ForwardRate <- value
-                     return(object)})
+                     return(object)
+                     })
   
   #' Method to extract the TwoYearForward from the class TermStructure
   #' @param object the name of the object of the type TermStructure
@@ -175,23 +205,47 @@
   setMethod("TwoYearForward", signature("TermStructure"),
             function(object){object@TwoYearFwd})
   
+  #' Method to replace the TwoYearForward in the class TermStructure
+  #' @param object the name of the object of the Type TermStructure
+  #' @param value the replacement value
+  #' @exportMethod TwoYearForward<-
+  setReplaceMethod("TwoYearForward", signature("TermStructure"),
+                   function(object, value){
+                     object@TwoYearFwd <- value
+                     return(object)
+                   })
+  
   #' Method to extract the TenYearForward from the class TermStructure
   #' @param object the name of the object of the type TermStructure
   #' @exportMethod TenYearForward
   setMethod("TenYearForward", signature("TermStructure"),
             function(object){object@TenYearFwd})
+  
+  #' Method to replace the TenYearForward in the class TermStructure
+  #' @param object the name of the object of the type TermStructure
+  #' @param value the value of the replacement
+  #' @exportMethod TenYearForward<-
+  setReplaceMethod("TenYearForward", signature("TermStructure"),
+            function(object, value){
+              object@TenYearFwd <- value
+              return(object)
+            })
 
-  #' The TermStructure constructor function it is a wrapper function around the package termstrc
+  #' The TermStructure constructor function it is a wrapper function 
+  #' around the package termstrc
   #' 
-  #' This is a wrapper function around the R package termstrc.  The function passes swap rate data
-  #' cash flows the to termstrc and creates the TermStructure object used by Bondlab.
+  #' This is a wrapper function around the R package termstrc.  
+  #' The function passes swap rate data
+  #' cash flows the to termstrc and creates the TermStructure object 
+  #' used by Bondlab.
   #' The function call rates data processes the yield curve and derives cashflow
   #' for the daily close swap curve. A Rates object must be called in the local
   #' environment for this function to work.
-  #' @param rates.data A character string representing the data for which the user
-  #' would like to call the swap curve
-  #' @param method A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
-  #' sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+  #' @param rates.data A character string representing the data for which 
+  #' the user would like to call the swap curve
+  #' @param method A character string indicating the fitting method 
+  #' ns = Nelson Siegel, dl = Diebold Lee, sv = Severson, 
+  #' asv = adjusted Severson, cs = cubic spline(not yet implemented).
   #' For addiition details see the termstrc documentation.
   #' @examples
   #' \dontrun{
@@ -252,15 +306,18 @@
   data$MATURITYDATE <-
     sapply(Mat.Years, function(Mat.Years = Mat.Years, 
                                Issue = Issue.Date) {
-      Maturity = if(Mat.Years < 1) {Issue %m+% months(round(Mat.Years * months.in.year))} else 
-    {Issue %m+% years(as.numeric(Mat.Years))}
+      Maturity = if(Mat.Years < 1) {
+        Issue %m+% months(round(Mat.Years * months.in.year))
+        } else {Issue %m+% years(as.numeric(Mat.Years))}
     return(as.character(Maturity))
     }) 
   
   
   data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
   
-  data$PRICE <-      ifelse(Mat.Years < 1, (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100, 100)
+  data$PRICE <- ifelse(Mat.Years < 1, 
+                       (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100,
+                       100)
   
   data$ACCRUED <- rep(0, ColCount -1)
   
@@ -269,22 +326,25 @@
                                                data[[2]][j],
                                                units = c("weeks"))/weeks.in.year,5))
     
-    Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , round(Vector.Length * pmt.frequency))
+    Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , 
+                            round(Vector.Length * pmt.frequency))
     #Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
     #pmt.frequency should be input 
     
-    data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, rep(data[[1]][j],Vector.Length))
+    data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, 
+                                  rep(data[[1]][j],Vector.Length))
     
     data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
-              as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * min.principal, 
+      as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * min.principal, 
               (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
     
     by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) 
     # this sets the month increment so that cashflows can handle discount bills
     
-    data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
-                          seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
-                          as.Date(data[[3]][j]), by = as.character(paste(by.months, "months", sep = " "))))
+  data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
+  seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
+  as.Date(data[[3]][j]), 
+  by = as.character(paste(by.months, "months", sep = " "))))
     
   } #The Loop Ends here and the list is made
   
@@ -299,8 +359,8 @@
   #Fit the term structure of interest rates
   
   if(method != "cs") {TSFit <- estim_nss(dataset = TSInput, 
-                                         group = as.character(rates.data[1,1]), 
-                                         matrange = "all", method = method)} else
+                                        group = as.character(rates.data[1,1]), 
+                                        matrange = "all", method = method)} else
   {TSFit <- estim_cs(bonddata = TSInput, 
                      group = as.character(rates.data[1,1]), 
                      matrange = "all", rse = TRUE)}
@@ -308,11 +368,11 @@
   #Return the coefficient vector to be passed in to the spot and forward rate functions
   #Maybe have the method choosen based on the one that gives the smallest RMSE
   Vector <- switch(method,
-                   ns = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1")]),
-                   dl = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2")]),
-                   sv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "beta3", "tau2")]),
-                   asv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "tau2", "tau3")])
-                   #cs = need to figure this out
+  ns = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1")]),
+  dl = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2")]),
+  sv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "beta3", "tau2")]),
+  asv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "tau2", "tau3")])
+  #cs = need to figure this out
   )
   
   #Calculate the spot rate curve and determine the forward rates needed to 

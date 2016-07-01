@@ -44,9 +44,11 @@ An S4 class to represent a mortgage pass-through security
 
 \item{\code{BondLab}}{A character string the BondLab credit rating}
 
-\item{\code{Frequency}}{A numeric value the frequency of payments (annual = 1, semi-annual = 2, monthly = 12)}
+\item{\code{Frequency}}{A numeric value the frequency of payments 
+(annual = 1, semi-annual = 2, monthly = 12)}
 
-\item{\code{BondBasis}}{A character string the day count used ("actual360",30360", etc.)}
+\item{\code{BondBasis}}{A character string the day count used 
+("actual360",30360", etc.)}
 
 \item{\code{GWac}}{A numeric string the weighted average note rate}
 
@@ -74,15 +76,18 @@ An S4 class to represent a mortgage pass-through security
 
 \item{\code{InitialInterest}}{A logical value TRUE or FALSE interest only mortgage}
 
-\item{\code{InterestOnlyPeriod}}{A numeric value the number of months the borrower pays only interest}
+\item{\code{InterestOnlyPeriod}}{A numeric value the number of months the 
+borrower pays only interest}
 
-\item{\code{FirstPrinPaymentDate}}{A character string the date of the first principal payment}
+\item{\code{FirstPrinPaymentDate}}{A character string the date of the 
+first principal payment}
 
 \item{\code{BalloonPmt}}{A logical value TRUE or FALSE a balloon payment due}
 
 \item{\code{BalloonDate}}{A character string the balloon payment date}
 
-\item{\code{MBSFactor}}{A numeric value the pass-through principal balance outstanding expressed as percent of the original balance}
+\item{\code{MBSFactor}}{A numeric value the pass-through principal balance 
+outstanding expressed as percent of the original balance}
 
 \item{\code{OriginalBal}}{A numeric value the pass-though original balance}
 

@@ -29,39 +29,47 @@ MakeMBSDetails(Cusip = "character", ID = "character",
 
 \item{BondType}{A character string the type of Bond MBS, etc.}
 
-\item{Sector}{A charcter string description of the Sector Mortgage, Utility, Government.}
+\item{Sector}{A charcter string description of the Sector Mortgage Sector}
 
 \item{Coupon}{A numeric value the Bond Coupon.}
 
 \item{IssueDate}{A character string the issue date of the security.}
 
-\item{DatedDate}{A character sting The date following the issue when interest begins to accure.}
+\item{DatedDate}{A character sting The date following the issue when 
+interest begins to accure.}
 
 \item{Maturity}{A character sting the final payment date to the investor
 in the case MBS the final payment data assuming 0 CPR.}
 
-\item{LastPmtDate}{A character string the date the last payment scheduled payment to the investor.}
+\item{LastPmtDate}{A character string the date the last payment scheduled 
+payment to the investor.}
 
-\item{NextPmtDate}{A character string the date of the next scheduled payment to the investor.}
+\item{NextPmtDate}{A character string the date of the next scheduled 
+payment to the investor.}
 
 \item{Term}{A numeric value the original term of the underlying mortgages}
 
-\item{WALA}{A numeric value the weighted average loan age of the underlying mortgages}
+\item{WALA}{A numeric value the weighted average loan age of the 
+underlying mortgages}
 
-\item{WAM}{A numeric value the weighted average maturity of the underlying mortgages}
+\item{WAM}{A numeric value the weighted average maturity of the 
+underlying mortgages}
 
-\item{PaymentDelay}{A numeric value in the case of MBS the delay of the payment 
-from the trust to the investor}
+\item{PaymentDelay}{A numeric value in the case of MBS the delay of the 
+payment from the trust to the investor}
 
 \item{Moody}{A character string Moody's assigned credit rating}
 
 \item{SP}{A character string SP's assigned credit rating}
 
-\item{BondLab}{A character string BondLab's or the user's assigned credit rating}
+\item{BondLab}{A character string BondLab's or the user's 
+assigned credit rating}
 
-\item{Frequency}{A numeric value string the frequency of payments made to the investor}
+\item{Frequency}{A numeric value string the frequency of payments made 
+to the investor}
 
-\item{BondBasis}{A character string the basis on which interest is calculated}
+\item{BondBasis}{A character string the basis on which 
+interest is calculated}
 
 \item{GWac}{A numeric value the borrower's note rate}
 
@@ -69,14 +77,15 @@ from the trust to the investor}
 
 \item{OrigLTV}{A numeric value the borrower's original loan to value ratio}
 
-\item{AmortizationType}{A character sting the type of the loan 'fixed' or 'arm'.
-These values are used by the prepayment model to drive the mortgage rate either fixed
-or adjustable mortgage rate}
+\item{AmortizationType}{A character sting the type of the 
+loan 'fixed' or 'arm'.
+These values are used by the prepayment model to drive the mortgage 
+rate either fixed or adjustable mortgage rate}
 
 \item{AmortizationTerm}{A numeric value the term of the loan in years}
 
-\item{Index}{A character string if the amortization type is adjustable the Index 
-to which the note rate references}
+\item{Index}{A character string if the amortization type is 
+adjustable the Index to which the note rate references}
 
 \item{Margin}{A numeric value the spread over the index used to determine 
 the borrower's note rate}
@@ -85,24 +94,28 @@ the borrower's note rate}
 of the borrower's note.}
 
 \item{FinalPmtDate}{A character string the date of thee final payment 
-of the borrower's note.  In the case of an MBS the final payment made to the bondholder}
+of the borrower's note.  In the case of an MBS the final payment made to 
+the bondholder}
 
-\item{Servicing}{A numeric value the servicing spread from the Gross WAC to the servicer
+\item{Servicing}{A numeric value the servicing spread from the Gross WAC 
+to the servicer
 of the mortgage pool's underlying loans.}
 
-\item{PMI}{A numeric value the primary mortage insurance paid by the borrower to the 
-PMI provider}
+\item{PMI}{A numeric value the primary mortage insurance paid by the 
+borrower to the PMI provider}
 
-\item{GFeePremium}{A numeric value the guarantee fee taken from the borrower's note rate to
-guarantee timely payment of principal and interest.  Applicable in the case of Fannie
-Mae, Freddie Mac, or Ginnie Mae pools.}
+\item{GFeePremium}{A numeric value the guarantee fee taken from the 
+borrower's note rate to guarantee timely payment of principal and interest.  
+Applicable in the case of Fannie Mae, Freddie Mac, or Ginnie Mae pools.}
 
-\item{InitialInterest}{A logical indicating the note carries an interest only period}
+\item{InitialInterest}{A logical indicating the note carries an interest 
+only period}
 
-\item{InterestOnlyPeriod}{A character string indicating the note's interest only period}
+\item{InterestOnlyPeriod}{A character string indicating the note's 
+interest only period}
 
-\item{FirstPrinPaymentDate}{A character string indicating the first principal payment date
-due of the mortgage.}
+\item{FirstPrinPaymentDate}{A character string indicating the first 
+principal payment date due of the mortgage.}
 
 \item{BalloonPmt}{A logical indicating the mortgage carries a balloon pmt.}
 
@@ -118,10 +131,12 @@ due of the mortgage.}
 
 \item{Burnout}{A numeric model the value of the borrower burnout.}
 
-\item{SATO}{A numeric value the borrrowers Spread AT Origination over the prime lending rate.}
+\item{SATO}{A numeric value the borrrowers Spread AT Origination over the 
+prime lending rate.}
 }
 \description{
-This is a standard generic function used to construct a MBS pass through security
+This is a standard generic function used to construct a MBS pass through 
+security
 }
 \examples{
 \dontrun{

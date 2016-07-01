@@ -2,21 +2,25 @@
 % Please edit documentation in R/TermStructure.R
 \name{TermStructure}
 \alias{TermStructure}
-\title{The TermStructure constructor function it is a wrapper function around the package termstrc}
+\title{The TermStructure constructor function it is a wrapper function 
+around the package termstrc}
 \usage{
 TermStructure(rates.data = "character", method = "character")
 }
 \arguments{
-\item{rates.data}{A character string representing the data for which the user
-would like to call the swap curve}
+\item{rates.data}{A character string representing the data for which 
+the user would like to call the swap curve}
 
-\item{method}{A character string indicating the fitting method ns = Nelson Siegel, dl = Diebold Lee,
-sv = Severson, asv = adjusted Severson, cs = cubic spline (not yet implemented in Bond Lab).
+\item{method}{A character string indicating the fitting method 
+ns = Nelson Siegel, dl = Diebold Lee, sv = Severson, 
+asv = adjusted Severson, cs = cubic spline(not yet implemented).
 For addiition details see the termstrc documentation.}
 }
 \description{
-This is a wrapper function around the R package termstrc.  The function passes swap rate data
-cash flows the to termstrc and creates the TermStructure object used by Bondlab.
+This is a wrapper function around the R package termstrc.  
+The function passes swap rate data
+cash flows the to termstrc and creates the TermStructure object 
+used by Bondlab.
 The function call rates data processes the yield curve and derives cashflow
 for the daily close swap curve. A Rates object must be called in the local
 environment for this function to work.

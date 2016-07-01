@@ -1,9 +1,8 @@
 
   # Bond Lab is a software application for the analysis of 
-  # fixed income securities it provides a suite of applications
+  # fixed income securities it provides a suite of applications for
   # mortgage backed, asset backed securities, and commerical mortgage backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
-
 
   #' An S4 class to represent a mortgage pass-through security
   #' 
@@ -24,8 +23,10 @@
   #' @slot Moody A character string the Moody credit rating
   #' @slot SP A character string the Standard and Poors credit rating
   #' @slot BondLab A character string the BondLab credit rating
-  #' @slot Frequency A numeric value the frequency of payments (annual = 1, semi-annual = 2, monthly = 12)
-  #' @slot BondBasis A character string the day count used ("actual360",30360", etc.)
+  #' @slot Frequency A numeric value the frequency of payments 
+  #' (annual = 1, semi-annual = 2, monthly = 12)
+  #' @slot BondBasis A character string the day count used 
+  #' ("actual360",30360", etc.)
   #' @slot GWac A numeric string the weighted average note rate
   #' @slot OrigLoanBal A numeric value the original loan balance
   #' @slot OrigLTV A numeric value the original loan to value ratio
@@ -39,11 +40,14 @@
   #' @slot PMI A numeric value the primary mortgage insurance paid
   #' @slot GFeePremium A numeric value the guarantee fee paid
   #' @slot InitialInterest A logical value TRUE or FALSE interest only mortgage
-  #' @slot InterestOnlyPeriod A numeric value the number of months the borrower pays only interest
-  #' @slot FirstPrinPaymentDate A character string the date of the first principal payment
+  #' @slot InterestOnlyPeriod A numeric value the number of months the 
+  #' borrower pays only interest
+  #' @slot FirstPrinPaymentDate A character string the date of the 
+  #' first principal payment
   #' @slot BalloonPmt A logical value TRUE or FALSE a balloon payment due
   #' @slot BalloonDate A character string the balloon payment date
-  #' @slot MBSFactor A numeric value the pass-through principal balance outstanding expressed as percent of the original balance
+  #' @slot MBSFactor A numeric value the pass-through principal balance 
+  #' outstanding expressed as percent of the original balance
   #' @slot OriginalBal A numeric value the pass-though original balance
   #' @slot CurrentBal A numeric value the pass-through current balance 
   #' a percentage of the original balance
@@ -196,11 +200,25 @@
   setGeneric("LastPmtDate", function(object)
     {standardGeneric("LastPmtDate")})
   
+  #' A standard generic function to replace the slot LastPmtDate
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export LastPmtDate<-
+  setGeneric("LastPmtDate<-", function(object, value)
+  {standardGeneric("LastPmtDate<-")})
+  
   #' A standard generic function to access the slot NextPmtDate
   #' @param  object an S4 class object
   #' @export NextPmtDate
   setGeneric("NextPmtDate", function(object)
     {standardGeneric("NextPmtDate")})
+  
+  #' A standard generic function to replace the slot NextPmtDate
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export NextPmtDate<-
+  setGeneric("NextPmtDate<-", function(object, value)
+    {standardGeneric("NextPmtDate<-")})
   
   #' A standard generic function to access the slot Term
   #' @param object an S4 class object
@@ -214,11 +232,25 @@
   setGeneric("WALA", function(object)
     {standardGeneric("WALA")})
   
+  #' A standard generic function to replace the slot WALA
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export WALA<-
+  setGeneric("WALA<-", function(object, value)
+    {standardGeneric("WALA<-")})
+  
   #' A standard generic function to access the slot WAM
   #' @param object an S4 class object
   #' @export WAM 
   setGeneric("WAM", function(object)
     {standardGeneric("WAM")})
+  
+  #' A standard generic function to replace the slot WAM
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export WAM<-
+  setGeneric("WAM<-", function(object, value)
+    {standardGeneric("WAM<-")})
   
   #' A standard generic function to access the slot PaymentDelay
   #' @param object an S4 class object
@@ -232,7 +264,6 @@
   setGeneric("MoodyRating", function(object)
     {standardGeneric("MoodyRating")})
 
-  
   #' A standard generic function to access the slot SP
   #' @param object an S4 class object
   #' @export SPRating
@@ -365,6 +396,13 @@
   setGeneric("MBSFactor", function(object)
     {standardGeneric("MBSFactor")})
   
+  #' A standard generic function to replace the slot MBSFactor
+  #' @param object an S4 class object
+  #' @param value the replacement value
+  #' @export MBSFactor<-
+  setGeneric("MBSFactor<-", function(object, value)
+    {setGeneric("MBSFactor<-")})
+  
   #' A standard generic function to access the slot OriginalBal
   #' @param object an S4 class object
   #' @export OriginalBal
@@ -376,6 +414,13 @@
   #' @export CurrentBal
   setGeneric("CurrentBal", function(object)
     {standardGeneric("CurrentBal")})
+  
+  #' A standard generic function to replace the slot CurrentBal
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export CurrentBal<-
+  setGeneric("CurrentBal<-", function(object, value)
+    {standardGeneric("CurrentBal<-")})
   
   #' A standard generic function to access the slot Model
   #' @param object an S4 class object
@@ -541,11 +586,31 @@
   setMethod("LastPmtDate", signature("MBSDetails"),
             function(object){object@LastPmtDate})
   
+  #' Method to replace slot LastPmtDate from in class MBSDetails
+  #' @param object the name of the object of type MBSDetails
+  #' @param value the value of the replacement
+  #' @exportMethod LastPmtDate<-
+  setReplaceMethod("LastPmtDate", signature("MBSDetails"),
+                   function(object, value){
+                     object@LastPmtDate <- value
+                     return(object)
+                   })
+  
   #' Method to extract the slot NextPmtDate from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
   #' @exportMethod NextPmtDate
   setMethod("NextPmtDate", signature("MBSDetails"),
             function(object){object@NextPmtDate})
+  
+  #' Method to extract the slot NextPmtDate from the class MBSDetails
+  #' @param object the name of the object of the type MBSDetails
+  #' @param value the value of the slot replacement
+  #' @exportMethod NextPmtDate<-
+  setReplaceMethod("NextPmtDate", signature("MBSDetails"),
+                   function(object, value){
+                     object@NextPmtDate <- value
+                     return(object)
+                   })
   
   #' Method to extract the slot Term from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
@@ -559,6 +624,16 @@
   setMethod("WALA", signature("MBSDetails"),
             function(object){object@WALA})
   
+  #' Method to replace the slot WALA in the class MBSDetails
+  #' @param object the name of the object of the type MBSDetails
+  #' @param value the replacement value of the slot 
+  #' @exportMethod WALA<-
+  setReplaceMethod("WALA", signature("MBSDetails"),
+                   function(object, value){
+                     object@WALA <- value
+                     return(object)
+                   })
+  
   #' Method to extract the slot PaymentDelay from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
   #' @exportMethod PaymentDelay
@@ -570,6 +645,16 @@
   #' @exportMethod WAM
   setMethod("WAM", signature("MBSDetails"),
             function(object){object@WAM})
+  
+  #' Method to replace the slot WAM in the class MBSDetails
+  #' @param object the name of the object of the type MBSDetails
+  #' @param value the replacement value of the slot
+  #' @exportMethod WAM<-
+  setReplaceMethod("WAM", signature("MBSDetails"),
+                   function(object, value){
+                     object@WAM <- value
+                     return(object)
+                   })
   
   #' Method to extract the slot Moody from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
@@ -709,6 +794,16 @@
   setMethod("MBSFactor", signature("MBSDetails"),
             function(object){object@MBSFactor})
   
+  #' Method to replace the slot MBSFactor from the class MBSDetails
+  #' @param object the name of the object of the type MBSDetails
+  #' @param value the replacement value of the slot
+  #' @exportMethod MBSFactor<-
+  setReplaceMethod("MBSFactor", signature("MBSDetails"),
+                   function(object, value){
+                     object@MBSFactor <- value
+                     return(object)
+                     })
+  
   #' Method to extract the slot OriginalBal from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
   #' @exportMethod OriginalBal
@@ -720,6 +815,16 @@
   #' @exportMethod CurrentBal
   setMethod("CurrentBal", signature("MBSDetails"),
             function(object){object@CurrentBal})
+  
+  #' Method to replace the slot CurrentBal from the class MBSDetails
+  #' @param object the name of the object of type MBSDetails
+  #' @param value the replacement value of the slot
+  #' @exportMethod CurrentBal<-
+  setReplaceMethod("CurrentBal", signature("MBSDetails"),
+                   function(object, value){
+                     object@CurrentBal <- value
+                     return(object)
+                   })
   
   #' Method to extract the slot Model from the class MBSDetails
   #' @param object the name of the object of the type MBSDetails
@@ -831,54 +936,68 @@
 
   #' A constructor function to create a mortgage pass through security
   #' 
-  #' This is a standard generic function used to construct a MBS pass through security
+  #' This is a standard generic function used to construct a MBS pass through 
+  #' security
   #' @param Cusip A character the Pass Through MBS cusip.
   #' @param ID A character string the pool number. 
   #' @param BondType A character string the type of Bond MBS, etc.
-  #' @param Sector A charcter string description of the Sector Mortgage, Utility, Government.
+  #' @param Sector A charcter string description of the Sector Mortgage Sector
   #' @param Coupon A numeric value the Bond Coupon.
   #' @param IssueDate A character string the issue date of the security.
-  #' @param DatedDate A character sting The date following the issue when interest begins to accure.
+  #' @param DatedDate A character sting The date following the issue when 
+  #' interest begins to accure.
   #' @param Maturity A character sting the final payment date to the investor
   #' in the case MBS the final payment data assuming 0 CPR.
-  #' @param LastPmtDate A character string the date the last payment scheduled payment to the investor.
-  #' @param NextPmtDate A character string the date of the next scheduled payment to the investor.
+  #' @param LastPmtDate A character string the date the last payment scheduled 
+  #' payment to the investor.
+  #' @param NextPmtDate A character string the date of the next scheduled 
+  #' payment to the investor.
   #' @param Term A numeric value the original term of the underlying mortgages
-  #' @param WALA A numeric value the weighted average loan age of the underlying mortgages
-  #' @param WAM A numeric value the weighted average maturity of the underlying mortgages
-  #' @param PaymentDelay A numeric value in the case of MBS the delay of the payment 
-  #' from the trust to the investor
+  #' @param WALA A numeric value the weighted average loan age of the 
+  #' underlying mortgages
+  #' @param WAM A numeric value the weighted average maturity of the 
+  #' underlying mortgages
+  #' @param PaymentDelay A numeric value in the case of MBS the delay of the 
+  #' payment from the trust to the investor
   #' @param Moody A character string Moody's assigned credit rating
   #' @param SP A character string SP's assigned credit rating
-  #' @param BondLab A character string BondLab's or the user's assigned credit rating
-  #' @param Frequency A numeric value string the frequency of payments made to the investor
-  #' @param BondBasis A character string the basis on which interest is calculated
+  #' @param BondLab A character string BondLab's or the user's 
+  #' assigned credit rating
+  #' @param Frequency A numeric value string the frequency of payments made 
+  #' to the investor
+  #' @param BondBasis A character string the basis on which 
+  #' interest is calculated
   #' @param GWac A numeric value the borrower's note rate
   #' @param OrigLoanBal A numeric value the original balance of the loan
   #' @param OrigLTV A numeric value the borrower's original loan to value ratio
-  #' @param AmortizationType A character sting the type of the loan 'fixed' or 'arm'.
-  #' These values are used by the prepayment model to drive the mortgage rate either fixed
-  #' or adjustable mortgage rate
+  #' @param AmortizationType A character sting the type of the 
+  #' loan 'fixed' or 'arm'.
+  #' These values are used by the prepayment model to drive the mortgage 
+  #' rate either fixed or adjustable mortgage rate
   #' @param AmortizationTerm A numeric value the term of the loan in years
-  #' @param Index A character string if the amortization type is adjustable the Index 
-  #' to which the note rate references
+  #' @param Index A character string if the amortization type is 
+  #' adjustable the Index to which the note rate references
   #' @param Margin A numeric value the spread over the index used to determine 
   #' the borrower's note rate
   #' @param FirstPmtDate A character string the date of the first payment 
   #' of the borrower's note.
   #' @param FinalPmtDate A character string the date of thee final payment 
-  #' of the borrower's note.  In the case of an MBS the final payment made to the bondholder
-  #' @param Servicing A numeric value the servicing spread from the Gross WAC to the servicer
+  #' of the borrower's note.  In the case of an MBS the final payment made to 
+  #' the bondholder
+  #' @param Servicing A numeric value the servicing spread from the Gross WAC 
+  #' to the servicer
   #' of the mortgage pool's underlying loans.
-  #' @param PMI A numeric value the primary mortage insurance paid by the borrower to the 
-  #' PMI provider
-  #' @param GFeePremium A numeric value the guarantee fee taken from the borrower's note rate to
-  #' guarantee timely payment of principal and interest.  Applicable in the case of Fannie
-  #' Mae, Freddie Mac, or Ginnie Mae pools.
-  #' @param InitialInterest A logical indicating the note carries an interest only period
-  #' @param InterestOnlyPeriod A character string indicating the note's interest only period
-  #' @param FirstPrinPaymentDate A character string indicating the first principal payment date
-  #' due of the mortgage.
+  #' @param PMI A numeric value the primary mortage insurance paid by the 
+  #' borrower to the PMI provider
+  #' @param GFeePremium A numeric value the guarantee fee taken from the 
+  #' borrower's note rate to guarantee timely payment of principal and interest.  
+  #' Applicable in the case of Fannie Mae, Freddie Mac, or Ginnie Mae pools.
+  #' @param InitialInterest A logical indicating the note carries an interest 
+  #' only period
+  #' @param InterestOnlyPeriod A character string indicating the note's 
+  #' interest only period
+  #' @param FirstPrinPaymentDate A character string indicating the first 
+  #' principal payment date due of the mortgage.
   #' @param BalloonPmt A logical indicating the mortgage carries a balloon pmt.
   #' @param BalloonDate A character string the balloon payment date.
   #' @param MBSFactor A numeric value the current factor of the MBS.
@@ -886,7 +1005,8 @@
   #' @param CurrentBal A numeric value the current balance of the MBS.
   #' @param Model A character string the prepayment model to use.
   #' @param Burnout A numeric model the value of the borrower burnout.
-  #' @param SATO A numeric value the borrrowers Spread AT Origination over the prime lending rate.
+  #' @param SATO A numeric value the borrrowers Spread AT Origination over the 
+  #' prime lending rate.
   #' @examples 
   #' \dontrun{
   #'  MakeMBSDetails( 

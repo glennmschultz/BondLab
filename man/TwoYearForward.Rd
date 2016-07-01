@@ -2,7 +2,7 @@
 % Please edit documentation in R/TermStructure.R
 \name{TwoYearForward}
 \alias{TwoYearForward}
-\title{A generic function to access the slot TwoYearForward}
+\title{A generic function to access the slot TwoYearForward in class TermStructure}
 \usage{
 TwoYearForward(object)
 }
@@ -10,6 +10,6 @@ TwoYearForward(object)
 \item{object}{an S4 class object}
 }
 \description{
-A generic function to access the slot TwoYearForward
+A generic function to access the slot TwoYearForward in class TermStructure
 }
 

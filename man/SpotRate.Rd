@@ -2,7 +2,7 @@
 % Please edit documentation in R/TermStructure.R
 \name{SpotRate}
 \alias{SpotRate}
-\title{A generic function to access the slot SpotRate}
+\title{A generic function to access the slot SpotRate in class TermStructure}
 \usage{
 SpotRate(object)
 }
@@ -10,6 +10,6 @@ SpotRate(object)
 \item{object}{an S4 class object}
 }
 \description{
-A generic function to access the slot SpotRate
+A generic function to access the slot SpotRate in class TermStructure
 }
 

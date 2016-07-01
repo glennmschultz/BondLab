@@ -24,22 +24,32 @@
                                  original.bal = numeric(),
                                  projected.cashflow = "character",
                                  horizon.months = numeric()){
-    TempBond <- bond.id
-    CurrentPeriod <- bond.id@WALA + horizon.months
-    NextPeriod <-  CurrentPeriod + 1
-    SchedPrincipal <- projected.cashflow@ScheduledPrin[1:horizon.months]
-    PrepaidPrincipal <- projected.cashflow@PrepaidPrin[1:horizon.months]
-    DefaultedPrincipal <- projected.cashflow@DefaultedPrin[1:horizon.months]
-    TotalPrincipal <- sum(SchedPrincipal) + sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
+  TempBond <- bond.id
+  # CurrentPeriod <- bond.id@WALA + horizon.months
+  # NextPeriod <-  CurrentPeriod + 1
+  SchedPrincipal <- ScheduledPrin(projected.cashflow)[1:horizon.months]
+  PrepaidPrincipal <- PrepaidPrin(projected.cashflow)[1:horizon.months]
+  DefaultedPrincipal <- DefaultedPrin(projected.cashflow)[1:horizon.months]
+  TotalPrincipal <- sum(SchedPrincipal) + 
+      sum(PrepaidPrincipal) + 
+      sum(DefaultedPrincipal)
     
-    TempBond@LastPmtDate <- as.character(format(as.Date(bond.id@FirstPmtDate, format = "%m-%d-%Y") %m+% months(CurrentPeriod), "%m-%d-%Y"))
-    TempBond@NextPmtDate <- as.character(format(as.Date(bond.id@FirstPmtDate, format = "%m-%d-%Y") %m+% months(NextPeriod), "%m-%d-%Y"))
-    TempBond@MBSFactor <- ((original.bal * bond.id@MBSFactor) - TotalPrincipal)/original.bal
-    TempBond@WAM <- bond.id@WAM + horizon.months
-    TempBond@WALA <- bond.id@WALA - horizon.months
+  LastPmtDate(TempBond) <- as.character(format(
+    as.Date(LastPmtDate(bond.id), 
+            format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
     
-    connTemp <-  gzfile(description = paste(system.file(package = "BondLab"),
-                                            "/Temp_BondData/","TempPassThrough.rds", sep = ""))
-    saveRDS(TempBond, connTemp)
-    close(connTemp)
+  NextPmtDate(TempBond) <- as.character(format(
+    as.Date(NextPmtDate(bond.id), 
+            format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    
+  MBSFactor(TempBond) <- ((original.bal * MBSFactor(bond.id)) - TotalPrincipal)/
+    original.bal
+  
+  WAM(TempBond) <- WAM(bond.id) - horizon.months
+  WALA(TempBond) <- WALA(bond.id) + horizon.months
+    
+  connTemp <-  gzfile(description = paste(system.file(
+    package = "BondLab"), "/Temp_BondData/","TempPassThrough.rds", sep = ""))
+  saveRDS(TempBond, connTemp)
+  close(connTemp)
   }

@@ -15,17 +15,21 @@
   #' 
   #' This is generic function to determine the price of a bond
   #' given the yield to maturity (YTM).  It is a nominal example of 
-  #' pricing a bond given its yield to maturity.  The equation assumes pricing
-  #' from one payment date to the next.  It does not account for acrrued interest.
+  #' pricing a bond given its yield to maturity.  The equation assumes 
+  #' pricing from one payment date to the next.  It does not account for
+  #' acrrued interest.
   #' @param yield.to.maturity A numeric value expressing the yield to
   #' maturity (discount rate) as an annual percentage.
-  #' @param coupon A numeric value the coupon paid by the bond as a percentage of
+  #' @param coupon A numeric value the coupon paid by the bond as a 
+  #' percentage of
   #' the bond's principal amount
-  #' @param coupon.frequency A numeirc value expressing the frequency of payments
-  #' over one year
+  #' @param coupon.frequency A numeirc value expressing the frequency 
+  #' of payments over one year
   #' @param years.mat A numeric value expressing the years to maturity
-  #' @param face.value A numeric value expressing the face value (principal amount) of the bond
-  #' @examples bondprice(yield.to.maturity = .05, coupon = .05, coupon.frequency = 2,
+  #' @param face.value A numeric value expressing the face value 
+  #' (principal amount) of the bond
+  #' @examples bondprice(
+  #' yield.to.maturity = .05, coupon = .05, coupon.frequency = 2,
   #' years.mat = 10, face.value = 100)
   #' @export bondprice
   bondprice<- function(yield.to.maturity = numeric(),
@@ -62,7 +66,8 @@
   #' @param face.value A numeric value expressing the face value (principal amount) of the bond
   #' @param price A numeric value expressing the price of the bond (not percentage of face value)
   #' for example a price of$102 is entered as 102.00
-  #' @examples EstimYTM(coupon = .04, coupon.frequency = 2, years.mat = 10, face.value = 1000, price = 100)
+  #' @examples EstimYTM(coupon = .04, 
+  #' coupon.frequency = 2, years.mat = 10, face.value = 1000, price = 100)
   #' @export EstimYTM
   EstimYTM <- function(coupon = numeric(), 
                      coupon.frequency = numeric(), 
@@ -73,7 +78,7 @@
   n = years.mat
   f = coupon.frequency
   fv = face.value
-  p = price/100 
+  p = price/price.basis 
   ((c * fv) + ((fv - (fv *p))/2)) / (((fv + (fv *p))/f))
   }
 

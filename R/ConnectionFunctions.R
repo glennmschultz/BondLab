@@ -130,8 +130,10 @@
   #' @param bond.id A character string the bond id or cusip currently bond.id is supported
   #' @export
    ModelTune <- function(bond.id = "character"){
-                ModelTune.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-                "/PrepaymentModel/", bond.id@Model,".rds", sep =""), open = "rb")
+                ModelTune.Conn <- gzfile(
+                  description = paste(system.file(package = "BondLab"),
+                "/PrepaymentModel/", Model(bond.id),".rds", sep =""), 
+                open = "rb")
                 ModelTune <- readRDS(ModelTune.Conn)
                 on.exit(close.connection(ModelTune.Conn))
                 return(ModelTune)

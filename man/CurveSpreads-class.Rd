@@ -10,6 +10,8 @@ An S4 class to hold curve spread values
 \section{Slots}{
 
 \describe{
+\item{\code{BenchMark}}{A numeric value the closest curve benchmark}
+
 \item{\code{SpreadToBenchmark}}{A numeric value to nominal spread to the nearest
 pricing benchmark}
 

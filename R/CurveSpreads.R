@@ -5,6 +5,7 @@
   
   #' An S4 class to hold curve spread values
   #' 
+  #' @slot BenchMark A numeric value the closest curve benchmark
   #' @slot SpreadToBenchmark A numeric value to nominal spread to the nearest
   #' pricing benchmark
   #' @slot SpreadToCurve A numeric value the nominal spread to the interpolated
@@ -12,6 +13,7 @@
   #' @exportClass CurveSpreads
   setClass("CurveSpreads",
            representation(
+             BenchMark = "numeric",
              SpreadToBenchmark = "numeric",
              SpreadToCurve = "numeric"
            ))
@@ -20,6 +22,13 @@
                                       MortgageCashFlow = "character")
     {standardGeneric("CurveSpreads")})
 
+  #' A standard generic function to access BenchMark
+  #' 
+  #' @param object An object of the type CurveSpreads
+  #' @export BenchMark
+  setGeneric("BenchMark", function(object)
+    {standardGeneric("BenchMark")})
+  
   #' A standard generic function to access SpreadToBenchmark
   #'
   #' @param object An object of the type CurveSpreads
@@ -37,14 +46,23 @@
   setMethod("initialize",
             signature("CurveSpreads"),
             function(.Object,
+                     BenchMark = numeric(),
                      SpreadToBenchmark = numeric(),
                      SpreadToCurve = numeric(),
                      ...){
               callNextMethod(.Object,
+                             BenchMark = BenchMark,
                              SpreadToBenchmark = SpreadToBenchmark,
                              SpreadToCurve = SpreadToCurve,
                              ...)
             })
+  #' A method to extract the BenchMark from object CurveSpreads
+  #' 
+  #' @param object An object of the type CurveSpreads
+  #' @exportMethod BenchMark
+  setMethod("BenchMark", signature("CurveSpreads"),
+            function(object){object@BenchMark})
+  
   #' A method to extract the SpreadToBenchmark from object CurveSpreads
   #'
   #' @param object An object of type CurveSpreads
@@ -74,9 +92,9 @@
     MarketCurve <- rates.data
 
     # local regression smooth of market curve
-    ModelCurve <- loess(as.numeric(MarketCurve[2,2:12]) ~
-                          as.numeric(MarketCurve[1,2:12]),
-                        data = MarketCurve)
+    ModelCurve <- loess(as.numeric(MarketCurve[1,2:12]) ~
+                          as.numeric(MarketCurve[2,2:12]),
+                        data = data.frame(MarketCurve))
 
     # use predict ModelCurve to spread to curve
     SpreadToCurve <- (YieldToMaturity(MortgageCashFlow)) -
@@ -87,12 +105,15 @@
                               as.numeric(WAL(MortgageCashFlow))) ==
                           min(abs(as.numeric(MarketCurve[1,2:12])-
                                     as.numeric(WAL(MortgageCashFlow)))))
+    # BenchMark maturity
+    BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex])
 
     # calculate spread to benchmark
     SpreadToBenchmark <-  (YieldToMaturity(MortgageCashFlow)) -
-      as.numeric(MarketCurve[2,RatesIndex + 1])
+      as.numeric(MarketCurve[1,RatesIndex])
 
     new("CurveSpreads",
+        BenchMark = BenchMarkMaturity,
         SpreadToBenchmark = SpreadToBenchmark,
         SpreadToCurve = SpreadToCurve)
   }

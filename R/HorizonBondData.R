@@ -45,6 +45,8 @@
   MBSFactor(TempBond) <- ((original.bal * MBSFactor(bond.id)) - TotalPrincipal)/
     original.bal
   
+  CurrentBal(TempBond) <- CurrentBal(bond.id) - TotalPrincipal
+  
   WAM(TempBond) <- WAM(bond.id) - horizon.months
   WALA(TempBond) <- WALA(bond.id) + horizon.months
     

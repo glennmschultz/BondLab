@@ -19,10 +19,12 @@ BondAnalytics(bond.id = "character", principal = numeric(),
 
 \item{settlement.date}{A character string the settlement date}
 
-\item{method}{A character string the method used to fit the term structure passed to the package termstruc}
+\item{method}{A character string the method used to fit the term 
+structure passed to the package termstruc}
 }
 \description{
-Analytic engine for standard bond (non-mortgage) analysis returns Bond Analytics object
+Analytic engine for standard bond (non-mortgage) analysis returns 
+Bond Analytics object
 }
 \examples{
 \dontrun{BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, 

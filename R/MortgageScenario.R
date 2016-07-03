@@ -649,7 +649,7 @@
 
   Horizon.Spot.Value <- function(HorizonTermStructure = "character",
                                    HorizonCashFlow = "character",
-                                   HorizonSpotSpread = numeric(),
+                                   horizon.spot.spread = numeric(),
                                    NumberofCashFlow = numeric()){
   DiscountRate <- 1/((1+((SpotRate(HorizonTermStructure)[1:NumberofCashFlow] + 
                            horizon.spot.spread)/monthly.yield.basis)) ^ 
@@ -729,7 +729,7 @@
   
   HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
   HorizonReturn <- (HorizonReturn - 1) * yield.basis
-    
+
   new("MtgScenario",
       Period = Period(MortgageCashFlow),
       PmtDate = PmtDate(MortgageCashFlow),
@@ -743,11 +743,11 @@
       SpotRate = SpotRate(TermStructure),
       ForwardRate = ForwardRate(TermStructure),
       SMM = SMM(Prepayment),
-      YieldToMaturity = YieldToMaturity(MortgageCashFlow),
-      WAL = WAL(MortgageCashFlow),
+      YieldToMaturity = YieldToMaturity(HorizonCashFlow),
+      WAL = WAL(HorizonCashFlow),
       SpreadToCurve = SpreadToCurve(CurveSpreads),
-      ModDuration = ModDuration(MortgageCashFlow),
-      Convexity = Convexity(MortgageCashFlow), 
+      ModDuration = ModDuration(HorizonCashFlow),
+      Convexity = Convexity(HorizonCashFlow), 
       EffDuration = EffDuration(MortgageTermStructure),
       EffConvexity = EffConvexity(MortgageTermStructure),
       KeyRateTenor = unname(KeyRateTenor(MortgageTermStructure)),

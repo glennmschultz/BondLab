@@ -16,7 +16,8 @@ An S4 class representing the cusip detail of the a standard bond
 
 \item{\code{BondType}}{a character string the type of the bond UST, Corp}
 
-\item{\code{Sector}}{a character string the bond sector (Govt, Financial, Utility, etc.)}
+\item{\code{Sector}}{a character string the bond sector 
+(Govt, Financial, Utility, etc.)}
 
 \item{\code{Coupon}}{a numeric value the bond's coupon}
 
@@ -36,7 +37,8 @@ payment to be received by the investor}
 
 \item{\code{SP}}{A character string the S&P credit rating}
 
-\item{\code{BondLab}}{A character string the BondLab or investor assigned credit rating}
+\item{\code{BondLab}}{A character string the BondLab or investor 
+assigned credit rating}
 
 \item{\code{Frequency}}{A numeric value the payment frequency of the bond 
 (the number of payments made in one-year)}

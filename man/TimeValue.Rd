@@ -10,15 +10,16 @@ TimeValue(interest.rate = numeric(), number.periods = numeric(),
   frequency = numeric(), type = "character")
 }
 \arguments{
-\item{interest.rate}{The interest rate used to determine the discount factor in decimal
+\item{interest.rate}{The interest rate used to determine the discount 
+factor in decimal
 form (i.e. 4.0\% is input as 0.04)}
 
 \item{number.periods}{The number of discount periods.  For example, 
-in the case of a mortgage whose cash flow occurs monthly over 30 years the number of 
-periods is 360.}
+in the case of a mortgage whose cash flow occurs monthly over 
+30 years the number of periods is 360.}
 
-\item{frequency}{The frequency of interest payments.  For example the frequency of a
-mortgage whose payments occur monthly is 12}
+\item{frequency}{The frequency of interest payments.  For example the 
+frequency of a mortgage whose payments occur monthly is 12}
 
 \item{type}{The type of calculation PV = present value, 
 PVA = present value of annuity, PVAD present value of annuity due,
@@ -30,6 +31,7 @@ A function to compute the time value of money
 A standard generic function used to calculate time value of money
 }
 \examples{
-TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")
+TimeValue(interest.rate = .05, number.periods = 3, 
+frequency = 1, type = "PV")
 }
 

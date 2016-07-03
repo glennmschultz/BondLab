@@ -2,7 +2,8 @@
 
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # mortgage backed, asset backed securities, and commerical mortgage backed
+  # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
   #'@include MortgageCashFlow.R
@@ -23,8 +24,8 @@
   #' to the investor
   #' @slot PrincipalOutstanding a numeric value the outstanding principal balance
   #' @slot CouponPmt a numeric value the coupon payment amount
-  #' @slot TotalCashFlow a numeric value the sum of the principal and interest payment
-  #' made in each period
+  #' @slot TotalCashFlow a numeric value the sum of the principal and interest
+  #' payment made in each period
   #' @exportClass BondCashFlows
   setClass("BondCashFlows",
          representation(
@@ -210,19 +211,28 @@
             settlement.date = settlement.date,
             price = price)
   
-  #  Validate the price and coupon passed through the error trapping function
-  #  This validates that the correct unit is passed into the Bond Cash Flow function
+  # Validate the price and coupon passed through the error trapping function
+  # This validates that the correct unit is passed into the Bond Cash Flow 
+  # function
   if(price <= 1) {price = price} else {price = price/price.basis}
   if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
   
-  #Calculate the number of cashflows that will be paid from settlement date to maturity date 
-  #step1 calculate the years to maturity  
-  ncashflows = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                   lastpmt.date = lastpmt.date, nextpmt.date = end.date, type = bondbasis) 
+  # Calculate the number of cashflows that will be paid from settlement date to
+  # maturity date 
+  # step1 calculate the years to maturity  
+  ncashflows = BondBasisConversion(
+    issue.date = issue.date, 
+    start.date = start.date, 
+    end.date = end.date, 
+    settlement.date = settlement.date,
+    lastpmt.date = lastpmt.date, 
+    nextpmt.date = end.date, 
+    type = bondbasis) 
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
   pmtdate.interval = months.in.year/frequency
+  
   # then compute the payment dates
   pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
                       else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")

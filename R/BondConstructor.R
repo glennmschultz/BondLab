@@ -12,7 +12,8 @@
   #' @slot Cusip a character string of length 9 the bond's cusip
   #' @slot ID a character string the ID of the bond
   #' @slot BondType a character string the type of the bond UST, Corp
-  #' @slot Sector a character string the bond sector (Govt, Financial, Utility, etc.)
+  #' @slot Sector a character string the bond sector 
+  #' (Govt, Financial, Utility, etc.)
   #' @slot Coupon a numeric value the bond's coupon
   #' @slot IssueDate a character string the issue date in mm/dd/YYYY format
   #' @slot DatedDate a character string the dated date in mm/dd/YYYY format
@@ -23,7 +24,8 @@
   #' payment to be received by the investor
   #' @slot Moody A character string the Moody credit rating
   #' @slot SP A character string the S&P credit rating
-  #' @slot BondLab A character string the BondLab or investor assigned credit rating
+  #' @slot BondLab A character string the BondLab or investor 
+  #' assigned credit rating
   #' @slot Frequency A numeric value the payment frequency of the bond 
   #' (the number of payments made in one-year)
   #' @slot BondBasis a character string the bond's interest calculation basis
@@ -72,7 +74,6 @@
     Putable = "character",
     SinkingFund = "character")
   {standardGeneric("MakeBondDetails")})
-  
 
   setMethod("initialize",
           signature = ("BondDetails"),
@@ -94,28 +95,28 @@
                    BondBasis = "character",
                    Callable = "character",
                    Putable = "character",
-                   SinkingFund = "character")
-  {
-              .Object@Cusip = Cusip
-              .Object@ID = ID
-              .Object@BondType = BondType
-              .Object@Sector = Sector
-              .Object@Coupon = Coupon
-              .Object@IssueDate = IssueDate
-              .Object@DatedDate = DatedDate
-              .Object@Maturity = Maturity
-              .Object@LastPmtDate = LastPmtDate
-              .Object@NextPmtDate = NextPmtDate
-              .Object@Moody = Moody
-              .Object@SP = SP
-              .Object@BondLab = BondLab
-              .Object@Frequency = Frequency
-              .Object@BondBasis = BondBasis
-              .Object@Callable = Callable
-              .Object@Putable = Putable
-              .Object@SinkingFund = SinkingFund
-
-              return(.Object)
+                   SinkingFund = "character",
+                   ...){
+            callNextMethod(.Object,
+                           Cusip = Cusip,
+                           ID = ID,
+                           BondType = BondType,
+                           Sector = Sector,
+                           Coupon = Coupon,
+                           IssueDate = IssueDate,
+                           DatedDate = DatedDate,
+                           Maturity = Maturity,
+                           LastPmtDate = LastPmtDate,
+                           NextPmtDate = NextPmtDate,
+                           Moody = Moody,
+                           SP = SP,
+                           BondLab = BondLab,
+                           Frequency = Frequency,
+                           BondBasis = BondBasis,
+                           Callable = Callable,
+                           Putable = Putable,
+                           SinkingFund = SinkingFund,
+                           ...)
           })
 
   BondDetails <-function(
@@ -166,12 +167,16 @@
   #' @param ID A character string the bond's ID
   #' @param BondType A character string the type of bond
   #' @param Sector A character string the bond sector
-  #' @param Coupon A character string the coupon (interest rate) paid to the investor
+  #' @param Coupon A character string the coupon (interest rate) 
+  #' paid to the investor
   #' @param IssueDate A character string the issue date of the bond
   #' @param DatedDate A character string the bond's dated date
-  #' @param Maturity A character string the bond's maturity date of final principal payment date
-  #' @param LastPmtDate A character string the most recent payment date to the investor
-  #' @param NextPmtDate A character string the next payment date due to the investor
+  #' @param Maturity A character string the bond's maturity date of final 
+  #' principal payment date
+  #' @param LastPmtDate A character string the most recent payment 
+  #' date to the investor
+  #' @param NextPmtDate A character string the next payment date due to 
+  #' the investor
   #' @param Moody A character string the Moody assigned rating
   #' @param SP A character string the SP assigned rating
   #' @param BondLab A character string the Bond Lab assigned rating

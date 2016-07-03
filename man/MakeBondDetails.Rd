@@ -22,17 +22,21 @@ MakeBondDetails(Cusip = "character", ID = "character",
 
 \item{Sector}{A character string the bond sector}
 
-\item{Coupon}{A character string the coupon (interest rate) paid to the investor}
+\item{Coupon}{A character string the coupon (interest rate) 
+paid to the investor}
 
 \item{IssueDate}{A character string the issue date of the bond}
 
 \item{DatedDate}{A character string the bond's dated date}
 
-\item{Maturity}{A character string the bond's maturity date of final principal payment date}
+\item{Maturity}{A character string the bond's maturity date of final 
+principal payment date}
 
-\item{LastPmtDate}{A character string the most recent payment date to the investor}
+\item{LastPmtDate}{A character string the most recent payment 
+date to the investor}
 
-\item{NextPmtDate}{A character string the next payment date due to the investor}
+\item{NextPmtDate}{A character string the next payment date due to 
+the investor}
 
 \item{Moody}{A character string the Moody assigned rating}
 

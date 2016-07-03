@@ -34,7 +34,7 @@ to the investor}
 
 \item{\code{CouponPmt}}{a numeric value the coupon payment amount}
 
-\item{\code{TotalCashFlow}}{a numeric value the sum of the principal and interest payment
-made in each period}
+\item{\code{TotalCashFlow}}{a numeric value the sum of the principal and interest
+payment made in each period}
 }}
 

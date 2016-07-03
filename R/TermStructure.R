@@ -322,25 +322,28 @@
   data$ACCRUED <- rep(0, ColCount -1)
   
   for(j in 1:(ColCount-1)){
-    Vector.Length <- as.numeric(round(difftime(data[[3]][j],
-                                               data[[2]][j],
-                                               units = c("weeks"))/weeks.in.year,5))
+    Vector.Length <- as.numeric(
+      round(difftime(data[[3]][j],
+                     data[[2]][j],
+                     units = c("weeks"))/weeks.in.year,5))
     
     Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , 
                             round(Vector.Length * pmt.frequency))
-    #Vector.Length <- ifelse(Vector.Length < 1, 1, Vector.Length * pmt.frequency)  
-    #pmt.frequency should be input 
     
     data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, 
                                   rep(data[[1]][j],Vector.Length))
     
     data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
-      as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * min.principal, 
-              (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* min.principal))))
+      as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * 
+                     min.principal, 
+              (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* 
+                 min.principal))))
     
-    by.months = ifelse(data[[4]][j] == 0, round(difftime(data[[3]][j], rates.data[1,1])/days.in.month), 6) 
-    # this sets the month increment so that cashflows can handle discount bills
-    
+    by.months = ifelse(data[[4]][j] == 0, 
+                       round(difftime(data[[3]][j], 
+                                      rates.data[1,1])/days.in.month), 6) 
+  # this sets the month increment so that cashflows can handle discount bills
+  
   data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
   seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
   as.Date(data[[3]][j]), 
@@ -360,31 +363,55 @@
   
   if(method != "cs") {TSFit <- estim_nss(dataset = TSInput, 
                                         group = as.character(rates.data[1,1]), 
-                                        matrange = "all", method = method)} else
-  {TSFit <- estim_cs(bonddata = TSInput, 
+                                        matrange = "all", method = method)
+  } else {TSFit <- estim_cs(bonddata = TSInput, 
                      group = as.character(rates.data[1,1]), 
                      matrange = "all", rse = TRUE)}
   
-  #Return the coefficient vector to be passed in to the spot and forward rate functions
+  #Return the coefficient vector to be passed in to the spot and 
+  #forward rate functions
   #Maybe have the method choosen based on the one that gives the smallest RMSE
+  #
   Vector <- switch(method,
-  ns = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1")]),
-  dl = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2")]),
-  sv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "beta3", "tau2")]),
-  asv = unname(TSFit$opt_result[[1]]$par[c("beta0", "beta1", "beta2", "tau1", "tau2", "tau3")])
+  ns = unname(TSFit$opt_result[[1]]$par[c("beta0", 
+                                          "beta1", 
+                                          "beta2", 
+                                          "tau1")]),
+  dl = unname(TSFit$opt_result[[1]]$par[c("beta0", 
+                                          "beta1", 
+                                          "beta2")]),
+  sv = unname(TSFit$opt_result[[1]]$par[c("beta0", 
+                                          "beta1", 
+                                          "beta2", 
+                                          "tau1", 
+                                          "beta3", 
+                                          "tau2")]),
+  asv = unname(TSFit$opt_result[[1]]$par[c("beta0", 
+                                           "beta1", 
+                                           "beta2", 
+                                           "tau1", 
+                                           "tau2", 
+                                           "tau3")])
   #cs = need to figure this out
   )
   
   #Calculate the spot rate curve and determine the forward rates needed to 
   period <- seq(from = 1, to = 492, by = 1)
   #Use the date from the cashflow file
-  date <- seq(as.Date(rates.data[1,1]) %m+% months(1), as.Date(data[[3]][j]), by="1 months")
-  spot.rate.curve <- spotrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
-  forward.rate.curve <- forwardrates(method = method, beta = Vector, m = seq(from = 1/12, to = 492/12, by = 1/12))
+  date <- seq(as.Date(rates.data[1,1]) %m+% months(1), 
+              as.Date(data[[3]][j]), by="1 months")
+  spot.rate.curve <- spotrates(method = method, 
+                               beta = Vector, 
+                               m = seq(from = 1/12, to = 492/12, 
+                                       by = 1/12))
+  forward.rate.curve <- forwardrates(method = method, 
+                                     beta = Vector, 
+                                     m = seq(from = 1/12, to = 492/12, 
+                                             by = 1/12))
+  
   Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:360]
   Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:360]
 
-  
   new("TermStructure",
       TradeDate = as.character(rates.data[1,1]),
       Period = as.numeric(period),

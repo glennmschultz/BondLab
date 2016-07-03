@@ -19,24 +19,26 @@
   #' A function to compute the time value of money
   #'                  
   #' A standard generic function used to calculate time value of money
-  #' @param interest.rate The interest rate used to determine the discount factor in decimal
+  #' @param interest.rate The interest rate used to determine the discount 
+  #' factor in decimal
   #' form (i.e. 4.0\% is input as 0.04)
   #' @param number.periods The number of discount periods.  For example, 
-  #' in the case of a mortgage whose cash flow occurs monthly over 30 years the number of 
-  #' periods is 360.
-  #' @param frequency The frequency of interest payments.  For example the frequency of a
-  #' mortgage whose payments occur monthly is 12
+  #' in the case of a mortgage whose cash flow occurs monthly over 
+  #' 30 years the number of periods is 360.
+  #' @param frequency The frequency of interest payments.  For example the 
+  #' frequency of a mortgage whose payments occur monthly is 12
   #' @param type The type of calculation PV = present value, 
   #' PVA = present value of annuity, PVAD present value of annuity due,
   #' FV = future value, FVA = future value of annuity.
-  #' @examples TimeValue(interest.rate = .05, number.periods = 3, frequency = 1, type = "PV")
+  #' @examples TimeValue(interest.rate = .05, number.periods = 3, 
+  #' frequency = 1, type = "PV")
   #' @export TimeValue
   TimeValue <- function(interest.rate = numeric(), 
                       number.periods = numeric(), 
                       frequency = numeric(), 
                       type = "character"){
   if (missing(interest.rate))
-    stop("Need to specify interest.rate as number between 0 and 1 for calculations.")
+    stop("Need to specify interest.rate as number between 0 and 1.")
   if (!is.numeric(interest.rate)  )
     stop("No numeric interest.rate specified.")
   if (interest.rate < 0 | interest.rate > 1)
@@ -64,7 +66,8 @@
   switch(type,
          PV =  1/(1+interest.rate)^number.periods,
          PVA = ((1-(1/(1+interest.rate)^number.periods))/interest.rate),
-         PVAD =   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * (1+interest.rate),  
+         PVAD =   ((1-(1/(1+interest.rate)^number.periods))/interest.rate) * 
+           (1+interest.rate),  
          FV =  (1+interest.rate)^number.periods,
          FVA =   (((1 + interest.rate)^(number.periods)) -1)/interest.rate)
   }

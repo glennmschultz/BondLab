@@ -1,7 +1,9 @@
 
-  # A function to calculate the spread to benchmark and
-  # the spread to the curve
-  # copyright 2016 Bond Lab Technologies, LLC
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
   
   #' An S4 class to hold curve spread values
   #' 

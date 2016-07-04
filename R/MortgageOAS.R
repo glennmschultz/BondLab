@@ -368,8 +368,8 @@
                               as.numeric(rates.data[2,2:12]), 
                               data = data.frame(rates.data))  
     
-    SpreadtoCurve = ((MtgCashFlow@YieldToMaturity  * yield.basis) - 
-                       predict(InterpolateCurve, MtgCashFlow@WAL ))/yield.basis
+    SpreadtoCurve = ((MtgCashFlow@YieldToMaturity) - 
+                       predict(InterpolateCurve, MtgCashFlow@WAL ))
     
   OAS <- OAS.Out
    # ------------------------------------------------------------------------
@@ -461,7 +461,7 @@
     new("MortgageOAS",
        OAS = mean(OAS.Out[,1]) * yield.basis,
        ZVSpread = spot.spread * yield.basis,
-       SpreadToCurve = SpreadtoCurve * yield.basis,
+       SpreadToCurve = SpreadtoCurve,
        EffDuration = EffDuration(MortgageKeyRate),
        EffConvexity = EffConvexity(MortgageKeyRate),
        KeyRateTenor = KeyRateTenor(MortgageKeyRate),

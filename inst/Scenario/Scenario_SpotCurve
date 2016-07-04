@@ -10,7 +10,7 @@
     Shiftbps = "0",
     Formula = function(rates.data = vector(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -20,7 +20,7 @@
     Shiftbps = "25",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -30,7 +30,7 @@
     Shiftbps = "50",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -40,7 +40,7 @@
     Shiftbps = "75",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -50,7 +50,7 @@
     Shiftbps = "100",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -60,7 +60,7 @@
     Shiftbps = "125",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -70,7 +70,7 @@
     Shiftbps = "150",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -80,7 +80,7 @@
     Shiftbps = "175",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -90,7 +90,7 @@
     Shiftbps = "200",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -100,7 +100,7 @@
     Shiftbps = "225",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -110,7 +110,7 @@
     Shiftbps = "250",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -120,7 +120,7 @@
     Shiftbps = "275",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -130,7 +130,7 @@
     Shiftbps = "300",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
      Scenario(
@@ -140,7 +140,7 @@
     Shiftbps = "-25",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -150,7 +150,7 @@
     Shiftbps = "-50",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -160,7 +160,7 @@
     Shiftbps = "-75",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -170,7 +170,7 @@
     Shiftbps = "-100",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -180,7 +180,7 @@
     Shiftbps = "-125",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -190,7 +190,7 @@
     Shiftbps = "-150",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -200,7 +200,7 @@
     Shiftbps = "-175",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -210,7 +210,7 @@
     Shiftbps = "-200",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -220,7 +220,7 @@
     Shiftbps = "-225",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -230,7 +230,7 @@
     Shiftbps = "-250",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -240,7 +240,7 @@
     Shiftbps = "-275",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 
     Scenario(
@@ -250,6 +250,6 @@
     Shiftbps = "-300",
     Formula = function(rates.data = numeric(), Shiftbps = "character"){
     yield.basis = 100
-    pmax(0.01, rates.data + (as.numeric(Shiftbps)/yield.basis))
+    pmax(0.01, as.numeric(rates.data) + (as.numeric(Shiftbps)/yield.basis))
     })
 

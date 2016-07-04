@@ -40,26 +40,33 @@
              function(rates.data = "character", method = "character")
              {standardGeneric("TermStructure")})
   
-  #' A generic function to access the slot tradedate
+  #' A generic function to access the slot TradeDate
   #' @param object an S4 class object
   #' @export TradeDate
   setGeneric("TradeDate", function(object)
     {standardGeneric("TradeDate")})
   
-  # Note: Both Object@Period standard generic is found in MortgageCashFlow.R
+  #' A generic function to replace the slot TradeDate
+  #' @param object an S4 class object
+  #' @param value the replacement value
+  #' @export TradeDate<-
+  setGeneric("TradeDate<-", function(object, value)
+    {standardGeneric("TradeDate<-")})
   
-  #' A generic function to access the slot ForwardDate in class TermStructure
+  # Note: Period standard generic is found in MortgageCashFlow.R
+  
+  #' A generic function to access the slot Date in class TermStructure
   #' @param object an S4 class object
   #' @export ForwardDate
   setGeneric("ForwardDate", function(object)
     {standardGeneric("ForwardDate")})
   
-  #' A generic function to replace slot ForwardDate in class TermStructure
+  #' A generic function to replace the slot Date in class TermStructure
   #' @param object an S4 class object
-  #' @param value the value of the replacement
+  #' @param value the replacement value of the slot
   #' @export ForwardDate<-
-  setGeneric("ForwardDate<-", function(object, value)
-  {standardGeneric("ForwardDate<-")})
+  setGeneric("ForwardDate<-", function(object,value)
+    {standardGeneric("ForwardDate<-")})
 
   #' A generic function to access the slot SpotRate in class TermStructure
   #' @param object an S4 class object
@@ -145,28 +152,38 @@
   setMethod("TradeDate", signature("TermStructure"),
             function(object){object@TradeDate})
   
+  #' Method to replace TradeDate in class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @param value the replacement value of the slot
+  #' @exportMethod TradeDate<-
+  setReplaceMethod("TradeDate", signature = ("TermStructure"),
+            function(object, value){
+              object@TradeDate <- value
+              return(object)
+            })
+  
   #' Method to extract Period from S4 class
   #' @param object the name of the S4 object
   #' @exportMethod Period
   setMethod("Period", signature("TermStructure"),
             function(object){object@Period})
   
-  #' Method to extract ForwardDate from the class TermStructure
+  #' Method to extract Date from the class TermStructure
   #' @param object the name of the object of type TermStructure
   #' @exportMethod ForwardDate
   setMethod("ForwardDate", signature("TermStructure"),
             function(object){object@Date})
   
-  #' Method to replace ForwardDate from the class TermStructure
+  #' Method to replace Date in the class TermStructure
   #' @param object the name of the object of type TermStructure
-  #' @param value the value of the replacement
+  #' @param value the replacement value of the slot
   #' @exportMethod ForwardDate<-
   setReplaceMethod("ForwardDate", signature("TermStructure"),
-                   function(object, value){
-                     object@ForwardDate <- value
-                     return(object)
-                   })
-  
+            function(object,value){
+              object@Date <- value
+              return(object)
+              })
+
   #' Method to extract SpotRate from the class TermStructure
   #' @param object the name of the object of type TermStructure
   #' @exportMethod SpotRate

@@ -2,16 +2,16 @@
 % Please edit documentation in R/TermStructure.R
 \name{ForwardDate<-}
 \alias{ForwardDate<-}
-\title{A generic function to replace slot ForwardDate in class TermStructure}
+\title{A generic function to replace the slot Date in class TermStructure}
 \usage{
 ForwardDate(object) <- value
 }
 \arguments{
 \item{object}{an S4 class object}
 
-\item{value}{the value of the replacement}
+\item{value}{the replacement value of the slot}
 }
 \description{
-A generic function to replace slot ForwardDate in class TermStructure
+A generic function to replace the slot Date in class TermStructure
 }
 

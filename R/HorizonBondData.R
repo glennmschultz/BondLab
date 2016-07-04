@@ -1,18 +1,21 @@
 
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # mortgage backed, asset backed securities, and commerical mortgage 
+  # backed securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
-  # =======================================================================================
+  # ===========================================================================
   # These functions create temp horizon bond data for scenario analysis
-  # the intention of these functions is to "roll forward" the cusip data for horizon
+  # the intention of these functions is to "roll forward" the cusip data 
+  # for horizon
   # pricing - OAS, spot spread or nominal spread to the curve
-  # =======================================================================================
+  # ===========================================================================
   
-  #' A Function to "Roll Forward" the mortgage pass through cusip object (MBS Details)
+  #' A Function to "Roll Forward" the pass through cusip object (MBS Details)
   #' 
-  #' A standard generic function to roll forward MBS cusip detail to the scenario horizon
+  #' A standard generic function to roll forward MBS cusip detail to the 
+  #' scenario horizon
   #' for pricing using spot spread, nominal spread, or option adjusted spread
   #' @param bond.id A character string referring to an object type of MBSDetails
   #' @param original.bal A numeric value the original balance

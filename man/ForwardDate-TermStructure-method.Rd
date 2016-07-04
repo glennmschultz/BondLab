@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ForwardDate,TermStructure-method}
 \alias{ForwardDate,TermStructure-method}
-\title{Method to extract ForwardDate from the class TermStructure}
+\title{Method to extract Date from the class TermStructure}
 \usage{
 \S4method{ForwardDate}{TermStructure}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the object of type TermStructure}
 }
 \description{
-Method to extract ForwardDate from the class TermStructure
+Method to extract Date from the class TermStructure
 }
 

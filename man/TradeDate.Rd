@@ -2,7 +2,7 @@
 % Please edit documentation in R/TermStructure.R
 \name{TradeDate}
 \alias{TradeDate}
-\title{A generic function to access the slot tradedate}
+\title{A generic function to access the slot TradeDate}
 \usage{
 TradeDate(object)
 }
@@ -10,6 +10,6 @@ TradeDate(object)
 \item{object}{an S4 class object}
 }
 \description{
-A generic function to access the slot tradedate
+A generic function to access the slot TradeDate
 }
 

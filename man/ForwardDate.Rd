@@ -2,7 +2,7 @@
 % Please edit documentation in R/TermStructure.R
 \name{ForwardDate}
 \alias{ForwardDate}
-\title{A generic function to access the slot ForwardDate in class TermStructure}
+\title{A generic function to access the slot Date in class TermStructure}
 \usage{
 ForwardDate(object)
 }
@@ -10,6 +10,6 @@ ForwardDate(object)
 \item{object}{an S4 class object}
 }
 \description{
-A generic function to access the slot ForwardDate in class TermStructure
+A generic function to access the slot Date in class TermStructure
 }
 

@@ -587,7 +587,7 @@
                                           cashflow = MortgageCashFlow)
   
   CurveSpreads <- CurveSpreads(rates.data = rates.data,
-                               MortgageCashFlow = MortgageCashFlow)
+                               CashFlow = MortgageCashFlow)
     
   # =========================================================================
   # Begin horizon mortgage pass-through analysis

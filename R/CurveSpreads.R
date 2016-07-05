@@ -82,13 +82,13 @@
   #' A functon to compute the curve spread metrics
   #'
   #'@param rates.data A character string the trade date mm-dd-YYYY
-  #'@param MortgageCashFlow A character string the for object of type
+  #'@param CashFlow A character string the for object of type
   #'MortgageCashFlow
   #'@export CurveSpreads
   CurveSpreads <- function(rates.data = "character",
-                           MortgageCashFlow = "character"){
+                           CashFlow = "character"){
 
-    MortgageCashFlow <- MortgageCashFlow
+    CashFlow <- CashFlow
 
     # Get market curve for interpolation of nominal spread to curve
     MarketCurve <- rates.data
@@ -99,19 +99,19 @@
                         data = data.frame(MarketCurve))
 
     # use predict ModelCurve to spread to curve
-    SpreadToCurve <- (YieldToMaturity(MortgageCashFlow)) -
-      predict(ModelCurve, WAL(MortgageCashFlow))
+    SpreadToCurve <- (YieldToMaturity(CashFlow)) -
+      predict(ModelCurve, WAL(CashFlow))
 
     # Find the cloest maturity for spread to benchmark
     RatesIndex =  which(abs(as.numeric(MarketCurve[1,2:12])-
-                              as.numeric(WAL(MortgageCashFlow))) ==
+                              as.numeric(WAL(CashFlow))) ==
                           min(abs(as.numeric(MarketCurve[1,2:12])-
-                                    as.numeric(WAL(MortgageCashFlow)))))
+                                    as.numeric(WAL(CashFlow)))))
     # BenchMark maturity
     BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex + 1])
 
     # calculate spread to benchmark
-    SpreadToBenchmark <-  (YieldToMaturity(MortgageCashFlow)) -
+    SpreadToBenchmark <-  (YieldToMaturity(CashFlow)) -
       as.numeric(MarketCurve[1,RatesIndex])
 
     new("CurveSpreads",

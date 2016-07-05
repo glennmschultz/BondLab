@@ -108,7 +108,7 @@
                           min(abs(as.numeric(MarketCurve[1,2:12])-
                                     as.numeric(WAL(MortgageCashFlow)))))
     # BenchMark maturity
-    BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex])
+    BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex + 1])
 
     # calculate spread to benchmark
     SpreadToBenchmark <-  (YieldToMaturity(MortgageCashFlow)) -

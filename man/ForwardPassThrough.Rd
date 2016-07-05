@@ -2,7 +2,7 @@
 % Please edit documentation in R/HorizonBondData.R
 \name{ForwardPassThrough}
 \alias{ForwardPassThrough}
-\title{A Function to "Roll Forward" the mortgage pass through cusip object (MBS Details)}
+\title{A Function to "Roll Forward" the pass through cusip object (MBS Details)}
 \usage{
 ForwardPassThrough(bond.id = "character", original.bal = numeric(),
   projected.cashflow = "character", horizon.months = numeric())
@@ -18,7 +18,8 @@ of MortgageCashFlows}
 \item{horizon.months}{A numeric value the investment horizon in months}
 }
 \description{
-A standard generic function to roll forward MBS cusip detail to the scenario horizon
+A standard generic function to roll forward MBS cusip detail to the 
+scenario horizon
 for pricing using spot spread, nominal spread, or option adjusted spread
 }
 

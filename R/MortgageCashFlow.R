@@ -159,13 +159,13 @@
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("ScheduledPrin", function(object)
-    {standardGeneric})
+    {standardGeneric("ScheduledPrin")})
   
   #' A generic function to access to the slot PrepaidPrin
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("PrepaidPrin", function(object)
-    {standardGeneric})
+    {standardGeneric("PrepaidPrin")})
     
   #' A standard generic function to access the slot DefaultedPrin
   #' @param object an S4 class object of type MortgageCashFlow

@@ -1,12 +1,16 @@
-# Bond Lab is a software application for the analysis of 
-# fixed income securities it provides a suite of applications
-# mortgage backed, asset backed securities, and commerical mortgage backed 
-# securities
-# Copyright (C) 2016  Bond Lab Technologies, Inc.
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
+  
   # The following script is used to calculate Term Structure
   # metrics for mortgage backed securities.  To create the script
   # the standard procedure is followed set class, set generics,
   # set methods, functions.  This class is a sub class (document superclass)
+
+  #' @include TermStructure.R
+  NULL
 
   #' An S4 class MortgageTermStructure
   #' 
@@ -396,6 +400,7 @@
   }
 
   # Step 5 Populated KRIndex Table with KR Shifts
+
   for (j in 1:KRCount){
     KRIndex[j,"KRDwn"] = KRIndex[j,"Disc Curve"] - (Rate.Delta/yield.basis)
     KRIndex[j,"KRUp"] = KRIndex[j,"Disc Curve"] + (Rate.Delta/yield.basis)
@@ -471,24 +476,24 @@
   Key.Rate.TS.Dwn <- TermStructure
   Key.Rate.TS.Up <- TermStructure
 
-  Key.Rate.TS.Dwn@SpotRate <- c((Key.Rate.Table[,"KRDwn"]-spot.spread) * 100, 
-  ((TermStructure@SpotRate[361:492])) + (spot.spread * 0))
+  SpotRate(Key.Rate.TS.Dwn) <- c((Key.Rate.Table[,"KRDwn"]-spot.spread) * 100, 
+  ((SpotRate(TermStructure)[361:492])))
     
-  Key.Rate.TS.Dwn@TwoYearFwd <- Forward.Rate(
-    SpotRate.Curve = Key.Rate.TS.Dwn@SpotRate, 
+  TwoYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
+    SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn), 
     FwdRate.Tenor = 24) 
-    Key.Rate.TS.Dwn@TenYearFwd <- Forward.Rate(
-      SpotRate.Curve = Key.Rate.TS.Dwn@SpotRate,
+    TenYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
+      SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn),
       FwdRate.Tenor = 120)
     
-  Key.Rate.TS.Up@SpotRate <- c((Key.Rate.Table[,"KRUp"]-spot.spread) * 100, 
-  ((TermStructure@SpotRate[361:492])) + (spot.spread * 0)) 
+  SpotRate(Key.Rate.TS.Up) <- c((Key.Rate.Table[,"KRUp"]-spot.spread) * 100, 
+  ((SpotRate(TermStructure)[361:492]))) 
 
-  Key.Rate.TS.Up@TwoYearFwd <- Forward.Rate(
-    SpotRate.Curve = Key.Rate.TS.Up@SpotRate,
+  TwoYearForward(Key.Rate.TS.Up) <- Forward.Rate(
+    SpotRate.Curve = SpotRate(Key.Rate.TS.Up),
     FwdRate.Tenor = 24) 
-    Key.Rate.TS.Up@TenYearFwd <- Forward.Rate(
-      SpotRate.Curve = Key.Rate.TS.Up@SpotRate,
+    TenYearForward(Key.Rate.TS.Up) <- Forward.Rate(
+      SpotRate.Curve = SpotRate(Key.Rate.TS.Up),
       FwdRate.Tenor = 120)
     
   # Run the prepayment model to derive the SMM vector given each Key Rate shift

@@ -16,18 +16,21 @@ MtgTermStructure(bond.id = "character", original.bal = numeric(),
 
 \item{Rate.Delta}{A numeric value the rate delta used to calculate KRDs}
 
-\item{TermStructure}{A character string referencing an object of the type TermStructure}
+\item{TermStructure}{A character string referencing an object of the 
+type TermStructure}
 
 \item{settlement.date}{a character string the settlement date}
 
-\item{principal}{A numeric value the principal balance.  The principal balance is the 
-original balance multiplied by the MBS factor}
+\item{principal}{A numeric value the principal balance.  The principal 
+balance is the original balance multiplied by the MBS factor}
 
 \item{price}{A numeric value the price paid}
 
-\item{cashflow}{A character string referencing an object of the type MortgageCashFlow}
+\item{cashflow}{A character string referencing an object of the 
+type MortgageCashFlow}
 }
 \description{
-This is a generic function used to construct the MortgageTermStructure object
+This is a generic function used to construct the 
+MortgageTermStructure object
 }
 

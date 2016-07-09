@@ -21,7 +21,7 @@
            ))
 
   setGeneric("CurveSpreads", function(rates.data = "character",
-                                      MortgageCashFlow = "character")
+                                      CashFlow = "character")
     {standardGeneric("CurveSpreads")})
 
   #' A standard generic function to access BenchMark
@@ -103,16 +103,16 @@
       predict(ModelCurve, WAL(CashFlow))
 
     # Find the cloest maturity for spread to benchmark
-    RatesIndex =  which(abs(as.numeric(MarketCurve[1,2:12])-
+    RatesIndex =  which(abs(as.numeric(MarketCurve[2,2:12])-
                               as.numeric(WAL(CashFlow))) ==
-                          min(abs(as.numeric(MarketCurve[1,2:12])-
+                          min(abs(as.numeric(MarketCurve[2,2:12])-
                                     as.numeric(WAL(CashFlow)))))
     # BenchMark maturity
     BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex + 1])
 
     # calculate spread to benchmark
     SpreadToBenchmark <-  (YieldToMaturity(CashFlow)) -
-      as.numeric(MarketCurve[1,RatesIndex])
+      as.numeric(MarketCurve[1,RatesIndex + 1 ])
 
     new("CurveSpreads",
         BenchMark = BenchMarkMaturity,

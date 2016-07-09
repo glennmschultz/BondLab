@@ -21,6 +21,7 @@ Imports:
     methods,
     optimx,
     RCurl,
+    splines,
     XML
 Suggests:
     knitr,

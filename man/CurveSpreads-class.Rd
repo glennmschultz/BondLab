@@ -15,7 +15,9 @@ An S4 class to hold curve spread values
 \item{\code{SpreadToBenchmark}}{A numeric value to nominal spread to the nearest
 pricing benchmark}
 
-\item{\code{SpreadToCurve}}{A numeric value the nominal spread to the interpolated
-Curve}
+\item{\code{SpreadToCurve}}{A numeric value the nominal spread to 
+the interpolated curve}
+
+\item{\code{ZeroVolSpread}}{A numeric value the Zero Volatilty spread}
 }}
 

@@ -12,7 +12,7 @@
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
-  #' @include PassThroughConstructor.R
+  #' @include PassThroughConstructor.R PriceYieldClasses.R
   NULL
   
   #' An S4 class MortgageCashFlow containing cashflow data 

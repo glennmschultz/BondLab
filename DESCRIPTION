@@ -30,6 +30,7 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
+    'PriceYieldClasses.R'
     'PassThroughConstructor.R'
     'MortgageCashFlow.R'
     'TermStructure.R'
@@ -67,7 +68,6 @@ Collate:
     'PaymentDateFunctions.R'
     'PrepaymentModelTune.R'
     'PrepaymentModelFunctions.R'
-    'PriceYieldClasses.R'
     'REMICConstructor.R'
     'REMICCusip.R'
     'RatesData.R'

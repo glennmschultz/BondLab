@@ -144,14 +144,21 @@
   #' @export PriceTypes
   PriceTypes <- function(Price = numeric()){
     PriceBasis = 100
+    
     Convertto32nds <- function(Price){
-      tail32nds = round(x = (Price - signif(x = Price, digits = 0)) * 32,
-                         digits = 2)
-      Price = paste(as.character(signif(x=Price, digits = 0)),
+      tail32nds = round(x = (Price - floor(x = Price)) * 32, digits = 4)
+      Price = paste(as.character(floor(x=Price)),
                     "-",
                     as.character(tail32nds),
                     sep = "")
                     return(Price)
+      
+      # Convert Price when entered as a decimal value
+      if(all.equal(1, grep(".", as.character(Price), fixed = TRUE)) == TRUE){
+        Price_Decimal = Price
+        Price_32nds = Convertto32nds(Price)
+        Price_Basis = Price / PriceBasis
+      }
     }
     new("PriceTypes",
         PriceDecimal = Price,

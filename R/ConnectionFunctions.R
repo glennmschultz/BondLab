@@ -1,33 +1,29 @@
 
-
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
-  # Copyright (C) 2016  Bond Lab Technologies, Inc.
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities. Copyright (C) 2016  Bond Lab Technologies, Inc.
 
-
-
-  #------------------------------------------------------------------------------------
   #' A connection function to BondData calling MBS cusips
   #' 
   #' Opens a connection to the BondData folder to call MBS cusip data 
-  #' @param MBS.id A character string the MBS.id or cusip number current MBS.id is supported
-  #' @export
+  #' @param MBS.id A character string the MBS.id or cusip number current 
+  #' MBS.id is supported
+  #' @export MBS
   MBS <- function(MBS.id = "character"){
-    MBS.Conn <- if(nchar(MBS.id) == 9) {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
-      "/BondData/", MBS.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
-      } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
-      "/BondData/", "*", MBS.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
-      }
-    
-    
-    MBS <- readRDS(MBS.Conn)
-    on.exit(close.connection(MBS.Conn))
-    return(MBS)}
-  
-    setGeneric("MBS", function(MBS.id = "character")
-      {standardGeneric("MBS")})
-    #----------------------------------------------------------------------------------
+  # if(nchar(MBS.id) == 9) should be all.equal function
+  MBS.Conn <- if(nchar(MBS.id) == 9) {
+  gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+  "/BondData/", MBS.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
+  } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+  "/BondData/", "*", MBS.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
+  }
+  MBS <- readRDS(MBS.Conn)
+  on.exit(close.connection(MBS.Conn))
+  return(MBS)}
+  setGeneric("MBS", function(MBS.id = "character")
+    {standardGeneric("MBS")})
+
     #' A connection function to the BondData calling bond cusips
     #' 
     #' Opens a connection to BondData folder to call a standard bond

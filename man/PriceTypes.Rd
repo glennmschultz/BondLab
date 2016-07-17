@@ -4,7 +4,7 @@
 \alias{PriceTypes}
 \title{A constructor function for the class PriceTypes}
 \usage{
-PriceTypes(Price = numeric())
+PriceTypes(Price = "character")
 }
 \arguments{
 \item{Price}{the price in decimal notation (example 100.125)}

@@ -7,7 +7,8 @@
 MBS(MBS.id = "character")
 }
 \arguments{
-\item{MBS.id}{A character string the MBS.id or cusip number current MBS.id is supported}
+\item{MBS.id}{A character string the MBS.id or cusip number current 
+MBS.id is supported}
 }
 \description{
 Opens a connection to the BondData folder to call MBS cusip data

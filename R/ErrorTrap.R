@@ -11,7 +11,7 @@
   ErrorTrap <- function(bond.id = "character", 
                         principal = numeric(), 
                         settlement.date = "character", 
-                        price = numeric()) {
+                        price = "character") {
   #Error inputs by the user make sure all needed dates and values are passed to Bond Cash Flow
   issue.date = bond.id@IssueDate
   start.date = bond.id@DatedDate

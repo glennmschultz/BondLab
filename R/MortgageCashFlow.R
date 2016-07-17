@@ -437,7 +437,7 @@
   MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              settlement.date = "character",
-                             price = numeric(),
+                             price = "character",
                              PrepaymentAssumption = "character"){
   
   #This function error traps mortgage bond inputs
@@ -445,6 +445,8 @@
             principal = original.bal, 
             settlement.date = settlement.date, 
             price = price)
+    
+  Price <- PriceTypes(Price = price)
   
   issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
   start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
@@ -459,10 +461,6 @@
   note.rate = GWac(bond.id)
   WAM = WAM(bond.id)
   
-  
-  #  Validate the price and coupon passed through the error trapping function
-  #  This validates that the correct unit is passed into the Bond Cash Flow function
-  if(price <= 1) {price = price} else {price = price/price.basis}
   
   # calculate beginning balance (principal) from the MBS pool factor
   # accrued interest is calculated using the current factor
@@ -518,7 +516,7 @@
                   accrued.interest){
   #pv = cashflow * exp(rate * -time.period)
   pv = cashflow * 1/(1+rate) ^ time.period
-  proceeds = principal * price
+  proceeds = principal * PriceBasis(Price)
   sum(pv) - (proceeds + accrued.interest)}
   
   
@@ -530,7 +528,7 @@
           time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
           cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
           principal = AdjPrincipal, 
-          price = price, 
+          price = PriceBasis(Price), 
           accrued.interest = accrued.interest)$root)
     
   # Convert to semi-bond equivalent
@@ -549,7 +547,8 @@
   #Step8 Risk measures Duration Factors
   MBS.CF.Table[,"Duration"] = 
     MBS.CF.Table[,"Time"] * 
-    (MBS.CF.Table[,"Present Value"]/((principal * price) + accrued.interest))
+    (MBS.CF.Table[,"Present Value"]/
+       ((principal * PriceBasis(Price)) + accrued.interest))
   
   # Weighted Average Life 
   WAL = 
@@ -566,7 +565,7 @@
   MBS.CF.Table[,"CashFlow Convexity"] = 
   (MBS.CF.Table[,"Investor CashFlow"]/((1 + ((Yield.To.Maturity)/frequency)) ^ 
     ((MBS.CF.Table[,"Time"] + 2) * frequency)))/ 
-    ((principal * price) + accrued.interest)
+    ((principal * PriceBasis(Price)) + accrued.interest)
   
   MBS.CF.Table[,"Convexity"] = 
     MBS.CF.Table[,"Convexity Time"] * MBS.CF.Table[,"CashFlow Convexity"] 
@@ -578,7 +577,7 @@
   
   #Create Class Mortgage Loan Cashflows
   new("MortgageCashFlow",
-      Price = price * price.basis,
+      Price = PriceDecimal(Price),
       Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity * yield.basis,
       WAL = WAL,

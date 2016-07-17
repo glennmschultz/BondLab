@@ -24,22 +24,22 @@
   setGeneric("MBS", function(MBS.id = "character")
     {standardGeneric("MBS")})
 
-    #' A connection function to the BondData calling bond cusips
-    #' 
-    #' Opens a connection to BondData folder to call a standard bond
-    #' @param Bond.id A character string the bond's cusip number or id
-    #' @export
-    Bond <- function(Bond.id = "character"){
-      Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-                  "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
-      Bond <- readRDS(Bond.Conn)
-      on.exit(close.connection(Bond.Conn))
-      return(Bond)
-    }
-    setGeneric("Bond", function(Bond.id = "character")
+  #' A connection function to the BondData calling bond cusips
+  #' 
+  #' Opens a connection to BondData folder to call a standard bond
+  #' @param Bond.id A character string the bond's cusip number or id
+  #' @export
+  Bond <- function(Bond.id = "character"){
+  Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+              "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
+  Bond <- readRDS(Bond.Conn)
+  on.exit(close.connection(Bond.Conn))
+  return(Bond)
+  }
+  
+  setGeneric("Bond", function(Bond.id = "character")
     {standardGeneric("Bond")})
 
-  #------------------------------------------------------------------------------------
     #' A connection function to BondData folder saved MBS cusip Detail
     #' 
     #' Opens a connection to BondData folder to save MBS cusip detail

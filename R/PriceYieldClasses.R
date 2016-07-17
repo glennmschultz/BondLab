@@ -140,28 +140,49 @@
   
   #' A constructor function for the class PriceTypes
   #' 
-  #' @param Price the price in decimal notation (example 100.125)
+  #' @param Price character the price in either 
+  #' decimal notation (example "100.125") or 32nds notation (example "100-4")
   #' @export PriceTypes
-  PriceTypes <- function(Price = numeric()){
+  PriceTypes <- function(Price = "character"){
     PriceBasis = 100
+    Units = 32
     
-    Convertto32nds <- function(Price){
+    Convertto32nds <- function(Price = "character"){
+      #convert price to numeric value
+      Price = as.numeric(Price)
       tail32nds = round(x = (Price - floor(x = Price)) * 32, digits = 4)
       Price = paste(as.character(floor(x=Price)),
                     "-",
                     as.character(tail32nds),
                     sep = "")
-                    return(Price)
+      return(Price)
+    }
+      
+      ConverttoDecimal <- function(Price = "character", Units = numeric()){
+        SplitPrice = strsplit(as.character(Price), "-")
+        handle = as.numeric(SplitPrice[[1]][1])
+        TailDecimal = as.numeric(SplitPrice[[1]][2])/Units
+        TailDecimal = gsub("(^|[^0-9])0+", "\\1", TailDecimal, perl = TRUE)
+        Price = paste(as.character(handle),
+                      as.character(TailDecimal),sep="")
+        return(Price)
+      }
       
       # Convert Price when entered as a decimal value
-      if(all.equal(1, grep(".", as.character(Price), fixed = TRUE)) == TRUE){
+      if(grepl(".", as.character(Price), fixed = TRUE) == TRUE){
         Price_Decimal = Price
-        Price_32nds = Convertto32nds(Price)
-        Price_Basis = Price / PriceBasis
+        Price_32nds = Convertto32nds(Price = Price)
+        Price_Basis = as.numeric(Price) / PriceBasis
       }
-    }
+      
+      if(grepl("-", as.character(Price), fixed = TRUE) == TRUE){
+        Price_Decimal = ConverttoDecimal(Price = Price, Units = Units)
+        Price_32nds = Price
+        Price_Basis = as.numeric(Price_Decimal)/PriceBasis
+      }
+
     new("PriceTypes",
-        PriceDecimal = Price,
-        Price32nds = Convertto32nds(Price = Price),
-        PriceBasis = Price/PriceBasis)
+        PriceDecimal = as.numeric(Price_Decimal),
+        Price32nds = Price_32nds,
+        PriceBasis = as.numeric(Price_Basis))
   }

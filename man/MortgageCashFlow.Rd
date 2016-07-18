@@ -5,7 +5,7 @@
 \title{A function to compute the cash flow of a pool of securitized mortgages}
 \usage{
 MortgageCashFlow(bond.id = "character", original.bal = numeric(),
-  settlement.date = "character", price = numeric(),
+  settlement.date = "character", price = "character",
   PrepaymentAssumption = "character")
 }
 \arguments{

@@ -497,27 +497,30 @@
                                 Shiftbps = Shiftbps(Scenario))
     
     
-    TermStructure <- TermStructure(rates.data = rates, 
-                                   method = method)
+    TermStructure <- TermStructure(
+      rates.data = rates,
+      method = method)
     
     
-    Prepayment <- PrepaymentModel(bond.id = bond.id, 
-                                  MortgageRate = MortgageRate, 
-                                  TermStructure = TermStructure, 
-                                  PrepaymentAssumption = prepayment, 
-                                  ModelTune = ModelTune,
-                                  Severity = 0,
-                                  Burnout = Burnout, 
-                                  begin.cpr = begin.cpr, 
-                                  end.cpr = end.cpr, 
-                                  seasoning.period = seasoning.period, 
-                                  CPR = CPR)
+    Prepayment <- PrepaymentModel(
+      bond.id = bond.id,
+      MortgageRate = MortgageRate,
+      TermStructure = TermStructure,
+      PrepaymentAssumption = prepayment,
+      ModelTune = ModelTune,
+      Severity = 0,
+      Burnout = Burnout,
+      begin.cpr = begin.cpr,
+      end.cpr = end.cpr,
+      seasoning.period = seasoning.period,
+      CPR = CPR)
     
-    MortgageCashFlow <- MortgageCashFlow(bond.id = bond.id, 
-                                         original.bal = original.bal, 
-                                         settlement.date = settlement.date, 
-                                         price = price, 
-                                         PrepaymentAssumption = Prepayment)
+    MortgageCashFlow <- MortgageCashFlow(
+      bond.id = bond.id,
+      original.bal = original.bal,
+      settlement.date = settlement.date,
+      price = price,
+      PrepaymentAssumption = Prepayment)
     
     InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
                         as.numeric(rates.data[2,2:12]), 
@@ -530,51 +533,58 @@
                                   MBSFactor(bond.id) * (price/price.basis))
     principal <- original.bal * MBSFactor(bond.id)
     
-    MortgageTermStructure <- MtgTermStructure(bond.id = bond.id, 
-                                            original.bal = original.bal, 
-                                            Rate.Delta = rate.delta, 
-                                            TermStructure = TermStructure,
-                                            settlement.date = settlement.date, 
-                                            principal = principal, 
-                                            price = price, 
-                                            cashflow = MortgageCashFlow)
+    MortgageTermStructure <- MtgTermStructure(
+      bond.id = bond.id,
+      original.bal = original.bal,
+      Rate.Delta = rate.delta,
+      TermStructure = TermStructure,
+      settlement.date = settlement.date,
+      principal = principal,
+      price = price,
+      cashflow = MortgageCashFlow)
     
     # =========================================================================
     # Begin horizon mortgage pass-through analysis
     # =========================================================================
     
     HorizonCurve <- rates
-    HorizonCurve[1,1] <- as.character(as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
-    HorizonSettlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
+    HorizonCurve[1,1] <- as.character(
+      as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
+    HorizonSettlement <- as.Date(
+      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
     
     
-    HorizonTermStructure <- TermStructure(rates.data = HorizonCurve,
-                                          method = "ns")
+    HorizonTermStructure <- TermStructure(
+      rates.data = HorizonCurve,
+      method = "ns")
     
-    ForwardPassThrough(bond.id = bond.id,
-                       original.bal = original.bal,
-                       projected.cashflow = MortgageCashFlow,
-                       horizon.months = horizon.months)
+    ForwardPassThrough(
+      bond.id = bond.id,
+      original.bal = original.bal,
+      projected.cashflow = MortgageCashFlow,
+      horizon.months = horizon.months)
 
     HorizonMBS <- HorizonMBS()
     
-    HorizonPrepaymentAssumption <- PrepaymentModel(bond.id = HorizonMBS,
-                                          MortgageRate = MortgageRate,
-                                          TermStructure = HorizonTermStructure,
-                                          PrepaymentAssumption = prepayment,
-                                          ModelTune = ModelTune,
-                                          Severity = 0,
-                                          Burnout = Burnout,
-                                          begin.cpr = begin.cpr,
-                                          end.cpr = end.cpr,
-                                          seasoning.period = seasoning.period,
-                                          CPR = CPR)
+    HorizonPrepaymentAssumption <- PrepaymentModel(
+      bond.id = HorizonMBS,
+      MortgageRate = MortgageRate,
+      TermStructure = HorizonTermStructure,
+      PrepaymentAssumption = prepayment,
+      ModelTune = ModelTune,
+      Severity = 0,
+      Burnout = Burnout,
+      begin.cpr = begin.cpr,
+      end.cpr = end.cpr,
+      seasoning.period = seasoning.period,
+      CPR = CPR)
     
-    HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
-                            original.bal = original.bal,
-                            settlement.date = HorizonSettlement,
-                            price = price,
-                            PrepaymentAssumption = HorizonPrepaymentAssumption)
+    HorizonCashFlow <- MortgageCashFlow(
+      bond.id = HorizonMBS,
+      original.bal = original.bal,
+      settlement.date = HorizonSettlement,
+      price = price,
+      PrepaymentAssumption = HorizonPrepaymentAssumption)
     
     # =========================================================================
     # This section begins the calculation of horizon total return

@@ -7,7 +7,8 @@
 PriceTypes(Price = "character")
 }
 \arguments{
-\item{Price}{the price in decimal notation (example 100.125)}
+\item{Price}{character the price in either 
+decimal notation (example "100.125") or 32nds notation (example "100-4")}
 }
 \description{
 A constructor function for the class PriceTypes

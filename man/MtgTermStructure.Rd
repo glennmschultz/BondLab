@@ -6,8 +6,8 @@
 \usage{
 MtgTermStructure(bond.id = "character", original.bal = numeric(),
   Rate.Delta = numeric(), TermStructure = "character",
-  settlement.date = "character", principal = numeric(), price = numeric(),
-  cashflow = "character")
+  settlement.date = "character", principal = numeric(),
+  price = "character", cashflow = "character")
 }
 \arguments{
 \item{bond.id}{A character string refrencing an object of type MBS details}

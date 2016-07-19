@@ -100,7 +100,7 @@
 
   #' A functon to compute the curve spread metrics
   #'
-  #'@param rates.data a character string the trade date mm-dd-YYYY
+  #'@param rates.data a character string the yield curve used
   #'@param CashFlow a character string the object of type MBSCashFlow
   #'@param TermStructure a character string the object of type TermStructure
   #'@param proceeds a numeric value the investor trade proceeeds 
@@ -113,7 +113,8 @@
 
     # Get market curve for interpolation of nominal spread to curve
     MarketCurve <- rates.data
-
+    RateLen <- as.numeric(ncol(MarketCurve))
+    
     # local regression smooth of market curve
     ModelCurve <- loess(as.numeric(MarketCurve[1,2:12]) ~
                           as.numeric(MarketCurve[2,2:12]),

@@ -36,7 +36,7 @@
                                           TermStructure = "character", 
                                           settlement.date = "character", 
                                           principal = numeric(), 
-                                          price = numeric(), 
+                                          price = "character", 
                                           cashflow = "character")
   {standardGeneric("MtgTermStructure")})
 
@@ -155,7 +155,7 @@
                              TermStructure = "character", 
                              settlement.date = "character", 
                              principal = numeric(), 
-                             price = numeric(), 
+                             price = "character", 
                              cashflow = "character"){
   
   # Open connection to the prepayment model tuning library
@@ -171,18 +171,18 @@
   maturity = Maturity(bond.id)
   accrued = Accrued(cashflow)
 
-  # create price for mortgage cash flow call in key rate
-  price.mtg.cashflow <- price
+  # create PriceTypes for mortgage cash flow call in key rate
+  Price <- PriceTypes(Price = price)
  
   #Error Trap the user's price input
-  if(price <= 1) {price = price} else {price = price/yield.basis}
-  if(price <=0) stop("No valid bond price")
+  #if(price <= 1) {price = price} else {price = price/yield.basis}
+  #if(price <=0) stop("No valid bond price")
   
   # calcuate proceeds the order of operation is important
   
   # calculate price basis and then proceeds based on the correct price basis
-  proceeds = (principal * price) + accrued
-  
+  proceeds = (principal * PriceBasis(Price)) + accrued
+
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
   # this insures that stored values will not be wrongly be passed to the 
@@ -220,7 +220,7 @@
     return(proceeds - Present.Value)
   }
   
-  # et up the index names for each array that will be used in the function
+  # set up the index names for each array that will be used in the function
   # Index names set names for columns in the KRIndex. This tables set the 
   # control strucutre for the loop that will compute key rate duration given 
   # rates in the key rate table
@@ -249,7 +249,7 @@
                        "25", 
                        "30")
   
-  # Key Rate Calculation Starts Here
+  #Key Rate Calculation Starts Here
   #set the arrays for key rate duration calculation
   #key rate table holds data for the term structure and shifts in the key rates
   #!! DIM TO LENGTH OF CASH FLOW ARRAY AND SET LAST KR TO LENGTH LINE 604 !!
@@ -345,8 +345,10 @@
     cashflow@TotalCashFlow
   
   # This code solves for the spread to spot curve to equal price
-  spot.spread <- uniroot(Spot.Spread, interval = c(-.75, .75), 
-                         tol = .0000000001, CashFlowArray[,"cashflow_nc"],
+  spot.spread <- uniroot(Spot.Spread, 
+                         interval = c(-.75, .75), 
+                         tol = .0000000001, 
+                         CashFlowArray[,"cashflow_nc"],
                          discount.rates = Key.Rate.Table[,"Spot Curve"], 
                          t.period = Key.Rate.Table[,"Time"] , 
                          proceeds)$root
@@ -510,11 +512,14 @@
       Severity = 0) 
     
   # Mortgage Cashflows call here requires that price as whole number passed
+  # Always use sprintf("%.8f", PriceDecimal(Price)) to convert back to string
+  # and preserve the trailing zeros that are needed for the PriceTypes function
+  # when price when the price tail is .000 or "-00"
   MortgageCashFlows.Dwn <- MortgageCashFlow(
     bond.id = bond.id,
     original.bal = original.bal,
     settlement.date = settlement.date,
-    price = price.mtg.cashflow,
+    price = sprintf("%.8f", PriceDecimal(Price)), 
     PrepaymentAssumption = Prepayment.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
@@ -543,7 +548,7 @@
     bond.id = bond.id,
     original.bal = original.bal,
     settlement.date = settlement.date,
-    price = price.mtg.cashflow,
+    price = sprintf("%.8f", PriceDecimal(Price)), #price.mtg.cashflow,
     PrepaymentAssumption = Prepayment.Up)
 
   # Assign CashFlows into the cash flow array. 

@@ -63,7 +63,8 @@ the sum of the key rate convexities}
 \item{\code{KeyRateDuration}}{A numeric vector the duration of each key rate tenor}
 
 \item{\code{KeyRateConvexity}}{A numeric vector the convexity of 
-each key rate tenor}
+each key rate tenor
+over the investment horizon}
 
 \item{\code{HorizonReturn}}{A numeric value the horizon total return}
 

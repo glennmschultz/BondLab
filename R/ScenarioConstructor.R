@@ -99,7 +99,6 @@
   setMethod("Type", signature("Scenario"),
             function(object){object@Type})
 
-  
   #' A Method to extract ShiftType from an S4 class Scenario
   #' @param object The name of the object of the S4 class of type Scenario
   #' @exportMethod ShiftType
@@ -117,7 +116,6 @@
   #' @exportMethod ScenarioFormula
   setMethod("ScenarioFormula", signature("Scenario"),
             function(object){object@Formula})
-  
 
   RateScenario <- function(
     Name = "character",

@@ -8,7 +8,7 @@ CurveSpreads(rates.data = "character", CashFlow = "character",
   TermStructure = "character", proceeds = numeric())
 }
 \arguments{
-\item{rates.data}{a character string the trade date mm-dd-YYYY}
+\item{rates.data}{a character string the yield curve used}
 
 \item{CashFlow}{a character string the object of type MBSCashFlow}
 

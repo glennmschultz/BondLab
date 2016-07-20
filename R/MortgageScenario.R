@@ -81,6 +81,7 @@
   #' @slot KeyRateDuration A numeric vector the duration of each key rate tenor
   #' @slot KeyRateConvexity A numeric vector the convexity of 
   #' each key rate tenor
+  #' over the investment horizon
   #' @slot HorizonReturn A numeric value the horizon total return
   #' @slot HorizonMos A numeric value the number of months to 
   #' the scenario horizon date
@@ -152,6 +153,7 @@
                                      seasoning.period = numeric(),
                                      CPR = numeric())
   {standardGeneric("MtgScenario")})
+  
   
   #' A standard generic function to access the slot HorizonRetrun
   #' @param object An S4 object of type MtgScenario
@@ -243,7 +245,7 @@
                              Formula = Formula,
                              ...)
             })
-  
+
   #' A method to extract Period from S4 class MtgScenario
   #' @param object The name of an S4 class of type MtgScenario
   #' @exportMethod  Period
@@ -375,7 +377,7 @@
   #' @exportMethod KeyRateConvexity
   setMethod("KeyRateConvexity", signature("MtgScenario"),
             function(object){object@KeyRateConvexity})
-  
+
   #' A method to extract HorizonReturn from S4 class MtgScenario
   #' @param object the name of an S4 class of type MtgScenario
   #' @exportMethod HorizonReturn
@@ -709,6 +711,7 @@
       KeyRateDuration = unname(KeyRateDuration(MortgageTermStructure)),
       KeyRateConvexity = unname(KeyRateConvexity(MortgageTermStructure)),
       HorizonReturn = HorizonReturn,
+      PassThroughInterest = PassThroughInterest,
       HorizonMos = horizon.months,
       Name = Name(Scenario),
       Type = Type(Scenario),

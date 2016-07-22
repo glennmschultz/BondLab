@@ -66,6 +66,9 @@ the sum of the key rate convexities}
 each key rate tenor
 over the investment horizon}
 
+\item{\code{CouponIncome}}{A numeric value the Coupon Income received over the 
+investment horizon}
+
 \item{\code{HorizonReturn}}{A numeric value the horizon total return}
 
 \item{\code{HorizonMos}}{A numeric value the number of months to 

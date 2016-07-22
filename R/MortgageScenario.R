@@ -82,6 +82,8 @@
   #' @slot KeyRateConvexity A numeric vector the convexity of 
   #' each key rate tenor
   #' over the investment horizon
+  #' @slot CouponIncome A numeric value the Coupon Income received over the 
+  #' investment horizon
   #' @slot HorizonReturn A numeric value the horizon total return
   #' @slot HorizonMos A numeric value the number of months to 
   #' the scenario horizon date
@@ -110,6 +112,11 @@
              KeyRateTenor = "numeric",
              KeyRateDuration = "numeric",
              KeyRateConvexity = "numeric",
+             CouponIncome = "numeric",
+             ScheduledPrinReceived = "numeric",
+             PrepaidPrinReceived = "numeric",
+             HorizonCurrBal = "numeric",
+             HorizonPrice = "numeric",
              HorizonReturn = "numeric",
              HorizonMos = "numeric"),
            contains = "Scenario")
@@ -153,7 +160,11 @@
                                      seasoning.period = numeric(),
                                      CPR = numeric())
   {standardGeneric("MtgScenario")})
-  
+  #' A standard generic function to access the slot CouponIncome
+  #' @param object An S4 object of type MtgScenario
+  #' @export
+  setGeneric("CouponIncome", function(object)
+    {standardGeneric("CouponIncome")})
   
   #' A standard generic function to access the slot HorizonRetrun
   #' @param object An S4 object of type MtgScenario
@@ -204,6 +215,7 @@
                      KeyRateTenor = numeric(),
                      KeyRateDuration = numeric(),
                      KeyRateConvexity = numeric(),
+                     CouponIncome = numeric(),
                      HorizonReturn = numeric(),
                      HorizonMos = numeric(),
                      Name = "character",
@@ -236,6 +248,7 @@
                              KeyRateTenor = KeyRateTenor,
                              KeyRateDuration = KeyRateDuration,
                              KeyRateConvexity = KeyRateConvexity,
+                             CouponIncome = CouponIncome,
                              HorizonReturn = HorizonReturn,
                              HorizonMos = HorizonMos,
                              Name = Name,
@@ -710,8 +723,8 @@
       KeyRateTenor = unname(KeyRateTenor(MortgageTermStructure)),
       KeyRateDuration = unname(KeyRateDuration(MortgageTermStructure)),
       KeyRateConvexity = unname(KeyRateConvexity(MortgageTermStructure)),
+      CouponIncome = CouponIncome,
       HorizonReturn = HorizonReturn,
-      PassThroughInterest = PassThroughInterest,
       HorizonMos = horizon.months,
       Name = Name(Scenario),
       Type = Type(Scenario),

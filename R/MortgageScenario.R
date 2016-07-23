@@ -84,6 +84,15 @@
   #' over the investment horizon
   #' @slot CouponIncome A numeric value the Coupon Income received over the 
   #' investment horizon
+  #' @slot ScheduledPrinReceived A numeric value the scheduled principal 
+  #' received over the investment horizon
+  #' @slot PrepaidPrinReceived A numeric value the prepaid principal received
+  #' over the investment horizon
+  #' @slot ReinvestmentIncome A numeric value the reivestment income received 
+  #' over the investment horizon
+  #' @slot HorizonCurrBal A numeric value the current balance at the end of the
+  #' investment horizon
+  #' @slot HorizonPrice A numeric value the price at the end of the horizon
   #' @slot HorizonReturn A numeric value the horizon total return
   #' @slot HorizonMos A numeric value the number of months to 
   #' the scenario horizon date
@@ -115,12 +124,12 @@
              CouponIncome = "numeric",
              ScheduledPrinReceived = "numeric",
              PrepaidPrinReceived = "numeric",
+             ReinvestmentIncome = "numeric",
              HorizonCurrBal = "numeric",
              HorizonPrice = "numeric",
              HorizonReturn = "numeric",
              HorizonMos = "numeric"),
            contains = "Scenario")
-  
   
   # Note: standard generic period is defined in MortgageCashFlow.R
   # Note: standard generic PmtDate is defined in MortgageCashFlow.R
@@ -160,11 +169,42 @@
                                      seasoning.period = numeric(),
                                      CPR = numeric())
   {standardGeneric("MtgScenario")})
+  
   #' A standard generic function to access the slot CouponIncome
   #' @param object An S4 object of type MtgScenario
   #' @export
   setGeneric("CouponIncome", function(object)
     {standardGeneric("CouponIncome")})
+  
+  #' A standard generic function to access the slot ScheduledPrinReceived
+  #' @param object an S4 object of type MtgScenario
+  #' @export
+  setGeneric("ScheduledPrinReceived", function(object)
+    {standardGeneric("ScheduledPrinReceived")})
+  
+  #' A standard generic function to access the slot PrepaidPrinReceived
+  #' @param object an S4 object of type MtgScenario
+  #' @export
+  setGeneric("PrepaidPrinReceived", function(object)
+    {standardGeneric("PrepaidPrinReceived")})
+  
+  #' A standard generic function to access the slot ReinvestmentIncome
+  #' @param object an S4 object of type MtgScenario
+  #' @export
+  setGeneric("ReinvestmentIncome", function(object)
+    {standardGeneric("ReinvestmentIncome")})
+  
+  #' A standard generic function to access the slot HorizonCurrBal
+  #' @param object an S4 object of type MtgScenario
+  #' @export
+  setGeneric("HorizonCurrBal", function(object)
+    {standardGeneric("HorizonCurrBal")})
+  
+  #' A standard generic function ot access the slot HorizonPrice
+  #' @param object an S4 object of type MtgScenario
+  #' @export
+  setGeneric("HorizonPrice", function(object)
+    {standardGeneric("HorizonPrice")})
   
   #' A standard generic function to access the slot HorizonRetrun
   #' @param object An S4 object of type MtgScenario
@@ -216,6 +256,11 @@
                      KeyRateDuration = numeric(),
                      KeyRateConvexity = numeric(),
                      CouponIncome = numeric(),
+                     ScheduledPrinReceived = numeric(),
+                     PrepaidPrinReceived = numeric(),
+                     ReinvestmentIncome = numeric(),
+                     HorizonCurrBal = numeric(),
+                     HorizonPrice = numeric(),
                      HorizonReturn = numeric(),
                      HorizonMos = numeric(),
                      Name = "character",
@@ -249,6 +294,11 @@
                              KeyRateDuration = KeyRateDuration,
                              KeyRateConvexity = KeyRateConvexity,
                              CouponIncome = CouponIncome,
+                             ScheduledPrinReceived = ScheduledPrinReceived,
+                             PrepaidPrinReceived = PrepaidPrinReceived,
+                             ReinvestmentIncome = ReinvestmentIncome,
+                             HorizonCurrBal = HorizonCurrBal,
+                             HorizonPrice = HorizonPrice,
                              HorizonReturn = HorizonReturn,
                              HorizonMos = HorizonMos,
                              Name = Name,
@@ -390,6 +440,42 @@
   #' @exportMethod KeyRateConvexity
   setMethod("KeyRateConvexity", signature("MtgScenario"),
             function(object){object@KeyRateConvexity})
+  
+  #' A method to extract CouponIncome from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod CouponIncome
+  setMethod("CouponIncome", signature("MtgScenario"),
+            function(object){object@CouponIncome})
+  
+  #' A method to extract ScheduledPrinReceived from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ScheduledPrinReceived
+  setMethod("ScheduledPrinReceived", signature("MtgScenario"),
+            function(object){object@ScheduledPrinReceived})
+  
+  #' A method to extract PrepaidPrinReceived from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod PrepaidPrinReceived
+  setMethod("PrepaidPrinReceived", signature("MtgScenario"),
+            function(object){object@PrepaidPrinReceived})
+  
+  #' A method to extract ReinvestmentIncome from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod ReinvestmentIncome
+  setMethod("ReinvestmentIncome", signature("MtgScenario"),
+            function(object){object@ReinvestmentIncome})
+  
+  #' A method to extract HorizonCurrBal from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod HorizonCurrBal
+  setMethod("HorizonCurrBal", signature("MtgScenario"),
+            function(object){object@HorizonCurrBal})
+  
+  #' A method to extract HorizonPrice from S4 class MtgScenario
+  #' @param object the name of an S4 class of tyoe MtgScenario
+  #' @exportMethod HorizonPrice
+  setMethod("HorizonPrice", signature("MtgScenario"),
+            function(object){object@HorizonPrice})
 
   #' A method to extract HorizonReturn from S4 class MtgScenario
   #' @param object the name of an S4 class of type MtgScenario

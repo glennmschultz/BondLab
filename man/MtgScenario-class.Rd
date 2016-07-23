@@ -69,6 +69,20 @@ over the investment horizon}
 \item{\code{CouponIncome}}{A numeric value the Coupon Income received over the 
 investment horizon}
 
+\item{\code{ScheduledPrinReceived}}{A numeric value the scheduled principal 
+received over the investment horizon}
+
+\item{\code{PrepaidPrinReceived}}{A numeric value the prepaid principal received
+over the investment horizon}
+
+\item{\code{ReinvestmentIncome}}{A numeric value the reivestment income received 
+over the investment horizon}
+
+\item{\code{HorizonCurrBal}}{A numeric value the current balance at the end of the
+investment horizon}
+
+\item{\code{HorizonPrice}}{A numeric value the price at the end of the horizon}
+
 \item{\code{HorizonReturn}}{A numeric value the horizon total return}
 
 \item{\code{HorizonMos}}{A numeric value the number of months to 

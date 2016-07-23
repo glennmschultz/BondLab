@@ -8,7 +8,6 @@
   #' @include PrepaymentModel.R MortgageKeyRate.R
   NULL
   
-  
   #' An S4 Class A list of Scenario outcomes
   #'
   #' The class MtgScenarioSet is a list of classes Scenario
@@ -552,7 +551,7 @@
   MtgScenario <- function(bond.id ="character",
                           settlement.date = "character",
                           rates.data = "character",
-                          price = numeric(), 
+                          price = "character", 
                           original.bal = numeric(),
                           scenario = "character",
                           horizon.months = numeric(),
@@ -597,11 +596,11 @@
       ScenarioFormula(Scenario)(rates[1,1:length(rates)], 
                                 Shiftbps = Shiftbps(Scenario))
     
+    Price <- PriceTypes(Price = price)
     
     TermStructure <- TermStructure(
       rates.data = rates,
       method = method)
-    
     
     Prepayment <- PrepaymentModel(
       bond.id = bond.id,
@@ -620,7 +619,7 @@
       bond.id = bond.id,
       original.bal = original.bal,
       settlement.date = settlement.date,
-      price = price,
+      price = PriceDecimalString(Price),
       PrepaymentAssumption = Prepayment)
     
     InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
@@ -631,7 +630,7 @@
       predict(InterpolateCurve, WAL(MortgageCashFlow))
     
     proceeds <- Accrued(MortgageCashFlow) + (original.bal * 
-                                  MBSFactor(bond.id) * (price/price.basis))
+                                  MBSFactor(bond.id) * PriceBasis(Price))
     principal <- original.bal * MBSFactor(bond.id)
     
     MortgageTermStructure <- MtgTermStructure(
@@ -684,7 +683,7 @@
       bond.id = HorizonMBS,
       original.bal = original.bal,
       settlement.date = HorizonSettlement,
-      price = price,
+      price = PriceDecimalString(Price),
       PrepaymentAssumption = HorizonPrepaymentAssumption)
     
     # =========================================================================
@@ -737,6 +736,7 @@
     
   Horizon.Price.Value <- function(HorizonBond = "character",
                                     HorizonPrice = numeric()){
+      price.basis = 100
       original.bal * MBSFactor(HorizonBond) * (HorizonPrice/price.basis)
     }
   
@@ -754,6 +754,10 @@
   HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
   (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
   
+  
+  # convert the horizon price to a string 
+  HorizonPrice <- sprintf("%.8f", HorizonPrice)
+  
   HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
                     original.bal = original.bal,
                     settlement.date = HorizonSettlement,
@@ -761,7 +765,6 @@
                     PrepaymentAssumption = HorizonPrepaymentAssumption)
 
   CouponIncome <- sum(MortgageCashFlow@PassThroughInterest[1:horizon.months])
-
   ReceivedCashFlow <- TotalCashFlow(MortgageCashFlow)[1:horizon.months]
 
   n.period <- 
@@ -772,8 +775,7 @@
   TerminalValue <- 
     ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
     ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
-    
-    
+
   PrincipalRepaid <- sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]) + 
   sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months])
     
@@ -810,6 +812,13 @@
       KeyRateDuration = unname(KeyRateDuration(MortgageTermStructure)),
       KeyRateConvexity = unname(KeyRateConvexity(MortgageTermStructure)),
       CouponIncome = CouponIncome,
+      ScheduledPrinReceived = 
+        sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months]),
+      PrepaidPrinReceived = 
+        sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]),
+      ReinvestmentIncome = ReinvestmentIncome,
+      HorizonCurrBal = original.bal * MBSFactor(HorizonMBS),
+      HorizonPrice = as.numeric(HorizonPrice),
       HorizonReturn = HorizonReturn,
       HorizonMos = horizon.months,
       Name = Name(Scenario),

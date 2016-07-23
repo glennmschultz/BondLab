@@ -16,12 +16,14 @@
   #' @slot PriceDecimal A numeric value the price using decimal notation
   #' @slot Price32nds A character the price using 32nds notation
   #' @slot PriceBasis A numeric value price decimal notation in units of 100
+  #' @slot PriceDecimalString A character the price using decimal notation
   #' @exportClass PriceTypes
   setClass("PriceTypes",
            representation(
              PriceDecimal =  "numeric",
              Price32nds = "character",
-             PriceBasis = "numeric")
+             PriceBasis = "numeric",
+             PriceDecimalString = "character")
            )
 
   setGeneric("PriceTypes", function(price)
@@ -72,17 +74,34 @@
   setGeneric("PriceBasis<-", function(object, value)
     {standardGeneric("PriceBasis<-")})
   
+  #' A standard generic to access the slot PriceDecimalString
+  #' 
+  #' @param object A S4 object of the type PriceTypes
+  #' @export
+  setGeneric("PriceDecimalString", function(object)
+    {setGeneric("PriceDecimalString")})
+  
+  #' A standard generic to replace the slot PriceDecimalString
+  #' 
+  #' @param object A S4 object of the type PriceTypes
+  #' @param value The replacement value of the slot
+  #' @export
+  setGeneric("PriceDecimalString<-", function(object, value)
+    {setGeneric("PriceDecimalString<-")})
+  
   setMethod("initialize",
             signature("PriceTypes"),
             function(.Object,
                      PriceDecimal = numeric(),
                      Price32nds = "character",
                      PriceBasis = numeric(),
+                     PriceDecimalString = "character",
                      ...){
               callNextMethod(.Object,
                              PriceDecimal = PriceDecimal,
                              Price32nds = Price32nds,
                              PriceBasis = PriceBasis,
+                             PriceDecimalString = PriceDecimalString,
                              ...)
             })
   #' A method to extract PriceDecimal from slot of class PriceTypes
@@ -138,6 +157,23 @@
                      return(object)
                    })
   
+  #' A method to extract PriceDecimalString from slot of class PriceTypes
+  #' 
+  #' @param object an S4 object of type PriceTypes
+  #' @exportMethod PriceDecimalString
+  setMethod("PriceDecimalString", signature("PriceTypes"),
+            function(object){object@PriceDecimalString})
+  
+  #' A method to replace PriceDecimalString from slot of class PriceTypes
+  #' 
+  #' @param object an S4 object of type PriceTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod PriceDecimalString<-
+  setReplaceMethod("PriceDecimalString", signature("PriceTypes"),
+                   function(object, value){
+                     object@PriceDecimalString <- value
+                     return(object)})
+  
   #' A constructor function for the class PriceTypes
   #' 
   #' @param Price character the price in either 
@@ -167,22 +203,32 @@
                       as.character(TailDecimal),sep="")
         return(Price)
       }
+
+    ConverttoString <- function(PriceDecimal = numeric()){
+      sprintf("%.8f", PriceDecimal)
+    }
       
       # Convert Price when entered as a decimal value
       if(grepl(".", as.character(Price), fixed = TRUE) == TRUE){
         Price_Decimal = Price
         Price_32nds = Convertto32nds(Price = Price)
         Price_Basis = as.numeric(Price) / PriceBasis
+        Price_Decimal_String = ConverttoString(
+          PriceDecimal = as.numeric(Price_Decimal))
       }
       
       if(grepl("-", as.character(Price), fixed = TRUE) == TRUE){
         Price_Decimal = ConverttoDecimal(Price = Price, Units = Units)
         Price_32nds = Price
         Price_Basis = as.numeric(Price_Decimal)/PriceBasis
+        Price_Decimal_String = ConverttoString(
+          PriceDecimal = as.numeric(Price_Decimal))
       }
 
     new("PriceTypes",
         PriceDecimal = as.numeric(Price_Decimal),
         Price32nds = Price_32nds,
-        PriceBasis = as.numeric(Price_Basis))
+        PriceBasis = as.numeric(Price_Basis),
+        PriceDecimalString = Price_Decimal_String
+        )
   }

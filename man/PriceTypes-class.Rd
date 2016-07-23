@@ -19,5 +19,7 @@ partial durations.
 \item{\code{Price32nds}}{A character the price using 32nds notation}
 
 \item{\code{PriceBasis}}{A numeric value price decimal notation in units of 100}
+
+\item{\code{PriceDecimalString}}{A character the price using decimal notation}
 }}
 

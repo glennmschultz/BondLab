@@ -5,7 +5,7 @@
 \title{Mortgage Scenario Analysis}
 \usage{
 MtgScenario(bond.id = "character", settlement.date = "character",
-  rates.data = "character", price = numeric(), original.bal = numeric(),
+  rates.data = "character", price = "character", original.bal = numeric(),
   scenario = "character", horizon.months = numeric(),
   method = "character", prepayment = "character", ...,
   horizon.spot.spread = NULL, horizon.nominal.spread = NULL,

@@ -133,11 +133,11 @@
   setMethod("KeyRateConvexity", signature("MortgageTermStructure"),
             function(object){object@KeyRateConvexity})
   
-  #' A function to calculate mortgage key rate duration
+  #' A function to calculate mortgage key rate duration and convexity
   #' 
   #' This is a generic function used to construct the 
   #' MortgageTermStructure object
-  #' @param bond.id A character string refrencing an object of type MBS details
+  #' @param bond.id A character string referencing an object of type MBS details
   #' @param original.bal A numeric value the original balance
   #' @param Rate.Delta A numeric value the rate delta used to calculate KRDs
   #' @param TermStructure A character string referencing an object of the 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/MortgageKeyRate.R
 \name{MtgTermStructure}
 \alias{MtgTermStructure}
-\title{A function to calculate mortgage key rate duration}
+\title{A function to calculate mortgage key rate duration and convexity}
 \usage{
 MtgTermStructure(bond.id = "character", original.bal = numeric(),
   Rate.Delta = numeric(), TermStructure = "character",
@@ -10,7 +10,7 @@ MtgTermStructure(bond.id = "character", original.bal = numeric(),
   price = "character", cashflow = "character")
 }
 \arguments{
-\item{bond.id}{A character string refrencing an object of type MBS details}
+\item{bond.id}{A character string referencing an object of type MBS details}
 
 \item{original.bal}{A numeric value the original balance}
 

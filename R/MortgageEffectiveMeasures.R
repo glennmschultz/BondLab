@@ -1,3 +1,4 @@
+
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # mortgage backed, asset backed securities, and commerical mortgage backed 
@@ -10,18 +11,17 @@
   # set methods, functions.  This function calculates the efffective duration
   # and convexity by shifting the spot rate curve.
 
-  #' @include TermStructure.R MortgageKeyRate.R
-
+  #' @include MortgageKeyRate.R
+  NULL
+  
   #' An S4 class MortgageEffectiveMeasures
   #' 
-  #' A class of mortgage effective duration and convexity
-  #' @slot EffDuration A numeric value the Effective Duration
-  #' @slot EffConvexity A numeric value the Effective Convexity
+  #' @slot EffDuration A numeric value the effective duration
+  #' @slot EffConvexity A numeric value the effective convexity
   #' @exportClass MortgageEffectiveMeasures
   setClass("MortgageEffectiveMeasures",
-           representation(
-           EffDuration = "numeric",
-           EffConvexity = "numeric"
+           representation(EffDuration = "numeric", 
+                          EffConvexity = "numeric"
          ))
   
   # Note: generic EffDuration is set in MortgageKeyRate.R
@@ -71,11 +71,12 @@
   #' @param price A character the price of the MBS.  Price may be entered in
   #' decimal notation or 32nds notation
   #' @export MortgageEffectiveMeasures
-  MortgageEffectiveMeasures <- function(bond.id = "character",
-                                        settlement.date = "character",
-                                        rates.data = "character",
-                                        TermStructure = "character",
-                                        price = "character"){
+  MortgageEffectiveMeasures <- function(
+    bond.id = "character",
+    settlement.date = "character",
+    rates.data = "character",
+    TermStructure = "character",
+    price = "character"){
   
   rates.data <- rates.data
   TermStructure = TermStructure
@@ -199,10 +200,10 @@
   DiscCashFlow <- sum(DiscCashFlow)
   
   PriceDwn <- DiscCashFlow
-  
-  EffectiveDuration <- (PriceUp - PriceDwn) / (2 * proceeds * (.0025))
+  Rate.Delta = rate.delta/yield.basis
+  EffectiveDuration <- (PriceUp - PriceDwn) / (2 * proceeds * Rate.Delta)
   EffectiveConvexity <- (PriceUp + PriceDwn - (2 * proceeds)) /
-    (2 * proceeds * .0025^2)
+    (2 * proceeds * Rate.Delta^2)
   
   new("MortgageEffectiveMeasures",
       EffDuration = EffectiveDuration,

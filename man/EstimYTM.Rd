@@ -11,14 +11,16 @@ EstimYTM(coupon = numeric(), coupon.frequency = numeric(),
 \item{coupon}{A numeric value expressing the bond's coupon as a
 percentage of its face amount}
 
-\item{coupon.frequency}{A numeric value expressing the frequency of payments
-over one year}
+\item{coupon.frequency}{A numeric value expressing the frequency of 
+payments over one year}
 
 \item{years.mat}{A numeric value expressing the years to maturity}
 
-\item{face.value}{A numeric value expressing the face value (principal amount) of the bond}
+\item{face.value}{A numeric value expressing the face value 
+(principal amount) of the bond}
 
-\item{price}{A numeric value expressing the price of the bond (not percentage of face value)
+\item{price}{A numeric value expressing the price of the bond 
+(not percentage of face value)
 for example a price of$102 is entered as 102.00}
 }
 \description{

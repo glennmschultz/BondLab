@@ -48,7 +48,6 @@ Collate:
     'CurveSpreads.R'
     'DollarRoll.R'
     'DollarRollAnalytics.R'
-    'EffectiveMeasure.R'
     'ErrorTrap.R'
     'ExtractScenario.R'
     'GetSwapCurve.R'

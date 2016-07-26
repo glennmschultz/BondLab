@@ -633,6 +633,7 @@
                                   MBSFactor(bond.id) * PriceBasis(Price))
     principal <- original.bal * MBSFactor(bond.id)
     
+    # compute the key rate duration 
     MortgageTermStructure <- MtgTermStructure(
       bond.id = bond.id,
       original.bal = original.bal,
@@ -640,7 +641,7 @@
       TermStructure = TermStructure,
       settlement.date = settlement.date,
       principal = principal,
-      price = price,
+      price = PriceDecimalString(Price),
       cashflow = MortgageCashFlow)
     
     # =========================================================================
@@ -652,7 +653,6 @@
       as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
     HorizonSettlement <- as.Date(
       settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
-    
     
     HorizonTermStructure <- TermStructure(
       rates.data = HorizonCurve,

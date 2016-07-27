@@ -584,7 +584,6 @@
       horizon.price.type <- "price"
     }
     
-    
     bond.id <- bond.id
     MortgageRate <- MtgRate()
     ModelTune <- ModelTune(bond.id = bond.id)

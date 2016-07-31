@@ -77,14 +77,15 @@
   #' @param paths A numeric value the number of paths
   #' @importFrom lubridate %m+%
   #' @export Mortgage.OAS
-  Mortgage.OAS <- function(bond.id = "character", 
-                         trade.date = "character", 
-                         settlement.date = "character", 
-                         original.bal = numeric(),
-                         price = numeric(), 
-                         sigma = numeric(), 
-                         paths = numeric()
-                         ){
+  Mortgage.OAS <- function(
+    bond.id = "character", 
+    trade.date = "character", 
+    settlement.date = "character", 
+    original.bal = numeric(),
+    price = "character", 
+    sigma = numeric(), 
+    paths = numeric()
+    ){
 
   # The first step is to read in the Bond Detail, rates, and 
   # Prepayment Model Tuning Parameters
@@ -98,6 +99,9 @@
   
   # Call the desired curve from rates data folder
   rates.data <- Rates(trade.date = trade.date)
+  
+  # PriceType class to convert price
+  Price <- PriceTypes(Price = price)
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -270,31 +274,32 @@
                                   Burnout = Burnout,
                                   Severity = 0)
 
-    # -----------------------------------------------------------------------
-    # Uncomment this line and # 239 to get the prepayment vector from the model 
-    # prepayout <- cbind(prepayout, Prepayment@SMM)
-    # -------------------------------------------------------------------------
 
-    MtgCashFlow <- MortgageCashFlow(bond.id = bond.id, 
-                                    original.bal = original.bal, 
-                                    settlement.date = settlement.date, 
-                                    price = price, 
-                                    PrepaymentAssumption = Prepayment)
+  # Uncomment this line and # 239 to get the prepayment vector from the model 
+  # prepayout <- cbind(prepayout, Prepayment@SMM)
+
+
+  MtgCashFlow <- MortgageCashFlow(
+    bond.id = bond.id,
+    original.bal = original.bal,
+    settlement.date = settlement.date,
+    price = PriceDecimalString(Price),
+    PrepaymentAssumption = Prepayment)
     
     OAS.CashFlow[,j] <- as.vector(MtgCashFlow@TotalCashFlow)
     OAS.DiscMatrix [,j] <- as.vector(sim.cube[,5])
-    
-    
+
     #This needs some error trapping on price
     proceeds <- as.numeric((
       original.bal * 
-        factor * price/price.basis) + 
+        factor * PriceBasis(Price)) + 
         MtgCashFlow@Accrued)
     
     curr.bal <- as.numeric(original.bal * factor)
     
     #Solve for spread to spot curve to equal price 
-    OAS.Out[j,1] <- uniroot(Spot.Spread, interval = c(-1, 1), 
+    OAS.Out[j,1] <- uniroot(Spot.Spread, 
+                            interval = c(-1, 1), 
                             tol = .0000000001, 
                             cashflow = MtgCashFlow@TotalCashFlow,
                             discount.rates = OAS.Term.Structure@SpotRate, 
@@ -307,34 +312,16 @@
     
   } # end of the OAS j loop
   
-  # -------------------------------------------------------------------------
   # uncomment this to get prepayment vectors
   # vectors <<- prepayout
   # cashflow <<- OAS.CashFlow
   # disc <<- OAS.DiscMatrix
-  # --------------------------------------------------------------------------
-  # --------------------------------------------------------------------------
-  # Calculate OAS spread find the spread such that the average 
-  # proceeds is equal to proceeds
-  # --------------------------------------------------------------------------
-   OAS <- function(spread = numeric(), 
-                  DiscountMatrix = matrix(), 
-                  CashFlowMatrix = matrix(), 
-                  period = vector(), 
-                  proceeds = numeric(),
-                  price = numeric(),
-                  paths = numeric()) {
-    
-    OAS.Proceeds <- data.frame(((1/((1 + DiscountMatrix[,] + spread)^ period)) *
-                                CashFlowMatrix[,]))
-    OAS.Proceeds <- colSums(OAS.Proceeds/curr.bal) * price.basis
-    return(mean(OAS.Proceeds) - price)}
   
    OAS.Spread <- mean(OAS.Out[,1])
   
-  # -------------------------------------------------------------------------
+  #
   #Calculate OAS to price for price distribution analysis
-  # --------------------------------------------------------------------------
+  # 
   OAS.Price <- function(spread = numeric(), 
                         DiscountMatrix = matrix(), 
                         CashFlowMatrix = matrix(), 
@@ -372,11 +359,11 @@
                        predict(InterpolateCurve, MtgCashFlow@WAL ))
     
   OAS <- OAS.Out
-   # ------------------------------------------------------------------------
-   # Key Rate Duration 
-   # -------------------------------------------------------------------------
+  # ------------------------------------------------------------------------
+  # Key Rate Duration 
+  # -------------------------------------------------------------------------
     
-   # CIR Bond Price returns the spot rate curve
+  # CIR Bond Price returns the spot rate curve
   
     CIRSpot <- CIRBondPrice(shortrate = short.rate,
     T = 40,
@@ -420,7 +407,7 @@
     bond.id = bond.id,
     original.bal = original.bal,
     settlement.date = settlement.date,
-    price = price,
+    price = PriceDecimalString(Price),
     PrepaymentAssumption = PrepaymentAssumption)
     
     MortgageKeyRate <- MtgTermStructure(
@@ -430,7 +417,7 @@
        TermStructure = CIRTermStructure,
        settlement.date = settlement.date,
        principal = principal,
-       price = price,
+       price = PriceDecimalString(Price),
        cashflow = MortgageCashFlow)
     
     # ----------------------------------------------------------------------

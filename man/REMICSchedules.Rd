@@ -2,15 +2,21 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{REMICSchedules}
 \alias{REMICSchedules}
-\title{A connection function to the REMICSchedules Data calls REMIC structuring element
-schedules.  This is the PAC/TAC schedule used by the waterfall}
+\title{A connection function to the REMICSchedules Data calls REMIC structuring
+element schedules.  This is the PAC/TAC schedule used by the waterfall
+Opens connection to the Schedules folder by REMIC deal name
+this function supports REMIC tranche analysis by provding the REMIC
+schedules deal information}
 \usage{
 REMICSchedules(REMIC.Tranche = "character")
 }
 \arguments{
-\item{REMIC.Tranche}{the REMIC tranche MBS.id or cusip.  Currently MBS.id is supported}
+\item{REMIC.Tranche}{the REMIC tranche MBS.id or cusip.
+Currently MBS.id is supported}
 }
 \description{
+A connection function to the REMICSchedules Data calls REMIC structuring
+element schedules.  This is the PAC/TAC schedule used by the waterfall
 Opens connection to the Schedules folder by REMIC deal name
 this function supports REMIC tranche analysis by provding the REMIC
 schedules deal information

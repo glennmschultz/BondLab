@@ -10,6 +10,7 @@ ScenarioCall(Scenario = "character")
 \item{Scenario}{a character string the scenario used in the analysis}
 }
 \description{
-Opens connection to the Scenarios folder calling user defined scenarios by name
+Opens connection to the Scenarios folder calling user defined 
+scenarios by name
 }
 

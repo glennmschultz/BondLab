@@ -9,9 +9,11 @@ SaveModelTune(ModelFile = "character", ModelName = "character")
 \arguments{
 \item{ModelFile}{A character string the model tuning default value is temp}
 
-\item{ModelName}{A character string the model name used to reference the prepayment model}
+\item{ModelName}{A character string the model name used to reference the
+prepayment model}
 }
 \description{
-Opens a connection to the PrepaymentModel folder to save the prepayment model tuning
+Opens a connection to the PrepaymentModel folder to save the prepayment
+model tuning
 }
 

@@ -10,7 +10,8 @@ REMICGroupConn(DealName = "character", Group = numeric())
 \item{DealName}{A character string the DealName}
 
 \item{Group}{A numeric value the collateral group number.
-Note: Group is a counter for this function connection used in the CollateralGroup function}
+Note: Group is a counter for this function connection used in 
+the CollateralGroup function}
 }
 \description{
 The connection is a read helper to the aggregator CollateralGroup

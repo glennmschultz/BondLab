@@ -7,9 +7,11 @@
 ModelTune(bond.id = "character")
 }
 \arguments{
-\item{bond.id}{A character string the bond id or cusip currently bond.id is supported}
+\item{bond.id}{A character string the bond id or cusip currently bond.id 
+is supported}
 }
 \description{
-A connection function to the mortgage rate function to call prepayment model tuning
+A connection function to the mortgage rate function to call the prepayment 
+model tuning
 }
 

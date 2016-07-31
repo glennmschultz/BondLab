@@ -9,7 +9,8 @@ SaveSchedules(DealName = "character", ScheduleFile = "character")
 \arguments{
 \item{DealName}{A character string the deal name}
 
-\item{ScheduleFile}{A character string the name of the schedule file to save}
+\item{ScheduleFile}{A character string the name of the 
+schedule file to save}
 }
 \description{
 Opens a connection to the Schedules folder to save PAC or TAC schedules

@@ -7,7 +7,8 @@
 HorizonMBS()
 }
 \description{
-A read connection function to the horizon MBS details.  No inputs are required
+A read connection function to the horizon MBS details.  
+No inputs are required
 }
 \examples{
 \dontrun{

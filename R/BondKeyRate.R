@@ -1,9 +1,12 @@
 
-
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
-  # mortgage backed, asset backed securities, and commerical mortgage backed securities
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
+  
+  #' @include MortgageKeyRate.R
+  NULL
 
  
   #' An S4 class representing the bond term structure exposure

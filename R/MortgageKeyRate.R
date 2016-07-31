@@ -345,6 +345,7 @@
     cashflow@TotalCashFlow
   
   # This code solves for the spread to spot curve to equal price
+  # This code can be replaced with the curve spreads class 
   spot.spread <- uniroot(Spot.Spread, 
                          interval = c(-.75, .75), 
                          tol = .0000000001, 

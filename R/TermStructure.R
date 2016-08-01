@@ -55,6 +55,13 @@
   
   # Note: Period standard generic is found in MortgageCashFlow.R
   
+  #' a generic function to replace the slot Period
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export Period<-
+  setGeneric("Period<-", function(object, value)
+    {standardGeneric("Period<-")})
+  
   #' A generic function to access the slot Date in class TermStructure
   #' @param object an S4 class object
   #' @export ForwardDate
@@ -156,17 +163,27 @@
   #' @param object the name of the object of type TermStructure
   #' @param value the replacement value of the slot
   #' @exportMethod TradeDate<-
-  setReplaceMethod("TradeDate", signature = ("TermStructure"),
+  setReplaceMethod("TradeDate", signature("TermStructure"),
             function(object, value){
               object@TradeDate <- value
               return(object)
             })
   
-  #' Method to extract Period from S4 class
-  #' @param object the name of the S4 object
+  #' Method to extract Period from S4 class TermStructure
+  #' @param object the name of the S4 object TermStructure
   #' @exportMethod Period
   setMethod("Period", signature("TermStructure"),
             function(object){object@Period})
+  
+  #' Method to replace Period in S4 class TermStructure
+  #' @param object the name of the S4 object of type TermStrucuture
+  #' @param value the replacement value of the slot
+  #' @exportMethod Period<-
+  setReplaceMethod("Period", signature("TermStructure"),
+                   function(object, value){
+                     object@Period <- value
+                     return(object)
+                   })
   
   #' Method to extract Date from the class TermStructure
   #' @param object the name of the object of type TermStructure

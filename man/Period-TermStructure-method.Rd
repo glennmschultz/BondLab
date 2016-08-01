@@ -3,14 +3,14 @@
 \docType{methods}
 \name{Period,TermStructure-method}
 \alias{Period,TermStructure-method}
-\title{Method to extract Period from S4 class}
+\title{Method to extract Period from S4 class TermStructure}
 \usage{
 \S4method{Period}{TermStructure}(object)
 }
 \arguments{
-\item{object}{the name of the S4 object}
+\item{object}{the name of the S4 object TermStructure}
 }
 \description{
-Method to extract Period from S4 class
+Method to extract Period from S4 class TermStructure
 }
 

@@ -4,6 +4,8 @@
   # mortgage backed, asset backed securities, and commerical mortgage backed 
   # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
+  
+  #' @include CurveSpreads.R
 
   setClass("MortgageOAS",
          representation(
@@ -21,15 +23,72 @@
            PathModDur = "vector",
            PathYTM = "vector"))
   
-  setGeneric("Mortgage.OAS",function(bond.id = "character", 
-                                     trade.date = "character", 
-                                     settlement.date = "character", 
-                                     original.bal = numeric(),
-                                     price = numeric(), 
-                                     sigma = numeric(), 
-                                     paths = numeric()) 
+  setGeneric("Mortgage.OAS",function(
+    bond.id = "character",
+    trade.date = "character",
+    settlement.date = "character",
+    original.bal = numeric(),
+    price = numeric(),
+    sigma = numeric(),
+    paths = numeric()) 
     
   {standardGeneric("Mortgage.OAS")})
+  
+  #' A standard generic function to access the slot OAS
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("OAS", function(object)
+  {standardGeneric("OAS")})
+  
+  #' A standard generic function to access the slot ZVSpread
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("ZVSpread", function(object)
+             {standardGeneric("ZVSpread")})
+  
+  # Note: SpreadToCurve generic is defined in CurveSpreads.R
+  # Note: EffDuration generic is defined in MortgageKeyRate.R
+  # Note: EffConvexity generic is defined in MortgageKeyRate.R
+  # Note: KeyRateTenor generic is defined in MortgageKeyRate.R
+  # Note: KeyRateDuration generic is defined in MortgageKeyRate.R
+  # Note: KeyRateConvexity generic is defined in MortgageKeyRate.R
+  
+  #' A standard generic function to access the slot PriceDist
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PriceDist", function(object)
+    {standardGeneric("PriceDist")})
+  
+  #' A standard generic function to access the slot PathSpread
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PathSpread", function(object)
+    {standardGeneric("PathSpread")})
+  
+  #' A standard generic function to access the slot PathWAL
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PathWAL", function(object)
+    {standardGeneric("PathWAL")})
+  
+  #' A standard generic function to access the slot PathModDuration
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PathModDuration", function(object)
+    {setGeneric("PathModDuration")})
+  
+  #' A standard generic function to access the slot PathYTM
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PathYTM", function(object)
+    {standardGeneric("PathYTM")})
   
   setMethod("initialize",
             signature("MortgageOAS"),
@@ -123,11 +182,12 @@
   # to the spot curve to normalize discounting
   # This function is encapasulated in term structure
   
-  Spot.Spread <- function(spread = numeric(), 
-                          cashflow = vector(), 
-                          discount.rates = vector(), 
-                          t.period = vector(), 
-                          proceeds = numeric()){
+  Spot.Spread <- function(
+    spread = numeric(),
+    cashflow = vector(),
+    discount.rates = vector(),
+    t.period = vector(),
+    proceeds = numeric()){
     
   Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
                 return(proceeds - Present.Value)
@@ -144,13 +204,14 @@
 
   # Calculate the number of cashflows that will be paid from settlement date 
   # to the last pmt date (used end date as next pmdt date for this)
-  ncashflows = BondBasisConversion(issue.date = issue.date, 
-                                   start.date = start.date, 
-                                   end.date = end.date, 
-                                   settlement.date = settlement.date,
-                                   lastpmt.date = lastpmt.date, 
-                                   nextpmt.date = end.date,
-                                   type = bondbasis) 
+  ncashflows = BondBasisConversion(
+    issue.date = issue.date,
+    start.date = start.date,
+    end.date = end.date,
+    settlement.date = settlement.date,
+    lastpmt.date = lastpmt.date,
+    nextpmt.date = end.date,
+    type = bondbasis) 
   
   # Build a vector of dates for the payment schedule
   # first get the pmtdate interval
@@ -165,13 +226,14 @@
   
   # Build the time period vector (n) for discounting the cashflows nextpmt date 
   # is vector of payment dates to n for each period
-  time.period <- BondBasisConversion(issue.date = issue.date, 
-                                    start.date = start.date, 
-                                    end.date = end.date, 
-                                    settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, 
-                                    nextpmt.date = pmtdate,
-                                    type = bondbasis)
+  time.period <- BondBasisConversion(
+    issue.date = issue.date,
+    start.date = start.date,
+    end.date = end.date,
+    settlement.date = settlement.date,
+    lastpmt.date = lastpmt.date,
+    nextpmt.date = pmtdate,
+    type = bondbasis)
   
   # step4 Count the number of cashflows 
   # num.periods is the total number of cashflows to be received
@@ -182,20 +244,27 @@
   # ==== Compute Option Adjusted Spread ======================================
   # For simulation pass T = mortgage term if the number of paths = 1 
   # then volatility = 0 
-  Simulation <- CIRSim(shortrate = short.rate, 
-                       kappa = kappa, 
-                       theta = theta, 
-                       T = ((num.periods-1) / months.in.year), 
-                       step = (1/months.in.year), 
-                       sigma = sigma, 
-                       N = paths)
+  Simulation <- CIRSim(
+    shortrate = short.rate,
+    kappa = kappa,
+    theta = theta,
+    T = ((num.periods-1) / months.in.year),
+    step = (1/months.in.year),
+    sigma = sigma,
+    N = paths)
   
   # number of rows in the simulation will size the arrays
   num.sim <- nrow(Simulation)
   
   # Dim arrays for the calculation
-  cube.names <- c("Period", "Date", "Time", 
-                  "SpotRate", "DiscRate", "TwoYear", "TenYear")    
+  cube.names <- c("Period", 
+                  "Date", 
+                  "Time", 
+                  "SpotRate", 
+                  "DiscRate", 
+                  "TwoYear", 
+                  "TenYear")    
+  
   sim.cube <- array(data = NA, c(num.sim, 7), 
                     dimnames = list(seq(c(1:num.sim)),cube.names))
   
@@ -205,7 +274,12 @@
   sim.cube[,3] <- time.period
   
   # Dimension the arrays that will be needed
-  oas.names <- c("OAS", "WAL", "ModDur", "YTM", "Price")
+  oas.names <- c("OAS", 
+                 "WAL", 
+                 "ModDur", 
+                 "YTM", 
+                 "Price")
+  
   # OAS out holds OAS solutions to individual trajectory calcualtions 
   # solving for the spread to price
   OAS.Out <- array(data = NA, c(paths,5), 
@@ -214,7 +288,20 @@
   OAS.CashFlow <- array(data = NA, c(num.sim,paths))
   OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
   
-  prepayout <- NULL
+  prepayout <- NULL #used to capture OAS prepayment vectors
+  
+  #Initialize empty TermStructure class.  If one repeatedly uses new term          structure in the loop the memory footprint will grow with the number of loops
+  
+  OAS.Term.Structure <- new("TermStructure",
+                            TradeDate = as.character(trade.date),
+                            Period = numeric(),
+                            Date = "character",
+                            SpotRate = numeric(),
+                            ForwardRate = numeric(),
+                            TwoYearFwd = numeric(),
+                            TenYearFwd = numeric()
+  ) 
+  
   for(j in 1:paths){
 
   # sim cube 5 ifelse synchs the CIR output to that of term 
@@ -255,24 +342,25 @@
   #When sigma is zero the simulated spot rates are compounded forward 
   #rates and the two and ten year rates are calcualted from the calculated 
   #spot rate rate curve
+  
+ 
+  # Use TermStructure setter
+  Period(OAS.Term.Structure) <- as.numeric(sim.cube[,3])
+  ForwardDate(OAS.Term.Structure) <- unname(
+  as.character(as.Date(sim.cube[,2], origin = "1970-01-01")))
+  SpotRate(OAS.Term.Structure) <- as.numeric(sim.cube[,5])
+  ForwardRate(OAS.Term.Structure) <- as.numeric(Simulation[,j])
+  TwoYearForward(OAS.Term.Structure) <- as.numeric(sim.cube[,6])
+  TenYearForward(OAS.Term.Structure) <- as.numeric(sim.cube[,7])
 
-  OAS.Term.Structure <- new("TermStructure",
-                TradeDate = as.character(trade.date),
-                Period = as.numeric(sim.cube[,3]),
-                Date = unname(
-                as.character(as.Date(sim.cube[,2], origin = "1970-01-01"))),
-                SpotRate = as.numeric(sim.cube[,5]),
-                ForwardRate = as.numeric(Simulation[,j]),
-                TwoYearFwd = as.numeric(sim.cube[,6]),
-                TenYearFwd = as.numeric(sim.cube[,7]))
-
-  Prepayment <- PrepaymentModel(bond.id = bond.id,
-                                  TermStructure = OAS.Term.Structure, 
-                                  MortgageRate = MortgageRate, 
-                                  PrepaymentAssumption = "MODEL", 
-                                  ModelTune = ModelTune, 
-                                  Burnout = Burnout,
-                                  Severity = 0)
+  Prepayment <- PrepaymentModel(
+    bond.id = bond.id,
+    TermStructure = OAS.Term.Structure,
+    MortgageRate = MortgageRate,
+    PrepaymentAssumption = "MODEL",
+    ModelTune = ModelTune,
+    Burnout = Burnout,
+    Severity = 0)
 
 
   # Uncomment this line and # 239 to get the prepayment vector from the model 
@@ -392,13 +480,14 @@
                             TwoYearFwd = TwoYrFwd * 100,
                             TenYearFwd = TenYrFwd * 100)
     
-  PrepaymentAssumption <- PrepaymentModel(bond.id = bond.id, 
-                                          MortgageRate = MortgageRate,
-                                          TermStructure = CIRTermStructure, 
-                                          PrepaymentAssumption = "MODEL", 
-                                          ModelTune = ModelTune, 
-                                          Burnout = Burnout,
-                                          Severity = 0) 
+  PrepaymentAssumption <- PrepaymentModel(
+    bond.id = bond.id,
+    MortgageRate = MortgageRate,
+    TermStructure = CIRTermStructure,
+    PrepaymentAssumption = "MODEL",
+    ModelTune = ModelTune,
+    Burnout = Burnout,
+    Severity = 0) 
 
     #The fourth step is to call the bond cusip details and calculate 
     #Bond Yield to Maturity, 

@@ -10,7 +10,7 @@
   setClass("MortgageOAS",
          representation(
            OAS = "numeric",
-           ZVSpread = "numeric",
+           ZeroVolSpread = "numeric",
            SpreadToCurve = "numeric",
            EffDuration = "numeric",
            EffConvexity = "numeric",
@@ -41,13 +41,7 @@
   setGeneric("OAS", function(object)
   {standardGeneric("OAS")})
   
-  #' A standard generic function to access the slot ZVSpread
-  #' 
-  #' @param object an S4 class object
-  #' @export
-  setGeneric("ZVSpread", function(object)
-             {standardGeneric("ZVSpread")})
-  
+  # Note: ZeroVolSpread is defined in CurveSpreads.R
   # Note: SpreadToCurve generic is defined in CurveSpreads.R
   # Note: EffDuration generic is defined in MortgageKeyRate.R
   # Note: EffConvexity generic is defined in MortgageKeyRate.R
@@ -80,8 +74,8 @@
   #' 
   #' @param object an S4 class object
   #' @export
-  setGeneric("PathModDuration", function(object)
-    {setGeneric("PathModDuration")})
+  setGeneric("PathModDur", function(object)
+    {setGeneric("PathModDur")})
   
   #' A standard generic function to access the slot PathYTM
   #' 
@@ -94,7 +88,7 @@
             signature("MortgageOAS"),
             function(.Object,
                      OAS = "numeric",
-                     ZVSpread = "numeric",
+                     ZeroVolSpread = "numeric",
                      SpreadToCurve = "numeric",
                      EffDuration = "numeric",
                      EffConvexity = "numeric",
@@ -109,7 +103,7 @@
             ){
               callNextMethod(.Object,
                              OAS = OAS,
-                             ZVSpread = ZVSpread,
+                             ZeroVolSpread = ZeroVolSpread,
                              SpreadToCurve = SpreadToCurve,
                              EffDuration = EffDuration,
                              EffConvexity = EffConvexity,
@@ -122,8 +116,123 @@
                              PathModDur = PathModDur,
                              PathYTM = PathYTM)
             })
-
-
+  
+  #' A method to extract OAS from S4 object MortgageOAS
+  #' 
+  #' @param object An S4 object of the type MortgageOAS
+  #' @exportMethod OAS
+  setMethod("OAS", signature("MortgageOAS"),
+            function(object){
+              object@OAS
+            })
+  
+  #' A method to extract ZeroVolSpread from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod ZeroVolSpread
+  setMethod("ZeroVolSpread", signature("MortgageOAS"),
+            function(object){
+              object@ZeroVolSpread
+            })
+  
+  #' A method to extract SpreadToCurve from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod SpreadToCurve
+  setMethod("SpreadToCurve", signature("MortgageOAS"),
+            function(object){
+              object@SpreadToCurve})
+  
+  #' A method to extract EffDuration from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod EffDuration
+  setMethod("EffDuration", signature("MortgageOAS"),
+            function(object){
+              object@EffDuration
+            })
+  
+  #' A method to extract EffConvexity from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod EffConvexity
+  setMethod("EffConvexity", signature("MortgageOAS"),
+            function(object){
+              object@EffConvexity
+            })
+  
+  #' A method to extract KeyRateTenor from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the typre MortgageOAS
+  #' @exportMethod KeyRateTenor
+  setMethod("KeyRateTenor", signature("MortgageOAS"),
+            function(object){
+              object@KeyRateTenor
+            })
+  
+  #' A method to extract KeyRateDuration from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod KeyRateDuration
+  setMethod("KeyRateDuration", signature("MortgageOAS"),
+            function(object){
+              object@KeyRateDuration
+            })
+  
+  #' A method to extract KeyRateConvexity from S4 object MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod KeyRateConvexity
+  setMethod("KeyRateConvexity", signature("MortgageOAS"),
+            function(object){
+              object@KeyRateConvexity
+            })
+  
+  #' A method to extract PriceDist from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod PriceDist
+  setMethod("PriceDist", signature("MortgageOAS"),
+            function(object){
+              object@PriceDist
+            })
+  
+  #' A method to extract PathSpread from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod PathSpread
+  setMethod("PathSpread", signature("MortgageOAS"),
+            function(object){
+              object@PathSpread
+            })
+  
+  #' A method to extract PathWAL from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS 
+  #' @exportMethod PathWAL
+  setMethod("PathWAL", signature("MortgageOAS"),
+            function(object){
+              object@PathWAL
+            })
+  
+  #' A method to extract PathModDur from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod PathModDur
+  setMethod("PathModDur", signature("MortgageOAS"),
+            function(object){
+              object@PathModDur
+            })
+  
+  #' A method to extract PathYTM from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod PathYTM
+  setMethod("PathYTM", signature("MortgageOAS"),
+            function(object){
+              object@PathYTM
+            })
+  
   #' Mortgage OAS the OAS engine for pass through OAS
   #' 
   #' Pass through OAS engine
@@ -536,7 +645,7 @@
     
     new("MortgageOAS",
        OAS = mean(OAS.Out[,1]) * yield.basis,
-       ZVSpread = spot.spread * yield.basis,
+       ZeroVolSpread = spot.spread * yield.basis,
        SpreadToCurve = SpreadtoCurve,
        EffDuration = EffDuration(MortgageKeyRate),
        EffConvexity = EffConvexity(MortgageKeyRate),

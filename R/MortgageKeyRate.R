@@ -476,8 +476,26 @@
   # 120 is 10-year forward
   # create variables and replace 24 and 120 in code
     
-  Key.Rate.TS.Dwn <- TermStructure
-  Key.Rate.TS.Up <- TermStructure
+  #Key.Rate.TS.Dwn <- TermStructure
+  #Key.Rate.TS.Up <- TermStructure
+  
+    Key.Rate.TS.Dwn <- new("TermStructure",
+                           TradeDate <- TradeDate(TermStructure),
+                           Period <- Period(TermStructure),
+                           Date <- ForwardDate(TermStructure),
+                           SpotRate = numeric(),
+                           ForwardRate = numeric(),
+                           TwoYearFwd = numeric(),
+                           TenYearFwd = numeric())
+    
+    Key.Rate.TS.Up <- new("TermStructure",
+                           TradeDate <- TradeDate(TermStructure),
+                           Period <- Period(TermStructure),
+                           Date <- ForwardDate(TermStructure),
+                           SpotRate = numeric(),
+                           ForwardRate = numeric(),
+                           TwoYearFwd = numeric(),
+                           TenYearFwd = numeric()) 
 
   SpotRate(Key.Rate.TS.Dwn) <- c((Key.Rate.Table[,"KRDwn"]-spot.spread) * 100, 
   ((SpotRate(TermStructure)[361:492])))

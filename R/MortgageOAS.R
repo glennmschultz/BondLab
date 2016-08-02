@@ -5,7 +5,8 @@
   # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
   
-  #' @include CurveSpreads.R
+  #' @include CurveSpreads.R MortgageKeyRate.R
+  NULL
 
   setClass("MortgageOAS",
          representation(

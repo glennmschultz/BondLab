@@ -71,5 +71,6 @@ Collate:
     'REMICConstructor.R'
     'REMICCusip.R'
     'RatesData.R'
+    'StructuringFunctions.R'
     'TimeValueFunction.R'
     'zzz.R'

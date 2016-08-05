@@ -307,7 +307,8 @@
   # Set trade date and call the CalibrateCIR Model
   # trade.date = as.Date(trade.date, "%m-%d-%Y")
   
-  Market.Fit <- CalibrateCIR(trade.date = trade.date, sigma = sigma)
+  Market.Fit <- CalibrateCIR(trade.date = trade.date, 
+                             sigma = sigma)
   kappa  = Market.Fit$p1
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
@@ -362,7 +363,7 @@
     step = (1/months.in.year),
     sigma = sigma,
     N = paths)
-  
+
   # number of rows in the simulation will size the arrays
   num.sim <- nrow(Simulation)
   
@@ -400,7 +401,8 @@
   
   prepayout <- NULL #used to capture OAS prepayment vectors
   
-  #Initialize empty TermStructure class.  If one repeatedly uses new term          structure in the loop the memory footprint will grow with the number of loops
+  #Initialize empty TermStructure class.  If one repeatedly uses new term
+  #structure in the loop the memory footprint will grow with the number of loops
   
   OAS.Term.Structure <- new("TermStructure",
                             TradeDate = as.character(trade.date),

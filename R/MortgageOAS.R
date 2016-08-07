@@ -366,7 +366,7 @@
 
   # number of rows in the simulation will size the arrays
   num.sim <- nrow(Simulation)
-  
+
   # Dim arrays for the calculation
   cube.names <- c("Period", 
                   "Date", 
@@ -391,7 +391,7 @@
                  "YTM", 
                  "Price")
   
-  # OAS out holds OAS solutions to individual trajectory calcualtions 
+  # OAS out holds OAS solutions to individual trajectory calculations 
   # solving for the spread to price
   OAS.Out <- array(data = NA, c(paths,5), 
                    dimnames = list(seq(c(1:paths)),oas.names))

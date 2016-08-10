@@ -5,7 +5,7 @@
   # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
   
-  #' @include MortgageKeyRate.R
+  #' @include TermStructure.R MortgageKeyRate.R
   NULL
 
  
@@ -57,7 +57,21 @@
                     return(.Object)
             })
   
-  
+  #' A function to calculate a bond key rate duration
+  #' 
+  #' This is a generic function used to contruct the object BondTermStructure
+  #' @param bond.id A character string referencing an object of 
+  #' type bond details.
+  #' @param Rate.Delta A numeric value the rate delta used to calcualte the 
+  #' bond KRDs.
+  #' @param TermStructure A character string referencing an object of typre
+  #' TermStructure.
+  #' @param principal A numeric value the principal or face amount of the bond.
+  #' @param price A numeric value the price of the bond
+  #' @param cashflow A character string referencing an object of the 
+  #' BondCashFlow.
+  #' @importFrom stats approx
+  #' @export BondTermStructure
   BondTermStructure <- function(bond.id = "character", 
                                 Rate.Delta = numeric(), 
                                 TermStructure = "character", 
@@ -65,13 +79,16 @@
                                 price = numeric(), 
                                 cashflow = "character"){
   
-  #Call the bond frequency to adjust the spot spread to the payment frequency of the bond
+  #Call the bond frequency to adjust the spot spread to the 
+  #payment frequency of the bond
   frequency = bond.id@Frequency
   maturity = bond.id@Maturity
   accrued = cashflow@Accrued
   
-  #Class name variable.  This will set the class name for the new class to be initilized
-  ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")} else {as.character("MortgageTermStructure")}
+  #Class name variable.  This will set the class name for the new class 
+  #to be initilized
+  ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")
+    } else {as.character("MortgageTermStructure")}
   
   #Error Trap the user's price input
   if(price <= 1) {price = price} else {price = price/100}
@@ -82,7 +99,11 @@
   # These functions are set as internal functions to key rates
   # this insures that stored values will not be wrongly be passed to the funtion
   # internal functions used to compute key rate duration and convexity
-  EffectiveMeasures <- function(rate.delta, cashflow, discount.rates, discount.rates.up, discount.rates.dwn, 
+  EffectiveMeasures <- function(rate.delta, 
+                                cashflow, 
+                                discount.rates, 
+                                discount.rates.up, 
+                                discount.rates.dwn, 
                                 t.period, proceeds, type){
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
@@ -90,7 +111,7 @@
     
     switch(type, 
            duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
-           convexity =  (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
+           convexity = (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
     )
   }
   

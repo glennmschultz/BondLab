@@ -20,6 +20,7 @@
   #' @slot KeyRateTenor A numeric value the Key Rate Tenor
   #' @slot KeyRateDuration A numeric value the Key Rate Duration
   #' @slot KeyRateConvexity A numeric value the Key Rate Convexity
+  #' @importFrom stats approx
   #' @exportClass MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(

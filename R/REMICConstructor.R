@@ -2,12 +2,59 @@
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # in addition to standard fixed income analysis bond lab provides 
-  # for the specific analysis of structured products residential mortgage backed securities, 
+  # for the specific analysis of structured products residential 
+  # mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
 
-
+  #' An S4 class the REMIC At Issuance Disclosure 
+  #' 
+  #' The RAID File contains the REMIC at issuance discloure data.  The data is
+  #' static data describing the REMIC at the time of issuance
+  #' @slot DealName A character the deal name
+  #' @slot Issuer A character the deal Issuer
+  #' @slot DealNumber A character the deal number
+  #' @slot DealPriceDate A character the pricing date of the transaction
+  #' @slot DealSettlementDate A character the settlement date.
+  #' @slot Underwriter A character the Underwriter of the deal.
+  #' @slot Trustee A character the Trustee of the deal.
+  #' @slot PricingSpeed A numeric value the PricingSpeed of the deal.
+  #' @slot JumpReferenceSpeed1 A numeric value the Jump Bond Reference Speed1.
+  #' @slot JumpReferenceSpeed2 A numeric value the Jump Bond Reference Speed2.
+  #' @slot JumpReferenceSpeed3 A numeric value the Jump Bond Reference Speed3.
+  #' @slot JumpReferenceSpeed4 A numeric value the Jump Bond Reference Speed4.
+  #' @slot NumberofTranches A numeric value the number of Tranches.
+  #' @slot NumberofComponentTranches A numeric value the number of Component
+  #' Tranches in the deal.
+  #' @slot NumberofCombinedTranches A numeric value the number of Combined 
+  #' Tranches in the deal.
+  #' @slot NumberofPools A numeric value the number of pools in the deal.
+  #' @slot PacSchedulesIncluded A logical value the indicating if PAC Schedules
+  #' are included as part of the REMIC at issuance disclosure.
+  #' @slot NumberofPacSchedules A numeric value number of PAC Schedules reported
+  #' at the time of the REMIC issuance.
+  #' @slot NumberofGroups A numeric value the number of collateral groups in the
+  #' REMIC transaction.
+  #' @slot DealSize A numeric value the at issuance original balance of the 
+  #' REMIC.
+  #' @slot CollateralAmount A numeric value the current balance of the
+  #' collateral at REMIC issuance.
+  #' @slot CollateralAvgLife A numeric value the at issuance average life of the 
+  #' collateral.
+  #' @slot BondValue A numeric value the bond value.
+  #' @slot BondValueMethod A numeric value the bond value method.
+  #' @slot BondValueCap A numeric value the bond value cap.
+  #' @slot BondValueDiscountRate A numeric value the bond value discount rate
+  #' @slot BondValueReinvestmentRate A numeric value the bond value reinvestment
+  #' rate
+  #' @slot ExpenseBasisPointFee A numeric value the deal expense fee 
+  #' in basis points.
+  #' @slot ExpenseFixed A numeric value the fixed expenses charged to the deal.
+  #' @slot ExpensePeriodicity A numeric value the frequency at which expenses
+  #' are charged to the deal.
+  #' @slot InitialReserveFund = A numeric value the initial reserve fund.
+  #' @exportClass RAID
   setClass("RAID",
          representation(
            DealName = "character", 
@@ -41,6 +88,125 @@
            ExpenseFixed = "numeric",
            ExpensePeriodicity = "numeric",
            InitialReserveFund = "numeric"))
+  setGeneric("RAID", function(DealName = "character",
+                              TrancheNumber = "character",
+                              NumberofComponents = "numeric",
+                              ComponentofTranches = "character",
+                              TrancheName = "character",
+                              TranchePrincipal = "character",
+                              TranchePrincipalDesc = "character",
+                              TrancheInterestDesc = "character",     
+                              TrancheOtherDescription = "character",
+                              Cusip = "character",
+                              TrancheOrigBal = "numeric",
+                              TrancheInterest = "character",
+                              TrancheCoupon = "numeric",
+                              AccrualRate = "numeric",
+                              TreasuryMaturity = "numeric",
+                              TreasuryYield = "numeric",
+                              TreasurySpread = "numeric",
+                              TrancheYield = "numeric",
+                              TranchePrice = "numeric",
+                              TrancheProceedsWithInterest = "numeric",
+                              TrancheAvgLife = "numeric",
+                              TrancheDuration = "numeric",
+                              TrancheDatedDate = "character",
+                              TrancheFirstPmtDate = "character",
+                              TrancheLastPmtDate = "character",
+                              TrancheNextPmtDate = "character",
+                              TrancheFinalPmtDate = "character",
+                              Delay = "numeric",
+                              InterestPmtFrequency = "numeric",
+                              PrinPmtFrequency = "numeric",
+                              PacLowBand = "numeric",
+                              PacHighBand = "numeric",
+                              FloaterIndex = "character",
+                              InitialIndexValue = "numeric",
+                              FloaterMargin = "numeric",
+                              FloaterMultiplier = "numeric",
+                              FloaterCap = "numeric",
+                              FloaterFloor = "numeric",
+                              FloaterInitialCoupon = "numeric",
+                              FloaterResetFrequency = "numeric",
+                              FloaterFirstResetDate = "character",
+                              FloaterFormula = "function",
+                              Group = "numeric",
+                              TrancheType = "character",
+                              Schedule = "logical",
+                              Fixed = "logical")
+    {standardGeneric("RAID")})
+  
+  
+  # Initialize RAID class
+  setMethod("initialize",
+            signature("RAID"),
+            function (.Object, 
+                      DealName = "character",
+                      Issuer = "character",
+                      DealNumber = "character",
+                      DealPriceDate = "character",
+                      DealSettlementDate = "character",
+                      Underwriter = "character",
+                      Trustee = "character",
+                      PricingSpeed = numeric(),
+                      JumpReferenceSpeed1 = numeric(),
+                      JumpReferenceSpeed2 = numeric(),
+                      JumpReferenceSpeed3 = numeric(),
+                      JumpReferenceSpeed4 = numeric(),
+                      NumberofTranches = numeric(),
+                      NumberofComponentTranches = numeric(),
+                      NumberofCombinedTranches = numeric(),
+                      NumberofPools = numeric(),
+                      PacSchedulesIncluded = "logical",
+                      NumberofPacSchedules = numeric(),
+                      NumberofGroups = numeric(),
+                      DealSize = numeric(),
+                      CollateralAmount = numeric(),
+                      CollateralAvgLife = numeric(),
+                      BondValue = numeric(),
+                      BondValueMethod = "character",
+                      BondValueCap = numeric(),
+                      BondValueDiscountRate = numeric(),
+                      BondValueReinvestmentRate = numeric(),
+                      ExpenseBasisPointFee = numeric(),
+                      ExpenseFixed = numeric(),
+                      ExpensePeriodicity = numeric(),
+                      InitialReserveFund = numeric()
+                      ){
+              callNextMethod(.Object,
+                             DealName = DealName,
+                             Issuer = Issuer,
+                             DealNumber = DealNumber,
+                             DealPriceDate = DealPriceDate,
+                             DealSettlementDate = DealSettlementDate,
+                             Underwriter = Underwriter,
+                             Trustee = Trustee,
+                             PricingSpeed = PricingSpeed,
+                             JumpReferenceSpeed1 = JumpReferenceSpeed1,
+                             JumpReferenceSpeed2 = JumpReferenceSpeed2,
+                             JumpReferenceSpeed3 = JumpReferenceSpeed3,
+                             JumpReferenceSpeed4 = JumpReferenceSpeed4,
+                             NumberofTranches = NumberofTranches,
+                             NumberofComponentTranches = NumberofComponentTranches,
+                             NumberofCombinedTranches = NumberofCombinedTranches,
+                             NumberofPools = NumberofPools,
+                             PacSchedulesIncluded = PacSchedulesIncluded,
+                             NumberofGroups = NumberofGroups,
+                             NumberofPacSchedules = NumberofPacSchedules,
+                             NumberofGroups = NumberofGroups,
+                             DealSize = DealSize,
+                             CollateralAmount = CollateralAmount,
+                             CollateralAvgLife = CollateralAvgLife,
+                             BondValue = BondValue,
+                             BondValueMethod = BondValueMethod,
+                             BondValueCap = BondValueCap,
+                             BondValueDiscountRate = BondValueDiscountRate,
+                             BondValueReinvestmentRate = BondValueReinvestmentRate,
+                             ExpenseBasisPointFee = ExpenseBasisPointFee,
+                             ExpenseFixed = ExpenseFixed,
+                             ExpensePeriodicity = ExpensePeriodicity,
+                             InitialReserveFund = InitialReserveFund)
+              })
 
 
   setClass("TrancheDetails",
@@ -150,78 +316,7 @@
                       "TrancheFactors")) 
 
 
-  # Initialize RAID class
-  setMethod("initialize",
-          signature("RAID"),
-          function (.Object, 
-                    DealName = "character",
-                    Issuer = "character",
-                    DealNumber = "character",
-                    DealPriceDate = "character",
-                    DealSettlementDate = "character",
-                    Underwriter = "character",
-                    Trustee = "character",
-                    PricingSpeed = numeric(),
-                    JumpReferenceSpeed1 = numeric(),
-                    JumpReferenceSpeed2 = numeric(),
-                    JumpReferenceSpeed3 = numeric(),
-                    JumpReferenceSpeed4 = numeric(),
-                    NumberofTranches = numeric(),
-                    NumberofComponentTranches = numeric(),
-                    NumberofCombinedTranches = numeric(),
-                    NumberofPools = numeric(),
-                    PacSchedulesIncluded = "logical",
-                    NumberofPacSchedules = numeric(),
-                    NumberofGroups = numeric(),
-                    DealSize = numeric(),
-                    CollateralAmount = numeric(),
-                    CollateralAvgLife = numeric(),
-                    BondValue = numeric(),
-                    BondValueMethod = "character",
-                    BondValueCap = numeric(),
-                    BondValueDiscountRate = numeric(),
-                    BondValueReinvestmentRate = numeric(),
-                    ExpenseBasisPointFee = numeric(),
-                    ExpenseFixed = numeric(),
-                    ExpensePeriodicity = numeric(),
-                    InitialReserveFund = numeric())
-          {
-            
-            .Object@DealName = DealName
-            .Object@Issuer = Issuer
-            .Object@DealNumber = DealNumber
-            .Object@DealPriceDate = DealPriceDate
-            .Object@DealSettlementDate = DealSettlementDate
-            .Object@Underwriter = Underwriter
-            .Object@Trustee = Trustee
-            .Object@PricingSpeed = PricingSpeed
-            .Object@JumpReferenceSpeed1 = JumpReferenceSpeed1
-            .Object@JumpReferenceSpeed2 = JumpReferenceSpeed2
-            .Object@JumpReferenceSpeed3 = JumpReferenceSpeed3
-            .Object@JumpReferenceSpeed4 = JumpReferenceSpeed4
-            .Object@NumberofTranches = NumberofTranches
-            .Object@NumberofComponentTranches = NumberofComponentTranches
-            .Object@NumberofCombinedTranches = NumberofCombinedTranches
-            .Object@NumberofPools = NumberofPools
-            .Object@PacSchedulesIncluded = PacSchedulesIncluded
-            .Object@NumberofGroups = NumberofGroups
-            .Object@NumberofPacSchedules = NumberofPacSchedules
-            .Object@NumberofGroups = NumberofGroups
-            .Object@DealSize = DealSize
-            .Object@CollateralAmount = CollateralAmount
-            .Object@CollateralAvgLife = CollateralAvgLife
-            .Object@BondValue = BondValue
-            .Object@BondValueMethod = BondValueMethod
-            .Object@BondValueCap = BondValueCap
-            .Object@BondValueDiscountRate = BondValueDiscountRate
-            .Object@BondValueReinvestmentRate = BondValueReinvestmentRate
-            .Object@ExpenseBasisPointFee = ExpenseBasisPointFee
-            .Object@ExpenseFixed = ExpenseFixed
-            .Object@ExpensePeriodicity = ExpensePeriodicity
-            .Object@InitialReserveFund = InitialReserveFund
-            
-            return(.Object) 
-          })
+
 
   # Initialize TrancheDetails
   setMethod("initialize",

@@ -272,19 +272,19 @@
   # PriceType class to convert price
   Price <- PriceTypes(Price = price)
   
-  issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
-  start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
-  end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
-  lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-  nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-  coupon = bond.id@Coupon
-  frequency = bond.id@Frequency
-  delay = bond.id@PaymentDelay
-  factor = bond.id@MBSFactor
+  issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+  start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+  end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+  lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+  nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+  coupon = Coupon(bond.id)
+  frequency = Frequency(bond.id)
+  delay = PaymentDelay(bond.id)
+  factor = MBSFactor(bond.id)
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   principal = original.bal * factor
-  bondbasis = bond.id@BondBasis
-  Burnout = bond.id@Burnout
+  bondbasis = BondBasis(bond.id)
+  Burnout = BurnOut(bond.id)
   
   short.rate = as.numeric(rates.data[1,2])/yield.basis
   

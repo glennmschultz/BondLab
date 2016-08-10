@@ -105,6 +105,8 @@
   #'@param TermStructure a character string the object of type TermStructure
   #'@param proceeds a numeric value the investor trade proceeeds 
   #'MortgageCashFlow
+  #'@importFrom stats loess
+  #'@importFrom stats predict
   #'@export CurveSpreads
   CurveSpreads <- function(rates.data = "character",
                            CashFlow = "character",

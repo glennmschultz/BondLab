@@ -3,7 +3,7 @@
 \docType{class}
 \name{RAID-class}
 \alias{RAID-class}
-\title{An S4 class the REMIC At Issuance Disclosure}
+\title{An S4 class the REMIC At Issuance Disclosure (RAID) Information}
 \description{
 The RAID File contains the REMIC at issuance discloure data.  The data is
 static data describing the REMIC at the time of issuance
@@ -11,13 +11,13 @@ static data describing the REMIC at the time of issuance
 \section{Slots}{
 
 \describe{
-\item{\code{DealName}}{A character the deal name}
+\item{\code{DealName}}{A character the deal name.}
 
-\item{\code{Issuer}}{A character the deal Issuer}
+\item{\code{Issuer}}{A character the deal Issuer.}
 
-\item{\code{DealNumber}}{A character the deal number}
+\item{\code{DealNumber}}{A character the deal number.}
 
-\item{\code{DealPriceDate}}{A character the pricing date of the transaction}
+\item{\code{DealPriceDate}}{A character the pricing date of the transaction.}
 
 \item{\code{DealSettlementDate}}{A character the settlement date.}
 

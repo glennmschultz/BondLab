@@ -8,14 +8,14 @@
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
 
-  #' An S4 class the REMIC At Issuance Disclosure 
+  #' An S4 class the REMIC At Issuance Disclosure (RAID) Information
   #' 
   #' The RAID File contains the REMIC at issuance discloure data.  The data is
   #' static data describing the REMIC at the time of issuance
-  #' @slot DealName A character the deal name
-  #' @slot Issuer A character the deal Issuer
-  #' @slot DealNumber A character the deal number
-  #' @slot DealPriceDate A character the pricing date of the transaction
+  #' @slot DealName A character the deal name.
+  #' @slot Issuer A character the deal Issuer.
+  #' @slot DealNumber A character the deal number.
+  #' @slot DealPriceDate A character the pricing date of the transaction.
   #' @slot DealSettlementDate A character the settlement date.
   #' @slot Underwriter A character the Underwriter of the deal.
   #' @slot Trustee A character the Trustee of the deal.
@@ -88,54 +88,256 @@
            ExpenseFixed = "numeric",
            ExpensePeriodicity = "numeric",
            InitialReserveFund = "numeric"))
-  setGeneric("RAID", function(DealName = "character",
-                              TrancheNumber = "character",
-                              NumberofComponents = "numeric",
-                              ComponentofTranches = "character",
-                              TrancheName = "character",
-                              TranchePrincipal = "character",
-                              TranchePrincipalDesc = "character",
-                              TrancheInterestDesc = "character",     
-                              TrancheOtherDescription = "character",
-                              Cusip = "character",
-                              TrancheOrigBal = "numeric",
-                              TrancheInterest = "character",
-                              TrancheCoupon = "numeric",
-                              AccrualRate = "numeric",
-                              TreasuryMaturity = "numeric",
-                              TreasuryYield = "numeric",
-                              TreasurySpread = "numeric",
-                              TrancheYield = "numeric",
-                              TranchePrice = "numeric",
-                              TrancheProceedsWithInterest = "numeric",
-                              TrancheAvgLife = "numeric",
-                              TrancheDuration = "numeric",
-                              TrancheDatedDate = "character",
-                              TrancheFirstPmtDate = "character",
-                              TrancheLastPmtDate = "character",
-                              TrancheNextPmtDate = "character",
-                              TrancheFinalPmtDate = "character",
-                              Delay = "numeric",
-                              InterestPmtFrequency = "numeric",
-                              PrinPmtFrequency = "numeric",
-                              PacLowBand = "numeric",
-                              PacHighBand = "numeric",
-                              FloaterIndex = "character",
-                              InitialIndexValue = "numeric",
-                              FloaterMargin = "numeric",
-                              FloaterMultiplier = "numeric",
-                              FloaterCap = "numeric",
-                              FloaterFloor = "numeric",
-                              FloaterInitialCoupon = "numeric",
-                              FloaterResetFrequency = "numeric",
-                              FloaterFirstResetDate = "character",
-                              FloaterFormula = "function",
-                              Group = "numeric",
-                              TrancheType = "character",
-                              Schedule = "logical",
-                              Fixed = "logical")
+  
+  setGeneric("RAID", function( DealName = "character", 
+                               Issuer = "character",
+                               DealNumber = "character",
+                               DealPriceDate = "character",
+                               DealSettlementDate = "character",
+                               Underwriter = "character",
+                               Trustee = "character",
+                               PricingSpeed = "numeric",
+                               JumpReferenceSpeed1 = "numeric",
+                               JumpReferenceSpeed2 = "numeric",
+                               JumpReferenceSpeed3 = "numeric",
+                               JumpReferenceSpeed4 = "numeric",
+                               NumberofTranches = "numeric",
+                               NumberofComponentTranches = "numeric",
+                               NumberofCombinedTranches = "numeric",
+                               NumberofPools = "numeric",
+                               PacSchedulesIncluded = "logical",
+                               NumberofPacSchedules = "numeric",
+                               NumberofGroups = "numeric",
+                               DealSize = "numeric",
+                               CollateralAmount = "numeric",
+                               CollateralAvgLife = "numeric",
+                               BondValue = "numeric",
+                               BondValueMethod = "character",
+                               BondValueCap = "numeric",
+                               BondValueDiscountRate = "numeric",
+                               BondValueReinvestmentRate = "numeric",
+                               ExpenseBasisPointFee = "numeric",
+                               ExpenseFixed = "numeric",
+                               ExpensePeriodicity = "numeric",
+                               InitialReserveFund = "numeric")
     {standardGeneric("RAID")})
   
+  #' A generic function to access the slot DealName
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("DealName", function(object)
+  {standardGeneric("DealName")})
+  
+  #' A generic function to access the slot Issuer
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Issuer", function(object)
+  {standardGeneric("Issuer")})
+  
+  #' A generic function to access the slot DealNumber
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("DealNumber", function(object)
+  {standardGeneric("DealNumber")})
+  
+  #' A generic function to access the slot DealPriceDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("DealPriceDate", function(object)
+  {standardGeneric("DealPriceDate")})
+  
+  #' A generic function to access the slot DealSettlementDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("DealSettlementDate", function(object)
+    {standardGeneric("DealSettlementDate")})
+  
+  #' A generic function to access the slot Underwriter
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Underwriter", function(object)
+    {standardGeneric("Underwriter")})
+  
+  #' A generic function to access the slot Trustee
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Trustee", function(object)
+    {standardGeneric("Trustee")})
+  
+  #' A generic function to access the slot PricingSpeed
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PricingSpeed", function(object)
+    {standardGeneric("PricingSpeed")})
+  
+  #' A generic function to access the slot JumpReferenceSpeed1
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("JumpReferenceSpeed1", function(object)
+    {standardGeneric("JumpReferenceSpeed1")})
+  
+  #' A generic function to access the slot JumpReferenceSpeed2
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("JumpReferenceSpeed2", function(object)
+    {standardGeneric("JumpReferenceSpeed2")})
+  
+  #' A generic function to access the slot JumpReferenceSpeed3
+  #' 
+  #' @param object an S4 class object
+  #' @export 
+  setGeneric("JumpReferenceSpeed3", function(object)
+    {standardGeneric("JumpReferenceSpeed3")})
+  
+  #' A generic function to access the slot JumpReferenceSpeed4
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("JumpReferenceSpeed4", function(object)
+    {standardGeneric("JumpReferenceSpeed4")})
+  
+  #' A generic function to access the slot NumberofTranches
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofTranches", function(object)
+    {standardGeneric("NumberofTranches")})
+  
+  #' A generic function to access the slot NumberofComponentTranches
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofComponentTranches", function(object)
+    {standardGeneric("NumberofComponentTranches")})
+  
+  #' A generic function to access the slot NumberofCombinedTranches
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofCombinedTranches", function(object)
+    {standardGeneric("NumberofCombinedTranches")})
+  
+  #' A generic function to access the slot NumberofPools
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofPools", function(object)
+    {standardGeneric("NumberofPools")})
+  
+  #' A generic function to access the slot PacSchedulesIncluded
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PacSchedulesIncluded", function(object)
+    {standardGeneric("PacSchedulesIncluded")})
+  
+  #' A generic function to access the slot NumberofPacSchedules
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofPacSchedules", function(object)
+    {standardGeneric("NumberofPacSchedules")})
+  
+  #' A generic function to access the slot NumberofGroups
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofGroups", function(object)
+    {standardGeneric("NumberofGroups")})
+  
+  #' A generic function to access the slot DealSize
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("DealSize", function(object)
+    {standardGeneric("DealSize")})
+  
+  #' A generic function to access the slot CollateralAmount
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("CollateralAmount", function(object)
+    {standardGeneric("CollateralAmount")})
+  
+  #' A generic function to access the slot CollateralAverageLife
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("CollateralAvgLife", function(object)
+    {standardGeneric("CollateralAvgLife")})
+  
+  #' A generic function to access the slot BondValue
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("BondValue", function(object)
+  {standardGeneric("BondValue")})
+  
+  #' A generic function to access the slot BondValueMethod
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("BondValueMethod", function(object)
+    {standardGeneric("BondValueMethod")})
+  
+  #' A generic function to access the slot BondValueCap
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("BondValueCap", function(object)
+    {standardGeneric("BondValueCap")})
+  
+  #' A generic function to access the slot BondValueDiscountRate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("BondValueDiscountRate", function(object)
+    {standardGeneric("BondValueDiscountRate")})
+  
+  #' A generic function to access the slot BondValueReinvestmentRate
+  #' 
+  #' @param object an S4 clss object
+  #' @export
+  setGeneric("BondValueReinvestmentRate", function(object)
+    {standardGeneric("BondValueReinvestmentRate")})
+  
+  #' A generic function to access the slot ExpenseBasisPointFee
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("ExpenseBasisPointFee", function(object)
+    {standardGeneric("ExpenseBasisPointFee")})
+  
+  #' A generic function to access the slot ExpenseFixed
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("ExpenseFixed", function(object)
+    {standardGeneric("ExpenseFixed")})
+
+  #' A generic function to access the slot ExpensePeriodicity
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("ExpensePeriodicity", function(object)
+    {standardGeneric("ExpensePeriodicity")})
+  
+  #' A generic function to access the slot InitialReserveFund
+  #' 
+  #' @param object an S4 object
+  #' @export
+  setGeneric("InitialReserveFund", function(object)
+    {standardGeneric("InitialReserveFund")})
   
   # Initialize RAID class
   setMethod("initialize",
@@ -191,7 +393,6 @@
                              NumberofCombinedTranches = NumberofCombinedTranches,
                              NumberofPools = NumberofPools,
                              PacSchedulesIncluded = PacSchedulesIncluded,
-                             NumberofGroups = NumberofGroups,
                              NumberofPacSchedules = NumberofPacSchedules,
                              NumberofGroups = NumberofGroups,
                              DealSize = DealSize,
@@ -207,8 +408,338 @@
                              ExpensePeriodicity = ExpensePeriodicity,
                              InitialReserveFund = InitialReserveFund)
               })
-
-
+  #' A method to access the slot DealName from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod DealName
+  setMethod("DealName", signature("RAID"),
+            function(object){
+              object@DealName
+            })
+  
+  #' A method to access the slot Issuer from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod Issuer
+  setMethod("Issuer", signature("RAID"),
+            function(object){
+              object@Issuer
+            })
+  
+  #' A method to access the slot DealNumber from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod DealNumber
+  setMethod("DealNumber", signature("RAID"),
+            function(object){
+              object@DealNumber
+            })
+  
+  #' A method to access the slot DealPriceDate from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod DealPriceDate
+  setMethod("DealPriceDate", signature("RAID"),
+            function(object){
+              object@DealPriceDate
+            })
+  
+  #' A method to access the slot DealSettlementDate from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod DealSettlementDate
+  setMethod("DealSettlementDate", signature("RAID"),
+            function(object){
+              object@DealSettlementDate
+            })
+  
+  #' A method to access the slot Underwriter from class RAID
+  #' 
+  #' @param object an S4 object of the type RAID
+  #' @exportMethod Underwriter
+  setMethod("Underwriter", signature("RAID"),
+            function(object){
+              object@Underwriter
+            })
+  
+  #' A method to access the slot Trustee from class RAID
+  #' 
+  #' @param object an S4 object of the type RAID
+  #' @exportMethod Trustee
+  setMethod("Trustee", signature("RAID"),
+            function(object){
+              object@Trustee
+            })
+  
+  #' A method to access the slot PricingSpeed from class RAID
+  #' 
+  #' @param object an S4 object of the type RAID
+  #' @exportMethod PricingSpeed
+  setMethod("PricingSpeed", signature("RAID"),
+            function(object){
+              object@PricingSpeed
+            })
+  
+  #' A method to access the slot JumpReferenceSpeed1 from class RAID
+  #' 
+  #' @param object an S4 object of the type RAID
+  #' @exportMethod JumpReferenceSpeed1
+  setMethod("JumpReferenceSpeed1", signature("RAID"),
+            function(object){
+              object@JumpReferenceSpeed1
+            })
+  
+  #' A method to access the slot JumpReferenceSpeed2 from class RAID
+  #' 
+  #' @param object an S4 object of the type RAID
+  #' @exportMethod JumpReferenceSpeed2
+  setMethod("JumpReferenceSpeed2", signature("RAID"),
+            function(object){
+              object@JumpReferenceSpeed2
+            })
+  
+  #' A method to access the slot JumpReferenceSpeed3 from class RAID
+  #' 
+  #' @param object an S4 object of the type RAID
+  #' @exportMethod JumpReferenceSpeed3
+  setMethod("JumpReferenceSpeed3", signature("RAID"),
+            function(object){
+              object@JumpReferenceSpeed3
+            })
+  
+  #' A method to access the slot JumpReferenceSpeed4 from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod JumpReferenceSpeed4
+  setMethod("JumpReferenceSpeed4", signature("RAID"),
+            function(object){
+              object@JumpReferenceSpeed4
+            })
+  
+  #' A method to access the slot NumberofTranches from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod NumberofTranches
+  setMethod("NumberofTranches", signature("RAID"),
+            function(object){
+              object@NumberofTranches
+            })
+  #' A method to access the slot NumberofCombinedTranches from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod NumberofCombinedTranches
+  setMethod("NumberofCombinedTranches", signature("RAID"),
+            function(object){
+              object@NumberofCombinedTranches
+            })
+  
+  #' A method to access the slot NumberofPools from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod NumberofPools
+  setMethod("NumberofPools", signature("RAID"),
+            function(object){
+              object@NumberofPools
+            })
+  
+  #' A method to access the slot PacSchedulesIncluded from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod PacSchedulesIncluded
+  setMethod("PacSchedulesIncluded", signature("RAID"),
+            function(object){
+              object@PacjSchedulesIncluded
+            })
+  
+  #' A method to access the slot NumberofPacSchedules from class RAID
+  #' 
+  #' @param object an S4 class object of type RAID
+  #' @exportMethod NumberofPacSchedules
+  setMethod("NumberofPacSchedules", signature("RAID"),
+            function(object){
+              object@NumberofPacSchedules
+            })
+  
+  #' A method to access the slot NumberofGroups from class RAID
+  #' 
+  #' @param object an S4 class object of type RAID
+  #' @exportMethod NumberofGroups
+  setMethod("NumberofGroups", signature("RAID"),
+            function(object){
+              object@NumberofGroups
+            })
+  
+  #' A method to access the slot DealSize from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod DealSize
+  setMethod("DealSize", signature("RAID"),
+            function(object){
+              object@DealSize
+            })
+  
+  #' A method to access the slot CollateralAmount from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod CollateralAmount
+  setMethod("CollateralAmount", signature("RAID"),
+            function(object){
+              object@CollateralAmount
+            })
+  
+  #' A method to access the slot CollateralAvgLife from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod CollateralAvgLife
+  setMethod("CollateralAvgLife", signature("RAID"),
+            function(object){
+              object@CollateralAvgLife
+            })
+  
+  #' A method to access the slot BondValue from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod BondValue
+  setMethod("BondValue", signature("RAID"),
+            function(object){
+              object@BondValue
+            })
+  
+  #' A method to access the slot BondValueMethod from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod BondValueMethod
+  setMethod("BondValueMethod", signature("RAID"),
+            function(object){
+              object@BondValueMethod
+            })
+  
+  #' A method to access the slot BondValueCap from class RAID
+  #' 
+  #' @param object an S4 class of type RAID
+  #' @exportMethod BondValueCap
+  setMethod("BondValueCap", signature("RAID"),
+            function(object){
+              object@BondValueCap
+            })
+  #' A method to access the slot BondValueDiscountRate from class RAID
+  #' 
+  #' @param object an S4 class of the type BondValueDiscountRate
+  #' @exportMethod BondValueDiscountRate
+  setMethod("BondValueDiscountRate", signature("RAID"),
+            function(object){
+              object@BondValueDiscountRate
+            })
+  
+  #' A method to access the slot BondValueReinvestmentRate from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod BondValueReinvestmentRate
+  setMethod("BondValueReinvestmentRate", signature("RAID"),
+            function(object){
+              object@BondValueReinvestmentRate
+            })
+  
+  #' A method to access the slot ExpenseBasisPointFee from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod ExpenseBasisPointFee
+  setMethod("ExpenseBasisPointFee", signature("RAID"),
+            function(object){
+              object@ExpenseBasisPointFee
+            })
+  
+  #' A method to access the slot ExpenseFixed from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod ExpenseFixed
+  setMethod("ExpenseFixed", signature("RAID"),
+            function(object){
+              object@ExpenseFixed
+            })
+  
+  #' A method to access the slot ExpensePeriodicity from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod ExpensePeriodicity
+  setMethod("ExpensePeriodicity", signature("RAID"),
+            function(object){
+              object@ExpensePeriodicity
+            })
+  
+  #' A method to extract slot InitialReserveFund from class RAID
+  #' 
+  #' @param object an S4 class of the type RAID
+  #' @exportMethod InitialReserveFund
+  setMethod("InitialReserveFund", signature("RAID"),
+            function(object){
+              object@InitialReserveFund
+            })
+  
+  #' An S4 Class TrancheDetails at Issuance
+  #' 
+  #' Tranche Details is static data Tranche changes are updated
+  #' via REMIC Data Month End (RDME) classes
+  #' @slot DealName A character the deal name
+  #' @slot TrancheNumber A character the tranche number
+  #' @slot NumberofComponents A numeric value the number of components
+  #' @slot ComponentofTranches A character the component of tranches
+  #' @slot TrancheName A character the tranche name
+  #' @slot TranchePrincipal A character the principal
+  #' @slot TranchePrincipalDesc A character the tranche principal description
+  #' @slot TrancheInterestDesc A character the tranche interest description
+  #' @slot TrancheOtherDescription A character additional tranche decriptive 
+  #' information
+  #' @slot Cusip A character the tranche cusip identifier
+  #' @slot TrancheOrigBal A numeric value the tranche original balance
+  #' @slot TrancheInterest A character the tranche interest
+  #' @slot TrancheCoupon A numeric value the tranche coupon
+  #' @slot AccrualRate A numeric value the tranche accrual rate
+  #' @slot TreasuryMaturity A numeric value the maturity of the 
+  #' benchmark Treasury at issuance
+  #' @slot TreasuryYield A numueric value the yield of the benchmark Treasury
+  #' @slot TreasurySpread A numeric value the tranche spread over the 
+  #' benchmark Treasury at issuance
+  #' @slot TrancheYield A numeric value the tranche yield at issuance
+  #' @slot TranchePrice A numeric value the tranche price at issuance
+  #' @slot TrancheProceedsWithInterest A numeric value the tranche proceeds at
+  #' issuance principal and interest
+  #' @slot TrancheAvgLife A numeric vlaue the tranche average life at issuance
+  #' @slot TrancheDuration A numeric value the tranche duration at issuance
+  #' @slot TrancheDatedDate A character the dated date of the tranche
+  #' @slot TrancheFirstPmtDate A character the first payment date of the tranche
+  #' @slot TrancheLastPmtDate A character the last payment date of the tranche
+  #' @slot TrancheNextPmtDate A character the next payment date of the tranche
+  #' @slot TrancheFinalPmtDate A character the final payment date of the tranche
+  #' @slot Delay A numeric value the delay days of payment to the investor
+  #' @slot InterestPmtFrequency A numeric value the frequency of 
+  #' interest payments to the investor
+  #' @slot PrinPmtFrequency A numeric value the frequency of principal
+  #' payments to the investor
+  #' @slot PacLowBand A numeric value lower PAC band
+  #' @slot PacHighBand A numeric value upper PAC band
+  #' @slot FloaterIndex A character the floating rate index used to determine
+  #' the floating rate bond coupon
+  #' @slot InitialIndexValue A numeric value the value of the floater index at
+  #' issuance
+  #' @slot FloaterMargin A numeric value the floater margin
+  #' @slot FloaterMultiplier A numeric value the floater multiplier
+  #' @slot FloaterCap A numeric vlaue the floating rate bond cap
+  #' @slot FloaterFloor A numeric value the floating rate bond floor
+  #' @slot FloaterInitialCoupon A numeric value the floater initial coupon
+  #' @slot FloaterResetFrequency A numeric value the frequency at which the 
+  #' floating coupon changes
+  #' @slot FloaterFirstResetDate a numeric vlaue the first reset date of the 
+  #' floating rate bond
+  #' @slot FloaterFormula A function used to calculate the floating rate bond
+  #' coupon rate
+  #' @slot Group A numeric value the collateral group to which the 
+  #' tranche belongs
+  #' @slot TrancheType A character the tranche type
+  #' @slot Schedule A logical indicating the bond payments are tied to 
+  #' a schedule
+  #' @slot Fixed A logical indicating the bond coupon rate is fixed
+  #' @exportClass TrancheDetails
   setClass("TrancheDetails",
          representation(
            DealName = "character",
@@ -257,7 +788,107 @@
            TrancheType = "character",
            Schedule = "logical",
            Fixed = "logical"))
-
+  
+  
+  # Initialize TrancheDetails
+  setMethod("initialize",
+            signature("TrancheDetails"),
+            function(.Object,
+                     DealName = "character",
+                     TrancheNumber = "character",
+                     NumberofComponents = numeric(),
+                     ComponentofTranches = "character",
+                     TrancheName = "character",
+                     TranchePrincipal = "character",
+                     TranchePrincipalDesc = "character",
+                     TrancheInterestDesc = "character",     
+                     TrancheOtherDescription = "character",
+                     Cusip = "character",
+                     TrancheOrigBal = numeric(),
+                     TrancheInterest = "character",
+                     TrancheCoupon = numeric(),
+                     AccrualRate = numeric(),
+                     TreasuryMaturity = numeric(),
+                     TreasuryYield = numeric(),
+                     TreasurySpread = numeric(),
+                     TrancheYield = numeric(),
+                     TranchePrice = numeric(),
+                     TrancheProceedsWithInterest = numeric(),
+                     TrancheAvgLife = numeric(),
+                     TrancheDuration = numeric(),
+                     TrancheDatedDate = numeric(),
+                     TrancheFirstPmtDate = "character",
+                     TrancheLastPmtDate = "character",
+                     TrancheNextPmtDate = "character",
+                     TrancheFinalPmtDate = "character",
+                     Delay = numeric(),
+                     InterestPmtFrequency = numeric(),
+                     PrinPmtFrequency = numeric(),
+                     PacLowBand = numeric(),
+                     PacHighBand = numeric(),
+                     FloaterIndex = "character",
+                     InitialIndexValue = numeric(),
+                     FloaterMargin = numeric(),
+                     FloaterMultiplier = numeric(),
+                     FloaterCap = numeric(),
+                     FloaterFloor = numeric(),
+                     FloaterInitialCoupon = numeric(),
+                     FloaterResetFrequency = numeric(),
+                     FloaterFirstResetDate = "character",
+                     FloaterFormula = "function",
+                     Group = numeric(),
+                     TrancheType = "character",
+                     Schedule = "logical",
+                     Fixed = "logical"
+                     ){
+              callNextMethod(.Object,
+                    DealName = DealName,
+                    TrancheNumber = TrancheNumber,
+                    NumberofComponents = NumberofComponents,
+                    ComponentofTranches = ComponentofTranches,
+                    TrancheName = TrancheName,
+                    TranchePrincipal = TranchePrincipal,
+                    TranchePrincipalDesc = TranchePrincipalDesc,
+                    TrancheInterestDesc = TrancheInterestDesc,
+                    TrancheOtherDescription = TrancheOtherDescription,
+                    Cusip = Cusip,
+                    TrancheOrigBal = TrancheOrigBal,
+                    TrancheInterest = TrancheInterest,
+                    TrancheCoupon = TrancheCoupon,
+                    AccrualRate = AccrualRate,
+                    TreasuryMaturity = TreasuryMaturity,
+                    TreasuryYield = TreasuryYield,
+                    TreasurySpread = TreasurySpread,
+                    TrancheYield = TreasuryYield,
+                    TranchePrice = TranchePrice,
+                    TrancheProceedsWithInterest = TrancheProceedsWithInterest,
+                    TrancheAvgLife = TrancheAvgLife,
+                    TrancheDuration = TrancheDuration,
+                    TrancheDatedDate = TrancheDatedDate,
+                    TrancheFirstPmtDate = TrancheFirstPmtDate,
+                    TrancheLastPmtDate = TrancheLastPmtDate,
+                    TrancheNextPmtDate = TrancheNextPmtDate,
+                    TrancheFinalPmtDate = TrancheFinalPmtDate,
+                    Delay = Delay,
+                    InterestPmtFrequency = InterestPmtFrequency,
+                    PrinPmtFrequency = PrinPmtFrequency,
+                    PacLowBand = PacLowBand,
+                    PacHighBand = PacHighBand,
+                    FloaterIndex = FloaterIndex,
+                    InitialIndexValue = InitialIndexValue,
+                    FloaterMargin = FloaterMargin,
+                    FloaterMultiplier = FloaterMultiplier,
+                    FloaterCap = FloaterCap,
+                    FloaterFloor = FloaterFloor,
+                    FloaterInitialCoupon = FloaterInitialCoupon,
+                    FloaterResetFrequency = FloaterResetFrequency,
+                    FloaterFirstResetDate = FloaterFirstResetDate,
+                    FloaterFormula = FloaterFormula,
+                    Group = Group,
+                    TrancheType = TrancheType,
+                    Schedule = Schedule,
+                    Fixed = Fixed)
+            })
 
   setClass("Tranches",
          representation(
@@ -315,109 +946,6 @@
                       "CollateralGroup", 
                       "TrancheFactors")) 
 
-
-
-
-  # Initialize TrancheDetails
-  setMethod("initialize",
-          signature("TrancheDetails"),
-          function(.Object,
-                   DealName = "character",
-                   TrancheNumber = "character",
-                   NumberofComponents = numeric(),
-                   ComponentofTranches = "character",
-                   TrancheName = "character",
-                   TranchePrincipal = "character",
-                   TranchePrincipalDesc = "character",
-                   TrancheInterestDesc = "character",     
-                   TrancheOtherDescription = "character",
-                   Cusip = "character",
-                   TrancheOrigBal = numeric(),
-                   TrancheInterest = "character",
-                   TrancheCoupon = numeric(),
-                   AccrualRate = numeric(),
-                   TreasuryMaturity = numeric(),
-                   TreasuryYield = numeric(),
-                   TreasurySpread = numeric(),
-                   TrancheYield = numeric(),
-                   TranchePrice = numeric(),
-                   TrancheProceedsWithInterest = numeric(),
-                   TrancheAvgLife = numeric(),
-                   TrancheDuration = numeric(),
-                   TrancheDatedDate = numeric(),
-                   TrancheFirstPmtDate = "character",
-                   TrancheLastPmtDate = "character",
-                   TrancheNextPmtDate = "character",
-                   TrancheFinalPmtDate = "character",
-                   Delay = numeric(),
-                   InterestPmtFrequency = numeric(),
-                   PrinPmtFrequency = numeric(),
-                   PacLowBand = numeric(),
-                   PacHighBand = numeric(),
-                   FloaterIndex = "character",
-                   InitialIndexValue = numeric(),
-                   FloaterMargin = numeric(),
-                   FloaterMultiplier = numeric(),
-                   FloaterCap = numeric(),
-                   FloaterFloor = numeric(),
-                   FloaterInitialCoupon = numeric(),
-                   FloaterResetFrequency = numeric(),
-                   FloaterFirstResetDate = "character",
-                   FloaterFormula = "function",
-                   Group = numeric(),
-                   TrancheType = "character",
-                   Schedule = "logical",
-                   Fixed = "logical"){
-            
-            .Object@DealName = DealName
-            .Object@TrancheNumber = TrancheNumber
-            .Object@NumberofComponents = NumberofComponents
-            .Object@ComponentofTranches = ComponentofTranches
-            .Object@TrancheName = TrancheName
-            .Object@TranchePrincipal = TranchePrincipal
-            .Object@TranchePrincipalDesc = TranchePrincipalDesc
-            .Object@TrancheInterestDesc = TrancheInterestDesc     
-            .Object@TrancheOtherDescription = TrancheOtherDescription
-            .Object@Cusip = Cusip
-            .Object@TrancheOrigBal = TrancheOrigBal
-            .Object@TrancheInterest = TrancheInterest
-            .Object@TrancheCoupon = TrancheCoupon
-            .Object@AccrualRate = AccrualRate
-            .Object@TreasuryMaturity = TreasuryMaturity
-            .Object@TreasuryYield = TreasuryYield
-            .Object@TreasurySpread = TreasurySpread
-            .Object@TrancheYield = TreasuryYield
-            .Object@TranchePrice = TranchePrice
-            .Object@TrancheProceedsWithInterest = TrancheProceedsWithInterest
-            .Object@TrancheAvgLife = TrancheAvgLife
-            .Object@TrancheDuration = TrancheDuration
-            .Object@TrancheDatedDate = TrancheDatedDate
-            .Object@TrancheFirstPmtDate = TrancheFirstPmtDate
-            .Object@TrancheLastPmtDate = TrancheLastPmtDate
-            .Object@TrancheNextPmtDate = TrancheNextPmtDate
-            .Object@TrancheFinalPmtDate = TrancheFinalPmtDate
-            .Object@Delay = Delay
-            .Object@InterestPmtFrequency = InterestPmtFrequency
-            .Object@PrinPmtFrequency = PrinPmtFrequency
-            .Object@PacLowBand = PacLowBand
-            .Object@PacHighBand = PacHighBand
-            .Object@FloaterIndex = FloaterIndex
-            .Object@InitialIndexValue = InitialIndexValue
-            .Object@FloaterMargin = FloaterMargin
-            .Object@FloaterMultiplier = FloaterMultiplier
-            .Object@FloaterCap = FloaterCap
-            .Object@FloaterFloor = FloaterFloor
-            .Object@FloaterInitialCoupon = FloaterInitialCoupon
-            .Object@FloaterResetFrequency = FloaterResetFrequency
-            .Object@FloaterFirstResetDate = FloaterFirstResetDate
-            .Object@FloaterFormula = FloaterFormula
-            .Object@Group = Group
-            .Object@TrancheType = TrancheType
-            .Object@Schedule = Schedule
-            .Object@Fixed = Fixed
-            
-            return(.Object)
-          })
 
   # Initialize Tranches
   setMethod("initialize",

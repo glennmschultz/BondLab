@@ -7,6 +7,9 @@
   # asset backed securities, and commerical mortgage backed securities
   # File License
   # Copyright (C) 2015  Bond Lab Technologies, Inc.
+  
+  #' @include PassThroughConstructor.R
+  NULL
 
   #' An S4 class the REMIC At Issuance Disclosure (RAID) Information
   #' 
@@ -985,6 +988,36 @@
   #' @export
   setGeneric("TranchePrincipal", function(object)
     {standardGeneric("TranchePrincipal")})
+  
+  #' A generic function to access the slot TranchePrincipalDesc
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TranchePrincipalDesc", function(object)
+    {standardGeneric("TranchePrincipalDesc")})
+  
+  #' A generic function to access the slot TrancheInterestDesc
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheInterestDesc", function(object)
+    {standardGeneric("TrancheInterestDesc")})
+  
+  #' A generic function to access the slot TrancheOtherDescription
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheOtherDescription", function(object)
+    {standardGeneric("TrancheOtherDescription")})
+  
+  # Note Cusip standardGeneric defined in PassThroughConstructor.R
+  
+  #' A generic function to access the slot TrancheOrigBal
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheOrigBal", function(object)
+    {setGeneric("TrancheOrigBal")})
   
   # Initialize TrancheDetails
   setMethod("initialize",

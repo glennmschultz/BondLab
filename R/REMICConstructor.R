@@ -345,7 +345,7 @@
   # Initialize RAID class
   setMethod("initialize",
             signature("RAID"),
-            function (.Object, 
+            function (.Object,..., 
                       DealName = "character",
                       Issuer = "character",
                       DealNumber = "character",
@@ -1343,7 +1343,7 @@
   # Initialize TrancheDetails 
   setMethod("initialize",
             signature("TrancheDetails"),
-            function(.Object,
+            function(.Object,...,
                      DealName = "character",
                      TrancheNumber = "character",
                      NumberofComponents = numeric(),
@@ -1839,7 +1839,7 @@
   #' 
   #' @param object an S4 object of the type TrancheDetails
   #' @exportMethod Schedule
-  setMethod("Schedule", signature("Schedule"),
+  setMethod("Schedule", signature("TrancheDetails"),
             function(object){
               object@Schedule
             })
@@ -1952,7 +1952,6 @@
         Schedule = Schedule,
         Fixed = Fixed)
   }
-  
   
   # MakeTranche is a function which calls the function TrancheDetails 
   # serialize the object TrancheDetails to the tranches directory
@@ -2122,7 +2121,7 @@
                 TrancheFile = temp)}
   
   # Tranches is a class holding a list of the TrancheDetails.  This could also
-  # be a JSON file of list of pairwise lists
+  # be a JSON file of list of pairwise data
   
   #' A S4 class Tranches for the REMIC 
   #' 
@@ -2132,6 +2131,23 @@
   setClass("Tranches",
          representation(
            Tranches = "list"))
+  
+  #' A generic function to access the slot Tranches
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Tranches", function(object)
+    {standardGeneric("Tranches")})
+  
+  # Initialize Tranches class object for Tranches
+  setMethod("initialize",
+            signature("Tranches"),
+            function(.Object,...,
+                     Tranches = list()
+          ){
+              callNextMethod(.Object,
+                             Tranches = Tranches)
+            })
 
   # Collateral class holds collateral data for each collateral group
   # The collateral class holds pools cusip list and original balance
@@ -2158,15 +2174,26 @@
 
   #' An S4 class the groups underlying the REMIC
   #' 
-  #' CollateralGroup is an aggregator of the collatreal class
+  #' CollateralGroup is an aggregator of the collatreal group class number
   #' @slot Group a list of the collateral groups
   #' @exportClass CollateralGroup
   setClass("CollateralGroup",
          representation(
            Group = "list"))
 
-  # Schedules is the projected schedule for a PAC/TAC Schedule
+  # Schedule is the projected schedule for a PAC/TAC Schedule
+  # the scheduled balance are used to compute PAC/TAC Schedule
+  # and companion bond payments
 
+  #' An S4 class REMIC PAC/TAC schedules and payments
+  #' 
+  #' Schedule class holds the PAC/TAC schedule payments
+  #' @slot DealName the name of the deal
+  #' @slot Group the group number
+  #' @slot PmtDate the payment date 
+  #' @slot Balance the scheduled balance of the PAC/TAC
+  #' @slot ScheduledPmt the scheduled payment to the PAC/TAC bond
+  #' @exportClass Schedule 
   setClass("Schedule",
          representation(
            DealName = "character",
@@ -2202,16 +2229,7 @@
                       "CollateralGroup", 
                       "TrancheFactors")) 
   
-  # Initialize Tranches
-  setMethod("initialize",
-          signature("Tranches"),
-          function(.Object,...,
-                   Tranches = list())
-          {
-            .Object@Tranches = Tranches
-            
-            return(.Object)
-          })
+ 
 
   # Initialize collateral  
   setMethod("initialize",
@@ -2377,14 +2395,12 @@
   #' @param NumberofTranches A numeric value the number of tranches in the deal
   #' @param DealName A character string the Deal Name
   #' @export
-  Tranches <- function(NumberofTranches = numeric(), DealName = "character"){
-    
+  TranchesList <- function(NumberofTranches = numeric(), 
+                           DealName = "character"){
     TrancheList <- list()
-    
     for(i in 1: NumberofTranches){
-  
-      Tranches <- SaveTranches(DealName = DealName, TrancheNumber = as.character(i))
-      
+      Tranches <- SaveTranches(DealName = DealName, 
+                               TrancheNumber = as.character(i))
       TrancheList <- append(TrancheList, Tranches)}
     
     new("Tranches",
@@ -2452,17 +2468,20 @@
       seasoning.period = seasoning.period
     )
     
-    MortgageCashFlow <-  MortgageCashFlow(bond.id = bond.id,
-                                          original.bal = original.bal,    
-                                          settlement.date = settlement.date,
-                                          price = price,
-                                          PrepaymentAssumption = PrepaymentAssumption)
+    MortgageCashFlow <-  MortgageCashFlow(
+      bond.id = bond.id,
+      original.bal = original.bal,    
+      settlement.date = settlement.date,
+      price = price,
+      PrepaymentAssumption = PrepaymentAssumption)
     
-    Principal[[i]] <-MortgageCashFlow@ScheduledPrin + MortgageCashFlow@PrepaidPrin
-
+    Principal[[i]] <-MortgageCashFlow@ScheduledPrin + 
+      MortgageCashFlow@PrepaidPrin
   }
+  
   Matrix <- do.call(cbind,Principal)
-  colnames(Matrix) <- c(paste(lower.PSA, "PSA", sep = ""),paste(upper.PSA, "PSA", sep = "") )
+  colnames(Matrix) <- c(paste(lower.PSA, "PSA", sep = ""),
+                        paste(upper.PSA, "PSA", sep = "") )
   PACSched <- apply(Matrix, 1, min)
   PACBal <- sum(PACSched)
   PmtDate <- as.Date(first.pmtdate, "%m-%d-%Y") %m+% months(0:360)
@@ -2707,7 +2726,6 @@
     
     for(i in 1 : NumberofTranches){
       
-      
       RDMEFactor <- RDMEFactor(DealName = DealName, TrancheNumber = i)
       #TrancesFactor <- function(DealName = "character", 
       #TrancheNumber = numeric()){
@@ -2725,12 +2743,13 @@
         FactorData = RDMEList)
   }
   
-  # --- REMIC Constructor Function these functions are used to assemble the 
-  # --- RAID, Tranches, RDME, and Collateral Groups into a single REMIC structure
+  # REMIC Constructor Function these functions are used to assemble the 
+  # RAID, Tranches, RDME, and Collateral Groups into a single REMIC structure
 
   #' The constructor function to build the REMIC deal from each of its elements 
   #' 
-  #' The function Assembles the deal RAID, RDME, Tranches, and Groups files into a REMIC structure
+  #' The function Assembles the deal RAID, RDME, Tranches, and Groups files 
+  #' into a REMIC structure
   #' @param DealName A character string the deal's names
   #' @examples
   #' \dontrun{
@@ -2740,7 +2759,7 @@
   RemicStructure <- function(DealName = "character"){
     
     RAID <- ReadRAID(RAIDFile = DealName)
-    Tranche <- Tranches(NumberofTranches = RAID@NumberofTranches, 
+    Tranche <- TranchesList(NumberofTranches = RAID@NumberofTranches, 
                         DealName = RAID@DealName)
     
     CollateralGroupData <- CollateralGroup(NumberofGroups = RAID@NumberofGroups, 

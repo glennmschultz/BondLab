@@ -2,16 +2,14 @@
 % Please edit documentation in R/REMICConstructor.R
 \name{Tranches}
 \alias{Tranches}
-\title{Aggregator Function for REMIC constructor}
+\title{A generic function to access the slot Tranches}
 \usage{
-Tranches(NumberofTranches = numeric(), DealName = "character")
+Tranches(object)
 }
 \arguments{
-\item{NumberofTranches}{A numeric value the number of tranches in the deal}
-
-\item{DealName}{A character string the Deal Name}
+\item{object}{an S4 class object}
 }
 \description{
-Aggregates Tranche data for REMIC constructor
+A generic function to access the slot Tranches
 }
 

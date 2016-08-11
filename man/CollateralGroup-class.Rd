@@ -5,7 +5,7 @@
 \alias{CollateralGroup-class}
 \title{An S4 class the groups underlying the REMIC}
 \description{
-CollateralGroup is an aggregator of the collatreal class
+CollateralGroup is an aggregator of the collatreal group class number
 }
 \section{Slots}{
 

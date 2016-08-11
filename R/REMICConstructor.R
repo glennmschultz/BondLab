@@ -6,7 +6,7 @@
   # mortgage backed securities, 
   # asset backed securities, and commerical mortgage backed securities
   # File License
-  # Copyright (C) 2015  Bond Lab Technologies, Inc.
+  # Copyright (C) 2016  Bond Lab Technologies, Inc.
   
   #' @include PassThroughConstructor.R
   NULL
@@ -411,6 +411,7 @@
                         ExpensePeriodicity = ExpensePeriodicity,
                         InitialReserveFund = InitialReserveFund)
               })
+  
   #' A method to access the slot DealName from class RAID
   #' 
   #' @param object an S4 class of the type RAID
@@ -678,6 +679,7 @@
             function(object){
               object@InitialReserveFund
             })
+  
   # Raid is a constructor function used by MakeRaid which is the constructor
   # function exposed to the user and which saves the RAID data to the 
   # appropriate data folder.  Alternatively, on could save the RAID data to a
@@ -1101,6 +1103,13 @@
   
   # Note: standard generic cusip is defined in PassThroughConstructor.R
   
+  #' A generic function to access the slot TrancheCoupon
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheCoupon", function(object)
+    {setGeneric("TrancheCoupon")})
+  
   #' A generic function to access the slot AccrualRate
   #' 
   #' @param object an S4 class object
@@ -1430,6 +1439,185 @@
                     TrancheType = TrancheType,
                     Schedule = Schedule,
                     Fixed = Fixed)
+            })
+  #' A method to access the slot DealName from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod DealName
+  setMethod("DealName", signature("TrancheDetails"),
+            function(object){
+              object@DealName
+            })
+  
+  #' A method to access the slot TrancheNumber from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheNumber
+  setMethod("TrancheNumber", signature("TrancheDetails"),
+            function(object){
+              object@TrancheDetails
+            })
+  
+  #' A method to access the slot NumberofComponents from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod NumberofComponents
+  setMethod("NumberofComponents", signature("TrancheDetails"),
+            function(object){
+              object@NumberofComponents
+            })
+  
+  #' A method to access the slot ComponentofTranches from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod ComponentofTranches
+  setMethod("ComponentofTranches", signature("TrancheDetails"),
+            function(object){
+              object@ComponentofTranches
+            })
+  
+  #' A method to access the slot TrancheName from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod TrancheName
+  setMethod("TrancheName", signature("TrancheDetails"),
+            function(object){
+              object@TrancheName
+            })
+  
+  #' A method to access the slot TranchePrincipal from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod TranchePrincipal
+  setMethod("TranchePrincipal", signature("TrancheDetails"),
+            function(object){
+              object@TranchePrincipal
+            })
+  
+  #' A method to access the slot TranchePrincipalDesc from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TranchePrincipalDesc
+  #' @exportMethod TranchePrincipalDesc
+  setMethod("TranchePrincipalDesc", signature("TrancheDetails"),
+            function(object){
+              object@TranchePrincipalDesc
+            })
+  
+  #' A method to access the slot TrancheInterestDesc from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheInterestDesc
+  #' @exportMethod TrancheInterestDesc
+  setMethod("TrancheInterestDesc", signature("TrancheDetails"),
+            function(object){
+              object@TrancheInterestDesc
+            })
+  
+  #' A method to access the slot TrancheOtherDescription from 
+  #' class TrancheDetails
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod TrancheOtherDescription
+  setMethod("TrancheOtherDescription", signature("TrancheDetails"),
+            function(object){
+              object@TrancheOtherDescription
+            })
+  
+  #' A method to access the slot Cusip from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod Cusip
+  setMethod("Cusip", signature("TrancheDetails"),
+            function(object){
+              object@Cusip
+            })
+  
+  #' A method to access the slot TrancheOrigBal from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheOrigBal
+  setMethod("TrancheOrigBal", signature("TrancheDetails"),
+            function(object){
+              object@TrancheOrigBal
+            })
+  
+  #' A method to access the slot TrancheInterest from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod TrancheInterest
+  setMethod("TrancheInterest", signature("TrancheDetails"),
+            function(object){
+              object@TrancheInterest
+            })
+  
+  #' A method to access the slot TrancheCoupon from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheCoupon
+  setMethod("TrancheCoupon", signature("TrancheDetails"),
+            function(object){
+              object@TrancheCoupon
+            })
+  
+  #' A method to access the slot AccrualRate from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod AccrualRate
+  setMethod("AccrualRate", signature("TrancheDetails"),
+            function(object){
+              object@AccrualRate
+            })
+  
+  #' A method to access the slot TreasuryMaturity from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TreasuryMaturity
+  setMethod("TreasuryMaturity", signature("TrancheDetails"),
+            function(object){
+              object@TreasuryMaturity
+            })
+  
+  #' A method to access the slot TreasuryYield from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TreasuryYield
+  setMethod("TreasuryYield", signature("TrancheDetails"),
+            function(object){
+              object@TreasuryYield
+            })
+  
+  #' A method to access the slot TreasurySpread from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TreasurySpread
+  setMethod("TreasurySpread", signature("TrancheDetails"),
+            function(object){
+              object@TreasurySpread
+            })
+  
+  #' A method to access the slot TrancheYield from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheYield
+  setMethod("TrancheYield", signature("TrancheDetails"),
+            function(object){
+              object@TrancheYield
+            })
+  
+  #' A method to access the slot TranchePrice from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TranchePrice
+  setMethod("TranchePrice", signature("TrancheDetails"),
+            function(object){
+              object@TranchePrice
+            })
+  
+  #' A method to access TrancheProceedsWithInterest from class TranchePrice
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheProceedsWithInterest
+  setMethod("TrancheProceedsWithInterest", signature("TrancheDetails"),
+            function(object){
+              object@TrancheProceedsWithInterest
             })
 
   setClass("Tranches",

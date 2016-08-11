@@ -678,6 +678,80 @@
             function(object){
               object@InitialReserveFund
             })
+  # Raid is a constructor function used by MakeRaid which is the constructor
+  # function exposed to the user and which saves the RAID data to the 
+  # appropriate data folder.  Alternatively, on could save the RAID data to a
+  # SQL or NoSQL database.
+  
+  RAID <- function(DealName = "character",
+                   Issuer = "character",
+                   DealNumber = "character",
+                   DealPriceDate = "character",
+                   DealSettlementDate = "character",
+                   Underwriter = "character",
+                   Trustee = "character",
+                   PricingSpeed = numeric(),
+                   JumpReferenceSpeed1 = numeric(),
+                   JumpReferenceSpeed2 = numeric(),
+                   JumpReferenceSpeed3 = numeric(),
+                   JumpReferenceSpeed4 = numeric(),
+                   NumberofTranches = numeric(),
+                   NumberofComponentTranches = numeric(),
+                   NumberofCombinedTranches = numeric(),
+                   NumberofPools = numeric(),
+                   PacSchedulesIncluded = "logical",
+                   NumberofPacSchedules = numeric(),
+                   NumberofGroups = numeric(),
+                   DealSize = numeric(),
+                   CollateralAmount = numeric(),
+                   CollateralAvgLife = numeric(),
+                   BondValue = numeric(),
+                   BondValueMethod = "character",
+                   BondValueCap = numeric(),
+                   BondValueDiscountRate = numeric(),
+                   BondValueReinvestmentRate = numeric(),
+                   ExpenseBasisPointFee = numeric(),
+                   ExpenseFixed = numeric(),
+                   ExpensePeriodicity = numeric(),
+                   InitialReserveFund = numeric()
+  ){
+    
+    
+    new("RAID",
+        DealName = DealName,
+        Issuer = Issuer,
+        DealNumber = DealNumber,
+        DealPriceDate = DealPriceDate,
+        DealSettlementDate = DealSettlementDate,
+        Underwriter = Underwriter,
+        Trustee = Trustee,
+        PricingSpeed = PricingSpeed,
+        JumpReferenceSpeed1 = JumpReferenceSpeed1,
+        JumpReferenceSpeed2 = JumpReferenceSpeed2,
+        JumpReferenceSpeed3 = JumpReferenceSpeed3,
+        JumpReferenceSpeed4 = JumpReferenceSpeed4,
+        NumberofTranches = NumberofTranches,
+        NumberofComponentTranches = NumberofComponentTranches,
+        NumberofCombinedTranches = NumberofCombinedTranches,
+        NumberofPools = NumberofPools,
+        PacSchedulesIncluded = PacSchedulesIncluded,
+        NumberofPacSchedules = NumberofPacSchedules,
+        NumberofGroups = NumberofGroups,      
+        DealSize = DealSize,
+        CollateralAmount = CollateralAmount,
+        CollateralAvgLife = CollateralAvgLife,
+        BondValue = BondValue,
+        BondValueMethod = BondValueMethod,
+        BondValueCap = BondValueCap,
+        BondValueDiscountRate = BondValueDiscountRate,
+        BondValueReinvestmentRate = BondValueReinvestmentRate,
+        ExpenseBasisPointFee = ExpenseBasisPointFee,
+        ExpenseFixed = ExpenseFixed,
+        ExpensePeriodicity = ExpensePeriodicity,
+        InitialReserveFund = InitialReserveFund
+    )                 
+  }
+  
   
   #' A constructor function for the REMIC At Issuance Disclosure file
   #' 
@@ -721,7 +795,6 @@
   #' @examples 
   #' \dontrun{Need Example}
   #' @export MakeRAID
-  
   MakeRAID <- function(DealName = "character", 
                        Issuer = "character",
                        DealNumber = "character",
@@ -788,7 +861,7 @@
     
     SaveRAID(RAIDFile = temp)}
   
-  
+
   
   #' An S4 Class TrancheDetails at Issuance
   #' 
@@ -1019,7 +1092,247 @@
   setGeneric("TrancheOrigBal", function(object)
     {setGeneric("TrancheOrigBal")})
   
-  # Initialize TrancheDetails
+  #' A generic function access the slot TrancheInterest
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheInterest", function(object)
+    {setGeneric("TrancheInterest")})
+  
+  # Note: standard generic cusip is defined in PassThroughConstructor.R
+  
+  #' A generic function to access the slot AccrualRate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("AccrualRate", function(object)
+    {standardGeneric("AccrualRate")})
+  
+  #' A generic function to access the slot TreasuryMaturity
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TreasuryMaturity", function(object)
+    {setGeneric("TreasuryMaturity")})
+  
+  #' A generic function to access the slot TreasuryYield
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TreasuryYield", function(object)
+    {setGeneric("TreasuryYield")})
+  
+  #' A generic function to access the slot TreasurySpread
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TreasurySpread", function(object)
+    {standardGeneric("TreasurySpread")})
+  
+  #' A generic function to access the slot TrancheYield
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheYield", function(object)
+    {standardGeneric("TrancheYield")})
+  
+  #' A generic function to access the slot TranchePrice
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TranchePrice", function(object)
+    {standardGeneric("TranchePrice")})
+  
+  #' A generic function to access the slot TrancheProceedsWithInterest
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheProceedsWithInterest", function(object)
+    {setGeneric("TrancheProceedsWithInterest")})
+  
+  #' A generic functionto access the slot TrancheAvgLife
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheAvgLife", function(object)
+    {standardGeneric("TrancheAvgLife")})
+  
+  #' A generic function to access the slot TrancheDuration
+  #' 
+  #' @param object an S4 class oject
+  #' @export
+  setGeneric("TrancheDuration", function(object)
+    {standardGeneric("TrancheDuration")})
+  
+  #' A generic function to access the TrancheDatedDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheDatedDate", function(object)
+  {standardGeneric("TrancheDatedDate")})
+  
+  #' A generic function to access the slot TrancheFirstPmtDate
+  #' 
+  #' @param object an S4 class object 
+  #' @export
+  setGeneric("TrancheFirstPmtDate", function(object)
+    {standardGeneric("TrancheFirstPmtDate")})
+  
+  #' A generic function to access the slot TrancheLastPmtDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheLastPmtDate", function(object)
+    {standardGeneric("TrancheLastPmtDate")})
+  
+  #' A generic function to access the slot TrancheNextPmtDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheNextPmtDate", function(object)
+    {standardGeneric("TrancheNextPmtDate")})
+  
+  #' A generic function to access the slot TrancheFinalPmtDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheFinalPmtDate", function(object)
+    {standardGeneric("TrancheFinalPmtDate")})
+  
+  #' A generic function to access the slot Delay
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Delay", function(object)
+    {standardGeneric("Delay")})
+  
+  #' A generic functon to access the slot InterestPmtFrequency
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("InterestPmtFrequency", function(object)
+    {standardGeneric("InterestPmtFrequency")})
+  
+  #' A generic function to access the slot PrinPmtFrequency
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PrinPmtFrequency", function(object)
+    {setGeneric("PrinPmtFrequency")})
+  
+  #' A generic function to access the slot PacLowBand
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PacLowBand", function(object)
+    {standardGeneric("PacLowBand")})
+  
+  #' A generic function to access the slot PachHighBand
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PacHighBand", function(object)
+    {standardGeneric("PacHighBand")})
+  
+  #' A generic function to access the slot FloaterIndex
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterIndex", function(object)
+    {standardGeneric("FloaterIndex")})
+  
+  #' A generic functon to access the slot InitialIndexValue
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("InitialIndexValue", function(object)
+    {standardGeneric("InitialIndexValue")})
+  
+  #' A generic function to access the slot FloaterMargin
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterMargin", function(object)
+    {standardGeneric("FloaterMargin")})
+  
+  #' A generic function to access the slot FloaterMultiplier
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterMultiplier", function(object)
+    {standardGeneric("FloaterMultiplier")})
+  
+  #' A generic function to access the slot FloaterCap
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterCap", function(object)
+    {standardGeneric("FloaterCap")})
+  
+  #' A generic function to access the slot FloaterFloor
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterFloor", function(object)
+    {standardGeneric("FloaterFloor")})
+  
+  #' A generic function to access the slot FloaterInitialCoupon
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterInitialCoupon", function(object)
+    {standardGeneric("FloaterInitialCoupon")})
+  
+  #' A generic function to access the slot FloaterResetFrequency
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterResetFrequency", function(object)
+    {standardGeneric("FloaterResetFrequency")})
+  
+  #' A generic function to access the slot FloaterFirstResetDate
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterFirstResetDate", function(object)
+    {standardGeneric("FloaterFirstResetDate")})
+  
+  #' A generic function to access the slot FloaterFormula
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("FloaterFormula", function(object)
+    {setGeneric("FloaterFormula")})
+  
+  #' A generic function to access the slot Group
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Group", function(object)
+    {standardGeneric("Group")})
+  
+  #' A generic function to access the slot TrancheType
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheType", function(object)
+    {standardGeneric("TrancheType")})
+  
+  #' A generic function to access the slot Schedule
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Schedule", function(object)
+  {standardGeneric("Schedule")})
+  
+  #' A generic function to access the slot Fixed
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Fixed", function(object)
+  {standardGeneric("Fixed")})
+  
+  # Initialize TrancheDetails 
   setMethod("initialize",
             signature("TrancheDetails"),
             function(.Object,
@@ -1333,74 +1646,6 @@
           })
 
 
-  RAID <- function(DealName = "character",
-                 Issuer = "character",
-                 DealNumber = "character",
-                 DealPriceDate = "character",
-                 DealSettlementDate = "character",
-                 Underwriter = "character",
-                 Trustee = "character",
-                 PricingSpeed = numeric(),
-                 JumpReferenceSpeed1 = numeric(),
-                 JumpReferenceSpeed2 = numeric(),
-                 JumpReferenceSpeed3 = numeric(),
-                 JumpReferenceSpeed4 = numeric(),
-                 NumberofTranches = numeric(),
-                 NumberofComponentTranches = numeric(),
-                 NumberofCombinedTranches = numeric(),
-                 NumberofPools = numeric(),
-                 PacSchedulesIncluded = "logical",
-                 NumberofPacSchedules = numeric(),
-                 NumberofGroups = numeric(),
-                 DealSize = numeric(),
-                 CollateralAmount = numeric(),
-                 CollateralAvgLife = numeric(),
-                 BondValue = numeric(),
-                 BondValueMethod = "character",
-                 BondValueCap = numeric(),
-                 BondValueDiscountRate = numeric(),
-                 BondValueReinvestmentRate = numeric(),
-                 ExpenseBasisPointFee = numeric(),
-                 ExpenseFixed = numeric(),
-                 ExpensePeriodicity = numeric(),
-                 InitialReserveFund = numeric()
-  ){
-  
-
-  new("RAID",
-      DealName = DealName,
-      Issuer = Issuer,
-      DealNumber = DealNumber,
-      DealPriceDate = DealPriceDate,
-      DealSettlementDate = DealSettlementDate,
-      Underwriter = Underwriter,
-      Trustee = Trustee,
-      PricingSpeed = PricingSpeed,
-      JumpReferenceSpeed1 = JumpReferenceSpeed1,
-      JumpReferenceSpeed2 = JumpReferenceSpeed2,
-      JumpReferenceSpeed3 = JumpReferenceSpeed3,
-      JumpReferenceSpeed4 = JumpReferenceSpeed4,
-      NumberofTranches = NumberofTranches,
-      NumberofComponentTranches = NumberofComponentTranches,
-      NumberofCombinedTranches = NumberofCombinedTranches,
-      NumberofPools = NumberofPools,
-      PacSchedulesIncluded = PacSchedulesIncluded,
-      NumberofPacSchedules = NumberofPacSchedules,
-      NumberofGroups = NumberofGroups,      
-      DealSize = DealSize,
-      CollateralAmount = CollateralAmount,
-      CollateralAvgLife = CollateralAvgLife,
-      BondValue = BondValue,
-      BondValueMethod = BondValueMethod,
-      BondValueCap = BondValueCap,
-      BondValueDiscountRate = BondValueDiscountRate,
-      BondValueReinvestmentRate = BondValueReinvestmentRate,
-      ExpenseBasisPointFee = ExpenseBasisPointFee,
-      ExpenseFixed = ExpenseFixed,
-      ExpensePeriodicity = ExpensePeriodicity,
-      InitialReserveFund = InitialReserveFund
-  )                 
-  }
 
 
   #=====================================================================================
@@ -1692,7 +1937,7 @@
   #It has no connection strings this functions constructs the PAC REMIC 
   #Class with call to new
   #' @importFrom lubridate %m+%
-  Schedule <- function(bond.id = "character",
+  BondSchedule <- function(bond.id = "character",
                              DealName = "character",
                              Group = "character",
                              original.bal = numeric(),
@@ -1807,7 +2052,7 @@
                          lower.PSA = numeric(), 
                          upper.PSA = numeric()){
   
-                         temp <- Schedule(bond.id = bond.id,
+                         temp <- BondSchedule(bond.id = bond.id,
                                           DealName = DealName,
                                           Group = Group,
                                           original.bal = original.bal,

@@ -375,38 +375,38 @@
                       ExpensePeriodicity = numeric(),
                       InitialReserveFund = numeric()
                       ){
-              callNextMethod(.Object,
-                             DealName = DealName,
-                             Issuer = Issuer,
-                             DealNumber = DealNumber,
-                             DealPriceDate = DealPriceDate,
-                             DealSettlementDate = DealSettlementDate,
-                             Underwriter = Underwriter,
-                             Trustee = Trustee,
-                             PricingSpeed = PricingSpeed,
-                             JumpReferenceSpeed1 = JumpReferenceSpeed1,
-                             JumpReferenceSpeed2 = JumpReferenceSpeed2,
-                             JumpReferenceSpeed3 = JumpReferenceSpeed3,
-                             JumpReferenceSpeed4 = JumpReferenceSpeed4,
-                             NumberofTranches = NumberofTranches,
-                             NumberofComponentTranches = NumberofComponentTranches,
-                             NumberofCombinedTranches = NumberofCombinedTranches,
-                             NumberofPools = NumberofPools,
-                             PacSchedulesIncluded = PacSchedulesIncluded,
-                             NumberofPacSchedules = NumberofPacSchedules,
-                             NumberofGroups = NumberofGroups,
-                             DealSize = DealSize,
-                             CollateralAmount = CollateralAmount,
-                             CollateralAvgLife = CollateralAvgLife,
-                             BondValue = BondValue,
-                             BondValueMethod = BondValueMethod,
-                             BondValueCap = BondValueCap,
-                             BondValueDiscountRate = BondValueDiscountRate,
-                             BondValueReinvestmentRate = BondValueReinvestmentRate,
-                             ExpenseBasisPointFee = ExpenseBasisPointFee,
-                             ExpenseFixed = ExpenseFixed,
-                             ExpensePeriodicity = ExpensePeriodicity,
-                             InitialReserveFund = InitialReserveFund)
+          callNextMethod(.Object,
+                        DealName = DealName,
+                        Issuer = Issuer,
+                        DealNumber = DealNumber,
+                        DealPriceDate = DealPriceDate,
+                        DealSettlementDate = DealSettlementDate,
+                        Underwriter = Underwriter,
+                        Trustee = Trustee,
+                        PricingSpeed = PricingSpeed,
+                        JumpReferenceSpeed1 = JumpReferenceSpeed1,
+                        JumpReferenceSpeed2 = JumpReferenceSpeed2,
+                        JumpReferenceSpeed3 = JumpReferenceSpeed3,
+                        JumpReferenceSpeed4 = JumpReferenceSpeed4,
+                        NumberofTranches = NumberofTranches,
+                        NumberofComponentTranches = NumberofComponentTranches,
+                        NumberofCombinedTranches = NumberofCombinedTranches,
+                        NumberofPools = NumberofPools,
+                        PacSchedulesIncluded = PacSchedulesIncluded,
+                        NumberofPacSchedules = NumberofPacSchedules,
+                        NumberofGroups = NumberofGroups,
+                        DealSize = DealSize,
+                        CollateralAmount = CollateralAmount,
+                        CollateralAvgLife = CollateralAvgLife,
+                        BondValue = BondValue,
+                        BondValueMethod = BondValueMethod,
+                        BondValueCap = BondValueCap,
+                        BondValueDiscountRate = BondValueDiscountRate,
+                        BondValueReinvestmentRate = BondValueReinvestmentRate,
+                        ExpenseBasisPointFee = ExpenseBasisPointFee,
+                        ExpenseFixed = ExpenseFixed,
+                        ExpensePeriodicity = ExpensePeriodicity,
+                        InitialReserveFund = InitialReserveFund)
               })
   #' A method to access the slot DealName from class RAID
   #' 
@@ -676,6 +676,117 @@
               object@InitialReserveFund
             })
   
+  #' A constructor function for the REMIC At Issuance Disclosure file
+  #' 
+  #' The RAID function creates the REMIC At Issuance Disclosure file
+  #' @param DealName A character string the deal name
+  #' @param Issuer A character string the Isser Name
+  #' @param DealNumber A character string the Deal Number
+  #' @param DealPriceDate A character string the Deal Pricing Date
+  #' @param DealSettlementDate A character string the Deal Settlement Date
+  #' @param Underwriter A character string the Deal Underwriter
+  #' @param Trustee A character string the deal Trustee
+  #' @param PricingSpeed A numeric value the deal pricing speed
+  #' @param JumpReferenceSpeed1 A numeric value the Jump Z speed
+  #' @param JumpReferenceSpeed2 A numeric value the Jump Z speed
+  #' @param JumpReferenceSpeed3 A numeric value the Jump Z speed
+  #' @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
+  #' @param NumberofTranches A numeric value the number of Tranches
+  #' @param NumberofComponentTranches A numeric value the number of 
+  #' component Tranches
+  #' @param NumberofCombinedTranches A numeric value the number of 
+  #' combined Tranches
+  #' @param NumberofPools A numeric value the number of pools
+  #' @param PacSchedulesIncluded A logical value TRUE/FALSE
+  #' @param NumberofPacSchedules A numeric value the number of PAC schedules
+  #' @param NumberofGroups A numeric value the number of groups
+  #' @param DealSize A numeric value the original balance of all tranches
+  #' @param CollateralAmount A numeric value the current face amount of 
+  #' the collateral
+  #' @param CollateralAvgLife A numeric value the avg life of the collateral 
+  #' @param BondValue A numeric value the bond price
+  #' @param BondValueMethod A character string the valuation method
+  #' @param BondValueCap A numeric value the Bond Coupon Cap Rate
+  #' @param BondValueDiscountRate A numeric value the Bond discount rate
+  #' @param BondValueReinvestmentRate A numeric value the assumed trust 
+  #' reinvestment rate
+  #' @param ExpenseBasisPointFee A numeric value the expense of the Trust
+  #' @param ExpenseFixed A numeric value the fixed expenses of the Trust
+  #' @param ExpensePeriodicity A numeric value the calender payment of expenses
+  #' @param InitialReserveFund A numeric value the amount of the initial 
+  #' reserve fund
+  #' @examples 
+  #' \dontrun{Need Example}
+  #' @export MakeRAID
+  
+  MakeRAID <- function(DealName = "character", 
+                       Issuer = "character",
+                       DealNumber = "character",
+                       DealPriceDate = "character", 
+                       DealSettlementDate = "character",
+                       Underwriter = "character",
+                       Trustee = "character",
+                       PricingSpeed = numeric(),
+                       JumpReferenceSpeed1 = numeric(),
+                       JumpReferenceSpeed2 = numeric(),
+                       JumpReferenceSpeed3 = numeric(),
+                       JumpReferenceSpeed4 = numeric(),
+                       NumberofTranches = numeric(),
+                       NumberofComponentTranches = numeric(),
+                       NumberofCombinedTranches = numeric(),
+                       NumberofPools = numeric(),
+                       PacSchedulesIncluded = "logical",
+                       NumberofPacSchedules = numeric(),
+                       NumberofGroups = numeric(),
+                       DealSize = numeric(),
+                       CollateralAmount = numeric(),
+                       CollateralAvgLife = numeric(),
+                       BondValue = numeric(),
+                       BondValueMethod = "character",
+                       BondValueCap = numeric(),
+                       BondValueDiscountRate = numeric(),
+                       BondValueReinvestmentRate = numeric(),
+                       ExpenseBasisPointFee = numeric(),
+                       ExpenseFixed = numeric(),
+                       ExpensePeriodicity = numeric(),
+                       InitialReserveFund = numeric()){
+    
+    temp <-RAID(DealName = DealName,
+                Issuer = Issuer,
+                DealNumber = DealNumber,
+                DealPriceDate = DealPriceDate,
+                DealSettlementDate = DealSettlementDate,
+                Underwriter = Underwriter,
+                Trustee = Trustee,
+                PricingSpeed = PricingSpeed,
+                JumpReferenceSpeed1 = JumpReferenceSpeed1,
+                JumpReferenceSpeed2 = JumpReferenceSpeed2,
+                JumpReferenceSpeed3 = JumpReferenceSpeed3,
+                JumpReferenceSpeed4 = JumpReferenceSpeed4,
+                NumberofTranches = NumberofTranches,
+                NumberofComponentTranches = NumberofComponentTranches,
+                NumberofCombinedTranches = NumberofCombinedTranches,
+                NumberofPools = NumberofPools,
+                PacSchedulesIncluded = PacSchedulesIncluded,
+                NumberofPacSchedules = NumberofPacSchedules,
+                NumberofGroups = NumberofGroups,
+                DealSize = DealSize,
+                CollateralAmount = CollateralAmount,
+                CollateralAvgLife = CollateralAvgLife,
+                BondValue = BondValue,
+                BondValueMethod = BondValueMethod,
+                BondValueCap = BondValueCap,
+                BondValueDiscountRate = BondValueDiscountRate,
+                BondValueReinvestmentRate = BondValueReinvestmentRate,
+                ExpenseBasisPointFee = ExpenseBasisPointFee,
+                ExpenseFixed = ExpenseFixed,
+                ExpensePeriodicity = ExpensePeriodicity,
+                InitialReserveFund = InitialReserveFund)
+    
+    SaveRAID(RAIDFile = temp)}
+  
+  
+  
   #' An S4 Class TrancheDetails at Issuance
   #' 
   #' Tranche Details is static data Tranche changes are updated
@@ -838,6 +949,42 @@
   )
     {standardGeneric("TrancheDetails")})
   
+  # Note: generic function DealName is defined above
+  
+  #' A generic function to access the slot TrancheNumber
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheNumber", function(object)
+  {standardGeneric("TrancheNumber")})
+  
+  #' A generic function to access the slot NumberofComponents
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("NumberofComponents", function(object)
+    {standardGeneric("NumberofComponents")})
+  
+  #' A generic function to access the slot ComponentofTranches
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("ComponentofTranches", function(object)
+    {standardGeneric("ComponentofTranches")})
+  
+  #' A generic function to access the slot TrancheName
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TrancheName", function(object)
+    {setGeneric("TrancheName")})
+  
+  #' A generic function to access the slot TranchePrincipal
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("TranchePrincipal", function(object)
+    {standardGeneric("TranchePrincipal")})
   
   # Initialize TrancheDetails
   setMethod("initialize",
@@ -976,9 +1123,9 @@
   setClass("RDME",
          representation(
            Cusip = "character",
-           PaymentDate = "character",
-           Coupon = "numeric",
-           Factor = "numeric"))
+           PaymentDate = "list",
+           Coupon = "list",
+           Factor = "list"))
 
   # The TrancheFactors class is an aggregator class 
   # The class aggregates the RDME classes for each associated trance
@@ -1055,9 +1202,9 @@
           signature("RDME"),
           function(.Object,
                    Cusip = "character",
-                   PaymentDate = "character",
-                   Coupon = numeric(),
-                   Factor = numeric())
+                   PaymentDate = "list",
+                   Coupon = "list",
+                   Factor = "list")
           {
             .Object@Cusip = Cusip
             .Object@PaymentDate = PaymentDate
@@ -1223,110 +1370,6 @@
   }
 
 
-  #' A constructor function for the REMIC At Issuance Disclosure file
-  #' 
-  #' The RAID function creates the REMIC At Issuance Disclosure file
-  #' @param DealName A character string the deal name
-  #' @param Issuer A character string the Isser Name
-  #' @param DealNumber A character string the Deal Number
-  #' @param DealPriceDate A character string the Deal Pricing Date
-  #' @param DealSettlementDate A character string the Deal Settlement Date
-  #' @param Underwriter A character string the Deal Underwriter
-  #' @param Trustee A character string the deal Trustee
-  #' @param PricingSpeed A numeric value the deal pricing speed
-  #' @param JumpReferenceSpeed1 A numeric value the Jump Z speed
-  #' @param JumpReferenceSpeed2 A numeric value the Jump Z speed
-  #' @param JumpReferenceSpeed3 A numeric value the Jump Z speed
-  #' @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
-  #' @param NumberofTranches A numeric value the number of Tranches
-  #' @param NumberofComponentTranches A numeric value the number of component Tranches
-  #' @param NumberofCombinedTranches A numeric value the number of combined Tranches
-  #' @param NumberofPools A numeric value the number of pools
-  #' @param PacSchedulesIncluded A logical value TRUE/FALSE
-  #' @param NumberofPacSchedules A numeric value the number of PAC schedules
-  #' @param NumberofGroups A numeric value the number of groups
-  #' @param DealSize A numeric value the original balance of all tranches
-  #' @param CollateralAmount A numeric value the current face amount of the collateral
-  #' @param CollateralAvgLife A numeric value the avg life of the collateral 
-  #' @param BondValue A numeric value the bond price
-  #' @param BondValueMethod A character string the valuation method
-  #' @param BondValueCap A numeric value the Bond Coupon Cap Rate
-  #' @param BondValueDiscountRate A numeric value the Bond discount rate
-  #' @param BondValueReinvestmentRate A numeric value the assumed trust reinvestment rate
-  #' @param ExpenseBasisPointFee A numeric value the expense of the Trust
-  #' @param ExpenseFixed A numeric value the fixed expenses of the Trust
-  #' @param ExpensePeriodicity A numeric value the calender payment of expenses
-  #' @param InitialReserveFund A numeric value the amount of the initial reserve fund
-  #' @examples 
-  #' \dontrun{Need Example}
-  #' @export MakeRAID
-
-  MakeRAID <- function(DealName = "character", 
-                     Issuer = "character",
-                     DealNumber = "character",
-                     DealPriceDate = "character", 
-                     DealSettlementDate = "character",
-                     Underwriter = "character",
-                     Trustee = "character",
-                     PricingSpeed = numeric(),
-                     JumpReferenceSpeed1 = numeric(),
-                     JumpReferenceSpeed2 = numeric(),
-                     JumpReferenceSpeed3 = numeric(),
-                     JumpReferenceSpeed4 = numeric(),
-                     NumberofTranches = numeric(),
-                     NumberofComponentTranches = numeric(),
-                     NumberofCombinedTranches = numeric(),
-                     NumberofPools = numeric(),
-                     PacSchedulesIncluded = "logical",
-                     NumberofPacSchedules = numeric(),
-                     NumberofGroups = numeric(),
-                     DealSize = numeric(),
-                     CollateralAmount = numeric(),
-                     CollateralAvgLife = numeric(),
-                     BondValue = numeric(),
-                     BondValueMethod = "character",
-                     BondValueCap = numeric(),
-                     BondValueDiscountRate = numeric(),
-                     BondValueReinvestmentRate = numeric(),
-                     ExpenseBasisPointFee = numeric(),
-                     ExpenseFixed = numeric(),
-                     ExpensePeriodicity = numeric(),
-                     InitialReserveFund = numeric()){
-  
-  temp <-RAID(DealName = DealName,
-              Issuer = Issuer,
-              DealNumber = DealNumber,
-              DealPriceDate = DealPriceDate,
-              DealSettlementDate = DealSettlementDate,
-              Underwriter = Underwriter,
-              Trustee = Trustee,
-              PricingSpeed = PricingSpeed,
-              JumpReferenceSpeed1 = JumpReferenceSpeed1,
-              JumpReferenceSpeed2 = JumpReferenceSpeed2,
-              JumpReferenceSpeed3 = JumpReferenceSpeed3,
-              JumpReferenceSpeed4 = JumpReferenceSpeed4,
-              NumberofTranches = NumberofTranches,
-              NumberofComponentTranches = NumberofComponentTranches,
-              NumberofCombinedTranches = NumberofCombinedTranches,
-              NumberofPools = NumberofPools,
-              PacSchedulesIncluded = PacSchedulesIncluded,
-              NumberofPacSchedules = NumberofPacSchedules,
-              NumberofGroups = NumberofGroups,
-              DealSize = DealSize,
-              CollateralAmount = CollateralAmount,
-              CollateralAvgLife = CollateralAvgLife,
-              BondValue = BondValue,
-              BondValueMethod = BondValueMethod,
-              BondValueCap = BondValueCap,
-              BondValueDiscountRate = BondValueDiscountRate,
-              BondValueReinvestmentRate = BondValueReinvestmentRate,
-              ExpenseBasisPointFee = ExpenseBasisPointFee,
-              ExpenseFixed = ExpenseFixed,
-              ExpensePeriodicity = ExpensePeriodicity,
-              InitialReserveFund = InitialReserveFund)
-  
-  SaveRAID(RAIDFile = temp)}
-  
   #=====================================================================================
   #The following are Tranches functions for the REMIC constructor
   #=====================================================================================

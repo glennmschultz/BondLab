@@ -2148,6 +2148,15 @@
               callNextMethod(.Object,
                              Tranches = Tranches)
             })
+  
+  #' A method to access the Tranches from class Tranches
+  #' 
+  #' @param object an S4 class object of type Tranches
+  #' @exportMethod Tranches
+  setMethod("Tranches", signature("Tranches"),
+            function(object){
+              object@Tranches
+            })
 
   # Collateral class holds collateral data for each collateral group
   # The collateral class holds pools cusip list and original balance

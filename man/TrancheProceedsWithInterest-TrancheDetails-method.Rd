@@ -3,7 +3,8 @@
 \docType{methods}
 \name{TrancheProceedsWithInterest,TrancheDetails-method}
 \alias{TrancheProceedsWithInterest,TrancheDetails-method}
-\title{A method to access TrancheProceedsWithInterest from class TranchePrice}
+\title{A method to access the slot TrancheProceedsWithInterest from 
+class TrancheDetails}
 \usage{
 \S4method{TrancheProceedsWithInterest}{TrancheDetails}(object)
 }
@@ -11,6 +12,7 @@
 \item{object}{an S4 class of type TrancheDetails}
 }
 \description{
-A method to access TrancheProceedsWithInterest from class TranchePrice
+A method to access the slot TrancheProceedsWithInterest from 
+class TrancheDetails
 }
 

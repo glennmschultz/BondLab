@@ -1611,13 +1611,247 @@
               object@TranchePrice
             })
   
-  #' A method to access TrancheProceedsWithInterest from class TranchePrice
+  #' A method to access the slot TrancheProceedsWithInterest from 
+  #' class TrancheDetails
   #' 
   #' @param object an S4 class of type TrancheDetails
   #' @exportMethod TrancheProceedsWithInterest
   setMethod("TrancheProceedsWithInterest", signature("TrancheDetails"),
             function(object){
               object@TrancheProceedsWithInterest
+            })
+  
+  #' A method to access the slot TrancheAvgLife from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheAvgLife
+  setMethod("TrancheAvgLife", signature("TrancheDetails"),
+            function(object){
+              object@TrancheAvgLife
+            })
+  
+  #' A method to access the slot TrancheDuration from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheDuration
+  setMethod("TrancheDuration", signature("TrancheDetails"),
+            function(object){
+              object@TrancheDuration
+            })
+  
+  #' A method to access the slot TrancheDatedDate from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheDatedDate
+  setMethod("TrancheDatedDate", signature("TrancheDetails"),
+            function(object){
+              object@TrancheDatedDate
+            })
+  #' A method to access the slot TrancheFirstPmtDate from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheFirstPmtDate
+  setMethod("TrancheFirstPmtDate", signature("TrancheDetails"),
+            function(object){
+              object@TrancheDatedDate
+            })
+  #' A method to access the slot TrancheLastPmtDate from class TrancheDetails
+  #' 
+  #' @param object an S4 clss of type TrancheDetails
+  #' @exportMethod TrancheLastPmtDate
+  setMethod("TrancheLastPmtDate", signature("TrancheDetails"),
+            function(object){
+              object@TrancheLastPmtDate
+            })
+  
+  #' A method to access the slot TrancheNextPmtDate from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheNextPmtDate
+  setMethod("TrancheNextPmtDate", signature("TrancheDetails"),
+            function(object){
+              object@TrancheNextPmtDate
+            })
+  
+  #' A method to access the slot TrancheFinalPmtDate from class TrancheDetails
+  #' 
+  #' @param object an S4 class of type TrancheDetails
+  #' @exportMethod TrancheFinalPmtDate
+  setMethod("TrancheFinalPmtDate", signature("TrancheDetails"),
+            function(object){
+              object@TrancheFinalPmtDate
+            })
+
+  #' A method to access the slot Delay from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod Delay
+  setMethod("Delay", signature("TrancheDetails"),
+            function(object){
+              object@Delay
+            })
+  
+  #' A method to access the slot InterestPmtFrequency from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type InterestPmtFrequency
+  #' @exportMethod InterestPmtFrequency
+  setMethod("InterestPmtFrequency", signature("TrancheDetails"),
+            function(object){
+              object@InterestPmtFrequency
+            })
+  
+  #' A method to access the slot PrinPmtFrequency from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod PrinPmtFrequency
+  setMethod("PrinPmtFrequency", signature("TrancheDetails"),
+            function(object){
+              object@PrinPmtFrequency
+            })
+  
+  #' A method to access the slot PacLowBand from class TrancheDetails
+  #' 
+  #' @param object an S4 object of type TrancheDetails
+  #' @exportMethod PacLowBand
+  setMethod("PacLowBand", signature("TrancheDetails"),
+            function(object){
+              object@PacLowBand
+            })
+  
+  #'A method to access the slot PacHighBand from class TrancheDetails
+  #'
+  #'@param object an S4 object of the type TrancheDetails
+  #'@exportMethod PacHighBand
+  setMethod("PacHighBand", signature("TrancheDetails"),
+            function(object){
+              object@PacHighBand
+            })
+  
+  #' A method to access the slot FloaterIndex from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterIndex
+  setMethod("FloaterIndex", signature("TrancheDetails"),
+            function(object){
+              object@FloaterIndex
+            })
+  
+  #' A method to access the slot InitialIndexValue from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod InitialIndexValue
+  setMethod("InitialIndexValue", signature("TrancheDetails"),
+            function(object){
+              object@InitialIndexValue
+            })
+  
+  #' A method to access the slot FloaterMargin from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterMargin
+  setMethod("FloaterMargin", signature("TrancheDetails"),
+            function(object){
+              object@FloaterMargin
+            })
+  
+  #' A method to access the slot FloaterMultiplier from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterMultiplier
+  setMethod("FloaterMultiplier", signature("TrancheDetails"),
+            function(object){
+              object@FloaterMultiplier
+            })
+  
+  #' A method to access the slot FloaterCap from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterCap
+  setMethod("FloaterCap", signature("TrancheDetails"),
+            function(object){
+              object@FloaterCap
+            })
+  
+  #' A method to access the slot FloaterFloor from the class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterFloor
+  setMethod("FloaterFloor", signature("TrancheDetails"),
+            function(object){
+              object@FloaterFloor
+            })
+  
+  #' A method to access the slot FloaterInitialCoupon from the 
+  #' class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterInitialCoupon
+  setMethod("FloaterInitialCoupon", signature("TrancheDetails"),
+            function(object){
+              object@FloaterInitialCoupon
+            })
+  
+  #' A method to access the slot FloaterResetFrequency from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterResetFrequency
+  setMethod("FloaterResetFrequency", signature("TrancheDetails"),
+            function(object){
+              object@FloaterResetFrequency
+            })
+  
+  #' A method to access the slot FloaterFirstResetDate from class TrancheDetails
+  #' 
+  #' @param object an S4 object o the type TrancheDetails
+  #' @exportMethod FloaterFirstResetDate
+  setMethod("FloaterFirstResetDate",signature("TrancheDetails"),
+            function(object){
+              object@FloaterFirstResetDate
+            })
+  
+  #' A method to access the slot FloaterFormula from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod FloaterFormula
+  setMethod("FloaterFormula", signature("TrancheDetails"),
+            function(object){
+              object@FloaterFormula
+            })
+  
+  #' A method to access the slot Group from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod Group
+  setMethod("Group", signature("TrancheDetails"),
+            function(object){
+              object@Group
+              })
+  
+  #' A method to access the slot TrancheType from class TrancheDetails
+  #' 
+  #' @param object an S4 object of the typre TrancheDetails
+  #' @exportMethod TrancheType
+  setMethod("TrancheType", signature("TrancheDetails"),
+            function(object){
+              object@TrancheType
+            })
+  
+  #' A method to access the slot Schedule from the class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod Schedule
+  setMethod("Schedule", signature("Schedule"),
+            function(object){
+              object@Schedule
+            })
+  
+  #' A method to access the slot Fixed from the class TrancheDetails
+  #' 
+  #' @param object an S4 object of the type TrancheDetails
+  #' @exportMethod Fixed
+  setMethod("Fixed", signature("TrancheDetails"),
+            function(object){
+              object@Fixed
             })
 
   setClass("Tranches",
@@ -2119,7 +2353,7 @@
     new("Tranches",
         Tranches = TrancheList)}
 
-  # --------------------------------------------------------------------------------
+  # ----------------------------------------------------------------------
   #REMIC Schedules PAC and TAC schedules for REMIC
   #This function is called by MakeSchedules
   #It has no connection strings this functions constructs the PAC REMIC 
@@ -2157,7 +2391,8 @@
   # --- connect to the prepayment model
   ModelTune <- ModelTune(bond.id = bond.id)
   
-  TermStructure <- TermStructure(rates.data = rates.data, method = "ns")
+  TermStructure <- TermStructure(rates.data = rates.data, 
+                                 method = "ns")
   Burnout <- bond.id@Burnout
   
   PSA.Band <- c(lower.PSA/100, upper.PSA/100)
@@ -2168,15 +2403,16 @@
     begin.cpr <- begin.cpr * PSA.Band[i]
     end.cpr <- end.cpr * PSA.Band[i]
     
-    PrepaymentAssumption <- PrepaymentAssumption(bond.id = bond.id,
-                                                 MortgageRate = MortgageRate,
-                                                 TermStructure = TermStructure,
-                                                 PrepaymentAssumption = "PPC",
-                                                 ModelTune = ModelTune,
-                                                 Burnout = Burnout,
-                                                 begin.cpr = begin.cpr,
-                                                 end.cpr = end.cpr,
-                                                 seasoning.period = seasoning.period
+    PrepaymentAssumption <- PrepaymentAssumption(
+      bond.id = bond.id,
+      MortgageRate = MortgageRate,
+      TermStructure = TermStructure,
+      PrepaymentAssumption = "PPC",
+      ModelTune = ModelTune,
+      Burnout = Burnout,
+      begin.cpr = begin.cpr,
+      end.cpr = end.cpr,
+      seasoning.period = seasoning.period
     )
     
     MortgageCashFlow <-  MortgageCashFlow(bond.id = bond.id,
@@ -2203,7 +2439,7 @@
 
 }
   
-  # ---------- function to create and save the PAC schedule class ----------------------------------------------------
+  # ---------- function to create and save the PAC schedule class ------------
   #' A constructor function to create the PAC Bond Sinking Fund Schedule file
   #' 
   #' Function to create a PAC bond sinking fund schedule file
@@ -2221,9 +2457,10 @@
   #' @param lower.PSA A numeric value the lower PSA band
   #' @param upper.PSA A numeric value the upper PSA band
   #' @examples 
-  #' \dontrun{MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",Group = 1,
-  #' original.bal = 200000000,first.pmtdate = "01-25-2013",trade.date = "01-10-2013",
-  #' settlement.date = "01-13-2013",price = 105.75,begin.cpr = .2,end.cpr = 6,
+  #' \dontrun{MakeSchedule(bond.id = "BondLabMBS4",DealName = "BondLabPAC01",
+  #' Group = 1, original.bal = 200000000,first.pmtdate = "01-25-2013",
+  #' trade.date = "01-10-2013", settlement.date = "01-13-2013",
+  #' price = 105.75,begin.cpr = .2,end.cpr = 6,
   #' seasoning.period = 30,lower.PSA = 75, upper.PSA = 250)}
   #' @export  
   MakeSchedule <- function(bond.id = "character",
@@ -2261,8 +2498,9 @@
 
 
 
-  # -------- Collateral groups for the REMIC Constructor -------------------------------------------------------------
-  # 1) construct the collateral class with call to new.  This function is used by MakeCollateral
+  # -------- Collateral groups for the REMIC Constructor -------------------
+  # 1) construct the collateral class with call to new.  This function is 
+  # used by MakeCollateral
  
   Collateral <- function(DealName = "character", 
                          Group = numeric(), 
@@ -2279,12 +2517,16 @@
   # 2) serialize the collateral information to the groups directory
   #' A constructor function to create the collatreal group file for a REMIC
   #' 
-  #' Makes Collateral Groups for REMIC structure currently only representative (aggregated collateral groups)
-  #' is supported.  In the future multiple collateral pools or loans are envisioned.
+  #' Makes Collateral Groups for REMIC structure currently only representative
+  #' (aggregated collateral groups)
+  #' is supported.  In the future multiple collateral pools or loans are 
+  #' envisioned.
   #' @param DealName A character string the deal's name
   #' @param Group A numeric value the collateral group number
-  #' @param Cusip A list the collateral group name, collateral pool cusips, or loan numbers.
-  #' @param OrigBal A list the original balance of the collateral group name, pool cusip or loan numbers used in the deal
+  #' @param Cusip A list the collateral group name, collateral pool cusips, 
+  #' or loan numbers.
+  #' @param OrigBal A list the original balance of the collateral group name, 
+  #' pool cusip or loan numbers used in the deal
   #' @examples
   #' \dontrun{
   #'  MakeCollateral(DealName = "BondLabPACInverse",
@@ -2293,15 +2535,25 @@
   #'  OrigBal = list("200000000"))
   #' } 
   #'@export
-  MakeCollateral <- function(DealName = "character", Group = numeric(), Cusip = list(), OrigBal = list()){
+  MakeCollateral <- function(DealName = "character", 
+                             Group = numeric(), 
+                             Cusip = list(), 
+                             OrigBal = list()){
     
-    temp <- Collateral(DealName = DealName, Group = Group, Cusip = Cusip, OrigBal = OrigBal)
-    SaveCollGroup(FileName = temp, DealName = DealName, Group = Group)
+    temp <- Collateral(DealName = DealName, 
+                       Group = Group, 
+                       Cusip = Cusip, 
+                       OrigBal = OrigBal)
+    
+    SaveCollGroup(FileName = temp, 
+                  DealName = DealName, 
+                  Group = Group)
     }
   
-  #------------------------------------------------------------------------------------------
+  #-------------------------------------------------------------------------
   # 3) aggregator function for the REMIC structure called by REMIC constructor
-  # the function assembles multiple collateral groups can be extended to loan level
+  # the function assembles multiple collateral groups can be extended to 
+  # loan level
   
   #' A function to aggregate the collateral group information
   #' 
@@ -2309,14 +2561,16 @@
   #' @param NumberofGroups A numeric value the number collateral groups
   #' @param DealName A character string the Deal Name
   #' @export
-  CollateralGroup <- function(NumberofGroups = numeric(), DealName = "character"){
+  CollateralGroup <- function(NumberofGroups = numeric(), 
+                              DealName = "character"){
     
     GroupList <- list()
     
     for(i in 1 : NumberofGroups){
       
      connGroup <- REMICGroupConn(DealName = DealName, Group = i)
-     #connGroup <- gzfile(description = paste("~/BondLab/Groups/",DealName,"_","Group","_",i,".rds", sep = "")) 
+     #connGroup <- gzfile(description = paste("~/BondLab/Groups/",
+     #DealName,"_","Group","_",i,".rds", sep = "")) 
      
      Group <- readRDS(connGroup)
      GroupList <- append(GroupList, Group)
@@ -2325,7 +2579,7 @@
         Group = GroupList)
     
   }
-  # ------ RDME Functions for the REMIC structuring tool ---------------------------------------------------------
+  # ------ RDME Functions for the REMIC structuring tool -----
   # 1) construct the tranche factors with the call to new
 
   RDME <- function(Cusip = "character", 
@@ -2338,17 +2592,18 @@
         Coupon = Coupon,
         Factor = Factor)
   }
-    
 
   
   # 2) serailize tranche factor date to RDME directory
   #' A constructor function for the REMIC Disclosure Month End (RDME) file
   #' 
-  #' A constructor for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
+  #' A constructor for the REMIC Month End Discloure.  This file the 
+  #' monthly factor data for each Tranche
   #' @param DealName A charcter string the deal name
   #' @param TrancheNumber A numeric value the number of the Tranche
   #' @param Cusip A character string the tranche cusip
-  #' @param PaymentDate A character string the payment date coinciding with the factor data
+  #' @param PaymentDate A character string the payment date 
+  #' coinciding with the factor data
   #' @param Coupon A numeric value the tranche's coupon
   #' @param Factor A numeric value the tranche's factor
   #' @examples
@@ -2394,15 +2649,20 @@
                  Factor = Factor)
     
     
-    SaveRDME(FileName = temp, DealName = DealName, TrancheNumber = TrancheNumber)
+    SaveRDME(FileName = temp, 
+             DealName = DealName, 
+             TrancheNumber = TrancheNumber)
   }
   
 
-    # 3) aggregator function for tranche factor information called by REMIC contructor
+    # 3) aggregator function for tranche factor information 
+    # called by REMIC contructor
     #' A function to aggregate monthly updated factor data
     #' 
-    #' Aggregator function used by the REMIC constructor to aggregate Monthly Factor Data
-    #' @param NumberofTranches A numeric value the Number of traches related to the collateral group
+    #' Aggregator function used by the REMIC constructor to aggregate 
+    #' Monthly Factor Data
+    #' @param NumberofTranches A numeric value the Number of traches 
+    #' related to the collateral group
     #' @param DealName A character string the Deal Name
     #' @export
     RDMEData <- function(NumberofTranches = numeric(), DealName = "character"){
@@ -2412,8 +2672,11 @@
       
       
       RDMEFactor <- RDMEFactor(DealName = DealName, TrancheNumber = i)
-      #TrancesFactor <- function(DealName = "character", TrancheNumber = numeric()){
-      #connRDME <- gzfile(description = paste("~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_","Factor",".rds", sep = "")) 
+      #TrancesFactor <- function(DealName = "character", 
+      #TrancheNumber = numeric()){
+      #connRDME <- gzfile(description = paste(
+      #"~/BondLab/RDME/",DealName,"_","Tranche","_",TrancheNumber,"_",
+      #"Factor",".rds", sep = "")) 
       #RDMEFactor <- readRDS(connRDME)
       #return(RDMEFactor)
       #close(connRDME)
@@ -2423,7 +2686,6 @@
     }
     new("TrancheFactors",
         FactorData = RDMEList)
-    
   }
   
   # --- REMIC Constructor Function these functions are used to assemble the 

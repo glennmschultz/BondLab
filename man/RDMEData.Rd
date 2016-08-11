@@ -7,11 +7,13 @@
 RDMEData(NumberofTranches = numeric(), DealName = "character")
 }
 \arguments{
-\item{NumberofTranches}{A numeric value the Number of traches related to the collateral group}
+\item{NumberofTranches}{A numeric value the Number of traches 
+related to the collateral group}
 
 \item{DealName}{A character string the Deal Name}
 }
 \description{
-Aggregator function used by the REMIC constructor to aggregate Monthly Factor Data
+Aggregator function used by the REMIC constructor to aggregate 
+Monthly Factor Data
 }
 

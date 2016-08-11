@@ -12,13 +12,17 @@ MakeCollateral(DealName = "character", Group = numeric(), Cusip = list(),
 
 \item{Group}{A numeric value the collateral group number}
 
-\item{Cusip}{A list the collateral group name, collateral pool cusips, or loan numbers.}
+\item{Cusip}{A list the collateral group name, collateral pool cusips, 
+or loan numbers.}
 
-\item{OrigBal}{A list the original balance of the collateral group name, pool cusip or loan numbers used in the deal}
+\item{OrigBal}{A list the original balance of the collateral group name, 
+pool cusip or loan numbers used in the deal}
 }
 \description{
-Makes Collateral Groups for REMIC structure currently only representative (aggregated collateral groups)
-is supported.  In the future multiple collateral pools or loans are envisioned.
+Makes Collateral Groups for REMIC structure currently only representative
+(aggregated collateral groups)
+is supported.  In the future multiple collateral pools or loans are 
+envisioned.
 }
 \examples{
 \dontrun{

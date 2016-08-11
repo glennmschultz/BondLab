@@ -39,13 +39,17 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 
 \item{TrancheName}{A character string the the Tranche Name}
 
-\item{TranchePrincipal}{A character string the principal type (pass-through, notional)}
+\item{TranchePrincipal}{A character string the principal type 
+(pass-through, notional)}
 
-\item{TranchePrincipalDesc}{A character string the REMIC principal type (sequential, IO, PAC, etc.)}
+\item{TranchePrincipalDesc}{A character string the REMIC principal 
+type (sequential, IO, PAC, etc.)}
 
-\item{TrancheInterestDesc}{A character string the REMIC interest type (Fixed, Floating, Variable)}
+\item{TrancheInterestDesc}{A character string the REMIC interest type 
+(Fixed, Floating, Variable)}
 
-\item{TrancheOtherDescription}{A character string the other REMIC descriptive information}
+\item{TrancheOtherDescription}{A character string the other REMIC 
+descriptive information}
 
 \item{Cusip}{A character string the tranche cusip}
 
@@ -57,11 +61,14 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 
 \item{AccrualRate}{A numeric value the accrual rate on the bond}
 
-\item{TreasuryMaturity}{A numeric value the maturity of the pricing benchmark (Treasury or Swap)}
+\item{TreasuryMaturity}{A numeric value the maturity of the pricing 
+benchmark (Treasury or Swap)}
 
-\item{TreasuryYield}{A numeric value the yield of the pricing benchmark (Treasury or Swap)}
+\item{TreasuryYield}{A numeric value the yield of the pricing 
+benchmark (Treasury or Swap)}
 
-\item{TreasurySpread}{A numeric value the spread over the pricing bechmark (Treasury or Swap)}
+\item{TreasurySpread}{A numeric value the spread over the pricing 
+bechmark (Treasury or Swap)}
 
 \item{TrancheYield}{A numeric value the new issue pricing yield to maturity}
 
@@ -95,7 +102,8 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 
 \item{FloaterIndex}{A character value the floater index name}
 
-\item{InitialIndexValue}{A numeric value the value of the floater's reference index at issuance}
+\item{InitialIndexValue}{A numeric value the value of the floater's 
+reference index at issuance}
 
 \item{FloaterMargin}{A numeric value the floater margin}
 
@@ -107,19 +115,23 @@ MakeTranche(DealName = "character", TrancheNumber = "character",
 
 \item{FloaterInitialCoupon}{A numeric value the floater's new issue coupon}
 
-\item{FloaterResetFrequency}{A numeric value the reset frequency (12 is monthly)}
+\item{FloaterResetFrequency}{A numeric value the reset frequency 
+(12 is monthly)}
 
-\item{FloaterFirstResetDate}{A character string the first reset date following issuance}
+\item{FloaterFirstResetDate}{A character string the first reset 
+date following issuance}
 
 \item{FloaterFormula}{A function the floater coupon formula}
 
 \item{Group}{A numeric value the collateral group number}
 
-\item{TrancheType}{A character value the type of tranche (standard, exchangeable)}
+\item{TrancheType}{A character value the type of tranche 
+(standard, exchangeable)}
 
 \item{Schedule}{A logical indicating the PAC/TAC schedule}
 
-\item{Fixed}{A logical indicating Fixed (TRUE) or Floating (FALSE) coupon}
+\item{Fixed}{A logical indicating Fixed (TRUE) or Floating (FALSE) 
+coupon}
 }
 \description{
 MakeTranche a constructor function used to create a REMIC tranche

@@ -2157,7 +2157,7 @@
             function(object){
               object@Tranches
             })
-
+  
   # Collateral class holds collateral data for each collateral group
   # The collateral class holds pools cusip list and original balance
   # this could be a pairwise JSON file
@@ -2175,6 +2175,29 @@
            Group = "numeric",
            Cusip = "list",
            OrigBal = "list"))
+  
+  setGeneric("Collateral", function(object)
+    {standardGeneric("Collateral")})
+  
+  # Note: standard generic Group is defined above with TrancheDetails
+  # Note: standard generic Cusip is defined in PassThroughConstructor.R
+  
+  setGeneric("OrigBal", function(object)
+    {standardGeneric("OrigBal")})
+  
+  # Initialize collateral  
+  setMethod("initialize",
+            signature ("Collateral"),
+            function (.Object,...,
+                      Group = numeric(),
+                      Cusip = list(),
+                      OrigBal = list()
+            ){callNextMethod(.Object,
+                             Group = Group,
+                             Cusip = Cusip,
+                             OrigBal = OrigBal)
+            })
+  
 
   # Collateral Group Class is an aggregator of the collateral class 
   # This class assembles multiple collateral groups into a list of 
@@ -2240,20 +2263,7 @@
   
  
 
-  # Initialize collateral  
-  setMethod("initialize",
-          signature ("Collateral"),
-          function (.Object,
-                    Group = numeric(),
-                    Cusip = list(),
-                    OrigBal = list()){
-            
-            .Object@Group = Group
-            .Object@Cusip = Cusip
-            .Object@OrigBal = OrigBal
-            return(.Object) 
-          })
-  
+ 
   # Initialize collateralgroup
   setMethod("initialize",
           signature("CollateralGroup"),

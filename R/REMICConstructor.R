@@ -2132,12 +2132,16 @@
          representation(
            Tranches = "list"))
   
+  setGeneric("Tranches", function(Tranches = list())
+    {standardGeneric("Tranches")})
+  
   #' A generic function to access the slot Tranches
   #' 
   #' @param object an S4 class object
   #' @export
-  setGeneric("Tranches", function(object)
-    {standardGeneric("Tranches")})
+  setGeneric("GetTrancheNumber", function(object)
+    {standardGeneric("GetTrancheNumber")})
+  
   
   # Initialize Tranches class object for Tranches
   setMethod("initialize",
@@ -2152,8 +2156,8 @@
   #' A method to access the Tranches from class Tranches
   #' 
   #' @param object an S4 class object of type Tranches
-  #' @exportMethod Tranches
-  setMethod("Tranches", signature("Tranches"),
+  #' @exportMethod GetTrancheNumber
+  setMethod("GetTrancheNumber", signature("Tranches"),
             function(object){
               object@Tranches
             })

@@ -10,7 +10,8 @@ MakeRAID(DealName = "character", Issuer = "character",
   Trustee = "character", PricingSpeed = numeric(),
   JumpReferenceSpeed1 = numeric(), JumpReferenceSpeed2 = numeric(),
   JumpReferenceSpeed3 = numeric(), JumpReferenceSpeed4 = numeric(),
-  NumberofTranches = numeric(), NumberofComponentTranches = numeric(),
+  JumpReferenceSpeed5 = numeric(), NumberofTranches = numeric(),
+  NumberofComponentTranches = numeric(),
   NumberofCombinedTranches = numeric(), NumberofPools = numeric(),
   PacSchedulesIncluded = "logical", NumberofPacSchedules = numeric(),
   NumberofGroups = numeric(), DealSize = numeric(),
@@ -45,6 +46,8 @@ MakeRAID(DealName = "character", Issuer = "character",
 \item{JumpReferenceSpeed3}{A numeric value the Jump Z speed}
 
 \item{JumpReferenceSpeed4}{A numeric value the Jump Z speed}
+
+\item{JumpReferenceSpeed5}{A numeric value the Jump S speed}
 
 \item{NumberofTranches}{A numeric value the number of Tranches}
 

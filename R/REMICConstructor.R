@@ -718,6 +718,7 @@
                    JumpReferenceSpeed2 = numeric(),
                    JumpReferenceSpeed3 = numeric(),
                    JumpReferenceSpeed4 = numeric(),
+                   JumpReferenceSpeed5 = numeric(),
                    NumberofTranches = numeric(),
                    NumberofComponentTranches = numeric(),
                    NumberofCombinedTranches = numeric(),
@@ -751,6 +752,7 @@
         JumpReferenceSpeed2 = JumpReferenceSpeed2,
         JumpReferenceSpeed3 = JumpReferenceSpeed3,
         JumpReferenceSpeed4 = JumpReferenceSpeed4,
+        JumpReferenceSpeed5 = JumpReferenceSpeed5,
         NumberofTranches = NumberofTranches,
         NumberofComponentTranches = NumberofComponentTranches,
         NumberofCombinedTranches = NumberofCombinedTranches,
@@ -789,6 +791,7 @@
   #' @param JumpReferenceSpeed2 A numeric value the Jump Z speed
   #' @param JumpReferenceSpeed3 A numeric value the Jump Z speed
   #' @param JumpReferenceSpeed4 A numeric value the Jump Z speed 
+  #' @param JumpReferenceSpeed5 A numeric value the Jump S speed
   #' @param NumberofTranches A numeric value the number of Tranches
   #' @param NumberofComponentTranches A numeric value the number of 
   #' component Tranches
@@ -828,6 +831,7 @@
                        JumpReferenceSpeed2 = numeric(),
                        JumpReferenceSpeed3 = numeric(),
                        JumpReferenceSpeed4 = numeric(),
+                       JumpReferenceSpeed5 = numeric(),
                        NumberofTranches = numeric(),
                        NumberofComponentTranches = numeric(),
                        NumberofCombinedTranches = numeric(),
@@ -860,6 +864,7 @@
                 JumpReferenceSpeed2 = JumpReferenceSpeed2,
                 JumpReferenceSpeed3 = JumpReferenceSpeed3,
                 JumpReferenceSpeed4 = JumpReferenceSpeed4,
+                JumpReferenceSpeed5 = JumpReferenceSpeed5,
                 NumberofTranches = NumberofTranches,
                 NumberofComponentTranches = NumberofComponentTranches,
                 NumberofCombinedTranches = NumberofCombinedTranches,

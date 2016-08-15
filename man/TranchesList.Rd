@@ -12,6 +12,7 @@ TranchesList(NumberofTranches = numeric(), DealName = "character")
 \item{DealName}{A character string the Deal Name}
 }
 \description{
-Aggregates Tranche data for REMIC constructor
+Aggregates Tranche data for REMIC constructor assembling multiple tranches
+associated with a collateral group or deal
 }
 

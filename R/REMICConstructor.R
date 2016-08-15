@@ -2161,7 +2161,30 @@
             function(object){
               object@Tranches
             })
-  
+
+  # TranchesList assembles the tranches for REMIC structure and is called by 
+  # REMIC constructor function
+  # The function assembles multiple tranches associated with a deal 
+  # building the tranche classes into a list
+
+  #' Aggregator Function for REMIC constructor
+  #' 
+  #' Aggregates Tranche data for REMIC constructor assembling multiple tranches
+  #' associated with a collateral group or deal
+  #' @param NumberofTranches A numeric value the number of tranches in the deal
+  #' @param DealName A character string the Deal Name
+  #' @export
+  TranchesList <- function(NumberofTranches = numeric(), 
+                           DealName = "character"){
+    TrancheList <- list()
+    for(i in 1: NumberofTranches){
+      Tranches <- SaveTranches(DealName = DealName, 
+                               TrancheNumber = as.character(i))
+      TrancheList <- append(TrancheList, Tranches)}
+    
+    new("Tranches",
+        Tranches = TrancheList)}
+
   # Collateral class holds collateral data for each collateral group
   # The collateral class holds pools cusip list and original balance
   # this could be a pairwise JSON file
@@ -2201,7 +2224,6 @@
                              Cusip = Cusip,
                              OrigBal = OrigBal)
             })
-  
 
   # Collateral Group Class is an aggregator of the collateral class 
   # This class assembles multiple collateral groups into a list of 
@@ -2408,27 +2430,7 @@
   
   
  
-  # 3) tranches assembles the tranches for REMIC structure and is called by REMIC constructor function
-  # The function assembles multiple tranches associated with a deal 
-  # building the tranche classes into a list
-  
-  #' Aggregator Function for REMIC constructor
-  #' 
-  #' Aggregates Tranche data for REMIC constructor
-  #' @param NumberofTranches A numeric value the number of tranches in the deal
-  #' @param DealName A character string the Deal Name
-  #' @export
-  TranchesList <- function(NumberofTranches = numeric(), 
-                           DealName = "character"){
-    TrancheList <- list()
-    for(i in 1: NumberofTranches){
-      Tranches <- SaveTranches(DealName = DealName, 
-                               TrancheNumber = as.character(i))
-      TrancheList <- append(TrancheList, Tranches)}
-    
-    new("Tranches",
-        Tranches = TrancheList)}
-
+ 
   # ----------------------------------------------------------------------
   #REMIC Schedules PAC and TAC schedules for REMIC
   #This function is called by MakeSchedules
@@ -2590,9 +2592,7 @@
         Cusip = as.list(Cusip),
         OrigBal = as.list(OrigBal)
     )}
-  
 
-  
   # 2) serialize the collateral information to the groups directory
   #' A constructor function to create the collatreal group file for a REMIC
   #' 

@@ -27,6 +27,7 @@
   #' @slot JumpReferenceSpeed2 A numeric value the Jump Bond Reference Speed2.
   #' @slot JumpReferenceSpeed3 A numeric value the Jump Bond Reference Speed3.
   #' @slot JumpReferenceSpeed4 A numeric value the Jump Bond Reference Speed4.
+  #' @slot JumpReferenceSpeed5 A numeric value the Jump Bond Reference Speed5.
   #' @slot NumberofTranches A numeric value the number of Tranches.
   #' @slot NumberofComponentTranches A numeric value the number of Component
   #' Tranches in the deal.
@@ -72,6 +73,7 @@
            JumpReferenceSpeed2 = "numeric",
            JumpReferenceSpeed3 = "numeric",
            JumpReferenceSpeed4 = "numeric",
+           JumpReferenceSpeed5 = "numeric",
            NumberofTranches = "numeric",
            NumberofComponentTranches = "numeric",
            NumberofCombinedTranches = "numeric",
@@ -104,6 +106,7 @@
                                JumpReferenceSpeed2 = "numeric",
                                JumpReferenceSpeed3 = "numeric",
                                JumpReferenceSpeed4 = "numeric",
+                               JumpReferenceSpeed5 = "numeric",
                                NumberofTranches = "numeric",
                                NumberofComponentTranches = "numeric",
                                NumberofCombinedTranches = "numeric",
@@ -208,6 +211,13 @@
   #' @export
   setGeneric("JumpReferenceSpeed4", function(object)
     {standardGeneric("JumpReferenceSpeed4")})
+  
+  #' generic function to access the slot JumpReferenceSpeed5
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("JumpReferenceSpeed5", function(object)
+    {standardGeneric("JumpReferenceSpeed5")})
   
   #' A generic function to access the slot NumberofTranches
   #' 
@@ -358,6 +368,7 @@
                       JumpReferenceSpeed2 = numeric(),
                       JumpReferenceSpeed3 = numeric(),
                       JumpReferenceSpeed4 = numeric(),
+                      JumpReferenceSpeed5 = numeric(),
                       NumberofTranches = numeric(),
                       NumberofComponentTranches = numeric(),
                       NumberofCombinedTranches = numeric(),
@@ -391,6 +402,7 @@
                         JumpReferenceSpeed2 = JumpReferenceSpeed2,
                         JumpReferenceSpeed3 = JumpReferenceSpeed3,
                         JumpReferenceSpeed4 = JumpReferenceSpeed4,
+                        JumpReferenceSpeed5 = JumpReferenceSpeed5,
                         NumberofTranches = NumberofTranches,
                         NumberofComponentTranches = NumberofComponentTranches,
                         NumberofCombinedTranches = NumberofCombinedTranches,
@@ -518,6 +530,15 @@
   setMethod("JumpReferenceSpeed4", signature("RAID"),
             function(object){
               object@JumpReferenceSpeed4
+            })
+  
+  #' A method to access the slot JumpReferenceSpeed5 from class RAID
+  #' 
+  #' @param object an S4 class of typre RAID
+  #' @exportMethod JumpReferenceSpeed5
+  setMethod("JumpReferenceSpeed5", signature("RAID"),
+            function(object){
+              object@JumpReferenceSpeed5
             })
   
   #' A method to access the slot NumberofTranches from class RAID

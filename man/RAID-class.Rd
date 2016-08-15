@@ -35,6 +35,8 @@ static data describing the REMIC at the time of issuance
 
 \item{\code{JumpReferenceSpeed4}}{A numeric value the Jump Bond Reference Speed4.}
 
+\item{\code{JumpReferenceSpeed5}}{A numeric value the Jump Bond Reference Speed5.}
+
 \item{\code{NumberofTranches}}{A numeric value the number of Tranches.}
 
 \item{\code{NumberofComponentTranches}}{A numeric value the number of Component

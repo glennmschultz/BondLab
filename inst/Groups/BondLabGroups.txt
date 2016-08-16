@@ -1,0 +1,1 @@
+This folder holds collateral groups data.  Collateral groups are part of the REMIC structuring tool and analysis.  Do not delete this file.  R will remove all empty directories at build time and the REMIC analytics and structuring tools will not work.

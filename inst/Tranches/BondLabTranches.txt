@@ -1,0 +1,1 @@
+This folder holds Bond Lab Tranches data.  The tranche data is copied to BondData folder while Tranches data folder is used to construct the REMIC.  Do not delete this folder as R will remove empty directories at build time and the user will be unable to save and recall tranches data.

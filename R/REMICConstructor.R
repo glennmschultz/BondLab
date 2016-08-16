@@ -2225,7 +2225,7 @@
   #' @exportClass Collateral
   setClass("Collateral",
          representation(
-           Group = "numeric",
+           Group = "character",
            Cusip = "list",
            OrigBal = "list"))
   
@@ -2233,22 +2233,58 @@
     {standardGeneric("Collateral")})
   
   # Note: standard generic Group is defined above with TrancheDetails
-  # Note: standard generic Cusip is defined in PassThroughConstructor.R
+ 
+  #' A generic function to access a cusip list slot
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("CusipList", function(object)
+    {standardGeneric("CusipList")})
   
-  setGeneric("OrigBal", function(object)
-    {standardGeneric("OrigBal")})
+  #' A generic function to access a OrigBal list slot
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("OrigBalList", function(object)
+    {standardGeneric("OrigBalList")})
   
   # Initialize collateral  
   setMethod("initialize",
             signature ("Collateral"),
             function (.Object,...,
-                      Group = numeric(),
+                      Group = "character",
                       Cusip = list(),
                       OrigBal = list()
             ){callNextMethod(.Object,
                              Group = Group,
                              Cusip = Cusip,
                              OrigBal = OrigBal)
+            })
+  #' A method to access the GroupNumber from S4 class Collateral
+  #' 
+  #' @param object An S4 class object of the type Collateral
+  #' @exportMethod Group
+  setMethod("Group", signature("Collateral"),
+            function(object){
+              object@Group
+            })
+  
+  #' A method ot access the cusip list from S4 class Collateral
+  #' 
+  #' @param object An S4 class object of the type Collateral
+  #' @exportMethod CusipList
+  setMethod("CusipList", signature("Collateral"),
+            function(object){
+              object@Cusip
+            })
+  
+  #' A method to access the original bal list from S4 class Collateral
+  #' 
+  #' @param object An S4 class object of the type Collaeral
+  #' @exportMethod OrigBalList
+  setMethod("OrigBalList", signature("Collateral"),
+            function(object){
+              object@OrigBal
             })
 
   # Collateral Group Class is an aggregator of the collateral class 
@@ -2264,6 +2300,16 @@
   setClass("CollateralGroup",
          representation(
            Group = "list"))
+  
+  setGeneric("CollateralGroup", function(object)
+    {standardGeneric("CollateralGroup")})
+  
+  #' A standard generic function to access the CollateralGroup list
+  #' 
+  #' @param object an list of S4 objects
+  #' @export
+  setGeneric("CollateralGroups", function(object)
+    {standardGeneric("CollateralGroups")})
 
   # Schedule is the projected schedule for a PAC/TAC Schedule
   # the scheduled balance are used to compute PAC/TAC Schedule

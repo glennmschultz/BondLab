@@ -1,1 +1,2 @@
-This file is here so that the folder is not empty and ignored
+This folder holds the cash flow data created during a total return scenario analysis
+do not delete this file or R will remove the folder at build time and scenario analysis will fail.

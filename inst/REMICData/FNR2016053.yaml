@@ -1,0 +1,34 @@
+name: Deal
+1:
+    name: AF
+    principaldesc: PT
+    interestdesc: FLT
+    coupon: 0.95
+    origbal: 38400349
+    factor: 1
+    currbal: 38400349
+    index: LIBOR1BBA
+    cap: 6.50
+    floor: 0.50
+    multiplier: 1
+2:
+    name: AS
+    principaldesc: NTL
+    interestdesc: INVIO
+    coupon: 5.55
+    origbal: 38400349
+    factor: 1
+    currbal: 38400349
+    index: LIBOR1BBA
+    cap: 6.00
+    floor: 0
+    multiplier: -1
+
+
+
+
+
+
+
+
+

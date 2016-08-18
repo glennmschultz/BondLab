@@ -70,6 +70,7 @@ Collate:
     'PrepaymentModelFunctions.R'
     'REMICConstructor.R'
     'REMICCusip.R'
+    'REMICStructuringFunctions.R'
     'RatesData.R'
     'StructuringFunctions.R'
     'TimeValueFunction.R'

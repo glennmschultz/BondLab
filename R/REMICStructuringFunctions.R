@@ -35,11 +35,16 @@
       settlement.date = settlement.date,
       principal = principal,
       PrepaymentAssumption = Vector)}
+
     
-    #' A function to calculate REMIC deal original balance on data.tree
+    #' A function to calculate the floater coupon 
     #' 
-    #' Function calculates original balance across tree
-    #' @export DealCurrBal
-    DealCurrBal <- function(self){
-      sum(sapply(self$children, function(x){x$origbal}))
-    }
+    #' The function calculates the floater coupon given
+    #' @param cap a numeric value the floater cap
+    #' @param floor a numeric value the floater floor
+    #' @param margin a numeric value the floater margin
+    #' @param index a numeric value the index value
+    #' @param multiplier a numeric value the index multiplier
+    #' @export FloatCoupon
+    FloatCoupon <- function(cap, floor, margin, index, multiplier){
+      min(cap, max((index * multiplier) + margin, floor))}

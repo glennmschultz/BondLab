@@ -15,6 +15,72 @@
   #' @include PassThroughConstructor.R PriceYieldClasses.R
   NULL
   
+  #' An S4 class PassThroughScenarios
+  #' 
+  #' @slot PrepaymentType A character the prepayment type (i.e. "CPR", "MODEL")
+  #' @slot PrepaymentScenario A character prepayment value (i.e. "25", "D25s")
+  #' @exportClass PriceYieldScenarioSet
+  setClass("PriceYieldScenarioSet",
+           representation(
+             PrepaymentType = "list",
+             PrepaymentScenario = "list"
+           ))
+  
+  setGeneric("PriceYieldScenarioSet", function(PrepaymentType = list(),
+                                               PrepaymentScenario = list())
+    {standardGeneric("PriceYieldScenarioSet")})
+  
+  #' A generic functon to access the slot PrepaymentType
+  #' 
+  #' @param object an S4 class object
+  #' @export PrepaymentType
+  setGeneric("PrepaymentType", function(object)
+    {standardGeneric("PrepaymentType")})
+  
+  #' A generic function to access the slot PrepaymentScenario
+  #' 
+  #' @param object an S4 class object
+  #' @export PrepaymentScenario
+  setGeneric("PrepaymentScenario", function(object)
+    {standardGeneric("PrepaymentScenario")})
+  
+  #' generic function to access both slots of PrepaymentScenario
+  #' 
+  #' @param object an S4 class object
+  #' @param ... optional arguments
+  #' @export PriceYieldScenario
+  setGeneric("PriceYieldScenario", function(object,...)
+    {standardGeneric("PriceYieldScenario")})
+  
+  setMethod("initialize",
+            signature("PriceYieldScenarioSet"),
+            function(.Object,
+                     PrepaymentType = "list",
+                     PrepaymentScenario = "list",
+                     ...){
+              callNextMethod(.Object,
+                             PrepaymentType = PrepaymentType,
+                             PrepaymentScenario = PrepaymentScenario,
+                             ...)
+            }
+  )
+  
+  #' A method to extract a Price/Yield Scenario Pair
+  #' 
+  #' @param object an S4 object of type PriceYieldScenarioSet
+  #' @param scenario an numeric value the location of the scenario
+  #' @exportMethod PriceYieldScenario
+  setMethod("PriceYieldScenario", signature("PriceYieldScenarioSet"),
+            function(object, scenario = numeric()){
+              c(object@PrepaymentType,
+                object@PrepaymentScenario)
+            })
+  
+  
+  
+  
+  
+  
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security
   #' 

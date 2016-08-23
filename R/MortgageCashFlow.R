@@ -65,6 +65,24 @@
             }
   )
   
+  #' A method to extract the PrepaymentType from class PriceYieldScenarioSet
+  #' 
+  #' @param object an S4 object of the typre PriceYieldScenarioSet
+  #' @exportMethod PrepaymentType
+  setMethod("PrepaymentType", signature("PriceYieldScenarioSet"),
+            function(object){
+              object@PrepaymentType
+            })
+  
+  #' A method to extract the PrepaymentScenario from class PriceYieldScenarioSet
+  #'
+  #'@param object an S4 object of the type PriceYieldScenarioSet
+  #'@exportMethod PrepaymentScenario
+  setMethod("PrepaymentScenario", signature("PriceYieldScenarioSet"),
+            function(object){
+              object@PrepaymentScenario
+            })
+  
   #' A method to extract a Price/Yield Scenario Pair
   #' 
   #' @param object an S4 object of type PriceYieldScenarioSet
@@ -72,14 +90,38 @@
   #' @exportMethod PriceYieldScenario
   setMethod("PriceYieldScenario", signature("PriceYieldScenarioSet"),
             function(object, scenario = numeric()){
-              c(object@PrepaymentType,
-                object@PrepaymentScenario)
+              c(object@PrepaymentType[scenario],
+                object@PrepaymentScenario[scenario])
             })
   
+  #' A function to convert Price Yield data to class PriceYieldScenarioSet
+  #' 
+  #' @param PrepaymentType a list of the prepayment type
+  #' @param PrepaymentScenario a list of the prepayment scenario corresponding
+  #' to the prepayment type
+  #' @export
+  PriceYieldScenarioSet <- function(PrepaymentType = "list",
+                                    PrepaymentScenario = "list"){
+    new("PriceYieldScenarioSet",
+        PrepaymentType = PrepaymentType,
+        PrepaymentScenario = PrepaymentScenario)
   
+  }
   
-  
-  
+  #' A function to test the validity of PriceYieldScenarioSet object
+  #' 
+  #' Validity test of the PriceYieldScenarioSet object test if the length
+  #' of the PrepaymentType and the PrepaymentScenario are equal
+  #' @param object an S4 object of type PriceYieldScenarioSet
+  #' @export ValidPriceYieldScenarioSet
+  ValidPriceYieldScenarioSet <- function(object){
+    if(length(object@PrepaymentType) == length(object@PrepaymentScenario))
+       TRUE
+       else
+      paste("Lengths of PrepaymentType(", length(object@PrepaymentType), ")",
+          "and PrepaymentScenario (", length(object@PrepaymentScenario), ")",
+          "should be equal", sep = " ")
+    }
   
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security

@@ -7,12 +7,14 @@
 MortgageCashFlowArray(CashFlowArray = array())
 }
 \arguments{
-\item{CashFlowArray}{an array of cashflows the user would like to pass to a function}
+\item{CashFlowArray}{an array of cashflows the user would like to pass 
+to a function}
 }
 \description{
 The MortgageCashFlowArray function can be used to pass a cashflow
 array to a computation engine by passing the internal cashflow engines
-this function can be useful when using distributed processing and/or external
+this function can be useful when using distributed processing and/or 
+external
 prepayment and interest rate models
 }
 

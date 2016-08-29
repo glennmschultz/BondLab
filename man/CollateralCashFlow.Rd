@@ -19,6 +19,8 @@ CollateralCashFlow(bond.id = "character", settlement.date = "character",
 \item{PSA}{the PSA assumtion used to price the deal}
 }
 \description{
-Calculate the REMIC collateral cashflow
+Calculate the REMIC collateral cashflow.  This function is used to
+structure a REMIC at the pricing speed.  This function is also used to 
+reverse engineer a REMIC
 }
 

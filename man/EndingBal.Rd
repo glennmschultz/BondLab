@@ -9,12 +9,14 @@ EndingBal(node, period = numeric())
 \arguments{
 \item{node}{The entry point of the deal's tree structure}
 
-\item{period}{A numeric value the period in which payment is received stated as integer}
+\item{period}{A numeric value the period in which payment is received 
+stated as integer}
 }
 \description{
-This function takes the beginning balance of the current period to calculate the 
-ending balance of the current period based on the principal paid in the period.  The
-principal paid in the period is passed via the node$Principal argument 
-Structuring functions run on a tree structure created by the package data.tree
+This function takes the beginning balance of the current period to 
+calculate the ending balance of the current period based on the principal 
+paid in the period.  The principal paid in the period is passed via the 
+node$Principal argument Structuring functions run on a tree structure 
+created by the package data.tree
 }
 

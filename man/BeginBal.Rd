@@ -9,11 +9,13 @@ BeginBal(node, period = numeric())
 \arguments{
 \item{node}{The entry point of the deal's tree structure.}
 
-\item{period}{A numeric value the period in which payment is recieved stated as an integer.}
+\item{period}{A numeric value the period in which payment is recieved 
+stated as an integer.}
 }
 \description{
 This function takes the ending balance of the previous period and assigns
-the value to the beginning balance in the current period. Structuring functions
-run on a tree structure created by the package data.tree.  See data.tree for more details on the package.
+the value to the beginning balance in the current period. Structuring 
+functions run on a tree structure created by the package data.tree.  
+See data.tree for more details on the package.
 }
 

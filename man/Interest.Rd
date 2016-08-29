@@ -2,7 +2,8 @@
 % Please edit documentation in R/REMICStructuringFunctions.R
 \name{Interest}
 \alias{Interest}
-\title{Function to calculate interest in the current period based on Beginning Balance}
+\title{Function to calculate interest in the current period based on Beginning 
+Balance.}
 \usage{
 Interest(node, frequency, period = numeric())
 }
@@ -11,12 +12,14 @@ Interest(node, frequency, period = numeric())
 
 \item{frequency}{the number of payments received over the calendar year}
 
-\item{period}{A numeric value the period in which payment is received stated as integer}
+\item{period}{A numeric value the period in which payment is received 
+stated as integer}
 }
 \description{
-The function takes beginning balance and frequency and period to calculate interest
-due the investor in the period.  The coupon is passed via the node argument from the
-deal's tree structure.  Structuring functions run on a tree structure created by the 
+The function takes beginning balance and frequency and period to 
+calculate interest due the investor in the period.  The coupon is passed 
+via the node argument from the deal's tree structure.  Structuring 
+functions run on a tree structure created by the 
 package data.tree.  See data.tree for more details on the package.
 }
 

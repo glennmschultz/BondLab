@@ -55,7 +55,23 @@
       close(connMBSDetails)}
 
   setGeneric("SaveMBS", function(filename = "character")
-    {standardGeneric("SaveMBS")})  
+    {standardGeneric("SaveMBS")})
+  
+  #' A connection function to BondData folder saved MBS cusip Detail
+  #' 
+  #' Opens a connection to BondData folder to save bond cusip detail
+  #' @param filename A character string the file name to save the 
+  #' default is temp
+  #' @export
+  SaveBond <- function(filename = "character"){
+    connBondDetails <- gzfile(
+      description = paste(system.file(package = "BondLab"),
+                          "/BondData/", filename@ID, ".rds", sep = ""))
+    saveRDS(filename, connBondDetails)
+    close(connBondDetails)}
+  
+  setGeneric("SaveBond", function(filename = "character")
+  {standardGeneric("SaveBond")})  
 
   #' A connection function to the RatesData folder to call swap curve data
   #' 

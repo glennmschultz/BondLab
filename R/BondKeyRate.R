@@ -173,7 +173,7 @@
                          dimnames = list(seq(1:360), c("period", "cashflow")))
   
   #Initialze the spot rate array for key rate duration calculations
-  SpotRate <- as.matrix(TermStructure@spotrate)
+  SpotRate <- as.matrix(TermStructure@SpotRate)
   
   # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS coefficients from Term Stucture
   # and then populate and align the cashflow array for discounting and key rate computations

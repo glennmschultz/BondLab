@@ -57,59 +57,60 @@
                    KeyRateDuration = "numeric",
                    KeyRateConvexity = "numeric",
                    # ----------- Term Structure ---------
-                   tradedate = "character",
-                   period = "numeric",
-                   date = "character",
-                   spotrate = "numeric",
-                   forwardrate = "numeric",
+                   TradeDate = "character",
+                   #Period = "numeric",
+                   Date = "character",
+                   SpotRate = "numeric",
+                   ForwardRate = "numeric",
                    TwoYearFwd = "numeric",
-                   TenYearFwd = "numeric")
-            {
-            .Object@Cusip = Cusip
-            .Object@ID = ID
-            .Object@BondType = BondType
-            .Object@Sector = Sector
-            .Object@Coupon = Coupon
-            .Object@IssueDate = IssueDate
-            .Object@DatedDate = DatedDate
-            .Object@Maturity = Maturity
-            .Object@LastPmtDate = LastPmtDate
-            .Object@NextPmtDate = NextPmtDate
-            .Object@Moody = Moody
-            .Object@SP = SP
-            .Object@BondLab  = BondLab
-            .Object@Frequency = Frequency
-            .Object@BondBasis = BondBasis
-            .Object@Callable = Callable
-            .Object@Putable = Putable
-            .Object@SinkingFund = SinkingFund
-            .Object@Price = Price
-            .Object@Accrued = Accrued
-            .Object@YieldToMaturity = YieldToMaturity
-            .Object@WAL = WAL
-            .Object@ModDuration = ModDuration
-            .Object@Convexity = Convexity
-            .Object@Period = Period
-            .Object@PmtDate = PmtDate
-            .Object@TimePeriod = TimePeriod
-            .Object@PrincipalOutstanding = PrincipalOutstanding  
-            .Object@CouponPmt = CouponPmt
-            .Object@TotalCashFlow = TotalCashFlow
-            .Object@SpotSpread = SpotSpread   
-            .Object@EffDuration = EffDuration
-            .Object@EffConvexity = EffConvexity
-            .Object@KeyRateTenor = KeyRateTenor
-            .Object@KeyRateDuration = KeyRateDuration
-            .Object@KeyRateConvexity = KeyRateConvexity
-            .Object@tradedate = tradedate
-            .Object@period = period
-            .Object@date = date
-            .Object@spotrate = spotrate
-            .Object@forwardrate = forwardrate
-            .Object@TwoYearFwd = TwoYearFwd
-            .Object@TenYearFwd = TenYearFwd
-            
-            return(.Object)})
+                   TenYearFwd = "numeric",
+                   ...){
+            callNextMethod(.Object,
+                           Cusip = Cusip,
+                           ID = ID,
+                           BondType = BondType,
+                           Sector = Sector,
+                           Coupon = Coupon,
+                           IssueDate = IssueDate,
+                           DatedDate = DatedDate,
+                           Maturity = Maturity,
+                           LastPmtDate = LastPmtDate,
+                           NextPmtDate = NextPmtDate,
+                           Moody = Moody,
+                           SP = SP,
+                           BondLab  = BondLab,
+                           Frequency = Frequency,
+                           BondBasis = BondBasis,
+                           Callable = Callable,
+                           Putable = Putable,
+                           SinkingFund = SinkingFund,
+                           Price = Price,
+                           Accrued = Accrued,
+                           YieldToMaturity = YieldToMaturity,
+                           WAL = WAL,
+                           ModDuration = ModDuration,
+                           Convexity = Convexity,
+                           Period = Period,
+                           PmtDate = PmtDate,
+                           TimePeriod = TimePeriod,
+                           PrincipalOutstanding = PrincipalOutstanding,
+                           CouponPmt = CouponPmt,
+                           TotalCashFlow = TotalCashFlow,
+                           SpotSpread = SpotSpread,
+                           EffDuration = EffDuration,
+                           EffConvexity = EffConvexity,
+                           KeyRateTenor = KeyRateTenor,
+                           KeyRateDuration = KeyRateDuration,
+                           KeyRateConvexity = KeyRateConvexity,
+                           TradeDate = TradeDate,
+                           Period = Period,
+                           Date = Date,
+                           SpotRate = SpotRate,
+                           ForwardRate = ForwardRate,
+                           TwoYearFwd = TwoYearFwd,
+                           TenYearFwd = TenYearFwd,
+            ...)
+            })
   
   setGeneric("BondAnalytics", function (bond.id = "character", 
                                         principal = numeric(), 
@@ -218,11 +219,11 @@
   KeyRateDuration = BondTermStructure@KeyRateDuration,
   KeyRateConvexity = BondTermStructure@KeyRateConvexity,
   # ----------- Term Structure ---------
-  tradedate = TermStructure@tradedate,
-  period = TermStructure@period,
-  date = TermStructure@date,
-  spotrate = TermStructure@spotrate,
-  forwardrate = TermStructure@forwardrate,
+  TradeDate = TermStructure@TradeDate,
+  #Period = TermStructure@Period,
+  Date = TermStructure@Date,
+  SpotRate = TermStructure@SpotRate,
+  ForwardRate = TermStructure@ForwardRate,
   TwoYearFwd = TermStructure@TwoYearFwd,
   TenYearFwd = TermStructure@TenYearFwd)
   }

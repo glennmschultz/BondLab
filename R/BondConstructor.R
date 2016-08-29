@@ -226,11 +226,8 @@
       Putable = Putable,
       SinkingFund = SinkingFund
       )
-<<<<<<< HEAD
- SaveBond(filename = temp)   
-=======
     SaveBond(filename = temp)
->>>>>>> master
+
 #connBondDetails <- gzfile(description = paste("~/BondLab/BondData/",temp@ID,".rds", sep = ""))
 #saveRDS(temp, connBondDetails)
 #close(connBondDetails)

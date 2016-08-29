@@ -26,6 +26,8 @@
   #' @param step A numeric value the time step
   #' @param sigma A numeric value the volatility not annualized
   #' @param N the number of paths
+  #' @importFrom stats rnorm
+  #' @importFrom stats uniroot
   #' @export
   CIRSim <- function(shortrate = numeric(), 
                    kappa = numeric(), 

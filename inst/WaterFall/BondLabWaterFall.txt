@@ -1,0 +1,1 @@
+This folder holds the waterfall logic.  Waterfalls are build using the package data.tree.  Do not remove this folder R will delete empty directories at build time and the user will be unable to save and recall waterfall logic.

@@ -7,9 +7,11 @@
 SaveModelFunctions(ModelFile = "character")
 }
 \arguments{
-\item{ModelFile}{A character string the model functions class default value is temp}
+\item{ModelFile}{A character string the model functions class default 
+value is temp}
 }
 \description{
-Opens a connection to the PrepaymentModel folder to save the ModelFunctions class
+Opens a connection to the PrepaymentModel folder to save the 
+ModelFunctions class
 }
 

@@ -12,8 +12,116 @@
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
-  #' @include PassThroughConstructor.R
+  #' @include PassThroughConstructor.R PriceYieldClasses.R
   NULL
+  
+  #' An S4 class PassThroughScenarios
+  #' 
+  #' @slot PrepaymentType A character the prepayment type (i.e. "CPR", "MODEL")
+  #' @slot PrepaymentScenario A character prepayment value (i.e. "25", "D25s")
+  #' @exportClass PriceYieldScenarioSet
+  setClass("PriceYieldScenarioSet",
+           representation(
+             PrepaymentType = "list",
+             PrepaymentScenario = "list"
+           ))
+  
+  setGeneric("PriceYieldScenarioSet", function(PrepaymentType = list(),
+                                               PrepaymentScenario = list())
+    {standardGeneric("PriceYieldScenarioSet")})
+  
+  #' A generic functon to access the slot PrepaymentType
+  #' 
+  #' @param object an S4 class object
+  #' @export PrepaymentType
+  setGeneric("PrepaymentType", function(object)
+    {standardGeneric("PrepaymentType")})
+  
+  #' A generic function to access the slot PrepaymentScenario
+  #' 
+  #' @param object an S4 class object
+  #' @export PrepaymentScenario
+  setGeneric("PrepaymentScenario", function(object)
+    {standardGeneric("PrepaymentScenario")})
+  
+  #' generic function to access both slots of PrepaymentScenario
+  #' 
+  #' @param object an S4 class object
+  #' @param ... optional arguments
+  #' @export PriceYieldScenario
+  setGeneric("PriceYieldScenario", function(object,...)
+    {standardGeneric("PriceYieldScenario")})
+  
+  setMethod("initialize",
+            signature("PriceYieldScenarioSet"),
+            function(.Object,
+                     PrepaymentType = "list",
+                     PrepaymentScenario = "list",
+                     ...){
+              callNextMethod(.Object,
+                             PrepaymentType = PrepaymentType,
+                             PrepaymentScenario = PrepaymentScenario,
+                             ...)
+            }
+  )
+  
+  #' A method to extract the PrepaymentType from class PriceYieldScenarioSet
+  #' 
+  #' @param object an S4 object of the typre PriceYieldScenarioSet
+  #' @exportMethod PrepaymentType
+  setMethod("PrepaymentType", signature("PriceYieldScenarioSet"),
+            function(object){
+              object@PrepaymentType
+            })
+  
+  #' A method to extract the PrepaymentScenario from class PriceYieldScenarioSet
+  #'
+  #'@param object an S4 object of the type PriceYieldScenarioSet
+  #'@exportMethod PrepaymentScenario
+  setMethod("PrepaymentScenario", signature("PriceYieldScenarioSet"),
+            function(object){
+              object@PrepaymentScenario
+            })
+  
+  #' A method to extract a Price/Yield Scenario Pair
+  #' 
+  #' @param object an S4 object of type PriceYieldScenarioSet
+  #' @param scenario an numeric value the location of the scenario
+  #' @exportMethod PriceYieldScenario
+  setMethod("PriceYieldScenario", signature("PriceYieldScenarioSet"),
+            function(object, scenario = numeric()){
+              c(object@PrepaymentType[scenario],
+                object@PrepaymentScenario[scenario])
+            })
+  
+  #' A function to convert Price Yield data to class PriceYieldScenarioSet
+  #' 
+  #' @param PrepaymentType a list of the prepayment type
+  #' @param PrepaymentScenario a list of the prepayment scenario corresponding
+  #' to the prepayment type
+  #' @export
+  PriceYieldScenarioSet <- function(PrepaymentType = "list",
+                                    PrepaymentScenario = "list"){
+    new("PriceYieldScenarioSet",
+        PrepaymentType = PrepaymentType,
+        PrepaymentScenario = PrepaymentScenario)
+  
+  }
+  
+  #' A function to test the validity of PriceYieldScenarioSet object
+  #' 
+  #' Validity test of the PriceYieldScenarioSet object test if the length
+  #' of the PrepaymentType and the PrepaymentScenario are equal
+  #' @param object an S4 object of type PriceYieldScenarioSet
+  #' @export ValidPriceYieldScenarioSet
+  ValidPriceYieldScenarioSet <- function(object){
+    if(length(object@PrepaymentType) == length(object@PrepaymentScenario))
+       TRUE
+       else
+      paste("Lengths of PrepaymentType(", length(object@PrepaymentType), ")",
+          "and PrepaymentScenario (", length(object@PrepaymentScenario), ")",
+          "should be equal", sep = " ")
+    }
   
   #' An S4 class MortgageCashFlow containing cashflow data 
   #' for a mortgage pass-through security
@@ -159,13 +267,13 @@
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("ScheduledPrin", function(object)
-    {standardGeneric})
+    {standardGeneric("ScheduledPrin")})
   
   #' A generic function to access to the slot PrepaidPrin
   #' @param object an S4 class object of the type MortgageCashFlow
   #' @export
   setGeneric("PrepaidPrin", function(object)
-    {standardGeneric})
+    {standardGeneric("PrepaidPrin")})
     
   #' A standard generic function to access the slot DefaultedPrin
   #' @param object an S4 class object of type MortgageCashFlow
@@ -437,7 +545,7 @@
   MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              settlement.date = "character",
-                             price = numeric(),
+                             price = "character",
                              PrepaymentAssumption = "character"){
   
   #This function error traps mortgage bond inputs
@@ -445,6 +553,8 @@
             principal = original.bal, 
             settlement.date = settlement.date, 
             price = price)
+    
+  Price <- PriceTypes(Price = price)
   
   issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
   start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
@@ -459,10 +569,6 @@
   note.rate = GWac(bond.id)
   WAM = WAM(bond.id)
   
-  
-  #  Validate the price and coupon passed through the error trapping function
-  #  This validates that the correct unit is passed into the Bond Cash Flow function
-  if(price <= 1) {price = price} else {price = price/price.basis}
   
   # calculate beginning balance (principal) from the MBS pool factor
   # accrued interest is calculated using the current factor
@@ -518,7 +624,7 @@
                   accrued.interest){
   #pv = cashflow * exp(rate * -time.period)
   pv = cashflow * 1/(1+rate) ^ time.period
-  proceeds = principal * price
+  proceeds = principal * PriceBasis(Price)
   sum(pv) - (proceeds + accrued.interest)}
   
   
@@ -530,7 +636,7 @@
           time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
           cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
           principal = AdjPrincipal, 
-          price = price, 
+          price = PriceBasis(Price), 
           accrued.interest = accrued.interest)$root)
     
   # Convert to semi-bond equivalent
@@ -549,7 +655,8 @@
   #Step8 Risk measures Duration Factors
   MBS.CF.Table[,"Duration"] = 
     MBS.CF.Table[,"Time"] * 
-    (MBS.CF.Table[,"Present Value"]/((principal * price) + accrued.interest))
+    (MBS.CF.Table[,"Present Value"]/
+       ((principal * PriceBasis(Price)) + accrued.interest))
   
   # Weighted Average Life 
   WAL = 
@@ -566,7 +673,7 @@
   MBS.CF.Table[,"CashFlow Convexity"] = 
   (MBS.CF.Table[,"Investor CashFlow"]/((1 + ((Yield.To.Maturity)/frequency)) ^ 
     ((MBS.CF.Table[,"Time"] + 2) * frequency)))/ 
-    ((principal * price) + accrued.interest)
+    ((principal * PriceBasis(Price)) + accrued.interest)
   
   MBS.CF.Table[,"Convexity"] = 
     MBS.CF.Table[,"Convexity Time"] * MBS.CF.Table[,"CashFlow Convexity"] 
@@ -578,7 +685,7 @@
   
   #Create Class Mortgage Loan Cashflows
   new("MortgageCashFlow",
-      Price = price * price.basis,
+      Price = PriceDecimal(Price),
       Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity * yield.basis,
       WAL = WAL,

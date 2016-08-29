@@ -8,7 +8,7 @@
 \S4method{Price}{BondCashFlows}(object)
 }
 \arguments{
-\item{object}{the name of the S4 object}
+\item{object}{the name of the S4 object BondCashFlows}
 }
 \description{
 Method to extract Price from S4 class

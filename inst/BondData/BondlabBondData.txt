@@ -1,0 +1,2 @@
+This folder holds the bond cusip data. The folder holds cusip data for all bonds
+government, corporate, MBS, and REMIC tranches. Do not remove this file R will remove any empty directories at build time and the user will be unable to store cusip data in Bond Lab.

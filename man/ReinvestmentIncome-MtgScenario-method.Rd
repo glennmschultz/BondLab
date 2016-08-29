@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ReinvestmentIncome,MtgScenario-method}
 \alias{ReinvestmentIncome,MtgScenario-method}
-\title{A method to extract Reinvestment Income from S4 class MtgScenario}
+\title{A method to extract ReinvestmentIncome from S4 class MtgScenario}
 \usage{
 \S4method{ReinvestmentIncome}{MtgScenario}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of an S4 class of type MtgScenario}
 }
 \description{
-A method to extract Reinvestment Income from S4 class MtgScenario
+A method to extract ReinvestmentIncome from S4 class MtgScenario
 }
 

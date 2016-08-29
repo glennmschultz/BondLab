@@ -35,9 +35,11 @@
   #' 
   #' The MortgageCashFlowArray function can be used to pass a cashflow
   #' array to a computation engine by passing the internal cashflow engines
-  #' this function can be useful when using distributed processing and/or external
+  #' this function can be useful when using distributed processing and/or 
+  #' external
   #' prepayment and interest rate models
-  #' @param CashFlowArray an array of cashflows the user would like to pass to a function
+  #' @param CashFlowArray an array of cashflows the user would like to pass 
+  #' to a function
   #' @export MortgageCashFlowArray 
   MortgageCashFlowArray <- function(CashFlowArray = array()){
     new("MortgageCashFlowArray",

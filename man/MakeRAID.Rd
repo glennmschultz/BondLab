@@ -10,7 +10,8 @@ MakeRAID(DealName = "character", Issuer = "character",
   Trustee = "character", PricingSpeed = numeric(),
   JumpReferenceSpeed1 = numeric(), JumpReferenceSpeed2 = numeric(),
   JumpReferenceSpeed3 = numeric(), JumpReferenceSpeed4 = numeric(),
-  NumberofTranches = numeric(), NumberofComponentTranches = numeric(),
+  JumpReferenceSpeed5 = numeric(), NumberofTranches = numeric(),
+  NumberofComponentTranches = numeric(),
   NumberofCombinedTranches = numeric(), NumberofPools = numeric(),
   PacSchedulesIncluded = "logical", NumberofPacSchedules = numeric(),
   NumberofGroups = numeric(), DealSize = numeric(),
@@ -46,11 +47,15 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{JumpReferenceSpeed4}{A numeric value the Jump Z speed}
 
+\item{JumpReferenceSpeed5}{A numeric value the Jump S speed}
+
 \item{NumberofTranches}{A numeric value the number of Tranches}
 
-\item{NumberofComponentTranches}{A numeric value the number of component Tranches}
+\item{NumberofComponentTranches}{A numeric value the number of 
+component Tranches}
 
-\item{NumberofCombinedTranches}{A numeric value the number of combined Tranches}
+\item{NumberofCombinedTranches}{A numeric value the number of 
+combined Tranches}
 
 \item{NumberofPools}{A numeric value the number of pools}
 
@@ -62,7 +67,8 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{DealSize}{A numeric value the original balance of all tranches}
 
-\item{CollateralAmount}{A numeric value the current face amount of the collateral}
+\item{CollateralAmount}{A numeric value the current face amount of 
+the collateral}
 
 \item{CollateralAvgLife}{A numeric value the avg life of the collateral}
 
@@ -74,7 +80,8 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{BondValueDiscountRate}{A numeric value the Bond discount rate}
 
-\item{BondValueReinvestmentRate}{A numeric value the assumed trust reinvestment rate}
+\item{BondValueReinvestmentRate}{A numeric value the assumed trust 
+reinvestment rate}
 
 \item{ExpenseBasisPointFee}{A numeric value the expense of the Trust}
 
@@ -82,7 +89,8 @@ MakeRAID(DealName = "character", Issuer = "character",
 
 \item{ExpensePeriodicity}{A numeric value the calender payment of expenses}
 
-\item{InitialReserveFund}{A numeric value the amount of the initial reserve fund}
+\item{InitialReserveFund}{A numeric value the amount of the initial 
+reserve fund}
 }
 \description{
 The RAID function creates the REMIC At Issuance Disclosure file

@@ -7,9 +7,9 @@
 ULTV()
 }
 \description{
-A read connection function to the updated loan to value function.  No inputs are
-required the function propogates the updated loan to value based on amortization
-and updated home price.
+A read connection function to the updated loan to value function.  
+No inputs are required the function propogates the updated loan to value 
+based on amortization and updated home price.
 }
 \examples{
 \dontrun{

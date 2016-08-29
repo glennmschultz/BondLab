@@ -2,13 +2,16 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{MtgRate}
 \alias{MtgRate}
-\title{A connection function to the Prepayment model folder to call mortgage rate function class}
+\title{A connection function to the Prepayment model folder to call 
+mortgage rate function class}
 \usage{
 MtgRate()
 }
 \description{
-A read connection function to the mortgage rate function. No inputs are required the function
-propogates the foward mortgage rate based on the 2-year and 10-year forward rate
+A read connection function to the mortgage rate function. No inputs 
+are required the function
+propogates the foward mortgage rate based on the 2-year and 10-year
+forward rate
 }
 \examples{
 \dontrun{

@@ -7,7 +7,7 @@
 ReinvestmentIncome(object)
 }
 \arguments{
-\item{object}{An S4 object of the type MtgScenario}
+\item{object}{an S4 object of type MtgScenario}
 }
 \description{
 A standard generic function to access the slot ReinvestmentIncome

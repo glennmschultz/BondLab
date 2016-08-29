@@ -71,7 +71,7 @@
   return(Scheduled.Prin)
   }
 
-  #-----------------------------------------------------------------------------------------------
+
   setGeneric("Remain.Balance", function(balance = numeric(), 
                                         note.rate = numeric(), 
                                         term.mos = numeric(), 

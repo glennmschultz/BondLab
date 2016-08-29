@@ -12,7 +12,8 @@ SaveTranche(DealName = "character", TrancheNumber = "character",
 
 \item{TrancheNumber}{a character string the Tranche number}
 
-\item{TrancheFile}{a character string the TrancheDetails object (file) to serialize}
+\item{TrancheFile}{a character string the TrancheDetails 
+object (file) to serialize}
 }
 \description{
 Opens a connection to the Tranches folder and save Tranche Data

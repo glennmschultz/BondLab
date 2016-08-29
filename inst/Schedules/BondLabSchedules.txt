@@ -1,0 +1,1 @@
+This folder holds schedules data for REMICs.  Schedules are used in the waterfall logic by PAC/TACs.  Do not remove this file.  R removes empty directories at build time and the user will be unable to save and recall schedule data

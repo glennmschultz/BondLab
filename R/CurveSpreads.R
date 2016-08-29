@@ -10,18 +10,21 @@
   #' @slot BenchMark A numeric value the closest curve benchmark
   #' @slot SpreadToBenchmark A numeric value to nominal spread to the nearest
   #' pricing benchmark
-  #' @slot SpreadToCurve A numeric value the nominal spread to the interpolated
-  #' Curve
+  #' @slot SpreadToCurve A numeric value the nominal spread to 
+  #' the interpolated curve
+  #' @slot ZeroVolSpread A numeric value the Zero Volatilty spread
   #' @exportClass CurveSpreads
+  #' @importFrom splines interpSpline
   setClass("CurveSpreads",
            representation(
              BenchMark = "numeric",
              SpreadToBenchmark = "numeric",
-             SpreadToCurve = "numeric"
+             SpreadToCurve = "numeric",
+             ZeroVolSpread = "numeric"
            ))
 
   setGeneric("CurveSpreads", function(rates.data = "character",
-                                      MortgageCashFlow = "character")
+                                      CashFlow = "character")
     {standardGeneric("CurveSpreads")})
 
   #' A standard generic function to access BenchMark
@@ -44,6 +47,13 @@
   #' @export SpreadToCurve
   setGeneric("SpreadToCurve", function(object)
     {standardGeneric("SpreadToCurve")})
+  
+  #' A standard generic function to access ZeroVol Spread
+  #' 
+  #' @param object An object of the type SpreadToCurve
+  #' @export ZeroVolSpread
+  setGeneric("ZeroVolSpread", function(object)
+    {standardGeneric("ZeroVolSpread")})
 
   setMethod("initialize",
             signature("CurveSpreads"),
@@ -51,11 +61,13 @@
                      BenchMark = numeric(),
                      SpreadToBenchmark = numeric(),
                      SpreadToCurve = numeric(),
+                     ZeroVolSpread = numeric(),
                      ...){
               callNextMethod(.Object,
                              BenchMark = BenchMark,
                              SpreadToBenchmark = SpreadToBenchmark,
                              SpreadToCurve = SpreadToCurve,
+                             ZeroVolSpread = ZeroVolSpread,
                              ...)
             })
   #' A method to extract the BenchMark from object CurveSpreads
@@ -78,21 +90,33 @@
   #' @exportMethod SpreadToCurve
   setMethod("SpreadToCurve", signature("CurveSpreads"),
             function(object){object@SpreadToCurve})
+  
+  #' A method to extract the ZeroVol spread from object CurveSpreads
+  #' 
+  #' @param object An object of type CurveSpreads
+  #' @exportMethod ZeroVolSpread
+  setMethod("ZeroVolSpread", signature = ("CurveSpreads"),
+            function(object){object@ZeroVolSpread})
 
   #' A functon to compute the curve spread metrics
   #'
-  #'@param rates.data A character string the trade date mm-dd-YYYY
-  #'@param CashFlow A character string the for object of type
+  #'@param rates.data a character string the yield curve used
+  #'@param CashFlow a character string the object of type MBSCashFlow
+  #'@param TermStructure a character string the object of type TermStructure
+  #'@param proceeds a numeric value the investor trade proceeeds 
   #'MortgageCashFlow
+  #'@importFrom stats loess
+  #'@importFrom stats predict
   #'@export CurveSpreads
   CurveSpreads <- function(rates.data = "character",
-                           CashFlow = "character"){
-
-    CashFlow <- CashFlow
+                           CashFlow = "character",
+                           TermStructure = "character",
+                           proceeds = numeric()){
 
     # Get market curve for interpolation of nominal spread to curve
     MarketCurve <- rates.data
-
+    RateLen <- as.numeric(ncol(MarketCurve))
+    
     # local regression smooth of market curve
     ModelCurve <- loess(as.numeric(MarketCurve[1,2:12]) ~
                           as.numeric(MarketCurve[2,2:12]),
@@ -103,19 +127,67 @@
       predict(ModelCurve, WAL(CashFlow))
 
     # Find the cloest maturity for spread to benchmark
-    RatesIndex =  which(abs(as.numeric(MarketCurve[1,2:12])-
+    RatesIndex =  which(abs(as.numeric(MarketCurve[2,2:12])-
                               as.numeric(WAL(CashFlow))) ==
-                          min(abs(as.numeric(MarketCurve[1,2:12])-
+                          min(abs(as.numeric(MarketCurve[2,2:12])-
                                     as.numeric(WAL(CashFlow)))))
     # BenchMark maturity
     BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex + 1])
 
     # calculate spread to benchmark
     SpreadToBenchmark <-  (YieldToMaturity(CashFlow)) -
-      as.numeric(MarketCurve[1,RatesIndex])
+      as.numeric(MarketCurve[1,RatesIndex + 1])
+    
+    # calculate ZVSpread (Spot Spread)
+    InterpolateSpot <- splines::interpSpline(
+      difftime(as.Date(ForwardDate(TermStructure)[1:360]),
+               TradeDate(TermStructure))/30,
+      SpotRate(TermStructure)[1:360],
+      bSpline = TRUE)
+    
+    SpotRates <- predict(
+      InterpolateSpot,
+      difftime(as.Date(PmtDate(CashFlow)),
+                as.Date(TradeDate(TermStructure)))/30)
+
+      
+      FindSpread <- function(
+        SpotSpread = numeric(),
+        SpotRate = vector(),
+        payment = vector(),
+        period = vector(),
+        proceeds = numeric()){
+        DiscRate = SpotRate + SpotSpread
+        return(proceeds - sum(1/((1+DiscRate) ^ period) * payment))}
+      
+      
+      SpotSpread <- function(
+        SpotRate = vector(),
+        payment = vector(),
+        period = vector(),
+        proceeds = numeric()){
+        tolerance = 0.00000001
+        rate.basis = 100
+        
+        Spread <- uniroot(
+          FindSpread,
+          interval = c(lower = -.20, upper = .20),
+          tol = tolerance,
+          SpotRate = SpotRate,
+          payment = payment,
+          period = period,
+         proceeds = proceeds)$root
+        return(Spread)}
+
+      ZVSpread <- SpotSpread(
+        SpotRate = SpotRates$y/yield.basis,
+        payment = TotalCashFlow(CashFlow),
+        period = TimePeriod(CashFlow),
+        proceeds = proceeds) * yield.basis
 
     new("CurveSpreads",
         BenchMark = BenchMarkMaturity,
         SpreadToBenchmark = SpreadToBenchmark,
-        SpreadToCurve = SpreadToCurve)
+        SpreadToCurve = SpreadToCurve,
+        ZeroVolSpread = ZVSpread)
   }

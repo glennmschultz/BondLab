@@ -15,14 +15,16 @@ MakeRDME(DealName = "character", TrancheNumber = numeric(),
 
 \item{Cusip}{A character string the tranche cusip}
 
-\item{PaymentDate}{A character string the payment date coinciding with the factor data}
+\item{PaymentDate}{A character string the payment date 
+coinciding with the factor data}
 
 \item{Coupon}{A numeric value the tranche's coupon}
 
 \item{Factor}{A numeric value the tranche's factor}
 }
 \description{
-A constructor for the REMIC Month End Discloure.  This file the monthly factor data for each Tranche
+A constructor for the REMIC Month End Discloure.  This file the 
+monthly factor data for each Tranche
 }
 \examples{
 \dontrun{

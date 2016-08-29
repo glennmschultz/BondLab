@@ -1,0 +1,1 @@
+This folder holds rates data.  Do not delete this file as R will delete empty folders at build time and the user will be unable to save and recall rates data.

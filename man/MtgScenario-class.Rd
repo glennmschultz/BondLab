@@ -45,7 +45,7 @@ received by the investor in the period}
 
 \item{\code{WAL}}{A numeric value the scenario weighted average life}
 
-\item{\code{SpreadToCurve}}{A numeric value the spread to the 
+\item{\code{SpreadToInterCurve}}{A numeric value the spread to the 
 interpolated curve}
 
 \item{\code{ModDuration}}{A numeric value the scenario modified duration}
@@ -63,15 +63,25 @@ the sum of the key rate convexities}
 \item{\code{KeyRateDuration}}{A numeric vector the duration of each key rate tenor}
 
 \item{\code{KeyRateConvexity}}{A numeric vector the convexity of 
-each key rate tenor}
+each key rate tenor
+over the investment horizon}
 
-\item{\code{CouponIncome}}{A numeric value the coupon income earned}
+\item{\code{CouponIncome}}{A numeric value the Coupon Income received over the 
+investment horizon}
 
-\item{\code{ReinvestmentIncome}}{A numeric value reinvestment income earned}
+\item{\code{ScheduledPrinReceived}}{A numeric value the scheduled principal 
+received over the investment horizon}
 
-\item{\code{CurrentBal}}{A numeric value the horizon current balance}
+\item{\code{PrepaidPrinReceived}}{A numeric value the prepaid principal received
+over the investment horizon}
 
-\item{\code{Price}}{A numeric value the horizon price}
+\item{\code{ReinvestmentIncome}}{A numeric value the reivestment income received 
+over the investment horizon}
+
+\item{\code{HorizonCurrBal}}{A numeric value the current balance at the end of the
+investment horizon}
+
+\item{\code{HorizonPrice}}{A numeric value the price at the end of the horizon}
 
 \item{\code{HorizonReturn}}{A numeric value the horizon total return}
 

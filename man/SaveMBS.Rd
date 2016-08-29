@@ -7,7 +7,8 @@
 SaveMBS(filename = "character")
 }
 \arguments{
-\item{filename}{A character string the file name to save the default is temp}
+\item{filename}{A character string the file name to save the 
+default is temp}
 }
 \description{
 Opens a connection to BondData folder to save MBS cusip detail

@@ -4,12 +4,25 @@
 \alias{CurveSpreads}
 \title{A functon to compute the curve spread metrics}
 \usage{
+<<<<<<< HEAD
 CurveSpreads(rates.data = "character", CashFlow = "character")
+=======
+CurveSpreads(rates.data = "character", CashFlow = "character",
+  TermStructure = "character", proceeds = numeric())
+>>>>>>> master
 }
 \arguments{
-\item{rates.data}{A character string the trade date mm-dd-YYYY}
+\item{rates.data}{a character string the yield curve used}
 
+<<<<<<< HEAD
 \item{CashFlow}{A character string the for object of type
+=======
+\item{CashFlow}{a character string the object of type MBSCashFlow}
+
+\item{TermStructure}{a character string the object of type TermStructure}
+
+\item{proceeds}{a numeric value the investor trade proceeeds 
+>>>>>>> master
 MortgageCashFlow}
 }
 \description{

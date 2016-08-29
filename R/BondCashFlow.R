@@ -106,7 +106,7 @@
             })
   
   #' Method to extract Price from S4 class
-  #' @param object the name of the S4 object
+  #' @param object the name of the S4 object BondCashFlows
   #' @exportMethod Price
   setMethod("Price", signature("BondCashFlows"),
             function(object){object@Price})

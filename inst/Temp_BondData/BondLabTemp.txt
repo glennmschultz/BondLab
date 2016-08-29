@@ -1,1 +1,3 @@
-This file is here so that the folder is not empty and ignored
+This folder holds the temp bond data created when running total return scenario
+do not delete this file otherwise R will delete the folder at build time and 
+Bond Lab scenario analysis will not run

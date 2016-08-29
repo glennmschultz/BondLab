@@ -1,0 +1,1 @@
+This folder holds prepayment models for use with both pass throughs and REMICs the user can store any number of prepayment models.  The prepayment model is referenced to a cusip via the model slot of the MBSDetails object.  Do not remove this file as R will delete any empty directories as build time and the user will be unable to save and recall prepayment models

@@ -21,6 +21,7 @@ Imports:
     methods,
     optimx,
     RCurl,
+    splines,
     XML
 Suggests:
     knitr,
@@ -29,9 +30,11 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
+    'PriceYieldClasses.R'
     'PassThroughConstructor.R'
     'MortgageCashFlow.R'
     'TermStructure.R'
+    'MortgageKeyRate.R'
     'BondKeyRate.R'
     'BondCashFlow.R'
     'BondConstructor.R'
@@ -46,7 +49,6 @@ Collate:
     'CurveSpreads.R'
     'DollarRoll.R'
     'DollarRollAnalytics.R'
-    'EffectiveMeasure.R'
     'ErrorTrap.R'
     'ExtractScenario.R'
     'GetSwapCurve.R'
@@ -54,9 +56,8 @@ Collate:
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
     'MortgageCashFlowArray.R'
-    'MortgageCashFlow_Array.R'
+    'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'
-    'MortgageKeyRate.R'
     'MortgageOAS.R'
     'MortgageRateFunctions.R'
     'PrepaymentModel.R'
@@ -66,9 +67,9 @@ Collate:
     'PaymentDateFunctions.R'
     'PrepaymentModelTune.R'
     'PrepaymentModelFunctions.R'
-    'PriceYieldClasses.R'
     'REMICConstructor.R'
     'REMICCusip.R'
+    'REMICStructuringFunctions.R'
     'RatesData.R'
     'TimeValueFunction.R'
     'zzz.R'

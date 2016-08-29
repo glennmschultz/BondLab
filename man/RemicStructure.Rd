@@ -10,7 +10,8 @@ RemicStructure(DealName = "character")
 \item{DealName}{A character string the deal's names}
 }
 \description{
-The function Assembles the deal RAID, RDME, Tranches, and Groups files into a REMIC structure
+The function Assembles the deal RAID, RDME, Tranches, and Groups files 
+into a REMIC structure
 }
 \examples{
 \dontrun{

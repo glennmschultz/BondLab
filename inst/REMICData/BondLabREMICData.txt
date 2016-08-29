@@ -1,0 +1,1 @@
+This folder holds the REMIC data - the assembled REMIC structure.  Ultimately these will be JSON files representing the REMIC. do not delete this file R will remove empty directories are build time and the user will not be able to save the REMIC object.

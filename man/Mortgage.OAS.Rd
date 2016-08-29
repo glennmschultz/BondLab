@@ -6,7 +6,7 @@
 \usage{
 Mortgage.OAS(bond.id = "character", trade.date = "character",
   settlement.date = "character", original.bal = numeric(),
-  price = numeric(), sigma = numeric(), paths = numeric())
+  price = "character", sigma = numeric(), paths = numeric())
 }
 \arguments{
 \item{bond.id}{A character string the bond id or cusip number}

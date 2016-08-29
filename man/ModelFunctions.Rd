@@ -2,11 +2,15 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{ModelFunctions}
 \alias{ModelFunctions}
-\title{A connection function read the Prepayment Model Folder ModelFunctions class}
+\title{A connection function read the Prepayment Model Folder ModelFunctions 
+class Opens a connection to the PrepaymentModel folder to read the 
+ModelFunctions class}
 \usage{
 ModelFunctions()
 }
 \description{
-Opens a connection to the PrepaymentModel folder to read the ModelFunctions class
+A connection function read the Prepayment Model Folder ModelFunctions 
+class Opens a connection to the PrepaymentModel folder to read the 
+ModelFunctions class
 }
 

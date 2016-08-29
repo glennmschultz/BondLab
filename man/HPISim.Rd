@@ -8,9 +8,11 @@ HPISim(shortrate = numeric(), LongTermGrowth = numeric(), T = numeric(),
   step = numeric(), sigma = numeric(), N = numeric())
 }
 \arguments{
-\item{shortrate}{A numeric value the short term forward rate given by the interest rate generation process}
+\item{shortrate}{A numeric value the short term forward rate given 
+by the interest rate generation process}
 
-\item{LongTermGrowth}{A numeric value the expected long term home price growth potential}
+\item{LongTermGrowth}{A numeric value the expected long term home 
+price growth potential}
 
 \item{T}{A numeric value the time in years}
 
@@ -21,6 +23,7 @@ HPISim(shortrate = numeric(), LongTermGrowth = numeric(), T = numeric(),
 \item{N}{A numeric value the number of paths}
 }
 \description{
-Simulates home prices as a function of the short-term rate and the long term growth of home prices
+Simulates home prices as a function of the short-term rate and the 
+long term growth of home prices
 }
 

@@ -4,12 +4,12 @@
 \alias{CurveSpreads}
 \title{A functon to compute the curve spread metrics}
 \usage{
-CurveSpreads(rates.data = "character", MortgageCashFlow = "character")
+CurveSpreads(rates.data = "character", CashFlow = "character")
 }
 \arguments{
 \item{rates.data}{A character string the trade date mm-dd-YYYY}
 
-\item{MortgageCashFlow}{A character string the for object of type
+\item{CashFlow}{A character string the for object of type
 MortgageCashFlow}
 }
 \description{

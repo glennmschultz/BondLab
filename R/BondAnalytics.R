@@ -103,7 +103,7 @@
                            KeyRateDuration = KeyRateDuration,
                            KeyRateConvexity = KeyRateConvexity,
                            TradeDate = TradeDate,
-                           Period = Period,
+                           #Period = Period,
                            Date = Date,
                            SpotRate = SpotRate,
                            ForwardRate = ForwardRate,

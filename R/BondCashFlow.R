@@ -215,7 +215,7 @@
   # This validates that the correct unit is passed into the Bond Cash Flow 
   # function
   if(price <= 1) {price = price} else {price = price/price.basis}
-  if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
+  if(coupon > 0) {coupon = coupon/yield.basis} else {coupon = coupon}
   
   # Calculate the number of cashflows that will be paid from settlement date to
   # maturity date 

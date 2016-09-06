@@ -190,7 +190,7 @@
   #' settlement.date = "1-13-2013", price = 100)}
   #' @export BondCashFlows
   BondCashFlows <- function (bond.id = "character", 
-                             principal = numeric(), 
+                             principal = "character", 
                              settlement.date = "character", 
                              price = numeric()){
   
@@ -211,11 +211,9 @@
             settlement.date = settlement.date,
             price = price)
   
-  # Validate the price and coupon passed through the error trapping function
-  # This validates that the correct unit is passed into the Bond Cash Flow 
-  # function
-  if(price <= 1) {price = price} else {price = price/price.basis}
-  coupon = coupon/100
+  # Pass price to the PriceTypes constructor function.  This function allows
+  # converts from 32nds and to decimal basis
+  price <- PriceTypes(Price = price)
   
   # Calculate the number of cashflows that will be paid from settlement date to
   # maturity date 
@@ -316,7 +314,7 @@
                 time.period = Bond.CF.Table[,3], 
                 cashflow = Bond.CF.Table[,8], 
                 principal = principal, 
-                price = price, 
+                price = PriceBasis(price), 
                 accrued.interest = accrued.interest)$root
   
   # convert to semi-bond equivalent yield

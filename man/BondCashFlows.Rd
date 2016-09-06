@@ -4,7 +4,7 @@
 \alias{BondCashFlows}
 \title{Bond cash flow engine for standard non-callable}
 \usage{
-BondCashFlows(bond.id = "character", principal = numeric(),
+BondCashFlows(bond.id = "character", principal = "character",
   settlement.date = "character", price = numeric())
 }
 \arguments{

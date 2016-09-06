@@ -30,7 +30,7 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
-    'PriceYieldClasses.R'
+    'PriceClasses.R'
     'PassThroughConstructor.R'
     'MortgageCashFlow.R'
     'TermStructure.R'

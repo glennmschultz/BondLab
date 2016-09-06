@@ -12,7 +12,7 @@
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
-  #' @include PassThroughConstructor.R PriceYieldClasses.R
+  #' @include PassThroughConstructor.R PriceClasses.R
   NULL
   
   #' An S4 class PassThroughScenarios

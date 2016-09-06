@@ -215,7 +215,7 @@
   # This validates that the correct unit is passed into the Bond Cash Flow 
   # function
   if(price <= 1) {price = price} else {price = price/price.basis}
-  if(coupon > 0) {coupon = coupon/yield.basis} else {coupon = coupon}
+  coupon = coupon/100
   
   # Calculate the number of cashflows that will be paid from settlement date to
   # maturity date 
@@ -234,12 +234,18 @@
   pmtdate.interval = months.in.year/frequency
   
   # then compute the payment dates
-  pmtdate = as.Date(c(if(settlement.date == issue.date) {seq(start.date, end.date, by = paste(pmtdate.interval, "months"))} 
-                      else {seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
+  pmtdate = as.Date(c(if(settlement.date == issue.date) {
+    seq(start.date, end.date, by = paste(pmtdate.interval, "months"))
+    } else {
+      seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), 
+    "%m-%d-%Y")
   
-  #step3 build the time period vector (n) for discounting the cashflows nextpmt date is vector of payment dates to n for each period
-  time.period = BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date, nextpmt.date = pmtdate, type = bondbasis)
+  #step3 build the time period vector (n) for discounting the cashflows 
+  #nextpmt date is vector of payment dates to n for each period
+  time.period = BondBasisConversion(
+    issue.date = issue.date, start.date = start.date, end.date = end.date, 
+    settlement.date = settlement.date, lastpmt.date = lastpmt.date, 
+    nextpmt.date = pmtdate, type = bondbasis)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
@@ -260,7 +266,8 @@
                  "CashFlow Convexity", 
                  "Convexity")
   
-  Bond.CF.Table <- array(data = NA, c(num.periods, 14), dimnames = list(seq(c(1:num.periods)),col.names))  
+  Bond.CF.Table <- array(data = NA, c(num.periods, 14), 
+                         dimnames = list(seq(c(1:num.periods)),col.names))  
   for(i in 1:num.periods){
     Bond.CF.Table[i,1] = i
     Bond.CF.Table[i,2] = pmtdate[i]
@@ -268,16 +275,22 @@
     Bond.CF.Table[i,4] = principal
     Bond.CF.Table[i,5] = coupon /frequency
     Bond.CF.Table[i,6] = Bond.CF.Table[i,5] * Bond.CF.Table[i,4]
-    if(Bond.CF.Table[i,2] == end.date) {Bond.CF.Table[i,7] = principal} else {Bond.CF.Table[i,7] = 0}
+    if(Bond.CF.Table[i,2] == end.date) {Bond.CF.Table[i,7] = principal
+    } else {Bond.CF.Table[i,7] = 0}
     Bond.CF.Table[i,8] = Bond.CF.Table[i,6] + Bond.CF.Table[i,7]
   }
   
   #step5 calculate accrued interest for the period
-  days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, start.date = start.date, end.date = end.date, 
-                                         settlement.date = settlement.date, lastpmt.date = lastpmt.date, 
-                                         nextpmt.date = nextpmt.date, type = bondbasis)) * 360
+  days.to.nextpmt = (BondBasisConversion(
+    issue.date = issue.date, 
+    start.date = start.date, 
+    end.date = end.date,
+    settlement.date = settlement.date, 
+    lastpmt.date = lastpmt.date, 
+    nextpmt.date = nextpmt.date, type = bondbasis)) * 360
   
-  days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
+  days.between.pmtdate = ((
+    months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = days.between.pmtdate - days.to.nextpmt
   accrued.interest = (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,6]
 
@@ -310,13 +323,15 @@
   Yield.To.Maturity = (((1 + ytm)^(1/2))-1) * 2
   
   #Step7 Present value of the cash flows Present Value Factors
-  Bond.CF.Table[,9] = 1/((1+(Yield.To.Maturity/frequency))^(Bond.CF.Table[,3] * frequency))
+  Bond.CF.Table[,9] = 1/
+    ((1+(Yield.To.Maturity/frequency))^(Bond.CF.Table[,3] * frequency))
   
   #Present Value of the cash flows
   Bond.CF.Table[,10] = Bond.CF.Table[,8] * Bond.CF.Table[,9]
   
   #Step8 Risk measures Duration Factors
-  Bond.CF.Table[,11] = Bond.CF.Table[,3] * (Bond.CF.Table[,10]/((principal * price) + accrued.interest))
+  Bond.CF.Table[,11] = Bond.CF.Table[,3] * 
+    (Bond.CF.Table[,10]/((principal * price) + accrued.interest))
   
   #Convexity Factors
   Bond.CF.Table[,12] = Bond.CF.Table[,3] *(Bond.CF.Table[,3] + 1)

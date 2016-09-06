@@ -4,23 +4,23 @@
 \alias{BondCashFlows}
 \title{Bond cash flow engine for standard non-callable}
 \usage{
-BondCashFlows(bond.id = "character", principal = "character",
-  settlement.date = "character", price = numeric())
+BondCashFlows(bond.id = "character", principal = numeric(),
+  settlement.date = "character", price = "character")
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or id of the bond}
 
-\item{principal}{A charcter string the principal or face amount of the bond}
+\item{principal}{A numeric string the principal or face amount of the bond}
 
 \item{settlement.date}{A character string the settlement date}
 
-\item{price}{A numeric value the price of the bond}
+\item{price}{A character value the price of the bond}
 }
 \description{
 Cashflow engine for standard non-callable bond
 }
 \examples{
 \dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000, 
-settlement.date = "1-13-2013", price = 100)}
+settlement.date = "1-13-2013", price = "100")}
 }
 

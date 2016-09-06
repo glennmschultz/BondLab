@@ -6,6 +6,7 @@
   # securities
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
+  #' @include PassThroughConstructor.R
  
   #' An S4 class representing the cusip detail of the a standard bond
   #' 
@@ -74,6 +75,23 @@
     Putable = "character",
     SinkingFund = "character")
   {standardGeneric("MakeBondDetails")})
+  
+  # standard generic cusip is defined in the passthrough constructor
+  # standard generic ID is defined in the passthrough constructor
+  # standard generic BondType is defined in the passthrough constructor
+  # standard generic Sector is defined in the passthrough constructor
+  # standard generic Coupon is defined in the passthrough constructor
+  # standard generic IssueDate is defined in the passthrough constructor
+  # standard generic DatedDate is defined in the passthrough constructor
+  # standard generic Maturity is defined in the passthrogh constructor
+  # standard generic LastPmtDate is defined in the passthrough constructor
+  # standard generic NextPmtDate is defined in the passthrough constructor
+  # standard generic NextPmtdate <- is defined in the passthrough constructor
+  # standard generic MoodyRating is defined in the passthrough constructor
+  # standard generic SPRating is defined in passthrough constructor
+  # standard generic BondLabRating is defined in passthough constructor
+  # standard generic Frequency is defined in passthrough constructor
+  # standard generic BondBasis is defined in passthrough constructor
 
   setMethod("initialize",
           signature = ("BondDetails"),

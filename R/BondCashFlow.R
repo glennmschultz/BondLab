@@ -45,7 +45,7 @@
   setGeneric("BondCashFlows", function (bond.id = "character", 
                                       principal = numeric(), 
                                       settlement.date = "character", 
-                                      price = numeric())
+                                      price = "character")
   {standardGeneric("BondCashFlows")})
   
   # Note: standard generic Price is defined in MortgageCashFlow.R
@@ -75,7 +75,7 @@
   setMethod("initialize",
             signature("BondCashFlows"),
             function(.Object,
-            Price = "numeric",
+            Price = "character",
             Accrued = "numeric",
             YieldToMaturity = "numeric",
             WAL = "numeric",
@@ -182,17 +182,17 @@
   #' 
   #' Cashflow engine for standard non-callable bond
   #' @param bond.id A character string the cusip number or id of the bond
-  #' @param principal A charcter string the principal or face amount of the bond
+  #' @param principal A numeric string the principal or face amount of the bond
   #' @param settlement.date A character string the settlement date
-  #' @param price A numeric value the price of the bond
+  #' @param price A character value the price of the bond
   #' @examples
   #' \dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000, 
-  #' settlement.date = "1-13-2013", price = 100)}
+  #' settlement.date = "1-13-2013", price = "100")}
   #' @export BondCashFlows
   BondCashFlows <- function (bond.id = "character", 
-                             principal = "character", 
+                             principal = numeric(), 
                              settlement.date = "character", 
-                             price = numeric()){
+                             price = "character"){
   
   issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
   start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
@@ -214,7 +214,8 @@
   # Pass price to the PriceTypes constructor function.  This function allows
   # converts from 32nds and to decimal basis
   price <- PriceTypes(Price = price)
-  
+  coupon = coupon/100
+
   # Calculate the number of cashflows that will be paid from settlement date to
   # maturity date 
   # step1 calculate the years to maturity  
@@ -329,11 +330,11 @@
   
   #Step8 Risk measures Duration Factors
   Bond.CF.Table[,11] = Bond.CF.Table[,3] * 
-    (Bond.CF.Table[,10]/((principal * price) + accrued.interest))
+    (Bond.CF.Table[,10]/((principal * PriceBasis(price)) + accrued.interest))
   
   #Convexity Factors
   Bond.CF.Table[,12] = Bond.CF.Table[,3] *(Bond.CF.Table[,3] + 1)
-  Bond.CF.Table[,13] = (Bond.CF.Table[,8]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((Bond.CF.Table[,3] + 2) * frequency)))/((principal * price) + accrued.interest)
+  Bond.CF.Table[,13] = (Bond.CF.Table[,8]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((Bond.CF.Table[,3] + 2) * frequency)))/((principal * PriceBasis(price)) + accrued.interest)
   Bond.CF.Table[,14] = Bond.CF.Table[,12] * Bond.CF.Table[,13] 
   
   #Weighted Average Life
@@ -345,7 +346,7 @@
   
   #Assign Values to the slots
   new("BondCashFlows",   
-      Price = price * 100,
+      Price = PriceDecimal(price),
       Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity,
       WAL = WAL,

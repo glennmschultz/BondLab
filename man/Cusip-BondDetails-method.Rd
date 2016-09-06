@@ -6,11 +6,17 @@
 \title{A method to extract Cusip from an S4 class of type BondDetails}
 \usage{
 \S4method{Cusip}{BondDetails}(object)
+
+\S4method{Cusip}{BondDetails}(object)
 }
 \arguments{
 \item{object}{The name of the S4 object of type BondDetails}
+
+\item{object}{the name of the S4 object of type BondDetails}
 }
 \description{
 A method to extract Cusip from an S4 class of type BondDetails
+
+A method to extract Coupon from an S4 class of type BondDetails
 }
 

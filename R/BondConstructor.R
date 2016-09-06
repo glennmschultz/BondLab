@@ -7,6 +7,7 @@
   # Copyright (C) 2016  Bond Lab Technologies, Inc.
 
   #' @include PassThroughConstructor.R
+  NULL
  
   #' An S4 class representing the cusip detail of the a standard bond
   #' 
@@ -30,9 +31,9 @@
   #' @slot Frequency A numeric value the payment frequency of the bond 
   #' (the number of payments made in one-year)
   #' @slot BondBasis a character string the bond's interest calculation basis
-  #' @slot Callable a character string (should be made to a logical)
-  #' @slot Putable a character string (should be made to a logical)
-  #' @slot SinkingFund a character string (should be made to a logical)
+  #' @slot Callable a logical indicating the bond is callable
+  #' @slot Putable a logical indicating the bond is putable
+  #' @slot SinkingFund a logical indicating the bond has a sinking fund schedule
   #' @exportClass BondDetails 
   setClass("BondDetails",
          representation(
@@ -51,9 +52,9 @@
            BondLab  = "character",
            Frequency = "numeric",
            BondBasis = "character",
-           Callable = "character",
-           Putable = "character",
-           SinkingFund = "character"))
+           Callable = "logical",
+           Putable = "logical",
+           SinkingFund = "logical"))
   
   setGeneric("MakeBondDetails", function(
     Cusip = "character",                              
@@ -71,9 +72,9 @@
     BondLab  = "character",
     Frequency = numeric(),
     BondBasis = "character",
-    Callable = "character",
-    Putable = "character",
-    SinkingFund = "character")
+    Callable = "logical",
+    Putable = "logical",
+    SinkingFund = "logical")
   {standardGeneric("MakeBondDetails")})
   
   # standard generic cusip is defined in the passthrough constructor
@@ -111,9 +112,9 @@
                    BondLab  = "character",
                    Frequency = "numeric",
                    BondBasis = "character",
-                   Callable = "character",
-                   Putable = "character",
-                   SinkingFund = "character",
+                   Callable = "logical",
+                   Putable = "logical",
+                   SinkingFund = "logical",
                    ...){
             callNextMethod(.Object,
                            Cusip = Cusip,
@@ -136,7 +137,35 @@
                            SinkingFund = SinkingFund,
                            ...)
           })
-
+  
+  #' A method to extract Cusip from an S4 class of type BondDetails
+  #' 
+  #' @param object The name of the S4 object of type BondDetails
+  #' @exportMethod Cusip
+  setMethod("Cusip", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' A method to extract ID from an S4 class of type BondDetails
+  #' 
+  #' @param object The name of the S4 object BondDetails
+  #' @exportMethod ID
+  setMethod("ID", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' A method to extract BondType from an S4 class of type BondDetails
+  #' 
+  #' @param object The name of the S4 object of type BondDetails
+  #' @exportMethod BondType
+  setMethod("BondType", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' A method to extract Sector from an S4 class of type BondDetails
+  #' 
+  #' @param object The name of the S4 object of type BondDetails
+  #' @exportMethod Sector
+  setMethod("Sector", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
   BondDetails <-function(
     Cusip = "character",
     ID ="character",
@@ -153,9 +182,9 @@
     BondLab  = "character",
     Frequency = numeric(),
     BondBasis = "character",
-    Callable = "character",
-    Putable = "character",
-    SinkingFund = "character") {
+    Callable = "logical",
+    Putable = "logical",
+    SinkingFund = "logical") {
     
     new("BondDetails",
         Cusip = Cusip,

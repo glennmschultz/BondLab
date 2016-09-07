@@ -3,7 +3,7 @@
 \docType{methods}
 \name{DatedDate,BondDetails-method}
 \alias{DatedDate,BondDetails-method}
-\title{A method to extract DatedDate from an S4 class of type BondDetails}
+\title{Method to extract DatedDate from an S4 class of type BondDetails}
 \usage{
 \S4method{DatedDate}{BondDetails}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 class of type BondDetails}
 }
 \description{
-A method to extract DatedDate from an S4 class of type BondDetails
+Method to extract DatedDate from an S4 class of type BondDetails
 }
 

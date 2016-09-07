@@ -3,7 +3,7 @@
 \docType{methods}
 \name{BondType,BondDetails-method}
 \alias{BondType,BondDetails-method}
-\title{A method to extract BondType from an S4 class of type BondDetails}
+\title{Method to extract BondType from an S4 class of type BondDetails}
 \usage{
 \S4method{BondType}{BondDetails}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{The name of the S4 object of type BondDetails}
 }
 \description{
-A method to extract BondType from an S4 class of type BondDetails
+Method to extract BondType from an S4 class of type BondDetails
 }
 

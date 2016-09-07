@@ -93,6 +93,27 @@
   # standard generic BondLabRating is defined in passthough constructor
   # standard generic Frequency is defined in passthrough constructor
   # standard generic BondBasis is defined in passthrough constructor
+  
+  #' A standard generic function to access the slot Callable
+  #' 
+  #' @param object an S4 class object
+  #' @export Callable
+  setGeneric("Callable", function(object)
+    {standardGeneric("Callable")})
+  
+  #' A standard generic function to access the slot Putable
+  #' 
+  #' @param object an S4 class object
+  #' @export Putable
+  setGeneric("Putable", function(object)
+    {standardGeneric("Putable")})
+  
+  #' A standard generic function to access the slot SinkinnFund
+  #' 
+  #' @param object an S4 class object
+  #' @export SinkingFund
+  setGeneric("SinkingFund", function(object)
+    {standardGeneric("SinkingFund")})
 
   setMethod("initialize",
           signature = ("BondDetails"),
@@ -138,53 +159,148 @@
                            ...)
           })
   
-  #' A method to extract Cusip from an S4 class of type BondDetails
+  #' Method to extract Cusip from an S4 class of type BondDetails
   #' 
   #' @param object The name of the S4 object of type BondDetails
   #' @exportMethod Cusip
   setMethod("Cusip", signature("BondDetails"),
             function(object){object@BondDetails})
   
-  #' A method to extract ID from an S4 class of type BondDetails
+  #' Method to extract ID from an S4 class of type BondDetails
   #' 
   #' @param object The name of the S4 object BondDetails
   #' @exportMethod ID
   setMethod("ID", signature("BondDetails"),
             function(object){object@BondDetails})
   
-  #' A method to extract BondType from an S4 class of type BondDetails
+  #' Method to extract BondType from an S4 class of type BondDetails
   #' 
   #' @param object The name of the S4 object of type BondDetails
   #' @exportMethod BondType
   setMethod("BondType", signature("BondDetails"),
             function(object){object@BondDetails})
   
-  #' A method to extract Sector from an S4 class of type BondDetails
+  #' Method to extract Sector from an S4 class of type BondDetails
   #' 
   #' @param object The name of the S4 object of type BondDetails
   #' @exportMethod Sector
   setMethod("Sector", signature("BondDetails"),
             function(object){object@BondDetails})
   
-  #' A method to extract Coupon from an S4 class of type BondDetails
+  #' Method to extract Coupon from an S4 class of type BondDetails
   #' 
   #' @param object the name of the S4 object of type BondDetails
   #' @exportMethod Cusip
   setMethod("Coupon", signature("BondDetails"),
             function(object){object@BondDetails})
   
-  #' A method to extract IssueDate from an S4 class of type BondDetails
+  #' Method to extract IssueDate from an S4 class of type BondDetails
   #' 
   #' @param object the name of the S4 class of type BondDetails
   #' @exportMethod IssueDate
   setMethod("IssueDate", signature("BondDetails"),
             function(object){object@BondDetails})
   
-  #' A method to extract DatedDate from an S4 class of type BondDetails
+  #' Method to extract DatedDate from an S4 class of type BondDetails
   #' 
   #' @param object the name of the S4 class of type BondDetails
   #' @exportMethod DatedDate
   setMethod("DatedDate", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract Maturity from an S4 class of type BondDetails
+  #' 
+  #' @param object the name of the S4 class of type BondDetails
+  setMethod("Maturity", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract LastPmtDate from an S4 class of type BondDetails
+  #' 
+  #' @param object the name of the S4 class of type BondDetails
+  setMethod("LastPmtDate", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to replace the slot LastPmtDate from class BondDetails
+  #' 
+  #' @param object the name of the S4 object of the type BondDetails
+  #' @param value the value of the replacement
+  #' @exportMethod LastPmtDate<-
+  setReplaceMethod("LastPmtDate", signature("BondDetails"),
+                   function(object, value){
+                     object@LastPmtDate <- value
+                     return(object)
+                   })
+  #' Method extract the slot NextPmtDate from class BondDetails
+  #' 
+  #' @param object the name of the S4 object of the type BondDetails
+  #' @exportMethod NextPmtDate
+  setMethod("NextPmtDate", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to replace the slot NextPmtDate from class BondDetails
+  #' 
+  #' @param object the name of the S4 object of the type BondDetails
+  #' @param value the value of the replacement
+  #' @exportMethod NextPmtDate<-
+  setReplaceMethod("NextPmtDate", signature("BondDetails"),
+                   function(object, value){
+                     object@BondDetails <- value
+                     return(object)
+                   })
+  #' Method to extract Moody rating from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetails
+  #' @exportMethod MoodyRating
+  setMethod("MoodyRating", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract SP rating from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetails
+  #' @exportMethod SPRating
+  setMethod("SPRating", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract BondLab rating from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetails
+  #' @exportMethod BondLabRating
+  setMethod("BondLabRating", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract the slot Frequency from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetails
+  #' @exportMethod Frequency
+  setMethod("Frequency", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract the slot BondBasis from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetails
+  #' @exportMethod BondBasis
+  setMethod("BondBasis", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract the slot Callable from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetails
+  #' @exportMethod Callable
+  setMethod("Callable", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract the slot Putable from S4 class of type BondDetails
+  #' 
+  #' @param object the name of the object of type BondDetials
+  #' @exportMethod Putable
+  setMethod("Putable", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' Method to extract the slot SinkingFund from S4 class of type BondDetails
+  #' 
+  #' @param object the name of hte object of type BondDetails
+  #' @exportMethod SinkingFund
+  setMethod("SinkingFund", signature("BondDetails"),
             function(object){object@BondDetails})
   
   BondDetails <-function(
@@ -255,9 +371,9 @@
   #' @param SinkingFund a character strign the bond sinking fund schedule
   #' @export MakeBondDetails
     MakeBondDetails <- function(    
-    Cusip = "character",                              
-    ID ="character",                              
-    BondType = "character",                              
+    Cusip = "character",
+    ID ="character",
+    BondType = "character",
     Sector ="character",
     Coupon = numeric(),
     IssueDate = "character",
@@ -295,10 +411,6 @@
       SinkingFund = SinkingFund
       )
     SaveBond(filename = temp)
-
-#connBondDetails <- gzfile(description = paste("~/BondLab/BondData/",temp@ID,".rds", sep = ""))
-#saveRDS(temp, connBondDetails)
-#close(connBondDetails)
   }
 
 

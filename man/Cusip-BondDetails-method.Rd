@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Cusip,BondDetails-method}
 \alias{Cusip,BondDetails-method}
-\title{A method to extract Cusip from an S4 class of type BondDetails}
+\title{Method to extract Cusip from an S4 class of type BondDetails}
 \usage{
 \S4method{Cusip}{BondDetails}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{The name of the S4 object of type BondDetails}
 }
 \description{
-A method to extract Cusip from an S4 class of type BondDetails
+Method to extract Cusip from an S4 class of type BondDetails
 }
 

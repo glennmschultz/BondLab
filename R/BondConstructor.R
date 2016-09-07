@@ -170,7 +170,21 @@
   #' 
   #' @param object the name of the S4 object of type BondDetails
   #' @exportMethod Cusip
-  setMethod("Cusip", signature("BondDetails"),
+  setMethod("Coupon", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' A method to extract IssueDate from an S4 class of type BondDetails
+  #' 
+  #' @param object the name of the S4 class of type BondDetails
+  #' @exportMethod IssueDate
+  setMethod("IssueDate", signature("BondDetails"),
+            function(object){object@BondDetails})
+  
+  #' A method to extract DatedDate from an S4 class of type BondDetails
+  #' 
+  #' @param object the name of the S4 class of type BondDetails
+  #' @exportMethod DatedDate
+  setMethod("DatedDate", signature("BondDetails"),
             function(object){object@BondDetails})
   
   BondDetails <-function(

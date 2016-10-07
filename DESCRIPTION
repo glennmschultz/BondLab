@@ -55,6 +55,7 @@ Collate:
     'HomePriceSim.R'
     'HorizonBondData.R'
     'InterestRateModelCIR.R'
+    'ModelToCPR.R'
     'MortgageCashFlowArray.R'
     'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'

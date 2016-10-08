@@ -91,7 +91,7 @@
   #' over the investment horizon
   #' @slot HorizonCurrBal A numeric value the current balance at the end of the
   #' investment horizon
-  #' @slot HorizonPrice A numeric value the price at the end of the horizon
+  #' @slot HorizonPrice A numeric the price at the end of the horizon
   #' @slot HorizonReturn A numeric value the horizon total return
   #' @slot HorizonMos A numeric value the number of months to 
   #' the scenario horizon date

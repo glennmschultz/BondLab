@@ -41,12 +41,15 @@ received by the investor in the period}
 
 \item{\code{SMM}}{A numeric vector the forecasted SMM vector}
 
+\item{\code{CPRLife}}{A numeric value the CPR which equates the yield to maturity
+to that of the prepayment vector yield to maturity}
+
 \item{\code{YieldToMaturity}}{A numeric value the scenario yield to maturity}
 
-\item{\code{WAL}}{A numeric value the scenario weighted average life}
+\item{\code{WAL}}{A numeric value the scenario's horizon weighted average life}
 
 \item{\code{SpreadToInterCurve}}{A numeric value the spread to the 
-interpolated curve}
+interpolated horizon curve at the horizon date}
 
 \item{\code{ModDuration}}{A numeric value the scenario modified duration}
 

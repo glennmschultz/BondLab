@@ -66,10 +66,12 @@
   #' @slot SpotRate A numeric vector the spot rate curve
   #' @slot ForwardRate A numeric vector the forward rate curve
   #' @slot SMM A numeric vector the forecasted SMM vector
+  #' @slot CPRLife A numeric value the CPR which equates the yield to maturity
+  #' to that of the prepayment vector yield to maturity
   #' @slot YieldToMaturity A numeric value the scenario yield to maturity
-  #' @slot WAL A numeric value the scenario weighted average life
+  #' @slot WAL A numeric value the scenario's horizon weighted average life
   #' @slot SpreadToInterCurve A numeric value the spread to the 
-  #' interpolated curve
+  #' interpolated horizon curve at the horizon date
   #' @slot ModDuration A numeric value the scenario modified duration
   #' @slot Convexity A numeric value the scenario convexity
   #' @slot EffDuration A numeric value the effective duration which is 
@@ -110,6 +112,7 @@
              SpotRate = "numeric",
              ForwardRate = "numeric",
              SMM = "numeric",
+             CPRLife = "numeric",
              YieldToMaturity = "numeric",
              WAL = "numeric",
              SpreadToInterCurve = "numeric",
@@ -142,6 +145,9 @@
   # Note: standard generic SpotRate is defined in MortgageCashFlow.R
   # Note: standard generic ForwardRate is defined in MortgageCashFlow.R
   # Note: standard generic SMM is defined in PrepaymentModel.R
+  
+  # Note: standard generic CPRLife is defined in ModelToCPR.R
+  
   # Note: standard generic YieldToMaturity is defined in MortgageCashFlow.R
   # Note: standard generic WAL is defined in MortgageCashFlow.R
   # Note: standard generic ModDuration is defined in MortgageCashFlow.R
@@ -243,6 +249,7 @@
                      TotalCashFlow = numeric(),
                      SpotRate = numeric(),
                      ForwardRate = numeric(),
+                     CPRLife = numeric(),                     
                      SMM = numeric(),
                      YieldToMaturity = numeric(),
                      WAL = numeric(),
@@ -282,6 +289,7 @@
                              SpotRate = SpotRate,
                              ForwardRate = ForwardRate,
                              SMM = SMM,
+                             CPRLife = CPRLife,
                              YieldToMaturity = YieldToMaturity,
                              WAL = WAL,
                              SpreadToInterCurve = SpreadToInterCurve,
@@ -379,6 +387,12 @@
   #' @exportMethod SMM
   setMethod("SMM", signature("MtgScenario"),
             function(object){object@SMM})
+  
+  #' A method to extract LifeCPR from S4 class MtgScenario
+  #' @param object the name of an S4 class of type MtgScenario
+  #' @exportMethod CPRLife
+  setMethod("CPRLife", signature("MtgScenario"),
+            function(object){object@CPRLife}) 
   
   #' A method to extract YieldToMaturity from S4 class MtgScenario
   #' @param object the name of an S4 class of type MtgScenario
@@ -621,18 +635,32 @@
       price = PriceDecimalString(Price),
       PrepaymentAssumption = Prepayment)
     
-    InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
-                        as.numeric(rates.data[2,2:12]), 
-                        data = data.frame(rates.data))  
-    
-    SpreadtoCurve <- (YieldToMaturity(MortgageCashFlow) * yield.basis) - 
-      predict(InterpolateCurve, WAL(MortgageCashFlow))
     
     proceeds <- Accrued(MortgageCashFlow) + (original.bal * 
                                   MBSFactor(bond.id) * PriceBasis(Price))
     principal <- original.bal * MBSFactor(bond.id)
     
-    # compute the key rate duration 
+    # Compute the CurvesSpreads based on the user price and prepayment vector
+    # given the user's scenario interest rate shift
+    CurveSpread <- CurveSpreads(rates.data = rates,
+                                CashFlow = MortgageCashFlow,
+                                TermStructure = TermStructure,
+                                proceeds = proceeds)
+    
+    LifeCPR <- ModelToCPR(
+      bond.id = bond.id,
+      TermStructure = TermStructure,
+      MortgageRate = MortgageRate,
+      ModelTune = ModelTune,
+      Burnout = Burnout,
+      original.bal = original.bal,
+      settlement.date = settlement.date,
+      price = PriceDecimal(Price),
+      yield = YieldToMaturity(MortgageCashFlow)/yield.basis
+    )
+    
+    # compute the key rate duration, effective duration, and convexity 
+    # given the user's interest rate scenario 
     MortgageTermStructure <- MtgTermStructure(
       bond.id = bond.id,
       original.bal = original.bal,
@@ -732,7 +760,9 @@
       HorizonPresentValue <- DiscountRate * TotalCashFlow(HorizonCashFlow)
       PresentValue <- sum(HorizonPresentValue)
       return(PresentValue)}
-    
+  
+  # Horizon.Price.Value is a function which returns the principal proceeds
+  # at the horizon date and is used to calculate PresentValue
   Horizon.Price.Value <- function(HorizonBond = "character",
                                     HorizonPrice = numeric()){
       price.basis = 100
@@ -754,7 +784,7 @@
   (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
   
   
-  # convert the horizon price to a string 
+  # Replace this with PriceTypes objects  
   HorizonPrice <- sprintf("%.8f", HorizonPrice)
   
   HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
@@ -762,6 +792,17 @@
                     settlement.date = HorizonSettlement,
                     price = HorizonPrice,
                     PrepaymentAssumption = HorizonPrepaymentAssumption)
+  
+  HorizonProceeds <- ((as.numeric(HorizonPrice)/price.basis * 
+                         MBSFactor(HorizonMBS) *
+                         OriginalBal(HorizonMBS)) + Accrued(HorizonCashFlow))
+  
+  HorizonSpread <- CurveSpreads(
+    rates.data = HorizonCurve,
+    CashFlow = HorizonCashFlow,
+    TermStructure = HorizonTermStructure,
+    proceeds = HorizonProceeds)
+  
 
   CouponIncome <- sum(MortgageCashFlow@PassThroughInterest[1:horizon.months])
   ReceivedCashFlow <- TotalCashFlow(MortgageCashFlow)[1:horizon.months]
@@ -800,9 +841,10 @@
       SpotRate = SpotRate(TermStructure),
       ForwardRate = ForwardRate(TermStructure),
       SMM = SMM(Prepayment),
+      CPRLife = CPRLife(LifeCPR),
       YieldToMaturity = YieldToMaturity(MortgageCashFlow),
-      WAL = WAL(MortgageCashFlow),
-      SpreadToInterCurve = SpreadtoCurve,
+      WAL = WAL(HorizonCashFlow),
+      SpreadToInterCurve = SpreadToCurve(HorizonSpread),
       ModDuration = ModDuration(MortgageCashFlow),
       Convexity = Convexity(MortgageCashFlow), 
       EffDuration = EffDuration(MortgageTermStructure),

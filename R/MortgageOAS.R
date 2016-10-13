@@ -7,7 +7,23 @@
   
   #' @include CurveSpreads.R MortgageKeyRate.R
   NULL
-
+  
+  #' An S4 class the Mortgage.OAS constructor function
+  #' 
+  #' @slot OAS A numeric value the option adjusted spread
+  #' @slot ZeroVolSpread A numeric value the zero volatility spread
+  #' @slot SpreadToCurve A numeric value the spread to the curve
+  #' @slot EffDuration A numeric value the effective duration
+  #' @slot EffConvexity A numeric value the effective convexity
+  #' @slot KeyRateTenor A numeric value the Key Rate Tenor
+  #' @slot KeyRateDuration A numeric value the Key Rate Duration
+  #' @slot KeyRateConvexity A numeric value the Key Rate Convexity
+  #' @slot PriceDist A numeric value the price distribution from the OAS model
+  #' @slot PathSpread A numeric value the spot rate spread along each path
+  #' @slot PathWAL A numeric value the WAL along each path
+  #' @slot PathModDur A numeric value the modified duration along each path
+  #' @slot PathYTM A numeric value the yield to maturity along each path
+  #' @exportClass MortgageOAS 
   setClass("MortgageOAS",
          representation(
            OAS = "numeric",

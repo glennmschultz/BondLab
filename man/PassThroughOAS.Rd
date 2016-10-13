@@ -28,7 +28,8 @@ This function is the Pass Through OAS constructor function
 }
 \examples{
 \dontrun{
-PassThroughOAS(bond.id = "bondlabMBS4", trade.date = "01-10-2013", settlement.date = "01-13-2013", 
+PassThroughOAS(bond.id = "bondlabMBS4", trade.date = "01-10-2013", 
+settlement.date = "01-13-2013", 
 original.bal = 100000, price = 105.75, sigma = 0.015, paths = 200)} 
 }
 

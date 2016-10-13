@@ -84,7 +84,7 @@ over the investment horizon}
 \item{\code{HorizonCurrBal}}{A numeric value the current balance at the end of the
 investment horizon}
 
-\item{\code{HorizonPrice}}{A numeric value the price at the end of the horizon}
+\item{\code{HorizonPrice}}{A numeric the price at the end of the horizon}
 
 \item{\code{HorizonReturn}}{A numeric value the horizon total return}
 

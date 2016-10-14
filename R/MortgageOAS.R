@@ -23,6 +23,10 @@
   #' @slot PathWAL A numeric value the WAL along each path
   #' @slot PathModDur A numeric value the modified duration along each path
   #' @slot PathYTM A numeric value the yield to maturity along each path
+  #' @slot OASTermStructure A S4 object the zero volatility Term Structure
+  #' @slot RatePaths A matrix the OAS Rate Paths
+  #' @slot PrepaymentVectors A matrix the prepayment vectors returned along 
+  #' each interest rate path
   #' @exportClass MortgageOAS 
   setClass("MortgageOAS",
          representation(
@@ -38,7 +42,10 @@
            PathSpread = "vector",
            PathWAL = "vector",
            PathModDur = "vector",
-           PathYTM = "vector"))
+           PathYTM = "vector",
+           OASTermStructure = "TermStructure",
+           RatePaths = "matrix",
+           PrepaymentVectors = "matrix"))
   
   setGeneric("Mortgage.OAS",function(
     bond.id = "character",
@@ -101,6 +108,27 @@
   setGeneric("PathYTM", function(object)
     {standardGeneric("PathYTM")})
   
+  #' A standard generic function to access the slot OASTermStructure
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("OASTermStructure", function(object)
+    {standardGeneric("OASTermStructure")})
+  
+  #' A standard generic function to access the slot RatePaths
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("RatePaths", function(object)
+    {standardGeneric("RatePaths")})
+  
+  #' A standard generic function to access the slot PrepaymentVectors
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("PrepaymentVectors", function(object)
+    {standardGeneric("PrepaymentVectors")})
+  
   setMethod("initialize",
             signature("MortgageOAS"),
             function(.Object,
@@ -116,7 +144,10 @@
                      PathSpread = "vector",
                      PathWAL = "vector",
                      PathModDur = "vector",
-                     PathYTM = "vector"
+                     PathYTM = "vector",
+                     OASTermStructure = "S4",
+                     RatePaths = "matrix",
+                     PrepaymentVectors = "matrix"
             ){
               callNextMethod(.Object,
                              OAS = OAS,
@@ -131,7 +162,10 @@
                              PathSpread = PathSpread,
                              PathWAL = PathWAL,
                              PathModDur = PathModDur,
-                             PathYTM = PathYTM)
+                             PathYTM = PathYTM,
+                             OASTermStructure = OASTermStructure,
+                             RatePaths = RatePaths,
+                             PrepaymentVectors = PrepaymentVectors)
             })
   
   #' A method to extract OAS from S4 object MortgageOAS
@@ -250,6 +284,33 @@
               object@PathYTM
             })
   
+  #' A method to extract OASTermStructure from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod OASTermStructure
+  setMethod("OASTermStructure", signature("MortgageOAS"),
+            function(object){
+              object@OASTermStructure
+            })
+  
+  #' A method to extact RatePaths from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod RatePaths
+  setMethod("RatePaths", signature("MortgageOAS"),
+            function(object){
+              object@RatePaths
+            })
+  
+  #' A method to extract PrepaymentVectors from S4 class MortgageOAS
+  #' 
+  #' @param object an S4 object of the type MortgageOAS
+  #' @exportMethod PrepaymentVectors
+  setMethod("PrepaymentVectors", signature("MortgageOAS"),
+            function(object){
+              object@PrepaymentVectors
+            })
+
   #' Mortgage OAS the OAS engine for pass through OAS
   #' 
   #' Pass through OAS engine
@@ -414,8 +475,7 @@
   
   OAS.CashFlow <- array(data = NA, c(num.sim,paths))
   OAS.DiscMatrix <- array(data = NA, c(num.sim, paths))
-  
-  prepayout <- NULL #used to capture OAS prepayment vectors
+  prepayout <- NULL #array(data = NA, c(num.sim, paths))
   
   #Initialize empty TermStructure class.  If one repeatedly uses new term
   #structure in the loop the memory footprint will grow with the number of loops
@@ -491,8 +551,8 @@
     Severity = 0)
 
 
-  # Uncomment this line and # 239 to get the prepayment vector from the model 
-  # prepayout <- cbind(prepayout, Prepayment@SMM)
+  # Assign the prepayment vector to the prepayment out matrix
+   prepayout <- cbind(prepayout, Prepayment@SMM)
 
 
   MtgCashFlow <- MortgageCashFlow(
@@ -528,8 +588,10 @@
     
   } # end of the OAS j loop
   
-  # uncomment this to get prepayment vectors
-  # vectors <<- prepayout
+  # Assign the prepayment and rate vectors to matrix for assignment
+  # MortgageOAS slot 
+   vectors <- prepayout
+   paths <- Simulation
   # cashflow <<- OAS.CashFlow
   # disc <<- OAS.DiscMatrix
   
@@ -676,5 +738,8 @@
        PathWAL = unname(OAS.Out[,2]),
        PathModDur = unname(OAS.Out[,3]),
        PathYTM = unname(OAS.Out[,4]),
-       PriceDist = unname(OAS.Out[,5]))
+       PriceDist = unname(OAS.Out[,5]),
+       OASTermStructure <- CIRTermStructure,
+       RatePaths = paths,
+       PrepaymentVector = as.matrix(prepayout))
     }

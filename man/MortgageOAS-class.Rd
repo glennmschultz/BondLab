@@ -35,5 +35,12 @@ An S4 class the Mortgage.OAS constructor function
 \item{\code{PathModDur}}{A numeric value the modified duration along each path}
 
 \item{\code{PathYTM}}{A numeric value the yield to maturity along each path}
+
+\item{\code{OASTermStructure}}{A S4 object the zero volatility Term Structure}
+
+\item{\code{RatePaths}}{A matrix the OAS Rate Paths}
+
+\item{\code{PrepaymentVectors}}{A matrix the prepayment vectors returned along 
+each interest rate path}
 }}
 

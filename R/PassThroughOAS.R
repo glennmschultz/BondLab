@@ -34,7 +34,6 @@
                    ...)
           {callNextMethod(.Object,
             ...)
-
           })
 
 
@@ -136,45 +135,64 @@
   lambda = Market.Fit$p2
   theta  = Market.Fit$p3
   
+#  Sim.Rate <- CIRSim(shortrate = short.rate,
+#                      kappa = kappa,
+#                      theta = theta,
+#                      T = ((num.periods-1) / months.in.year),
+#                      step = 1/months.in.year,
+#                      sigma = 0,
+#                      N = 1)
   
-  Sim.Rate <- CIRSim(shortrate = short.rate,
-                      kappa = kappa,
-                      theta = theta,
-                      T = ((num.periods-1) / months.in.year),
-                      step = 1/months.in.year,
-                      sigma = 0,
-                      N = 1)
+#  #Compute the continuously compounded rate
+#  Compounded.Rate <- cumprod(1 + Sim.Rate)
   
-  #Compute the continuously compounded rate
-  Compounded.Rate <- cumprod(1 + Sim.Rate)
+#  #Compute the Spot Rate
+#  Spot.Rate <- (((Compounded.Rate ^ (1/ time.period))^(1/months.in.year))-1)
+#  Two.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
+#                                      kappa = kappa, 
+#                                      lambda = lambda, 
+#                                      theta = theta, 
+#                                      sigma = 0, 
+#                                      T = 2, 
+#                                      step = 0, 
+#                                      result = "y") * yield.basis)
   
-  #Compute the Spot Rate
-  Spot.Rate <- (((Compounded.Rate ^ (1/ time.period))^(1/months.in.year))-1)
-  Two.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
-                                      kappa = kappa, 
-                                      lambda = lambda, 
-                                      theta = theta, sigma = 0, 
-                                      T = 2, step = 0, 
-                                      result = "y") * yield.basis)
+#  Ten.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
+#                                      kappa = kappa, 
+#                                      lambda = lambda, 
+#                                      theta = theta, 
+#                                      sigma = 0, 
+#                                      T = 10, 
+#                                      step = 0, 
+#                                      result = "y") * yield.basis)
+  CIRSpot <- CIRBondPrice(
+    shortrate = short.rate,
+    T = 40,
+    step = 1/months.in.year,
+    kappa = kappa,
+    lambda = lambda,
+    theta = theta,
+    sigma = sigma,
+    result = "y")
   
-  Ten.Year.Fwd <- as.vector(CIRBondPrice(shortrate = as.numeric(Sim.Rate), 
-                                      kappa = kappa, 
-                                      lambda = lambda, 
-                                      theta = theta, 
-                                      sigma = 0, 
-                                      T = 10, 
-                                      step = 0, 
-                                      result = "y") * yield.basis)
+  time.period <- seq(from = 1, to = 30, by = 1)
+  time.period <- time.period/12
+  timelength <- length(time.period)
+  
+  CIRSpot[1] <- short.rate
+  Mo1Fwd <- Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 1)
+  TwoYrFwd <-Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 2)
+  TenYrFwd <-Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 10)
+  
 
   TermStructure <- new("TermStructure",
-                       TradeDate = as.character(trade.date),
-                       Period = as.numeric(time.period),
-                       Date = as.character(as.Date(pmtdate, origin = "1970-01-01")),
-                       SpotRate = as.numeric(Spot.Rate),
-                       ForwardRate = as.numeric(Sim.Rate),
-                       TwoYearFwd = as.numeric(Two.Year.Fwd),
-                       TenYearFwd = as.numeric(Ten.Year.Fwd))
-  
+                       TradeDate = trade.date,
+                       Period = time.period[2:timelength],
+                       Date = unname(as.character(pmtdate)),
+                       SpotRate = CIRSpot * 100,
+                       ForwardRate = Mo1Fwd * 100,
+                       TwoYearFwd = TwoYrFwd * 100,
+                       TenYearFwd = TenYrFwd * 100)
   
   #Third if mortgage security call the prepayment model
   PrepaymentAssumption <- PrepaymentModel(bond.id = bond.id, 
@@ -191,12 +209,7 @@
                                        settlement.date = settlement.date, 
                                        price = price, 
                                        PrepaymentAssumption = PrepaymentAssumption)
-  
-  #Calculate effective duration, convexity, and key rate durations and key rate convexities
-  #This is done with the MtgTermStructureFunction this creates the class BondTermStructure
-  #MortgageTermStructure <- MtgTermStructure(bond.id = MortgageCashFlow, original.bal = original.bal, Rate.Delta = Rate.Delta, TermStructure = TermStructure, 
-  #settlement.date = settlement.date, principal = original.bal *  MortgageCashFlow@MBSFactor, price = price, cashflow = MortgageCashFlow)
-  #End of 0 volatility term structure fit analysis
+
   
   #This section begins the OAS analysis
   MortgageOAS  <- Mortgage.OAS(bond.id = bond.id@ID, 
@@ -209,77 +222,82 @@
 
   
   new("PassThroughOAS",
-      Cusip = bond.id@Cusip,
-      ID = bond.id@ID,
-      BondType = bond.id@BondType,
-      Sector = bond.id@Sector,
-      Coupon = bond.id@Coupon,
-      IssueDate = bond.id@IssueDate,
-      DatedDate = bond.id@DatedDate,
-      Maturity = bond.id@Maturity,
-      LastPmtDate = bond.id@LastPmtDate,
-      NextPmtDate = bond.id@NextPmtDate,
-      Term = bond.id@Term,
-      WALA = bond.id@WALA,
-      WAM = bond.id@WAM,
-      PaymentDelay = bond.id@PaymentDelay,
-      Moody = bond.id@Moody,
-      SP = bond.id@SP,
-      BondLab  = bond.id@BondLab,
-      Frequency = bond.id@Frequency,
-      BondBasis = bond.id@BondBasis,
-      GWac = bond.id@GWac,
-      OrigLoanBal = bond.id@OrigLoanBal,
-      OrigLTV = bond.id@OrigLTV,
-      AmortizationType = bond.id@AmortizationType,
-      AmortizationTerm = bond.id@AmortizationTerm,
-      Index = bond.id@Index,
-      Margin = bond.id@Margin,
-      FirstPmtDate = bond.id@FirstPmtDate,
-      FinalPmtDate = bond.id@FinalPmtDate,
-      Servicing = bond.id@Servicing,
-      PMI = bond.id@PMI,
-      InitialInterest = bond.id@InitialInterest,
-      InterestOnlyPeriod = bond.id@InterestOnlyPeriod,
-      FirstPrinPaymentDate = bond.id@FirstPrinPaymentDate,
-      BalloonPmt = bond.id@BalloonPmt,
-      BalloonDate = bond.id@BalloonDate,
-      MBSFactor = bond.id@MBSFactor,
-      OriginalBal = bond.id@MBSFactor,
-      CurrentBal = bond.id@OrigLTV,
-      Model = bond.id@Model,
-      Burnout = bond.id@Burnout,
-      SATO = bond.id@SATO,
-      Price = MortgageCashFlow@Price,
-      Accrued = MortgageCashFlow@Accrued,
-      YieldToMaturity = MortgageCashFlow@YieldToMaturity,
-      WAL = MortgageCashFlow@WAL,
-      ModDuration = MortgageCashFlow@ModDuration,
-      Convexity = MortgageCashFlow@Convexity,
-      Period = MortgageCashFlow@Period,
-      PmtDate = MortgageCashFlow@PmtDate,
-      TimePeriod = MortgageCashFlow@TimePeriod,
-      BeginningBal = MortgageCashFlow@BeginningBal,
-      MonthlyPmt = MortgageCashFlow@MonthlyPmt,
-      MonthlyInterest = MortgageCashFlow@MonthlyInterest,
-      PassThroughInterest = MortgageCashFlow@PassThroughInterest,
-      ScheduledPrin = MortgageCashFlow@ScheduledPrin,
-      PrepaidPrin = MortgageCashFlow@PrepaidPrin,
-      DefaultedPrin = MortgageCashFlow@DefaultedPrin,
-      LossAmount = MortgageCashFlow@LossAmount,
-      RecoveredAmount = MortgageCashFlow@RecoveredAmount,
-      EndingBal = MortgageCashFlow@EndingBal,
-      ServicingIncome = MortgageCashFlow@ServicingIncome,
-      PMIPremium = MortgageCashFlow@PMIPremium,
-      GFeePremium = MortgageCashFlow@GFeePremium,  
-      TotalCashFlow = MortgageCashFlow@TotalCashFlow,
-      OAS = MortgageOAS@OAS,
-      ZeroVolSpread = MortgageOAS@ZeroVolSpread,
-      SpreadToCurve = MortgageOAS@SpreadToCurve,
-      PriceDist = MortgageOAS@PriceDist,
-      PathSpread = MortgageOAS@PathSpread,
-      PathWAL = MortgageOAS@PathWAL,
-      PathModDur = MortgageOAS@PathModDur,
-      PathYTM = MortgageOAS@PathYTM)
+      Cusip = Cusip(bond.id),
+      ID = ID(bond.id),
+      BondType = BondType(bond.id),
+      Sector = Sector(bond.id),
+      Coupon = Coupon(bond.id),
+      IssueDate = IssueDate(bond.id),
+      DatedDate = DatedDate(bond.id),
+      Maturity = Maturity(bond.id),
+      LastPmtDate = LastPmtDate(bond.id),
+      NextPmtDate = NextPmtDate(bond.id),
+      Term = Term(bond.id),
+      WALA = WALA(bond.id),
+      WAM = WAM(bond.id),
+      PaymentDelay = PaymentDelay(bond.id),
+      Moody = MoodyRating(bond.id),
+      SP = SPRating(bond.id),
+      BondLab  = BondLabRating(bond.id),
+      Frequency = Frequency(bond.id),
+      BondBasis = BondBasis(bond.id),
+      GWac = GWac(bond.id),
+      OrigLoanBal = OrigLoanBal(bond.id),
+      OrigLTV = OrigLTV(bond.id),
+      AmortizationType = AmortizationType(bond.id),
+      AmortizationTerm = AmortizationTerm(bond.id),
+      Index = Index(bond.id),
+      Margin = Margin(bond.id),
+      FirstPmtDate = FirstPmtDate(bond.id),
+      FinalPmtDate = FinalPmtDate(bond.id),
+      Servicing = Servicing(bond.id),
+      PMI = PMI(bond.id),
+      InitialInterest = InitialInterest(bond.id),
+      InterestOnlyPeriod = InterestOnlyPeriod(bond.id),
+      FirstPrinPaymentDate = FirstPrinPaymentDate(bond.id),
+      BalloonPmt = BalloonPmt(bond.id),
+      BalloonDate = BalloonDate(bond.id),
+      MBSFactor = MBSFactor(bond.id),
+      OriginalBal = MBSFactor(bond.id),
+      CurrentBal = OrigLTV(bond.id),
+      Model = Model(bond.id),
+      Burnout = BurnOut(bond.id),
+      SATO = SATO(bond.id),
+      Price = Price(MortgageCashFlow),
+      Accrued = Accrued(MortgageCashFlow),
+      YieldToMaturity = YieldToMaturity(MortgageCashFlow),
+      WAL = WAL(MortgageCashFlow),
+      ModDuration = ModDuration(MortgageCashFlow),
+      Convexity = Convexity(MortgageCashFlow),
+      Period = Period(MortgageCashFlow),
+      PmtDate = PmtDate(MortgageCashFlow),
+      TimePeriod = TimePeriod(MortgageCashFlow),
+      BeginningBal = BeginningBal(MortgageCashFlow),
+      MonthlyPmt = MonthlyPmt(MortgageCashFlow),
+      MonthlyInterest = MonthlyInterest(MortgageCashFlow),
+      PassThroughInterest = PassThroughInterest(MortgageCashFlow),
+      ScheduledPrin = ScheduledPrin(MortgageCashFlow),
+      PrepaidPrin = PrepaidPrin(MortgageCashFlow),
+      DefaultedPrin = DefaultedPrin(MortgageCashFlow),
+      LossAmount = LossAmount(MortgageCashFlow),
+      RecoveredAmount = RecoveredAmount(MortgageCashFlow),
+      EndingBal = EndingBalance(MortgageCashFlow),
+      ServicingIncome = ServicingIncome(MortgageCashFlow),
+      PMIPremium = PMIPremium(MortgageCashFlow),
+      GFeePremium = GFeePremium(MortgageCashFlow),  
+      TotalCashFlow = TotalCashFlow(MortgageCashFlow),
+      OAS = OAS(MortgageOAS),
+      ZeroVolSpread = ZeroVolSpread(MortgageOAS),
+      SpreadToCurve = SpreadToCurve(MortgageOAS),
+      EffDuration = EffDuration(MortgageOAS),
+      EffConvexity = EffConvexity(MortgageOAS),
+      KeyRateTenor = KeyRateTenor(MortgageOAS),
+      KeyRateDuration = KeyRateDuration(MortgageOAS),
+      KeyRateConvexity = KeyRateConvexity(MortgageOAS),
+      PriceDist = PriceDist(MortgageOAS),
+      PathSpread = PathSpread(MortgageOAS),
+      PathWAL = PathWAL(MortgageOAS),
+      PathModDur = PathModDur(MortgageOAS),
+      PathYTM = PathYTM(MortgageOAS))
   }
 

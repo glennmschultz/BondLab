@@ -581,7 +581,8 @@
     
   # CIR Bond Price returns the spot rate curve
   
-    CIRSpot <- CIRBondPrice(shortrate = short.rate,
+    CIRSpot <- CIRBondPrice(
+    shortrate = short.rate,
     T = 40,
     step = 1/months.in.year,
     kappa = kappa,

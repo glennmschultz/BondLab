@@ -320,7 +320,7 @@
   }
   
   # Fit the model to the market   
-  fit <- optimx(par = c(.01, .05, .01), 
+  fit <- optimx(par = c(.01, .05, .05), 
                 fn = CIRTune, 
                 method = "L-BFGS-B",
                 lower = c(.01, 0.0,0.005),

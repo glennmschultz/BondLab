@@ -431,9 +431,28 @@
 
   # ==== Compute Option Adjusted Spread ======================================
   # For simulation pass T = mortgage term if the number of paths = 1 
-  # then volatility = 0 
+  # then volatility = 0
+  set.seed(300) 
   Simulation <- CIRSim(
     shortrate = short.rate,
+    kappa = kappa,
+    theta = theta,
+    T = ((num.periods-1) / months.in.year),
+    step = (1/months.in.year),
+    sigma = sigma,
+    N = paths)
+  
+  SimulationUp <- CIRSim(
+    shortrate = short.rate + (rate.delta/yield.basis),
+    kappa = kappa,
+    theta = theta,
+    T = ((num.periods-1) / months.in.year),
+    step = (1/months.in.year),
+    sigma = sigma,
+    N = paths)
+  
+  SimulationDwn <- CIRSim(
+    shortrate = short.rate - (rate.delta/yield.basis),
     kappa = kappa,
     theta = theta,
     T = ((num.periods-1) / months.in.year),

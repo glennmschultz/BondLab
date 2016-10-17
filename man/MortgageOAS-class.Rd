@@ -12,6 +12,10 @@ An S4 class the Mortgage.OAS constructor function
 \describe{
 \item{\code{OAS}}{A numeric value the option adjusted spread}
 
+\item{\code{OptionAdjDur}}{A numeric value the option adjusted duration}
+
+\item{\code{OptionAdjCvx}}{A numeric value the option adjusted convexity}
+
 \item{\code{ZeroVolSpread}}{A numeric value the zero volatility spread}
 
 \item{\code{SpreadToCurve}}{A numeric value the spread to the curve}

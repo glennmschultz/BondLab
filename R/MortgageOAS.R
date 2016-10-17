@@ -11,6 +11,8 @@
   #' An S4 class the Mortgage.OAS constructor function
   #' 
   #' @slot OAS A numeric value the option adjusted spread
+  #' @slot OptionAdjDur A numeric value the option adjusted duration
+  #' @slot OptionAdjCvx A numeric value the option adjusted convexity
   #' @slot ZeroVolSpread A numeric value the zero volatility spread
   #' @slot SpreadToCurve A numeric value the spread to the curve
   #' @slot EffDuration A numeric value the effective duration
@@ -31,6 +33,8 @@
   setClass("MortgageOAS",
          representation(
            OAS = "numeric",
+           OptionAdjDur = "numeric",
+           OptionAdjCvx = "numeric",
            ZeroVolSpread = "numeric",
            SpreadToCurve = "numeric",
            EffDuration = "numeric",
@@ -64,6 +68,20 @@
   #' @export
   setGeneric("OAS", function(object)
   {standardGeneric("OAS")})
+  
+  #' A standard generic function to access the slot OptionAdjDur
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("OptionAdjDur", function(object)
+    {standardGeneric("OptionAdjDur")})
+  
+  #' A standard generic function to access the slot OptionAdjCvx
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("OptionAdjCvx", function(object)
+    {standardGeneric("OptionAdjCvx")})
   
   # Note: ZeroVolSpread is defined in CurveSpreads.R
   # Note: SpreadToCurve generic is defined in CurveSpreads.R
@@ -133,6 +151,8 @@
             signature("MortgageOAS"),
             function(.Object,
                      OAS = "numeric",
+                     OptionAdjDur = "numeric",
+                     OptionAdjCvx = "numeric",
                      ZeroVolSpread = "numeric",
                      SpreadToCurve = "numeric",
                      EffDuration = "numeric",
@@ -151,6 +171,8 @@
             ){
               callNextMethod(.Object,
                              OAS = OAS,
+                             OptionAdjDur = OptionAdjDur,
+                             OptionAdjCvx = OptionAdjCvx,
                              ZeroVolSpread = ZeroVolSpread,
                              SpreadToCurve = SpreadToCurve,
                              EffDuration = EffDuration,
@@ -175,6 +197,23 @@
   setMethod("OAS", signature("MortgageOAS"),
             function(object){
               object@OAS
+            })
+  
+  #' A method to extract the OptionAdjDur from S4 object MortgageOAS
+  #' 
+  #' @param object An S4 object of the type MortgageOAS
+  #' @export OptionAdjDur
+  setMethod("OptionAdjDur", signature("MortgageOAS"),
+            function(object){
+              object@OptionAdjDur
+            })
+  #' A method to extract the OptionAdjDur from S4 object MortgageOAS
+  #' 
+  #' @param object An S4 object of the type MortgageOAS
+  #' @export OptionAdjCvx
+  setMethod("OptionAdjCvx", signature("MortgageOAS"),
+            function(object){
+              object@OptionAdjCvx
             })
   
   #' A method to extract ZeroVolSpread from S4 object MortgageOAS
@@ -628,7 +667,6 @@
   
   #
   #Calculate OAS to price for price distribution analysis
-   
   OAS.Price <- function(spread = numeric(), 
                         DiscountMatrix = matrix(), 
                         CashFlowMatrix = matrix(), 
@@ -651,6 +689,28 @@
   
   OAS.Out[,5] <- Price.Dist 
   
+  PriceUp <- mean(OAS.Price(OAS.Spread, 
+                       DiscountMatrix = SimulationUp, 
+                       CashFlowMatrix = OAS.CashFlow,
+                       period = OAS.Term.Structure@Period, 
+                       proceeds = proceeds, 
+                       paths = paths))
+  
+  PriceDwn <- mean(OAS.Price(OAS.Spread, 
+                       DiscountMatrix = SimulationDwn, 
+                       CashFlowMatrix = OAS.CashFlow,
+                       period = OAS.Term.Structure@Period, 
+                       proceeds = proceeds, 
+                       paths = paths))
+  
+  OptionAdjDur = (
+    (PriceUp - PriceDwn)/(2 *PriceDecimal(Price) * (rate.delta/yield.basis))
+  )
+  
+  OptionAdjCvx = (
+    (PriceUp + PriceDwn - 2*PriceDecimal(Price))/
+      (2 *PriceDecimal(Price) * (rate.delta/yield.basis)^2)
+  )
   # --------------------------------------------------------------------------
   # Calculate static cash flow spread to the curve at zero volatility
   # Using the prepayment model this will always match the ZV spread indiciating
@@ -711,7 +771,6 @@
     Burnout = Burnout,
     Severity = 0) 
 
-
     #The fourth step is to call the bond cusip details and calculate 
     #Bond Yield to Maturity, 
     #Duration, Convexity and CashFlow.
@@ -759,6 +818,8 @@
     
     new("MortgageOAS",
        OAS = mean(OAS.Out[,1]) * yield.basis,
+       OptionAdjDur = OptionAdjDur * -1,
+       OptionAdjCvx = OptionAdjCvx * .5,
        ZeroVolSpread = spot.spread * yield.basis,
        SpreadToCurve = SpreadtoCurve,
        EffDuration = EffDuration(MortgageKeyRate),

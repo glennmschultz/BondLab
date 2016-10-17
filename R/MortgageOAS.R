@@ -492,18 +492,30 @@
   
   for(j in 1:paths){
 
-  # sim cube 5 ifelse synchs the CIR output to that of term 
-  # strucutred for MBS cashflow 
-  # analysis this needs to be fixed rates should be passed through in a 
-  # common scales regardless of 
-  # interest rate model  
+  
+  # This is an attempt to compute the forward curve for the path from the simulated
+  # short term rates  
   sim.cube[,4] <- cumprod(1 + Simulation[,j])
     
-  #sim.cube 5 is the discount rate to value cash flows
-  sim.cube[,5] <- (((sim.cube[,4] ^ (1/ sim.cube[,3]))^(1/months.in.year))-1)
-    
-  # Note sim.cube[,6] and sim.cube[,7] are multiplied by yield basis to adjust
-  # the values to pass into the mortgage rate function of the prepayment model
+  #sim.cube 5 is the spot rates implied from the forward rate curve above
+  #sim.cube[,5] <- (((sim.cube[,4] ^ (1/ sim.cube[,3]))^(1/months.in.year))-1)
+  
+  # Note sim.cube[5], sim.cube[,6] and sim.cube[,7] are multiplied by yield 
+  # basis to adjust the values to pass into the mortgage rate function of the 
+  # prepayment model Note sim.cube[,6] and sim.cube[,7] are multiplied by yield 
+  # basis to adjust the values to pass into the mortgage rate function of the 
+  # prepayment model
+  
+  sim.cube[,5] <- as.vector(CIRBondPrice(
+    shortrate = as.numeric(Simulation[, j]), 
+    kappa = kappa, 
+    lambda = lambda, 
+    theta = theta, 
+    sigma = sigma, 
+    T = 1/12, 
+    step = 0, 
+    result = "y") * yield.basis)
+  
   sim.cube[,6] <- as.vector(CIRBondPrice(
     shortrate = as.numeric(Simulation[, j]), 
     kappa = kappa, 
@@ -536,8 +548,8 @@
   Period(OAS.Term.Structure) <- as.numeric(sim.cube[,3])
   ForwardDate(OAS.Term.Structure) <- unname(
   as.character(as.Date(sim.cube[,2], origin = "1970-01-01")))
-  SpotRate(OAS.Term.Structure) <- as.numeric(sim.cube[,5])
-  ForwardRate(OAS.Term.Structure) <- as.numeric(Simulation[,j])
+  SpotRate(OAS.Term.Structure) <- as.numeric(Simulation[,j])
+  ForwardRate(OAS.Term.Structure) <- as.numeric(Simulation[,4])
   TwoYearForward(OAS.Term.Structure) <- as.numeric(sim.cube[,6])
   TenYearForward(OAS.Term.Structure) <- as.numeric(sim.cube[,7])
 
@@ -563,7 +575,7 @@
     PrepaymentAssumption = Prepayment)
     
     OAS.CashFlow[,j] <- as.vector(MtgCashFlow@TotalCashFlow)
-    OAS.DiscMatrix [,j] <- as.vector(sim.cube[,5])
+    OAS.DiscMatrix [,j] <- as.numeric(Simulation[,j]) #as.vector(sim.cube[,5])
 
     #This needs some error trapping on price
     proceeds <- as.numeric((
@@ -592,14 +604,12 @@
   # MortgageOAS slot 
    vectors <- prepayout
    paths <- Simulation
-  # cashflow <<- OAS.CashFlow
-  # disc <<- OAS.DiscMatrix
-  
+
    OAS.Spread <- mean(OAS.Out[,1])
   
   #
   #Calculate OAS to price for price distribution analysis
-  # 
+   
   OAS.Price <- function(spread = numeric(), 
                         DiscountMatrix = matrix(), 
                         CashFlowMatrix = matrix(), 
@@ -607,10 +617,11 @@
                         proceeds = numeric(), 
                         paths = numeric()) {
     
-  OAS.Proceeds <- data.frame(((1/((1 + OAS.DiscMatrix[,] + spread)^ period)) * 
-                                OAS.CashFlow[,]))
+  OAS.Proceeds <- data.frame(
+    ((1/((1 + DiscountMatrix[,] + spread)^ period)) * CashFlowMatrix[,]))
     OAS.Proceeds <- (colSums(OAS.Proceeds)/curr.bal) * price.basis
-    return(OAS.Proceeds)}
+    return(OAS.Proceeds)
+    }
   
   Price.Dist <- OAS.Price(OAS.Spread, 
                           DiscountMatrix = OAS.DiscMatrix, 
@@ -643,31 +654,32 @@
     
   # CIR Bond Price returns the spot rate curve
   
-    CIRSpot <- CIRBondPrice(
-    shortrate = short.rate,
-    T = 40,
-    step = 1/months.in.year,
-    kappa = kappa,
-    lambda = lambda,
-    theta = theta,
-    sigma = sigma,
-    result = "y")
+    CIRFwd <- CIRSim(
+      shortrate = short.rate,
+      kappa = kappa,
+      theta = theta,
+      T = 40,
+      step = 1/months.in.year,
+      sigma = 0,
+      N = 1
+    )
+  
+    Spot <- cumprod(1+(CIRFwd))
+    t <- seq(1,length(Spot),1)
+    Spot <- (Spot^(1/t))
+    CIRSpot <- Spot - 1
     
-    time.period <- seq(from = 1, to = 30, by = 1)
-    time.period <- time.period/12
-    timelength <- length(time.period)
-    
-    CIRSpot[1] <- short.rate
+    #CIRSpot[1] <- short.rate
     Mo1Fwd <- Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 1)
-    TwoYrFwd <-Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 2)
-    TenYrFwd <-Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 10)
+    TwoYrFwd <-Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 24)
+    TenYrFwd <-Forward.Rate(SpotRate.Curve = CIRSpot, FwdRate.Tenor = 120)
     
     CIRTermStructure <- new("TermStructure",
                             TradeDate = trade.date,
-                            Period = time.period[2:timelength],
+                            Period = as.numeric(sim.cube[,3]), 
                             Date = unname(as.character(pmtdate)),
                             SpotRate = CIRSpot * 100,
-                            ForwardRate = Mo1Fwd * 100,
+                            ForwardRate = Mo1Fwd *100,
                             TwoYearFwd = TwoYrFwd * 100,
                             TenYearFwd = TenYrFwd * 100)
     
@@ -679,6 +691,7 @@
     ModelTune = ModelTune,
     Burnout = Burnout,
     Severity = 0) 
+
 
     #The fourth step is to call the bond cusip details and calculate 
     #Bond Yield to Maturity, 
@@ -693,12 +706,12 @@
     MortgageKeyRate <- MtgTermStructure(
       bond.id = bond.id,
       original.bal = original.bal,
-       Rate.Delta = rate.delta,
-       TermStructure = CIRTermStructure,
-       settlement.date = settlement.date,
-       principal = principal,
-       price = PriceDecimalString(Price),
-       cashflow = MortgageCashFlow)
+      Rate.Delta = rate.delta,
+      TermStructure = CIRTermStructure,
+      settlement.date = settlement.date,
+      principal = principal,
+      price = PriceDecimalString(Price),
+      cashflow = MortgageCashFlow)
     
     # ----------------------------------------------------------------------
     # Solve for the zero volatility spread
@@ -742,4 +755,4 @@
        OASTermStructure <- CIRTermStructure,
        RatePaths = paths,
        PrepaymentVector = as.matrix(prepayout))
-    }
+   }

@@ -12,7 +12,8 @@ BondBasisConversion(issue.date = "character", start.date = "character",
 \arguments{
 \item{issue.date}{A character value the issue date of the security}
 
-\item{start.date}{A character value the start date for interest payment (dated date)}
+\item{start.date}{A character value the start date for interest payment
+(dated date)}
 
 \item{end.date}{A character value the final payment date}
 

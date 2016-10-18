@@ -34,7 +34,8 @@
   #' 
   #' Conversion for payment date (currently 30/360 is supported)
   #' @param issue.date A character value the issue date of the security
-  #' @param start.date A character value the start date for interest payment (dated date)
+  #' @param start.date A character value the start date for interest payment
+  #'  (dated date)
   #' @param end.date A character value the final payment date
   #' @param settlement.date A character value the settlement date
   #' @param lastpmt.date  A character value the last payment date to the investor
@@ -50,8 +51,9 @@
                                   lastpmt.date = "character", 
                                   nextpmt.date = "character",
                                   type = "character"){
-  # This function converts day count to bond U.S. Bond Basis 30/360 day count calculation 
-  # It returns the number of payments that will be received, period, and n for discounting
+  # This function converts day count to bond U.S. Bond Basis 30/360 day count
+  #  calculation. It returns the number of payments that will be received, 
+  #  period, and n for discounting
   # issue.date is the issuance date of the bond
   # start.date is the dated date of the bond
   # end.date is the maturity date of the bond
@@ -59,9 +61,12 @@
   # lastpmt.date is the last coupon payment date
   # nextpmt.date is the next coupon payment date
     
-  d1 <- if(settlement.date == issue.date) {day(issue.date)} else {day(settlement.date)}    
-  m1 <- if(settlement.date == issue.date) {month(issue.date)} else {month(settlement.date)}
-  y1 <- if(settlement.date == issue.date) {year(issue.date)} else {year(settlement.date)}
+  d1 <- if(settlement.date == issue.date) {day(issue.date)
+    } else {day(settlement.date)}    
+  m1 <- if(settlement.date == issue.date) {month(issue.date)
+    } else {month(settlement.date)}
+  y1 <- if(settlement.date == issue.date) {year(issue.date)
+    } else {year(settlement.date)}
   d2 <- day(nextpmt.date)
   m2 <- month(nextpmt.date)
   y2 <- year(nextpmt.date)

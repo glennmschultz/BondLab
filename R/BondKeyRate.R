@@ -112,9 +112,10 @@
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
     Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
     
-    switch(type, 
-           duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
-           convexity = (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
+    switch(
+      type, 
+      duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
+      convexity = (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * rate.delta^2)
     )
   }
   
@@ -215,10 +216,10 @@
     
   # Time (t) at which the cashflow is received
     #Time period in which the cashflow was received for discounting
-    Key.Rate.Table [x,2] = x/12
+    Key.Rate.Table [x,2] = x/months.in.year
     
   # spot rates for discounting
-    Key.Rate.Table[x,3] = SpotRate[x,1]/100   
+    Key.Rate.Table[x,3] = SpotRate[x,1]/yield.basis  
     
   # Align Cash Flows and populated the CashFlowArray
   # Step One: Make sure all cash flows are set to zero
@@ -232,8 +233,13 @@
   # The indexing is conditional on the integer of the first period less than or 
   # equal to 1
   
-  if(as.integer(cashflow@TimePeriod[1] *12) != 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12) + 1,2] = cashflow@TotalCashFlow
-  if(as.integer(cashflow@TimePeriod[1] * 12) == 1) CashFlowArray[as.integer(cashflow@TimePeriod * 12),2] = cashflow@TotalCashFlow
+  if(as.integer(cashflow@TimePeriod[1] * months.in.year) != 1) 
+      CashFlowArray[as.integer(cashflow@TimePeriod * months.in.year) + 1,2] = 
+        cashflow@TotalCashFlow
+  
+  if(as.integer(cashflow@TimePeriod[1] * months.in.year) == 1) 
+      CashFlowArray[as.integer(cashflow@TimePeriod * months.in.year),2] = 
+        cashflow@TotalCashFlow
   
   #solve for spread to spot curve to equal price
   spot.spread <- uniroot(Spot.Spread, 
@@ -257,7 +263,7 @@
   # using this table allows for incremental looping of discontinous segments 
   # of the spot rate curve and is proprietary to bondlab
   # Step 1 populate Period (n)
-  KRIndex[1:KRCount,1] <- round(as.numeric(KR) *12,0)
+  KRIndex[1:KRCount,1] <- round(as.numeric(KR) * months.in.year,0)
   
   # Step 2 populate time period (t)
   KRIndex[1:KRCount,2] <- as.numeric(KR) 
@@ -270,7 +276,7 @@
   
   for (j in 1:KRCount){                                   
     for (i in 1:360){
-      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {
+      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * months.in.year,0)) {
         KRIndex[j,3] = Key.Rate.Table[i,3]} else {KRIndex[j,3] = KRIndex[j,3]}
     }
   }
@@ -281,15 +287,15 @@
   
   for (j in 1:KRCount){                                   
     for (i in 1:360){
-      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * 12,0)) {
+      if (Key.Rate.Table[i,1] == round(KRIndex[j,2] * months.in.year,0)) {
         KRIndex[j,4] = Key.Rate.Table[i,4]} else {KRIndex[j,3] = KRIndex[j,3]}
     }
   }
   
   # Step 5 Populated KRIndex Table with KR Shifts
   for (j in 1:KRCount){
-    KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/100)
-    KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/100)
+    KRIndex[j,5] = KRIndex[j,4] - (Rate.Delta/yield.basis)
+    KRIndex[j,6] = KRIndex[j,4] + (Rate.Delta/yield.basis)
   }
   
   #===== Implement Shift of Spot Rates =======================
@@ -335,7 +341,7 @@
     
     # Calculate Key Rate Duration 
     KR.Duration[w-1,2] <- -EffectiveMeasures(
-      rate.delta = Rate.Delta/100, 
+      rate.delta = Rate.Delta/yield.basis, 
       cashflow = CashFlowArray[,2], 
       discount.rates = Key.Rate.Table[,4], 
       discount.rates.up = Key.Rate.Table[,6],
@@ -345,7 +351,7 @@
       proceeds = proceeds
     ) 
     KR.Duration[w-1,3] <- EffectiveMeasures(
-      rate.delta = Rate.Delta/100, 
+      rate.delta = Rate.Delta/yield.basis, 
       cashflow = CashFlowArray[,2], 
       discount.rates = Key.Rate.Table[,4], 
       discount.rates.up = Key.Rate.Table[,6],
@@ -356,7 +362,7 @@
     ) 
   } # Outer Loop around KRIndex
   new("BondTermStructure",
-      SpotSpread = spot.spread * 100,
+      SpotSpread = spot.spread * yield.basis,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3]),
       KeyRateTenor = KR.Duration[,1],

@@ -1,6 +1,6 @@
 
   # Bond Lab is a software application for the analysis of 
-  # fixed income securities it provides a suite of applications
+  # fixed income securities it provides a suite of applications for the analysis
   # mortgage backed, asset backed securities, and commerical mortgage backed 
   # securities Copyright (C) 2016  Bond Lab Technologies, Inc.
   # 
@@ -17,11 +17,9 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
   #' @include TermStructure.R MortgageKeyRate.R
   NULL
 
- 
   #' An S4 class representing the bond term structure exposure
   #' 
   #' @slot SpotSpread a numeric value the spread to the spot curve
@@ -40,7 +38,6 @@
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
 
-
   setGeneric("BondTermStructure",function(bond.id = "character", 
                                  Rate.Delta = numeric(), 
                                  TermStructure = "character", 
@@ -57,17 +54,16 @@
                      EffConvexity = "numeric",
                      KeyRateTenor = "numeric",
                      KeyRateDuration = "numeric",
-                     KeyRateConvexity = "numeric")
-              
-                    {
-                    .Object@SpotSpread = SpotSpread
-                    .Object@EffDuration = EffDuration
-                    .Object@EffConvexity = EffConvexity
-                    .Object@KeyRateTenor = KeyRateTenor
-                    .Object@KeyRateDuration = KeyRateDuration
-                    .Object@KeyRateConvexity = KeyRateConvexity
-
-                    return(.Object)
+                     KeyRateConvexity = "numeric",
+                     ...){
+              callNextMethod(.Object,
+                             SpotSpread = SpotSpread,
+                             EffDuration = EffDuration,
+                             EffConvexity = EffConvexity,
+                             KeyRateTenor = KeyRateTenor,
+                             KeyRateDuration = KeyRateDuration,
+                             KeyRateConvexity = KeyRateConvexity,
+                             ...)
             })
   
   #' A function to calculate a bond key rate duration
@@ -80,7 +76,7 @@
   #' @param TermStructure A character string referencing an object of typre
   #' TermStructure.
   #' @param principal A numeric value the principal or face amount of the bond.
-  #' @param price A numeric value the price of the bond
+  #' @param price A character the price of the bond
   #' @param cashflow A character string referencing an object of the 
   #' BondCashFlow.
   #' @importFrom stats approx
@@ -89,7 +85,7 @@
                                 Rate.Delta = numeric(), 
                                 TermStructure = "character", 
                                 principal = numeric(), 
-                                price = numeric(), 
+                                price = "character", 
                                 cashflow = "character"){
   
   #Call the bond frequency to adjust the spot spread to the 
@@ -98,15 +94,18 @@
   maturity = bond.id@Maturity
   accrued = cashflow@Accrued
   
+  Price <- PriceTypes(price)
+  
   #Class name variable.  This will set the class name for the new class 
   #to be initilized
-  ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")
-    } else {as.character("MortgageTermStructure")}
+  #ClassName <- if(bond.id@BondType != "MBS") {as.character("BondTermStructure")
+  #  } else {as.character("MortgageTermStructure")}
   
   #Error Trap the user's price input
-  if(price <= 1) {price = price} else {price = price/100}
-  if(price <=0) stop("No valid bond price")
-  proceeds = (principal * price) + accrued 
+  #if(price <= 1) {price = price} else {price = price/100}
+  #if(price <=0) stop("No valid bond price")
+  
+  proceeds = (principal * PriceBasis(Price)) + accrued 
   
   #========== Set the functions that will be used ==========
   # These functions are set as internal functions to key rates
@@ -128,24 +127,27 @@
     )
   }
   
-  Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
-                                 discount.rates.up, discount.rates.dwn, t.period, proceeds){
-    Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-    Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-    Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
-    (Price.UP - Price.DWN)/(2*proceeds*rate.delta)
-  }
-  Effective.Convexity <- function(rate.delta, cashflow, discount.rates, 
-                                  discount.rates.up, discount.rates.dwn, t.period, proceeds){
-    Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
-    Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
-    Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
-    (Price.UP + Price.DWN - (2*proceeds))/(2*proceeds *(rate.delta^2))
-  }
+  # Effective.Duration <- function(rate.delta, cashflow, discount.rates, 
+  #                               discount.rates.up, discount.rates.dwn, t.period, proceeds){
+  #  Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+  #  Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
+  #  Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+  #  (Price.UP - Price.DWN)/(2*proceeds*rate.delta)
+  #}
+  #Effective.Convexity <- function(rate.delta, cashflow, discount.rates, 
+  #                                discount.rates.up, discount.rates.dwn, t.period, proceeds){
+  #  Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
+  #  Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow)
+  #  Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow)
+  #  (Price.UP + Price.DWN - (2*proceeds))/(2*proceeds *(rate.delta^2))
+  #}
   
   #The spot spread function is used to solve for the spread to the spot curve to normalize discounting
-  Spot.Spread <- function(spread = numeric(), cashflow = vector(), discount.rates = vector(), 
-                          t.period = vector(), proceeds = numeric()){
+  Spot.Spread <- function(spread = numeric(), 
+                          cashflow = vector(), 
+                          discount.rates = vector(), 
+                          t.period = vector(), 
+                          proceeds = numeric()){
     Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
     return(proceeds - Present.Value)
   }
@@ -168,7 +170,9 @@
   Key.Rate.Table <- array(data = NA, c(360,6), dimnames = list(seq(c(1:360)), Index.Names))
   
   #key rate duration array holds the key rates and the key rate duration
-  KR.Duration <- array(data = NA, c(11,3), dimnames = list(seq(c(1:11)), KR.Duration.Col))
+  KR.Duration <- array(data = NA, c(11,3), 
+                       dimnames = list(seq(c(1:11)), KR.Duration.Col))
+  
   KR.Duration[,1] <- as.numeric(KR.Duration.Row)
   
   # Create Index for Key Rate Table for interpolation of Key Rate Duration set outer knot points
@@ -176,8 +180,11 @@
   # this needs some logic to change the right knot point if the maturity or last payment of the 
   # bond is greater than 30-years should be adaptive
   KR <- c("0.083", "0.25", "1", "2", "3", "5", "7", "10", "15", "20", "25", "30", "30")   # Key Rates
+  
   KRCount = length(KR)
-  KRIndex <- array(data = NA, c(KRCount, 6), dimnames = list(seq(c(1:KRCount)), Index.Names))
+  
+  KRIndex <- array(data = NA, c(KRCount, 6), 
+                   dimnames = list(seq(c(1:KRCount)), Index.Names))
   
   # Initialize the cash flow array for discounting and key rate caclulations
   # this will be populated from class BondCashFlows
@@ -326,7 +333,7 @@
       proceeds = proceeds
     ) 
   } # Outer Loop around KRIndex
-  new(ClassName,
+  new("BondTermStructure",
       SpotSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3]),

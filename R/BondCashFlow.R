@@ -22,7 +22,7 @@
   
   #' An S4 class representing standard bond cash flows
   #' 
-  #' @slot Price a numeric value the price of the bond
+  #' @slot Price a character the price of the bond
   #' @slot Accrued a numeric value the accrued interest
   #' @slot YieldToMaturity a numeric value the bond yield to maturity
   #' @slot WAL a numeric value the weighted average life of the bond
@@ -40,7 +40,7 @@
   #' @exportClass BondCashFlows
   setClass("BondCashFlows",
          representation(
-           Price = "numeric",
+           Price = "character",
            Accrued = "numeric",
            YieldToMaturity = "numeric",
            WAL = "numeric",
@@ -97,9 +97,8 @@
             TimePeriod = "numeric",
             PrincipalOutstanding = "numeric",  
             CouponPmt = "numeric",
-            TotalCashFlow = "numeric")
-            
-            {
+            TotalCashFlow = "numeric",
+            ...){
               callNextMethod(.Object,
                              Price = Price,
                              Accrued = Accrued,
@@ -112,8 +111,8 @@
                              TimePeriod = TimePeriod,
                              PrincipalOutstanding = PrincipalOutstanding,
                              CouponPmt = CouponPmt,
-                             TotalCashFlow = TotalCashFlow)
-               
+                             TotalCashFlow = TotalCashFlow,
+                             ...)
             })
   
   #' Method to extract Price from S4 class
@@ -225,7 +224,7 @@
   # Pass price to the PriceTypes constructor function.  This function allows
   # converts from 32nds and to decimal basis
   price <- PriceTypes(Price = price)
-  coupon = coupon/100
+  coupon = coupon/yield.basis
 
   # Calculate the number of cashflows that will be paid from settlement date to
   # maturity date 
@@ -297,7 +296,7 @@
     end.date = end.date,
     settlement.date = settlement.date, 
     lastpmt.date = lastpmt.date, 
-    nextpmt.date = nextpmt.date, type = bondbasis)) * 360
+    nextpmt.date = nextpmt.date, type = bondbasis)) * days.in.year.360
   
   days.between.pmtdate = ((
     months.in.year/frequency)/months.in.year) * days.in.year.360
@@ -357,7 +356,7 @@
   
   #Assign Values to the slots
   new("BondCashFlows",   
-      Price = PriceDecimal(price),
+      Price = PriceDecimalString(price),
       Accrued = accrued.interest,
       YieldToMaturity = Yield.To.Maturity,
       WAL = WAL,

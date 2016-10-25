@@ -10,7 +10,7 @@ An S4 class representing standard bond cash flows
 \section{Slots}{
 
 \describe{
-\item{\code{Price}}{a numeric value the price of the bond}
+\item{\code{Price}}{a character the price of the bond}
 
 \item{\code{Accrued}}{a numeric value the accrued interest}
 

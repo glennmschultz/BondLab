@@ -5,7 +5,7 @@
 \title{A function to calculate a bond key rate duration}
 \usage{
 BondTermStructure(bond.id = "character", Rate.Delta = numeric(),
-  TermStructure = "character", principal = numeric(), price = numeric(),
+  TermStructure = "character", principal = numeric(), price = "character",
   cashflow = "character")
 }
 \arguments{
@@ -20,7 +20,7 @@ TermStructure.}
 
 \item{principal}{A numeric value the principal or face amount of the bond.}
 
-\item{price}{A numeric value the price of the bond}
+\item{price}{A character the price of the bond}
 
 \item{cashflow}{A character string referencing an object of the 
 BondCashFlow.}

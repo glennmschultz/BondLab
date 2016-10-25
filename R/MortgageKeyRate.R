@@ -188,13 +188,8 @@
   # create PriceTypes for mortgage cash flow call in key rate
   Price <- PriceTypes(Price = price)
  
-  #Error Trap the user's price input
-  #if(price <= 1) {price = price} else {price = price/yield.basis}
-  #if(price <=0) stop("No valid bond price")
-  
   # calcuate proceeds the order of operation is important
-  
-  # calculate price basis and then proceeds based on the correct price basis
+
   proceeds = (principal * PriceBasis(Price)) + accrued
 
   #========== Set the functions that will be used ==========

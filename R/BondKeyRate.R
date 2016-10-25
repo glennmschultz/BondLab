@@ -90,9 +90,9 @@
   
   #Call the bond frequency to adjust the spot spread to the 
   #payment frequency of the bond
-  frequency = bond.id@Frequency
-  maturity = bond.id@Maturity
-  accrued = cashflow@Accrued
+  frequency = Frequency(bond.id)
+  maturity = Maturity(bond.id)
+  accrued = Accrued(cashflow)
   
   Price <- PriceTypes(price)
 
@@ -203,7 +203,7 @@
                          dimnames = list(seq(1:360), c("period", "cashflow")))
   
   #Initialze the spot rate array for key rate duration calculations
-  SpotRate <- as.matrix(TermStructure@SpotRate)
+  SpotRate <- as.matrix(SpotRate(TermStructure))
   
   # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS 
   # coefficients from Term Stucture and then populate and align the cashflow 
@@ -233,13 +233,13 @@
   # The indexing is conditional on the integer of the first period less than or 
   # equal to 1
   
-  if(as.integer(cashflow@TimePeriod[1] * months.in.year) != 1) 
-      CashFlowArray[as.integer(cashflow@TimePeriod * months.in.year) + 1,2] = 
-        cashflow@TotalCashFlow
+  if(as.integer(TimePeriod(cashflow)[1] * months.in.year) != 1) 
+      CashFlowArray[as.integer(TimePeriod(cashflow) * months.in.year) + 1,2] = 
+        TotalCashFlow(cashflow)
   
-  if(as.integer(cashflow@TimePeriod[1] * months.in.year) == 1) 
-      CashFlowArray[as.integer(cashflow@TimePeriod * months.in.year),2] = 
-        cashflow@TotalCashFlow
+  if(as.integer(TimePeriod(cashflow)[1] * months.in.year) == 1) 
+      CashFlowArray[as.integer(TimePeriod(cashflow) * months.in.year),2] = 
+        TotalCashFlow(cashflow)
   
   #solve for spread to spot curve to equal price
   spot.spread <- uniroot(Spot.Spread, 

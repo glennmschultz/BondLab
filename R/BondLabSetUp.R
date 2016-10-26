@@ -29,4 +29,7 @@
     do.call(source,
             list(file = paste(system.file(package = "BondLab"), "/Scenario/Scenario_YieldCurve", sep = ""),
                  local = TRUE))
+    do.call(source,
+            list(file = paste(system.file(package = "BondLab"), "/BondData/BondData", sep = ""),
+                 local = TRUE))
   }

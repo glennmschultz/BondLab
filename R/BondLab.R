@@ -18,6 +18,7 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   options(digits = 8)
+  options(rgl.useNULL = TRUE) 
   utils::globalVariables(c("day", "month", "year"))
 
 

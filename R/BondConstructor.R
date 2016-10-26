@@ -19,7 +19,7 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-  #' @include PassThroughConstructor.R
+  #' @include PassThroughConstructor.R 
   NULL
  
   #' An S4 class representing the cusip detail of the a standard bond
@@ -29,6 +29,8 @@
   #' @slot BondType a character string the type of the bond UST, Corp
   #' @slot Sector a character string the bond sector 
   #' (Govt, Financial, Utility, etc.)
+  #' @slot Issuer a character string the issuer of the bill, note, or bond.
+  #' @slot Underwriter a character string the deal underwriter
   #' @slot Coupon a numeric value the bond's coupon
   #' @slot IssueDate a character string the issue date in mm/dd/YYYY format
   #' @slot DatedDate a character string the dated date in mm/dd/YYYY format
@@ -54,6 +56,8 @@
            ID = "character",
            BondType = "character",
            Sector ="character",
+           Issuer = "character",
+           Underwriter = "character",
            Coupon = "numeric",
            IssueDate = "character",
            DatedDate = "character",
@@ -74,6 +78,8 @@
     ID ="character",                              
     BondType = "character",                              
     Sector ="character",
+    Issuer = "character",
+    Underwriter = "character",
     Coupon = numeric(),
     IssueDate = "character",
     DatedDate = "character",
@@ -94,6 +100,8 @@
   # standard generic ID is defined in the passthrough constructor
   # standard generic BondType is defined in the passthrough constructor
   # standard generic Sector is defined in the passthrough constructor
+  # standard generic Issuer is defined in the passthrough constructor
+  # standard generic underwriter is defined in passthrough constructor
   # standard generic Coupon is defined in the passthrough constructor
   # standard generic IssueDate is defined in the passthrough constructor
   # standard generic DatedDate is defined in the passthrough constructor
@@ -135,6 +143,8 @@
                    ID ="character",
                    BondType = "character",
                    Sector ="character",
+                   Issuer = "character",
+                   Underwriter = "character",
                    Coupon = "numeric",
                    IssueDate = "character",
                    DatedDate = "character",
@@ -155,6 +165,8 @@
                            ID = ID,
                            BondType = BondType,
                            Sector = Sector,
+                           Issuer = Issuer,
+                           Underwriter = Underwriter,
                            Coupon = Coupon,
                            IssueDate = IssueDate,
                            DatedDate = DatedDate,
@@ -199,6 +211,20 @@
   #' @exportMethod Sector
   setMethod("Sector", signature("BondDetails"),
             function(object){object@Sector})
+  
+  #' Method to extract Issuer from an S4 class of type BondDetails
+  #' 
+  #' @param object The name of the S4 object of type BondDetails
+  #' @exportMethod Issuer
+  setMethod("Issuer", signature("BondDetails"),
+            function(object){object@Issuer})
+  
+  #' Method to extract Underwriter from an S$ class of type BondDetails
+  #' 
+  #' @param object The name of the S4 object of type BondDetails
+  #' @exportMethod Underwriter
+  setMethod("Underwriter", signature("BondDetails"),
+            function(object){object@Underwriter})
   
   #' Method to extract Coupon from an S4 class of type BondDetails
   #' 
@@ -321,6 +347,8 @@
     ID ="character",
     BondType = "character",
     Sector ="character",
+    Issuer = "character",
+    Underwriter = "character",
     Coupon = numeric(),
     IssueDate = "character",
     DatedDate = "character",
@@ -341,6 +369,8 @@
         ID = ID,
         BondType = BondType,
         Sector = Sector,
+        Issuer = Issuer,
+        Underwriter = Underwriter,
         Coupon = Coupon,
         IssueDate = IssueDate,
         DatedDate = DatedDate,
@@ -364,6 +394,8 @@
   #' @param ID A character string the bond's ID
   #' @param BondType A character string the type of bond
   #' @param Sector A character string the bond sector
+  #' @param Issuer A character string the bond issuer
+  #' @param Underwriter A character string the bond underwriter
   #' @param Coupon A character string the coupon (interest rate) 
   #' paid to the investor
   #' @param IssueDate A character string the issue date of the bond
@@ -388,6 +420,8 @@
     ID ="character",
     BondType = "character",
     Sector ="character",
+    Issuer = "character",
+    Underwriter = "character",
     Coupon = numeric(),
     IssueDate = "character",
     DatedDate = "character",
@@ -408,6 +442,8 @@
       ID = ID,
       BondType = BondType,
       Sector = Sector,
+      Issuer = Issuer,
+      Underwriter = Underwriter,
       Coupon = Coupon,
       IssueDate = IssueDate,
       DatedDate = DatedDate,

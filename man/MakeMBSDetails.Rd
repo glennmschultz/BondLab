@@ -5,22 +5,22 @@
 \title{A constructor function to create a mortgage pass through security}
 \usage{
 MakeMBSDetails(Cusip = "character", ID = "character",
-  BondType = "character", Sector = "character", Coupon = numeric(),
-  IssueDate = "character", DatedDate = "character",
-  Maturity = "character", LastPmtDate = "character",
-  NextPmtDate = "character", Term = numeric(), WALA = numeric(),
-  WAM = numeric(), PaymentDelay = numeric(), Moody = "character",
-  SP = "character", BondLab = "character", Frequency = numeric(),
-  BondBasis = "character", GWac = numeric(), OrigLoanBal = numeric(),
-  OrigLTV = numeric(), AmortizationType = "character",
-  AmortizationTerm = numeric(), Index = "character", Margin = numeric(),
-  FirstPmtDate = "character", FinalPmtDate = "character",
-  Servicing = numeric(), PMI = numeric(), GFeePremium = numeric(),
-  InitialInterest = "logical", InterestOnlyPeriod = numeric(),
-  FirstPrinPaymentDate = "character", BalloonPmt = "logical",
-  BalloonDate = "character", MBSFactor = numeric(),
-  OriginalBal = numeric(), CurrentBal = numeric(), Model = "character",
-  Burnout = numeric(), SATO = numeric())
+  BondType = "character", Sector = "character", Issuer = "character",
+  Underwriter = "character", Coupon = numeric(), IssueDate = "character",
+  DatedDate = "character", Maturity = "character",
+  LastPmtDate = "character", NextPmtDate = "character", Term = numeric(),
+  WALA = numeric(), WAM = numeric(), PaymentDelay = numeric(),
+  Moody = "character", SP = "character", BondLab = "character",
+  Frequency = numeric(), BondBasis = "character", GWac = numeric(),
+  OrigLoanBal = numeric(), OrigLTV = numeric(),
+  AmortizationType = "character", AmortizationTerm = numeric(),
+  Index = "character", Margin = numeric(), FirstPmtDate = "character",
+  FinalPmtDate = "character", Servicing = numeric(), PMI = numeric(),
+  GFeePremium = numeric(), InitialInterest = "logical",
+  InterestOnlyPeriod = numeric(), FirstPrinPaymentDate = "character",
+  BalloonPmt = "logical", BalloonDate = "character",
+  MBSFactor = numeric(), OriginalBal = numeric(), CurrentBal = numeric(),
+  Model = "character", Burnout = numeric(), SATO = numeric())
 }
 \arguments{
 \item{Cusip}{A character the Pass Through MBS cusip.}
@@ -29,7 +29,11 @@ MakeMBSDetails(Cusip = "character", ID = "character",
 
 \item{BondType}{A character string the type of Bond MBS, etc.}
 
-\item{Sector}{A charcter string description of the Sector Mortgage Sector}
+\item{Sector}{A character string description of the Sector Mortgage Sector}
+
+\item{Issuer}{A character string the Issuer}
+
+\item{Underwriter}{A character string the Underwriter}
 
 \item{Coupon}{A numeric value the Bond Coupon.}
 
@@ -145,6 +149,8 @@ security
  ID = "bondlabMBS4",
  BondType = "MBS",
  Sector = "MBS",
+ Issuer = FNMA,
+ Underwriter = FNMA,
  Coupon = 4.0,
  IssueDate = "01-01-2013",
  DatedDate = "01-01-2013",

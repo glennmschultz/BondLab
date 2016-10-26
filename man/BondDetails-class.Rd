@@ -19,6 +19,10 @@ An S4 class representing the cusip detail of the a standard bond
 \item{\code{Sector}}{a character string the bond sector 
 (Govt, Financial, Utility, etc.)}
 
+\item{\code{Issuer}}{a character string the issuer of the bill, note, or bond.}
+
+\item{\code{Underwriter}}{a character string the deal underwriter}
+
 \item{\code{Coupon}}{a numeric value the bond's coupon}
 
 \item{\code{IssueDate}}{a character string the issue date in mm/dd/YYYY format}

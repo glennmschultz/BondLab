@@ -16,13 +16,16 @@
   #
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  
 
   #' An S4 class to represent a mortgage pass-through security
   #' 
   #' @slot Cusip A character string the pass-through cusip
   #' @slot ID A character string identifying the agency and pool number
-  #' @slot BondType A character sting the bond type
+  #' @slot BondType A character string the bond type
   #' @slot Sector A character string the sector
+  #' @slot Issuer A character string the Issuer
+  #' @slot Underwriter A character string the Underwriter
   #' @slot Coupon A coupon a numeric value the annual coupon rate
   #' @slot IssueDate A character string the issue date
   #' @slot DatedDate A character string the dated date
@@ -74,6 +77,8 @@
            ID = "character",
            BondType = "character",
            Sector ="character",
+           Issuer = "character",
+           Underwriter = "character",
            Coupon = "numeric",
            IssueDate = "character",
            DatedDate = "character",
@@ -117,6 +122,8 @@
     Cusip = "character",
     ID = "character",
     BondType = "character",
+    Issuer = "character",
+    Underwriter = "character",
     Sector ="character",
     Coupon = numeric(),
     IssueDate = "character",
@@ -182,6 +189,21 @@
   #' @export Sector
   setGeneric("Sector", function(object)
     {standardGeneric("Sector")})
+  
+  #' A generic function to access the slot Issuer
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Issuer", function(object)
+  {standardGeneric("Issuer")})
+  
+  #' A generic function to access the slot Underwriter
+  #' 
+  #' @param object an S4 class object
+  #' @export
+  setGeneric("Underwriter", function(object)
+  {standardGeneric("Underwriter")})
+  
   
   #' A standard generic function to access the slot Coupon
   #' @param object an S4 class object
@@ -460,6 +482,8 @@
                    ID = "character",
                    BondType = "character",
                    Sector ="character",
+                   Issuer = "character",
+                   Underwriter = "character",
                    Coupon = "numeric",
                    IssueDate = "character",
                    DatedDate = "character",
@@ -504,6 +528,8 @@
                            ID = ID,
                            BondType = BondType,
                            Sector = Sector,
+                           Issuer = Issuer,
+                           Underwriter = Underwriter,
                            Coupon = Coupon,
                            IssueDate = IssueDate,
                            DatedDate = DatedDate,
@@ -568,6 +594,18 @@
   #' @exportMethod Sector
   setMethod("Sector", signature("MBSDetails"),
             function(object){object@Sector})
+  
+  #' Method to extreact the slot Issuer from the class MBSDetails
+  #' @param object the name of the object of type MBSDetails
+  #' @exportMethod Issuer
+  setMethod("Issuer", signature("MBSDetails"),
+            function(object){object@Issuer})
+  
+  #' Method to extract the slot Underwriter from the class MBSDetails
+  #' @param object the name of the object of type MBSDetails
+  #' @exportMethod Underwriter
+  setMethod("Underwriter", signature("MBSDetails"),
+            function(object){object@Underwriter})
   
   #' Method to extract the slot Coupon from the class MBSDetails
   #' @param object the name of the object of type MBSDetails
@@ -862,6 +900,8 @@
   ID = "character",
   BondType = "character",
   Sector ="character",
+  Issuer = "character",
+  Underwriter = "character",
   Coupon = numeric(),
   IssueDate = "character",
   DatedDate = "character",
@@ -907,6 +947,8 @@
       ID = ID,
       BondType = BondType,
       Sector = Sector,
+      Issuer = Issuer,
+      Underwriter = Underwriter,
       Coupon = Coupon,
       IssueDate = IssueDate,
       DatedDate = DatedDate,
@@ -954,7 +996,9 @@
   #' @param Cusip A character the Pass Through MBS cusip.
   #' @param ID A character string the pool number. 
   #' @param BondType A character string the type of Bond MBS, etc.
-  #' @param Sector A charcter string description of the Sector Mortgage Sector
+  #' @param Sector A character string description of the Sector Mortgage Sector
+  #' @param Issuer A character string the Issuer
+  #' @param Underwriter A character string the Underwriter 
   #' @param Coupon A numeric value the Bond Coupon.
   #' @param IssueDate A character string the issue date of the security.
   #' @param DatedDate A character sting The date following the issue when 
@@ -1027,6 +1071,8 @@
   #'  ID = "bondlabMBS4",
   #'  BondType = "MBS",
   #'  Sector = "MBS",
+  #'  Issuer = FNMA,
+  #'  Underwriter = FNMA,
   #'  Coupon = 4.0,
   #'  IssueDate = "01-01-2013",
   #'  DatedDate = "01-01-2013",
@@ -1071,6 +1117,8 @@
   ID = "character",
   BondType = "character",
   Sector ="character",
+  Issuer = "character",
+  Underwriter = "character",
   Coupon = numeric(),
   IssueDate = "character",
   DatedDate = "character",
@@ -1116,6 +1164,8 @@
     ID = ID,
     BondType = BondType,
     Sector = Sector,
+    Issuer = Issuer,
+    Underwriter = Underwriter,
     Coupon = Coupon,
     IssueDate = IssueDate,
     DatedDate = DatedDate,

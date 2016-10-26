@@ -5,13 +5,13 @@
 \title{A constuctor function to create standard bond cusip information}
 \usage{
 MakeBondDetails(Cusip = "character", ID = "character",
-  BondType = "character", Sector = "character", Coupon = numeric(),
-  IssueDate = "character", DatedDate = "character",
-  Maturity = "character", LastPmtDate = "character",
-  NextPmtDate = "character", Moody = "character", SP = "character",
-  BondLab = "character", Frequency = numeric(), BondBasis = "character",
-  Callable = "character", Putable = "character",
-  SinkingFund = "character")
+  BondType = "character", Sector = "character", Issuer = "character",
+  Underwriter = "character", Coupon = numeric(), IssueDate = "character",
+  DatedDate = "character", Maturity = "character",
+  LastPmtDate = "character", NextPmtDate = "character",
+  Moody = "character", SP = "character", BondLab = "character",
+  Frequency = numeric(), BondBasis = "character", Callable = "character",
+  Putable = "character", SinkingFund = "character")
 }
 \arguments{
 \item{Cusip}{A character string the bond's cusip number}
@@ -21,6 +21,10 @@ MakeBondDetails(Cusip = "character", ID = "character",
 \item{BondType}{A character string the type of bond}
 
 \item{Sector}{A character string the bond sector}
+
+\item{Issuer}{A character string the bond issuer}
+
+\item{Underwriter}{A character string the bond underwriter}
 
 \item{Coupon}{A character string the coupon (interest rate) 
 paid to the investor}

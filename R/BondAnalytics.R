@@ -108,6 +108,8 @@
       ID = bond.id@ID,
       BondType = bond.id@BondType,
       Sector = bond.id@Sector,
+      Issuer = bond.id@Issuer,
+      Underwriter = bond.id@Underwriter,
       Coupon = bond.id@Coupon,
       IssueDate = bond.id@IssueDate,
       DatedDate = bond.id@DatedDate,

@@ -145,12 +145,7 @@
   setGeneric("DealName", function(object)
   {standardGeneric("DealName")})
   
-  #' A generic function to access the slot Issuer
-  #' 
-  #' @param object an S4 class object
-  #' @export
-  setGeneric("Issuer", function(object)
-  {standardGeneric("Issuer")})
+  # standard generic Issuer is defined in passthroughconstructor
   
   #' A generic function to access the slot DealNumber
   #' 
@@ -173,12 +168,7 @@
   setGeneric("DealSettlementDate", function(object)
     {standardGeneric("DealSettlementDate")})
   
-  #' A generic function to access the slot Underwriter
-  #' 
-  #' @param object an S4 class object
-  #' @export
-  setGeneric("Underwriter", function(object)
-    {standardGeneric("Underwriter")})
+  # standard generic Underwriter is defined in passthrough constructor
   
   #' A generic function to access the slot Trustee
   #' 

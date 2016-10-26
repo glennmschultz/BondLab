@@ -14,9 +14,13 @@ An S4 class to represent a mortgage pass-through security
 
 \item{\code{ID}}{A character string identifying the agency and pool number}
 
-\item{\code{BondType}}{A character sting the bond type}
+\item{\code{BondType}}{A character string the bond type}
 
 \item{\code{Sector}}{A character string the sector}
+
+\item{\code{Issuer}}{A character string the Issuer}
+
+\item{\code{Underwriter}}{A character string the Underwriter}
 
 \item{\code{Coupon}}{A coupon a numeric value the annual coupon rate}
 

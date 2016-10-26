@@ -16,9 +16,9 @@
   #
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-  options(digits = 8)
+  
   options(rgl.useNULL = TRUE) 
+  options(digits = 8)
   utils::globalVariables(c("day", "month", "year"))
 
 

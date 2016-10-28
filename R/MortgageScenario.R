@@ -56,6 +56,35 @@
   #' @exportMethod ScenarioSet
   setMethod("ScenarioSet", signature("MtgScenarioSet"),
             function(object){object@Scenario})
+  
+  #' An S4 class representing mortgage scenario return analysis 
+  #' 
+  #' The class MortgageReturn holds the results of mortgage return analysis
+  #' @slot CouponIncome A numeric value the Coupon Income received over the 
+  #' investment horizon
+  #' @slot ScheduledPrinReceived A numeric value the scheduled principal 
+  #' received over the investment horizon
+  #' @slot PrepaidPrinReceived A numeric value the prepaid principal received
+  #' over the investment horizon
+  #' @slot ReinvestmentIncome A numeric value the reivestment income received 
+  #' over the investment horizon
+  #' @slot HorizonCurrBal A numeric value the current balance at the end of the
+  #' investment horizon
+  #' @slot HorizonPrice A numeric the price at the end of the horizon
+  #' @slot HorizonReturn A numeric value the horizon total return
+  #' @slot HorizonMos A numeric value the number of months to 
+  #' the scenario horizon date
+  #' @exportClass MortgageReturn
+  setClass("MortgageReturn",
+           representation(
+             CouponIncome = "numeric",
+             ScheduledPrinReceived = "numeric",
+             PrepaidPrinReceived = "numeric",
+             ReinvestmentIncome = "numeric",
+             HorizonCurrBal = "numeric",
+             HorizonPrice = "numeric",
+             HorizonReturn = "numeric",
+             HorizonMos = "numeric"))
 
   #' An S4 Class representing the results of mortgage return scenario analysis
   #' 
@@ -757,7 +786,10 @@
     DiscountRate[1:NumberofCashFlow] * TotalCashFlow(HorizonCashFlow)
     PresentValue <- sum(HorizonPresentValue)
     return(PresentValue)}
-    
+  
+  # Do not replace this with curve spreads as this section of code is used 
+  # to compute horizon yield to maturity from nominal spread and interpolated
+  # curve.  
   Horizon.Nominal.Value <- function(HorizonCurve = "character",
                            HorizonTermStructure = "character",
                           HorizonCashFlow = "character"){

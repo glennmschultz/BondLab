@@ -41,7 +41,7 @@
           function(.Object,
                    ...)
             {callNextMethod(.Object,
-                                       ...)
+                            ...)
             })
 
   #'Bond Analytics is the Analytic engine for a standard non-callable bond 

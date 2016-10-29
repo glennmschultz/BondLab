@@ -637,7 +637,6 @@
   # Assign the prepayment vector to the prepayment out matrix
    prepayout <- cbind(prepayout, Prepayment@SMM)
 
-
   MtgCashFlow <- MortgageCashFlow(
     bond.id = bond.id,
     original.bal = original.bal,

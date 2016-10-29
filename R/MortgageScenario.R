@@ -334,38 +334,41 @@
     }
     
     bond.id <- bond.id
+    rates.data <- rates.data
     MortgageRate <- MtgRate()
     ModelTune <- ModelTune(bond.id = bond.id)
     Burnout = BurnOut(bond.id)
     Scenario <- ScenarioCall(Scenario = scenario)
+
+    #set rates shift (immediate) for term structure fit
+    ShiftCurve <- rates.data
+    ShiftCurve[1,2:length(ShiftCurve)] <- 
+      ScenarioFormula(Scenario)(rates.data[1,2:length(ShiftCurve)], 
+                                Shiftbps = Shiftbps(Scenario))
+
+    # Set horizon curve and settlment date for horizon ending value analysis
+    # This curve is used to fit the horizon term structure when the scenario is
+    # not based on shift of the spot rate curve.
     
-    rates <- rates.data
-  
+    HorizonCurve <- rates.data
+    HorizonCurve[1,1] <- as.character(
+      as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
+    
+    HorizonCurve[1,2:length(HorizonCurve)] <- 
+      ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
+                                Shiftbps = Shiftbps(Scenario))
+    HorizonSettlement <- as.Date(
+      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
+    
     Price <- PriceTypes(Price = price)
-    
-    if(grepl("s", scenario) == TRUE){
-      TermStructure <- TermStructure(
-        rates.data = rates,
-        method = method)
-      
-      ForwardRate(TermStructure) <- ScenarioFormula(Scenario)(
-        ForwardRate(TermStructure), Shiftbps(Scenario))
-      SpotRate(TermStructure) <- ScenarioFormula(Scenario)(
-        SpotRate(TermStructure), Shiftbps(Scenario))
-      TwoYearForward(TermStructure) <- ScenarioFormula(Scenario)(
-        ForwardRate(TermStructure), Shiftbps(Scenario))
-      TenYearForward(TermStructure) <- ScenarioFormula(Scenario)(
-        TenYearForward(TermStructure), Shiftbps(Scenario))
-    } else {
-      rates[1,2:length(rates)] <- 
-        ScenarioFormula(Scenario)(rates[1,1:length(rates)], 
-                                  Shiftbps = Shiftbps(Scenario))
+  
+    # fit the term structure and calcualate cashflows to compute the 
+    # following Yield, WAL, Curve Spreads, KeyRate Durations, etc
+
     TermStructure <- TermStructure(
-      rates.data = rates,
+      rates.data = ShiftCurve,
       method = method)
-    
-    } # End of logic for TermStructure
-    
+   
     Prepayment <- PrepaymentModel(
       bond.id = bond.id,
       MortgageRate = MortgageRate,
@@ -386,17 +389,18 @@
       price = PriceDecimalString(Price),
       PrepaymentAssumption = Prepayment)
 
-    proceeds <- Accrued(MortgageCashFlow) + (original.bal * 
-                                  MBSFactor(bond.id) * PriceBasis(Price))
+    proceeds <- Accrued(MortgageCashFlow) + 
+      (original.bal * MBSFactor(bond.id) * PriceBasis(Price))
     principal <- original.bal * MBSFactor(bond.id)
     
     # Compute the CurvesSpreads based on the user price and prepayment vector
     # given the user's scenario interest rate shift
-    CurveSpread <- CurveSpreads(rates.data = rates,
+    CurveSpread <- CurveSpreads(rates.data = rates.data,
                                 CashFlow = MortgageCashFlow,
                                 TermStructure = TermStructure,
                                 proceeds = proceeds)
     
+    # Compute life CPR using the base case term structure fit
     LifeCPR <- ModelToCPR(
       bond.id = bond.id,
       TermStructure = TermStructure,
@@ -410,7 +414,7 @@
     )
     
     # compute the key rate duration, effective duration, and convexity 
-    # given the user's interest rate scenario 
+    # given the base case structure pricing. 
     MortgageTermStructure <- MtgTermStructure(
       bond.id = bond.id,
       original.bal = original.bal,
@@ -421,29 +425,21 @@
       price = PriceDecimalString(Price),
       cashflow = MortgageCashFlow)
     
-    # =========================================================================
-    # Begin horizon mortgage pass-through analysis
-    # =========================================================================
     
-    
+    # This section begins the  horizon mortgage pass-through analysis. 
     # Horizon curve can be calculated by either shifting the coupon curve or
     # and refitting the curve or it can be calculated by shifting the spot rate
     # curve.  Senarios with ending with (s) indicate the user wishes to shift
     # the spot rate curve.
     
-    HorizonSettlement <- as.Date(
-      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
-    
-    HorizonCurve <- rates
-    HorizonCurve[1,1] <- as.character(
-      as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
-  
     if(grepl("s",scenario) == TRUE){
-      # initialize term structure object
+      # initialize term structure object and assign shift vlaue to the 
+      # spot rate curve based on the TermStructure object above
+      
       HorizonTermStructure <- new(
         "TermStructure",
         TradeDate = as.character(
-          as.Date(rates[1,1]) %m+% months(horizon.months)),
+          as.Date(rates.data[1,1]) %m+% months(horizon.months)),
         Period = numeric(),
         Date = "character",
         SpotRate = numeric(),
@@ -451,22 +447,14 @@
         TwoYearFwd = numeric(),
         TenYearFwd = numeric())
       
-      # Assign shift values based on original term structure object
-      # this shifts the original term structure curve by the scenario formula
-      
       Period(HorizonTermStructure) <- Period(TermStructure)
       ForwardDate(HorizonTermStructure) <- as.character(
         as.Date(ForwardDate(TermStructure)) %m+% months(horizon.months))
-      ForwardRate(HorizonTermStructure) <- ScenarioFormula(Scenario)(
-      ForwardRate(TermStructure), Shiftbps(Scenario))
-      SpotRate(HorizonTermStructure) <- ScenarioFormula(Scenario)(
-        SpotRate(TermStructure), Shiftbps(Scenario))
-      TwoYearForward(HorizonTermStructure) <- ScenarioFormula(Scenario)(
-        TwoYearForward(TermStructure), Shiftbps(Scenario))
-      TenYearForward(HorizonTermStructure) <- ScenarioFormula(Scenario)(
-        TenYearForward(TermStructure), Shiftbps(Scenario))
+      ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
+      SpotRate(HorizonTermStructure) <- SpotRate(TermStructure)
+      TwoYearForward(HorizonTermStructure) <- TwoYearForward(TermStructure)
+      TenYearForward(HorizonTermStructure) <- TenYearForward(TermStructure)
     } else {
-    
     HorizonTermStructure <- TermStructure(
       rates.data = HorizonCurve,
       method = "ns")

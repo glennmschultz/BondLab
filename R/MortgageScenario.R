@@ -405,7 +405,7 @@
       Burnout = Burnout,
       original.bal = original.bal,
       settlement.date = settlement.date,
-      price = PriceDecimal(Price),
+      price = PriceDecimalString(Price),
       yield = YieldToMaturity(MortgageCashFlow)/yield.basis
     )
     

@@ -208,7 +208,7 @@
       ConverttoDecimal <- function(Price = "character", Units = numeric()){
         SplitPrice = strsplit(as.character(Price), "-")
         handle = as.numeric(SplitPrice[[1]][1])
-        TailDecimal = as.numeric(SplitPrice[[1]][2])/Units
+        TailDecimal = signif(as.numeric(SplitPrice[[1]][2])/Units,8)
         TailDecimal = gsub("(^|[^0-9])0+", "\\1", TailDecimal, perl = TRUE)
         Price = paste(as.character(handle),
                       as.character(TailDecimal),sep="")
@@ -221,7 +221,7 @@
       
       # Convert Price when entered as a decimal value
       if(grepl(".", as.character(Price), fixed = TRUE) == TRUE){
-        Price_Decimal = Price
+        Price_Decimal = format(Price, nsmall =2)
         Price_32nds = Convertto32nds(Price = Price)
         Price_Basis = as.numeric(Price) / PriceBasis
         Price_Decimal_String = ConverttoString(

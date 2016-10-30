@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2016-10-26" />
+<meta name="date" content="2016-10-30" />
 
 <title>Bond Lab®</title>
 
@@ -32,19 +32,45 @@
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2016-10-26</em></h4>
+<h4 class="date"><em>2016-10-30</em></h4>
 
 
 
 <p>Bond Lab® is an R package for the analysis of fixed income securities. The analytical engines are modular in nature thereby allowing the user to create a customized fixed income analytical output. Bond Lab® is written in the S4 language and introduces a number of new classes.</p>
-<p>Bond Lab® classes are classified as those that support bonds (standard fixed income), mortgage- and asset-backed securities, analytic output, term structure. Bond Lab® uses the package TermStrc for its interest rates models. The constructor function TermStructure is a wrapper around the package TermStrc. All classes are exposued to the user thereby allowing the user to create new superclasses from existing classes or extend the classes as the user sees fit. Bondlab classes are outlined below:</p>
+<p>Bond Lab® classes are classified as those that support bonds (standard fixed income), mortgage- and asset-backed securities, analytic output, term structure. BondLab® uses the following R packages:<br />
+* termstrc<br />
+* lubridate<br />
+* methods<br />
+* optimx<br />
+* RCurl<br />
+* splines<br />
+* XML<br />
+* knitr<br />
+* devtools<br />
+* testthat<br />
+* rmarkdown</p>
+<p>All classes are exposed to the user thereby allowing the user to create new superclasses from existing classes or extend the classes as the user sees fit. Bondlab classes are outlined below:</p>
+<div id="classes-used-to-pass-price-term-structure-spreads-and-rate-scenarios" class="section level2">
+<h2>Classes used to pass price, term structure, spreads, and rate scenarios</h2>
 <ul>
-<li>Bond classes Generally, speaking these classes pertain to a bond which pays a period coupon monthly, quarterly, semi-annually, or annually. The bond may be callable, putable, or have a sinking-fund schedule.
+<li><p><strong>PriceTypes</strong> The PriceTypes class represents price as passed to functions. Price is passed to functions as a character. The PriceTypes class converts the character value to numeric and string values. It contains Price (numeric), Price32nds(string), PriceBasis (numeric), and PriceDecimalString (character). Price are be passed to BondLab® functions as characters in either decimal (.) or 32nds (-) format.</p></li>
+<li><p><strong>TermStructure</strong> The TermStructure class represents the term structure of interest rates. The class contains forward rates, spot rates, two year forward, ten year forward. The constructuctor function TermStrucuture is a wrapper around the package termstruc.</p></li>
+<li><p><strong>CurveSpreads</strong> The CurvesSpreads class represents curve spreads. It contains benchmark, spread to benchmark, spread to curve, zero volatility spread.</p></li>
+<li><p><strong>Scenario</strong> The scenario class represents interest rates used in total return scenario analysis. The user may define and scenario applied to either the coupon curve or the spot rate curve. spot rate curve scenarios are designated with a trailing (s).</p></li>
+</ul>
+</div>
+<div id="bond-classes" class="section level2">
+<h2>Bond classes</h2>
+<p>Generally, speaking these classes pertain to a bond which pays a period coupon monthly, quarterly, semi-annually, or annually. The bond may be callable, putable, or have a sinking-fund schedule.</p>
 <ul>
 <li><strong>BondDetails</strong> The BondDetails class represents the cusip detail of a standard bond. It includes all the relevant detail to analyze a standard fixed income security. Call, Put, and Sinking Fund schedules are not yet implemented.</li>
-<li><strong>BondCashFlows</strong> The BondCashFlows class holds all the relevant detail regarding a bond’s cashflow characteristics including: yield-to-maturity, weighted average life, modified duration, convexity, and bond cashflows coupon payments and principal payments</li>
-</ul></li>
+<li><strong>BondCashFlows</strong> The BondCashFlows class holds all the relevant detail regarding a bond’s cashflow characteristics including: yield-to-maturity, weighted average life, modified duration, convexity, and bond cashflows coupon payments and principal payment(s), and total cash flow.</li>
+<li><strong>BondTermStructure</strong> The BondTermStructure class represents the key rate duration and key rate convexity of bond.</li>
+<li><strong>BondAnalytics</strong> The BondAnalytics class is a superclass of BondTermStructure, BondDetails, BondCashFlows, and TermStructure. The BondAnalytics class represents the measures which define the value of and a bond and the risk measures of a bond. It is an example of creating a superclass from existing classes.</li>
+<li><strong>BondReturn</strong> The BondReturn class represents the total return of a bond. The BondReturn class contains the coupon income, principal recieved, reinvestment income horizon balance, horizon price, horizon return, horizon months. Note: currently under construction.</li>
+<li><strong>BondScenario</strong> The BondScenario class represents the bond total return analysis. It is a superclass of BondReturn, BondCashFlows, BondTermStructure, and CurveSpreads. Note: currently under construction.</li>
 </ul>
+</div>
 
 
 

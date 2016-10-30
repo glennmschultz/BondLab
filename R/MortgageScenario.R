@@ -209,8 +209,8 @@
   #' An S4 Class representing the results of mortgage return scenario analysis
   #' 
   #' The SuperClass MtgScenario holds the results of a scenario analysis run 
-  #' @exportClass MtgScenario    
-  setClass("MtgScenario",
+  #' @exportClass MortgageScenario    
+  setClass("MortgageScenario",
            representation(),
            contains = c("TermStructure",
                         "PrepaymentAssumption",
@@ -222,7 +222,7 @@
                         "Scenario")
   )
   
-  setGeneric("MtgScenario", function(bond.id ="character",
+  setGeneric("MortgageScenario", function(bond.id ="character",
                                      settlement.date = "character",
                                      rates.data = "character",
                                      price = numeric(), 
@@ -240,11 +240,11 @@
                                      end.cpr = numeric(),
                                      seasoning.period = numeric(),
                                      CPR = numeric())
-  {standardGeneric("MtgScenario")})
+  {standardGeneric("MortgageScenario")})
   
   
   setMethod("initialize",
-            signature("MtgScenario"),
+            signature("MortgageScenario"),
             function(.Object,
                      ...)
             {callNextMethod(.Object,
@@ -280,8 +280,8 @@
   #' @param seasoning.period A numeric value the length of the 
   #' seasoning ramp
   #' @param CPR A numeric value the CPR speed
-  #' @export MtgScenario
-  MtgScenario <- function(bond.id ="character",
+  #' @export MortgageScenario
+  MortgageScenario <- function(bond.id ="character",
                           settlement.date = "character",
                           rates.data = "character",
                           price = "character", 
@@ -593,7 +593,7 @@
   HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
   HorizonReturn <- (HorizonReturn - 1) * yield.basis
     
-  new("MtgScenario",
+  new("MortgageScenario",
       Period = Period(MortgageCashFlow),
       PmtDate = PmtDate(MortgageCashFlow),
       TimePeriod = TimePeriod(MortgageCashFlow),

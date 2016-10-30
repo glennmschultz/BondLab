@@ -12,3 +12,5 @@
 ^PrepaymentModel$
 ^RatesData$
 ^\.travis\.yml$
+^packrat/
+^\.Rprofile$

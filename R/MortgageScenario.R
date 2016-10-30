@@ -211,13 +211,14 @@
   #' The SuperClass MtgScenario holds the results of a scenario analysis run 
   #' @exportClass MtgScenario    
   setClass("MtgScenario",
-           representation(SpreadToInterCurve = "numeric"),
+           representation(),
            contains = c("TermStructure",
                         "PrepaymentAssumption",
                         "MortgageCashFlow",
                         "MortgageTermStructure",
                         "MortgageReturn",
                         "ModelToCPR",
+                        "CurveSpreads",
                         "Scenario")
   )
   
@@ -242,27 +243,13 @@
   {standardGeneric("MtgScenario")})
   
   
-  #' A standard generic function to access the slot SpreadToInterCurve
-  #' @param object An S4 object of type MtgScenario
-  #' @export
-  setGeneric("SpreadToInterCurve", function(object)
-  {standardGeneric("SpreadToInterCurve")})
-  
   setMethod("initialize",
             signature("MtgScenario"),
             function(.Object,
-                     SpreadToInterCurve = numeric(),
                      ...)
             {callNextMethod(.Object,
-                            SpreadToInterCurve = SpreadToInterCurve,
                              ...)
             })
-  
-  #' A method to extract SpreadToInterCurve from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
-  #' @exportMethod SpreadToInterCurve
-  setMethod("SpreadToInterCurve", signature("MtgScenario"),
-            function(object){object@SpreadToInterCurve})
   
   #---------------------------------------------------------
   # Scenario Total Return Analysis
@@ -622,9 +609,12 @@
       TenYearFwd = TenYearForward(TermStructure),
       SMM = SMM(Prepayment),
       CPRLife = CPRLife(LifeCPR),
+      BenchMark = BenchMark(HorizonSpread),
+      SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
+      SpreadToCurve = SpreadToCurve(HorizonSpread),
+      ZeroVolSpread = ZeroVolSpread(HorizonSpread),
       YieldToMaturity = YieldToMaturity(MortgageCashFlow),
       WAL = WAL(HorizonCashFlow),
-      SpreadToInterCurve = SpreadToCurve(HorizonSpread),
       ModDuration = ModDuration(MortgageCashFlow),
       Convexity = Convexity(MortgageCashFlow), 
       EffDuration = EffDuration(MortgageTermStructure),

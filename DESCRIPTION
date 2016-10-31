@@ -27,6 +27,9 @@ Suggests:
     knitr,
     devtools,
     testthat,
+    reshape2,
+    ggplot2,
+    scales,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
@@ -75,4 +78,5 @@ Collate:
     'REMICStructuringFunctions.R'
     'RatesData.R'
     'TimeValueFunction.R'
+    'ValuationFramework.R'
     'zzz.R'

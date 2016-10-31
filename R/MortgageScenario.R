@@ -25,13 +25,13 @@
   #'
   #' The class MtgScenarioSet is a list of classes Scenario
   #' @slot Scenario A list of the class Scenario
-  #' @exportClass MtgScenarioSet
-  setClass("MtgScenarioSet",
+  #' @exportClass MortgageScenarioSet
+  setClass("MortgageScenarioSet",
            representation(
              Scenario = "list"))
   
-  setGeneric("MtgScenarioSet", function(Scenario = "list")
-  {standardGeneric("MtgScenarioSet")})
+  setGeneric("MortgageScenarioSet", function(Scenario = "list")
+  {standardGeneric("MortgageScenarioSet")})
   
   #' A standard generic function to extract the slot Scenario
   #' @param object An S4 class object of the type MtgScenarioSet
@@ -40,7 +40,7 @@
   {standardGeneric("ScenarioSet")})
   
   setMethod("initialize",
-            signature("MtgScenarioSet"),
+            signature("MortgageScenarioSet"),
             function(.Object,
                      Scenario = "list",
                      ...)
@@ -53,7 +53,7 @@
   #' A method to extract the Scenario list from S4 class MtgScenarioSet
   #' @param object the name of the S4 object of the type Scenario
   #' @exportMethod ScenarioSet
-  setMethod("ScenarioSet", signature("MtgScenarioSet"),
+  setMethod("ScenarioSet", signature("MortgageScenarioSet"),
             function(object){object@Scenario})
   
   #' An S4 class representing mortgage scenario return analysis 

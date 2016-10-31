@@ -52,7 +52,7 @@ than the yield to maturity (a linear term structure assumption) pricing of each 
 * The rich cashflows are those whose present value along the sopt rate curve are
 less than the yield to maturity assumption pricing of each cashflow.
 
-```{r FigureOne, echo = FALSE, fig.height= 5, fig.width=7, fig.cap= "Valuation Framework"}
+```{r, echo = FALSE, fig.align='center', fig.height= 5, fig.width= 7}
 Valuation()
 ```
 
@@ -162,23 +162,6 @@ a delay, based on the pool's underlying borrowers' prepayment rates.
 ### MortgageTermStructure
     The MortgageTermStructure class represents the key rate duration and key
     rate convexity of a mortgage backed security.
-
-### PrepaymentAssumption
-    The PrepaymentAssumption class represents the output of the prepayment model,
-    Prospectus Prepayment Curve (PPC) and CPR.  The class is used to pass 
-    prepayment assumtptions to mortgage casflow.
-    
-## PrepaymentModelTune
-    The PrepaymentModelTune class represents the tuning parameters of the 
-    BondLab prepayment model.  The use of a tuning class allows the user to 
-    create custom prepayment models for different mortgage product types.
-    The user may extend the class to add additional model tuning parameters
-    in the event that PrepaymentModelFunctions slots are extended.
-    
-## PrepaymentModelFunctions
-    The PrepaymentModelFunctions class represents functions used in the 
-    construction of a mortgage prepayment model.  The user may add additional
-    slots to the class to extend the prepayment model.
     
 ### MortgageEffectiveMeasures
     The MortgageEffectiveMeasures class represents effective duration and 
@@ -204,6 +187,30 @@ a delay, based on the pool's underlying borrowers' prepayment rates.
     The MortgageOAS class represents the results of a mortgage OAS analysis. It
     is currently defined by slots but plans are to make MortgageOAS a superclass
     containing EffectiveMeasures, MortgageTermStructure
+
+## Prepayment Model Classes
+The prepayment model classes support the prepayment model used in Bond Lab®.  
+The Bond Lab® prepayment model is non-parametric in the sense that the model 
+makes no assumption as to the underlying distributional properties of mortgage
+prepayment rates.
+
+### PrepaymentAssumption
+    The PrepaymentAssumption class represents the output of the prepayment model,
+    Prospectus Prepayment Curve (PPC) and CPR.  The class is used to pass 
+    prepayment assumtptions to mortgage casflow.
+    
+## PrepaymentModelTune
+    The PrepaymentModelTune class represents the tuning parameters of the 
+    BondLab prepayment model.  The use of a tuning class allows the user to 
+    create custom prepayment models for different mortgage product types.
+    The user may extend the class to add additional model tuning parameters
+    in the event that PrepaymentModelFunctions slots are extended.
+    
+### PrepaymentModelFunctions
+    The PrepaymentModelFunctions class represents functions used in the 
+    construction of a mortgage prepayment model.  The user may add additional
+    slots to the class to extend the prepayment model.
+    
     
 
 

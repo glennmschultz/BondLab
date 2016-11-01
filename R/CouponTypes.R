@@ -34,4 +34,7 @@
              CouponDecimal = "numeric",
              CouponBasis = "numeric",
              CouponDecimalString = "character")
-           ) 
+           )
+  
+  setGeneric("CouponTypes", function(coupon)
+    {standardGeneric("CouponTypes")})

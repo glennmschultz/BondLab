@@ -34,7 +34,7 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
-    'PriceClasses.R'
+    'PriceTypes.R'
     'PassThroughConstructor.R'
     'MortgageCashFlow.R'
     'TermStructure.R'
@@ -51,6 +51,7 @@ Collate:
     'CashFlowEngine.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
+    'CouponTypes.R'
     'CurveSpreads.R'
     'DollarRoll.R'
     'DollarRollAnalytics.R'

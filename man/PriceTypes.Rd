@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{PriceTypes}
 \alias{PriceTypes}
-\title{A constructor function for the class PriceTypes}
+\title{PriceTypes is a constructor function for the class PriceTypes}
 \usage{
 PriceTypes(Price = "character")
 }
@@ -11,6 +11,6 @@ PriceTypes(Price = "character")
 decimal notation (example "100.125") or 32nds notation (example "100-4")}
 }
 \description{
-A constructor function for the class PriceTypes
+PriceTypes is a constructor function for the class PriceTypes
 }
 

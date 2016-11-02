@@ -28,6 +28,8 @@
   #' eg 5.50
   #' @slot CouponBasis A numeric value the coupon expressed in basis notation
   #' eg 0.055
+  #' @slot CouponDecimalString A character value the coupon expressed as a string
+  #' using decimal notation eg "5.50".
   #' @exportClass CouponTypes
   setClass("CouponTypes",
            representation(
@@ -38,3 +40,108 @@
   
   setGeneric("CouponTypes", function(coupon)
     {standardGeneric("CouponTypes")})
+  
+  #' A standard generic function to access the slot CouponDecimal
+  #' 
+  #' @param object an S4 class object
+  #' @export CouponDecimal
+  setGeneric("CouponDecimal", function(object)
+    {standardGeneric("CouponDecimal")})
+  
+  #' A standard generic function to replace the slot CouponDecimal
+  #' 
+  #' @param object an S4 class object of the type CouponTypes
+  #' @param value the replacement value of the slot
+  #' @export CouponDecimal<-
+  setGeneric("CouponDecimal<-", function(object, value)
+    {setGeneric("CouponDecimal<-")})
+  
+  #' A standard generic function to access the slot CouponBasis
+  #' 
+  #' @param object an S4 class object
+  #' @export CouponBasis
+  setGeneric("CouponBasis", function(object)
+    {standardGeneric("CouponBasis")})
+  
+  #' A standard generic function ot replace the slot CouponBasis
+  #' 
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export CouponBasis<-
+  setGeneric("CouponBasis<-", function(object, value)
+    {setGeneric("CouponBasis<-")})
+  
+  #' A standard generic function to access the slot CouponDecimalString
+  #'
+  #'@param object an S4 class object
+  #'@export CouponDecimalString
+  setGeneric("CouponDecimalString", function(object)
+    {standardGeneric("CouponDecimalString")})
+  
+  #' A standard generic functon to replace the slot CouponDecimalString
+  #' 
+  #' 
+  #' @param object an S4 class object
+  #' @param value the replacement value of the slot
+  #' @export CouponDecimalString<-
+  setGeneric("CouponDecimalString<-", function(object,value)
+    {standardGeneric("CouponDecimalString<-")}) 
+  
+  setMethod("initialize",
+    signature("CouponTypes"),
+    function(.Object,
+             CouponDecimal = numeric(),
+             CouponBasis = numeric(),
+             CouponDecimalString = "character",
+             ...)
+      {callNextMethod(.Object,
+                      CouponDecimal = CouponDecimal,
+                      CouponBasis = CouponBasis,
+                      CouponDecimalString,
+                      ...)
+    })
+  
+  #' A method to extract CouponDecimal from object CouponTypes
+  #' 
+  #' @param object an S4 object of the type CouponTypes
+  #' @exportMethod CouponDecimal
+  setMethod("CouponDecimal", signature("CouponTypes"),
+            function(object){object@CouponTypes})
+  
+  #' A method to replace CouponDecimal in the slot of CouponTypes
+  #' 
+  #' @param object an S4 object of the type CouponTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod CouponDecimal
+  setReplaceMethod("CouponDecimal", signature("CouponTypes"),
+                   function(object,value){
+                     object@CouponDecimal <- value
+                     return(object)})
+  
+  #' CouponTypes is a constructor function for the CouponTypes class
+  #' 
+  #' The CouponTypes class converts coupon as a numeric value to a basis value
+  #' (CouponBasis) used to calculate interest due and character string 
+  #' CouponDecimalString
+  #' @param coupon A numeric value the state coupon of the bond
+  #' @export CouponTypes
+  CouponTypes <- function(coupon = numeric()){
+    CouponBasis = 100
+    
+    ConverttoBasis <- function(coupon = numeric(), CouponBasis = numeric()){
+      coupon = coupon / CouponBasis
+      return(coupon)
+    }
+    
+    ConverttoString <- function(coupon = numeric()){
+      coupon = sprintf("%.8f", coupon)
+      return(coupon)
+    }
+    
+    new("CouponTypes",
+        CouponDecimal = coupon,
+        CouponBasis = ConverttoBasis(coupon = coupon, CouponBasis = CouponBasis),
+        CouponDecimalString = ConverttoString(coupon = coupon)
+    )
+  }  
+  

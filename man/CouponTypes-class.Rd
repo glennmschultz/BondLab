@@ -19,5 +19,8 @@ eg 5.50}
 
 \item{\code{CouponBasis}}{A numeric value the coupon expressed in basis notation
 eg 0.055}
+
+\item{\code{CouponDecimalString}}{A character value the coupon expressed as a string
+using decimal notation eg "5.50".}
 }}
 

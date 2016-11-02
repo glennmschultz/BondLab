@@ -3,3 +3,5 @@ ggplot2
 scales
 BondLab
 knitr
+reshape2
+termstrc

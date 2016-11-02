@@ -32,3 +32,62 @@
   
   setGeneric("YieldTypes", function(yield)
     {standardGeneric("YieldTypes")})
+  
+  #' A standard generic function to access the slot YieldDecimal
+  #' 
+  #' @param object an S4 object of the type YieldTypes
+  #' @export YieldDecimal
+  setGeneric("YieldDecimal", function(object)
+    {standardGeneric("YieldDecimal")})
+  
+  #' A standard generic function to replace the value in the slot YieldDecimal
+  #' 
+  #' @param object an S4 object of the type YieldTypes
+  #' @param value the replacement value of the slot
+  #' @export YieldDecimal<-
+  setGeneric("YieldDecimal<-", function(object, value)
+  {standardGeneric("YieldDecimal<-")})
+  
+  #' A standard generic function to access the slot YieldBasis
+  #' 
+  #' @param object an S4 object of the type YieldBasis
+  #' @export YieldBasis
+  setGeneric("YieldBasis", function(object)
+    {standardGeneric("YieldBasis")})
+  
+  #' A standard generic function replace the value in the slot YieldBasis
+  #' 
+  #' @param object an S4 object of the type YieldBasis
+  #' @param value the replacement value of the slot
+  #' @export YieldBasis<-
+  setGeneric("YieldBasis<-", function(object, value)
+    {standardGeneric("YieldBasis<-")})
+  
+  #' A standard generic function to access the slot YieldDecimalString
+  #' 
+  #' @param object an S4 object of the type YieldTypes
+  #' @export YieldDecimalString
+  setGeneric("YieldDecimalString", function(object)
+    {standardGeneric("YieldDecimalString")})
+  
+  #' A standard generic function to replace the value in the slot YieldDecimalString
+  #' 
+  #' @param object an S4 object of the type YieldTypes
+  #' @param value the replacement value of the slot
+  #' @export YieldDecimalString<-
+  setGeneric("YieldDecimalString<-", function(object, value)
+    {standardGeneric("YieldDecimalString<-")})
+  
+  setMethod("initialize",
+            signature("YieldTypes"),
+            function(.Object,
+                     YieldDecimal = numeric(),
+                     YieldBasis = numeric(),
+                     YieldDecimalString = "character",
+                     ...){
+              callNextMethod(.Object,
+                             YieldDecimal = YieldDecimal,
+                             YieldBasis = YieldBasis,
+                             YieldDecimalString = YieldDecimalString,
+                             ...)
+              })

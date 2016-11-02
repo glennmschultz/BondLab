@@ -5,11 +5,11 @@
 \alias{CouponTypes-class}
 \title{An S4 class representing the bond coupon}
 \description{
-This class is used to pass coupon types reported to investors and used in
-analytics.  For example coupon is often reported as a decimal number
+This class is used to create and pass coupon types reported to investors 
+used in analytics.  For example, coupon is often reported as a decimal number
 (e.g. 5.0%) but the coupon basis is used to calculate interest due to the 
-investor.  In BondLab coupon is a numeric value as opposed to price which is
-a character value.
+investor.  In BondLab coupon is a numeric value in all slots as opposed to 
+price which is a character value in all slots.
 }
 \section{Slots}{
 

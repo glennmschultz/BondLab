@@ -78,4 +78,5 @@ Collate:
     'REMICStructuringFunctions.R'
     'RatesData.R'
     'TimeValueFunction.R'
+    'YieldTypes.R'
     'zzz.R'

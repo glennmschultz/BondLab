@@ -1,7 +1,6 @@
 Package: BondLab
 Type: Package
-Title: BondLab is a package for the analysis of structured mortgage backed
-    securities
+Title: BondLab is a package for the analysis of fixed-income securities
 Version: 0.0.0.9000
 Date: 2015-12-19
 Author: Glenn Schultz, CFA
@@ -34,6 +33,7 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
+    'CouponTypes.R'
     'PriceTypes.R'
     'PassThroughConstructor.R'
     'MortgageCashFlow.R'
@@ -51,7 +51,6 @@ Collate:
     'CashFlowEngine.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
-    'CouponTypes.R'
     'CurveSpreads.R'
     'DollarRoll.R'
     'DollarRollAnalytics.R'

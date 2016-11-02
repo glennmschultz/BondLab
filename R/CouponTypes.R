@@ -97,7 +97,7 @@
       {callNextMethod(.Object,
                       CouponDecimal = CouponDecimal,
                       CouponBasis = CouponBasis,
-                      CouponDecimalString,
+                      CouponDecimalString = CouponDecimalString,
                       ...)
     })
   
@@ -106,7 +106,7 @@
   #' @param object an S4 object of the type CouponTypes
   #' @exportMethod CouponDecimal
   setMethod("CouponDecimal", signature("CouponTypes"),
-            function(object){object@CouponTypes})
+            function(object){object@CouponDecimal})
   
   #' A method to replace CouponDecimal in the slot of CouponTypes
   #' 
@@ -117,6 +117,41 @@
                    function(object,value){
                      object@CouponDecimal <- value
                      return(object)})
+  
+  #' A method to extract CouponBasis from the slot of CouponTypes
+  #' 
+  #' @param  object an S4 object of the type CouponTypes
+  #' @exportMethod CouponBasis
+  setMethod("CouponBasis", signature("CouponTypes"),
+            function(object){object@CouponBasis})
+  
+  #' A method to replace CouponBasis in the slot of CouponTypes
+  #'
+  #'@param object an S4 object of the type CouponTypes
+  #'@param value the replacement value of the slot
+  #'@exportMethod CouponBasis
+  setReplaceMethod("CouponBasis", signature("CouponTypes"),
+                   function(object, value){
+                     object@CouponBasis <- value
+                     return(object)})
+  
+  #' A method to extract CouponDecimalString from the object CouponTypes
+  #' 
+  #' @param object an S4 object of the type CouponTypes
+  #' @exportMethod CouponDecimalString
+  setMethod("CouponDecimalString", signature("CouponTypes"),
+            function(object){object@CouponDecimalString})
+  
+  #' A method to replace CouponDecimalString in the slot of CouponTypes
+  #' 
+  #' @param object an S4 object of the type CouponTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod CouponDecimalString
+  setReplaceMethod("CouponDecimalString", signature("CouponTypes"),
+                   function(object, value){
+                     object@CouponDecimalString
+                     return(object)
+                   })
   
   #' CouponTypes is a constructor function for the CouponTypes class
   #' 

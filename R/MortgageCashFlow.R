@@ -653,7 +653,11 @@
           accrued.interest = accrued.interest)$root)
     
   # Convert to semi-bond equivalent
-  Yield.To.Maturity = (((1 + ytm) ^ (1/2)) -1) * 2
+  Yield.To.Maturity = ((((1 + ytm) ^ (1/2)) -1) * 2) * yield.basis
+  
+  # Pass Yield.To.Maturity to YieldTypes class to handle the conversion to 
+  # YieldBasis, YieldDecimal, and YieldDecimalString
+  Yield <- YieldTypes(yield = Yield.To.Maturity)
   
   # Pass Yield.To.Maturity to YieldTypes class for handling YieldBais, 
   # YieldDecimal and YieldDecimalString conversions
@@ -662,7 +666,7 @@
   
   #Step7 Present value of the cash flows Present Value Factors
   MBS.CF.Table[,"Present Value Factor"] = 
-    round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * 
+    round((1/((1+(YieldBasis(Yield)/frequency))^(MBS.CF.Table[,"Time"] * 
                                                    frequency))),12)
   
   #Present Value of the cash flows
@@ -689,7 +693,7 @@
     MBS.CF.Table[,"Time"] *(MBS.CF.Table[,"Time"] + 1)
   
   MBS.CF.Table[,"CashFlow Convexity"] = 
-  (MBS.CF.Table[,"Investor CashFlow"]/((1 + ((Yield.To.Maturity)/frequency)) ^ 
+  (MBS.CF.Table[,"Investor CashFlow"]/((1 + ((YieldBasis(Yield))/frequency)) ^ 
     ((MBS.CF.Table[,"Time"] + 2) * frequency)))/ 
     ((principal * PriceBasis(Price)) + accrued.interest)
   
@@ -698,14 +702,14 @@
   
   #Duration and Convexity
   Duration = apply(MBS.CF.Table, 2, sum)["Duration"]
-  Modified.Duration = Duration/(1 + (Yield.To.Maturity/frequency))
+  Modified.Duration = Duration/(1 + (YieldBasis(Yield)/frequency))
   Convexity = apply(MBS.CF.Table, 2, sum)["Convexity"] * .5
   
   #Create Class Mortgage Loan Cashflows
   new("MortgageCashFlow",
       Price = PriceDecimal(Price),
       Accrued = accrued.interest,
-      YieldToMaturity = Yield.To.Maturity * yield.basis,
+      YieldToMaturity = YieldDecimal(Yield),
       WAL = WAL,
       ModDuration = unname(Modified.Duration),
       Convexity = unname(Convexity),

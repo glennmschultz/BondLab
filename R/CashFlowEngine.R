@@ -65,25 +65,29 @@
          by = paste(pmtdate.interval, "months"))
     } else {seq(nextpmt.date + delay, end.date + delay, 
                 by = paste(pmtdate.interval, "months"))}), "%m-%d-%Y")
-  
-  #  Validate the coupon and note rate passed through the error 
-  #  trapping function This validates that the correct unit is 
-  #  passed into the Bond Cash Flow function
-  if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
-  if(note.rate > 1) {note.rate = note.rate/yield.basis
-  } else {note.rate = note.rate}
     
+    # pass coupon to the coupon types class for conversion to CouponDecimal,
+    # CouponBasis, and CouponDecimalString
+    Coupon <- CouponTypes(coupon = coupon)
+  
+    #  Validate the coupon and note rate passed through the error 
+    #  trapping function This validates that the correct unit is 
+    #  passed into the Bond Cash Flow function
+    if(coupon > 1) {coupon = coupon/yield.basis} else {coupon = coupon}
+    if(note.rate > 1) {note.rate = note.rate/yield.basis
+    } else {note.rate = note.rate}
+  
     # Build the time period vector (n) for discounting the cashflows 
     # nextpmt date is vector of payment dates to n for each period.  
     # need TBA versus T + 3 settlement date logic
     # if T + 3 then settlement date is equal to settlement date
     time.period = BondBasisConversion(issue.date = issue.date,
-                                    start.date = start.date,
-                                    end.date = end.date,
-                                    settlement.date = settlement.date,
-                                    lastpmt.date = lastpmt.date,
-                                    nextpmt.date = pmtdate,
-                                    type = bondbasis)
+                                      start.date = start.date,
+                                      end.date = end.date,
+                                      settlement.date = settlement.date,
+                                      lastpmt.date = lastpmt.date,
+                                      nextpmt.date = pmtdate,
+                                      type = bondbasis)
     
     # step5 calculate accrued interest for the period this is also
     # the remain time period used to adjust the period vector 
@@ -177,7 +181,7 @@
   MBS.CF.Table[x,"GFee"] = MBS.CF.Table[x,"Begin Bal"] * 
     (g.fee/monthly.yield.basis)
   MBS.CF.Table[x,"Pass Through Interest"] = MBS.CF.Table[x,"Begin Bal"] * 
-    (coupon/months.in.year)
+    (CouponBasis(Coupon)/months.in.year)
   MBS.CF.Table[x,"Investor CashFlow"] = MBS.CF.Table[x,"Scheduled Prin"] + 
     MBS.CF.Table[x,"Prepaid Prin"] + 
   MBS.CF.Table[x,"Recovered Amount"] + MBS.CF.Table[x,"Pass Through Interest"]

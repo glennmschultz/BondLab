@@ -107,4 +107,40 @@
   setReplaceMethod("YieldDecimal", signature("YieldTypes"),
                    function(object, value){
                      object@YieldDecimal <- value
+                     return(object)
                    })
+  
+  #' A method to extract the slot YieldBasis from the class YieldTypes
+  #' 
+  #' @param object an S4 object class of the type YieldTypes
+  #' @exportMethod YieldBasis
+  setMethod("YieldBasis", signature("YieldTypes"),
+            function(object){object@YieldBasis})
+  
+  #' A method to replace the value of the slot YieldBasis
+  #' 
+  #' @param object an S4 object class of the type YieldTypes
+  #' @param value the replacement value of the slot
+  setReplaceMethod("YieldBasis", signature("YieldTypes"),
+            function(object, value){
+              object@YieldBasis <- value
+              return(object)
+            })
+  
+  #' A method to extract the slot YieldDecimalString from the class YieldTypes
+  #' 
+  #' @param object an S4 class object of the type YieldTypes
+  #' @exportMethod YieldDecimalString
+  setMethod("YieldDecimalString",signature("YieldTypes"),
+            function(object){object@YieldDecimalString})
+  
+  #' A method to replace the slot YieldDecimalstring from the class YieldTypes
+  #' 
+  #' @param object an S4 class object of the type YieldTypes
+  #' @param value the replacement value of the slot
+  setReplaceMethod("YieldDecimalString", signature("YieldTypes"),
+                   function(object, value){
+                     object@YieldDecimalString <- value
+                     return(object)
+                   })
+  

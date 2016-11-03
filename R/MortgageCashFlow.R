@@ -655,6 +655,11 @@
   # Convert to semi-bond equivalent
   Yield.To.Maturity = (((1 + ytm) ^ (1/2)) -1) * 2
   
+  # Pass Yield.To.Maturity to YieldTypes class for handling YieldBais, 
+  # YieldDecimal and YieldDecimalString conversions
+   
+  Yield <- YieldTypes(yield = Yield.To.Maturity)
+  
   #Step7 Present value of the cash flows Present Value Factors
   MBS.CF.Table[,"Present Value Factor"] = 
     round((1/((1+(Yield.To.Maturity/frequency))^(MBS.CF.Table[,"Time"] * 

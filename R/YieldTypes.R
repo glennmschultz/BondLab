@@ -157,7 +157,7 @@
       return(yield)
     }
     
-    YieldDecimalString <- function(yield = numeric(), yield.basis = numeric()){
+    YieldDecimalString <- function(yield = numeric(), yieldbasis = numeric()){
       yield <- yield * yieldbasis
       yield <- sprintf("%.8f", yield)
       return(yield)

@@ -653,7 +653,7 @@
           accrued.interest = accrued.interest)$root)
     
   # Convert to semi-bond equivalent
-  Yield.To.Maturity = ((((1 + ytm) ^ (1/2)) -1) * 2) * 100
+  Yield.To.Maturity = ((((1 + ytm) ^ (1/2)) -1) * 2) * yield.basis
   
   # Pass Yield.To.Maturity to YieldTypes class to handle the conversion to 
   # YieldBasis, YieldDecimal, and YieldDecimalString

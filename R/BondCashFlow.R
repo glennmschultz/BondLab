@@ -191,7 +191,7 @@
   #' Bond cash flow engine for standard non-callable
   #' 
   #' Cashflow engine for standard non-callable bond
-  #' @param bond.id A character string the cusip number or id of the bond
+  #' @param bond.id A character string referencing an object of type BondDetails
   #' @param principal A numeric string the principal or face amount of the bond
   #' @param settlement.date A character string the settlement date
   #' @param price A character value the price of the bond
@@ -224,7 +224,7 @@
   # Pass price to the PriceTypes constructor function.  This function allows
   # converts from 32nds and to decimal basis
   price <- PriceTypes(Price = price)
-  coupon = coupon/yield.basis
+  Coupon <- CouponTypes(coupon = coupon)
 
   # Calculate the number of cashflows that will be paid from settlement date to
   # maturity date 
@@ -236,15 +236,17 @@
     settlement.date = settlement.date,
     lastpmt.date = lastpmt.date, 
     nextpmt.date = end.date, 
-    type = bondbasis) 
+    type = bondbasis)
   
   #Step2 build a vector of dates for the payment schedule
   # first get the pmtdate interval
   pmtdate.interval = months.in.year/frequency
   
-  # then compute the payment dates
+  # then compute the payment dates based on payment date interval.  The logic
+  # including the settlement.date == issue.date is to facilitate adding first
+  # payment date to BondDetails object
   pmtdate = as.Date(c(if(settlement.date == issue.date) {
-    seq(start.date, end.date, by = paste(pmtdate.interval, "months"))
+    seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))
     } else {
       seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), 
     "%m-%d-%Y")
@@ -260,35 +262,37 @@
   #num.periods is the total number of cashflows to be received
   #num.period is the period in which the cashflow is received
   num.periods = length(time.period)
-  col.names <- c("Period", 
-                 "Date", 
-                 "Time", 
-                 "Principal Outstanding", 
-                 "Coupon", 
-                 "Coupon Income", 
-                 "Principal Paid", 
-                 "TotalCashFlow",
-                 "Present Value Factor", 
-                 "Present Value", 
-                 "Duration", 
-                 "Convexity Time", 
-                 "CashFlow Convexity", 
-                 "Convexity")
+  col.names <- c("Period",                   #1
+                 "Date",                     #2
+                 "Time",                     #3
+                 "Principal Outstanding",    #4
+                 "Coupon",                   #5
+                 "Coupon Income",            #6
+                 "Principal Paid",           #7
+                 "TotalCashFlow",            #8
+                 "Present Value Factor",     #9
+                 "Present Value",            #10
+                 "Duration",                 #11
+                 "Convexity Time",           #12
+                 "CashFlow Convexity",       #13
+                 "Convexity")                #14
   
   Bond.CF.Table <- array(data = NA, c(num.periods, 14), 
                          dimnames = list(seq(c(1:num.periods)),col.names))  
   for(i in 1:num.periods){
-    Bond.CF.Table[i,1] = i
-    Bond.CF.Table[i,2] = pmtdate[i]
-    Bond.CF.Table[i,3] = time.period[i]
-    Bond.CF.Table[i,4] = principal
-    Bond.CF.Table[i,5] = coupon /frequency
-    Bond.CF.Table[i,6] = Bond.CF.Table[i,5] * Bond.CF.Table[i,4]
-    if(Bond.CF.Table[i,2] == end.date) {Bond.CF.Table[i,7] = principal
-    } else {Bond.CF.Table[i,7] = 0}
-    Bond.CF.Table[i,8] = Bond.CF.Table[i,6] + Bond.CF.Table[i,7]
+    Bond.CF.Table[i,"Period"] = i
+    Bond.CF.Table[i,"Date"] = pmtdate[i]
+    Bond.CF.Table[i,"Time"] = time.period[i]
+    Bond.CF.Table[i,"Principal Outstanding"] = principal
+    Bond.CF.Table[i,"Coupon"] = CouponBasis(Coupon) /frequency
+    Bond.CF.Table[i,"Coupon Income"] = 
+      Bond.CF.Table[i,"Coupon"] * Bond.CF.Table[i,"Principal Outstanding"]
+    if(Bond.CF.Table[i,"Date"] == end.date) {Bond.CF.Table[i,"Principal Paid"] = principal
+    } else {Bond.CF.Table[i,"Principal Paid"] = 0}
+    Bond.CF.Table[i,"TotalCashFlow"] = 
+      Bond.CF.Table[i,"Coupon Income"] + Bond.CF.Table[i,"Principal Paid"]
   }
-  
+
   #step5 calculate accrued interest for the period
   days.to.nextpmt = (BondBasisConversion(
     issue.date = issue.date, 
@@ -301,8 +305,8 @@
   days.between.pmtdate = ((
     months.in.year/frequency)/months.in.year) * days.in.year.360
   days.of.accrued = days.between.pmtdate - days.to.nextpmt
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,6]
-
+  accrued.interest = 
+    (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,"Coupon Income"]
 
   # Step6 solve for yield to maturity given the price of the bond.  
   # irr is an internal function used to solve for yield to maturity
@@ -321,53 +325,64 @@
   
   ytm = uniroot(irr, 
                 interval = c(lower = -1, upper = 1), 
-                tol =.000000001, 
-                time.period = Bond.CF.Table[,3], 
-                cashflow = Bond.CF.Table[,8], 
+                tol = tolerance, 
+                time.period = Bond.CF.Table[,"Time"], 
+                cashflow = Bond.CF.Table[,"TotalCashFlow"], 
                 principal = principal, 
                 price = PriceBasis(price), 
                 accrued.interest = accrued.interest)$root
   
   # convert to semi-bond equivalent yield
-  Yield.To.Maturity = (((1 + ytm)^(1/2))-1) * 2
+  Yield.To.Maturity = ((((1 + ytm)^(1/2))-1) * 2) * yield.basis
+  
+  # pass Yield.To.Maturity to class YieldTypes for conversion to YieldDecimal,
+  # YieldBasis, and YieldDecimalString
+  Yield <- YieldTypes(yield = Yield.To.Maturity)
   
   #Step7 Present value of the cash flows Present Value Factors
-  Bond.CF.Table[,9] = 1/
-    ((1+(Yield.To.Maturity/frequency))^(Bond.CF.Table[,3] * frequency))
+  Bond.CF.Table[,"Present Value Factor"] = 1/
+    ((1+(YieldBasis(Yield)/frequency))^(Bond.CF.Table[,"Time"] * frequency))
   
   #Present Value of the cash flows
-  Bond.CF.Table[,10] = Bond.CF.Table[,8] * Bond.CF.Table[,9]
+  Bond.CF.Table[,"Present Value"] = 
+    Bond.CF.Table[,"TotalCashFlow"] * Bond.CF.Table[,"Present Value Factor"]
   
   #Step8 Risk measures Duration Factors
-  Bond.CF.Table[,11] = Bond.CF.Table[,3] * 
-    (Bond.CF.Table[,10]/((principal * PriceBasis(price)) + accrued.interest))
+  Bond.CF.Table[,"Duration"] = Bond.CF.Table[,"Time"] * 
+    (Bond.CF.Table[,"Present Value"]/((principal * PriceBasis(price)) + accrued.interest))
   
   #Convexity Factors
-  Bond.CF.Table[,12] = Bond.CF.Table[,3] *(Bond.CF.Table[,3] + 1)
-  Bond.CF.Table[,13] = (Bond.CF.Table[,8]/((1 + ((Yield.To.Maturity)/frequency)) ^ ((Bond.CF.Table[,3] + 2) * frequency)))/((principal * PriceBasis(price)) + accrued.interest)
-  Bond.CF.Table[,14] = Bond.CF.Table[,12] * Bond.CF.Table[,13] 
+  Bond.CF.Table[,"Convexity Time"] = Bond.CF.Table[,"Time"] *(Bond.CF.Table[,"Time"] + 1)
+  Bond.CF.Table[,"CashFlow Convexity"] = (
+    Bond.CF.Table[,"TotalCashFlow"]/((1 + ((YieldBasis(Yield))/frequency)) ^ 
+                         ((Bond.CF.Table[,"Time"] + 2) * frequency)))/
+    ((principal * PriceBasis(price)) + accrued.interest)
+  Bond.CF.Table[,"Convexity"] = 
+    Bond.CF.Table[,"Convexity Time"] * Bond.CF.Table[,"CashFlow Convexity"] 
   
   #Weighted Average Life
-  WAL = sum((Bond.CF.Table[,7] * Bond.CF.Table[,3]))/sum(Bond.CF.Table[,7])
+  WAL = sum(
+    (Bond.CF.Table[,"Principal Paid"] * Bond.CF.Table[,"Time"]))/
+    sum(Bond.CF.Table[,"Principal Paid"])
   #Duration and Convexity
-  Duration = apply(Bond.CF.Table, 2, sum)[11]
-  Modified.Duration = Duration/(1 + (Yield.To.Maturity/frequency))
-  Convexity = apply(Bond.CF.Table, 2, sum)[14] * .5
-  
+  Duration = apply(Bond.CF.Table, 2, sum)["Duration"]
+  Modified.Duration = Duration/(1 + (YieldBasis(Yield)/frequency))
+  Convexity = apply(Bond.CF.Table, 2, sum)["Convexity"] * .5
+
   #Assign Values to the slots
   new("BondCashFlows",   
       Price = PriceDecimalString(price),
       Accrued = accrued.interest,
-      YieldToMaturity = Yield.To.Maturity,
+      YieldToMaturity = YieldDecimal(Yield),
       WAL = WAL,
       ModDuration = Modified.Duration,
       Convexity = Convexity,
-      Period = Bond.CF.Table[,1],
-      PmtDate = as.character(as.Date(Bond.CF.Table[,2], origin = "1970-01-01")),
-      TimePeriod = Bond.CF.Table[,3],
-      PrincipalOutstanding  = Bond.CF.Table[,4],
-      CouponPmt = Bond.CF.Table[,5],
-      TotalCashFlow = Bond.CF.Table[,8]
+      Period = Bond.CF.Table[,"Period"],
+      PmtDate = as.character(as.Date(Bond.CF.Table[,"Date"], origin = "1970-01-01")),
+      TimePeriod = Bond.CF.Table[,"Time"],
+      PrincipalOutstanding  = Bond.CF.Table[,"Principal Outstanding"],
+      CouponPmt = Bond.CF.Table[,"Coupon"],
+      TotalCashFlow = Bond.CF.Table[,"TotalCashFlow"]
   )
 }
 

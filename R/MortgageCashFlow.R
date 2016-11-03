@@ -118,7 +118,6 @@
     new("PriceYieldScenarioSet",
         PrepaymentType = PrepaymentType,
         PrepaymentScenario = PrepaymentScenario)
-  
   }
   
   #' A function to test the validity of PriceYieldScenarioSet object

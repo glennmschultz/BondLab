@@ -3,14 +3,14 @@
 \docType{methods}
 \name{YieldDecimal,YieldTypes-method}
 \alias{YieldDecimal,YieldTypes-method}
-\title{A method to extract YieldDecimal from slot of YieldTypes}
+\title{A method to extract the slot YieldDecimal from the class YieldTypes}
 \usage{
 \S4method{YieldDecimal}{YieldTypes}(object)
 }
 \arguments{
-\item{object}{an S4 class of type YieldTypes}
+\item{object}{an S4 class object of the type YieldTypes}
 }
 \description{
-A method to extract YieldDecimal from slot of YieldTypes
+A method to extract the slot YieldDecimal from the class YieldTypes
 }
 

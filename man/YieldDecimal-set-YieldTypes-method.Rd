@@ -3,16 +3,16 @@
 \docType{methods}
 \name{YieldDecimal<-,YieldTypes-method}
 \alias{YieldDecimal<-,YieldTypes-method}
-\title{A method to replace the value YieldDecimal in slot of class YieldTypes}
+\title{A method to replace the vlaue in the slot YieldDecimal}
 \usage{
 \S4method{YieldDecimal}{YieldTypes}(object) <- value
 }
 \arguments{
-\item{object}{an S4 class of type YieldTypes}
+\item{object}{an S4 class of the type YieldTypes}
 
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the value YieldDecimal in slot of class YieldTypes
+A method to replace the vlaue in the slot YieldDecimal
 }
 

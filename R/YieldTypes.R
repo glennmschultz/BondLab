@@ -91,3 +91,20 @@
                              YieldDecimalString = YieldDecimalString,
                              ...)
               })
+  
+  #' A method to extract the slot YieldDecimal from the class YieldTypes
+  #' 
+  #' @param object an S4 class object of the type YieldTypes
+  #' @exportMethod YieldDecimal
+  setMethod("YieldDecimal", signature("YieldTypes"),
+            function(object){object@YieldDecimal})
+  
+  #' A method to replace the vlaue in the slot YieldDecimal 
+  #' 
+  #' @param object an S4 class of the type YieldTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod YieldDecimal
+  setReplaceMethod("YieldDecimal", signature("YieldTypes"),
+                   function(object, value){
+                     object@YieldDecimal <- value
+                   })

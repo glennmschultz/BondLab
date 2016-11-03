@@ -276,8 +276,8 @@
                  "Convexity Time",           #12
                  "CashFlow Convexity",       #13
                  "Convexity")                #14
-  
-  Bond.CF.Table <- array(data = NA, c(num.periods, 14), 
+  num.columns <- length(col.names)
+  Bond.CF.Table <- array(data = NA, c(num.periods, num.columns), 
                          dimnames = list(seq(c(1:num.periods)),col.names))  
   for(i in 1:num.periods){
     Bond.CF.Table[i,"Period"] = i

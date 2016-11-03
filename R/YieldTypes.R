@@ -144,3 +144,30 @@
                      return(object)
                    })
   
+  #' YieldTypes is the constructor function for the class YieldTypes
+  #' 
+  #' @param yield a numeric value the yield expresssed in basis format
+  #' (expample 5.0 is 0.5)
+  #' @export YieldTypes
+  YieldTypes <- function(yield = numeric()){
+    YieldBasis = 100
+    
+    YieldDecimal <- function(yield = numeric(), yieldbasis = numeric()){
+      yield <- yield * yieldbasis
+      return(yield)
+    }
+    
+    YieldDecimalString <- function(yield = numeric(), yield.basis = numeric()){
+      yield <- yield * yieldbasis
+      yield <- sprintf("%.8f", yield)
+      return(yield)
+    }
+    
+    new("YieldTypes",
+        YieldDecimal = YieldDecimal(yield =yield, yieldbasis = YieldBasis),
+        YieldBasis = yield,
+        YieldDecimalString = YieldDecimalString(yield = yield, 
+                                                yieldbasis = YieldBasis)
+    )
+  }
+  

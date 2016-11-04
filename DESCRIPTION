@@ -73,6 +73,7 @@ Collate:
     'PaymentDateFunctions.R'
     'PrepaymentModelTune.R'
     'PrepaymentModelFunctions.R'
+    'PrincipalPmtDateCalcs.R'
     'REMICConstructor.R'
     'REMICCusip.R'
     'REMICStructuringFunctions.R'

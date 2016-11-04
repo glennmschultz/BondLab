@@ -525,12 +525,7 @@
   #' @exportMethod TotalCashFlow
   setMethod("TotalCashFlow", signature("MortgageCashFlow"),
             function(object){object@TotalCashFlow})
-  
-  #' Method to extract the FirstPrinPaymentDate from the class MortgageCashFlow
-  #' @param object the name of the object of type MortgageCashFlow
-  #' @exportMethod FirstPrinPaymentDate
-  setMethod("FirstPrinPaymentDate", signature("MortgageCashFlow"),
-            function(object){object@FirstPrinPaymentDate})
+
   
   #'  A function to compute the cash flow of a pool of securitized mortgages
   #' 

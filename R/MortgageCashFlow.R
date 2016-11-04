@@ -653,14 +653,9 @@
     
   # Convert to semi-bond equivalent
   Yield.To.Maturity = ((((1 + ytm) ^ (1/2)) -1) * 2) * yield.basis
-  
+
   # Pass Yield.To.Maturity to YieldTypes class to handle the conversion to 
   # YieldBasis, YieldDecimal, and YieldDecimalString
-  Yield <- YieldTypes(yield = Yield.To.Maturity)
-  
-  # Pass Yield.To.Maturity to YieldTypes class for handling YieldBais, 
-  # YieldDecimal and YieldDecimalString conversions
-   
   Yield <- YieldTypes(yield = Yield.To.Maturity)
   
   #Step7 Present value of the cash flows Present Value Factors

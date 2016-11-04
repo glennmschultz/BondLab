@@ -152,22 +152,21 @@
   YieldTypes <- function(yield = numeric()){
     YieldBasis = 100
     
-    YieldDecimal <- function(yield = numeric(), yieldbasis = numeric()){
-      yield <- yield * yieldbasis
+    ConverttoBasis <- function(yield = numeric(), yieldbasis = numeric()){
+      yield <- yield / yieldbasis
       return(yield)
     }
     
-    YieldDecimalString <- function(yield = numeric(), yieldbasis = numeric()){
-      yield <- yield * yieldbasis
+    ConverttoString <- function(yield = numeric()){
+      yield <- yield
       yield <- sprintf("%.8f", yield)
       return(yield)
     }
     
     new("YieldTypes",
-        YieldDecimal = YieldDecimal(yield =yield, yieldbasis = YieldBasis),
-        YieldBasis = yield,
-        YieldDecimalString = YieldDecimalString(yield = yield, 
-                                                yieldbasis = YieldBasis)
+        YieldDecimal = yield,
+        YieldBasis = ConverttoBasis(yield = yield, yieldbasis = YieldBasis),
+        YieldDecimalString = ConverttoString(yield = yield)
     )
   }
   

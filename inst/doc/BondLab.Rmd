@@ -1,0 +1,278 @@
+---
+title: "Bond Lab®"
+author: "Glenn M. Schultz, CFA"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette: 
+  toc: true
+  fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Bond Lab®}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+require(ggplot2)
+require(reshape2)
+require(scales)
+require(termstrc)
+require(BondLab)
+```
+# Preface
+Bond Lab® is an R package for the analysis of fixed income securities.  The 
+analytical engines are modular in nature thereby allowing the user to create
+a customized fixed income analytical output.  Bond Lab® is written in the S4
+language and introduces a number of new classes.  
+
+Bond Lab® classes are classified as those that support bonds (standard fixed income), mortgage- and asset-backed securities, analytic output, term structure. BondLab®
+uses the following R packages:  
+* termstrc  
+* lubridate  
+* methods  
+* optimx  
+* RCurl  
+* splines  
+* XML  
+* knitr  
+* devtools  
+* testthat  
+* rmarkdown  
+
+## The Bond Lab® Valuation Framework
+
+The Bond Lab® valuation framework combines both linear and non-linear
+term structure assumptions into a holistic valuation framework.  Bond cashflows
+are viewed as bundle of zero coupon cashsflows which are discounted along the
+spot rate curve.  The value or price of a bond is sum of the individual 
+valuation of each zero coupon cashflow.  The timing and magnitude of the 
+cahflows determine the relative richness or cheapness of each cashflow.  
+
+* The cheap cashflows are those whose present value along the spot curve are greater
+than the yield to maturity (a linear term structure assumption) pricing of each cashflow.
+
+* The rich cashflows are those whose present value along the sopt rate curve are
+less than the yield to maturity assumption pricing of each cashflow.
+
+```{r, echo = FALSE, fig.align='center', fig.height= 5, fig.width= 7}
+ Valuation <- function(){
+    cbbPalette <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', 
+                    '#D55E00', '#CC79A7', '#000000','#E69F00')
+
+  SpotCurve <- spr_ns(c(4.26591, -3.54742, 2.46095, 7.49599), m = 1:30)
+  Maturity <- as.numeric(seq(1:30))
+  Coupon <- SpotCurve - .25
+
+  Data <- data.frame(Maturity = Maturity, 
+                     CouponCurve = Coupon, 
+                     SpotRateCurve = SpotCurve, 
+                     ZVSpread = SpotCurve +.20, 
+                     YTM = 3.25)
+  Data <- melt(Data, id = 'Maturity')
+  
+  framework <-
+  ggplot(Data, aes(x= Maturity, y = value/100, colour = variable))+
+  geom_line(aes(linetype = variable), size = 1)+
+  scale_linetype_manual(values = c('solid', 'dashed', 'dotted', 'twodash')) +
+  scale_y_continuous(breaks = seq(0, .04, .005), labels = percent_format())+
+  geom_vline(xintercept = 10)+
+  ylab('Yield') +
+  xlab('Maturity (years)') +
+  scale_colour_manual(values = cbbPalette) +
+  theme_minimal()+  
+  theme(axis.text = element_text(size = 15),
+        axis.title = element_text(size = 20),
+        panel.grid.major = element_line(size = .25, color = 'grey'),
+        legend.title=element_blank(),
+        legend.position=c(.80,.25), 
+        legend.background = element_rect(fill = 'transparent', 
+                                         colour = 'transparent')
+        )+
+  # Add annotations describing the valuation framework for mortgage and asset 
+  # backed securities
+  # 
+  # Add annotation labeling: the Nominal Spread to the curve
+    annotate('pointrange', x = 9, y = 2.95/100, ymin = 2.65/100, 
+             ymax = 3.25/100, colour = 'black', size = .5)+
+    geom_segment(aes(x= 1, y = 2.8/100, xend = 8.75, yend = 2.8/100), 
+               arrow = arrow(length = unit(0.2, 'cm')), colour = 'black') +
+    annotate('text', x=4.35, y = 2.9/100, label = c('Nominal Spread')) +
+  
+  # Add annotation labeling: the ZV spread
+    annotate('pointrange', x= 19, y = 3.78/100, ymin = 3.67/100, ymax = 3.89/100, 
+           colour = 'black', size = .5) +
+    geom_segment(aes(x= 12.5, y = 3.75/100, xend = 18.5, yend = 3.75/100), 
+               arrow = arrow(length = unit(0.2, 'cm')), colour = 'black') +
+    annotate('text', x=14.75, y = 3.85/100, label = c('ZV-Spread')) +
+
+  # Label Cheap Cash Flows region on the graph
+  annotate('text', x=4.35, y = 4.25/100, 
+           label = c('Cheap Cash Flows\n PV Spot > PV YTM'), size = 4) +
+  # Label Rich Cash Flows region on the graph
+  annotate('text', x=16, y = 4.25/100, 
+           label = c('Rich Cash Flows\n PV Spot < PV YTM'), size = 4)
+  plot(framework)
+ }
+Valuation()
+```
+
+> the spread to the spot rate curve is referred to in the fixed income markets as
+the **Zero Volatility Spread**. The zero volatility spread (ZV spread) is the 
+spread which equates the present value of a bond's cash flows along the spot rate curve to its yield to maturity price. The zero volatility spread is the corner 
+stone upon which the valuation framework is built, linking the linear and non-linear
+term structure pricing assumptions.
+
+
+**From the *valuation framework* we can deduce the following:**  
+
+ Relationship                            | Valuation
+-----------------------------------------|-----------------------------------------
+Zero Volatility Spread < Nominal Spread  | Rich cash flows outweigh cheap cash flows
+Zero Volatility Spread = Nominal Spread  | Rich and cheap cash flows are balanced
+Zero Volatility Spread > Nominal Spread  | Cheap cash flows outweigh rich cash flows 
+
+## Bond Lab® Design Philosphy
+Bond Lab® is designed to be modular. All classes are exposed to the user thereby allowing the user to create new superclasses from existing classes or extend the classes as the user sees fit.  Thus, the user is free to combine these classes into a superclass to fit her anlytics needs or extend classes to incorporate additional analytic information or methods.  The Bond Lab® classes are outlined below:
+
+# Bond Lab® Classes
+
+## Price, Term Structure, and Scenario classes
+These classes contain the pricing and term structure classes need to price and evlauation the relative richness or cheapness of a bond or mortgage backed 
+security
+
+### PriceTypes
+    The PriceTypes class represents price as passed to functions. Price is passed
+    to functions as a character.  The PriceTypes class converts the character value
+    to numeric and string values. It contains Price (numeric), Price32nds(string),
+    PriceBasis (numeric), and PriceDecimalString (character).  Price are be passed
+    to BondLab® functions as characters in either decimal (.) or 32nds (-) format.
+
+### TermStructure
+    The TermStructure class represents the term structure of interest rates.  The 
+    class contains forward rates, spot rates, two year forward, ten year forward.
+    The constructuctor function TermStrucuture is a wrapper around the package 
+    termstruc.
+
+### CurveSpreads
+    The CurvesSpreads class represents curve spreads.  It contains benchmark, 
+    spread to benchmark, spread to curve, zero volatility spread.
+
+### Scenario
+    The scenario class represents interest rates used in total return scenario 
+    analysis.  The user may define and scenario applied to either the coupon curve
+    or the spot rate curve.  spot rate curve scenarios are designated with a trailing
+    (s).
+
+## Bond Classes  
+Generally, speaking these classes pertain to a bond which pays a period coupon
+monthly, quarterly, semi-annually, or annually.  The bond may be callable, 
+putable, or have a sinking-fund schedule.  
+
+### BondDetails
+    The BondDetails class represents the cusip detail of a standard bond.  It
+    includes all the relevant detail to analyze a standard fixed income
+    security.  Call, Put, and Sinking Fund schedules are not yet implemented. 
+
+### BondCashFlows
+    The BondCashFlows class holds all the relevant detail regarding a bond's
+    cashflow characteristics including: yield-to-maturity, weighted average
+    life, modified duration, convexity, and bond cashflows coupon payments
+    and principal payment(s), and total cash flow.
+
+### BondTermStructure
+    The BondTermStructure class represents the key rate duration and key rate
+    convexity of bond.
+
+### BondAnalytics
+    The BondAnalytics class is a superclass of BondTermStructure, BondDetails,
+    BondCashFlows, and TermStructure.  The BondAnalytics class represents the
+    measures which define the value of and a bond and the risk measures of a
+    bond.  It is an example of creating a superclass from existing classes.
+
+### BondReturn
+    The BondReturn class represents the total return of a bond.  The BondReturn
+    class contains the coupon income, principal recieved, reinvestment income
+    horizon balance, horizon price, horizon return, horizon months.  Note:
+    currently under construction.
+
+### BondScenario
+    The BondScenario class represents the bond total return scenario analysis.  
+    It is a superclass of BondReturn, BondCashFlows, BondTermStructure, and 
+    CurveSpreads.  Note: currently under construction.
+
+## Mortgage Classes
+Mortgage class pertain to both mortgage pass-through MBS and REMICs.  Mortgage
+backed securities pay both principal and interest on a monthly basis, often with
+a delay, based on the pool's underlying borrowers' prepayment rates.
+
+### MBSDetails
+    The MBSDetails class represents the cusip detail of a mortgage backed 
+    security.  It includes all the relevant detail needed to determine the 
+    cashflow and analyze a mortgage pass-through MBS.  The MBSDetails also
+    includes reference to the prepayment model tuning file and is the primary
+    means by which a prepayment model is assigned to a MBS cusip.
+    
+### MortgageCashFlow
+    The MortgageCashFlow class holds the cashflow deatil of a mortgage-backed 
+    security including: yield to maturity, modified duration and convexity,
+    SMM, MDR, severity, scheduled interest, scheduled principal, 
+    prepaid principal, etc.  The MortgageCashFlow class is used to cashflow a
+    pass-through MBS security.
+
+### MortgageTermStructure
+    The MortgageTermStructure class represents the key rate duration and key
+    rate convexity of a mortgage backed security.
+    
+### MortgageEffectiveMeasures
+    The MortgageEffectiveMeasures class represents effective duration and 
+    convexity measures.
+
+### MortgageReturn
+    The MortgageReturn class represents the total return of a mortgage backed
+    security.  The MortgageReturn class contains the coupon income, scheduled 
+    principal received, prepaid principal received, reinvestment income, 
+    horizon current balance, horizon price, horizon return, and horizon months.
+    
+### MortgageScenario
+    The MortgageScenario class represents the mortgage total return analysis. It
+    is a superclass consisting of the classes TermStructure, PrepaymentAssumption
+    MortgageCashFlow, MortgageTermStructure, MortgageReturn, ModelToCPR,
+    CurveSpreads, Scenario.
+
+### MortgageScenarioSet
+    The MortgageScenarioSet class is a list of scenarios which can be used to 
+    batch calculate MortgageScenario.
+    
+### MortgageOAS
+    The MortgageOAS class represents the results of a mortgage OAS analysis. It
+    is currently defined by slots but plans are to make MortgageOAS a superclass
+    containing EffectiveMeasures, MortgageTermStructure
+
+## Prepayment Model Classes
+The prepayment model classes support the prepayment model used in Bond Lab®.  
+The Bond Lab® prepayment model is non-parametric in the sense that the model 
+makes no assumption as to the underlying distributional properties of mortgage
+prepayment rates.
+
+### PrepaymentAssumption
+    The PrepaymentAssumption class represents the output of the prepayment model,
+    Prospectus Prepayment Curve (PPC) and CPR.  The class is used to pass 
+    prepayment assumtptions to mortgage casflow.
+    
+## PrepaymentModelTune
+    The PrepaymentModelTune class represents the tuning parameters of the 
+    BondLab prepayment model.  The use of a tuning class allows the user to 
+    create custom prepayment models for different mortgage product types.
+    The user may extend the class to add additional model tuning parameters
+    in the event that PrepaymentModelFunctions slots are extended.
+    
+### PrepaymentModelFunctions
+    The PrepaymentModelFunctions class represents functions used in the 
+    construction of a mortgage prepayment model.  The user may add additional
+    slots to the class to extend the prepayment model.
+    
+    
+
+
+
+    

@@ -29,6 +29,7 @@ Suggests:
     ggplot2,
     reshape2,
     scales,
+    markdown,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

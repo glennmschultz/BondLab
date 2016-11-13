@@ -271,8 +271,90 @@ prepayment rates.
     construction of a mortgage prepayment model.  The user may add additional
     slots to the class to extend the prepayment model.
     
-    
 
+# Anatomy of a Bond Lab® Call
 
+Bond Lab® is designed to be modular in nature.  The classes outlined above are
+passed thereby providing input required for the next step in the analysis.  The
+design is intened to allow users to create bespoke analytic functions addressing
+the user's unique question or analytic framework.  Through inheritance users can 
+create new superclasses from the subclasses outlined above.  The anatomy of a
+Bond Lab call for MBS return analysis is outlined below
 
-    
+## Step One: define the required input for analysis
+
+```{r, priceclass, echo=TRUE}
+      price <- "103-16"
+      tradedate <- "07-11-2016"
+      settlementdate <- "08-18-2016"
+    # note PriceTypes class is used to convert price from string to
+    # numeric decimal equivilant
+    Price <- PriceTypes(Price = price)
+```
+
+## Step Two: call the yield curve and fit the term structure model
+```{r, termstructure, echo = TRUE}
+   rates.data <- Rates(trade.date = "07-11-2016")
+   # note use invisible(capture.output()) to supress messages
+   invisible(capture.output(
+     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+```
+
+## Step Three: call the MBS either by cusip of bond id
+```{r, bonddata, echo=TRUE}
+      bond.id <- MBS(MBS.id = "FHQ41072")
+```
+
+## Step Four: call the mortgage prepayment model and its dependencies
+```{r, prepayment, echo=TRUE}
+    MortgageRate <- MtgRate()
+    ModelTune <- ModelTune(bond.id = bond.id)
+    #invoke the prepayment model and assign it to object
+    Prepayment <- PrepaymentModel(bond.id = bond.id,
+                                  TermStructure = TermStructure,
+                                  MortgageRate = MortgageRate,
+                                  ModelTune = ModelTune,
+                                  PrepaymentAssumption = "MODEL")
+```
+
+## Step Five: call the mortgage cashflow function
+```{r, cashflow, echo=TRUE}
+PassThrough <-
+  MortgageCashFlow(bond.id = bond.id,
+                   original.bal = OriginalBal(bond.id),
+                   settlement.date = settlementdate,
+                   # note: here price is passed as decimal eqivalent string
+                   # internally this function also uses PriceType to convert
+                   # price to a numeric decimal basis
+                   price = PriceDecimalString(Price),
+                   PrepaymentAssumption = Prepayment)
+```
+
+## Step Six: Optional but recommended, calculate curve spread
+```{r, spreads, echo=TRUE}
+# note: used getter methods on the classes to calculate proceeds
+  proceeds = OriginalBal(bond.id) *MBSFactor(bond.id) * PriceBasis(Price)
+# The class curve spreads calculates curve spreads for reporting
+# or in this case to pass zero volatility spread to the total return function  
+  CurveSpreads <- CurveSpreads(rates.data = rates.data,
+                               TermStructure = TermStructure,
+                               CashFlow = PassThrough,
+                               proceeds = proceeds)
+```
+
+## Step Seven: Calculate Total Return
+```{r, total return, echo=TRUE}
+
+  invisible(capture.output(
+    NoChangeScenario <- MortgageScenario(
+      bond.id = bond.id,
+      settlement.date = settlementdate,
+      rates.data = rates.data,
+      price = PriceDecimalString(Price),
+      original.bal = OriginalBal(bond.id),
+      scenario = "NCs",
+      horizon.months = 12,
+      method = "ns",
+      prepayment = "MODEL",
+      horizon.spot.spread = ZeroVolSpread(CurveSpreads))))
+```

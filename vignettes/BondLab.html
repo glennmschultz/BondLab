@@ -12,12 +12,50 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2016-11-10" />
+<meta name="date" content="2016-11-13" />
 
 <title>Bond Lab®</title>
 
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 
 
@@ -32,7 +70,7 @@
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2016-11-10</em></h4>
+<h4 class="date"><em>2016-11-13</em></h4>
 
 
 
@@ -249,6 +287,79 @@ in the event that PrepaymentModelFunctions slots are extended.</code></pre>
 construction of a mortgage prepayment model.  The user may add additional
 slots to the class to extend the prepayment model.</code></pre>
 </div>
+</div>
+</div>
+<div id="anatomy-of-a-bond-lab-call" class="section level1">
+<h1>Anatomy of a Bond Lab® Call</h1>
+<p>Bond Lab® is designed to be modular in nature. The classes outlined above are passed thereby providing input required for the next step in the analysis. The design is intened to allow users to create bespoke analytic functions addressing the user’s unique question or analytic framework. Through inheritance users can create new superclasses from the subclasses outlined above. The anatomy of a Bond Lab call for MBS return analysis is outlined below</p>
+<div id="step-one-define-the-required-input-for-analysis" class="section level2">
+<h2>Step One: define the required input for analysis</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      price &lt;-<span class="st"> &quot;103-16&quot;</span>
+      tradedate &lt;-<span class="st"> &quot;07-11-2016&quot;</span>
+      settlementdate &lt;-<span class="st"> &quot;08-18-2016&quot;</span>
+    <span class="co"># note PriceTypes class is used to convert price from string to</span>
+    <span class="co"># numeric decimal equivilant</span>
+    Price &lt;-<span class="st"> </span><span class="kw">PriceTypes</span>(<span class="dt">Price =</span> price)</code></pre></div>
+</div>
+<div id="step-two-call-the-yield-curve-and-fit-the-term-structure-model" class="section level2">
+<h2>Step Two: call the yield curve and fit the term structure model</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   rates.data &lt;-<span class="st"> </span><span class="kw">Rates</span>(<span class="dt">trade.date =</span> <span class="st">&quot;07-11-2016&quot;</span>)
+   <span class="co"># note use invisible(capture.output()) to supress messages</span>
+   <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
+     TermStructure &lt;-<span class="st"> </span><span class="kw">TermStructure</span>(<span class="dt">rates.data =</span> rates.data, <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>)))</code></pre></div>
+</div>
+<div id="step-three-call-the-mbs-either-by-cusip-of-bond-id" class="section level2">
+<h2>Step Three: call the MBS either by cusip of bond id</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      bond.id &lt;-<span class="st"> </span><span class="kw">MBS</span>(<span class="dt">MBS.id =</span> <span class="st">&quot;FHQ41072&quot;</span>)</code></pre></div>
+</div>
+<div id="step-four-call-the-mortgage-prepayment-model-and-its-dependencies" class="section level2">
+<h2>Step Four: call the mortgage prepayment model and its dependencies</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    MortgageRate &lt;-<span class="st"> </span><span class="kw">MtgRate</span>()
+    ModelTune &lt;-<span class="st"> </span><span class="kw">ModelTune</span>(<span class="dt">bond.id =</span> bond.id)
+    <span class="co">#invoke the prepayment model and assign it to object</span>
+    Prepayment &lt;-<span class="st"> </span><span class="kw">PrepaymentModel</span>(<span class="dt">bond.id =</span> bond.id,
+                                  <span class="dt">TermStructure =</span> TermStructure,
+                                  <span class="dt">MortgageRate =</span> MortgageRate,
+                                  <span class="dt">ModelTune =</span> ModelTune,
+                                  <span class="dt">PrepaymentAssumption =</span> <span class="st">&quot;MODEL&quot;</span>)</code></pre></div>
+</div>
+<div id="step-five-call-the-mortgage-cashflow-function" class="section level2">
+<h2>Step Five: call the mortgage cashflow function</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PassThrough &lt;-
+<span class="st">  </span><span class="kw">MortgageCashFlow</span>(<span class="dt">bond.id =</span> bond.id,
+                   <span class="dt">original.bal =</span> <span class="kw">OriginalBal</span>(bond.id),
+                   <span class="dt">settlement.date =</span> settlementdate,
+                   <span class="co"># note: here price is passed as decimal eqivalent string</span>
+                   <span class="co"># internally this function also uses PriceType to convert</span>
+                   <span class="co"># price to a numeric decimal basis</span>
+                   <span class="dt">price =</span> <span class="kw">PriceDecimalString</span>(Price),
+                   <span class="dt">PrepaymentAssumption =</span> Prepayment)</code></pre></div>
+</div>
+<div id="step-six-optional-but-recommended-calculate-curve-spread" class="section level2">
+<h2>Step Six: Optional but recommended, calculate curve spread</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note: used getter methods on the classes to calculate proceeds</span>
+  proceeds =<span class="st"> </span><span class="kw">OriginalBal</span>(bond.id) *<span class="kw">MBSFactor</span>(bond.id) *<span class="st"> </span><span class="kw">PriceBasis</span>(Price)
+<span class="co"># The class curve spreads calculates curve spreads for reporting</span>
+<span class="co"># or in this case to pass zero volatility spread to the total return function  </span>
+  CurveSpreads &lt;-<span class="st"> </span><span class="kw">CurveSpreads</span>(<span class="dt">rates.data =</span> rates.data,
+                               <span class="dt">TermStructure =</span> TermStructure,
+                               <span class="dt">CashFlow =</span> PassThrough,
+                               <span class="dt">proceeds =</span> proceeds)</code></pre></div>
+</div>
+<div id="step-seven-calculate-total-return" class="section level2">
+<h2>Step Seven: Calculate Total Return</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
+    NoChangeScenario &lt;-<span class="st"> </span><span class="kw">MortgageScenario</span>(
+      <span class="dt">bond.id =</span> bond.id,
+      <span class="dt">settlement.date =</span> settlementdate,
+      <span class="dt">rates.data =</span> rates.data,
+      <span class="dt">price =</span> <span class="kw">PriceDecimalString</span>(Price),
+      <span class="dt">original.bal =</span> <span class="kw">OriginalBal</span>(bond.id),
+      <span class="dt">scenario =</span> <span class="st">&quot;NCs&quot;</span>,
+      <span class="dt">horizon.months =</span> <span class="dv">12</span>,
+      <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>,
+      <span class="dt">prepayment =</span> <span class="st">&quot;MODEL&quot;</span>,
+      <span class="dt">horizon.spot.spread =</span> <span class="kw">ZeroVolSpread</span>(CurveSpreads))))</code></pre></div>
 </div>
 </div>
 

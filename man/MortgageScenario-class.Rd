@@ -5,6 +5,10 @@
 \alias{MortgageScenario-class}
 \title{An S4 Class representing the results of mortgage return scenario analysis}
 \description{
-The SuperClass MtgScenario holds the results of a scenario analysis run
+The SuperClass MortgageScenario holds the results of a scenario analysis run
+MortgageScenario contains the following classes: TermStructure, 
+PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn,
+ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario inherits the 
+getters of each of the above classes.
 }
 

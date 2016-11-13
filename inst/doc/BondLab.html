@@ -12,12 +12,50 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2016-11-10" />
+<meta name="date" content="2016-11-13" />
 
 <title>Bond Lab®</title>
 
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 
 
@@ -32,7 +70,7 @@
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2016-11-10</em></h4>
+<h4 class="date"><em>2016-11-13</em></h4>
 
 
 
@@ -249,6 +287,101 @@ in the event that PrepaymentModelFunctions slots are extended.</code></pre>
 construction of a mortgage prepayment model.  The user may add additional
 slots to the class to extend the prepayment model.</code></pre>
 </div>
+</div>
+</div>
+<div id="anatomy-of-a-bond-lab-call" class="section level1">
+<h1>Anatomy of a Bond Lab® Call</h1>
+<p>Bond Lab® is designed to be modular in nature. The classes outlined above are passed thereby providing input required for the next step in the analysis. The design is intened to allow users to create bespoke analytic functions addressing the user’s unique question or analytic framework. Through inheritance users can create new superclasses from the subclasses outlined above. The anatomy of a Bond Lab call for MBS return analysis is outlined below</p>
+<div id="step-one-define-the-required-input-for-analysis" class="section level2">
+<h2>Step One: define the required input for analysis</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      price &lt;-<span class="st"> &quot;103-16&quot;</span>
+      tradedate &lt;-<span class="st"> &quot;07-11-2016&quot;</span>
+      settlementdate &lt;-<span class="st"> &quot;08-18-2016&quot;</span>
+    <span class="co"># note PriceTypes class is used to convert price from string to</span>
+    <span class="co"># numeric decimal equivilant</span>
+    Price &lt;-<span class="st"> </span><span class="kw">PriceTypes</span>(<span class="dt">Price =</span> price)</code></pre></div>
+</div>
+<div id="step-two-call-the-yield-curve-and-fit-the-term-structure-model" class="section level2">
+<h2>Step Two: call the yield curve and fit the term structure model</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   rates.data &lt;-<span class="st"> </span><span class="kw">Rates</span>(<span class="dt">trade.date =</span> <span class="st">&quot;07-11-2016&quot;</span>)
+   <span class="co"># note use invisible(capture.output()) to supress messages</span>
+   <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
+     TermStructure &lt;-<span class="st"> </span><span class="kw">TermStructure</span>(<span class="dt">rates.data =</span> rates.data, <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>)))</code></pre></div>
+</div>
+<div id="step-three-call-the-mbs-either-by-cusip-of-bond-id" class="section level2">
+<h2>Step Three: call the MBS either by cusip of bond id</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      bond.id &lt;-<span class="st"> </span><span class="kw">MBS</span>(<span class="dt">MBS.id =</span> <span class="st">&quot;FHQ41072&quot;</span>)</code></pre></div>
+</div>
+<div id="step-four-call-the-mortgage-prepayment-model-and-its-dependencies" class="section level2">
+<h2>Step Four: call the mortgage prepayment model and its dependencies</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    MortgageRate &lt;-<span class="st"> </span><span class="kw">MtgRate</span>()
+    ModelTune &lt;-<span class="st"> </span><span class="kw">ModelTune</span>(<span class="dt">bond.id =</span> bond.id)
+    <span class="co">#invoke the prepayment model and assign it to object</span>
+    Prepayment &lt;-<span class="st"> </span><span class="kw">PrepaymentModel</span>(<span class="dt">bond.id =</span> bond.id,
+                                  <span class="dt">TermStructure =</span> TermStructure,
+                                  <span class="dt">MortgageRate =</span> MortgageRate,
+                                  <span class="dt">ModelTune =</span> ModelTune,
+                                  <span class="dt">PrepaymentAssumption =</span> <span class="st">&quot;MODEL&quot;</span>)</code></pre></div>
+</div>
+<div id="step-five-call-the-mortgage-cashflow-function" class="section level2">
+<h2>Step Five: call the mortgage cashflow function</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PassThrough &lt;-
+<span class="st">  </span><span class="kw">MortgageCashFlow</span>(<span class="dt">bond.id =</span> bond.id,
+                   <span class="dt">original.bal =</span> <span class="kw">OriginalBal</span>(bond.id),
+                   <span class="dt">settlement.date =</span> settlementdate,
+                   <span class="co"># note: here price is passed as decimal eqivalent string</span>
+                   <span class="co"># internally this function also uses PriceType to convert</span>
+                   <span class="co"># price to a numeric decimal basis</span>
+                   <span class="dt">price =</span> <span class="kw">PriceDecimalString</span>(Price),
+                   <span class="dt">PrepaymentAssumption =</span> Prepayment)</code></pre></div>
+</div>
+<div id="step-six-optional-but-recommended-calculate-curve-spread" class="section level2">
+<h2>Step Six: Optional but recommended, calculate curve spread</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note: used getter methods on the classes to calculate proceeds</span>
+  proceeds =<span class="st"> </span><span class="kw">OriginalBal</span>(bond.id) *<span class="kw">MBSFactor</span>(bond.id) *<span class="st"> </span><span class="kw">PriceBasis</span>(Price)
+<span class="co"># The class curve spreads calculates curve spreads for reporting</span>
+<span class="co"># or in this case to pass zero volatility spread to the total return function  </span>
+  CurveSpreads &lt;-<span class="st"> </span><span class="kw">CurveSpreads</span>(<span class="dt">rates.data =</span> rates.data,
+                               <span class="dt">TermStructure =</span> TermStructure,
+                               <span class="dt">CashFlow =</span> PassThrough,
+                               <span class="dt">proceeds =</span> proceeds)</code></pre></div>
+</div>
+<div id="step-seven-calculate-total-return" class="section level2">
+<h2>Step Seven: Calculate Total Return</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
+    NoChangeScenario &lt;-<span class="st"> </span><span class="kw">MortgageScenario</span>(
+      <span class="dt">bond.id =</span> bond.id,
+      <span class="dt">settlement.date =</span> settlementdate,
+      <span class="dt">rates.data =</span> rates.data,
+      <span class="dt">price =</span> <span class="kw">PriceDecimalString</span>(Price),
+      <span class="dt">original.bal =</span> <span class="kw">OriginalBal</span>(bond.id),
+      <span class="dt">scenario =</span> <span class="st">&quot;NCs&quot;</span>,
+      <span class="dt">horizon.months =</span> <span class="dv">12</span>,
+      <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>,
+      <span class="dt">prepayment =</span> <span class="st">&quot;MODEL&quot;</span>,
+      <span class="dt">horizon.spot.spread =</span> <span class="kw">ZeroVolSpread</span>(CurveSpreads))))</code></pre></div>
+<p>MortgageScenario is a superclass of the following subclasses :TermStructure, PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn, ModelToCPR. CurveSpreads, and Scenario. MortgageScenario inherits the getters of each of the above classes.</p>
+</div>
+<div id="now-lets-get-some-analytics-out-of-the-class-mortgagescenario" class="section level2">
+<h2>Now, lets get some analytics out of the class MortgageScenario</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">HorizonReturn</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 1.713965</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ZeroVolSpread</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 1.124109</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToCurve</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 1.313486</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToBenchmark</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 1.303284</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 7</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EffDuration</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 4.543266</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">KeyRateDuration</span>(NoChangeScenario))</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="create-your-own-function" class="section level2">
+<h2>Create Your Own Function</h2>
+<p>Naturally, one does not wish to replicate the anatomy of a Bond Lab® call repeatedly. The use can create her own function to encapsulate the anatomy of a Bond Lab®</p>
 </div>
 </div>
 

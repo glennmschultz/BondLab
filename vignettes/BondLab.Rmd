@@ -358,3 +358,24 @@ PassThrough <-
       prepayment = "MODEL",
       horizon.spot.spread = ZeroVolSpread(CurveSpreads))))
 ```
+
+MortgageScenario is a superclass of the following subclasses :TermStructure, 
+PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn,
+ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario inherits the 
+getters of each of the above classes.
+
+## Now, lets get some analytics out of the class MortgageScenario
+```{r, return, echo=TRUE}
+HorizonReturn(NoChangeScenario)
+ZeroVolSpread(NoChangeScenario)
+SpreadToCurve(NoChangeScenario)
+SpreadToBenchmark(NoChangeScenario)
+BenchMark(NoChangeScenario)
+EffDuration(NoChangeScenario)
+barplot(KeyRateDuration(NoChangeScenario))
+```
+
+## Create Your Own Function
+Naturally, one does not wish to replicate the anatomy of a Bond Lab® call
+repeatedly.  The use can create her own function to encapsulate the anatomy of 
+a Bond Lab®

@@ -57,7 +57,7 @@ Collate:
     'DollarRollAnalytics.R'
     'ErrorTrap.R'
     'ExtractScenario.R'
-    'GWACTypes.R'
+    'GWacTypes.R'
     'GetSwapCurve.R'
     'HomePriceSim.R'
     'HorizonBondData.R'

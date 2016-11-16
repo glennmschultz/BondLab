@@ -38,3 +38,116 @@
            )
   setGeneric("GWacTypes", function(GWac)
     {standardGeneric("GWacTypes")})
+  
+  #' A standard generic function to access the slot GWacDecimal
+  #' 
+  #' @param object an S4 class object of the type GWACTypes
+  #' @export GWacDecimal
+  setGeneric("GWacDecimal", function(object)
+    (standardGeneric("GWacDecimal")))
+  
+  #' A standard generic function to replace the value of slot GWacDecimal
+  #' 
+  #' @param object an S4 class object of the type GWacTypes  #' 
+  #' @param value the replacement value of the slot
+  #' @export GWacDecimal<-
+  setGeneric("GWacDecimal<-", function(object, value)
+    {standardGeneric("GWacDecimal<-")})
+  
+  #' A standard generic function to access the slot GWacBasis
+  #' 
+  #' @param object an S4 class object of the type GWacTypes
+  #' @export GWacBasis
+  setGeneric("GWacBasis", function(object)
+    {standardGeneric("GWacBasis")})
+  
+  #' A standard generic function to replace the slot GwacBasis
+  #' 
+  #' @param object an S4 class object of the type GWacTypes  #' 
+  #' @param value the replacement value of the slot
+  #' @export GWacBasis<-
+  setGeneric("GWacBasis<-", function(object, value)
+    {standardGeneric("GWacBasis<-")})
+  
+  #' A standard generic function to access the slot GWacDecimalString
+  #' 
+  #' @param object an S4 object of the type GWacTypes
+  #' @export GWacDecimalString
+  setGeneric("GWacDecimalString", function(object)
+    {standardGeneric("GWacDecimalString")})
+  
+  #' A standard generic function to replace the slot GWacDecimalString
+  #' 
+  #' @param object an S4 object of the type GWacDecimalBasis  #' 
+  #' @param value the replacement value of the slot
+  #' @export GWacDecimalString<-
+  setGeneric("GWacDecimalString<-", function(object, value)
+    {standardGeneric("GWacDecimalString<-")})
+  
+  setMethod("initialize",
+            signature("GWacTypes"),
+            function(.Object,
+                     GWacDecimal = numeric(),
+                     GWacBasis = numeric(),
+                     GWacDecimalString = "character",
+                     ...)
+              {callNextMethod(.Object,
+                              GWacDecimal = GWacDecimal,
+                              GWacBasis = GWacBasis,
+                              GWacDecimalString = GWacDecimalString,
+                              ...)
+            })
+            
+  #' A method to extract GWacDecimal from the object GWacTypes
+  #' 
+  #' @param object an S4 object of the type GWacDecimal
+  #' @exportMethod GWacDecimal
+  setMethod("GWacDecimal", signature("GWacTypes"),
+            function(object){object@GWacDecimal})
+  
+  #' A method to replace the vlaue of GWacDecimal slot in the object GWacTypes
+  #' 
+  #' @param object an S4 object of the type GWacTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod GWacDecimal
+  setReplaceMethod("GWacDecimal", signature("GWacTypes"),
+                   function(object, value){
+                     object@GWacDecimal <- value
+                   })
+  
+  #' A method to extract the value of GWacBasis slot in the object GWacTypes
+  #' 
+  #' @param object an S4 object of the tyoe GWacTypes
+  #' @exportMethod GWacBasis
+  setMethod("GWacBasis", signature("GWacTypes"),
+            function(object){object@GWacBasis})
+  
+  #' A method to replace the value of GWacBasis slot in the object GWacTypes
+  #' 
+  #' @param object an S4 object of the type GWacTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod GWacBasis
+  setReplaceMethod("GWacBasis", signature("GWacTypes"),
+                   function(object, value){
+                     object@GWacBasis <- value
+                   })
+  
+  #' A method to extract the value of the slot GWacDecimalString slot in the
+  #' object GWacTypes
+  #' 
+  #' @param object an S4 object of the type GwacTypes
+  #' @exportMethod GWacDecimalString
+  setMethod("GWacDecimalString", signature("GWacTypes"),
+            function(object){object@GWacDecimalString}) 
+  
+  #' A method to replace the value of GWacDecimalString slot in the 
+  #' object GWacTypes
+  #' 
+  #' @param object an S4 object of the type GWacTypes
+  #' @param value the replacement value of the slot
+  #' @exportMethod GWacDecimalString
+  setReplaceMethod("GWacDecimalString", signature("GWacTypes"),
+                   function(object, value){
+                     object@GWacTypes <- value
+                   })
+  

@@ -69,7 +69,7 @@
   #' @param value the replacement value of the slot
   #' @export CouponBasis<-
   setGeneric("CouponBasis<-", function(object, value)
-    {setGeneric("CouponBasis<-")})
+    {standardGeneric("CouponBasis<-")})
   
   #' A standard generic function to access the slot CouponDecimalString
   #'

@@ -136,9 +136,9 @@ Bond Lab® is designed to be modular. All classes are exposed to the user thereb
 
 # Bond Lab® Classes
 
-## Price, Term Structure, and Scenario classes
-These classes contain the pricing and term structure classes need to price and evlauation the relative richness or cheapness of a bond or mortgage backed 
-security
+## Conversion Classes
+Conversion classes take a value or string and convert the object to numeric,
+basis, or string.
 
 ### PriceTypes
     The PriceTypes class represents price as passed to functions. Price is passed
@@ -146,6 +146,16 @@ security
     to numeric and string values. It contains Price (numeric), Price32nds(string),
     PriceBasis (numeric), and PriceDecimalString (character).  Price are be passed
     to BondLab® functions as characters in either decimal (.) or 32nds (-) format.
+
+### CouponTypes
+    The CouponTypes class represents the bond coupon passed to function.  Coupon
+    is passed to function in numeric decimal form (5.5).  The CouponTypes class 
+    convert the numeric decimal value to a basis 0.55 and character string 
+
+## Price, Term Structure, and Scenario classes
+These classes contain the pricing and term structure classes need to price and evlauation the relative richness or cheapness of a bond or mortgage backed 
+security
+
 
 ### TermStructure
     The TermStructure class represents the term structure of interest rates.  The 

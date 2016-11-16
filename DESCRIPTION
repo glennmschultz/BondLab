@@ -34,6 +34,7 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
+    'GWacTypes.R'
     'CouponTypes.R'
     'PriceTypes.R'
     'PassThroughConstructor.R'
@@ -57,7 +58,6 @@ Collate:
     'DollarRollAnalytics.R'
     'ErrorTrap.R'
     'ExtractScenario.R'
-    'GWacTypes.R'
     'GetSwapCurve.R'
     'HomePriceSim.R'
     'HorizonBondData.R'

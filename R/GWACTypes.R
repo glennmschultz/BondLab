@@ -150,4 +150,26 @@
                    function(object, value){
                      object@GWacTypes <- value
                    })
-  
+  #' GWacTypes is a constructor function for the GwacTypes class
+  #' 
+  #' The GWacTypes class converty Gross Wac a decimal numeric value to a 
+  #' GWacBasis a numeric value and GWacDecimalString a character string
+  #' @param GWac a numeric value the Gross WAC reported to the investor.  This 
+  #' may also be the note rate in the case of a loan
+  #' @export GWacTypes
+  GWacTypes <- function(GWac = numeric()){
+    GWacbasis = 100
+    
+    ConverttoBasis <- function(GWac = numeric(), Gwacbasis = numeric()){
+      GWac = GWac/GWacbasis
+      return(GWac)}
+    
+    ConverttoString <- function(GWac = numeric()){
+      GWac = sprintf("%.8f", GWac)
+      return(GWac)}
+    
+    new("GWacTypes", 
+        GWacDecimal = GWac,
+        GWacBasis = ConverttoBasis(GWac = GWac, Gwacbasis = GWacbasis),
+        GWacDecimalString = ConverttoString(Gwac = GWac))
+  }

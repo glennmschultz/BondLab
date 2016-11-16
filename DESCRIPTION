@@ -71,7 +71,6 @@ Collate:
     'PrepaymentModel.R'
     'ScenarioConstructor.R'
     'MortgageScenario.R'
-    'NoteRateTypes.R'
     'PassThroughOAS.R'
     'PaymentDateFunctions.R'
     'PrepaymentModelTune.R'

@@ -17,7 +17,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
   
-  #' An S4 class representing the borrower Gwac borrower (note rate)
+  #' An S4 class representing the borrower Gwac borrower (note rate) Types
   #' 
   #' This class is used to create and pass GWac (note rate) Types reported
   #' to the investor and used in the cash flow analytics.  For example, GWac
@@ -27,7 +27,7 @@
   #' expressed as numeric decimal
   #' @slot GWacBasis A numeric value the GWac expressed in basis notation e.g.
   #' 0.055
-  #' @slot GWacDecimalString A character value the GWac (borrower note rate)
+  #' @slot GWacDecimalString A character string the GWac (borrower note rate)
   #' expressed as numeric decimal notation e.g. "5.50
   #' @exportClass GWacTypes
   setClass("GWacTypes",
@@ -44,7 +44,7 @@
   #' @param object an S4 class object of the type GWACTypes
   #' @export GWacDecimal
   setGeneric("GWacDecimal", function(object)
-    (standardGeneric("GWacDecimal")))
+    {standardGeneric("GWacDecimal")})
   
   #' A standard generic function to replace the value of slot GWacDecimal
   #' 
@@ -152,16 +152,16 @@
                    })
   #' GWacTypes is a constructor function for the GwacTypes class
   #' 
-  #' The GWacTypes class converty Gross Wac a decimal numeric value to a 
+  #' The GWacTypes class converts Gross Wac a decimal numeric value to a 
   #' GWacBasis a numeric value and GWacDecimalString a character string
   #' @param GWac a numeric value the Gross WAC reported to the investor.  This 
   #' may also be the note rate in the case of a loan
   #' @export GWacTypes
   GWacTypes <- function(GWac = numeric()){
-    GWacbasis = 100
+    GWacBasis = 100
     
-    ConverttoBasis <- function(GWac = numeric(), Gwacbasis = numeric()){
-      GWac = GWac/GWacbasis
+    ConverttoBasis <- function(GWac = numeric(), GwacBasis = numeric()){
+      GWac = GWac/GWacBasis
       return(GWac)}
     
     ConverttoString <- function(GWac = numeric()){
@@ -170,6 +170,6 @@
     
     new("GWacTypes", 
         GWacDecimal = GWac,
-        GWacBasis = ConverttoBasis(GWac = GWac, Gwacbasis = GWacbasis),
-        GWacDecimalString = ConverttoString(Gwac = GWac))
+        GWacBasis = ConverttoBasis(GWac = GWac, GwacBasis = GwacBasis),
+        GWacDecimalString = ConverttoString(GWac = GWac))
   }

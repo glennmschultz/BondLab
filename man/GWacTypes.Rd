@@ -11,7 +11,7 @@ GWacTypes(GWac = numeric())
 may also be the note rate in the case of a loan}
 }
 \description{
-The GWacTypes class converty Gross Wac a decimal numeric value to a 
+The GWacTypes class converts Gross Wac a decimal numeric value to a 
 GWacBasis a numeric value and GWacDecimalString a character string
 }
 

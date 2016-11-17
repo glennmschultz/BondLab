@@ -3,7 +3,7 @@
 \docType{class}
 \name{GWacTypes-class}
 \alias{GWacTypes-class}
-\title{An S4 class representing the borrower Gwac borrower (note rate)}
+\title{An S4 class representing the borrower Gwac borrower (note rate) Types}
 \description{
 This class is used to create and pass GWac (note rate) Types reported
 to the investor and used in the cash flow analytics.  For example, GWac
@@ -19,7 +19,7 @@ expressed as numeric decimal}
 \item{\code{GWacBasis}}{A numeric value the GWac expressed in basis notation e.g.
 0.055}
 
-\item{\code{GWacDecimalString}}{A character value the GWac (borrower note rate)
+\item{\code{GWacDecimalString}}{A character string the GWac (borrower note rate)
 expressed as numeric decimal notation e.g. "5.50}
 }}
 

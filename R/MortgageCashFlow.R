@@ -26,6 +26,7 @@
   # for the most part this script is requiring only modest changes.
   
   #' @include PassThroughConstructor.R PriceTypes.R CouponTypes.R GWacTypes.R
+  #' @include ServicingFeeTypes.R
   NULL
   
   #' An S4 class PassThroughScenarios

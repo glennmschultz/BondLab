@@ -18,7 +18,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  #' An S4 class representing servicing fee Types
+  #' An S4 class representing ServicingFee Types
   #' 
   #' This class is used create and pass SerivicingFee Types reported to the 
   #' investor and used in cashflow analytics.  For example, serivicing fee is 

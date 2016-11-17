@@ -3,7 +3,7 @@
 \docType{class}
 \name{ServicingFeeTypes-class}
 \alias{ServicingFeeTypes-class}
-\title{An S4 class representing servicing fee Types}
+\title{An S4 class representing ServicingFee Types}
 \description{
 This class is used create and pass SerivicingFee Types reported to the 
 investor and used in cashflow analytics.  For example, serivicing fee is 

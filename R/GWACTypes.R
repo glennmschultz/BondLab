@@ -160,7 +160,7 @@
   GWacTypes <- function(GWac = numeric()){
     GWacBasis = 100
     
-    ConverttoBasis <- function(GWac = numeric(), GwacBasis = numeric()){
+    ConverttoBasis <- function(GWac = numeric(), GWacBasis = numeric()){
       GWac = GWac/GWacBasis
       return(GWac)}
     
@@ -170,6 +170,6 @@
     
     new("GWacTypes", 
         GWacDecimal = GWac,
-        GWacBasis = ConverttoBasis(GWac = GWac, GwacBasis = GwacBasis),
+        GWacBasis = ConverttoBasis(GWac = GWac, GWacBasis = GWacBasis),
         GWacDecimalString = ConverttoString(GWac = GWac))
   }

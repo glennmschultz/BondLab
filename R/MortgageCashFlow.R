@@ -25,7 +25,7 @@
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
-  #' @include PassThroughConstructor.R PriceTypes.R CouponTypes.R GWacTypes.R
+  #' @include PassThroughConstructor.R PriceTypes.R CouponTypes.R 
   #' @include ServicingFeeTypes.R
   NULL
   

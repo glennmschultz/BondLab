@@ -35,7 +35,6 @@ VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
     'ServicingFeeTypes.R'
-    'GWacTypes.R'
     'CouponTypes.R'
     'PriceTypes.R'
     'PassThroughConstructor.R'
@@ -54,6 +53,7 @@ Collate:
     'CashFlowEngine.R'
     'ConnectionFunctions.R'
     'ConvertToCashFlowTable.R'
+    'CopyOfGWacTypes.R'
     'CurveSpreads.R'
     'DollarRoll.R'
     'DollarRollAnalytics.R'

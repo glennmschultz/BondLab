@@ -37,7 +37,7 @@
              PriceDecimalString = "character")
            )
 
-  setGeneric("PriceTypes", function(price)
+  setGeneric("PriceTypes", function(price = numeric())
     {standardGeneric("PriceTypes")})
   
   #' A standard generic function access the slot PriceDecimal

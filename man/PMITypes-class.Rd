@@ -3,7 +3,7 @@
 \docType{class}
 \name{PMITypes-class}
 \alias{PMITypes-class}
-\title{An S4 class representing PMITypes}
+\title{An S4 class representing PMI (primary mortgage insurance) PMITypes}
 \description{
 This class is used to calculate and pass PMITypes reported to the investor
 and used in cashflow analytics.  For example, PMI is reported to the investor

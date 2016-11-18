@@ -38,7 +38,7 @@
              CouponDecimalString = "character")
            )
   
-  setGeneric("CouponTypes", function(coupon)
+  setGeneric("CouponTypes", function(coupon = numeric())
     {standardGeneric("CouponTypes")})
   
   #' A standard generic function to access the slot CouponDecimal

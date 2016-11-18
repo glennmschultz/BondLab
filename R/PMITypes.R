@@ -18,7 +18,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
   
-  #' An S4 class representing PMITypes
+  #' An S4 class representing PMI (primary mortgage insurance) PMITypes
   #' 
   #' This class is used to calculate and pass PMITypes reported to the investor
   #' and used in cashflow analytics.  For example, PMI is reported to the investor
@@ -36,7 +36,7 @@
              PMIBasis = "numeric",
              PMIDecimalString = "character"
            ))
-  setGeneric("PMITypes", function(object)
+  setGeneric("PMITypes", function(PMI = numeric())
     {standardGeneric("PMITypes")})
   
   #' A standard generic function to access the slot PMIDecimal

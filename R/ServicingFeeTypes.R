@@ -38,7 +38,7 @@
              ServicingFeeDecimalString = "character")
   )
   
-  setGeneric("ServicingFeeTypes", function(ServicingFee)
+  setGeneric("ServicingFeeTypes", function(ServicingFee = numeric())
     {standardGeneric("ServicingFeeTypes")})
   
   #' A standard generic function to access the slot ServicingFeeDecimal

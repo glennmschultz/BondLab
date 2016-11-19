@@ -21,12 +21,12 @@
   #' @include PrepaymentModel.R MortgageKeyRate.R ModelToCPR.R
   NULL
   
-  #' An S4 Class A list of mortgage scenarios for analysis
+  #' An S4 Class a list of mortgage scenarios for analysis
   #'
   #' The class MortgageScenarioSet is a list of classes of the type scenario.
   #' The class is used to facilitate multiple scenario analysis by providing
   #' the user defined list of scenarios for analysis
-  #' @slot Scenario A list of the classes of type scenario
+  #' @slot ScenarioSet A list of the classes of type scenario
   #' @exportClass MortgageScenarioSet
   setClass("MortgageScenarioSet",
            representation(
@@ -60,17 +60,17 @@
   
   #' MortgageScenarioSet is the constructor function for the class Mortgage
   #' ScenarioSet
-  #' @param ScenarioList a list the of scenario classes for analysis
+  #' @param ScenarioSet a list the of scenario classes for analysis
   #' @export MortgageScenarioSet 
   MortgageScenarioSet <- function(ScenarioSet = "list"){
     new("MortgageScenarioSet",
         ScenarioSet = ScenarioSet)
   }
   
-  #' An S4 class representing mortgage scenario return analysis 
+  #' An S4 class the results of mortgage total return analysis 
   #' 
   #' The class MortgageReturn holds the results of mortgage return analysis
-  #' @slot CouponIncome A numeric value the Coupon Income received over the 
+  #' @slot CouponIncome A numeric value the coupon income received over the 
   #' investment horizon
   #' @slot ScheduledPrinReceived A numeric value the scheduled principal 
   #' received over the investment horizon
@@ -169,55 +169,55 @@
                              ...)
             })
 
-  #' A method to extract CouponIncome from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract CouponIncome from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod CouponIncome
   setMethod("CouponIncome", signature("MortgageReturn"),
             function(object){object@CouponIncome})
   
-  #' A method to extract ScheduledPrinReceived from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract ScheduledPrinReceived from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod ScheduledPrinReceived
   setMethod("ScheduledPrinReceived", signature("MortgageReturn"),
             function(object){object@ScheduledPrinReceived})
   
-  #' A method to extract PrepaidPrinReceived from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract PrepaidPrinReceived from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod PrepaidPrinReceived
   setMethod("PrepaidPrinReceived", signature("MortgageReturn"),
             function(object){object@PrepaidPrinReceived})
   
-  #' A method to extract ReinvestmentIncome from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract ReinvestmentIncome from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod ReinvestmentIncome
   setMethod("ReinvestmentIncome", signature("MortgageReturn"),
             function(object){object@ReinvestmentIncome})
   
-  #' A method to extract HorizonCurrBal from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract HorizonCurrBal from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod HorizonCurrBal
   setMethod("HorizonCurrBal", signature("MortgageReturn"),
             function(object){object@HorizonCurrBal})
   
-  #' A method to extract HorizonPrice from S4 class MtgScenario
-  #' @param object the name of an S4 class of tyoe MtgScenario
+  #' A method to extract HorizonPrice from S4 class MortgageReturn
+  #' @param object the name of an S4 class of tyoe MortgageReturn
   #' @exportMethod HorizonPrice
   setMethod("HorizonPrice", signature("MortgageReturn"),
             function(object){object@HorizonPrice})
   
-  #' A method to extract HorizonReturn from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract HorizonReturn from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod HorizonReturn
   setMethod("HorizonReturn", signature("MortgageReturn"),
             function(object){object@HorizonReturn})
   
-  #' A method to extract HorizonMos from S4 class MtgScenario
-  #' @param object the name of an S4 class of type MtgScenario
+  #' A method to extract HorizonMos from S4 class MortgageReturn
+  #' @param object the name of an S4 class of type MortgageReturn
   #' @exportMethod HorizonMos
   setMethod("HorizonMos", signature("MortgageReturn"),
             function(object){object@HorizonMos})
   
-  #' An S4 Class representing the results of mortgage return scenario analysis
+  #' An S4 Class the results of mortgage return scenario analysis
   #' 
   #' The SuperClass MortgageScenario holds the results of a scenario analysis run
   #' MortgageScenario contains the following classes: TermStructure, 
@@ -234,8 +234,7 @@
                         "MortgageReturn",
                         "ModelToCPR",
                         "CurveSpreads",
-                        "Scenario")
-  )
+                        "Scenario"))
   
   setGeneric("MortgageScenario", function(bond.id ="character",
                                      settlement.date = "character",

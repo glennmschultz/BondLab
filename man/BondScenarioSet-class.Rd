@@ -5,11 +5,13 @@
 \alias{BondScenarioSet-class}
 \title{An S4 class a list of bond scenarios for analysis}
 \description{
-The class BondScenarioSet is a list of classes of the type scenario
+The class BondScenarioSet is a list of classes of the type scenario.  The
+class is used to facilitate multiple scenario analysis by providing a user
+defined list for scenario analysis
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Scenario}}{A list of the classes of the type scenario}
+\item{\code{ScenarioSet}}{A list of the classes of the type scenario}
 }}
 

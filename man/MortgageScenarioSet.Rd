@@ -8,7 +8,7 @@ ScenarioSet}
 MortgageScenarioSet(ScenarioSet = "list")
 }
 \arguments{
-\item{ScenarioList}{a list the of scenario classes for analysis}
+\item{ScenarioSet}{a list the of scenario classes for analysis}
 }
 \description{
 MortgageScenarioSet is the constructor function for the class Mortgage

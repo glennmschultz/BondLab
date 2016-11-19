@@ -3,14 +3,14 @@
 \docType{methods}
 \name{ReinvestmentIncome,MortgageReturn-method}
 \alias{ReinvestmentIncome,MortgageReturn-method}
-\title{A method to extract ReinvestmentIncome from S4 class MtgScenario}
+\title{A method to extract ReinvestmentIncome from S4 class MortgageReturn}
 \usage{
 \S4method{ReinvestmentIncome}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type MtgScenario}
+\item{object}{the name of an S4 class of type MortgageReturn}
 }
 \description{
-A method to extract ReinvestmentIncome from S4 class MtgScenario
+A method to extract ReinvestmentIncome from S4 class MortgageReturn
 }
 

@@ -3,7 +3,7 @@
 \docType{class}
 \name{MortgageScenario-class}
 \alias{MortgageScenario-class}
-\title{An S4 Class representing the results of mortgage return scenario analysis}
+\title{An S4 Class the results of mortgage return scenario analysis}
 \description{
 The SuperClass MortgageScenario holds the results of a scenario analysis run
 MortgageScenario contains the following classes: TermStructure, 

@@ -3,14 +3,14 @@
 \docType{methods}
 \name{HorizonPrice,MortgageReturn-method}
 \alias{HorizonPrice,MortgageReturn-method}
-\title{A method to extract HorizonPrice from S4 class MtgScenario}
+\title{A method to extract HorizonPrice from S4 class MortgageReturn}
 \usage{
 \S4method{HorizonPrice}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of tyoe MtgScenario}
+\item{object}{the name of an S4 class of tyoe MortgageReturn}
 }
 \description{
-A method to extract HorizonPrice from S4 class MtgScenario
+A method to extract HorizonPrice from S4 class MortgageReturn
 }
 

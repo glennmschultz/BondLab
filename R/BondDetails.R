@@ -19,7 +19,7 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-  #' @include PassThroughConstructor.R 
+  #' @include MBSDetails.R 
   NULL
  
   #' An S4 class representing the cusip detail of the a standard bond

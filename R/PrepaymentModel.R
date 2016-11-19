@@ -18,7 +18,7 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-  #' @include PassThroughConstructor.R MortgageCashFlow.R
+  #' @include MBSDetails.R MortgageCashFlow.R
   NULL
 
   #' A S4 Class prepayment vectors which are passed to cash flow engines

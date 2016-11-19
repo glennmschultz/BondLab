@@ -18,7 +18,7 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-  #' @include BondConstructor.R BondCashFlow.R BondKeyRate.R TermStructure.R
+  #' @include BondDetails.R BondCashFlow.R BondKeyRate.R TermStructure.R
   NULL
   
   setClass("BondAnalytics", 

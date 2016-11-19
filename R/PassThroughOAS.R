@@ -17,7 +17,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  #' @include PassThroughConstructor.R MortgageCashFlow.R MortgageOAS.R
+  #' @include MBSDetails.R MortgageCashFlow.R MortgageOAS.R
   NULL
   
   #' An S4 class containing the classes MBSDetails, MortgageCashFlow, 

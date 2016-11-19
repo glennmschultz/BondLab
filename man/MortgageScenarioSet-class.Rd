@@ -5,7 +5,9 @@
 \alias{MortgageScenarioSet-class}
 \title{An S4 Class A list of mortgage scenarios for analysis}
 \description{
-The class MortgageScenarioSet is a list of classes of the type scenario
+The class MortgageScenarioSet is a list of classes of the type scenario.
+The class is used to facilitate multiple scenario analysis by providing
+the user defined list of scenarios for analysis
 }
 \section{Slots}{
 

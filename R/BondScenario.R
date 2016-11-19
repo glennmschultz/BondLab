@@ -28,7 +28,7 @@
   #' @exportClass BondScenarioSet
   setClass("BondScenarioSet",
            representation(
-             Scenario = "list"
+             ScenarioSest = "list"
            ))
   
   setGeneric("BondScenarioSet", function(object)
@@ -39,11 +39,11 @@
   setMethod("initialize",
             signature("BondScenarioSet"),
             function(.Object,
-                     Scenario = "list",
+                     ScenarioSet = "list",
                      ...)
             {
               callNextMethod(.Object,
-                            Scenario = Scenario,
+                            ScenarioSet = ScenarioSet,
                             ...)
             })
 
@@ -52,4 +52,4 @@
   #' @param object The name of an S4 object of the type BondScenarioSet
   #' @exportMethod ScenarioSet
   setMethod("ScenarioSet", signature("BondScenarioSet"),
-            function(object){object@Scenario})
+            function(object){object@ScenarioSet})

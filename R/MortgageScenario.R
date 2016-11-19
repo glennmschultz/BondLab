@@ -23,12 +23,14 @@
   
   #' An S4 Class A list of mortgage scenarios for analysis
   #'
-  #' The class MortgageScenarioSet is a list of classes of the type scenario
+  #' The class MortgageScenarioSet is a list of classes of the type scenario.
+  #' The class is used to facilitate multiple scenario analysis by providing
+  #' the user defined list of scenarios for analysis
   #' @slot Scenario A list of the classes of type scenario
   #' @exportClass MortgageScenarioSet
   setClass("MortgageScenarioSet",
            representation(
-             Scenario = "list"))
+             ScenarioSet = "list"))
   
   setGeneric("MortgageScenarioSet", function(Scenario = "list")
   {standardGeneric("MortgageScenarioSet")})
@@ -42,19 +44,28 @@
   setMethod("initialize",
             signature("MortgageScenarioSet"),
             function(.Object,
-                     Scenario = "list",
+                     ScenarioSet = "list",
                      ...)
             {
               callNextMethod(.Object,
-                             Scenario = Scenario,
+                             ScenarioSet = ScenarioSet,
                              ...)
             })
   
   #' A method to extract the Scenario list from S4 class MtgScenarioSet
-  #' @param object the name of the S4 object of the type Scenario
+  #' @param object a list of the S4 objects of the type Scenario
   #' @exportMethod ScenarioSet
   setMethod("ScenarioSet", signature("MortgageScenarioSet"),
-            function(object){object@Scenario})
+            function(object){object@ScenarioSet})
+  
+  #' MortgageScenarioSet is the constructor function for the class Mortgage
+  #' ScenarioSet
+  #' @param ScenarioList a list the of scenario classes for analysis
+  #' @export MortgageScenarioSet 
+  MortgageScenarioSet <- function(ScenarioSet = "list"){
+    new("MortgageScenarioSet",
+        ScenarioSet = ScenarioSet)
+  }
   
   #' An S4 class representing mortgage scenario return analysis 
   #' 

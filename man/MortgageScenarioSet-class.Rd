@@ -3,13 +3,13 @@
 \docType{class}
 \name{MortgageScenarioSet-class}
 \alias{MortgageScenarioSet-class}
-\title{An S4 Class A list of Scenario outcomes}
+\title{An S4 Class A list of mortgage scenarios for analysis}
 \description{
-The class MtgScenarioSet is a list of classes Scenario
+The class MortgageScenarioSet is a list of classes of the type scenario
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Scenario}}{A list of the class Scenario}
+\item{\code{Scenario}}{A list of the classes of type scenario}
 }}
 

@@ -21,10 +21,10 @@
   #' @include PrepaymentModel.R MortgageKeyRate.R ModelToCPR.R
   NULL
   
-  #' An S4 Class A list of Scenario outcomes
+  #' An S4 Class A list of mortgage scenarios for analysis
   #'
-  #' The class MtgScenarioSet is a list of classes Scenario
-  #' @slot Scenario A list of the class Scenario
+  #' The class MortgageScenarioSet is a list of classes of the type scenario
+  #' @slot Scenario A list of the classes of type scenario
   #' @exportClass MortgageScenarioSet
   setClass("MortgageScenarioSet",
            representation(

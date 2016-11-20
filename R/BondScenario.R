@@ -227,4 +227,117 @@
                            horizon.OAS = NULL,
                            horizon.price = NULL){
     
+    # Bond Scenario analysis is done in two steps
+    # The first is calculated the expected cash-flows received over the 
+    # investment horizon The second is to "roll" the bond
+    # forward and price the expected future cash-flows
+    
+    # logical declarations of scenario analysis are horzion pricing methods
+    # and horizon term structure assumption used shift the sopt curve or shift
+    # the coupon curve and refit the term structure model
+    
+    if(is.null(horizon.spot.spread) != TRUE) {
+      horizon.price.type <- "spot"
+    } else if(is.null(horizon.nominal.spread) != TRUE) {
+      horizon.price.type <- "nominal"  
+    } else if(is.null(horizon.OAS) != TRUE) {
+      horizon.price.type <- "oas"  
+    } else {
+      horizon.price.type <- "price"
+    }
+    
+    bond.id <- bond.id
+    rates.data <- rates.data
+    MortgageRate <- MtgRate()
+    ModelTune <- ModelTune(bond.id = bond.id)
+    Burnout = BurnOut(bond.id)
+    Scenario <- ScenarioCall(Scenario = scenario)
+    
+    #set rates shift (immediate) for term structure fit
+    ShiftCurve <- rates.data
+    ShiftCurve[1,2:length(ShiftCurve)] <- 
+      ScenarioFormula(Scenario)(rates.data[1,2:length(ShiftCurve)], 
+                                Shiftbps = Shiftbps(Scenario))
+    
+    # Set horizon curve and settlment date for horizon ending value analysis
+    # This curve is used to fit the horizon term structure when the scenario is
+    # not based on shift of the spot rate curve.
+    
+    HorizonCurve <- rates.data
+    HorizonCurve[1,1] <- as.character(
+      as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
+    
+    HorizonCurve[1,2:length(HorizonCurve)] <- 
+      ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
+                                Shiftbps = Shiftbps(Scenario))
+    HorizonSettlement <- as.Date(
+      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
+    
+    Price <- PriceTypes(Price = price)
+    
+    # fit the term structure and calcualate cashflows to compute the 
+    # following Yield, WAL, Curve Spreads, KeyRate Durations, etc
+    
+    TermStructure <- TermStructure(
+      rates.data = ShiftCurve,
+      method = method)
+    
+    BondCashFlow <- BondCashFlows(bond.id = bond.id,
+                                  principal = par.amount,
+                                  settlement.date = settlement.date,
+                                  price = PriceDecimalString(Price))
+    
+    proceeds <- Accrued(BondCashFlow) + (par.amount * PriceBasis(Price))
+    
+    principal <- par.amount
+    
+    # Compute the CurvesSpreads based on the user price and prepayment vector
+    # given the user's scenario interest rate shift
+    CurveSpread <- CurveSpreads(rates.data = rates.data,
+                                CashFlow = BondCashFlow,
+                                TermStructure = TermStructure,
+                                proceeds = proceeds)
+    
+    BondTermStructure = BondTermStructure(bond.id = bond.id,
+                                          Rate.Delta = rate.delta,
+                                          TermStructure = TermStructure,
+                                          price = PriceDecimalString(Price),
+                                          cashflow = BondCashFlow)
+    
+    # This section begins the  horizon bond analysis. 
+    # Horizon curve can be calculated by either shifting the coupon curve or
+    # and refitting the curve or it can be calculated by shifting the spot rate
+    # curve.  Senarios with ending with (s) indicate the user wishes to shift
+    # the spot rate curve.
+    
+    if(grepl("s",scenario) == TRUE){
+      # initialize term structure object and assign shift vlaue to the 
+      # spot rate curve based on the TermStructure object above
+      
+      HorizonTermStructure <- new(
+        "TermStructure",
+        TradeDate = as.character(
+          as.Date(rates.data[1,1]) %m+% months(horizon.months)),
+        Period = numeric(),
+        Date = "character",
+        SpotRate = numeric(),
+        ForwardRate = numeric(),
+        TwoYearFwd = numeric(),
+        TenYearFwd = numeric())
+      
+      Period(HorizonTermStructure) <- Period(TermStructure)
+      ForwardDate(HorizonTermStructure) <- as.character(
+        as.Date(ForwardDate(TermStructure)) %m+% months(horizon.months))
+      ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
+      SpotRate(HorizonTermStructure) <- SpotRate(TermStructure)
+      TwoYearForward(HorizonTermStructure) <- TwoYearForward(TermStructure)
+      TenYearForward(HorizonTermStructure) <- TenYearForward(TermStructure)
+    } else {
+      HorizonTermStructure <- TermStructure(
+        rates.data = HorizonCurve,
+        method = "ns")
+    } # End of if logic for term structure method
+    
+    
+    
   }

@@ -324,7 +324,7 @@
     
     # logical declarations of scenario analysis are horzion pricing methods
     # and horizon term structure assumption used shift the sopt curve or shift
-    # the coupon curve and refit the terms structure model
+    # the coupon curve and refit the term structure model
     
     if(is.null(horizon.spot.spread) != TRUE) {
       horizon.price.type <- "spot"

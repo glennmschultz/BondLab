@@ -20,15 +20,14 @@
   # ===========================================================================
   # These functions create temp horizon bond data for scenario analysis
   # the intention of these functions is to "roll forward" the cusip data 
-  # for horizon
-  # pricing - OAS, spot spread or nominal spread to the curve
+  # for horizon pricing - OAS, spot spread or nominal spread to the curve
   # ===========================================================================
   
   #' A Function to "Roll Forward" the pass through cusip object (MBS Details)
   #' 
   #' A standard generic function to roll forward MBS cusip detail to the 
-  #' scenario horizon
-  #' for pricing using spot spread, nominal spread, or option adjusted spread
+  #' scenario horizon for pricing using spot spread, nominal spread, 
+  #' or option adjusted spread
   #' @param bond.id A character string referring to an object type of MBSDetails
   #' @param original.bal A numeric value the original balance
   #' @param projected.cashflow A character string referring to an object type 
@@ -40,8 +39,9 @@
                                  projected.cashflow = "character",
                                  horizon.months = numeric()){
   TempBond <- bond.id
-  # CurrentPeriod <- bond.id@WALA + horizon.months
-  # NextPeriod <-  CurrentPeriod + 1
+  
+  # Use the projected cashflow to determine the current balance outstanding
+  # at the end of the horizon
   SchedPrincipal <- ScheduledPrin(projected.cashflow)[1:horizon.months]
   PrepaidPrincipal <- PrepaidPrin(projected.cashflow)[1:horizon.months]
   DefaultedPrincipal <- DefaultedPrin(projected.cashflow)[1:horizon.months]
@@ -69,4 +69,32 @@
     package = "BondLab"), "/Temp_BondData/","TempPassThrough.rds", sep = ""))
   saveRDS(TempBond, connTemp)
   close(connTemp)
+  }
+  
+  #' A Function to "Roll Forward a bond cusip object BondDetails
+  #' 
+  #' A standard generic function to roll forward bond details to the scenario
+  #' horizon for pricing using the spot spread (nomimal spread), spread to the 
+  #' benchmark, option adjusted spread or price.
+  #' @param bond.id A character string referring to an object of the type BondDetails
+  #' @param par.amount A numeric value the par amount of the bond
+  #' @param horizon.months A numeric value the investment horizon in months
+  #' @export ForwardBond
+  ForwardBond <- function(bond.id = "character",
+                          par.amount = numeric(),
+                          horizon.months = numeric()){
+    TempBond <- bond.id
+    
+    LastPmtDate(TempBond) <- as.character(format(
+      as.Date(LastPmtDate(bond.id), 
+              format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    
+    NextPmtDate(TempBond) <- as.character(format(
+      as.Date(NextPmtDate(bond.id), 
+              format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    
+    connTemp <-  gzfile(description = paste(system.file(
+      package = "BondLab"), "/Temp_BondData/","TempBond.rds", sep = ""))
+    saveRDS(TempBond, connTemp)
+    close(connTemp)
   }

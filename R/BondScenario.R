@@ -179,3 +179,52 @@
                         "BondReturn",
                         "CurveSpreads",
                         "Scenario"))
+  
+  setGeneric("BondScenario", function(bond.id = "character",
+                                      settlement.date = "character",
+                                      rates.data = "character",
+                                      scenario = "character",
+                                      horizon.months = "character",
+                                      method = "character",
+                                      ...,
+                                      horizon.spot.spread = NULL,
+                                      horizon.nominal.spread = NULL,
+                                      horizon.OAS = NULL,
+                                      horizon.price = NULL)
+    {standardGeneric("BondScenario")})
+  
+  #' Bond Scenario Analysis
+  #' 
+  #' A function to compute the total return of a Bond
+  #' @param bond.id A character string referencing an object of the type BondDetails
+  #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
+  #' @param rates.data A character string the trade.data "mm-dd-YYYY"
+  #' @param price A character string in decimal equivalent (.) or 32nds (-)
+  #' @param par.amount A numeric value the par amount. 
+  #' @param scenario A character string the scenario
+  #' @param horizon.months A numeric value the time horizon
+  #' @param method A character string the method used to fit the term structure
+  #' @param ... Optional values to select term structure and horizon price method
+  #' @param horizon.spot.spread A numeric value the horizon zero volatility 
+  #' spread
+  #' @param horizon.nominal.spread A numeric value the horizon nominal spread
+  #' or spread to  the curve
+  #' @param horizon.OAS A numeric value the horizon option adjusted spread
+  #' (not currently implemented)
+  #' @param horizon.price A numeric value the horizon price
+  #' @export BondScenario
+  BondScenario <- function(bond.id = "character",
+                           settlement.date = "character",
+                           rates.data = "character",
+                           price = numeric(),
+                           par.amount = numeric(),
+                           scenario = "character",
+                           horizon.months = numeric(),
+                           method = "ns",
+                           ...,
+                           horizon.spot.spread = NULL,
+                           horizon.nominal.spread = NULL,
+                           horizon.OAS = NULL,
+                           horizon.price = NULL){
+    
+  }

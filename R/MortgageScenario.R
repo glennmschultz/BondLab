@@ -273,10 +273,10 @@
   #' Mortgage Scenario Analysis
   #' 
   #' A function to compute the total return of mortgage pass-throughs MBS
-  #' @param bond.id A character string to object of type MBS details
+  #' @param bond.id A character string referencing an object of type MBSDetails
   #' @param settlement.date A charcter string the settlement date
   #' @param rates.data A character string the trade date mm-dd-yyyy
-  #' @param price A numeric value the price
+  #' @param price A character string in decimal equivalent (.) or 32nds (-)
   #' @param original.bal A numeric value the price
   #' @param scenario A character string the scenario
   #' @param horizon.months A numeric value the time horizon
@@ -285,9 +285,11 @@
   #' is used
   #' @param method A character string the method used to fit the 
   #' term structure
-  #' @param horizon.spot.spread A numeric value the horizon spread
+  #' @param horizon.spot.spread A numeric value the horizon zero volatility 
+  #' spread
   #' @param horizon.nominal.spread A numeric value the horizon spread
   #' @param horizon.OAS A numeric value the horizon option adjusted spread
+  #' (not currently implemented)
   #' @param horizon.price A numeric value the horizon price in decimal form
   #' @param begin.cpr A numeric value the beginning CPR value
   #' @param end.cpr A numeric value the ending CPR value

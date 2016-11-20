@@ -13,13 +13,13 @@ MortgageScenario(bond.id = "character", settlement.date = "character",
   end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric())
 }
 \arguments{
-\item{bond.id}{A character string to object of type MBS details}
+\item{bond.id}{A character string referencing an object of type MBSDetails}
 
 \item{settlement.date}{A charcter string the settlement date}
 
 \item{rates.data}{A character string the trade date mm-dd-yyyy}
 
-\item{price}{A numeric value the price}
+\item{price}{A character string in decimal equivalent (.) or 32nds (-)}
 
 \item{original.bal}{A numeric value the price}
 
@@ -35,11 +35,13 @@ term structure}
 \item{...}{Optional values when PSA or CPR is used or Yield Curve
 is used}
 
-\item{horizon.spot.spread}{A numeric value the horizon spread}
+\item{horizon.spot.spread}{A numeric value the horizon zero volatility 
+spread}
 
 \item{horizon.nominal.spread}{A numeric value the horizon spread}
 
-\item{horizon.OAS}{A numeric value the horizon option adjusted spread}
+\item{horizon.OAS}{A numeric value the horizon option adjusted spread
+(not currently implemented)}
 
 \item{horizon.price}{A numeric value the horizon price in decimal form}
 

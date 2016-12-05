@@ -83,6 +83,7 @@ Collate:
     'REMICCusip.R'
     'REMICStructuringFunctions.R'
     'RatesData.R'
+    'SpreadToPriceFunctions.R'
     'TimeValueFunction.R'
     'YieldTypes.R'
     'zzz.R'

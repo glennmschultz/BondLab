@@ -153,8 +153,8 @@
     
     price = ((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) /
                principal) * price.basis
-    
-    return(price)
+    PriceTypes <- PriceTypes(Price = as.character(price))
+    return(PriceTypes)
   }
   
   

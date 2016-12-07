@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2016-12-05" />
+<meta name="date" content="2016-12-07" />
 
 <title>Bond Lab®</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2016-12-05</em></h4>
+<h4 class="date"><em>2016-12-07</em></h4>
 
 
 
@@ -146,11 +146,39 @@ to numeric and string values. It contains Price (numeric), Price32nds(string),
 PriceBasis (numeric), and PriceDecimalString (character).  Price are be passed
 to BondLab® functions as characters in either decimal (.) or 32nds (-) format.</code></pre>
 </div>
+<div id="yieldtypes" class="section level3">
+<h3>YieldTypes</h3>
+<pre><code>The YieldTypes class represents yield to maturity as passed from function.
+Yield to maturity is passed to the function in numeric decimal form (3.0).
+The YieldTypes class converts teh numeric decimal value to a basis value 
+0.30 and a character string.</code></pre>
+</div>
 <div id="coupontypes" class="section level3">
 <h3>CouponTypes</h3>
-<pre><code>The CouponTypes class represents the bond coupon passed to function.  Coupon
+<pre><code>The CouponTypes class represents the bond coupon passed to a function.  Coupon
 is passed to function in numeric decimal form (5.5).  The CouponTypes class 
-convert the numeric decimal value to a basis 0.55 and character string </code></pre>
+converts the numeric decimal value to a basis 0.55 and character string</code></pre>
+</div>
+<div id="gfeetypes" class="section level3">
+<h3>GFeeTypes</h3>
+<pre><code>The GFeeTypes class represents the guarantee fee, if any, passed to the cashflow
+engine.  GFee is passed to the function in numeric decimal form (0.35).
+The GFeeTypes converts the numeric decimal value to a basis 0.0035 and character
+string.</code></pre>
+</div>
+<div id="gwactypes" class="section level3">
+<h3>GWacTypes</h3>
+<pre><code>The GWacTypes class represents the borrower Gross WAC passed to the cashflow
+engine.  GWac is passed to the function in numeric decimal form (4.00).
+The GWacTypes converts the numeric decimal value to a basis 0.04 and character
+string.</code></pre>
+</div>
+<div id="servicingfeetypes" class="section level3">
+<h3>ServicingFeeTypes</h3>
+<pre><code>The ServicingFeeTypes class represents the servicing fee passed to the cashflow
+engine.  Servicing fee is passed to the function in numeric decimal form (0.30).
+The ServicingFeeTypes converts the numeric decimal value to a basis 0.0030 
+and character string.</code></pre>
 </div>
 </div>
 <div id="price-term-structure-and-scenario-classes" class="section level2">
@@ -199,7 +227,7 @@ convexity of bond.</code></pre>
 </div>
 <div id="bondanalytics" class="section level3">
 <h3>BondAnalytics</h3>
-<pre><code>The BondAnalytics class is a superclass of BondTermStructure, BondDetails,
+<pre><code>The BondAnalytics class is a subclass of BondTermStructure, BondDetails,
 BondCashFlows, and TermStructure.  The BondAnalytics class represents the
 measures which define the value of and a bond and the risk measures of a
 bond.  It is an example of creating a superclass from existing classes.</code></pre>
@@ -214,8 +242,8 @@ currently under construction.</code></pre>
 <div id="bondscenario" class="section level3">
 <h3>BondScenario</h3>
 <pre><code>The BondScenario class represents the bond total return scenario analysis.  
-It is a superclass of BondReturn, BondCashFlows, BondTermStructure, and 
-CurveSpreads.  Note: currently under construction.</code></pre>
+The superclasses of which are BondReturn, BondCashFlows, BondTermStructure, 
+and CurveSpreads.  Note: currently under construction.</code></pre>
 </div>
 </div>
 <div id="mortgage-classes" class="section level2">
@@ -384,6 +412,8 @@ slots to the class to extend the prepayment model.</code></pre>
 <pre><code>## [1] 1.3032839</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 7</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">WAL</span>(NoChangeScenario)</code></pre></div>
+<pre><code>## [1] 6.9049558</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EffDuration</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 4.543266</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">KeyRateDuration</span>(NoChangeScenario))</code></pre></div>
@@ -391,7 +421,7 @@ slots to the class to extend the prepayment model.</code></pre>
 </div>
 <div id="create-your-own-function" class="section level2">
 <h2>Create Your Own Function</h2>
-<p>Naturally, one does not wish to replicate the anatomy of a Bond Lab® call repeatedly. The use can create her own function to encapsulate the anatomy of a Bond Lab®</p>
+<p>Naturally, one does not wish to replicate the anatomy of a Bond Lab® call repeatedly. The user can create her own function to encapsulate the anatomy of a Bond Lab® call.</p>
 </div>
 </div>
 

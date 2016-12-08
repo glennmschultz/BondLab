@@ -8,7 +8,7 @@ returns the clean price of the bond}
 \usage{
 SpreadToPrice(bond.id = "character", trade.date = "character",
   settlement.date = "character", PrepaymentAssumption = "character",
-  spread = numeric(), CPR = numeric())
+  spread = numeric(), CPR = numeric(), ..., benchmark = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -24,6 +24,10 @@ entered in percent}
 
 \item{CPR}{a numeric value the CPR assumption used to price the MBS
 e.g. 100 basis points = 1}
+
+\item{...}{optional values follow}
+
+\item{benchmark}{optionally the user can pass pricing benchmark}
 }
 \description{
 A function to solve for the price of a MBS pass-through given

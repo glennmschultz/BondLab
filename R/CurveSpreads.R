@@ -27,7 +27,6 @@
   #' the interpolated curve
   #' @slot ZeroVolSpread A numeric value the Zero Volatilty spread
   #' @exportClass CurveSpreads
-  #' @importFrom splines interpSpline
   setClass("CurveSpreads",
            representation(
              BenchMark = "numeric",
@@ -118,6 +117,7 @@
   #'@param TermStructure a character string the object of type TermStructure
   #'@param proceeds a numeric value the investor trade proceeeds 
   #'MortgageCashFlow
+  #'@importFrom splines interpSpline
   #'@importFrom stats loess
   #'@importFrom stats predict
   #'@export CurveSpreads

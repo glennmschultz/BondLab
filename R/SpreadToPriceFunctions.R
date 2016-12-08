@@ -63,13 +63,17 @@
   #' entered in percent
   #' @param CPR a numeric value the CPR assumption used to price the MBS
   #' e.g. 100 basis points = 1
+  #' @param ... optional values follow
+  #' @param benchmark optionally the user can pass pricing benchmark
   #' @export
   SpreadToPrice <- function(bond.id = "character",
                             trade.date = "character",
                             settlement.date = "character",
                             PrepaymentAssumption = "character",
                             spread = numeric(),
-                            CPR = numeric()){
+                            CPR = numeric(),
+                            ...,
+                            benchmark = NULL){
     
     rates.data <- Rates(trade.date = trade.date)
     bond.id = MBS(MBS.id = bond.id)

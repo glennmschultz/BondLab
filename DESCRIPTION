@@ -84,6 +84,7 @@ Collate:
     'REMICStructuringFunctions.R'
     'RatesData.R'
     'SpreadToPriceFunctions.R'
+    'SpreadTypes.R'
     'TimeValueFunction.R'
     'YieldTypes.R'
     'zzz.R'

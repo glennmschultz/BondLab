@@ -2,7 +2,7 @@
 % Please edit documentation in R/CouponTypes.R
 \name{CouponDecimalString<-}
 \alias{CouponDecimalString<-}
-\title{A standard generic functon to replace the slot CouponDecimalString}
+\title{A standard generic functon to set the slot CouponDecimalString}
 \usage{
 CouponDecimalString(object) <- value
 }
@@ -12,6 +12,6 @@ CouponDecimalString(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic functon to replace the slot CouponDecimalString
+A standard generic functon to set the slot CouponDecimalString
 }
 

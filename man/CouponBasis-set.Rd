@@ -2,7 +2,7 @@
 % Please edit documentation in R/CouponTypes.R
 \name{CouponBasis<-}
 \alias{CouponBasis<-}
-\title{A standard generic function ot replace the slot CouponBasis}
+\title{A standard generic function ot set the slot CouponBasis}
 \usage{
 CouponBasis(object) <- value
 }
@@ -12,6 +12,6 @@ CouponBasis(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function ot replace the slot CouponBasis
+A standard generic function ot set the slot CouponBasis
 }
 

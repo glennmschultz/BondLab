@@ -2,7 +2,7 @@
 % Please edit documentation in R/GFeeTypes.R
 \name{GFeeDecimalString}
 \alias{GFeeDecimalString}
-\title{A standard generic functon to access the slot GFeeDecimalString}
+\title{A standard generic functon to get the slot GFeeDecimalString}
 \usage{
 GFeeDecimalString(object)
 }
@@ -10,6 +10,6 @@ GFeeDecimalString(object)
 \item{object}{an object of the type GFeeTypes}
 }
 \description{
-A standard generic functon to access the slot GFeeDecimalString
+A standard generic functon to get the slot GFeeDecimalString
 }
 

@@ -115,21 +115,21 @@
   # standard generic Frequency is defined in passthrough constructor
   # standard generic BondBasis is defined in passthrough constructor
   
-  #' A standard generic function to access the slot Callable
+  #' A standard generic function to get the slot Callable
   #' 
   #' @param object an S4 class object
   #' @export Callable
   setGeneric("Callable", function(object)
     {standardGeneric("Callable")})
   
-  #' A standard generic function to access the slot Putable
+  #' A standard generic function to get the slot Putable
   #' 
   #' @param object an S4 class object
   #' @export Putable
   setGeneric("Putable", function(object)
     {standardGeneric("Putable")})
   
-  #' A standard generic function to access the slot SinkinnFund
+  #' A standard generic function to get the slot SinkingFund
   #' 
   #' @param object an S4 class object
   #' @export SinkingFund

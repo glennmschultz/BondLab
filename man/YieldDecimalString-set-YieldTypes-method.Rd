@@ -3,7 +3,7 @@
 \docType{methods}
 \name{YieldDecimalString<-,YieldTypes-method}
 \alias{YieldDecimalString<-,YieldTypes-method}
-\title{A method to replace the slot YieldDecimalstring from the class YieldTypes}
+\title{A method to set the slot YieldDecimalstring from the class YieldTypes}
 \usage{
 \S4method{YieldDecimalString}{YieldTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the slot YieldDecimalstring from the class YieldTypes
+A method to set the slot YieldDecimalstring from the class YieldTypes
 }
 

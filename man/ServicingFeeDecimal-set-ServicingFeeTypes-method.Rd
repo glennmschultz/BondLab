@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ServicingFeeDecimal<-,ServicingFeeTypes-method}
 \alias{ServicingFeeDecimal<-,ServicingFeeTypes-method}
-\title{A method to replace the slot ServicingFeeBasis in the object 
+\title{A method to set the slot ServicingFeeBasis in the object 
 ServicingFeeTypes}
 \usage{
 \S4method{ServicingFeeDecimal}{ServicingFeeTypes}(object) <- value
@@ -14,7 +14,7 @@ ServicingFeeTypes}
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the slot ServicingFeeBasis in the object 
+A method to set the slot ServicingFeeBasis in the object 
 ServicingFeeTypes
 }
 

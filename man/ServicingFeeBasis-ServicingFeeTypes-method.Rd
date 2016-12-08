@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ServicingFeeBasis,ServicingFeeTypes-method}
 \alias{ServicingFeeBasis,ServicingFeeTypes-method}
-\title{A method to access the slot ServicingFeeBasis from the object 
+\title{A method to get the slot ServicingFeeBasis from the object 
 ServicingFeeTypes}
 \usage{
 \S4method{ServicingFeeBasis}{ServicingFeeTypes}(object)
@@ -12,7 +12,7 @@ ServicingFeeTypes}
 \item{object}{an S4 object of the type ServicingFeeTypes}
 }
 \description{
-A method to access the slot ServicingFeeBasis from the object 
+A method to get the slot ServicingFeeBasis from the object 
 ServicingFeeTypes
 }
 

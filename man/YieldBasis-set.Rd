@@ -2,7 +2,7 @@
 % Please edit documentation in R/YieldTypes.R
 \name{YieldBasis<-}
 \alias{YieldBasis<-}
-\title{A standard generic function replace the value in the slot YieldBasis}
+\title{A standard generic function set the value in the slot YieldBasis}
 \usage{
 YieldBasis(object) <- value
 }
@@ -12,6 +12,6 @@ YieldBasis(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function replace the value in the slot YieldBasis
+A standard generic function set the value in the slot YieldBasis
 }
 

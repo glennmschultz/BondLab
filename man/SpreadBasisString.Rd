@@ -2,14 +2,14 @@
 % Please edit documentation in R/SpreadTypes.R
 \name{SpreadBasisString}
 \alias{SpreadBasisString}
-\title{A standard generic function to access the slot SpreadBasisString}
+\title{A standard generic function to get the slot SpreadBasisString}
 \usage{
 SpreadBasisString(object)
 }
 \arguments{
-\item{object}{an S4 object of the type SpreadTypes}
+\item{object}{an S4 object of the class SpreadTypes}
 }
 \description{
-A standard generic function to access the slot SpreadBasisString
+A standard generic function to get the slot SpreadBasisString
 }
 

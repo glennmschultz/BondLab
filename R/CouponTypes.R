@@ -41,14 +41,14 @@
   setGeneric("CouponTypes", function(coupon = numeric())
     {standardGeneric("CouponTypes")})
   
-  #' A standard generic function to access the slot CouponDecimal
+  #' A standard generic function to get the slot CouponDecimal
   #' 
   #' @param object an S4 class object
   #' @export CouponDecimal
   setGeneric("CouponDecimal", function(object)
     {standardGeneric("CouponDecimal")})
   
-  #' A standard generic function to replace the slot CouponDecimal
+  #' A standard generic function to set the slot CouponDecimal
   #' 
   #' @param object an S4 class object of the type CouponTypes
   #' @param value the replacement value of the slot
@@ -56,14 +56,14 @@
   setGeneric("CouponDecimal<-", function(object, value)
     {setGeneric("CouponDecimal<-")})
   
-  #' A standard generic function to access the slot CouponBasis
+  #' A standard generic function to get the slot CouponBasis
   #' 
   #' @param object an S4 class object
   #' @export CouponBasis
   setGeneric("CouponBasis", function(object)
     {standardGeneric("CouponBasis")})
   
-  #' A standard generic function ot replace the slot CouponBasis
+  #' A standard generic function ot set the slot CouponBasis
   #' 
   #' @param object an S4 class object
   #' @param value the replacement value of the slot
@@ -71,14 +71,14 @@
   setGeneric("CouponBasis<-", function(object, value)
     {standardGeneric("CouponBasis<-")})
   
-  #' A standard generic function to access the slot CouponDecimalString
+  #' A standard generic function to get the slot CouponDecimalString
   #'
   #'@param object an S4 class object
   #'@export CouponDecimalString
   setGeneric("CouponDecimalString", function(object)
     {standardGeneric("CouponDecimalString")})
   
-  #' A standard generic functon to replace the slot CouponDecimalString
+  #' A standard generic functon to set the slot CouponDecimalString
   #' 
   #' 
   #' @param object an S4 class object
@@ -108,7 +108,7 @@
   setMethod("CouponDecimal", signature("CouponTypes"),
             function(object){object@CouponDecimal})
   
-  #' A method to replace CouponDecimal in the slot of CouponTypes
+  #' A method to set CouponDecimal in the slot of CouponTypes
   #' 
   #' @param object an S4 object of the type CouponTypes
   #' @param value the replacement value of the slot
@@ -125,7 +125,7 @@
   setMethod("CouponBasis", signature("CouponTypes"),
             function(object){object@CouponBasis})
   
-  #' A method to replace CouponBasis in the slot of CouponTypes
+  #' A method to set CouponBasis in the slot of CouponTypes
   #'
   #'@param object an S4 object of the type CouponTypes
   #'@param value the replacement value of the slot
@@ -142,7 +142,7 @@
   setMethod("CouponDecimalString", signature("CouponTypes"),
             function(object){object@CouponDecimalString})
   
-  #' A method to replace CouponDecimalString in the slot of CouponTypes
+  #' A method to set CouponDecimalString in the slot of CouponTypes
   #' 
   #' @param object an S4 object of the type CouponTypes
   #' @param value the replacement value of the slot

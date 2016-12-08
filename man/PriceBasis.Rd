@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{PriceBasis}
 \alias{PriceBasis}
-\title{A standard generic to access the slot PriceBasis}
+\title{A standard generic to get the slot PriceBasis}
 \usage{
 PriceBasis(object)
 }
@@ -10,6 +10,6 @@ PriceBasis(object)
 \item{object}{an S4 object}
 }
 \description{
-A standard generic to access the slot PriceBasis
+A standard generic to get the slot PriceBasis
 }
 

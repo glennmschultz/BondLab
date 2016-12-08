@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondDetails.R
 \name{Callable}
 \alias{Callable}
-\title{A standard generic function to access the slot Callable}
+\title{A standard generic function to get the slot Callable}
 \usage{
 Callable(object)
 }
@@ -10,6 +10,6 @@ Callable(object)
 \item{object}{an S4 class object}
 }
 \description{
-A standard generic function to access the slot Callable
+A standard generic function to get the slot Callable
 }
 

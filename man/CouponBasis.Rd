@@ -2,7 +2,7 @@
 % Please edit documentation in R/CouponTypes.R
 \name{CouponBasis}
 \alias{CouponBasis}
-\title{A standard generic function to access the slot CouponBasis}
+\title{A standard generic function to get the slot CouponBasis}
 \usage{
 CouponBasis(object)
 }
@@ -10,6 +10,6 @@ CouponBasis(object)
 \item{object}{an S4 class object}
 }
 \description{
-A standard generic function to access the slot CouponBasis
+A standard generic function to get the slot CouponBasis
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{Price32nds<-}
 \alias{Price32nds<-}
-\title{A standard generic function to replace the slot Price32nds}
+\title{A standard generic function to set the slot Price32nds}
 \usage{
 Price32nds(object) <- value
 }
@@ -12,6 +12,6 @@ Price32nds(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the slot Price32nds
+A standard generic function to set the slot Price32nds
 }
 

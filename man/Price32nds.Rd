@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{Price32nds}
 \alias{Price32nds}
-\title{A standard generic function to access the slot Price32nds}
+\title{A standard generic function to get the slot Price32nds}
 \usage{
 Price32nds(object)
 }
@@ -10,6 +10,6 @@ Price32nds(object)
 \item{object}{an S4 object}
 }
 \description{
-A standard generic function to access the slot Price32nds
+A standard generic function to get the slot Price32nds
 }
 

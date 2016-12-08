@@ -2,7 +2,7 @@
 % Please edit documentation in R/ServicingFeeTypes.R
 \name{ServicingFeeDecimalString}
 \alias{ServicingFeeDecimalString}
-\title{A standard generic function to access the value of the slot
+\title{A standard generic function to get the value of the slot
 ServicingFeeDecimalString}
 \usage{
 ServicingFeeDecimalString(object)
@@ -11,7 +11,7 @@ ServicingFeeDecimalString(object)
 \item{object}{an S4 object of the type ServicingFeeTypes}
 }
 \description{
-A standard generic function to access the value of the slot
+A standard generic function to get the value of the slot
 ServicingFeeDecimalString
 }
 

@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PMIBasis,PMITypes-method}
 \alias{PMIBasis,PMITypes-method}
-\title{A method to access the slot PMIBasis from the object PMITypes}
+\title{A method to get the slot PMIBasis from the object PMITypes}
 \usage{
 \S4method{PMIBasis}{PMITypes}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an S4 object of the type PMITypes}
 }
 \description{
-A method to access the slot PMIBasis from the object PMITypes
+A method to get the slot PMIBasis from the object PMITypes
 }
 

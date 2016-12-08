@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Price32nds<-,PriceTypes-method}
 \alias{Price32nds<-,PriceTypes-method}
-\title{A method to replace Price32nds in slot of class PriceTypes}
+\title{A method to set Price32nds in slot of class PriceTypes}
 \usage{
 \S4method{Price32nds}{PriceTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace Price32nds in slot of class PriceTypes
+A method to set Price32nds in slot of class PriceTypes
 }
 

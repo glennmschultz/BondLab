@@ -2,7 +2,7 @@
 % Please edit documentation in R/GWacTypes.R
 \name{GWacBasis}
 \alias{GWacBasis}
-\title{A standard generic function to access the slot GWacBasis}
+\title{A standard generic function to get the slot GWacBasis}
 \usage{
 GWacBasis(object)
 }
@@ -10,6 +10,6 @@ GWacBasis(object)
 \item{object}{an S4 class object of the type GWacTypes}
 }
 \description{
-A standard generic function to access the slot GWacBasis
+A standard generic function to get the slot GWacBasis
 }
 

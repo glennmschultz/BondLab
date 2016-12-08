@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{PriceDecimalString<-}
 \alias{PriceDecimalString<-}
-\title{A standard generic to replace the slot PriceDecimalString}
+\title{A standard generic to set the slot PriceDecimalString}
 \usage{
 PriceDecimalString(object) <- value
 }
@@ -12,6 +12,6 @@ PriceDecimalString(object) <- value
 \item{value}{The replacement value of the slot}
 }
 \description{
-A standard generic to replace the slot PriceDecimalString
+A standard generic to set the slot PriceDecimalString
 }
 

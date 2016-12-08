@@ -2,7 +2,7 @@
 % Please edit documentation in R/CouponTypes.R
 \name{CouponDecimal}
 \alias{CouponDecimal}
-\title{A standard generic function to access the slot CouponDecimal}
+\title{A standard generic function to get the slot CouponDecimal}
 \usage{
 CouponDecimal(object)
 }
@@ -10,6 +10,6 @@ CouponDecimal(object)
 \item{object}{an S4 class object}
 }
 \description{
-A standard generic function to access the slot CouponDecimal
+A standard generic function to get the slot CouponDecimal
 }
 

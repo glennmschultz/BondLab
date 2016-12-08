@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ServicingFeeDecimalString,ServicingFeeTypes-method}
 \alias{ServicingFeeDecimalString,ServicingFeeTypes-method}
-\title{A method to access the slot ServicingFeeDecimalString from the object
+\title{A method to get the slot ServicingFeeDecimalString from the object
 ServicingFeeTypes}
 \usage{
 \S4method{ServicingFeeDecimalString}{ServicingFeeTypes}(object)
@@ -12,7 +12,7 @@ ServicingFeeTypes}
 \item{object}{an S4 object of the type ServicingFeeTypes}
 }
 \description{
-A method to access the slot ServicingFeeDecimalString from the object
+A method to get the slot ServicingFeeDecimalString from the object
 ServicingFeeTypes
 }
 

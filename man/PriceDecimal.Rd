@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{PriceDecimal}
 \alias{PriceDecimal}
-\title{A standard generic function access the slot PriceDecimal}
+\title{A standard generic function get the slot PriceDecimal}
 \usage{
 PriceDecimal(object)
 }
@@ -10,6 +10,6 @@ PriceDecimal(object)
 \item{object}{an S4 object}
 }
 \description{
-A standard generic function access the slot PriceDecimal
+A standard generic function get the slot PriceDecimal
 }
 

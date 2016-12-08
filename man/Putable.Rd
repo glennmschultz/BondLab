@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondDetails.R
 \name{Putable}
 \alias{Putable}
-\title{A standard generic function to access the slot Putable}
+\title{A standard generic function to get the slot Putable}
 \usage{
 Putable(object)
 }
@@ -10,6 +10,6 @@ Putable(object)
 \item{object}{an S4 class object}
 }
 \description{
-A standard generic function to access the slot Putable
+A standard generic function to get the slot Putable
 }
 

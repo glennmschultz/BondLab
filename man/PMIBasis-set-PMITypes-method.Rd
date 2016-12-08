@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PMIBasis<-,PMITypes-method}
 \alias{PMIBasis<-,PMITypes-method}
-\title{A method to replace the value of the slot PMIBasis in the object PMITypes}
+\title{A method to set the value of the slot PMIBasis in the object PMITypes}
 \usage{
 \S4method{PMIBasis}{PMITypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the value of the slot PMIBasis in the object PMITypes
+A method to set the value of the slot PMIBasis in the object PMITypes
 }
 

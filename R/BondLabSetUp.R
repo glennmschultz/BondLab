@@ -24,12 +24,15 @@
   BondLabSetUp <- function(){
     
     do.call(source, 
-            list(file = paste(system.file(package = "BondLab"), "/Scenario/Scenario_SpotCurve", sep = ""),
-            local = TRUE))
-    do.call(source,
-            list(file = paste(system.file(package = "BondLab"), "/Scenario/Scenario_YieldCurve", sep = ""),
+            list(file = paste(system.file(package = "BondLab"), 
+                              "/Scenario/Scenario_SpotCurve", sep = ""),
                  local = TRUE))
     do.call(source,
-            list(file = paste(system.file(package = "BondLab"), "/BondData/BondData", sep = ""),
+            list(file = paste(system.file(package = "BondLab"), 
+                              "/Scenario/Scenario_YieldCurve", sep = ""),
+                 local = TRUE))
+    do.call(source,
+            list(file = paste(system.file(package = "BondLab"), 
+                              "/BondData/BondData", sep = ""),
                  local = TRUE))
   }

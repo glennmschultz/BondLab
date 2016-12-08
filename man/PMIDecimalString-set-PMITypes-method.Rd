@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PMIDecimalString<-,PMITypes-method}
 \alias{PMIDecimalString<-,PMITypes-method}
-\title{A method to replace the value of the slot PMIDecimalString in the object PMITypes}
+\title{A method to set the value of the slot PMIDecimalString in the object PMITypes}
 \usage{
 \S4method{PMIDecimalString}{PMITypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the value of the slot PMIDecimalString in the object PMITypes
+A method to set the value of the slot PMIDecimalString in the object PMITypes
 }
 

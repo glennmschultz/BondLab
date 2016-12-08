@@ -33,14 +33,14 @@
   setGeneric("YieldTypes", function(yield = numeric())
     {standardGeneric("YieldTypes")})
   
-  #' A standard generic function to access the slot YieldDecimal
+  #' A standard generic function to get the slot YieldDecimal
   #' 
   #' @param object an S4 object of the type YieldTypes
   #' @export YieldDecimal
   setGeneric("YieldDecimal", function(object)
     {standardGeneric("YieldDecimal")})
   
-  #' A standard generic function to replace the value in the slot YieldDecimal
+  #' A standard generic function to set the value in the slot YieldDecimal
   #' 
   #' @param object an S4 object of the type YieldTypes
   #' @param value the replacement value of the slot
@@ -48,14 +48,14 @@
   setGeneric("YieldDecimal<-", function(object, value)
   {standardGeneric("YieldDecimal<-")})
   
-  #' A standard generic function to access the slot YieldBasis
+  #' A standard generic function to get the slot YieldBasis
   #' 
   #' @param object an S4 object of the type YieldBasis
   #' @export YieldBasis
   setGeneric("YieldBasis", function(object)
     {standardGeneric("YieldBasis")})
   
-  #' A standard generic function replace the value in the slot YieldBasis
+  #' A standard generic function set the value in the slot YieldBasis
   #' 
   #' @param object an S4 object of the type YieldBasis
   #' @param value the replacement value of the slot
@@ -63,14 +63,14 @@
   setGeneric("YieldBasis<-", function(object, value)
     {standardGeneric("YieldBasis<-")})
   
-  #' A standard generic function to access the slot YieldDecimalString
+  #' A standard generic function to get the slot YieldDecimalString
   #' 
   #' @param object an S4 object of the type YieldTypes
   #' @export YieldDecimalString
   setGeneric("YieldDecimalString", function(object)
     {standardGeneric("YieldDecimalString")})
   
-  #' A standard generic function to replace the value in the slot YieldDecimalString
+  #' A standard generic function to set the value in the slot YieldDecimalString
   #' 
   #' @param object an S4 object of the type YieldTypes
   #' @param value the replacement value of the slot
@@ -99,7 +99,7 @@
   setMethod("YieldDecimal", signature("YieldTypes"),
             function(object){object@YieldDecimal})
   
-  #' A method to replace the vlaue in the slot YieldDecimal 
+  #' A method to set the vlaue in the slot YieldDecimal 
   #' 
   #' @param object an S4 class of the type YieldTypes
   #' @param value the replacement value of the slot
@@ -117,7 +117,7 @@
   setMethod("YieldBasis", signature("YieldTypes"),
             function(object){object@YieldBasis})
   
-  #' A method to replace the value of the slot YieldBasis
+  #' A method to set the value of the slot YieldBasis
   #' 
   #' @param object an S4 object class of the type YieldTypes
   #' @param value the replacement value of the slot
@@ -134,7 +134,7 @@
   setMethod("YieldDecimalString",signature("YieldTypes"),
             function(object){object@YieldDecimalString})
   
-  #' A method to replace the slot YieldDecimalstring from the class YieldTypes
+  #' A method to set the slot YieldDecimalstring from the class YieldTypes
   #' 
   #' @param object an S4 class object of the type YieldTypes
   #' @param value the replacement value of the slot

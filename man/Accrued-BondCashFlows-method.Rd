@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Accrued,BondCashFlows-method}
 \alias{Accrued,BondCashFlows-method}
-\title{Method to extract Accrued from S4 class BondCashFlows}
+\title{Method to get Accrued from S4 class BondCashFlows}
 \usage{
 \S4method{Accrued}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract Accrued from S4 class BondCashFlows
+Method to get Accrued from S4 class BondCashFlows
 }
 

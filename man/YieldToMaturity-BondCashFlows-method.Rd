@@ -3,7 +3,7 @@
 \docType{methods}
 \name{YieldToMaturity,BondCashFlows-method}
 \alias{YieldToMaturity,BondCashFlows-method}
-\title{Method to extract YieldToMaturity from S4 class BondCashFlows}
+\title{Method to get YieldToMaturity from S4 class BondCashFlows}
 \usage{
 \S4method{YieldToMaturity}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract YieldToMaturity from S4 class BondCashFlows
+Method to get YieldToMaturity from S4 class BondCashFlows
 }
 

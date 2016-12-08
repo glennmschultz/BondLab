@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GFeeDecimal<-,GFeeTypes-method}
 \alias{GFeeDecimal<-,GFeeTypes-method}
-\title{A method to replace the slot GFeeDecimal in the object GFeeTypes}
+\title{A method to set the slot GFeeDecimal in the object GFeeTypes}
 \usage{
 \S4method{GFeeDecimal}{GFeeTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the slot GFeeDecimal in the object GFeeTypes
+A method to set the slot GFeeDecimal in the object GFeeTypes
 }
 

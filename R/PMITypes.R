@@ -39,14 +39,14 @@
   setGeneric("PMITypes", function(PMI = numeric())
     {standardGeneric("PMITypes")})
   
-  #' A standard generic function to access the slot PMIDecimal
+  #' A standard generic function to get the slot PMIDecimal
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @export PMIDecimal
   setGeneric("PMIDecimal", function(object)
   {standardGeneric("PMIDecimal")})
   
-  #' A standard generic function to replace the value of the slot PMIDecimal
+  #' A standard generic function to set the value of the slot PMIDecimal
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @param value the replacement value of the slot
@@ -61,7 +61,7 @@
   setGeneric("PMIBasis", function(object)
   {standardGeneric("PMIBasis")})
   
-  #' A standard generic function to replace the value of the slot PMIBasis
+  #' A standard generic function to set the value of the slot PMIBasis
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @param value the replacement value of the slot
@@ -69,14 +69,14 @@
   setGeneric("PMIBasis<-", function(object, value)
     {standardGeneric("PMIBasis<-")})
   
-  #' A standard generic function to access the slot PMIDecimalString
+  #' A standard generic function to get the slot PMIDecimalString
   #' 
   #' @param object an S4 object of the type PMIDecimalString
   #' @export PMIDecimalString
   setGeneric("PMIDecimalString", function(object)
     {setGeneric("PMIDecimalString")})
   
-  #' A standard generic function to replace the value of the slot PMIDecimalString
+  #' A standard generic function to set the value of the slot PMIDecimalString
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @param value the replacement value of the slot
@@ -98,14 +98,14 @@
                               ...)
               })
   
-  #' A method to access the slot PMIDecimal from the object PMITypes
+  #' A method to get the slot PMIDecimal from the object PMITypes
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @exportMethod PMIDecimal
   setMethod("PMIDecimal", signature("PMITypes"),
             function(object){object@PMIDecimal})
   
-  #' A method to replace the value of the slot PMIBasis in the object PMITypes
+  #' A method to set the value of the slot PMIBasis in the object PMITypes
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @param value the replacement value of the slot
@@ -115,14 +115,14 @@
                      object@PMIDecimal <- value
                    })
   
-  #' A method to access the slot PMIBasis from the object PMITypes
+  #' A method to get the slot PMIBasis from the object PMITypes
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @exportMethod PMIBasis
   setMethod("PMIBasis", signature("PMITypes"),
             function(object){object@PMIBasis})
   
-  #' A method to replace the value of the slot PMIBasis in the object PMITypes
+  #' A method to set the value of the slot PMIBasis in the object PMITypes
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @param value the replacement value of the slot
@@ -132,14 +132,14 @@
                      object@PMIBasis <- value
                    })
   
-  #' A method to access the slot PMIDecimalString from the object PMITypes
+  #' A method to get the slot PMIDecimalString from the object PMITypes
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @exportMethod PMIDecimalString
   setMethod("PMIDecimalString", signature("PMITypes"),
             function(object){object@PMIDecimalString})
   
-  #' A method to replace the value of the slot PMIDecimalString in the object PMITypes
+  #' A method to set the value of the slot PMIDecimalString in the object PMITypes
   #' 
   #' @param object an S4 object of the type PMITypes
   #' @param value the replacement value of the slot

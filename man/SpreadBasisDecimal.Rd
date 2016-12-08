@@ -2,14 +2,14 @@
 % Please edit documentation in R/SpreadTypes.R
 \name{SpreadBasisDecimal}
 \alias{SpreadBasisDecimal}
-\title{A standard generic function to access the slot SpreadBasis}
+\title{A standard generic function to get the slot SpreadBasis}
 \usage{
 SpreadBasisDecimal(object)
 }
 \arguments{
-\item{object}{an S4 object of the type SpreadTypes}
+\item{object}{an S4 object of the class SpreadTypes}
 }
 \description{
-A standard generic function to access the slot SpreadBasis
+A standard generic function to get the slot SpreadBasis
 }
 

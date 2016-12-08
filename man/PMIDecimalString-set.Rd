@@ -2,7 +2,7 @@
 % Please edit documentation in R/PMITypes.R
 \name{PMIDecimalString<-}
 \alias{PMIDecimalString<-}
-\title{A standard generic function to replace the value of the slot PMIDecimalString}
+\title{A standard generic function to set the value of the slot PMIDecimalString}
 \usage{
 PMIDecimalString(object) <- value
 }
@@ -12,6 +12,6 @@ PMIDecimalString(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the value of the slot PMIDecimalString
+A standard generic function to set the value of the slot PMIDecimalString
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GFeeTypes.R
 \name{GFeeDecimalString<-}
 \alias{GFeeDecimalString<-}
-\title{A standard generic function to replace the slot GFeeDecimalString}
+\title{A standard generic function to set the slot GFeeDecimalString}
 \usage{
 GFeeDecimalString(object) <- value
 }
@@ -12,6 +12,6 @@ GFeeDecimalString(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the slot GFeeDecimalString
+A standard generic function to set the slot GFeeDecimalString
 }
 

@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Convexity,BondCashFlows-method}
 \alias{Convexity,BondCashFlows-method}
-\title{Method to extract Convexity from S4 class BondCashFlows}
+\title{Method to get Convexity from S4 class BondCashFlows}
 \usage{
 \S4method{Convexity}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract Convexity from S4 class BondCashFlows
+Method to get Convexity from S4 class BondCashFlows
 }
 

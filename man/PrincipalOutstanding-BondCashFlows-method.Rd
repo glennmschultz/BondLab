@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PrincipalOutstanding,BondCashFlows-method}
 \alias{PrincipalOutstanding,BondCashFlows-method}
-\title{Method to extract PrincipalOutstanding from S4 class BondCashFlows}
+\title{Method to get PrincipalOutstanding from S4 class BondCashFlows}
 \usage{
 \S4method{PrincipalOutstanding}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract PrincipalOutstanding from S4 class BondCashFlows
+Method to get PrincipalOutstanding from S4 class BondCashFlows
 }
 

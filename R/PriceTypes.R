@@ -40,14 +40,14 @@
   setGeneric("PriceTypes", function(price = numeric())
     {standardGeneric("PriceTypes")})
   
-  #' A standard generic function access the slot PriceDecimal
+  #' A standard generic function get the slot PriceDecimal
   #' 
   #' @param object an S4 object
   #' @export PriceDecimal
   setGeneric("PriceDecimal", function(object)
     {standardGeneric("PriceDecimal")})
   
-  #' A standard generic function to replace the slot PriceDecimal
+  #' A standard generic function to set the slot PriceDecimal
   #' 
   #' @param object an S4 object
   #' @param value the replacement value of the slot
@@ -55,14 +55,14 @@
   setGeneric("PriceDecimal<-", function(object, value)
     {standardGeneric("PriceDecimal<-")})
   
-  #' A standard generic function to access the slot Price32nds
+  #' A standard generic function to get the slot Price32nds
   #' 
   #' @param object an S4 object
   #' @export Price32nds
   setGeneric("Price32nds", function(object)
     {standardGeneric("Price32nds")})
   
-  #' A standard generic function to replace the slot Price32nds
+  #' A standard generic function to set the slot Price32nds
   #' 
   #' @param object an S4 object
   #' @param value the replacement value of the slot
@@ -70,14 +70,14 @@
   setGeneric("Price32nds<-", function(object, value)
     {setGeneric("Price32nds")})
   
-  #' A standard generic to access the slot PriceBasis
+  #' A standard generic to get the slot PriceBasis
   #' 
   #' @param object an S4 object
   #' @export PriceBasis
   setGeneric("PriceBasis", function(object)
     {standardGeneric("PriceBasis")})
   
-  #' A standard generic to replace the slot PriceBasis
+  #' A standard generic to set the slot PriceBasis
   #' 
   #' @param object A S4 object of type PriceTypes
   #' @param value the replacement value of the slot
@@ -85,14 +85,14 @@
   setGeneric("PriceBasis<-", function(object, value)
     {standardGeneric("PriceBasis<-")})
   
-  #' A standard generic to access the slot PriceDecimalString
+  #' A standard generic to get the slot PriceDecimalString
   #' 
   #' @param object A S4 object of the type PriceTypes
   #' @export
   setGeneric("PriceDecimalString", function(object)
     {setGeneric("PriceDecimalString")})
   
-  #' A standard generic to replace the slot PriceDecimalString
+  #' A standard generic to set the slot PriceDecimalString
   #' 
   #' @param object A S4 object of the type PriceTypes
   #' @param value The replacement value of the slot
@@ -122,7 +122,7 @@
   setMethod("PriceDecimal", signature("PriceTypes"),
             function(object){object@PriceDecimal})
   
-  #' A method to replace PriceDecimal in slot of class PriceTypes
+  #' A method to set PriceDecimal in slot of class PriceTypes
   #' 
   #' @param object an S4 object of the typre PriceTypes
   #' @param value the replacement value of the slot
@@ -140,7 +140,7 @@
   setMethod("Price32nds", signature("PriceTypes"),
             function(object){object@Price32nds})
   
-  #' A method to replace Price32nds in slot of class PriceTypes
+  #' A method to set Price32nds in slot of class PriceTypes
   #' 
   #' @param object an S4 object of the type PriceTypes
   #' @param value the replacement value of the slot
@@ -157,7 +157,7 @@
   setMethod("PriceBasis", signature("PriceTypes"),
             function(object){object@PriceBasis})
   
-  #' a method to replace PriceBasis from slot of class PriceTypes
+  #' a method to set PriceBasis from slot of class PriceTypes
   #' 
   #' @param object an S4 object of the type PriceTypes
   #' @param value the replacement value of the slot
@@ -175,7 +175,7 @@
   setMethod("PriceDecimalString", signature("PriceTypes"),
             function(object){object@PriceDecimalString})
   
-  #' A method to replace PriceDecimalString from slot of class PriceTypes
+  #' A method to set PriceDecimalString from slot of class PriceTypes
   #' 
   #' @param object an S4 object of type PriceTypes
   #' @param value the replacement value of the slot

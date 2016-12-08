@@ -3,7 +3,7 @@
 \docType{methods}
 \name{YieldDecimal<-,YieldTypes-method}
 \alias{YieldDecimal<-,YieldTypes-method}
-\title{A method to replace the vlaue in the slot YieldDecimal}
+\title{A method to set the vlaue in the slot YieldDecimal}
 \usage{
 \S4method{YieldDecimal}{YieldTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the vlaue in the slot YieldDecimal
+A method to set the vlaue in the slot YieldDecimal
 }
 

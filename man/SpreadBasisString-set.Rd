@@ -2,16 +2,16 @@
 % Please edit documentation in R/SpreadTypes.R
 \name{SpreadBasisString<-}
 \alias{SpreadBasisString<-}
-\title{A standard generic functioin to replace the value of the slot SpreadBasisString}
+\title{A standard generic function to set the value of the slot SpreadBasisString}
 \usage{
 SpreadBasisString(object) <- value
 }
 \arguments{
-\item{object}{an S4 object of the type SpreadTypes}
+\item{object}{an S4 object of the class SpreadTypes}
 
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic functioin to replace the value of the slot SpreadBasisString
+A standard generic function to set the value of the slot SpreadBasisString
 }
 

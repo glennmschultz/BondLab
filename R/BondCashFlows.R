@@ -69,13 +69,13 @@
   # Note: standard generic PmtDate is defined in MortgageCashFlow.R
   # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
   
-  #' A standard generic function to access the slot PrincipalOutstanding
+  #' A standard generic function to get the slot PrincipalOutstanding
   #' @param object An S4 class object
   #' @export PrincipalOutstanding
   setGeneric("PrincipalOutstanding", function(object)
              {standardGeneric})
   
-  #' A standard generic function to access the slot CouponPmt
+  #' A standard generic function to get the slot CouponPmt
   #' @param object An S4 class object
   #' @export CouponPmt
   setGeneric("CouponPmt", function(object)
@@ -115,73 +115,73 @@
                              ...)
             })
   
-  #' Method to extract Price from S4 class
+  #' Method to get Price from S4 class
   #' @param object the name of the S4 object BondCashFlows
   #' @exportMethod Price
   setMethod("Price", signature("BondCashFlows"),
             function(object){object@Price})
   
-  #' Method to extract Accrued from S4 class BondCashFlows
+  #' Method to get Accrued from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod Accrued
   setMethod("Accrued", signature("BondCashFlows"),
             function(object){object@Accrued})
   
-  #' Method to extract YieldToMaturity from S4 class BondCashFlows
+  #' Method to get YieldToMaturity from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod YieldToMaturity
   setMethod("YieldToMaturity", signature("BondCashFlows"),
             function(object){object@YieldToMaturity})
   
-  #' Method to extract WAL from S4 class
+  #' Method to get WAL from S4 class
   #' @param object the name of the S4 object
   #' @exportMethod WAL
   setMethod("WAL", signature("BondCashFlows"),
             function(object){object@WAL})
   
-  #' Method to extract ModDuration from S4 class BondCashFlows
+  #' Method to get ModDuration from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod ModDuration
   setMethod("ModDuration", signature("BondCashFlows"),
             function(object){object@ModDuration})
   
-  #' Method to extract Convexity from S4 class BondCashFlows
+  #' Method to get Convexity from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod Convexity
   setMethod("Convexity", signature("BondCashFlows"),
             function(object){object@Convexity})
   
-  #' Method to extract Period from S4 class BondCashFlows
+  #' Method to get Period from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod Period
   setMethod("Period", signature("BondCashFlows"),
             function(object){object@Period})
   
-  #' Method to extract PmtDate from S4 class BondCashFlows
+  #' Method to get PmtDate from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod PmtDate
   setMethod("PmtDate", signature("BondCashFlows"),
             function(object){object@PmtDate})
   
-  #' Method to extract TimePeriod from S4 class BondCashFlows
+  #' Method to get TimePeriod from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod TimePeriod
   setMethod("TimePeriod", signature("BondCashFlows"),
             function(object){object@TimePeriod})
   
-  #' Method to extract PrincipalOutstanding from S4 class BondCashFlows
+  #' Method to get PrincipalOutstanding from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod PrincipalOutstanding
   setMethod("PrincipalOutstanding", signature("BondCashFlows"),
             function(object){object@PrincipalOutstanding})
   
-  #' Method to extract CouponPmt from S4 class BondCashFlows
+  #' Method to get CouponPmt from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod CouponPmt
   setMethod("CouponPmt", signature("BondCashFlows"),
             function(object){object@CouponPmt})
   
-  #' Method to extract TotalCashFlow from S4 class BondCashFlows
+  #' Method to get TotalCashFlow from S4 class BondCashFlows
   #' @param object the name of the S4 object
   #' @exportMethod TotalCashFlow
   setMethod("TotalCashFlow", signature("BondCashFlows"),

@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondCashFlows.R
 \name{CouponPmt}
 \alias{CouponPmt}
-\title{A standard generic function to access the slot CouponPmt}
+\title{A standard generic function to get the slot CouponPmt}
 \usage{
 CouponPmt(object)
 }
@@ -10,6 +10,6 @@ CouponPmt(object)
 \item{object}{An S4 class object}
 }
 \description{
-A standard generic function to access the slot CouponPmt
+A standard generic function to get the slot CouponPmt
 }
 

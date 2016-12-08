@@ -2,14 +2,16 @@
 % Please edit documentation in R/SpreadTypes.R
 \name{SpreadDecimalString<-}
 \alias{SpreadDecimalString<-}
-\title{A standard generic function to replace the value of the slot SpreadDecimalString}
+\title{A standard generic function to set the value of the slot SpreadDecimalString}
 \usage{
 SpreadDecimalString(object) <- value
 }
 \arguments{
-\item{object}{an S4 object of the type SpreadTypes}
+\item{object}{an S4 object of the class SpreadTypes}
+
+\item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the value of the slot SpreadDecimalString
+A standard generic function to set the value of the slot SpreadDecimalString
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GFeeTypes.R
 \name{GFeeBasis}
 \alias{GFeeBasis}
-\title{A standard generic function to access the value of the slot GFeeBasis}
+\title{A standard generic function to get the value of the slot GFeeBasis}
 \usage{
 GFeeBasis(object)
 }
@@ -10,6 +10,6 @@ GFeeBasis(object)
 \item{object}{an S4 object of the type GFeeTypes}
 }
 \description{
-A standard generic function to access the value of the slot GFeeBasis
+A standard generic function to get the value of the slot GFeeBasis
 }
 

@@ -3,7 +3,7 @@
 \docType{methods}
 \name{WAL,BondCashFlows-method}
 \alias{WAL,BondCashFlows-method}
-\title{Method to extract WAL from S4 class}
+\title{Method to get WAL from S4 class}
 \usage{
 \S4method{WAL}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract WAL from S4 class
+Method to get WAL from S4 class
 }
 

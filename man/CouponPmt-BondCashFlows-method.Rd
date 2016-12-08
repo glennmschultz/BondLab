@@ -3,7 +3,7 @@
 \docType{methods}
 \name{CouponPmt,BondCashFlows-method}
 \alias{CouponPmt,BondCashFlows-method}
-\title{Method to extract CouponPmt from S4 class BondCashFlows}
+\title{Method to get CouponPmt from S4 class BondCashFlows}
 \usage{
 \S4method{CouponPmt}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract CouponPmt from S4 class BondCashFlows
+Method to get CouponPmt from S4 class BondCashFlows
 }
 

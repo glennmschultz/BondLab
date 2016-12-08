@@ -2,7 +2,7 @@
 % Please edit documentation in R/PMITypes.R
 \name{PMIDecimal}
 \alias{PMIDecimal}
-\title{A standard generic function to access the slot PMIDecimal}
+\title{A standard generic function to get the slot PMIDecimal}
 \usage{
 PMIDecimal(object)
 }
@@ -10,6 +10,6 @@ PMIDecimal(object)
 \item{object}{an S4 object of the type PMITypes}
 }
 \description{
-A standard generic function to access the slot PMIDecimal
+A standard generic function to get the slot PMIDecimal
 }
 

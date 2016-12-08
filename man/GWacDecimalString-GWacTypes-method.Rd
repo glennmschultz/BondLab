@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GWacDecimalString,GWacTypes-method}
 \alias{GWacDecimalString,GWacTypes-method}
-\title{A method to extract the value of the slot GWacDecimalString slot in the
+\title{A method to get the value of the slot GWacDecimalString slot in the
 object GWacTypes}
 \usage{
 \S4method{GWacDecimalString}{GWacTypes}(object)
@@ -12,7 +12,7 @@ object GWacTypes}
 \item{object}{an S4 object of the type GwacTypes}
 }
 \description{
-A method to extract the value of the slot GWacDecimalString slot in the
+A method to get the value of the slot GWacDecimalString slot in the
 object GWacTypes
 }
 

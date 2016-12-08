@@ -3,7 +3,7 @@
 \docType{methods}
 \name{YieldBasis<-,YieldTypes-method}
 \alias{YieldBasis<-,YieldTypes-method}
-\title{A method to replace the value of the slot YieldBasis}
+\title{A method to set the value of the slot YieldBasis}
 \usage{
 \S4method{YieldBasis}{YieldTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the value of the slot YieldBasis
+A method to set the value of the slot YieldBasis
 }
 

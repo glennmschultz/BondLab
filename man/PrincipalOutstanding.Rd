@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondCashFlows.R
 \name{PrincipalOutstanding}
 \alias{PrincipalOutstanding}
-\title{A standard generic function to access the slot PrincipalOutstanding}
+\title{A standard generic function to get the slot PrincipalOutstanding}
 \usage{
 PrincipalOutstanding(object)
 }
@@ -10,6 +10,6 @@ PrincipalOutstanding(object)
 \item{object}{An S4 class object}
 }
 \description{
-A standard generic function to access the slot PrincipalOutstanding
+A standard generic function to get the slot PrincipalOutstanding
 }
 

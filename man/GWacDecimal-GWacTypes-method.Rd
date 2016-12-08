@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GWacDecimal,GWacTypes-method}
 \alias{GWacDecimal,GWacTypes-method}
-\title{A method to extract GWacDecimal from the object GWacTypes}
+\title{A method to get GWacDecimal from the object GWacTypes}
 \usage{
 \S4method{GWacDecimal}{GWacTypes}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an S4 object of the type GWacDecimal}
 }
 \description{
-A method to extract GWacDecimal from the object GWacTypes
+A method to get GWacDecimal from the object GWacTypes
 }
 

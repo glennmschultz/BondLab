@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GWacDecimal<-,GWacTypes-method}
 \alias{GWacDecimal<-,GWacTypes-method}
-\title{A method to replace the vlaue of GWacDecimal slot in the object GWacTypes}
+\title{A method to set the vlaue of GWacDecimal slot in the object GWacTypes}
 \usage{
 \S4method{GWacDecimal}{GWacTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the vlaue of GWacDecimal slot in the object GWacTypes
+A method to set the vlaue of GWacDecimal slot in the object GWacTypes
 }
 

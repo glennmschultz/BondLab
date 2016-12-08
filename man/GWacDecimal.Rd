@@ -2,7 +2,7 @@
 % Please edit documentation in R/GWacTypes.R
 \name{GWacDecimal}
 \alias{GWacDecimal}
-\title{A standard generic function to access the slot GWacDecimal}
+\title{A standard generic function to get the slot GWacDecimal}
 \usage{
 GWacDecimal(object)
 }
@@ -10,6 +10,6 @@ GWacDecimal(object)
 \item{object}{an S4 class object of the type GWACTypes}
 }
 \description{
-A standard generic function to access the slot GWacDecimal
+A standard generic function to get the slot GWacDecimal
 }
 

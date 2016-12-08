@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GFeeDecimal,GFeeTypes-method}
 \alias{GFeeDecimal,GFeeTypes-method}
-\title{A method to access the slot GFeeDecimal from the object GFeeTypes}
+\title{A method to get the slot GFeeDecimal from the object GFeeTypes}
 \usage{
 \S4method{GFeeDecimal}{GFeeTypes}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an S4 object of the type GFeeTypes}
 }
 \description{
-A method to access the slot GFeeDecimal from the object GFeeTypes
+A method to get the slot GFeeDecimal from the object GFeeTypes
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ServicingFeeTypes.R
 \name{ServicingFeeDecimal<-}
 \alias{ServicingFeeDecimal<-}
-\title{A standard generic function to replace the value of the slot 
+\title{A standard generic function to set the value of the slot 
 SerivcingFeeDecimal}
 \usage{
 ServicingFeeDecimal(object) <- value
@@ -13,7 +13,7 @@ ServicingFeeDecimal(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the value of the slot 
+A standard generic function to set the value of the slot 
 SerivcingFeeDecimal
 }
 

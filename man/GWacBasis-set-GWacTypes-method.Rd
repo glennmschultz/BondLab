@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GWacBasis<-,GWacTypes-method}
 \alias{GWacBasis<-,GWacTypes-method}
-\title{A method to replace the value of GWacBasis slot in the object GWacTypes}
+\title{A method to set the value of GWacBasis slot in the object GWacTypes}
 \usage{
 \S4method{GWacBasis}{GWacTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the value of GWacBasis slot in the object GWacTypes
+A method to set the value of GWacBasis slot in the object GWacTypes
 }
 

@@ -41,14 +41,14 @@
   setGeneric("ServicingFeeTypes", function(ServicingFee = numeric())
     {standardGeneric("ServicingFeeTypes")})
   
-  #' A standard generic function to access the slot ServicingFeeDecimal
+  #' A standard generic function to get the slot ServicingFeeDecimal
   #' 
   #' @param object an S4 object of the type ServicingFeeDecimal
   #' @export ServicingFeeDecimal
   setGeneric("ServicingFeeDecimal", function(object)
     {standardGeneric("ServicingFeeDecimal")})
   
-  #' A standard generic function to replace the value of the slot 
+  #' A standard generic function to set the value of the slot 
   #' SerivcingFeeDecimal
   #' 
   #' @param object an S4 object of the type SerivicingFeeTypes
@@ -57,7 +57,7 @@
   setGeneric("ServicingFeeDecimal<-", function(object, value)
     {standardGeneric("ServicingFeeDecimal<-")})
   
-  #' A standard generic function to access the value of the slot 
+  #' A standard generic function to get the value of the slot 
   #' ServicingFeeBasis
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes
@@ -65,7 +65,7 @@
   setGeneric("ServicingFeeBasis",function(object)
     {standardGeneric("ServicingFeeBasis")})
   
-  #' A standard generic function to replace the value of the slot 
+  #' A standard generic function to set the value of the slot 
   #' ServicingFeeBasis
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes
@@ -74,7 +74,7 @@
   setGeneric("ServicingFeeBasis<-", function(object, value)
     {standardGeneric("ServicingFeeBasis<-")})
   
-  #' A standard generic function to access the value of the slot
+  #' A standard generic function to get the value of the slot
   #' ServicingFeeDecimalString
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes
@@ -82,7 +82,7 @@
   setGeneric("ServicingFeeDecimalString", function(object)
     {standardGeneric("ServicingFeeDecimalString")})
   
-  #' A standard generic function to replace the value of the slot 
+  #' A standard generic function to set the value of the slot 
   #' ServicingFeeDecimalString
   #' @param object an S4 object of the type ServicingFeeTypes
   #' @param value the replacement value of the slot
@@ -102,7 +102,7 @@
                               ServicingFeeDecimalString = ServicingFeeDecimalString,
                               ...)
               })
-  #' A method to access the slot ServicingFeeDecimal from the object 
+  #' A method to get the slot ServicingFeeDecimal from the object 
   #' ServicingFeeTypes
   #' 
   #' @param object an object of the type ServicingFeeTypes
@@ -110,7 +110,7 @@
   setMethod("ServicingFeeDecimal", signature("ServicingFeeTypes"),
             function(object){object@ServicingFeeDecimal})
 
-  #' A method to replace the slot ServicingFeeBasis in the object 
+  #' A method to set the slot ServicingFeeBasis in the object 
   #' ServicingFeeTypes
   #' @param object an S4 object of the type ServicingFeetypes
   #' @param value the replacement value of the slot
@@ -120,7 +120,7 @@
                      object@ServicingFeeDecimal <- value
                    })
   
-  #' A method to access the slot ServicingFeeBasis from the object 
+  #' A method to get the slot ServicingFeeBasis from the object 
   #' ServicingFeeTypes
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes
@@ -128,7 +128,7 @@
   setMethod("ServicingFeeBasis", signature("ServicingFeeTypes"),
             function(object){object@ServicingFeeBasis})
   
-  #' A method to replace the slot ServicingFeeBasis in object ServicingFeeTypes
+  #' A method to set the slot ServicingFeeBasis in object ServicingFeeTypes
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes
   #' @param value the replacement value of the slot
@@ -138,7 +138,7 @@
               object@ServicingFeeBasis <- value
             })
   
-  #' A method to access the slot ServicingFeeDecimalString from the object
+  #' A method to get the slot ServicingFeeDecimalString from the object
   #' ServicingFeeTypes
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes
@@ -146,7 +146,7 @@
   setMethod("ServicingFeeDecimalString", signature("ServicingFeeTypes"),
             function(object){object@ServicingFeeDecimalString})
   
-  #' A method to replace the slot ServicingFeeDecimalString in the object
+  #' A method to set the slot ServicingFeeDecimalString in the object
   #' ServicingFeeTypes
   #' 
   #' @param object an S4 object of the type ServicingFeeTypes

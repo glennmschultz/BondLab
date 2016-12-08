@@ -2,7 +2,7 @@
 % Please edit documentation in R/GWacTypes.R
 \name{GWacDecimal<-}
 \alias{GWacDecimal<-}
-\title{A standard generic function to replace the value of slot GWacDecimal}
+\title{A standard generic function to set the value of slot GWacDecimal}
 \usage{
 GWacDecimal(object) <- value
 }
@@ -12,6 +12,6 @@ GWacDecimal(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the value of slot GWacDecimal
+A standard generic function to set the value of slot GWacDecimal
 }
 

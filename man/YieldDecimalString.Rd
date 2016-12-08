@@ -2,7 +2,7 @@
 % Please edit documentation in R/YieldTypes.R
 \name{YieldDecimalString}
 \alias{YieldDecimalString}
-\title{A standard generic function to access the slot YieldDecimalString}
+\title{A standard generic function to get the slot YieldDecimalString}
 \usage{
 YieldDecimalString(object)
 }
@@ -10,6 +10,6 @@ YieldDecimalString(object)
 \item{object}{an S4 object of the type YieldTypes}
 }
 \description{
-A standard generic function to access the slot YieldDecimalString
+A standard generic function to get the slot YieldDecimalString
 }
 

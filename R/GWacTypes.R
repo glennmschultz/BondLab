@@ -39,14 +39,14 @@
   setGeneric("GWacTypes", function(GWac)
     {standardGeneric("GWacTypes")})
   
-  #' A standard generic function to access the slot GWacDecimal
+  #' A standard generic function to get the slot GWacDecimal
   #' 
   #' @param object an S4 class object of the type GWACTypes
   #' @export GWacDecimal
   setGeneric("GWacDecimal", function(object)
     {standardGeneric("GWacDecimal")})
   
-  #' A standard generic function to replace the value of slot GWacDecimal
+  #' A standard generic function to set the value of slot GWacDecimal
   #' 
   #' @param object an S4 class object of the type GWacTypes  #' 
   #' @param value the replacement value of the slot
@@ -54,14 +54,14 @@
   setGeneric("GWacDecimal<-", function(object, value)
     {standardGeneric("GWacDecimal<-")})
   
-  #' A standard generic function to access the slot GWacBasis
+  #' A standard generic function to get the slot GWacBasis
   #' 
   #' @param object an S4 class object of the type GWacTypes
   #' @export GWacBasis
   setGeneric("GWacBasis", function(object)
     {standardGeneric("GWacBasis")})
   
-  #' A standard generic function to replace the slot GwacBasis
+  #' A standard generic function to set the slot GwacBasis
   #' 
   #' @param object an S4 class object of the type GWacTypes  #' 
   #' @param value the replacement value of the slot
@@ -69,14 +69,14 @@
   setGeneric("GWacBasis<-", function(object, value)
     {standardGeneric("GWacBasis<-")})
   
-  #' A standard generic function to access the slot GWacDecimalString
+  #' A standard generic function to get the slot GWacDecimalString
   #' 
   #' @param object an S4 object of the type GWacTypes
   #' @export GWacDecimalString
   setGeneric("GWacDecimalString", function(object)
     {standardGeneric("GWacDecimalString")})
   
-  #' A standard generic function to replace the slot GWacDecimalString
+  #' A standard generic function to set the slot GWacDecimalString
   #' 
   #' @param object an S4 object of the type GWacDecimalBasis  #' 
   #' @param value the replacement value of the slot
@@ -98,14 +98,14 @@
                               ...)
             })
             
-  #' A method to extract GWacDecimal from the object GWacTypes
+  #' A method to get GWacDecimal from the object GWacTypes
   #' 
   #' @param object an S4 object of the type GWacDecimal
   #' @exportMethod GWacDecimal
   setMethod("GWacDecimal", signature("GWacTypes"),
             function(object){object@GWacDecimal})
   
-  #' A method to replace the vlaue of GWacDecimal slot in the object GWacTypes
+  #' A method to set the vlaue of GWacDecimal slot in the object GWacTypes
   #' 
   #' @param object an S4 object of the type GWacTypes
   #' @param value the replacement value of the slot
@@ -115,14 +115,14 @@
                      object@GWacDecimal <- value
                    })
   
-  #' A method to extract the value of GWacBasis slot in the object GWacTypes
+  #' A method to get the value of GWacBasis slot in the object GWacTypes
   #' 
   #' @param object an S4 object of the tyoe GWacTypes
   #' @exportMethod GWacBasis
   setMethod("GWacBasis", signature("GWacTypes"),
             function(object){object@GWacBasis})
   
-  #' A method to replace the value of GWacBasis slot in the object GWacTypes
+  #' A method to set the value of GWacBasis slot in the object GWacTypes
   #' 
   #' @param object an S4 object of the type GWacTypes
   #' @param value the replacement value of the slot
@@ -132,7 +132,7 @@
                      object@GWacBasis <- value
                    })
   
-  #' A method to extract the value of the slot GWacDecimalString slot in the
+  #' A method to get the value of the slot GWacDecimalString slot in the
   #' object GWacTypes
   #' 
   #' @param object an S4 object of the type GwacTypes
@@ -140,7 +140,7 @@
   setMethod("GWacDecimalString", signature("GWacTypes"),
             function(object){object@GWacDecimalString}) 
   
-  #' A method to replace the value of GWacDecimalString slot in the 
+  #' A method to set the value of GWacDecimalString slot in the 
   #' object GWacTypes
   #' 
   #' @param object an S4 object of the type GWacTypes

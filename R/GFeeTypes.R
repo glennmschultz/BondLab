@@ -40,14 +40,14 @@
   setGeneric("GFeeTypes", function(GFee = numeric())
     {standardGeneric("GFeeTypes")})
   
-  #' A standard generic function to access the slot GFeeDecimal
+  #' A standard generic function to get the slot GFeeDecimal
   #' 
   #' @param object an S4 object of the type GFeeTypes
   #' @export GFeeDecimal
   setGeneric("GFeeDecimal", function(object)
     {standardGeneric("GFeeDecimal")})
   
-  #' A standard generic function to replace the value of the slot GFeeDecimal
+  #' A standard generic function to set the value of the slot GFeeDecimal
   #' 
   #' @param object an S4 object of the type GFeeTypes
   #' @param value the replacement value of the slot
@@ -55,14 +55,14 @@
   setGeneric("GFeeDecimal<-", function(object, value)
     {standardGeneric("GFeeDecimal<-")})
   
-  #' A standard generic function to access the value of the slot GFeeBasis
+  #' A standard generic function to get the value of the slot GFeeBasis
   #' 
   #' @param object an S4 object of the type GFeeTypes
   #' @export GFeeBasis
   setGeneric("GFeeBasis", function(object)
     {standardGeneric("GFeeBasis")})
   
-  #' A standard generic function to replace the value of the slot GFeeBasis
+  #' A standard generic function to set the value of the slot GFeeBasis
   #' 
   #' @param object an S4 object of the type GFeeTypes
   #' @param value the replacement value of the slot 
@@ -70,14 +70,14 @@
   setGeneric("GFeeBasis<-", function(object, value)
     {standardGeneric("GFeeBasis<-")})
   
-  #' A standard generic functon to access the slot GFeeDecimalString
+  #' A standard generic functon to get the slot GFeeDecimalString
   #' 
   #' @param object an object of the type GFeeTypes
   #' @export GFeeDecimalString
   setGeneric("GFeeDecimalString", function(object)
     {standardGeneric("GFeeDecimalString")})
   
-  #' A standard generic function to replace the slot GFeeDecimalString
+  #' A standard generic function to set the slot GFeeDecimalString
   #' 
   #' @param object an object of the type GFeeTypes
   #' @param value the replacement value of the slot
@@ -100,14 +100,14 @@
                             ...)
               })
   
-  #' A method to access the slot GFeeDecimal from the object GFeeTypes
+  #' A method to get the slot GFeeDecimal from the object GFeeTypes
   #' 
   #' @param object an S4 object of the type GFeeTypes
   #' @exportMethod GFeeDecimal
   setMethod("GFeeDecimal", signature("GFeeTypes"),
             function(object){object@GFeeDecimal})
   
-  #' A method to replace the slot GFeeDecimal in the object GFeeTypes
+  #' A method to set the slot GFeeDecimal in the object GFeeTypes
   #' 
   #' @param object an object of the type GFeeTypes
   #' @param value the replacement value of the slot
@@ -117,14 +117,14 @@
                      object@GFeeDecimal <- value
                    })
   
-  #' A method to access the slot GFeeBasis in the object GFeeTypes
+  #' A method to get the slot GFeeBasis in the object GFeeTypes
   #' 
   #' @param object an object of the type GFeeTypes
   #' @exportMethod GFeeBasis
   setMethod("GFeeBasis", signature("GFeeTypes"),
             function(object){object@GFeeBasis})
   
-  #' A method to replace the value of the slot GFeeBasis in the object GFeeTypes
+  #' A method to set the value of the slot GFeeBasis in the object GFeeTypes
   #' 
   #' @param object an object of the type GFeeTypes
   #' @param value the replacement value of the slot
@@ -133,14 +133,14 @@
                    function(object, value){
                      object@GFeeBasis <- value})
   
-  #' A method to access the slot GFeeDecimalString in the object GFeeTypes
+  #' A method to get the slot GFeeDecimalString in the object GFeeTypes
   #' 
   #' @param object an object of the type GFeeTypes
   #' @exportMethod GFeeDecimalString
   setMethod("GFeeDecimalString", signature("GFeeTypes"),
             function(object){object@GFeeDecimalString})
   
-  #' A method to replace the value of the slot GFeeDecimalString in the 
+  #' A method to set the value of the slot GFeeDecimalString in the 
   #' object GFeeTypes
   #' 
   #' @param object an S4 object of the type GFeeTypes

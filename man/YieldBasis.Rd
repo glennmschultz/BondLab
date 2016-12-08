@@ -2,7 +2,7 @@
 % Please edit documentation in R/YieldTypes.R
 \name{YieldBasis}
 \alias{YieldBasis}
-\title{A standard generic function to access the slot YieldBasis}
+\title{A standard generic function to get the slot YieldBasis}
 \usage{
 YieldBasis(object)
 }
@@ -10,6 +10,6 @@ YieldBasis(object)
 \item{object}{an S4 object of the type YieldBasis}
 }
 \description{
-A standard generic function to access the slot YieldBasis
+A standard generic function to get the slot YieldBasis
 }
 

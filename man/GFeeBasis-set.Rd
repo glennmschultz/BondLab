@@ -2,7 +2,7 @@
 % Please edit documentation in R/GFeeTypes.R
 \name{GFeeBasis<-}
 \alias{GFeeBasis<-}
-\title{A standard generic function to replace the value of the slot GFeeBasis}
+\title{A standard generic function to set the value of the slot GFeeBasis}
 \usage{
 GFeeBasis(object) <- value
 }
@@ -12,6 +12,6 @@ GFeeBasis(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the value of the slot GFeeBasis
+A standard generic function to set the value of the slot GFeeBasis
 }
 

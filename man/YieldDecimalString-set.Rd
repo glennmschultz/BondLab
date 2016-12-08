@@ -2,7 +2,7 @@
 % Please edit documentation in R/YieldTypes.R
 \name{YieldDecimalString<-}
 \alias{YieldDecimalString<-}
-\title{A standard generic function to replace the value in the slot YieldDecimalString}
+\title{A standard generic function to set the value in the slot YieldDecimalString}
 \usage{
 YieldDecimalString(object) <- value
 }
@@ -12,6 +12,6 @@ YieldDecimalString(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the value in the slot YieldDecimalString
+A standard generic function to set the value in the slot YieldDecimalString
 }
 

@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PMIDecimalString,PMITypes-method}
 \alias{PMIDecimalString,PMITypes-method}
-\title{A method to access the slot PMIDecimalString from the object PMITypes}
+\title{A method to get the slot PMIDecimalString from the object PMITypes}
 \usage{
 \S4method{PMIDecimalString}{PMITypes}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an S4 object of the type PMITypes}
 }
 \description{
-A method to access the slot PMIDecimalString from the object PMITypes
+A method to get the slot PMIDecimalString from the object PMITypes
 }
 

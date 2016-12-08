@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondDetails.R
 \name{SinkingFund}
 \alias{SinkingFund}
-\title{A standard generic function to access the slot SinkinnFund}
+\title{A standard generic function to get the slot SinkingFund}
 \usage{
 SinkingFund(object)
 }
@@ -10,6 +10,6 @@ SinkingFund(object)
 \item{object}{an S4 class object}
 }
 \description{
-A standard generic function to access the slot SinkinnFund
+A standard generic function to get the slot SinkingFund
 }
 

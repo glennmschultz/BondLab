@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GFeeBasis,GFeeTypes-method}
 \alias{GFeeBasis,GFeeTypes-method}
-\title{A method to access the slot GFeeBasis in the object GFeeTypes}
+\title{A method to get the slot GFeeBasis in the object GFeeTypes}
 \usage{
 \S4method{GFeeBasis}{GFeeTypes}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an object of the type GFeeTypes}
 }
 \description{
-A method to access the slot GFeeBasis in the object GFeeTypes
+A method to get the slot GFeeBasis in the object GFeeTypes
 }
 

@@ -3,7 +3,7 @@
 \docType{methods}
 \name{CouponDecimalString<-,CouponTypes-method}
 \alias{CouponDecimalString<-,CouponTypes-method}
-\title{A method to replace CouponDecimalString in the slot of CouponTypes}
+\title{A method to set CouponDecimalString in the slot of CouponTypes}
 \usage{
 \S4method{CouponDecimalString}{CouponTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace CouponDecimalString in the slot of CouponTypes
+A method to set CouponDecimalString in the slot of CouponTypes
 }
 

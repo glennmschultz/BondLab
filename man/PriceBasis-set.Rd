@@ -2,7 +2,7 @@
 % Please edit documentation in R/PriceTypes.R
 \name{PriceBasis<-}
 \alias{PriceBasis<-}
-\title{A standard generic to replace the slot PriceBasis}
+\title{A standard generic to set the slot PriceBasis}
 \usage{
 PriceBasis(object) <- value
 }
@@ -12,6 +12,6 @@ PriceBasis(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic to replace the slot PriceBasis
+A standard generic to set the slot PriceBasis
 }
 

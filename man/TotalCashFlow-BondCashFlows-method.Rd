@@ -3,7 +3,7 @@
 \docType{methods}
 \name{TotalCashFlow,BondCashFlows-method}
 \alias{TotalCashFlow,BondCashFlows-method}
-\title{Method to extract TotalCashFlow from S4 class BondCashFlows}
+\title{Method to get TotalCashFlow from S4 class BondCashFlows}
 \usage{
 \S4method{TotalCashFlow}{BondCashFlows}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the S4 object}
 }
 \description{
-Method to extract TotalCashFlow from S4 class BondCashFlows
+Method to get TotalCashFlow from S4 class BondCashFlows
 }
 

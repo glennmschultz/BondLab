@@ -2,7 +2,7 @@
 % Please edit documentation in R/GWacTypes.R
 \name{GWacBasis<-}
 \alias{GWacBasis<-}
-\title{A standard generic function to replace the slot GwacBasis}
+\title{A standard generic function to set the slot GwacBasis}
 \usage{
 GWacBasis(object) <- value
 }
@@ -12,6 +12,6 @@ GWacBasis(object) <- value
 \item{value}{the replacement value of the slot}
 }
 \description{
-A standard generic function to replace the slot GwacBasis
+A standard generic function to set the slot GwacBasis
 }
 

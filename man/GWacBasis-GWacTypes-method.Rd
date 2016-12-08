@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GWacBasis,GWacTypes-method}
 \alias{GWacBasis,GWacTypes-method}
-\title{A method to extract the value of GWacBasis slot in the object GWacTypes}
+\title{A method to get the value of GWacBasis slot in the object GWacTypes}
 \usage{
 \S4method{GWacBasis}{GWacTypes}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{an S4 object of the tyoe GWacTypes}
 }
 \description{
-A method to extract the value of GWacBasis slot in the object GWacTypes
+A method to get the value of GWacBasis slot in the object GWacTypes
 }
 

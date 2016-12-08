@@ -3,7 +3,7 @@
 \docType{methods}
 \name{GFeeBasis<-,GFeeTypes-method}
 \alias{GFeeBasis<-,GFeeTypes-method}
-\title{A method to replace the value of the slot GFeeBasis in the object GFeeTypes}
+\title{A method to set the value of the slot GFeeBasis in the object GFeeTypes}
 \usage{
 \S4method{GFeeBasis}{GFeeTypes}(object) <- value
 }
@@ -13,6 +13,6 @@
 \item{value}{the replacement value of the slot}
 }
 \description{
-A method to replace the value of the slot GFeeBasis in the object GFeeTypes
+A method to set the value of the slot GFeeBasis in the object GFeeTypes
 }
 

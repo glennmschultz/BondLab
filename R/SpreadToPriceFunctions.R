@@ -96,7 +96,8 @@
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
     bondbasis = BondBasis(bond.id)
     
-    TermStructure <- TermStructure(rates.data = rates.data)
+    invisible(capture.output(
+      TermStructure <- TermStructure(rates.data = rates.data)))
     
     prepayment = PrepaymentModel(
       bond.id = bond.id,

@@ -20,7 +20,7 @@ For example $102 is input as 102.00 not 1.02.}
 whole number.}
 
 \item{PrepaymentAssumption}{A character string referencing the 
-class object.}
+class PrepaymentModel}
 }
 \description{
 This is a generic function used to construct the class 

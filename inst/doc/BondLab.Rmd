@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 ```{r, setup, include=FALSE}
-knitr::opts_chunk$set(cache=TRUE)
+knitr::opts_chunk$set(cache=FALSE)
 require(ggplot2)
 require(reshape2)
 require(scales)
@@ -43,7 +43,7 @@ uses the following R packages:
 
 The Bond Lab® valuation framework combines both linear and non-linear
 term structure assumptions into a holistic valuation framework.  Bond cashflows
-are viewed as bundle of zero coupon cashsflows which are discounted along the
+are viewed as bundle of zero coupon cashflows which are discounted along the
 spot rate curve.  The value or price of a bond is sum of the individual 
 valuation of each zero coupon cashflow.  The timing and magnitude of the 
 cahflows determine the relative richness or cheapness of each cashflow.  

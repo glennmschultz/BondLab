@@ -29,7 +29,7 @@
   #' @param settlement.date A character string the settlement date
   #' @param principal A numeric value the principal balance
   #' @param PrepaymentAssumption A character string referencing 
-  #' an object type PrepaymentAssumption
+  #' an object type PrepaymentModel
   #' @export
   CashFlowEngine <- function (bond.id = "character",
                               settlement.date = "character",

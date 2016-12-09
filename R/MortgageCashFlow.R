@@ -541,7 +541,7 @@
   #' @param price A numeric value the price traded.  Price is input as a 
   #' whole number.
   #' @param PrepaymentAssumption A character string referencing the 
-  #' class object.
+  #' class PrepaymentModel
   #' @examples
   #' \dontrun{
   #' MortgageCashFlow(bond.id = "bondlabMBS4", 

@@ -91,7 +91,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 * rmarkdown</p>
 <div id="the-bond-lab-valuation-framework" class="section level2">
 <h2>The Bond Lab® Valuation Framework</h2>
-<p>The Bond Lab® valuation framework combines both linear and non-linear term structure assumptions into a holistic valuation framework. Bond cashflows are viewed as bundle of zero coupon cashsflows which are discounted along the spot rate curve. The value or price of a bond is sum of the individual valuation of each zero coupon cashflow. The timing and magnitude of the cahflows determine the relative richness or cheapness of each cashflow.</p>
+<p>The Bond Lab® valuation framework combines both linear and non-linear term structure assumptions into a holistic valuation framework. Bond cashflows are viewed as bundle of zero coupon cashflows which are discounted along the spot rate curve. The value or price of a bond is sum of the individual valuation of each zero coupon cashflow. The timing and magnitude of the cahflows determine the relative richness or cheapness of each cashflow.</p>
 <ul>
 <li><p>The cheap cashflows are those whose present value along the spot curve are greater than the yield to maturity (a linear term structure assumption) pricing of each cashflow.</p></li>
 <li><p>The rich cashflows are those whose present value along the sopt rate curve are less than the yield to maturity assumption pricing of each cashflow.</p></li>
@@ -403,17 +403,17 @@ slots to the class to extend the prepayment model.</code></pre>
 <div id="now-lets-get-some-analytics-out-of-the-class-mortgagescenario" class="section level2">
 <h2>Now, lets get some analytics out of the class MortgageScenario</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">HorizonReturn</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.7139647</code></pre>
+<pre><code>## [1] 1.713965</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ZeroVolSpread</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.1241092</code></pre>
+<pre><code>## [1] 1.124109</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToCurve</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.3134863</code></pre>
+<pre><code>## [1] 1.313486</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToBenchmark</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.3032839</code></pre>
+<pre><code>## [1] 1.303284</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">WAL</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 6.9049558</code></pre>
+<pre><code>## [1] 6.904956</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EffDuration</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 4.543266</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">KeyRateDuration</span>(NoChangeScenario))</code></pre></div>

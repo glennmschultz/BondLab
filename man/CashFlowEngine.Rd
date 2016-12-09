@@ -15,7 +15,7 @@ CashFlowEngine(bond.id = "character", settlement.date = "character",
 \item{principal}{A numeric value the principal balance}
 
 \item{PrepaymentAssumption}{A character string referencing 
-an object type PrepaymentAssumption}
+an object type PrepaymentModel}
 }
 \description{
 Bond Lab function the residential mortgage cash flow engine

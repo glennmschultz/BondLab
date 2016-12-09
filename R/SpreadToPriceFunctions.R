@@ -75,6 +75,8 @@
                             ...,
                             benchmark = NULL){
     
+    Spread <- SpreadTypes(Spread = spread)
+    
     rates.data <- Rates(trade.date = trade.date)
     bond.id = MBS(MBS.id = bond.id)
     MortgageRate = MtgRate()
@@ -100,7 +102,7 @@
       bond.id = bond.id,
       TermStructure = TermStructure,
       MortgageRate = MortgageRate,
-      ModelTune = ModelTune,
+      ModelTune = ModelTune(bond.id = bond.id),
       Burnout = Burnout,
       PrepaymentAssumption = PrepaymentAssumption,
       CPR = CPR)
@@ -143,7 +145,7 @@
     
     # use predict ModelCurve to determine
     ICurve = predict(ModelCurve, WAL)
-    YieldTypes <- YieldTypes( yield = (ICurve + spread))
+    YieldTypes <- YieldTypes( yield = (ICurve + SpreadDecimal(Spread)))
     
     # Present value of the cash flows Present Value Factors
     MBS.CF.Table[,"Present Value Factor"] =

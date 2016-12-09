@@ -23,16 +23,13 @@
   #' The is class is used to calculate SpreadTypes which are in turne 
   #' used as input to calculate price given a yield curve, 
   #' WAL or benchmark, and spread to curve.
-  #' @slot SpreadBasisDecimal a numeric value the spread expressed as numeric 
-  #' decimal (bps)
-  #' @slot SpreadBasisString a character the spread expressed as numeric decimal (bps)
+  #' @slot SpreadBasis a character the spread expressed in basis points
   #' @slot SpreadDecimal a numeric value the spread expressed as numeric decimal
   #' @slot SpreadDecimalString a character the spread expressed as numeric decimal 
   #' @exportClass SpreadTypes
   setClass ("SpreadTypes",
             representation(
-              SpreadBasisDecimal = "numeric",
-              SpreadBasisString = "character",
+              SpreadBasis = "character",
               SpreadDecimal = "numeric",
               SpreadDecimalString = "character"
               ))
@@ -42,32 +39,17 @@
   #' A standard generic function to get the slot SpreadBasis
   #' 
   #' @param object an S4 object of the class SpreadTypes
-  #' @export SpreadBasisDecimal
-  setGeneric("SpreadBasisDecimal", function(object)
-    {standardGeneric("SpreadBasisDecimal")})
+  #' @export SpreadBasis
+  setGeneric("SpreadBasis", function(object)
+    {standardGeneric("SpreadBasis")})
   
   #' A standard generic function to set the value of the slot SpreadBasis
   #' 
   #' @param object an S4 object of the class SpreadTypes
   #' @param value the replacement value of the slot
-  #' @export SpreadBasisDecimal<-
-  setGeneric("SpreadBasisDecimal<-", function(object, value)
-    {standardGeneric("SpreadBasisDecimal<-")})
-  
-  #' A standard generic function to get the slot SpreadBasisString
-  #' 
-  #' @param object an S4 object of the class SpreadTypes
-  #' @export SpreadBasisString
-  setGeneric("SpreadBasisString", function(object)
-    {standardGeneric("SpreadBasisString")})
-  
-  #' A standard generic function to set the value of the slot SpreadBasisString
-  #' 
-  #' @param object an S4 object of the class SpreadTypes
-  #' @param value the replacement value of the slot
-  #' @export SpreadBasisString<-
-  setGeneric("SpreadBasisString<-", function(object, value)
-    {setGeneric("SpreadBasisString<-")})
+  #' @export SpreadBasis<-
+  setGeneric("SpreadBasis<-", function(object, value)
+    {setGeneric("SpreadBasis<-")})
   
   #' A standard generic function to get the slot SpreadDecimal
   #' 
@@ -102,55 +84,35 @@
   setMethod("initialize",
             signature("SpreadTypes"),
             function(.Object,
-                     SpreadBasisDecimal = numeric(),
-                     SpreadBasisString = "character",
+                     SpreadBasis = "character",
                      SpreadDecimal = numeric(),
                      SpreadDecimalString = "character",
                      ...
                      ){
               callNextMethod(.Object,
-                             SpreadBasisDecimal = SpreadBasisDecimal,
-                             SpreadBasisString = SpreadBasisString,
+                             SpreadBasis = SpreadBasis,
                              SpreadDecimal = SpreadDecimal,
                              SpreadDecimalString = SpreadDecimalString)
             })
   
-  #' A method to get SpreadBasisDecimal from slot of class SpreadTypes
-  #' 
-  #' @param object an object of the type SpreadTypes
-  #' @exportMethod SpreadBasisDecimal
-  setMethod("SpreadBasisDecimal", signature("SpreadTypes"),
-            function(object){object@SpreadBasisDecimal})
-  
-  #' A method to set the value of the slot SpreadBasisDecimal of the 
-  #' class SpreadTypes
-  #' 
-  #' @param object an object of the class SpreadTypes
-  #' @param value the replacement value of the slot
-  #' @exportMethod SpreadBasisDecimal<-
-  setReplaceMethod("SpreadBasisDecimal", signature("SpreadTypes"),
-                   function(object, value){
-                     object@SpreadBasisDecimal <- value
-                     return(object)
-                   })
   
   #' A method to get the value of the slot SpreadBasisString from the object
   #' of class SpreadTypes
   #' 
   #' @param object an S4 object of the class SpreadTypes
-  #' @exportMethod SpreadBasisString
-  setMethod("SpreadBasisString", signature("SpreadTypes"),
-            function(object){object@SpreadBasisDecimal})
+  #' @exportMethod SpreadBasis
+  setMethod("SpreadBasis", signature("SpreadTypes"),
+            function(object){object@SpreadBasis})
   
   #' A method to set the value of the slot SpreadBasisString of the
   #' class SpreadTypes
   #' 
   #' @param object and object of the class SpreadTypes
   #' @param value the replacement value of the slot
-  #' @exportMethod SpreadBasisString<-
-  setReplaceMethod("SpreadBasisString", signature("SpreadTypes"),
+  #' @exportMethod SpreadBasis<-
+  setReplaceMethod("SpreadBasis", signature("SpreadTypes"),
                    function(object, value){
-                     object@SpreadBasisString <- value
+                     object@SpreadBasis <- value
                      return(object)
                    })
   
@@ -192,3 +154,25 @@
                      object@SpreadDecimalString <- value
                      return(object)
                    })
+  
+  #' SpreadTypes is a constructor function for the class SpreadTypes
+  #' 
+  #' @param Spread a character string the spread entered in basis points
+  #' @export SpreadTypes
+  SpreadTypes <- function(Spread = "character"){
+    SpreadBasis = 100
+    
+    ConverttoDecimal <- function(spread, basis){
+      spread = as.numeric(spread)/basis
+      return(spread)}
+      
+    ConverttoString <- function(spread,basis){
+      spread = as.numeric(spread)/basis
+      spread = sprintf("%.8f", spread)
+      return(spread)}
+    new("SpreadTypes",
+        SpreadBasis = Spread,
+        SpreadDecimal = ConverttoDecimal(spread = Spread, basis = SpreadBasis),
+        SpreadDecimalString = ConverttoString(spread = Spread, basis = SpreadBasis)
+        )
+  }

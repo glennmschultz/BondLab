@@ -8,7 +8,7 @@ returns the clean price of the bond}
 \usage{
 SpreadToPrice(bond.id = "character", trade.date = "character",
   settlement.date = "character", PrepaymentAssumption = "character",
-  spread = numeric(), CPR = numeric(), ..., benchmark = NULL)
+  spread = "character", CPR = numeric(), ..., benchmark = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -19,8 +19,8 @@ SpreadToPrice(bond.id = "character", trade.date = "character",
 
 \item{PrepaymentAssumption}{the assumption must be: "CPR", "PPC", "MODEL"}
 
-\item{spread}{a numeric value the spread to the interpolated curve
-entered in percent}
+\item{spread}{a charcter string the spread to the interpolated curve
+entered in basis points}
 
 \item{CPR}{a numeric value the CPR assumption used to price the MBS
 e.g. 100 basis points = 1}

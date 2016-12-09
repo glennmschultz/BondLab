@@ -12,10 +12,7 @@ WAL or benchmark, and spread to curve.
 \section{Slots}{
 
 \describe{
-\item{\code{SpreadBasisDecimal}}{a numeric value the spread expressed as numeric 
-decimal (bps)}
-
-\item{\code{SpreadBasisString}}{a character the spread expressed as numeric decimal (bps)}
+\item{\code{SpreadBasis}}{a character the spread expressed in basis points}
 
 \item{\code{SpreadDecimal}}{a numeric value the spread expressed as numeric decimal}
 

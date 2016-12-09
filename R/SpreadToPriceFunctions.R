@@ -59,8 +59,8 @@
   #' @param trade.date A character string the trade date mm-dd-YYYY
   #' @param settlement.date A character string the settlement date mm-dd-YYYY
   #' @param PrepaymentAssumption the assumption must be: "CPR", "PPC", "MODEL"
-  #' @param spread a numeric value the spread to the interpolated curve
-  #' entered in percent
+  #' @param spread a charcter string the spread to the interpolated curve
+  #' entered in basis points
   #' @param CPR a numeric value the CPR assumption used to price the MBS
   #' e.g. 100 basis points = 1
   #' @param ... optional values follow
@@ -70,7 +70,7 @@
                             trade.date = "character",
                             settlement.date = "character",
                             PrepaymentAssumption = "character",
-                            spread = numeric(),
+                            spread = "character",
                             CPR = numeric(),
                             ...,
                             benchmark = NULL){

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2016-12-07" />
+<meta name="date" content="2016-12-09" />
 
 <title>Bond Lab®</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2016-12-07</em></h4>
+<h4 class="date"><em>2016-12-09</em></h4>
 
 
 
@@ -422,6 +422,33 @@ slots to the class to extend the prepayment model.</code></pre>
 <div id="create-your-own-function" class="section level2">
 <h2>Create Your Own Function</h2>
 <p>Naturally, one does not wish to replicate the anatomy of a Bond Lab® call repeatedly. The user can create her own function to encapsulate the anatomy of a Bond Lab® call.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MyPassThrough &lt;-<span class="st"> </span>function(<span class="dt">bond.id =</span> <span class="st">&quot;character&quot;</span>,
+                         <span class="dt">trade.date =</span> <span class="st">&quot;character&quot;</span>,
+                         <span class="dt">settlement.date =</span> <span class="st">&quot;character&quot;</span>,
+                         <span class="dt">prepayment =</span> <span class="st">&quot;character&quot;</span>,
+                         ...,
+                         <span class="dt">price =</span> <span class="ot">NULL</span>,
+                         <span class="dt">spread =</span> <span class="ot">NULL</span>,
+                         <span class="dt">CPR =</span> <span class="kw">numeric</span>()){
+  
+  Price &lt;-<span class="st"> </span><span class="kw">PriceTypes</span>(<span class="dt">Price =</span> price)
+  bond.id &lt;-<span class="st"> </span><span class="kw">MBS</span>(<span class="dt">MBS.id =</span> <span class="st">&quot;FHQ41072&quot;</span>)
+  rates.data &lt;-<span class="st"> </span><span class="kw">Rates</span>(<span class="dt">trade.date =</span> trade.date)
+  MortgageRate &lt;-<span class="st"> </span><span class="kw">MtgRate</span>()
+  ModelTune &lt;-<span class="st"> </span><span class="kw">ModelTune</span>(<span class="dt">bond.id =</span> bond.id) 
+  
+  <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
+     TermStructure &lt;-<span class="st"> </span><span class="kw">TermStructure</span>(<span class="dt">rates.data =</span> rates.data, <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>)))
+  
+    <span class="co">#invoke the prepayment model and assign it to object</span>
+    Prepayment &lt;-<span class="st"> </span><span class="kw">PrepaymentModel</span>(<span class="dt">bond.id =</span> bond.id,
+                                  <span class="dt">TermStructure =</span> TermStructure,
+                                  <span class="dt">MortgageRate =</span> MortgageRate,
+                                  <span class="dt">ModelTune =</span> ModelTune,
+                                  <span class="dt">PrepaymentAssumption =</span> prepayment,
+                                  <span class="dt">CPR =</span> CPR)
+
+                         }</code></pre></div>
 </div>
 </div>
 

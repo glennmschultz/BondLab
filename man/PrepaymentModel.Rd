@@ -2,7 +2,7 @@
 % Please edit documentation in R/PrepaymentModel.R
 \name{PrepaymentModel}
 \alias{PrepaymentModel}
-\title{A contstructor function for the PrepaymentAssumption object}
+\title{A contstructor function for the PrepaymentModel object}
 \usage{
 PrepaymentModel(bond.id = "character", TermStructure = "character",
   MortgageRate = "character", ModelTune = "character",
@@ -46,6 +46,6 @@ used "MODEL", "PPC", or "CPR"}
 \item{Severity}{A numeric value the loss severity given default}
 }
 \description{
-The function is a constructor function for the PrepaymentAssumption object
+The function is a constructor function for the PrepaymentModel object
 }
 

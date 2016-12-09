@@ -7,7 +7,7 @@
 PPCSeasoning(object)
 }
 \arguments{
-\item{object}{An S4 class object of the type PrepaymentAssumption
+\item{object}{An S4 class object of the type PrepaymentModel
 export PPCSeasoning}
 }
 \description{

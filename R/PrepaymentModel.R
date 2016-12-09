@@ -23,7 +23,7 @@
 
   #' A S4 Class prepayment vectors which are passed to cash flow engines
   #' 
-  #' The PrepaymentAssumption class is used to pass the prepayment information 
+  #' The PrepaymentClass class is used to pass the prepayment information 
   #' and SMM vectors to the MortgageCashFlow engine.  It must be called in 
   #' advance for cash flow calculations.
   #' @slot PrepaymentAssumption A character string the type of 
@@ -50,8 +50,8 @@
   #' SMM is the measure of voluntary repayments 
   #' @slot MDR A numeric vector the pojected MDR  (Monthly Default Rate)
   #' @slot Severity A numeric vector the loss severity given default
-  #' @exportClass PrepaymentAssumption 
-  setClass("PrepaymentAssumption",
+  #' @exportClass PrepaymentModel
+  setClass("PrepaymentModel",
          representation(
            PrepaymentAssumption = "character",
            PPCStart = "numeric",
@@ -87,25 +87,25 @@
   {standardGeneric("PrepaymentModel")})
   
   #' A standard generic function to access the slot PrepaymentAssumption
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' export PrepaymentAssumption 
   setGeneric("PrepaymentAssumption", function(object)
   {standardGeneric("PrepaymentAssumption")})
   
   #' A standard generic function to access the slot PPCstart
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' export PPCStart
   setGeneric("PPCStart", function(object)
   {standardGeneric("PPCStart")})
   
   #' A standard generic function to access the slot PPCEnd
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' export PPCEnd
   setGeneric("PPCEnd", function(object)
   {standardGeneric("PPCEnd")})
   
   #' A standard generic function to access the slot PPCSeasoning
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' export PPCSeasoning
   setGeneric("PPCSeasoning", function(object)
   {standardGeneric("PPCSeasoning")})
@@ -116,7 +116,7 @@
   # Note: PmtDate generic is defined in MortgageCashFlow.R 
   
   #' A standard generic function to access the slot LoanAge
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export LoanAge
   setGeneric("LoanAge", function(object)
     {standardGeneric("LoanAge")})
@@ -124,43 +124,43 @@
   # Note: Period generic is defined MortgageCashFlow.R
   
   #' A standard generic function to access the slot NoteRate
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export NoteRate
   setGeneric("NoteRate", function(object)
     {standardGeneric("NoteRate")})
   
   #' A standard generic function to access the slot MtgRateFwd
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export MtgRateFwd 
   setGeneric("MtgRateFwd", function(object)
     {standardGeneric("MtgRateFwd")})
   
   #' A standard generic function to access the slot Incentive
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export Incentive
   setGeneric("Incentive", function(object)
     {standardGeneric("Incentive")})
   
   #' A standard generic function to access the slot SMM
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export SMM
   setGeneric("SMM", function(object)
     {standardGeneric("SMM")})
   
   #' A standard generic function to access the slot MDR
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export MDR
   setGeneric("MDR", function(object)
     {standardGeneric("MDR")})
   
   #' A standard generic function to access the slot Severity
-  #' @param object An S4 class object of the type PrepaymentAssumption
+  #' @param object An S4 class object of the type PrepaymentModel
   #' @export Severity
   setGeneric("Severity", function(object)
     {standardGeneric("Severity")})
   
   setMethod("initialize",
-          signature("PrepaymentAssumption"),
+          signature("PrepaymentModel"),
           function(.Object,
                    PrepaymentAssumption = "character",
                    PPCStart = numeric(),
@@ -198,100 +198,100 @@
                            Severity = Severity)
           })
   
-  #' A method to extact PrepaymentAssumption from S4 class PrepaymentAssumption
+  #' A method to extact PrepaymentAssumption from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod PrepaymentAssumption
-  setMethod("PrepaymentAssumption", signature("PrepaymentAssumption"),
+  setMethod("PrepaymentAssumption", signature("PrepaymentModel"),
             function(object){object@PrepaymentAssumption})
   
-  #' A method to extract PPCStart from S4 class PrepaymentAssumption
+  #' A method to extract PPCStart from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod PPCStart
-  setMethod("PPCStart", signature("PrepaymentAssumption"),
+  setMethod("PPCStart", signature("PrepaymentModel"),
             function(object){object@PPCStart})
   
-  #' A method to extract PPCEnd from S4 class PrepaymentAssumption
+  #' A method to extract PPCEnd from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod PPCEnd
-  setMethod("PPCEnd", signature("PrepaymentAssumption"),
+  setMethod("PPCEnd", signature("PrepaymentModel"),
             function(object){object@PPCEnd})
   
-  #' A method to extract PPCSeasoning from S4 class PrepaymentAssumption
+  #' A method to extract PPCSeasoning from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod PPCSeasoning
-  setMethod("PPCSeasoning", signature("PrepaymentAssumption"),
+  setMethod("PPCSeasoning", signature("PrepaymentModel"),
             function(object){object@PPCSeasoning})
   
-  #' A method to extract FirstPmtDate from S4 class PrepaymentAssumption
+  #' A method to extract FirstPmtDate from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod FirstPmtDate
-  setMethod("FirstPmtDate", signature("PrepaymentAssumption"),
+  setMethod("FirstPmtDate", signature("PrepaymentModel"),
             function(object){object@FirstPmtDate})
   
-  #' A method to extract LastPmtDate from S4 class PrepaymentAssumption
+  #' A method to extract LastPmtDate from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod LastPmtDate
-  setMethod("LastPmtDate", signature("PrepaymentAssumption"),
+  setMethod("LastPmtDate", signature("PrepaymentModel"),
             function(object){object@LastPmtDate})
   
-  #' A method to extract FinalPmtDate from S4 class PrepaymentAssumption
+  #' A method to extract FinalPmtDate from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod FinalPmtDate
-  setMethod("FinalPmtDate", signature("PrepaymentAssumption"),
+  setMethod("FinalPmtDate", signature("PrepaymentModel"),
             function(object){object@FinalPmtDate})
   
-  #' A method to extract PmtDate from S4 class PrepaymentAssumption
+  #' A method to extract PmtDate from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod PmtDate
-  setMethod("PmtDate", signature("PrepaymentAssumption"),
+  setMethod("PmtDate", signature("PrepaymentModel"),
             function(object){object@PmtDate})
   
-  #' A method to extract LoanAge from S4 class PrepaymentAssumption
+  #' A method to extract LoanAge from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod LoanAge
-  setMethod("LoanAge", signature("PrepaymentAssumption"),
+  setMethod("LoanAge", signature("PrepaymentModel"),
             function(object){object@LoanAge})
   
-  #' A method to extract Period from S4 class PrepaymentAssumption
+  #' A method to extract Period from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod Period
-  setMethod("Period", signature("PrepaymentAssumption"),
+  setMethod("Period", signature("PrepaymentModel"),
             function(object){object@Period})
   
-  #' A method to extract NoteRate from S4 class PrepaymentAssumption
+  #' A method to extract NoteRate from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod NoteRate
-  setMethod("NoteRate", signature("PrepaymentAssumption"),
+  setMethod("NoteRate", signature("PrepaymentModel"),
             function(object){object@NoteRate})
   
-  #' A method to extract MtgRateFwd from S4 class PrepaymentAssumption
+  #' A method to extract MtgRateFwd from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod MtgRateFwd
-  setMethod("MtgRateFwd", signature("PrepaymentAssumption"),
+  setMethod("MtgRateFwd", signature("PrepaymentModel"),
             function(object){object@MtgRateFwd})
   
-  #' A method to extract Incentive from S4 class PrepaymentAssumption
+  #' A method to extract Incentive from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod Incentive
-  setMethod("Incentive", signature("PrepaymentAssumption"),
+  setMethod("Incentive", signature("PrepaymentModel"),
             function(object){object@Incentive})
   
-  #' A method to extract SMM from S4 class PrepaymentAssumption
+  #' A method to extract SMM from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod SMM
-  setMethod("SMM", signature("PrepaymentAssumption"),
+  setMethod("SMM", signature("PrepaymentModel"),
             function(object){object@SMM})
   
-  #' A method to extract MDR from S4 class PrepaymentAssumption
+  #' A method to extract MDR from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod MDR
-  setMethod("MDR", signature("PrepaymentAssumption"),
+  setMethod("MDR", signature("PrepaymentModel"),
             function(object){object@MDR})
   
-  #' A method to extract Severity from class PrepaymentAssumption
+  #' A method to extract Severity from class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod Severity
-  setMethod("Severity", signature("PrepaymentAssumption"),
+  setMethod("Severity", signature("PrepaymentModel"),
             function(object){object@Severity}) 
   
   #--------------------------------------------------------------------------
@@ -434,9 +434,9 @@
   #This section begins the bond lab prepayment model
   #The constructor for the prepayment model vector starts below
   # --------------------------------------------------------------------------
-  #' A contstructor function for the PrepaymentAssumption object
+  #' A contstructor function for the PrepaymentModel object
   #' 
-  #' The function is a constructor function for the PrepaymentAssumption object
+  #' The function is a constructor function for the PrepaymentModel object
   #' @param bond.id A character string referring to an object 
   #' of the type MBSDetails
   #' @param TermStructure A character string referring to an object 
@@ -600,7 +600,7 @@
                            ...,
                            HomePrice = HomePrice),8)}
 
-  new("PrepaymentAssumption",
+  new("PrepaymentModel",
       PrepaymentAssumption = as.character(PrepaymentAssumption),
       PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
       PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},

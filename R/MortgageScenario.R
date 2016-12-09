@@ -228,7 +228,7 @@
   setClass("MortgageScenario",
            representation(),
            contains = c("TermStructure",
-                        "PrepaymentAssumption",
+                        "PrepaymentModel",
                         "MortgageCashFlow",
                         "MortgageTermStructure",
                         "MortgageReturn",

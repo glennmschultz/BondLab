@@ -7,7 +7,7 @@
 LoanAge(object)
 }
 \arguments{
-\item{object}{An S4 class object of the type PrepaymentAssumption}
+\item{object}{An S4 class object of the type PrepaymentModel}
 }
 \description{
 A standard generic function to access the slot LoanAge

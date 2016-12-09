@@ -413,3 +413,33 @@ barplot(KeyRateDuration(NoChangeScenario))
 Naturally, one does not wish to replicate the anatomy of a Bond Lab® call
 repeatedly.  The user can create her own function to encapsulate the anatomy of 
 a Bond Lab® call.
+
+```{r, MyPassThrough, echo= TRUE}
+MyPassThrough <- function(bond.id = "character",
+                         trade.date = "character",
+                         settlement.date = "character",
+                         prepayment = "character",
+                         ...,
+                         price = NULL,
+                         spread = NULL,
+                         CPR = numeric()){
+  
+  Price <- PriceTypes(Price = price)
+  bond.id <- MBS(MBS.id = "FHQ41072")
+  rates.data <- Rates(trade.date = trade.date)
+  MortgageRate <- MtgRate()
+  ModelTune <- ModelTune(bond.id = bond.id) 
+  
+  invisible(capture.output(
+     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+  
+    #invoke the prepayment model and assign it to object
+    Prepayment <- PrepaymentModel(bond.id = bond.id,
+                                  TermStructure = TermStructure,
+                                  MortgageRate = MortgageRate,
+                                  ModelTune = ModelTune,
+                                  PrepaymentAssumption = prepayment,
+                                  CPR = CPR)
+
+                         }
+```

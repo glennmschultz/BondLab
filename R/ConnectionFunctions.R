@@ -140,6 +140,21 @@
    HorizonMBS <- readRDS(HorizonConn)
    on.exit(close.connection(HorizonConn))
    return(HorizonMBS)}
+  
+  #' A connection function to the horizon bond object
+  #' 
+  #' A read connection to the horizon bond details
+  #' No inputs are required
+  #' @examples 
+  #' \dontrun{
+  #' HorizonBond()}
+  #' @export HorizonBond
+  HorizonBond <- function(){HorizonConn <- gzfile(
+    paste(system.file(package = "BondLab"),
+          "/Temp_BondData/","TempBond.rds", sep = ""))
+  HorizonBond <- readRDS(HorizonConn)
+  on.exit(close.connection(HorizonConn))
+  return(HorizonBond)}
  
   #' Function to calculate the updated loan to value
   #' 

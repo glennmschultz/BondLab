@@ -248,9 +248,6 @@
     
     bond.id <- bond.id
     rates.data <- rates.data
-    MortgageRate <- MtgRate()
-    ModelTune <- ModelTune(bond.id = bond.id)
-    Burnout = BurnOut(bond.id)
     Scenario <- ScenarioCall(Scenario = scenario)
     
     #set rates shift (immediate) for term structure fit
@@ -338,6 +335,173 @@
         method = "ns")
     } # End of if logic for term structure method
     
+    ForwardBond(bond.id = bond.id,
+                par.amount = par.amount,
+                horizon.months = horizon.months)
+    
+    HorizonBond = HorizonBond()
+    
+    HorizonCashFlow <- BondCashFlow(bond.id = bond.id,
+                                    principal = par.amount,
+                                    settlement.date = settlement.date,
+                                    price = price)
+    
+    # =========================================================================
+    # This section begins the calculation of horizon total return
+    # Cashflow Received + Reinvestment Income + Present Value at Horizon
+    # ========================================================================
+    
+    NumberofCashFlow <- as.numeric(length(TotalCashFlow(HorizonCashFlow)))
+    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
+    
+    # =========================================================================
+    # Horizon present value of MBS pass through using spot spread, nominal 
+    # spread or OAS use switch here to compute the horizon present value based 
+    # and on either spot spread, nominal spread, or horizon price. (At this 
+    # time there is no OAS to price module) The functions Horizon.Spot.Value, 
+    # Horizon.Nominal.Value, and Horizon.Price.Value are used to determine the
+    # present value of the remaining cash flows are the horizon date.  
+    # The switch function determines which function is called based on 
+    # horizon.price.type
+    # ========================================================================
+    
+    Horizon.Spot.Value <- function(HorizonTermStructure = "character",
+                                   HorizonCashFlow = "character",
+                                   HorizonSpotSpread = numeric(),
+                                   NumberofCashFlow = numeric()){
+      DiscountRate <- 1/((1+((SpotRate(HorizonTermStructure)[1:NumberofCashFlow] + 
+                                horizon.spot.spread)/semi.yield.basis)) ^ 
+                           (Period(HorizonTermStructure)[1:NumberofCashFlow]))
+      
+      HorizonPresentValue <- 
+      DiscountRate[1:NumberofCashFlow] * TotalCashFlow(HorizonCashFlow)
+      PresentValue <- sum(HorizonPresentValue)
+      return(PresentValue)}
+    
+    # Do not replace this with curve spreads as this section of code is used 
+    # to compute horizon yield to maturity from nominal spread and interpolated
+    # curve.  
+    Horizon.Nominal.Value <- function(HorizonCurve = "character",
+                                      HorizonTermStructure = "character",
+                                      HorizonCashFlow = "character"){
+      InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
+                                  as.numeric(rates.data[2,2:12]),
+                                data = data.frame(HorizonCurve))
+      
+      HorizonYield <- 
+      predict(InterpolateCurve, WAL(HorizonCashFlow)) + horizon.nominal.spread
+      HorizonYield <- rep(HorizonYield, NumberofCashFlow)
+      DiscountRate <- 1/((1 + (HorizonYield/monthly.yield.basis))^
+                           (Period(HorizonTermStructure)[1:NumberofCashFlow]))
+      HorizonPresentValue <- DiscountRate * TotalCashFlow(HorizonCashFlow)
+      PresentValue <- sum(HorizonPresentValue)
+      return(PresentValue)}
+    
+    # Horizon.Price.Value is a function which returns the principal proceeds
+    # at the horizon date and is used to calculate PresentValue
+    Horizon.Price.Value <- function(HorizonBond = "character",
+                                    HorizonPrice = numeric()){
+      price.basis = 100
+      original.bal * MBSFactor(HorizonBond) * (HorizonPrice/price.basis)
+    }
+    
+    PresentValue <- switch(horizon.price.type,
+    "spot" = Horizon.Spot.Value(HorizonTermStructure = HorizonTermStructure,
+                                HorizonCashFlow = HorizonCashFlow,
+                                HorizonSpotSpread = horizon.spot.spread,
+                                NumberofCashFlow = NumberofCashFlow),
+   "nominal" = Horizon.Nominal.Value(HorizonCurve = HorizonCurve,
+                                     HorizonTermStructure = HorizonTermStructure,
+                                     HorizonCashFlow = HorizonCashFlow),
+   "price" = Horizon.Price.Value(HorizonBond = HorizonMBS,
+                                 HorizonPrice = horizon.price))
+    
+    HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
+      (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
+    
+    # Replace this with PriceTypes objects  
+    HorizonPrice <- sprintf("%.8f", HorizonPrice)
+    
+    HorizonCashFlow <- BondCashFlow(bond.id = bond.id,
+                                    principal = par.amount,
+                                    settlement.date = settlement.date,
+                                    price = price)
     
     
+    HorizonProceeds <- ((as.numeric(HorizonPrice)/price.basis * 
+                           OriginalBal(HorizonMBS)) + Accrued(HorizonCashFlow))
+    
+    HorizonSpread <- CurveSpreads(
+      rates.data = HorizonCurve,
+      CashFlow = HorizonCashFlow,
+      TermStructure = HorizonTermStructure,
+      proceeds = HorizonProceeds)
+    
+    # From the beginning cashflow calculation get the cashflow recieved by the 
+    # investor.
+    CouponIncome <- sum(CouponPmt(BondCashFlow)[1:horizon.months])
+    ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:horizon.months]
+    
+    n.period <- 
+      as.numeric(difftime(as.Date(PmtDate(BondCashFlow)[horizon.months]), 
+                          as.Date(PmtDate(BondCashFlow)[1:horizon.months]), 
+                          units = "days")/days.in.month)
+    
+    TerminalValue <- 
+      ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
+    
+    #PrincipalRepaid <- sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]) + 
+    #  sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months])
+    
+    HorizonValue <- 
+      CouponIncome + 
+      ReinvestmentIncome + 
+    #  PrincipalRepaid + 
+      PresentValue
+    
+    HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
+    HorizonReturn <- (HorizonReturn - 1) * yield.basis
+    
+    new("MortgageScenario",
+        Period = Period(BondCashFlow),
+        PmtDate = PmtDate(BondCashFlow),
+        TimePeriod = TimePeriod(BondCashFlow),
+        PrincipalOutstanding = PrincipalOutstanding(BondCashFlow),
+        CouponPmt = CouponPmt(BondCashFlow),
+        TotalCashFlow = TotalCashFlow(BondCashFlow),
+        SpotRate = SpotRate(TermStructure),
+        ForwardRate = ForwardRate(TermStructure),
+        TwoYearFwd = TwoYearForward(TermStructure),
+        TenYearFwd = TenYearForward(TermStructure),
+        SMM = SMM(Prepayment),
+        CPRLife = CPRLife(LifeCPR),
+        BenchMark = BenchMark(HorizonSpread),
+        SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
+        SpreadToCurve = SpreadToCurve(HorizonSpread),
+        ZeroVolSpread = ZeroVolSpread(HorizonSpread),
+        YieldToMaturity = YieldToMaturity(BondCashFlow),
+        WAL = WAL(BondCashFlow),
+        ModDuration = ModDuration(BondCashFlow),
+        Convexity = Convexity(BondCashFlow), 
+        EffDuration = EffDuration(BondTermStructure),
+        EffConvexity = EffConvexity(BondTermStructure),
+        KeyRateTenor = unname(KeyRateTenor(BondTermStructure)),
+        KeyRateDuration = unname(KeyRateDuration(BondTermStructure)),
+        KeyRateConvexity = unname(KeyRateConvexity(BondTermStructure)),
+        CouponIncome = CouponIncome,
+        ScheduledPrinReceived = 
+          sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months]),
+        PrepaidPrinReceived = 
+          sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]),
+        ReinvestmentIncome = ReinvestmentIncome,
+        HorizonCurrBal = original.bal * MBSFactor(HorizonMBS),
+        HorizonPrice = as.numeric(HorizonPrice),
+        HorizonReturn = HorizonReturn,
+        HorizonMos = horizon.months,
+        Name = Name(Scenario),
+        Type = Type(Scenario),
+        ShiftType = ShiftType(Scenario),
+        Shiftbps = Shiftbps(Scenario),
+        Formula = ScenarioFormula(Scenario))
   }

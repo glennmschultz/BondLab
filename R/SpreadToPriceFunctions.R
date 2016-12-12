@@ -55,6 +55,7 @@
   #' A function to solve for the price of a MBS pass-through given
   #' both pricing speed and spread to the interpolated curve.  The function
   #' returns the clean price of the bond
+  #' @importFrom utils capture.output
   #' @param bond.id A character string the cusip number or bond.id
   #' @param trade.date A character string the trade date mm-dd-YYYY
   #' @param settlement.date A character string the settlement date mm-dd-YYYY

@@ -584,7 +584,8 @@
     TermStructure = HorizonTermStructure,
     proceeds = HorizonProceeds)
   
-
+  # From the beginning cashflow calculation get the cashflow recieved by the 
+  # investor.
   CouponIncome <- sum(MortgageCashFlow@PassThroughInterest[1:horizon.months])
   ReceivedCashFlow <- TotalCashFlow(MortgageCashFlow)[1:horizon.months]
 

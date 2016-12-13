@@ -33,8 +33,9 @@
                          APIKey = "character"){
   rates <- list("USD1MTD156N", 
                 "USD3MTD156N", 
-                "USD6MTD156N", 
-                "DSWP1", 
+                "USD6MTD156N",
+                "USD12MD156N",
+                #"DSWP1", 
                 "DSWP2", 
                 "DSWP3", 
                 "DSWP4", 

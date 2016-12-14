@@ -411,11 +411,11 @@
   } else {TSFit <- estim_cs(bonddata = TSInput, 
                      group = as.character(rates.data[1,1]), 
                      matrange = "all", rse = TRUE)}
-  #return(TSFit)
+  
   #Return the coefficient vector to be passed in to the spot and 
   #forward rate functions
   #Maybe have the method choosen based on the one that gives the smallest RMSE
-  #
+  
   Vector <- switch(method,
   ns = unname(TSFit$opt_result[[1]]$par[c("beta0", 
                                           "beta1", 
@@ -434,8 +434,8 @@
                                            "beta1", 
                                            "beta2", 
                                            "tau1", 
-                                           "tau2", 
-                                           "tau3")])
+                                           "beta3", 
+                                           "tau2")])
   #cs = need to figure this out
   )
   

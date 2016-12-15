@@ -131,7 +131,7 @@ Zero Volatility Spread = Nominal Spread  | Rich and cheap cash flows are balance
 Zero Volatility Spread > Nominal Spread  | Cheap cash flows outweigh rich cash flows 
 
 ## Bond Lab® Design Philosphy
-Bond Lab® is designed to be modular. All classes are exposed to the user thereby allowing the user to create new superclasses from existing classes or extend the classes as the user sees fit.  Thus, the user is free to combine these classes into a superclass to fit her anlytics needs or extend classes to incorporate additional analytic information or methods.  The Bond Lab® classes are outlined below:
+Bond Lab® is designed to be modular. All classes are exposed to the user thereby allowing the user to create new class from existing classes (super class) or extend the classes as the user sees fit.  Thus, the user is free to combine these classes into a new class consiting of superclasses to fit her analytics needs or extend classes to incorporate additional analytic information.  The Bond Lab® classes are outlined below:
 
 # Bond Lab® Classes
 

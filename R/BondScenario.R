@@ -402,7 +402,8 @@
     Horizon.Price.Value <- function(HorizonBond = "character",
                                     HorizonPrice = numeric()){
       price.basis = 100
-      original.bal * MBSFactor(HorizonBond) * (HorizonPrice/price.basis)
+      if(LastPmtDate(HorizonBond) == Maturity(HorizonBond)){0
+    }else {par.amount * (HorizonPrice/price.basis)}
     }
     
     PresentValue <- switch(horizon.price.type,
@@ -448,22 +449,25 @@
                           units = "days")/days.in.month)
     
     TerminalValue <- 
-      ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
     ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
     
-    #PrincipalRepaid <- sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]) + 
-    #  sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months])
+    # This needs to be changed by adding principal pmt to bond cashflow class
+    # and bond cashflow engine. 
+    PrincipalRepaid <- sum(TotalCashFlow(BondCashFlow)[1:horizon.months]) + 
+    sum(CouponPmt(BondCashFlow)[1:horizon.months])
+    
     
     HorizonValue <- 
       CouponIncome + 
       ReinvestmentIncome + 
-    #  PrincipalRepaid + 
+      PrincipalRepaid + 
       PresentValue
     
     HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
     HorizonReturn <- (HorizonReturn - 1) * yield.basis
     
-    new("MortgageScenario",
+    new("BondScenario",
         Period = Period(BondCashFlow),
         PmtDate = PmtDate(BondCashFlow),
         TimePeriod = TimePeriod(BondCashFlow),
@@ -474,8 +478,6 @@
         ForwardRate = ForwardRate(TermStructure),
         TwoYearFwd = TwoYearForward(TermStructure),
         TenYearFwd = TenYearForward(TermStructure),
-        SMM = SMM(Prepayment),
-        CPRLife = CPRLife(LifeCPR),
         BenchMark = BenchMark(HorizonSpread),
         SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
         SpreadToCurve = SpreadToCurve(HorizonSpread),
@@ -490,12 +492,9 @@
         KeyRateDuration = unname(KeyRateDuration(BondTermStructure)),
         KeyRateConvexity = unname(KeyRateConvexity(BondTermStructure)),
         CouponIncome = CouponIncome,
-        ScheduledPrinReceived = 
-          sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months]),
-        PrepaidPrinReceived = 
-          sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]),
+        PrincipalReceived = PrincipalRepaid,
         ReinvestmentIncome = ReinvestmentIncome,
-        HorizonCurrBal = original.bal * MBSFactor(HorizonMBS),
+        HorizonCurrBal = original.bal - PrincipalRepaid,
         HorizonPrice = as.numeric(HorizonPrice),
         HorizonReturn = HorizonReturn,
         HorizonMos = horizon.months,

@@ -244,7 +244,7 @@
   #' @param object the name of the S4 object of the type BondDetails
   #' @exportMethod OfferAmount
   setMethod("OfferAmount", signature("BondDetails"),
-            function(object){object@Coupon})
+            function(object){object@OfferAmount})
   
   #' Method to extract Coupon from an S4 class of type BondDetails
   #' 

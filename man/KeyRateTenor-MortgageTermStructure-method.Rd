@@ -3,7 +3,7 @@
 \docType{methods}
 \name{KeyRateTenor,MortgageTermStructure-method}
 \alias{KeyRateTenor,MortgageTermStructure-method}
-\title{Method to extract the KeyRateTenor from S4 class}
+\title{Method to get the KeyRateTenor from S4 class}
 \usage{
 \S4method{KeyRateTenor}{MortgageTermStructure}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{The name of the S4 object of type MortgageTermStructure}
 }
 \description{
-Method to extract the KeyRateTenor from S4 class
+Method to get the KeyRateTenor from S4 class
 }
 

@@ -381,7 +381,7 @@
       PmtDate = as.character(as.Date(Bond.CF.Table[,"Date"], origin = "1970-01-01")),
       TimePeriod = Bond.CF.Table[,"Time"],
       PrincipalOutstanding  = Bond.CF.Table[,"Principal Outstanding"],
-      CouponPmt = Bond.CF.Table[,"Coupon"],
+      CouponPmt = Bond.CF.Table[,"Coupon Income"],
       TotalCashFlow = Bond.CF.Table[,"TotalCashFlow"]
   )
 }

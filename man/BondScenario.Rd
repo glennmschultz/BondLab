@@ -15,7 +15,7 @@ BondScenario(bond.id = "character", settlement.date = "character",
 
 \item{settlement.date}{A character string the settlement data "mm-dd-YYYY".}
 
-\item{rates.data}{A character string the trade.data "mm-dd-YYYY"}
+\item{rates.data}{A character string an object yield curve}
 
 \item{price}{A character string in decimal equivalent (.) or 32nds (-)}
 

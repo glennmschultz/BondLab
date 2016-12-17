@@ -198,7 +198,7 @@
   #' A function to compute the total return of a Bond
   #' @param bond.id A character string referencing an object of the type BondDetails
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
-  #' @param rates.data A character string the trade.data "mm-dd-YYYY"
+  #' @param rates.data A character string an object yield curve
   #' @param price A character string in decimal equivalent (.) or 32nds (-)
   #' @param par.amount A numeric value the par amount. 
   #' @param scenario A character string the scenario
@@ -285,7 +285,6 @@
                                   price = PriceDecimalString(Price))
     
     proceeds <- Accrued(BondCashFlow) + (par.amount * PriceBasis(Price))
-    
     principal <- par.amount
     
     # Compute the CurvesSpreads based on the user price and prepayment vector
@@ -298,8 +297,10 @@
     BondTermStructure = BondTermStructure(bond.id = bond.id,
                                           Rate.Delta = rate.delta,
                                           TermStructure = TermStructure,
+                                          principal = principal,
                                           price = PriceDecimalString(Price),
                                           cashflow = BondCashFlow)
+
     
     # This section begins the  horizon bond analysis. 
     # Horizon curve can be calculated by either shifting the coupon curve or
@@ -341,10 +342,10 @@
     
     HorizonBond = HorizonBond()
     
-    HorizonCashFlow <- BondCashFlow(bond.id = bond.id,
-                                    principal = par.amount,
-                                    settlement.date = settlement.date,
-                                    price = price)
+    HorizonCashFlow <- BondCashFlows(bond.id = bond.id,
+                                     principal = par.amount,
+                                     settlement.date = settlement.date,
+                                     price = price)
     
     # =========================================================================
     # This section begins the calculation of horizon total return
@@ -354,6 +355,11 @@
     NumberofCashFlow <- as.numeric(length(TotalCashFlow(HorizonCashFlow)))
     reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
     
+    # Here frequency and horizon is converted into the number of payments received
+    # Frequency is the number of payments recieved in a year and the monthly interval
+    # between payments.  Maybe frequency should be months between payments
+    NumberPaymentReceived <- horizon.months/(horizon.months/Frequency(bond.id))
+
     # =========================================================================
     # Horizon present value of MBS pass through using spot spread, nominal 
     # spread or OAS use switch here to compute the horizon present value based 
@@ -424,14 +430,13 @@
     # Replace this with PriceTypes objects  
     HorizonPrice <- sprintf("%.8f", HorizonPrice)
     
-    HorizonCashFlow <- BondCashFlow(bond.id = bond.id,
-                                    principal = par.amount,
-                                    settlement.date = settlement.date,
-                                    price = price)
-    
-    
-    HorizonProceeds <- ((as.numeric(HorizonPrice)/price.basis * 
-                           OriginalBal(HorizonMBS)) + Accrued(HorizonCashFlow))
+    HorizonCashFlow <- BondCashFlows(bond.id = bond.id,
+                                     principal = par.amount,
+                                     settlement.date = settlement.date,
+                                     price = PriceDecimalString(Price))
+
+    HorizonProceeds <- (((as.numeric(HorizonPrice)/price.basis) * par.amount) + 
+                          Accrued(HorizonCashFlow))
     
     HorizonSpread <- CurveSpreads(
       rates.data = HorizonCurve,
@@ -441,24 +446,24 @@
     
     # From the beginning cashflow calculation get the cashflow recieved by the 
     # investor.
-    CouponIncome <- sum(CouponPmt(BondCashFlow)[1:horizon.months])
-    ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:horizon.months]
-    
+      
+    CouponIncome <- sum(CouponPmt(BondCashFlow)[1:NumberPaymentReceived])
+    ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:NumberPaymentReceived]
+
     n.period <- 
-      as.numeric(difftime(as.Date(PmtDate(BondCashFlow)[horizon.months]), 
-                          as.Date(PmtDate(BondCashFlow)[1:horizon.months]), 
+      as.numeric(difftime(as.Date(PmtDate(BondCashFlow)[NumberPaymentReceived]), 
+                          as.Date(PmtDate(BondCashFlow)[1:NumberPaymentReceived]), 
                           units = "days")/days.in.month)
-    
+
     TerminalValue <- 
     ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
     ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
     
     # This needs to be changed by adding principal pmt to bond cashflow class
     # and bond cashflow engine. 
-    PrincipalRepaid <- sum(TotalCashFlow(BondCashFlow)[1:horizon.months]) + 
-    sum(CouponPmt(BondCashFlow)[1:horizon.months])
-    
-    
+    PrincipalRepaid <- sum(TotalCashFlow(BondCashFlow)[1:NumberPaymentReceived]) - 
+    sum(CouponPmt(BondCashFlow)[1:NumberPaymentReceived])
+
     HorizonValue <- 
       CouponIncome + 
       ReinvestmentIncome + 

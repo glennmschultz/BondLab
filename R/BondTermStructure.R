@@ -46,6 +46,13 @@
                                  cashflow = "character")
     {standardGeneric("BondTermStructure")})
   
+  # Note: standard generic SpotSpread is defined in MortgageKeyRate
+  # Note: standard generic EffDuration is defined in MortgageKeyRate
+  # Note: standard generic EffConvexity is defined in MortgageKeyRate
+  # Note: standard generic KeyRateTenor is defined in MortgageKeyRate
+  # Note: standard generic KeyRateDuration is defined in MortgageKeyRate
+  # Note: standard generic KeyRateConvexity is defined in MortgageKeyRate
+  
   setMethod("initialize",
             signature("BondTermStructure"),
             function(.Object,
@@ -65,6 +72,48 @@
                              KeyRateConvexity = KeyRateConvexity,
                              ...)
             })
+  
+  #' A method to get SpotSpread from the class BondTermStructure
+  #' 
+  #' @param object an object of the type BondTermStructure
+  #' @exportMethod SpotSpread
+  setMethod("SpotSpread", signature("BondTermStructure"),
+            function(object){object@SpotSpread})
+  
+  #' A method to get EffDuration from the class BondTermStructure
+  #' 
+  #' @param object an object of the type BondTermStructure
+  #' @exportMethod EffDuration
+  setMethod("EffDuration", signature("BondTermStructure"),
+            function(object){object@EffDuration})
+  
+  #' A method to get EffConvexity from the class BondTermStructure
+  #' 
+  #' @param object an object of the type BondTermStructure
+  #' @exportMethod EffConvexity
+  setMethod("EffConvexity", signature("BondTermStructure"),
+            function(object){object@EffConvexity})
+  
+  #' A method to get KeyRateTenor from the class BondTermStructure
+  #' 
+  #' @param object an object of the type BondTermStructure
+  #' @exportMethod KeyRateTenor
+  setMethod("KeyRateTenor", signature("BondTermStructure"),
+            function(object){object@KeyRateTenor})
+  
+  #' A method to get KeyRateDuration from the class BondTermStructure
+  #' 
+  #' @param object an object of the type BondTermStructure
+  #' @exportMethod KeyRateDuration
+  setMethod("KeyRateDuration", signature("BondTermStructure"),
+            function(object){object@KeyRateDuration})
+  
+  #' A method to get KeyRateConvexity from the class BondTermStructure
+  #' 
+  #' @param object an object of the type BondTermStructure
+  #' @exportMethod KeyRateConvexity
+  setMethod("KeyRateConvexity", signature("BondTermStructure"),
+            function(object){object@KeyRateConvexity})
   
   #' A function to calculate a bond key rate duration
   #' 

@@ -129,7 +129,7 @@
   setMethod("EffConvexity", signature("MortgageTermStructure"),
             function(object){object@EffConvexity})
   
-  #' Method to extract the KeyRateTenor from S4 class
+  #' Method to get the KeyRateTenor from S4 class
   #' @param object The name of the S4 object of type MortgageTermStructure
   #' @exportMethod KeyRateTenor
   setMethod("KeyRateTenor", signature("MortgageTermStructure"),

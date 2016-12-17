@@ -6,12 +6,13 @@
 \usage{
 MakeBondDetails(Cusip = "character", ID = "character",
   BondType = "character", Sector = "character", Issuer = "character",
-  Underwriter = "character", Coupon = numeric(), IssueDate = "character",
-  DatedDate = "character", Maturity = "character",
-  LastPmtDate = "character", NextPmtDate = "character",
-  Moody = "character", SP = "character", BondLab = "character",
-  Frequency = numeric(), BondBasis = "character", Callable = "character",
-  Putable = "character", SinkingFund = "character")
+  Underwriter = "character", OfferAmount = numeric(), Coupon = numeric(),
+  IssueDate = "character", DatedDate = "character",
+  Maturity = "character", LastPmtDate = "character",
+  NextPmtDate = "character", Moody = "character", SP = "character",
+  BondLab = "character", Frequency = numeric(), BondBasis = "character",
+  Callable = "character", Putable = "character",
+  SinkingFund = "character")
 }
 \arguments{
 \item{Cusip}{A character string the bond's cusip number}
@@ -26,7 +27,9 @@ MakeBondDetails(Cusip = "character", ID = "character",
 
 \item{Underwriter}{A character string the bond underwriter}
 
-\item{Coupon}{A character string the coupon (interest rate) 
+\item{OfferAmount}{A numeric value the offer amount of the bond}
+
+\item{Coupon}{A numeric value the coupon (interest rate) 
 paid to the investor}
 
 \item{IssueDate}{A character string the issue date of the bond}

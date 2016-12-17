@@ -45,8 +45,14 @@
   #' @param Bond.id A character string the bond's cusip number or id
   #' @export
   Bond <- function(Bond.id = "character"){
-  Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-              "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
+  Bond.Conn <- if(nchar(Bond.id) == 9){
+  gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+  "/BondData/", Bond.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
+  } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+  "/BondData/", "*", Bond.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
+  }
+  #Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+  #            "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
   Bond <- readRDS(Bond.Conn)
   on.exit(close.connection(Bond.Conn))
   return(Bond)

@@ -23,6 +23,8 @@ An S4 class representing the cusip detail of the a standard bond
 
 \item{\code{Underwriter}}{a character string the deal underwriter}
 
+\item{\code{OfferAmount}}{a numeric value the OfferAmount Issued.}
+
 \item{\code{Coupon}}{a numeric value the bond's coupon}
 
 \item{\code{IssueDate}}{a character string the issue date in mm/dd/YYYY format}

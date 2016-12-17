@@ -417,8 +417,9 @@
    "price" = Horizon.Price.Value(HorizonBond = HorizonMBS,
                                  HorizonPrice = horizon.price))
     
+    # Here will need to subtract from sinking fund scheduled principal paid
     HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
-      (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
+      (PresentValue / par.amount) * price.basis}
     
     # Replace this with PriceTypes objects  
     HorizonPrice <- sprintf("%.8f", HorizonPrice)
@@ -494,7 +495,7 @@
         CouponIncome = CouponIncome,
         PrincipalReceived = PrincipalRepaid,
         ReinvestmentIncome = ReinvestmentIncome,
-        HorizonCurrBal = original.bal - PrincipalRepaid,
+        HorizonCurrBal = par.amount - PrincipalRepaid,
         HorizonPrice = as.numeric(HorizonPrice),
         HorizonReturn = HorizonReturn,
         HorizonMos = horizon.months,

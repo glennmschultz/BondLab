@@ -31,6 +31,7 @@
   #' (Govt, Financial, Utility, etc.)
   #' @slot Issuer a character string the issuer of the bill, note, or bond.
   #' @slot Underwriter a character string the deal underwriter
+  #' @slot OfferAmount a numeric value the OfferAmount Issued.
   #' @slot Coupon a numeric value the bond's coupon
   #' @slot IssueDate a character string the issue date in mm/dd/YYYY format
   #' @slot DatedDate a character string the dated date in mm/dd/YYYY format
@@ -58,6 +59,7 @@
            Sector ="character",
            Issuer = "character",
            Underwriter = "character",
+           OfferAmount = "numeric",
            Coupon = "numeric",
            IssueDate = "character",
            DatedDate = "character",
@@ -80,6 +82,7 @@
     Sector ="character",
     Issuer = "character",
     Underwriter = "character",
+    OfferAmount = numeric(),
     Coupon = numeric(),
     IssueDate = "character",
     DatedDate = "character",
@@ -96,24 +99,32 @@
     SinkingFund = "logical")
   {standardGeneric("MakeBondDetails")})
   
-  # standard generic cusip is defined in the passthrough constructor
-  # standard generic ID is defined in the passthrough constructor
-  # standard generic BondType is defined in the passthrough constructor
-  # standard generic Sector is defined in the passthrough constructor
-  # standard generic Issuer is defined in the passthrough constructor
-  # standard generic underwriter is defined in passthrough constructor
-  # standard generic Coupon is defined in the passthrough constructor
-  # standard generic IssueDate is defined in the passthrough constructor
-  # standard generic DatedDate is defined in the passthrough constructor
-  # standard generic Maturity is defined in the passthrogh constructor
-  # standard generic LastPmtDate is defined in the passthrough constructor
-  # standard generic NextPmtDate is defined in the passthrough constructor
-  # standard generic NextPmtdate <- is defined in the passthrough constructor
-  # standard generic MoodyRating is defined in the passthrough constructor
-  # standard generic SPRating is defined in passthrough constructor
-  # standard generic BondLabRating is defined in passthough constructor
-  # standard generic Frequency is defined in passthrough constructor
-  # standard generic BondBasis is defined in passthrough constructor
+  # standard generic cusip is defined in the MBSDetails
+  # standard generic ID is defined in the MBSDetails
+  # standard generic BondType is defined in the MBSDetails
+  # standard generic Sector is defined in the MBSDetails
+  # standard generic Issuer is defined in the MBSDetails
+  # standard generic underwriter is defined in MBSDetails
+  
+  #' A standard generic function to get the par amount isssued traded
+  #' 
+  #' @param object an S4 class object
+  #' @export OfferAmount
+  setGeneric("OfferAmount", function(object)
+    {standardGeneric("OfferAmount")})
+  
+  # standard generic Coupon is defined in the MBSDetails
+  # standard generic IssueDate is defined in the MBSDetails
+  # standard generic DatedDate is defined in the MBSDetails
+  # standard generic Maturity is defined in the MBSDetails
+  # standard generic LastPmtDate is defined in the MBSDetails
+  # standard generic NextPmtDate is defined in the MBSDetails
+  # standard generic NextPmtdate <- is defined in the MBSDetails
+  # standard generic MoodyRating is defined in the MBSDetails
+  # standard generic SPRating is defined in MBSDetails
+  # standard generic BondLabRating is defined in MBSDetails
+  # standard generic Frequency is defined in MBSDetails
+  # standard generic BondBasis is defined in MBSDetails
   
   #' A standard generic function to get the slot Callable
   #' 
@@ -145,6 +156,7 @@
                    Sector ="character",
                    Issuer = "character",
                    Underwriter = "character",
+                   OfferAmount = "numeric",
                    Coupon = "numeric",
                    IssueDate = "character",
                    DatedDate = "character",
@@ -167,6 +179,7 @@
                            Sector = Sector,
                            Issuer = Issuer,
                            Underwriter = Underwriter,
+                           OfferAmount = OfferAmount,
                            Coupon = Coupon,
                            IssueDate = IssueDate,
                            DatedDate = DatedDate,
@@ -225,6 +238,13 @@
   #' @exportMethod Underwriter
   setMethod("Underwriter", signature("BondDetails"),
             function(object){object@Underwriter})
+  
+  #' Method to get OfferAmount from an S4 class of type BondDetails
+  #' 
+  #' @param object the name of the S4 object of the type BondDetails
+  #' @exportMethod OfferAmount
+  setMethod("OfferAmount", signature("BondDetails"),
+            function(object){object@Coupon})
   
   #' Method to extract Coupon from an S4 class of type BondDetails
   #' 
@@ -349,6 +369,7 @@
     Sector ="character",
     Issuer = "character",
     Underwriter = "character",
+    OfferAmount = numeric(),
     Coupon = numeric(),
     IssueDate = "character",
     DatedDate = "character",
@@ -371,6 +392,7 @@
         Sector = Sector,
         Issuer = Issuer,
         Underwriter = Underwriter,
+        OfferAmount = OfferAmount,
         Coupon = Coupon,
         IssueDate = IssueDate,
         DatedDate = DatedDate,
@@ -396,7 +418,8 @@
   #' @param Sector A character string the bond sector
   #' @param Issuer A character string the bond issuer
   #' @param Underwriter A character string the bond underwriter
-  #' @param Coupon A character string the coupon (interest rate) 
+  #' @param OfferAmount A numeric value the offer amount of the bond
+  #' @param Coupon A numeric value the coupon (interest rate) 
   #' paid to the investor
   #' @param IssueDate A character string the issue date of the bond
   #' @param DatedDate A character string the bond's dated date
@@ -422,6 +445,7 @@
     Sector ="character",
     Issuer = "character",
     Underwriter = "character",
+    OfferAmount = numeric(),
     Coupon = numeric(),
     IssueDate = "character",
     DatedDate = "character",
@@ -444,6 +468,7 @@
       Sector = Sector,
       Issuer = Issuer,
       Underwriter = Underwriter,
+      OfferAmount = OfferAmount,
       Coupon = Coupon,
       IssueDate = IssueDate,
       DatedDate = DatedDate,
@@ -461,6 +486,3 @@
       )
     SaveBond(filename = temp)
   }
-
-
-        

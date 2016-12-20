@@ -14,3 +14,10 @@
 ^\.travis\.yml$
 ^packrat/
 ^\.Rprofile$
+^images$
+^javascripts$
+^stylesheets$
+^\.params.json$
+^\.index.html$
+^params\.json$
+^index\.html$

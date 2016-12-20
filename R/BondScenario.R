@@ -445,7 +445,7 @@
       proceeds = HorizonProceeds)
     
     # From the beginning cashflow calculation get the cashflow recieved by the 
-    # investor.
+    # investor.  This should be the matrix in the book
       
     CouponIncome <- sum(CouponPmt(BondCashFlow)[1:NumberPaymentReceived])
     ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:NumberPaymentReceived]

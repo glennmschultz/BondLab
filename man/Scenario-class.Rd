@@ -3,11 +3,17 @@
 \docType{class}
 \name{Scenario-class}
 \alias{Scenario-class}
-\title{An S4 class Scenario to describing the interest rate scenario
-and interest rate shift function applied the curve}
+\title{An S4 class Scenario}
 \description{
-An S4 class Scenario to describing the interest rate scenario
-and interest rate shift function applied the curve
+The interest rate shift function applied the yield curve.  The shift may
+be applied to the spot rate curve slot of the object TermStructure or the
+rates data object.  The BondLab convention is to identify shifts applied to
+the sopt rate curve with a trailing for example D50s is down 50bps applied 
+to the spot rate curve.  D50 is down 50bps applied to the rates data object.
+In all cases the curve shift is not allowed to result in a negative rate. 
+Thus, all shifts are subject to a floor of 0.01.  It is recommend that those
+users wishing to create custom yield shift scenarios avoid 0 or negative 
+rates when creating custom shift scenarios.
 }
 \section{Slots}{
 
@@ -23,4 +29,14 @@ eg("Parallel", "Twist")}
 
 \item{\code{Formula}}{A function defining the interest rate shift}
 }}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
+}
 

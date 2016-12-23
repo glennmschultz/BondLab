@@ -41,6 +41,21 @@ or spread to  the curve}
 \item{horizon.price}{A numeric value the horizon price}
 }
 \description{
-A function to compute the total return of a Bond
+A function to compute the total return of a Bond.  The function first 
+calculates the bond cashflows as of settlment date, rolls the bond forward
+per the horizon months, recomputes the cash flows, maturity and average
+life and prices the bond per the user's input.  The cash flow received, 
+reinvestment income, and horizon price are used to compute the investor's
+total return.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
 }
 

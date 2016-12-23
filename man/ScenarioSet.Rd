@@ -2,14 +2,14 @@
 % Please edit documentation in R/MortgageScenario.R
 \name{ScenarioSet}
 \alias{ScenarioSet}
-\title{A standard generic function to extract the slot Scenario}
+\title{A standard generic function to get the slot Scenario}
 \usage{
 ScenarioSet(object)
 }
 \arguments{
-\item{object}{An S4 class object of the type MtgScenarioSet}
+\item{object}{An S4 class object of the type MtgScenarioSet or BondScenarioSet}
 }
 \description{
-A standard generic function to extract the slot Scenario
+A standard generic function to get the slot Scenario
 }
 

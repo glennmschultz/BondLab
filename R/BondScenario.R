@@ -21,11 +21,16 @@
   #' @include BondTermStructure.R MortgageScenario.R CurveSpreads.R
   NULL
   
-  #' An S4 class a list of bond scenarios for analysis
-  #' 
-  #' The class BondScenarioSet is a list of classes of the type scenario.  The
-  #' class is used to facilitate multiple scenario analysis by providing a user
-  #' defined list for scenario analysis
+  #' @title An S4 class BondScenarioSet
+  #' @family Scenario Analysis
+  #' @description 
+  #' The class \strong{BondScenarioSet} is a list of classes of the type 
+  #' \strong{Scenario}.
+  #' @details 
+  #' The BondScenarioSet, like its cousin the MortgageScenarioSet class is used 
+  #' to facilitate multiple scenario analysis.  Both classes make use of the 
+  #' same scenario classes.  The motivating reason for creating distinct classes 
+  #' is to clearly delineate the mortgage analysis and bond analysis.
   #' @slot ScenarioSet A list of the classes of the type scenario
   #' @exportClass BondScenarioSet
   setClass("BondScenarioSet",
@@ -33,6 +38,7 @@
              ScenarioSet = "list"
            ))
   
+  #' @export
   setGeneric("BondScenarioSet", function(object)
              {standardGeneric("BondScenarioSet")})
   
@@ -49,25 +55,39 @@
                             ...)
             })
 
-  #' A Method to extract the slot Scenario from the object BondScenarioSet
-  #' 
-  #' @param object The name of an S4 object of the type BondScenarioSet
+  #' @title A method to get ScenarioSet from the object BondScenarioSet
+  #' @family Scenario Analysis
+  #' @description 
+  #' A method to get ScenarioSet from BondScenarioSet
+  #' \code{ScenarioSet(object)} is a getter method applied to the object
+  #' BondScenarioSet the method also applies to the object MortgageScenarioSet
+  #' @details
+  #' The method "gets" the slot ScenarioSet from the class BondScenarioSet
+  #' @param object is the name of the object of the type BondScenarioSet
   #' @exportMethod ScenarioSet
   setMethod("ScenarioSet", signature("BondScenarioSet"),
             function(object){object@ScenarioSet})
   
-  #' BondScenarioSet is a constructor function for the class BondScenarioSet
+  #' @title BondScenarioSet - constructor function
+  #' @family Scenario Analysis
+  #' @description 
+  #' A constructor function for the class BondScenarioSet.
   #' 
   #' @param ScenarioSet a list of the scenario classes used for analysis
   #' @export BondScenarioSet
   BondScenarioSet <- function(ScenarioSet = "list"){
     new("BondScenarioSet",
-        ScenarioSet = ScenarioSet)
-  }
+        ScenarioSet = ScenarioSet)}
   
-  #' An S4 class the results of bond total return scenario analysis
-  #' 
-  #' The class BondReturn holds the results of bond total return analysis
+  #' @title Bond Total Return Metrics - an S4 class
+  #' @family Scenario Analysis
+  #' @description 
+  #' The class BondReturn holds the results of bond total return analysis.
+  #' Bond total return is the sum of coupon income, principal received,
+  #' reinvestment income, and price appreciation or depreciation. In addition,
+  #' most investors also track horizon current balance.  The BondReturn class
+  #' differs from the MortgageReturn class in that the MortgageReturn class
+  #' includes scheduled principal and prepaid principal.
   #' @slot CouponIncome A numeric value the coupon income received over the 
   #' investment horizon
   #' @slot PrincipalReceived A numeric value the scheduled principal 
@@ -122,7 +142,12 @@
                              HorizonReturn = HorizonReturn,
                              HorizonMos = HorizonMos)
             })
-  #' A method to extract CouponIncome from S4 class BondReturn
+  #' @title BondReturn CouponIncome
+  #' @family Scenario Analysis
+  #' @description 
+  #' A method to get the \strong{CouponIncome} paid over the scenario horzon
+  #' to the investor.  Coupon income reported as the sum of the coupon income 
+  #' received by the investor.
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod CouponIncome
   setMethod("CouponIncome", signature("BondReturn"),
@@ -164,12 +189,13 @@
   setMethod("HorizonMos", signature("BondReturn"),
             function(object){object@HorizonMos})
   
-  #' An S4 class the bond return scenario analysis
-  #' 
-  #' The SuperClass BondScenario holds the results of a scenario analysis run
-  #' BondScenario contains the following classes: TermStructure, BondCashFlow,
-  #' BondTermStructure, BondReturn, CurveSpreads, and Scenario.  BondScenario
-  #' inherts the getters and setters of the above classes.
+  #' @title An S4 class the bond return scenario analysis
+  #' @family Scenario Analysis
+  #' @description 
+  #' The class BondScenario holds the results of a scenario analysis run
+  #' BondScenario contains the following super classes: TermStructure, 
+  #' BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, and Scenario.
+  #' BondScenario inherts the getters and setters of the above classes.
   #' @exportClass BondScenario
   setClass("BondScenario",
            representation(),
@@ -179,7 +205,7 @@
                         "BondReturn",
                         "CurveSpreads",
                         "Scenario"))
-  
+  #' @export
   setGeneric("BondScenario", function(bond.id = "character",
                                       settlement.date = "character",
                                       rates.data = "character",
@@ -193,9 +219,15 @@
                                       horizon.price = NULL)
     {standardGeneric("BondScenario")})
   
-  #' Bond Scenario Analysis
-  #' 
-  #' A function to compute the total return of a Bond
+  #' @title Bond Scenario Analysis
+  #' @family Scenario Analysis
+  #' @description 
+  #' A function to compute the total return of a Bond.  The function first 
+  #' calculates the bond cashflows as of settlment date, rolls the bond forward
+  #' per the horizon months, recomputes the cash flows, maturity and average
+  #' life and prices the bond per the user's input.  The cash flow received, 
+  #' reinvestment income, and horizon price are used to compute the investor's
+  #' total return.
   #' @param bond.id A character string referencing an object of the type BondDetails
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
   #' @param rates.data A character string an object yield curve

@@ -3,9 +3,14 @@
 \docType{class}
 \name{BondReturn-class}
 \alias{BondReturn-class}
-\title{An S4 class the results of bond total return scenario analysis}
+\title{Bond Total Return Metrics - an S4 class}
 \description{
-The class BondReturn holds the results of bond total return analysis
+The class BondReturn holds the results of bond total return analysis.
+Bond total return is the sum of coupon income, principal received,
+reinvestment income, and price appreciation or depreciation. In addition,
+most investors also track horizon current balance.  The BondReturn class
+differs from the MortgageReturn class in that the MortgageReturn class
+includes scheduled principal and prepaid principal.
 }
 \section{Slots}{
 
@@ -29,4 +34,14 @@ investment horizon}
 \item{\code{HorizonMos}}{A numeric value the number of months to 
 the scenario horizon date}
 }}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
+}
 

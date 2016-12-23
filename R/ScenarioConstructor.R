@@ -24,8 +24,18 @@
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
   
-  #' An S4 class Scenario to describing the interest rate scenario
-  #' and interest rate shift function applied the curve
+  #' @title An S4 class Scenario
+  #' @family Scenario Analysis
+  #' @description 
+  #' The interest rate shift function applied the yield curve.  The shift may
+  #' be applied to the spot rate curve slot of the object TermStructure or the
+  #' rates data object.  The BondLab convention is to identify shifts applied to
+  #' the sopt rate curve with a trailing for example D50s is down 50bps applied 
+  #' to the spot rate curve.  D50 is down 50bps applied to the rates data object.
+  #' In all cases the curve shift is not allowed to result in a negative rate. 
+  #' Thus, all shifts are subject to a floor of 0.01.  It is recommend that those
+  #' users wishing to create custom yield shift scenarios avoid 0 or negative 
+  #' rates when creating custom shift scenarios.
   #' @slot Name A character the name of the scenario
   #' @slot Type A character the type of scenario eg("Immediate", "Gradual")
   #' @slot ShiftType A character indicating the type shift 
@@ -42,6 +52,7 @@
            Formula = "function"
          ))
   
+  #' @export
   setGeneric("Scenario", function(Name = "character",
                                       Type = "character",
                                       ShiftType = "character",
@@ -61,7 +72,6 @@
   setGeneric("Type", function(object)
   {standardGeneric("Type")})
   
-  
   #' A standard generic to access the slot ShiftType
   #' @param object An S4 class object of the type Scenario
   #' @export ShiftType
@@ -79,7 +89,6 @@
   #' @export ScenarioFormula
   setGeneric("ScenarioFormula", function(object)
   {standardGeneric("ScenarioFormula")})
-  
 
   setMethod("initialize",
           signature("Scenario"),
@@ -99,7 +108,11 @@
                           ...)
                           })
   
-  #' A Method to extract scenario name from an S4 class Scenario
+  #' @title Scenario Name
+  #' @family Scenario Analysis
+  #' @description A method to get \strong{Name} from the object scenario.  This
+  #' can be useful for those investors saving the results of multiple scenario
+  #' analysis.
   #' @param object The name of the object of the S4 class of type Scenario
   #' @exportMethod Name
   setMethod("Name", signature("Scenario"),

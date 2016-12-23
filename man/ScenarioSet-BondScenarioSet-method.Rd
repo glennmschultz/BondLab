@@ -3,14 +3,29 @@
 \docType{methods}
 \name{ScenarioSet,BondScenarioSet-method}
 \alias{ScenarioSet,BondScenarioSet-method}
-\title{A Method to extract the slot Scenario from the object BondScenarioSet}
+\title{A method to get ScenarioSet from the object BondScenarioSet}
 \usage{
 \S4method{ScenarioSet}{BondScenarioSet}(object)
 }
 \arguments{
-\item{object}{The name of an S4 object of the type BondScenarioSet}
+\item{object}{is the name of the object of the type BondScenarioSet}
 }
 \description{
-A Method to extract the slot Scenario from the object BondScenarioSet
+A method to get ScenarioSet from BondScenarioSet
+\code{ScenarioSet(object)} is a getter method applied to the object
+BondScenarioSet the method also applies to the object MortgageScenarioSet
+}
+\details{
+The method "gets" the slot ScenarioSet from the class BondScenarioSet
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}}
 }
 

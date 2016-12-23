@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondScenario.R
 \name{BondScenarioSet}
 \alias{BondScenarioSet}
-\title{BondScenarioSet is a constructor function for the class BondScenarioSet}
+\title{BondScenarioSet - constructor function}
 \usage{
 BondScenarioSet(ScenarioSet = "list")
 }
@@ -10,6 +10,16 @@ BondScenarioSet(ScenarioSet = "list")
 \item{ScenarioSet}{a list of the scenario classes used for analysis}
 }
 \description{
-BondScenarioSet is a constructor function for the class BondScenarioSet
+A constructor function for the class BondScenarioSet.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
 }
 

@@ -5,9 +5,19 @@
 \alias{BondScenario-class}
 \title{An S4 class the bond return scenario analysis}
 \description{
-The SuperClass BondScenario holds the results of a scenario analysis run
-BondScenario contains the following classes: TermStructure, BondCashFlow,
-BondTermStructure, BondReturn, CurveSpreads, and Scenario.  BondScenario
-inherts the getters and setters of the above classes.
+The class BondScenario holds the results of a scenario analysis run
+BondScenario contains the following super classes: TermStructure, 
+BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, and Scenario.
+BondScenario inherts the getters and setters of the above classes.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
 }
 

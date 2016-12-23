@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Name,Scenario-method}
 \alias{Name,Scenario-method}
-\title{A Method to extract scenario name from an S4 class Scenario}
+\title{Scenario Name}
 \usage{
 \S4method{Name}{Scenario}(object)
 }
@@ -11,6 +11,18 @@
 \item{object}{The name of the object of the S4 class of type Scenario}
 }
 \description{
-A Method to extract scenario name from an S4 class Scenario
+A method to get \strong{Name} from the object scenario.  This
+can be useful for those investors saving the results of multiple scenario
+analysis.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
 }
 

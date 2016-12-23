@@ -3,7 +3,7 @@
 \docType{methods}
 \name{CouponIncome,BondReturn-method}
 \alias{CouponIncome,BondReturn-method}
-\title{A method to extract CouponIncome from S4 class BondReturn}
+\title{BondReturn CouponIncome}
 \usage{
 \S4method{CouponIncome}{BondReturn}(object)
 }
@@ -11,6 +11,18 @@
 \item{object}{the name of an S4 class of type BondReturn}
 }
 \description{
-A method to extract CouponIncome from S4 class BondReturn
+A method to get the \strong{CouponIncome} paid over the scenario horzon
+to the investor.  Coupon income reported as the sum of the coupon income 
+received by the investor.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
 }
 

@@ -3,15 +3,30 @@
 \docType{class}
 \name{BondScenarioSet-class}
 \alias{BondScenarioSet-class}
-\title{An S4 class a list of bond scenarios for analysis}
+\title{An S4 class BondScenarioSet}
 \description{
-The class BondScenarioSet is a list of classes of the type scenario.  The
-class is used to facilitate multiple scenario analysis by providing a user
-defined list for scenario analysis
+The class \strong{BondScenarioSet} is a list of classes of the type 
+\strong{Scenario}.
+}
+\details{
+The BondScenarioSet, like its cousin the MortgageScenarioSet class is used 
+to facilitate multiple scenario analysis.  Both classes make use of the 
+same scenario classes.  The motivating reason for creating distinct classes 
+is to clearly delineate the mortgage analysis and bond analysis.
 }
 \section{Slots}{
 
 \describe{
 \item{\code{ScenarioSet}}{A list of the classes of the type scenario}
 }}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenarioSet}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScenarioSet,BondScenarioSet-method}}
+}
 

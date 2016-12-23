@@ -35,8 +35,9 @@
   setGeneric("MortgageScenarioSet", function(Scenario = "list")
   {standardGeneric("MortgageScenarioSet")})
   
-  #' A standard generic function to extract the slot Scenario
-  #' @param object An S4 class object of the type MtgScenarioSet
+  #' A standard generic function to get the slot Scenario
+  #' @param object 
+  #' An S4 class object of the type MtgScenarioSet or BondScenarioSet
   #' @export
   setGeneric("ScenarioSet", function(object)
   {standardGeneric("ScenarioSet")})

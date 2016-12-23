@@ -21,3 +21,4 @@
 ^\.index.html$
 ^params\.json$
 ^index\.html$
+^sandbox$

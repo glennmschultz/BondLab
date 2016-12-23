@@ -6,12 +6,10 @@
 (FRED) database.  Full swap curve data is reported with a lag of 
 approximately four days due to delayed reporting of LIBOR rates by ICE}
 \usage{
-GetSwapCurve(CurveDate = "character", APIKey = "character")
+GetSwapCurve(CurveDate = "character")
 }
 \arguments{
 \item{CurveDate}{a character the swap curve date}
-
-\item{APIKey}{a character the user API Key provided by FRED}
 }
 \description{
 A function to call swap curve data from the St. Louis Federal Reserve

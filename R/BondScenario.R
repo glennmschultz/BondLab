@@ -148,7 +148,7 @@
                         "BondReturn",
                         "CurveSpreads",
                         "Scenario"))
-  #' @export
+  
   setGeneric("BondScenario", function(bond.id = "character",
                                       settlement.date = "character",
                                       rates.data = "character",
@@ -161,6 +161,14 @@
                                       horizon.OAS = NULL,
                                       horizon.price = NULL)
     {standardGeneric("BondScenario")})
+  
+  setMethod("initialize",
+            signature("BondScenario"),
+            function(.Object,
+                     ...)
+            {callNextMethod(.Object,
+                            ...)
+            })
   
   #' @title Bond Scenario Analysis
   #' @family Scenario Analysis

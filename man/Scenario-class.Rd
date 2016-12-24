@@ -32,11 +32,8 @@ eg("Parallel", "Twist")}
 \seealso{
 Other Scenario.Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
-  \code{\link{BondScenarioSet-class}},
-  \code{\link{BondScenarioSet}},
   \code{\link{BondScenario}},
   \code{\link{CouponIncome,BondReturn-method}},
-  \code{\link{Name,Scenario-method}},
-  \code{\link{ScenarioSet,BondScenarioSet-method}}
+  \code{\link{Name,Scenario-method}}
 }
 

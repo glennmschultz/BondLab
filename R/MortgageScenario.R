@@ -21,52 +21,6 @@
   #' @include PrepaymentModel.R MortgageKeyRate.R ModelToCPR.R
   NULL
   
-  #' An S4 Class a list of mortgage scenarios for analysis
-  #'
-  #' The class MortgageScenarioSet is a list of classes of the type scenario.
-  #' The class is used to facilitate multiple scenario analysis by providing
-  #' the user defined list of scenarios for analysis
-  #' @slot ScenarioSet A list of the classes of type scenario
-  #' @exportClass MortgageScenarioSet
-  setClass("MortgageScenarioSet",
-           representation(
-             ScenarioSet = "list"))
-  
-  setGeneric("MortgageScenarioSet", function(Scenario = "list")
-  {standardGeneric("MortgageScenarioSet")})
-  
-  #' A standard generic function to get the slot Scenario
-  #' @param object 
-  #' An S4 class object of the type MtgScenarioSet or BondScenarioSet
-  #' @export
-  setGeneric("ScenarioSet", function(object)
-  {standardGeneric("ScenarioSet")})
-  
-  setMethod("initialize",
-            signature("MortgageScenarioSet"),
-            function(.Object,
-                     ScenarioSet = "list",
-                     ...)
-            {
-              callNextMethod(.Object,
-                             ScenarioSet = ScenarioSet,
-                             ...)
-            })
-  
-  #' A method to extract the Scenario list from S4 class MtgScenarioSet
-  #' @param object a list of the S4 objects of the type Scenario
-  #' @exportMethod ScenarioSet
-  setMethod("ScenarioSet", signature("MortgageScenarioSet"),
-            function(object){object@ScenarioSet})
-  
-  #' MortgageScenarioSet is the constructor function for the class Mortgage
-  #' ScenarioSet
-  #' @param ScenarioSet a list the of scenario classes for analysis
-  #' @export MortgageScenarioSet 
-  MortgageScenarioSet <- function(ScenarioSet = "list"){
-    new("MortgageScenarioSet",
-        ScenarioSet = ScenarioSet)
-  }
   
   #' An S4 class the results of mortgage total return analysis 
   #' 

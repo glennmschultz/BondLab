@@ -21,63 +21,6 @@
   #' @include BondTermStructure.R MortgageScenario.R CurveSpreads.R
   NULL
   
-  #' @title An S4 class BondScenarioSet
-  #' @family Scenario Analysis
-  #' @description 
-  #' The class \strong{BondScenarioSet} is a list of classes of the type 
-  #' \strong{Scenario}.
-  #' @details 
-  #' The BondScenarioSet, like its cousin the MortgageScenarioSet class is used 
-  #' to facilitate multiple scenario analysis.  Both classes make use of the 
-  #' same scenario classes.  The motivating reason for creating distinct classes 
-  #' is to clearly delineate the mortgage analysis and bond analysis.
-  #' @slot ScenarioSet A list of the classes of the type scenario
-  #' @exportClass BondScenarioSet
-  setClass("BondScenarioSet",
-           representation(
-             ScenarioSet = "list"
-           ))
-  
-  #' @export
-  setGeneric("BondScenarioSet", function(object)
-             {standardGeneric("BondScenarioSet")})
-  
-  # Note: standardGeneric ScenarioSet is found in MortgageScenario.R
-  
-  setMethod("initialize",
-            signature("BondScenarioSet"),
-            function(.Object,
-                     ScenarioSet = "list",
-                     ...)
-            {
-              callNextMethod(.Object,
-                            ScenarioSet = ScenarioSet,
-                            ...)
-            })
-
-  #' @title A method to get ScenarioSet from the object BondScenarioSet
-  #' @family Scenario Analysis
-  #' @description 
-  #' A method to get ScenarioSet from BondScenarioSet
-  #' \code{ScenarioSet(object)} is a getter method applied to the object
-  #' BondScenarioSet the method also applies to the object MortgageScenarioSet
-  #' @details
-  #' The method "gets" the slot ScenarioSet from the class BondScenarioSet
-  #' @param object is the name of the object of the type BondScenarioSet
-  #' @exportMethod ScenarioSet
-  setMethod("ScenarioSet", signature("BondScenarioSet"),
-            function(object){object@ScenarioSet})
-  
-  #' @title BondScenarioSet - constructor function
-  #' @family Scenario Analysis
-  #' @description 
-  #' A constructor function for the class BondScenarioSet.
-  #' 
-  #' @param ScenarioSet a list of the scenario classes used for analysis
-  #' @export BondScenarioSet
-  BondScenarioSet <- function(ScenarioSet = "list"){
-    new("BondScenarioSet",
-        ScenarioSet = ScenarioSet)}
   
   #' @title Bond Total Return Metrics - an S4 class
   #' @family Scenario Analysis

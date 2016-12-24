@@ -3,14 +3,30 @@
 \docType{methods}
 \name{ReinvestmentIncome,BondReturn-method}
 \alias{ReinvestmentIncome,BondReturn-method}
-\title{A method to extract ReinvestmentIncome from S4 class BondReturn}
+\title{Bond Return ReinvestmentIncome}
 \usage{
 \S4method{ReinvestmentIncome}{BondReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type BondReturn}
+\item{object}{An S4 class of type BondReturn}
 }
 \description{
-A method to extract ReinvestmentIncome from S4 class BondReturn
+A method to get \strong{ReinvestmentIncome} over the scenario
+horizon to the investor. ReinvestmentIncome is reported as the sum of the
+reinvestment income received by the investor.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{Scenario-class}}
 }
 

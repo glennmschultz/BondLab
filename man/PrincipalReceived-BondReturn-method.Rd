@@ -3,14 +3,30 @@
 \docType{methods}
 \name{PrincipalReceived,BondReturn-method}
 \alias{PrincipalReceived,BondReturn-method}
-\title{A method to extract ScheduledPrinReceived from S4 class BondReturn}
+\title{Bond Return PrincipalReceived}
 \usage{
 \S4method{PrincipalReceived}{BondReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type BondReturn}
+\item{object}{An S4 class of type BondReturn}
 }
 \description{
-A method to extract ScheduledPrinReceived from S4 class BondReturn
+A method to get \strong{ScheduledPrinReceived} over the 
+scenario horizon to the investor.  SceheduledPrincipalReceived is reported 
+as the sum of scheduled principal received by the investor.
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
+  \code{\link{Scenario-class}}
 }
 

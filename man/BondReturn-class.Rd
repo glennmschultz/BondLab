@@ -3,7 +3,7 @@
 \docType{class}
 \name{BondReturn-class}
 \alias{BondReturn-class}
-\title{Bond Total Return Metrics - an S4 class}
+\title{Bond Total Return Metrics}
 \description{
 The class BondReturn holds the results of bond total return analysis.
 Bond total return is the sum of coupon income, principal received,
@@ -38,7 +38,14 @@ the scenario horizon date}
 Other Scenario.Analysis: \code{\link{BondScenario-class}},
   \code{\link{BondScenario}},
   \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
   \code{\link{Name,Scenario-method}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
   \code{\link{Scenario-class}}
 }
 

@@ -3,18 +3,24 @@
 \docType{class}
 \name{BondScenario-class}
 \alias{BondScenario-class}
-\title{An S4 class the bond return scenario analysis}
+\title{BondScenario class}
 \description{
-The class BondScenario holds the results of a scenario analysis run
-BondScenario contains the following super classes: TermStructure, 
-BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, and Scenario.
-BondScenario inherts the getters and setters of the above classes.
+The class \strong{BondScenario} contains the following super classes: 
+TermStructure, BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, 
+and Scenario.
 }
 \seealso{
 Other Scenario.Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario}},
   \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
   \code{\link{Name,Scenario-method}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
   \code{\link{Scenario-class}}
 }
 

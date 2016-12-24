@@ -3,23 +3,30 @@
 \docType{methods}
 \name{CouponIncome,BondReturn-method}
 \alias{CouponIncome,BondReturn-method}
-\title{BondReturn CouponIncome}
+\title{Bond Return CouponIncome}
 \usage{
 \S4method{CouponIncome}{BondReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type BondReturn}
+\item{object}{An S4 class of type BondReturn}
 }
 \description{
-A method to get the \strong{CouponIncome} paid over the scenario horzon
-to the investor.  Coupon income reported as the sum of the coupon income 
+A method to get the \strong{CouponIncome} paid over the scenario horizon
+to the investor.  Coupon income is reported as the sum of the coupon income 
 received by the investor.
 }
 \seealso{
 Other Scenario.Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
   \code{\link{BondScenario}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
   \code{\link{Name,Scenario-method}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
   \code{\link{Scenario-class}}
 }
 

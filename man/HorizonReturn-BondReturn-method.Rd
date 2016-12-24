@@ -3,7 +3,7 @@
 \docType{methods}
 \name{HorizonReturn,BondReturn-method}
 \alias{HorizonReturn,BondReturn-method}
-\title{A method to extract HorizonReturn from S4 class BondReturn}
+\title{Bond Return HorizonReturn}
 \usage{
 \S4method{HorizonReturn}{BondReturn}(object)
 }
@@ -11,6 +11,20 @@
 \item{object}{the name of an S4 class of type BondReturn}
 }
 \description{
-A method to extract HorizonReturn from S4 class BondReturn
+A method to get \string{HorizonReturn}
+}
+\seealso{
+Other Scenario.Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
+  \code{\link{Scenario-class}}
 }
 

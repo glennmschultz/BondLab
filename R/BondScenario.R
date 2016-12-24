@@ -22,7 +22,7 @@
   NULL
   
   
-  #' @title Bond Total Return Metrics - an S4 class
+  #' @title Bond Total Return Metrics
   #' @family Scenario Analysis
   #' @description 
   #' The class BondReturn holds the results of bond total return analysis.
@@ -56,7 +56,9 @@
   
   # Note: standardGeneric CouponIncome is found in MortgageScenario.R
   
-  # ' A standard generic function to access the slot PrincipalRecevied
+  #' @title PrincipalReceived generic
+  #' @family Scenario Analysis
+  #' @description A  generic function for method dispatch
   setGeneric("PrincipalReceived", function(object)
     {standardGeneric("PrincipalReceived")})
   
@@ -85,60 +87,77 @@
                              HorizonReturn = HorizonReturn,
                              HorizonMos = HorizonMos)
             })
-  #' @title BondReturn CouponIncome
+  #' @title Bond Return CouponIncome
   #' @family Scenario Analysis
   #' @description 
-  #' A method to get the \strong{CouponIncome} paid over the scenario horzon
-  #' to the investor.  Coupon income reported as the sum of the coupon income 
+  #' A method to get the \strong{CouponIncome} paid over the scenario horizon
+  #' to the investor.  Coupon income is reported as the sum of the coupon income 
   #' received by the investor.
-  #' @param object the name of an S4 class of type BondReturn
+  #' @param object An S4 class of type BondReturn
   #' @exportMethod CouponIncome
   setMethod("CouponIncome", signature("BondReturn"),
             function(object){object@CouponIncome})
   
-  #' A method to extract ScheduledPrinReceived from S4 class BondReturn
-  #' @param object the name of an S4 class of type BondReturn
+  #' @title Bond Return PrincipalReceived 
+  #' @family Scenario Analysis
+  #' @description A method to get \strong{ScheduledPrinReceived} over the 
+  #' scenario horizon to the investor.  SceheduledPrincipalReceived is reported 
+  #' as the sum of scheduled principal received by the investor.
+  #' @param object An S4 class of type BondReturn
   #' @exportMethod ScheduledPrinReceived
   setMethod("PrincipalReceived", signature("BondReturn"),
             function(object){object@PrincipalReceived})
   
-  #' A method to extract ReinvestmentIncome from S4 class BondReturn
-  #' @param object the name of an S4 class of type BondReturn
+  #' @title Bond Return ReinvestmentIncome
+  #' @family Scenario Analysis
+  #' @description A method to get \strong{ReinvestmentIncome} over the scenario
+  #' horizon to the investor. ReinvestmentIncome is reported as the sum of the
+  #' reinvestment income received by the investor.
+  #' @param object An S4 class of type BondReturn
   #' @exportMethod ReinvestmentIncome
   setMethod("ReinvestmentIncome", signature("BondReturn"),
             function(object){object@ReinvestmentIncome})
   
-  #' A method to extract HorizonCurrBal from S4 class BondReturn
-  #' @param object the name of an S4 class of type BondReturn
+  #' @title Bond Return HorizonCurrBal
+  #' @family Scenario Analysis
+  #' @desription A method to get \strong{HorizonCurrBal} at the end of the
+  #' scenario horizon.
+  #' @param object An S4 class of type BondReturn
   #' @exportMethod HorizonCurrBal
   setMethod("HorizonCurrBal", signature("BondReturn"),
             function(object){object@HorizonCurrBal})
   
-  #' A method to extract HorizonPrice from S4 class BondReturn
-  #' @param object the name of an S4 class of tyoe BondReturn
+  #' @title Bond Return HorizonPrice
+  #' @family Scenario Analysis
+  #' @description A method to get \strong{HorizonPrice} at the end of the 
+  #' scenario horizon.
+  #' @param object An S4 class of type BondReturn
   #' @exportMethod HorizonPrice
   setMethod("HorizonPrice", signature("BondReturn"),
             function(object){object@HorizonPrice})
   
-  #' A method to extract HorizonReturn from S4 class BondReturn
+  #' @title Bond Return HorizonReturn
+  #' @family Scenario Analysis
+  #' @description A method to get \string{HorizonReturn}
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod HorizonReturn
   setMethod("HorizonReturn", signature("BondReturn"),
             function(object){object@HorizonReturn})
   
-  #' A method to extract HorizonMos from S4 class BondReturn
+  #' @title Bond Return HorizonMos
+  #' @family Scenario Analysis
+  #' @desciption A method to get \strong{HorizonMos} over which a scenario covers
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod HorizonMos
   setMethod("HorizonMos", signature("BondReturn"),
             function(object){object@HorizonMos})
   
-  #' @title An S4 class the bond return scenario analysis
+  #' @title BondScenario class
   #' @family Scenario Analysis
   #' @description 
-  #' The class BondScenario holds the results of a scenario analysis run
-  #' BondScenario contains the following super classes: TermStructure, 
-  #' BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, and Scenario.
-  #' BondScenario inherts the getters and setters of the above classes.
+  #' The class \strong{BondScenario} contains the following super classes: 
+  #' TermStructure, BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, 
+  #' and Scenario.
   #' @exportClass BondScenario
   setClass("BondScenario",
            representation(),

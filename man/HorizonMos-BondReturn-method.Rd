@@ -10,6 +10,9 @@
 \arguments{
 \item{object}{the name of an S4 class of type BondReturn}
 }
+\description{
+A method to get \strong{HorizonMos} over which a scenario covers
+}
 \seealso{
 Other Scenario.Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},

@@ -59,6 +59,7 @@
   #' @title PrincipalReceived generic
   #' @family Scenario Analysis
   #' @description A  generic function for method dispatch
+  #' @param object an object of the type BondScenario
   setGeneric("PrincipalReceived", function(object)
     {standardGeneric("PrincipalReceived")})
   
@@ -120,7 +121,7 @@
   
   #' @title Bond Return HorizonCurrBal
   #' @family Scenario Analysis
-  #' @desription A method to get \strong{HorizonCurrBal} at the end of the
+  #' @description A method to get \strong{HorizonCurrBal} at the end of the
   #' scenario horizon.
   #' @param object An S4 class of type BondReturn
   #' @exportMethod HorizonCurrBal
@@ -138,7 +139,7 @@
   
   #' @title Bond Return HorizonReturn
   #' @family Scenario Analysis
-  #' @description A method to get \string{HorizonReturn}
+  #' @description A method to get \strong{HorizonReturn}
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod HorizonReturn
   setMethod("HorizonReturn", signature("BondReturn"),
@@ -146,7 +147,7 @@
   
   #' @title Bond Return HorizonMos
   #' @family Scenario Analysis
-  #' @desciption A method to get \strong{HorizonMos} over which a scenario covers
+  #' @description A method to get \strong{HorizonMos} over which a scenario covers
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod HorizonMos
   setMethod("HorizonMos", signature("BondReturn"),
@@ -192,12 +193,12 @@
   #' @title Bond Scenario Analysis
   #' @family Scenario Analysis
   #' @description 
-  #' A function to compute the total return of a Bond.  The function first 
-  #' calculates the bond cashflows as of settlment date, rolls the bond forward
-  #' per the horizon months, recomputes the cash flows, maturity and average
-  #' life and prices the bond per the user's input.  The cash flow received, 
-  #' reinvestment income, and horizon price are used to compute the investor's
-  #' total return.
+  #' A function to compute the \strong{total return} of a Bond.  The function 
+  #' first calculates the bond cashflows as of settlment date, rolls the bond 
+  #' forward per the horizon months, recomputes the cash flows, maturity and 
+  #' average life and prices the bond per the user's input.  The cash flow 
+  #' received, reinvestment income, and horizon price are used to compute the
+  #' investor's total return.
   #' @param bond.id A character string referencing an object of the type BondDetails
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
   #' @param rates.data A character string an object yield curve

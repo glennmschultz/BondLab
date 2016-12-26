@@ -11,7 +11,7 @@
 \item{object}{the name of an S4 class of type BondReturn}
 }
 \description{
-A method to get \string{HorizonReturn}
+A method to get \strong{HorizonReturn}
 }
 \seealso{
 Other Scenario.Analysis: \code{\link{BondReturn-class}},

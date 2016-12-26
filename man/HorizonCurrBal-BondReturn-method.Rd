@@ -10,6 +10,10 @@
 \arguments{
 \item{object}{An S4 class of type BondReturn}
 }
+\description{
+A method to get \strong{HorizonCurrBal} at the end of the
+scenario horizon.
+}
 \seealso{
 Other Scenario.Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},

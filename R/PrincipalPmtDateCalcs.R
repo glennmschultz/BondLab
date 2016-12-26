@@ -36,8 +36,9 @@
 
   #' A function to subtract months to a date
   #'
-  #' @param Date A character string the data to which the number of months are subtracted
-  #' @param Months A numeric vlaue the number of months to subtract from Date
+  #' @param Date A character string the date to which the number of months 
+  #' are subtracted
+  #' @param Months A numeric value the number of months to subtract from Date
   #' @importFrom lubridate %m-%
   #' @examples SubtractMonths("03-01-2015", 360)
   #' @export

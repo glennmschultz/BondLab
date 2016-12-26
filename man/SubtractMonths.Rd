@@ -7,9 +7,10 @@
 SubtractMonths(Date = "character", Months = numeric())
 }
 \arguments{
-\item{Date}{A character string the data to which the number of months are subtracted}
+\item{Date}{A character string the date to which the number of months 
+are subtracted}
 
-\item{Months}{A numeric vlaue the number of months to subtract from Date}
+\item{Months}{A numeric value the number of months to subtract from Date}
 }
 \description{
 A function to subtract months to a date

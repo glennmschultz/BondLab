@@ -350,7 +350,7 @@
                                      settlement.date = settlement.date,
                                      price = price)
     
-    # =========================================================================
+    # ========================================================================
     # This section begins the calculation of horizon total return
     # Cashflow Received + Reinvestment Income + Present Value at Horizon
     # ========================================================================
@@ -358,9 +358,10 @@
     NumberofCashFlow <- as.numeric(length(TotalCashFlow(HorizonCashFlow)))
     reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
     
-    # Here frequency and horizon is converted into the number of payments received
-    # Frequency is the number of payments recieved in a year and the monthly interval
-    # between payments.  Maybe frequency should be months between payments
+    # Here frequency and horizon is converted into the number of payments 
+    # received Frequency is the number of payments recieved in a year and the 
+    # monthly interval between payments.  Maybe frequency should be months 
+    # between payments
     NumberPaymentReceived <- horizon.months/(horizon.months/Frequency(bond.id))
 
     # =========================================================================
@@ -433,6 +434,7 @@
     # Replace this with PriceTypes objects  
     HorizonPrice <- sprintf("%.8f", HorizonPrice)
     
+    # Replace this with an array of cashflow 
     HorizonCashFlow <- BondCashFlows(bond.id = bond.id,
                                      principal = par.amount,
                                      settlement.date = settlement.date,

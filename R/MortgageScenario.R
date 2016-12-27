@@ -22,9 +22,13 @@
   NULL
   
   
-  #' An S4 class the results of mortgage total return analysis 
-  #' 
-  #' The class MortgageReturn holds the results of mortgage return analysis
+  #' @title MBS Total Return Metrics
+  #' @family Scenario Analysis
+  #' @description 
+  #' The class MortgageReturn holds the results of mortgage return analysis.
+  #' MortgageReturn is the sum of coupon income, principal received, reinvestment
+  #' income and price appreciation or depreciation.  In addition, most investors
+  #' also track horizon current balance. 
   #' @slot CouponIncome A numeric value the coupon income received over the 
   #' investment horizon
   #' @slot ScheduledPrinReceived A numeric value the scheduled principal 
@@ -51,26 +55,34 @@
              HorizonReturn = "numeric",
              HorizonMos = "numeric"))
   
-  #' A standard generic function to access the slot CouponIncome
-  #' @param object An S4 object of type MtgScenario
+  #' @title CouponIncome generic
+  #' @family Scenario Analysis
+  #' @description A generic function CouponIncome 
+  #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("CouponIncome", function(object)
   {standardGeneric("CouponIncome")})
   
-  #' A standard generic function to access the slot ScheduledPrinReceived
-  #' @param object an S4 object of type MtgScenario
+  #' @title ScheduledPrincipalReceived generic
+  #' @family Scenario Analysis
+  #' @description A generic function ScheduledPrincipalReceived
+  #' @param object an object of the type MtgScenario
   #' @export
   setGeneric("ScheduledPrinReceived", function(object)
   {standardGeneric("ScheduledPrinReceived")})
   
-  #' A standard generic function to access the slot PrepaidPrinReceived
-  #' @param object an S4 object of type MtgScenario
+  #' @title PrepaidPrinReceived generic
+  #' @family Scenario Analysis
+  #' @description A generic function PrepaidPrinReceived
+  #' @param object an object of the type MtgScenario
   #' @export
   setGeneric("PrepaidPrinReceived", function(object)
   {standardGeneric("PrepaidPrinReceived")})
   
-  #' A standard generic function to access the slot ReinvestmentIncome
-  #' @param object an S4 object of type MtgScenario
+  #' @title ReinvestmentIncome generic
+  #' @family Scenario Analysis
+  #' @description A generic function ReinvestmentIncome
+  #' @param object an object of the type MtgScenario
   #' @export
   setGeneric("ReinvestmentIncome", function(object)
   {standardGeneric("ReinvestmentIncome")})

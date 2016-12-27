@@ -2,14 +2,33 @@
 % Please edit documentation in R/MortgageScenario.R
 \name{ReinvestmentIncome}
 \alias{ReinvestmentIncome}
-\title{A standard generic function to access the slot ReinvestmentIncome}
+\title{ReinvestmentIncome generic}
 \usage{
 ReinvestmentIncome(object)
 }
 \arguments{
-\item{object}{an S4 object of type MtgScenario}
+\item{object}{an object of the type MtgScenario}
 }
 \description{
-A standard generic function to access the slot ReinvestmentIncome
+A generic function ReinvestmentIncome
+}
+\seealso{
+Other Scenario Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{CouponIncome}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{MortgageReturn-class}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
 }
 

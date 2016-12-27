@@ -2,14 +2,33 @@
 % Please edit documentation in R/MortgageScenario.R
 \name{CouponIncome}
 \alias{CouponIncome}
-\title{A standard generic function to access the slot CouponIncome}
+\title{CouponIncome generic}
 \usage{
 CouponIncome(object)
 }
 \arguments{
-\item{object}{An S4 object of type MtgScenario}
+\item{object}{An object of the type MtgScenario}
 }
 \description{
-A standard generic function to access the slot CouponIncome
+A generic function CouponIncome
+}
+\seealso{
+Other Scenario Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{MortgageReturn-class}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
+  \code{\link{ReinvestmentIncome}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
 }
 

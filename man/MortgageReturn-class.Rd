@@ -3,9 +3,12 @@
 \docType{class}
 \name{MortgageReturn-class}
 \alias{MortgageReturn-class}
-\title{An S4 class the results of mortgage total return analysis}
+\title{MBS Total Return Metrics}
 \description{
-The class MortgageReturn holds the results of mortgage return analysis
+The class MortgageReturn holds the results of mortgage return analysis.
+MortgageReturn is the sum of coupon income, principal received, reinvestment
+income and price appreciation or depreciation.  In addition, most investors
+also track horizon current balance.
 }
 \section{Slots}{
 
@@ -32,4 +35,23 @@ investment horizon}
 \item{\code{HorizonMos}}{A numeric value the number of months to 
 the scenario horizon date}
 }}
+\seealso{
+Other Scenario Analysis: \code{\link{BondReturn-class}},
+  \code{\link{BondScenario-class}},
+  \code{\link{BondScenario}},
+  \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{CouponIncome}},
+  \code{\link{HorizonCurrBal,BondReturn-method}},
+  \code{\link{HorizonMos,BondReturn-method}},
+  \code{\link{HorizonPrice,BondReturn-method}},
+  \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
+  \code{\link{PrincipalReceived,BondReturn-method}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
+  \code{\link{ReinvestmentIncome}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
+}
 

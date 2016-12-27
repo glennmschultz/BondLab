@@ -14,17 +14,22 @@
 A method to get \strong{HorizonMos} over which a scenario covers
 }
 \seealso{
-Other Scenario.Analysis: \code{\link{BondReturn-class}},
+Other Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
   \code{\link{BondScenario}},
   \code{\link{CouponIncome,BondReturn-method}},
+  \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal,BondReturn-method}},
   \code{\link{HorizonPrice,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{MortgageReturn-class}},
   \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
   \code{\link{PrincipalReceived,BondReturn-method}},
   \code{\link{PrincipalReceived}},
   \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{Scenario-class}}
+  \code{\link{ReinvestmentIncome}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
 }
 

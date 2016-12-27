@@ -16,17 +16,21 @@ to the investor.  Coupon income is reported as the sum of the coupon income
 received by the investor.
 }
 \seealso{
-Other Scenario.Analysis: \code{\link{BondReturn-class}},
+Other Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
-  \code{\link{BondScenario}},
+  \code{\link{BondScenario}}, \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal,BondReturn-method}},
   \code{\link{HorizonMos,BondReturn-method}},
   \code{\link{HorizonPrice,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
+  \code{\link{MortgageReturn-class}},
   \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
   \code{\link{PrincipalReceived,BondReturn-method}},
   \code{\link{PrincipalReceived}},
   \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{Scenario-class}}
+  \code{\link{ReinvestmentIncome}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
 }
 

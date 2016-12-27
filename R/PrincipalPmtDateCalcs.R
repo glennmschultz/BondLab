@@ -20,8 +20,12 @@
   setGeneric("AddMonths", function(Date = "character", Months = numeric())
     {standardGeneric("AddMonths")})
 
-  #' A function to add months to a date
-  #'
+  #' @title Principal payment dates
+  #' @family ScenarioAnalysis
+  #' @description In the case of mortgage and asset backed securities the 
+  #' first and last principal payment date are of interest to the investors. 
+  #' This funnction computes the first principal payment and last principal 
+  #' payment dates.
   #' @param Date A character string the date to which the number of months are added
   #' @param Months A numeric value the number of months to add to Date
   #' @importFrom lubridate %m+%

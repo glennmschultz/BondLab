@@ -2,7 +2,7 @@
 % Please edit documentation in R/PrincipalPmtDateCalcs.R
 \name{AddMonths}
 \alias{AddMonths}
-\title{A function to add months to a date}
+\title{Principal payment dates}
 \usage{
 AddMonths(Date = "character", Months = numeric())
 }
@@ -12,7 +12,10 @@ AddMonths(Date = "character", Months = numeric())
 \item{Months}{A numeric value the number of months to add to Date}
 }
 \description{
-A function to add months to a date
+In the case of mortgage and asset backed securities the 
+first and last principal payment date are of interest to the investors. 
+This funnction computes the first principal payment and last principal 
+payment dates.
 }
 \examples{
 AddMonths("03-01-2015", 360)

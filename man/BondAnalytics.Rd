@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondAnalytics.R
 \name{BondAnalytics}
 \alias{BondAnalytics}
-\title{Bond Analytics is the Analytic engine for a standard non-callable bond}
+\title{Bond Analytics function}
 \usage{
 BondAnalytics(bond.id = "character", principal = numeric(),
   price = numeric(), trade.date = "character",
@@ -23,11 +23,14 @@ BondAnalytics(bond.id = "character", principal = numeric(),
 structure passed to the package termstruc}
 }
 \description{
-Analytic engine for standard bond (non-mortgage) analysis returns 
-Bond Analytics object
+The constructor function for the BondAnalytics class.  Returns
+the BondAnalytics object methods may be dispatched against slot generics.
 }
 \examples{
 \dontrun{BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, 
 trade.date = "01-10-2013", settlement.date = "01-16-2013")}
+}
+\seealso{
+Other Parametric: \code{\link{BondAnalytics-class}}
 }
 

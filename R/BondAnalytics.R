@@ -21,6 +21,11 @@
   #' @include BondDetails.R BondCashFlows.R BondTermStructure.R TermStructure.R
   NULL
   
+  #' @title BondAnalytics class
+  #' @family Parametric
+  #' @description The superclasses of BondAnalytics are BondDetails, BondCashFlows,
+  #' BondTermStructure, TermStructure
+  #' @exportClass BondAnalytics
   setClass("BondAnalytics", 
            representation(),
            contains = c("BondDetails", 
@@ -36,6 +41,7 @@
                                         method = "character")
     
   {standardGeneric("BondAnalytics")})
+  
   setMethod("initialize",
           signature("BondAnalytics"),
           function(.Object,
@@ -44,10 +50,10 @@
                             ...)
             })
 
-  #'Bond Analytics is the Analytic engine for a standard non-callable bond 
-  #'
-  #'Analytic engine for standard bond (non-mortgage) analysis returns 
-  #'Bond Analytics object
+  #'@title Bond Analytics function
+  #'@family Parametric
+  #'@description The constructor function for the BondAnalytics class.  Returns
+  #'the BondAnalytics object methods may be dispatched against slot generics.
   #'@param bond.id A character string the cusip number or id of the bond
   #'@param principal  A numeric value the principal amount of the bond
   #'@param price A numeric value the price of the bond

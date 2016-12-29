@@ -3,14 +3,20 @@
 \docType{methods}
 \name{CouponIncome,MortgageReturn-method}
 \alias{CouponIncome,MortgageReturn-method}
-\title{A method to extract CouponIncome from S4 class MortgageReturn}
+\title{CouponIncome method, class MortgageReturn}
 \usage{
 \S4method{CouponIncome}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type MortgageReturn}
+\item{object}{A class of the type MortgageReturn}
 }
 \description{
-A method to extract CouponIncome from S4 class MortgageReturn
+A method to get the  \strong{CouponIncome} paid to the 
+to the investor over the scenrio horizon.  CouponIncome is reported as the 
+sum of the coupon income received by the investor.
+}
+\seealso{
+Other Mortgage Scenario Analysis: \code{\link{MortgageReturn-class}},
+  \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
 

@@ -23,7 +23,7 @@
   
   
   #' @title Bond Total Return Metrics
-  #' @family Scenario Analysis
+  #' @family Bond Scenario Analysis
   #' @description 
   #' The class BondReturn holds the results of bond total return analysis.
   #' Bond total return is the sum of coupon income, principal received,
@@ -88,8 +88,8 @@
                              HorizonReturn = HorizonReturn,
                              HorizonMos = HorizonMos)
             })
-  #' @title Bond Return CouponIncome
-  #' @family Scenario Analysis
+  #' @title CouponIncome method, class BondReturn
+  #' @family Bond Scenario Analysis
   #' @description 
   #' A method to get the \strong{CouponIncome} paid over the scenario horizon
   #' to the investor.  Coupon income is reported as the sum of the coupon income 
@@ -99,8 +99,8 @@
   setMethod("CouponIncome", signature("BondReturn"),
             function(object){object@CouponIncome})
   
-  #' @title Bond Return PrincipalReceived 
-  #' @family Scenario Analysis
+  #' @title PrincipalReceived method, class BondReturn 
+  #' @family Bond Scenario Analysis
   #' @description A method to get \strong{ScheduledPrinReceived} over the 
   #' scenario horizon to the investor.  SceheduledPrincipalReceived is reported 
   #' as the sum of scheduled principal received by the investor.
@@ -109,8 +109,8 @@
   setMethod("PrincipalReceived", signature("BondReturn"),
             function(object){object@PrincipalReceived})
   
-  #' @title Bond Return ReinvestmentIncome
-  #' @family Scenario Analysis
+  #' @title ReinvestmentIncome method, class BondReturn
+  #' @family Bond Scenario Analysis
   #' @description A method to get \strong{ReinvestmentIncome} over the scenario
   #' horizon to the investor. ReinvestmentIncome is reported as the sum of the
   #' reinvestment income received by the investor.
@@ -119,8 +119,8 @@
   setMethod("ReinvestmentIncome", signature("BondReturn"),
             function(object){object@ReinvestmentIncome})
   
-  #' @title Bond Return HorizonCurrBal
-  #' @family Scenario Analysis
+  #' @title HorizonCurrBal method, class BondReturn
+  #' @family Bond Scenario Analysis
   #' @description A method to get \strong{HorizonCurrBal} at the end of the
   #' scenario horizon.
   #' @param object An S4 class of type BondReturn
@@ -128,8 +128,8 @@
   setMethod("HorizonCurrBal", signature("BondReturn"),
             function(object){object@HorizonCurrBal})
   
-  #' @title Bond Return HorizonPrice
-  #' @family Scenario Analysis
+  #' @title HorizonPrice method, class BondReturn
+  #' @family Bond Scenario Analysis
   #' @description A method to get \strong{HorizonPrice} at the end of the 
   #' scenario horizon.
   #' @param object An S4 class of type BondReturn
@@ -137,16 +137,16 @@
   setMethod("HorizonPrice", signature("BondReturn"),
             function(object){object@HorizonPrice})
   
-  #' @title Bond Return HorizonReturn
-  #' @family Scenario Analysis
+  #' @title HorizonReturn method, class BondReturn
+  #' @family Bond Scenario Analysis
   #' @description A method to get \strong{HorizonReturn}
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod HorizonReturn
   setMethod("HorizonReturn", signature("BondReturn"),
             function(object){object@HorizonReturn})
   
-  #' @title Bond Return HorizonMos
-  #' @family Scenario Analysis
+  #' @title HorizonMos method, class BondReturn
+  #' @family Bond Scenario Analysis
   #' @description A method to get \strong{HorizonMos} over which a scenario covers
   #' @param object the name of an S4 class of type BondReturn
   #' @exportMethod HorizonMos
@@ -154,7 +154,7 @@
             function(object){object@HorizonMos})
   
   #' @title BondScenario class
-  #' @family Scenario Analysis
+  #' @family Bond Scenario Analysis
   #' @description 
   #' The class \strong{BondScenario} contains the following super classes: 
   #' TermStructure, BondCashFlow, BondTermStructure, BondReturn, CurveSpreads, 
@@ -190,15 +190,15 @@
                             ...)
             })
   
-  #' @title Bond Scenario Analysis
-  #' @family Scenario Analysis
+  #' @title BondScenario function
+  #' @family Bond Scenario Analysis
   #' @description 
   #' A function to compute the \strong{total return} of a Bond.  The function 
   #' first calculates the bond cashflows as of settlment date, rolls the bond 
   #' forward per the horizon months, recomputes the cash flows, maturity and 
   #' average life and prices the bond per the user's input.  The cash flow 
   #' received, reinvestment income, and horizon price are used to compute the
-  #' investor's total return.
+  #' investor's total return.  The function returns the class BondScenario
   #' @param bond.id A character string referencing an object of the type BondDetails
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
   #' @param rates.data A character string an object yield curve

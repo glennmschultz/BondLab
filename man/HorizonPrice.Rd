@@ -2,14 +2,25 @@
 % Please edit documentation in R/MortgageScenario.R
 \name{HorizonPrice}
 \alias{HorizonPrice}
-\title{A standard generic function ot access the slot HorizonPrice}
+\title{HorizonPrice generic}
 \usage{
 HorizonPrice(object)
 }
 \arguments{
-\item{object}{an S4 object of type MtgScenario}
+\item{object}{an S4 object of the type MtgScenario}
 }
 \description{
-A standard generic function ot access the slot HorizonPrice
+A generic function for method dispatch
+}
+\seealso{
+Other Scenario Analysis: \code{\link{CouponIncome}},
+  \code{\link{HorizonCurrBal}}, \code{\link{HorizonMos}},
+  \code{\link{HorizonReturn}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
 }
 

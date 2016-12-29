@@ -3,14 +3,20 @@
 \docType{methods}
 \name{ScheduledPrinReceived,MortgageReturn-method}
 \alias{ScheduledPrinReceived,MortgageReturn-method}
-\title{A method to extract ScheduledPrinReceived from S4 class MortgageReturn}
+\title{ScheduledPrinReceived method, class MortgageReturn}
 \usage{
 \S4method{ScheduledPrinReceived}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type MortgageReturn}
+\item{object}{An S4 class of type MortgageReturn}
 }
 \description{
-A method to extract ScheduledPrinReceived from S4 class MortgageReturn
+A method to get the \strong{ScheduledPrinRecieved} paid to the
+investor over the scenario horizon.  ScheduledPrinReceived is reported as 
+the sum of the sceduled principal received over the horizon.
+}
+\seealso{
+Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
+  \code{\link{MortgageReturn-class}}
 }
 

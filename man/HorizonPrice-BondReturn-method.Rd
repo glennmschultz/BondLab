@@ -3,7 +3,7 @@
 \docType{methods}
 \name{HorizonPrice,BondReturn-method}
 \alias{HorizonPrice,BondReturn-method}
-\title{Bond Return HorizonPrice}
+\title{HorizonPrice method, class BondReturn}
 \usage{
 \S4method{HorizonPrice}{BondReturn}(object)
 }
@@ -15,22 +15,14 @@ A method to get \strong{HorizonPrice} at the end of the
 scenario horizon.
 }
 \seealso{
-Other Scenario Analysis: \code{\link{BondReturn-class}},
+Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
   \code{\link{BondScenario}},
   \code{\link{CouponIncome,BondReturn-method}},
-  \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal,BondReturn-method}},
   \code{\link{HorizonMos,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{MortgageReturn-class}},
-  \code{\link{Name,Scenario-method}},
-  \code{\link{PrepaidPrinReceived}},
   \code{\link{PrincipalReceived,BondReturn-method}},
-  \code{\link{PrincipalReceived}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{ReinvestmentIncome}},
-  \code{\link{Scenario-class}},
-  \code{\link{ScheduledPrinReceived}}
+  \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
 

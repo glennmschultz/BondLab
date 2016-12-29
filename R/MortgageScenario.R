@@ -23,7 +23,7 @@
   
   
   #' @title MBS Total Return Metrics
-  #' @family Scenario Analysis
+  #' @family Mortgage Scenario Analysis
   #' @description 
   #' The class MortgageReturn holds the results of mortgage return analysis.
   #' MortgageReturn is the sum of coupon income, principal received, reinvestment
@@ -57,7 +57,7 @@
   
   #' @title CouponIncome generic
   #' @family Scenario Analysis
-  #' @description A generic function CouponIncome 
+  #' @description A generic function for method dispatch
   #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("CouponIncome", function(object)
@@ -65,48 +65,56 @@
   
   #' @title ScheduledPrincipalReceived generic
   #' @family Scenario Analysis
-  #' @description A generic function ScheduledPrincipalReceived
-  #' @param object an object of the type MtgScenario
+  #' @description A generic function for method dispatch
+  #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("ScheduledPrinReceived", function(object)
   {standardGeneric("ScheduledPrinReceived")})
   
   #' @title PrepaidPrinReceived generic
   #' @family Scenario Analysis
-  #' @description A generic function PrepaidPrinReceived
-  #' @param object an object of the type MtgScenario
+  #' @description A generic function for method dispatch
+  #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("PrepaidPrinReceived", function(object)
   {standardGeneric("PrepaidPrinReceived")})
   
   #' @title ReinvestmentIncome generic
   #' @family Scenario Analysis
-  #' @description A generic function ReinvestmentIncome
+  #' @description A generic function for method dispatch
   #' @param object an object of the type MtgScenario
   #' @export
   setGeneric("ReinvestmentIncome", function(object)
   {standardGeneric("ReinvestmentIncome")})
   
-  #' A standard generic function to access the slot HorizonCurrBal
-  #' @param object an S4 object of type MtgScenario
+  #' @title HorizonCurrBal generic
+  #' @family Scenario Analysis
+  #' @description A generic function for method dispatch
+  #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("HorizonCurrBal", function(object)
   {standardGeneric("HorizonCurrBal")})
   
-  #' A standard generic function ot access the slot HorizonPrice
-  #' @param object an S4 object of type MtgScenario
+  #' @title HorizonPrice generic
+  #' @family Scenario Analysis
+  #' @description A generic function for method dispatch
+  #' @param object an S4 object of the type MtgScenario
   #' @export
   setGeneric("HorizonPrice", function(object)
   {standardGeneric("HorizonPrice")})
   
-  #' A standard generic function to access the slot HorizonRetrun
-  #' @param object An S4 object of type MtgScenario
+  #' @title HorizonPrice generic
+  #' @family Scenario Analysis
+  #' @description A generic function for method dispatch
+  #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("HorizonReturn", function(object)
   {standardGeneric("HorizonReturn")})
   
-  #' A standard generic function to access the slot HorizonMos
-  #' @param object An S4 object of type MtgScenario
+  #' @title HorizonMos generic
+  #' @family Scenario Analysis
+  #' @description A generic function for method dispatch
+  #' @param object An object of the type MtgScenario
   #' @export
   setGeneric("HorizonMos", function(object)
   {standardGeneric("HorizonMos")})
@@ -136,20 +144,32 @@
                              ...)
             })
 
-  #' A method to extract CouponIncome from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title CouponIncome method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get the  \strong{CouponIncome} paid to the 
+  #' to the investor over the scenrio horizon.  CouponIncome is reported as the 
+  #' sum of the coupon income received by the investor.
+  #' @param object A class of the type MortgageReturn
   #' @exportMethod CouponIncome
   setMethod("CouponIncome", signature("MortgageReturn"),
             function(object){object@CouponIncome})
   
-  #' A method to extract ScheduledPrinReceived from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title ScheduledPrinReceived method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get the \strong{ScheduledPrinRecieved} paid to the
+  #' investor over the scenario horizon.  ScheduledPrinReceived is reported as 
+  #' the sum of the sceduled principal received over the horizon.
+  #' @param object An S4 class of type MortgageReturn
   #' @exportMethod ScheduledPrinReceived
   setMethod("ScheduledPrinReceived", signature("MortgageReturn"),
             function(object){object@ScheduledPrinReceived})
   
-  #' A method to extract PrepaidPrinReceived from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title PrepaidPrinReceived method, class MortgageReturn
+  #' @family Mortgage Scenario Analysisn
+  #' @description A method to get \strong{PrepaidPrinReceived} paid to the 
+  #' investor over the scenario horizon.  PrepaidPrinReceived is reported as
+  #' the sum of the prepaid principal received over the horizon.
+  #' @param object An S4 class of type MortgageReturn
   #' @exportMethod PrepaidPrinReceived
   setMethod("PrepaidPrinReceived", signature("MortgageReturn"),
             function(object){object@PrepaidPrinReceived})

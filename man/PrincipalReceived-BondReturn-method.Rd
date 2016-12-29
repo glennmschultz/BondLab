@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PrincipalReceived,BondReturn-method}
 \alias{PrincipalReceived,BondReturn-method}
-\title{Bond Return PrincipalReceived}
+\title{PrincipalReceived method, class BondReturn}
 \usage{
 \S4method{PrincipalReceived}{BondReturn}(object)
 }
@@ -16,22 +16,14 @@ scenario horizon to the investor.  SceheduledPrincipalReceived is reported
 as the sum of scheduled principal received by the investor.
 }
 \seealso{
-Other Scenario Analysis: \code{\link{BondReturn-class}},
+Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
   \code{\link{BondScenario}},
   \code{\link{CouponIncome,BondReturn-method}},
-  \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal,BondReturn-method}},
   \code{\link{HorizonMos,BondReturn-method}},
   \code{\link{HorizonPrice,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{MortgageReturn-class}},
-  \code{\link{Name,Scenario-method}},
-  \code{\link{PrepaidPrinReceived}},
-  \code{\link{PrincipalReceived}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{ReinvestmentIncome}},
-  \code{\link{Scenario-class}},
-  \code{\link{ScheduledPrinReceived}}
+  \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
 

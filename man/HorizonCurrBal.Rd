@@ -2,14 +2,25 @@
 % Please edit documentation in R/MortgageScenario.R
 \name{HorizonCurrBal}
 \alias{HorizonCurrBal}
-\title{A standard generic function to access the slot HorizonCurrBal}
+\title{HorizonCurrBal generic}
 \usage{
 HorizonCurrBal(object)
 }
 \arguments{
-\item{object}{an S4 object of type MtgScenario}
+\item{object}{An object of the type MtgScenario}
 }
 \description{
-A standard generic function to access the slot HorizonCurrBal
+A generic function for method dispatch
+}
+\seealso{
+Other Scenario Analysis: \code{\link{CouponIncome}},
+  \code{\link{HorizonMos}}, \code{\link{HorizonPrice}},
+  \code{\link{HorizonReturn}},
+  \code{\link{Name,Scenario-method}},
+  \code{\link{PrepaidPrinReceived}},
+  \code{\link{PrincipalReceived}},
+  \code{\link{ReinvestmentIncome}},
+  \code{\link{Scenario-class}},
+  \code{\link{ScheduledPrinReceived}}
 }
 

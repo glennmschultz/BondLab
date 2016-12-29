@@ -3,7 +3,7 @@
 \docType{methods}
 \name{CouponIncome,BondReturn-method}
 \alias{CouponIncome,BondReturn-method}
-\title{Bond Return CouponIncome}
+\title{CouponIncome method, class BondReturn}
 \usage{
 \S4method{CouponIncome}{BondReturn}(object)
 }
@@ -16,21 +16,14 @@ to the investor.  Coupon income is reported as the sum of the coupon income
 received by the investor.
 }
 \seealso{
-Other Scenario Analysis: \code{\link{BondReturn-class}},
+Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
-  \code{\link{BondScenario}}, \code{\link{CouponIncome}},
+  \code{\link{BondScenario}},
   \code{\link{HorizonCurrBal,BondReturn-method}},
   \code{\link{HorizonMos,BondReturn-method}},
   \code{\link{HorizonPrice,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{MortgageReturn-class}},
-  \code{\link{Name,Scenario-method}},
-  \code{\link{PrepaidPrinReceived}},
   \code{\link{PrincipalReceived,BondReturn-method}},
-  \code{\link{PrincipalReceived}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{ReinvestmentIncome}},
-  \code{\link{Scenario-class}},
-  \code{\link{ScheduledPrinReceived}}
+  \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
 

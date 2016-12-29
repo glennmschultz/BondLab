@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondScenario.R
 \name{BondScenario}
 \alias{BondScenario}
-\title{Bond Scenario Analysis}
+\title{BondScenario function}
 \usage{
 BondScenario(bond.id = "character", settlement.date = "character",
   rates.data = "character", price = numeric(), par.amount = numeric(),
@@ -46,25 +46,17 @@ first calculates the bond cashflows as of settlment date, rolls the bond
 forward per the horizon months, recomputes the cash flows, maturity and 
 average life and prices the bond per the user's input.  The cash flow 
 received, reinvestment income, and horizon price are used to compute the
-investor's total return.
+investor's total return.  The function returns the class BondScenario
 }
 \seealso{
-Other Scenario Analysis: \code{\link{BondReturn-class}},
+Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{BondScenario-class}},
   \code{\link{CouponIncome,BondReturn-method}},
-  \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal,BondReturn-method}},
   \code{\link{HorizonMos,BondReturn-method}},
   \code{\link{HorizonPrice,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{MortgageReturn-class}},
-  \code{\link{Name,Scenario-method}},
-  \code{\link{PrepaidPrinReceived}},
   \code{\link{PrincipalReceived,BondReturn-method}},
-  \code{\link{PrincipalReceived}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{ReinvestmentIncome}},
-  \code{\link{Scenario-class}},
-  \code{\link{ScheduledPrinReceived}}
+  \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
 

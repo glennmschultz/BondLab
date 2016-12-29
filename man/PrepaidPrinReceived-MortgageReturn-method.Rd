@@ -3,14 +3,16 @@
 \docType{methods}
 \name{PrepaidPrinReceived,MortgageReturn-method}
 \alias{PrepaidPrinReceived,MortgageReturn-method}
-\title{A method to extract PrepaidPrinReceived from S4 class MortgageReturn}
+\title{PrepaidPrinReceived method, class MortgageReturn}
 \usage{
 \S4method{PrepaidPrinReceived}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type MortgageReturn}
+\item{object}{An S4 class of type MortgageReturn}
 }
 \description{
-A method to extract PrepaidPrinReceived from S4 class MortgageReturn
+A method to get \strong{PrepaidPrinReceived} paid to the 
+investor over the scenario horizon.  PrepaidPrinReceived is reported as
+the sum of the prepaid principal received over the horizon.
 }
 

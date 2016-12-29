@@ -3,7 +3,7 @@
 \docType{class}
 \name{MortgageReturn-class}
 \alias{MortgageReturn-class}
-\title{MBS Total Return Metrics}
+\title{MortgageReturn class}
 \description{
 The class MortgageReturn holds the results of mortgage return analysis.
 MortgageReturn is the sum of coupon income, principal received, reinvestment
@@ -37,6 +37,13 @@ the scenario horizon date}
 }}
 \seealso{
 Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
+  \code{\link{HorizonCurrBal,MortgageReturn-method}},
+  \code{\link{HorizonMos,MortgageReturn-method}},
+  \code{\link{HorizonPrice,MortgageReturn-method}},
+  \code{\link{HorizonReturn,MortgageReturn-method}},
+  \code{\link{MortgageScenario-class}},
+  \code{\link{PrepaidPrinReceived,MortgageReturn-method}},
+  \code{\link{ReinvestmentIncome,MortgageReturn-method}},
   \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
 

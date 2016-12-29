@@ -3,14 +3,26 @@
 \docType{methods}
 \name{HorizonPrice,MortgageReturn-method}
 \alias{HorizonPrice,MortgageReturn-method}
-\title{A method to extract HorizonPrice from S4 class MortgageReturn}
+\title{HorizonPrice method, class MortgageReturn}
 \usage{
 \S4method{HorizonPrice}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of tyoe MortgageReturn}
+\item{object}{An S4 class of the type MortgageReturn}
 }
 \description{
-A method to extract HorizonPrice from S4 class MortgageReturn
+A method to get \strong{HorizonPrice} used to calculate
+mortgage total return.
+}
+\seealso{
+Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
+  \code{\link{HorizonCurrBal,MortgageReturn-method}},
+  \code{\link{HorizonMos,MortgageReturn-method}},
+  \code{\link{HorizonReturn,MortgageReturn-method}},
+  \code{\link{MortgageReturn-class}},
+  \code{\link{MortgageScenario-class}},
+  \code{\link{PrepaidPrinReceived,MortgageReturn-method}},
+  \code{\link{ReinvestmentIncome,MortgageReturn-method}},
+  \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
 

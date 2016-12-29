@@ -17,6 +17,13 @@ the sum of the sceduled principal received over the horizon.
 }
 \seealso{
 Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
-  \code{\link{MortgageReturn-class}}
+  \code{\link{HorizonCurrBal,MortgageReturn-method}},
+  \code{\link{HorizonMos,MortgageReturn-method}},
+  \code{\link{HorizonPrice,MortgageReturn-method}},
+  \code{\link{HorizonReturn,MortgageReturn-method}},
+  \code{\link{MortgageReturn-class}},
+  \code{\link{MortgageScenario-class}},
+  \code{\link{PrepaidPrinReceived,MortgageReturn-method}},
+  \code{\link{ReinvestmentIncome,MortgageReturn-method}}
 }
 

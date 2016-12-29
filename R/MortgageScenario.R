@@ -22,7 +22,7 @@
   NULL
   
   
-  #' @title MBS Total Return Metrics
+  #' @title MortgageReturn class
   #' @family Mortgage Scenario Analysis
   #' @description 
   #' The class MortgageReturn holds the results of mortgage return analysis.
@@ -165,7 +165,7 @@
             function(object){object@ScheduledPrinReceived})
   
   #' @title PrepaidPrinReceived method, class MortgageReturn
-  #' @family Mortgage Scenario Analysisn
+  #' @family Mortgage Scenario Analysis
   #' @description A method to get \strong{PrepaidPrinReceived} paid to the 
   #' investor over the scenario horizon.  PrepaidPrinReceived is reported as
   #' the sum of the prepaid principal received over the horizon.
@@ -174,43 +174,56 @@
   setMethod("PrepaidPrinReceived", signature("MortgageReturn"),
             function(object){object@PrepaidPrinReceived})
   
-  #' A method to extract ReinvestmentIncome from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title ReinvestmentIncome method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get \strong{ReinvestmentIncome} paid to the 
+  #' investor over the scenario horizon.  ReinvesmentIncome is reported as
+  #' the sum of the reinvestment income received over the horizon.
+  #' @param object An S4 class of the type MortgageReturn
   #' @exportMethod ReinvestmentIncome
   setMethod("ReinvestmentIncome", signature("MortgageReturn"),
             function(object){object@ReinvestmentIncome})
   
-  #' A method to extract HorizonCurrBal from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title HorizonCurrBal method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get \strong{HorizonCurrBal} the mortgage current
+  #' balance after principal paydown.
+  #' @param object An S4 class of the type MortgageReturn
   #' @exportMethod HorizonCurrBal
   setMethod("HorizonCurrBal", signature("MortgageReturn"),
             function(object){object@HorizonCurrBal})
   
-  #' A method to extract HorizonPrice from S4 class MortgageReturn
-  #' @param object the name of an S4 class of tyoe MortgageReturn
+  #' @title HorizonPrice method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get \strong{HorizonPrice} used to calculate
+  #' mortgage total return.
+  #' @param object An S4 class of the type MortgageReturn
   #' @exportMethod HorizonPrice
   setMethod("HorizonPrice", signature("MortgageReturn"),
             function(object){object@HorizonPrice})
   
-  #' A method to extract HorizonReturn from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title HorizonReturn method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get \strong{HorizonReturn}
+  #' @param object An S4 class of the type MortgageReturn
   #' @exportMethod HorizonReturn
   setMethod("HorizonReturn", signature("MortgageReturn"),
             function(object){object@HorizonReturn})
   
-  #' A method to extract HorizonMos from S4 class MortgageReturn
-  #' @param object the name of an S4 class of type MortgageReturn
+  #' @title HorizonMos method, class MortgageReturn
+  #' @family Mortgage Scenario Analysis
+  #' @description A method to get \strong{HorizonMos}
+  #' @param object An S4 class of the type MortgageReturn
   #' @exportMethod HorizonMos
   setMethod("HorizonMos", signature("MortgageReturn"),
             function(object){object@HorizonMos})
   
-  #' An S4 Class the results of mortgage return scenario analysis
-  #' 
-  #' The SuperClass MortgageScenario holds the results of a scenario analysis run
-  #' MortgageScenario contains the following classes: TermStructure, 
-  #' PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn,
-  #' ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario inherits the 
-  #' getters of each of the above classes.
+  #' @title MortgageScenario class
+  #' @family Mortgage Scenario Analysis
+  #' @description The call MortgageScenario contains the following super classes:
+  #' TermStructure, PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure
+  #' MortgageReturn, ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario
+  #' inherits the  getters and setter of each of the above super classes.
   #' @exportClass MortgageScenario    
   setClass("MortgageScenario",
            representation(),
@@ -224,25 +237,24 @@
                         "Scenario"))
   
   setGeneric("MortgageScenario", function(bond.id ="character",
-                                     settlement.date = "character",
-                                     rates.data = "character",
-                                     price = numeric(), 
-                                     original.bal = numeric(),
-                                     scenario = "character",
-                                     horizon.months = numeric(),
-                                     method = "character",
-                                     prepayment = "character",
-                                     ...,
-                                     horizon.spot.spread = NULL,
-                                     horizon.nominal.spread = NULL,
-                                     horizon.OAS = NULL,
-                                     horizon.price = NULL,
-                                     begin.cpr = numeric(),
-                                     end.cpr = numeric(),
-                                     seasoning.period = numeric(),
-                                     CPR = numeric())
-  {standardGeneric("MortgageScenario")})
-  
+                                          settlement.date = "character",
+                                          rates.data = "character",
+                                          price = "character", 
+                                          original.bal = numeric(),
+                                          scenario = "character",
+                                          horizon.months = numeric(),
+                                          method = "character",
+                                          prepayment = "character",
+                                          ...,
+                                          horizon.spot.spread = NULL,
+                                          horizon.nominal.spread = NULL,
+                                          horizon.OAS = NULL,
+                                          horizon.price = NULL,
+                                          begin.cpr = numeric(),
+                                          end.cpr = numeric(),
+                                          seasoning.period = numeric(),
+                                          CPR = numeric())
+             {standardGeneric("MortgageScenario")})
   
   setMethod("initialize",
             signature("MortgageScenario"),

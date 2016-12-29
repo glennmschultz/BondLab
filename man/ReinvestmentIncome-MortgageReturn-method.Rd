@@ -3,14 +3,27 @@
 \docType{methods}
 \name{ReinvestmentIncome,MortgageReturn-method}
 \alias{ReinvestmentIncome,MortgageReturn-method}
-\title{A method to extract ReinvestmentIncome from S4 class MortgageReturn}
+\title{ReinvestmentIncome method, class MortgageReturn}
 \usage{
 \S4method{ReinvestmentIncome}{MortgageReturn}(object)
 }
 \arguments{
-\item{object}{the name of an S4 class of type MortgageReturn}
+\item{object}{An S4 class of the type MortgageReturn}
 }
 \description{
-A method to extract ReinvestmentIncome from S4 class MortgageReturn
+A method to get \strong{ReinvestmentIncome} paid to the 
+investor over the scenario horizon.  ReinvesmentIncome is reported as
+the sum of the reinvestment income received over the horizon.
+}
+\seealso{
+Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
+  \code{\link{HorizonCurrBal,MortgageReturn-method}},
+  \code{\link{HorizonMos,MortgageReturn-method}},
+  \code{\link{HorizonPrice,MortgageReturn-method}},
+  \code{\link{HorizonReturn,MortgageReturn-method}},
+  \code{\link{MortgageReturn-class}},
+  \code{\link{MortgageScenario-class}},
+  \code{\link{PrepaidPrinReceived,MortgageReturn-method}},
+  \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
 

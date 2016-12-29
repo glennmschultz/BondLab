@@ -3,12 +3,22 @@
 \docType{class}
 \name{MortgageScenario-class}
 \alias{MortgageScenario-class}
-\title{An S4 Class the results of mortgage return scenario analysis}
+\title{MortgageScenario class}
 \description{
-The SuperClass MortgageScenario holds the results of a scenario analysis run
-MortgageScenario contains the following classes: TermStructure, 
-PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn,
-ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario inherits the 
-getters of each of the above classes.
+The call MortgageScenario contains the following super classes:
+TermStructure, PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure
+MortgageReturn, ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario
+inherits the  getters and setter of each of the above super classes.
+}
+\seealso{
+Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
+  \code{\link{HorizonCurrBal,MortgageReturn-method}},
+  \code{\link{HorizonMos,MortgageReturn-method}},
+  \code{\link{HorizonPrice,MortgageReturn-method}},
+  \code{\link{HorizonReturn,MortgageReturn-method}},
+  \code{\link{MortgageReturn-class}},
+  \code{\link{PrepaidPrinReceived,MortgageReturn-method}},
+  \code{\link{ReinvestmentIncome,MortgageReturn-method}},
+  \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
 

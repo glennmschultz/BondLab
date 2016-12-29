@@ -575,8 +575,8 @@
   
   HorizonProceeds <- ((as.numeric(HorizonPrice)/price.basis * 
                          MBSFactor(HorizonMBS) *
-                         OriginalBal(HorizonMBS)) + Accrued(HorizonCashFlow))
-  
+                         original.bal) + Accrued(HorizonCashFlow))
+
   HorizonSpread <- CurveSpreads(
     rates.data = HorizonCurve,
     CashFlow = HorizonCashFlow,

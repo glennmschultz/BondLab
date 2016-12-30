@@ -2,9 +2,7 @@
 % Please edit documentation in R/SpreadToPriceFunctions.R
 \name{SpreadToPrice}
 \alias{SpreadToPrice}
-\title{A function to solve for the price of a MBS pass-through given
-both pricing speed and spread to the interpolated curve.  The function
-returns the clean price of the bond}
+\title{SpreadToPrice Function}
 \usage{
 SpreadToPrice(bond.id = "character", trade.date = "character",
   settlement.date = "character", PrepaymentAssumption = "character",
@@ -22,16 +20,15 @@ SpreadToPrice(bond.id = "character", trade.date = "character",
 \item{spread}{a charcter string the spread to the interpolated curve
 entered in basis points}
 
-\item{CPR}{a numeric value the CPR assumption used to price the MBS
-e.g. 100 basis points = 1}
+\item{CPR}{a numeric value the CPR assumption used to price the MBS.  For
+example 16 CPR is entered 16.}
 
 \item{...}{optional values follow}
 
 \item{benchmark}{optionally the user can pass pricing benchmark}
 }
 \description{
-A function to solve for the price of a MBS pass-through given
-both pricing speed and spread to the interpolated curve.  The function
-returns the clean price of the bond
+Returns the clean price of the MBS given a prepayment speed
+and spread to the curve
 }
 

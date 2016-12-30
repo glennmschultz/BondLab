@@ -52,9 +52,10 @@
                           proceeds = proceeds)$root
     return(spot.spread)}
   
-  #' A function to solve for the price of a MBS pass-through given
-  #' both pricing speed and spread to the interpolated curve.  The function
-  #' returns the clean price of the bond
+  #' @title SpreadToPrice Function
+  #' @family Pricing
+  #' @description Returns the clean price of the MBS given a prepayment speed
+  #' and spread to the curve
   #' @importFrom utils capture.output
   #' @param bond.id A character string the cusip number or bond.id
   #' @param trade.date A character string the trade date mm-dd-YYYY
@@ -62,8 +63,8 @@
   #' @param PrepaymentAssumption the assumption must be: "CPR", "PPC", "MODEL"
   #' @param spread a charcter string the spread to the interpolated curve
   #' entered in basis points
-  #' @param CPR a numeric value the CPR assumption used to price the MBS
-  #' e.g. 100 basis points = 1
+  #' @param CPR a numeric value the CPR assumption used to price the MBS.  For
+  #' example 16 CPR is entered 16.
   #' @param ... optional values follow
   #' @param benchmark optionally the user can pass pricing benchmark
   #' @export
@@ -82,10 +83,10 @@
     bond.id = MBS(MBS.id = bond.id)
     MortgageRate = MtgRate()
     Burnout = BurnOut(bond.id)
+    orig.bal = OriginalBal(bond.id)
     principal = orig.bal * MBSFactor(bond.id)
     frequency = Frequency(bond.id)
-    orig.bal = OriginalBal(bond.id)
-    
+
     issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
     start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
     end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")

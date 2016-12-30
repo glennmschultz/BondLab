@@ -235,7 +235,7 @@
                         "ModelToCPR",
                         "CurveSpreads",
                         "Scenario"))
-  
+
   setGeneric("MortgageScenario", function(bond.id ="character",
                                           settlement.date = "character",
                                           rates.data = "character",
@@ -295,7 +295,7 @@
   #' @param seasoning.period A numeric value the length of the 
   #' seasoning ramp
   #' @param CPR A numeric value the CPR speed
-  #' @export MortgageScenario
+  #' @export
   MortgageScenario <- function(bond.id ="character",
                           settlement.date = "character",
                           rates.data = "character",

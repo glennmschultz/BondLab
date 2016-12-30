@@ -23,9 +23,9 @@
   #' @slot Cusip A character string the pass-through cusip
   #' @slot ID A character string identifying the agency and pool number
   #' @slot BondType A character string the bond type
-  #' @slot Sector A character string the sector
   #' @slot Issuer A character string the Issuer
   #' @slot Underwriter A character string the Underwriter
+  #' @slot Sector A character string the sector
   #' @slot Coupon A coupon a numeric value the annual coupon rate
   #' @slot IssueDate A character string the issue date
   #' @slot DatedDate A character string the dated date
@@ -117,8 +117,8 @@
            Model = "character",
            Burnout = "numeric",
            SATO = "numeric"))
-  
-  setGeneric("MakeMBSDetails", function(
+
+  setGeneric("MBSDetails", function(
     Cusip = "character",
     ID = "character",
     BondType = "character",
@@ -164,7 +164,7 @@
     Burnout = numeric(),
     SATO = numeric())
   
-  {standardGeneric("MakeMBSDetails")})
+  {standardGeneric("MBSDetails")})
   
   #' A standard generic function to access the slot Cusip
   #' @param object an S4 class object
@@ -481,9 +481,9 @@
                    Cusip = "character",
                    ID = "character",
                    BondType = "character",
-                   Sector ="character",
                    Issuer = "character",
                    Underwriter = "character",
+                   Sector ="character",
                    Coupon = "numeric",
                    IssueDate = "character",
                    DatedDate = "character",
@@ -527,9 +527,9 @@
                            Cusip = Cusip,
                            ID = ID,
                            BondType = BondType,
-                           Sector = Sector,
                            Issuer = Issuer,
                            Underwriter = Underwriter,
+                           Sector = Sector,
                            Coupon = Coupon,
                            IssueDate = IssueDate,
                            DatedDate = DatedDate,
@@ -589,12 +589,6 @@
   setMethod("BondType", signature("MBSDetails"),
             function(object){object@BondType})
   
-  #' Method to extract the slot Sector from the class MBSDetails
-  #' @param object the name of the object of type MBSDetails
-  #' @exportMethod Sector
-  setMethod("Sector", signature("MBSDetails"),
-            function(object){object@Sector})
-  
   #' Method to extreact the slot Issuer from the class MBSDetails
   #' @param object the name of the object of type MBSDetails
   #' @exportMethod Issuer
@@ -606,6 +600,12 @@
   #' @exportMethod Underwriter
   setMethod("Underwriter", signature("MBSDetails"),
             function(object){object@Underwriter})
+  
+  #' Method to extract the slot Sector from the class MBSDetails
+  #' @param object the name of the object of type MBSDetails
+  #' @exportMethod Sector
+  setMethod("Sector", signature("MBSDetails"),
+            function(object){object@Sector})
   
   #' Method to extract the slot Coupon from the class MBSDetails
   #' @param object the name of the object of type MBSDetails
@@ -895,13 +895,88 @@
   setMethod("SATO", signature("MBSDetails"),
             function(object){object@SATO})
   
+  #' @title MBSDetails
+  #' @family MBSDetails
+  #' @description MBSDetails creates an MBS pass-through cusip object in the 
+  #' local environment 
+  #' @param Cusip A character the Pass Through MBS cusip.
+  #' @param ID A character string the pool number. 
+  #' @param BondType A character string the type of Bond MBS, etc.
+  #' @param Sector A character string description of the Sector Mortgage Sector
+  #' @param Issuer A character string the Issuer
+  #' @param Underwriter A character string the Underwriter 
+  #' @param Coupon A numeric value the Bond Coupon.
+  #' @param IssueDate A character string the issue date of the security.
+  #' @param DatedDate A character sting The date following the issue when 
+  #' interest begins to accure.
+  #' @param Maturity A character sting the final payment date to the investor
+  #' in the case MBS the final payment data assuming 0 CPR.
+  #' @param LastPmtDate A character string the date the last payment scheduled 
+  #' payment to the investor.
+  #' @param NextPmtDate A character string the date of the next scheduled 
+  #' payment to the investor.
+  #' @param Term A numeric value the original term of the underlying mortgages
+  #' @param WALA A numeric value the weighted average loan age of the 
+  #' underlying mortgages
+  #' @param WAM A numeric value the weighted average maturity of the 
+  #' underlying mortgages
+  #' @param PaymentDelay A numeric value in the case of MBS the delay of the 
+  #' payment from the trust to the investor
+  #' @param Moody A character string Moody's assigned credit rating
+  #' @param SP A character string SP's assigned credit rating
+  #' @param BondLab A character string BondLab's or the user's 
+  #' assigned credit rating
+  #' @param Frequency A numeric value string the frequency of payments made 
+  #' to the investor
+  #' @param BondBasis A character string the basis on which 
+  #' interest is calculated
+  #' @param GWac A numeric value the borrower's note rate
+  #' @param OrigLoanBal A numeric value the original balance of the loan
+  #' @param OrigLTV A numeric value the borrower's original loan to value ratio
+  #' @param AmortizationType A character sting the type of the 
+  #' loan 'fixed' or 'arm'.
+  #' These values are used by the prepayment model to drive the mortgage 
+  #' rate either fixed or adjustable mortgage rate
+  #' @param AmortizationTerm A numeric value the term of the loan in years
+  #' @param Index A character string if the amortization type is 
+  #' adjustable the Index to which the note rate references
+  #' @param Margin A numeric value the spread over the index used to determine 
+  #' the borrower's note rate
+  #' @param FirstPmtDate A character string the date of the first payment 
+  #' of the borrower's note.
+  #' @param FinalPmtDate A character string the date of thee final payment 
+  #' of the borrower's note.  In the case of an MBS the final payment made to 
+  #' the bondholder
+  #' @param Servicing A numeric value the servicing spread from the Gross WAC 
+  #' to the servicer
+  #' of the mortgage pool's underlying loans.
+  #' @param PMI A numeric value the primary mortage insurance paid by the 
+  #' borrower to the PMI provider
+  #' @param GFeePremium A numeric value the guarantee fee taken from the 
+  #' borrower's note rate to guarantee timely payment of principal and interest.  
+  #' Applicable in the case of Fannie Mae, Freddie Mac, or Ginnie Mae pools.
+  #' @param InitialInterest A logical indicating the note carries an interest 
+  #' only period
+  #' @param InterestOnlyPeriod A character string indicating the note's 
+  #' interest only period
+  #' @param FirstPrinPaymentDate A character string indicating the first 
+  #' principal payment date due of the mortgage.
+  #' @param BalloonPmt A logical indicating the mortgage carries a balloon pmt.
+  #' @param BalloonDate A character string the balloon payment date.
+  #' @param MBSFactor A numeric value the current factor of the MBS.
+  #' @param OriginalBal A numeric value the original balance of the MBS.
+  #' @param CurrentBal A numeric value the current balance of the MBS.
+  #' @param Model A character string the prepayment model to use.
+  #' @param Burnout A numeric model the value of the borrower burnout.
+  #' @param SATO A numeric value the borrrowers Spread AT Origination over the
+  #' @export
   MBSDetails <- function(
   Cusip = "character",
   ID = "character",
   BondType = "character",
-  Sector ="character",
   Issuer = "character",
   Underwriter = "character",
+  Sector ="character",
   Coupon = numeric(),
   IssueDate = "character",
   DatedDate = "character",
@@ -946,9 +1021,9 @@
       Cusip = Cusip,
       ID = ID,
       BondType = BondType,
-      Sector = Sector,
       Issuer = Issuer,
       Underwriter = Underwriter,
+      Sector = Sector,
       Coupon = Coupon,
       IssueDate = IssueDate,
       DatedDate = DatedDate,
@@ -989,16 +1064,18 @@
       SATO = SATO)
   }
 
-  #' A constructor function to create a mortgage pass through security
-  #' 
-  #' This is a standard generic function used to construct a MBS pass through 
-  #' security
+  #' @title MakeMBSDetails
+  #' @family MBSDetails
+  #' @description The function calls MBSDetails function and saves the MBS
+  #' cusip detail to the folder BondData.  This function is useful for working
+  #' on a local install of BondLab with no database when the user would like to 
+  #' repeatedly call the cusip.
   #' @param Cusip A character the Pass Through MBS cusip.
   #' @param ID A character string the pool number. 
   #' @param BondType A character string the type of Bond MBS, etc.
-  #' @param Sector A character string description of the Sector Mortgage Sector
   #' @param Issuer A character string the Issuer
   #' @param Underwriter A character string the Underwriter 
+  #' @param Sector A character string description of the Sector Mortgage Sector
   #' @param Coupon A numeric value the Bond Coupon.
   #' @param IssueDate A character string the issue date of the security.
   #' @param DatedDate A character sting The date following the issue when 
@@ -1070,9 +1147,9 @@
   #'  Cusip = "23456789",
   #'  ID = "bondlabMBS4",
   #'  BondType = "MBS",
-  #'  Sector = "MBS",
   #'  Issuer = FNMA,
   #'  Underwriter = FNMA,
+  #'  Sector = "MBS",
   #'  Coupon = 4.0,
   #'  IssueDate = "01-01-2013",
   #'  DatedDate = "01-01-2013",
@@ -1116,9 +1193,9 @@
   Cusip = "character",
   ID = "character",
   BondType = "character",
-  Sector ="character",
   Issuer = "character",
   Underwriter = "character",
+  Sector ="character",
   Coupon = numeric(),
   IssueDate = "character",
   DatedDate = "character",
@@ -1163,9 +1240,9 @@
     Cusip = Cusip,
     ID = ID,
     BondType = BondType,
-    Sector = Sector,
     Issuer = Issuer,
     Underwriter = Underwriter,
+    Sector = Sector,
     Coupon = Coupon,
     IssueDate = IssueDate,
     DatedDate = DatedDate,

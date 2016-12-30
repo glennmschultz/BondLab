@@ -2,11 +2,11 @@
 % Please edit documentation in R/MBSDetails.R
 \name{MakeMBSDetails}
 \alias{MakeMBSDetails}
-\title{A constructor function to create a mortgage pass through security}
+\title{MakeMBSDetails}
 \usage{
 MakeMBSDetails(Cusip = "character", ID = "character",
-  BondType = "character", Sector = "character", Issuer = "character",
-  Underwriter = "character", Coupon = numeric(), IssueDate = "character",
+  BondType = "character", Issuer = "character", Underwriter = "character",
+  Sector = "character", Coupon = numeric(), IssueDate = "character",
   DatedDate = "character", Maturity = "character",
   LastPmtDate = "character", NextPmtDate = "character", Term = numeric(),
   WALA = numeric(), WAM = numeric(), PaymentDelay = numeric(),
@@ -29,11 +29,11 @@ MakeMBSDetails(Cusip = "character", ID = "character",
 
 \item{BondType}{A character string the type of Bond MBS, etc.}
 
-\item{Sector}{A character string description of the Sector Mortgage Sector}
-
 \item{Issuer}{A character string the Issuer}
 
 \item{Underwriter}{A character string the Underwriter}
+
+\item{Sector}{A character string description of the Sector Mortgage Sector}
 
 \item{Coupon}{A numeric value the Bond Coupon.}
 
@@ -139,8 +139,10 @@ principal payment date due of the mortgage.}
 prime lending rate.}
 }
 \description{
-This is a standard generic function used to construct a MBS pass through 
-security
+The function calls MBSDetails function and saves the MBS
+cusip detail to the folder BondData.  This function is useful for working
+on a local install of BondLab with no database when the user would like to 
+repeatedly call the cusip.
 }
 \examples{
 \dontrun{
@@ -148,9 +150,9 @@ security
  Cusip = "23456789",
  ID = "bondlabMBS4",
  BondType = "MBS",
- Sector = "MBS",
  Issuer = FNMA,
  Underwriter = FNMA,
+ Sector = "MBS",
  Coupon = 4.0,
  IssueDate = "01-01-2013",
  DatedDate = "01-01-2013",
@@ -189,5 +191,8 @@ security
  Model = "FH30.Generic",
  Burnout = 25,
  SATO = 0.75)} 
+}
+\seealso{
+Other MBSDetails: \code{\link{MBSDetails}}
 }
 

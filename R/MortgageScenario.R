@@ -462,13 +462,45 @@
       method = "ns")
     } # End of if logic for term structure method
     
-    ForwardPassThrough(
-      bond.id = bond.id,
-      original.bal = original.bal,
-      projected.cashflow = MortgageCashFlow,
-      horizon.months = horizon.months)
+    # replace this code with getters and setters.  This will reduce the disk IO
+    # and should speed up the calculation.  In addition it will eliminate the need
+    # the Temp_BondData folder
+    #ForwardPassThrough(
+    #  bond.id = bond.id,
+    #  original.bal = original.bal,
+    #  projected.cashflow = MortgageCashFlow,
+    #  horizon.months = horizon.months)
 
-    HorizonMBS <- HorizonMBS()
+    #HorizonMBS <- HorizonMBS()
+    
+    # This section of code rolls the MBS pass-though forward in time updating
+    # factor, current balance, lastpaymentdate, nextpaymentdate, wam and wala the 
+    # first step is to assign bond.id to HorizonMBS object
+    HorizonMBS <- bond.id
+    
+    # Use the projected cashflow to determine the current balance outstanding 
+    # at the end of horizon
+    SchedPrincipal <- ScheduledPrin(MortgageCashFlow)[1:horizon.months]
+    PrepaidPrincipal <- PrepaidPrin(MortgageCashFlow)[1:horizon.months]
+    DefaultedPrincipal <- DefaultedPrin(MortgageCashFlow)[1:horizon.months]
+    TotalPrincipal <- sum(SchedPrincipal) + sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
+    
+    # Update the LastPmtDate and NextPmtDate to reflect the end of the horizon
+    # and compute and update the MBSFactor, CurrentBal, WAM, and WALA
+    LastPmtDate(HorizonMBS) <- as.character(format(
+      as.Date(LastPmtDate(bond.id), 
+              format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    
+    NextPmtDate(HorizonMBS) <- as.character(format(
+      as.Date(NextPmtDate(bond.id), 
+              format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    
+    MBSFactor(HorizonMBS) <- ((original.bal * 
+                                  MBSFactor(bond.id)) - TotalPrincipal)/original.bal
+    
+    CurrentBal(HorizonMBS) <- CurrentBal(bond.id) - TotalPrincipal
+    WAM(HorizonMBS) <- WAM(bond.id) - horizon.months
+    WALA(HorizonMBS) <- WALA(bond.id) + horizon.months
     
     HorizonPrepaymentAssumption <- PrepaymentModel(
       bond.id = HorizonMBS,

@@ -339,11 +339,33 @@
         method = "ns")
     } # End of if logic for term structure method
     
-    ForwardBond(bond.id = bond.id,
-                par.amount = par.amount,
-                horizon.months = horizon.months)
+    # replace this code with getters and setters.  This will reduce the disk IO
+    # and should speed up the calculation.  In addition it will eliminate the need
+    # the Temp_BondData folder
+    #ForwardBond(bond.id = bond.id,
+    #            par.amount = par.amount,
+    #            horizon.months = horizon.months)
     
-    HorizonBond = HorizonBond()
+    #HorizonBond = HorizonBond()
+    #
+    # This section of code rolls the bond forward in time updating
+    # factor, current balance, lastpaymentdate, nextpaymentdate, wam and wala the 
+    # first step is to assign bond.id to HorizonMBS object
+    
+    HorizonBond <- bond.id
+    HorizonBond <- `LastPmtDate<-`(HorizonBond,
+                                   as.character(
+                                     format(as.Date(
+                                       LastPmtDate(bond.id), 
+                        format = "%m-%d-%Y") %m+% months(horizon.months), 
+                        "%m-%d-%Y"))
+    )
+    HorizonBond <- `NextPmtDate<-`(HorizonBond,
+                                   as.character(format(
+                                     as.Date(NextPmtDate(bond.id), 
+                      format = "%m-%d-%Y") %m+% months(horizon.months), 
+                      "%m-%d-%Y"))
+    )
     
     HorizonCashFlow <- BondCashFlows(bond.id = bond.id,
                                      principal = par.amount,

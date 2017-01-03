@@ -483,20 +483,33 @@
     SchedPrincipal <- ScheduledPrin(MortgageCashFlow)[1:horizon.months]
     PrepaidPrincipal <- PrepaidPrin(MortgageCashFlow)[1:horizon.months]
     DefaultedPrincipal <- DefaultedPrin(MortgageCashFlow)[1:horizon.months]
-    TotalPrincipal <- sum(SchedPrincipal) + sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
+    TotalPrincipal <- sum(SchedPrincipal) + 
+      sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
     
     # Update the LastPmtDate and NextPmtDate to reflect the end of the horizon
     # and compute and update the MBSFactor, CurrentBal, WAM, and WALA
-    LastPmtDate(HorizonMBS) <- as.character(format(
-      as.Date(LastPmtDate(bond.id), 
-              format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    HorizonMBS <- `LastPmtDate<-`(HorizonMBS,
+                    as.character(format(
+                      as.Date(LastPmtDate(bond.id), 
+                              format = "%m-%d-%Y") %m+% months(horizon.months), 
+                      "%m-%d-%Y"))
+                    )
+    #LastPmtDate(HorizonMBS) <- as.character(format(
+    #  as.Date(LastPmtDate(bond.id), 
+    #          format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
     
-    NextPmtDate(HorizonMBS) <- as.character(format(
-      as.Date(NextPmtDate(bond.id), 
-              format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+    HorizonMBS <- `NextPmtDate<-`(HorizonMBS,
+                    as.character(format(
+                      as.Date(NextPmtDate(bond.id), 
+                              format = "%m-%d-%Y") %m+% months(horizon.months), 
+                      "%m-%d-%Y"))
+                    )
+    #NextPmtDate(HorizonMBS) <- as.character(format(
+    #  as.Date(NextPmtDate(bond.id), 
+    #          format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
     
     MBSFactor(HorizonMBS) <- ((original.bal * 
-                                  MBSFactor(bond.id)) - TotalPrincipal)/original.bal
+                                  MBSFactor(bond.id)) - TotalPrincipal)/ original.bal
     
     CurrentBal(HorizonMBS) <- CurrentBal(bond.id) - TotalPrincipal
     WAM(HorizonMBS) <- WAM(bond.id) - horizon.months
@@ -514,7 +527,7 @@
       end.cpr = end.cpr,
       seasoning.period = seasoning.period,
       CPR = CPR)
-    
+
     HorizonCashFlow <- MortgageCashFlow(
       bond.id = HorizonMBS,
       original.bal = original.bal,

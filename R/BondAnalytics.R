@@ -65,12 +65,12 @@
   #'\dontrun{BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, 
   #'trade.date = "01-10-2013", settlement.date = "01-16-2013")}
   #'@export
-  BondAnalytics <- function (bond.id = "character",
-                             principal = numeric(),
-                             price = numeric(), 
-                             trade.date = "character", 
-                             settlement.date = "character", 
-                             method = "character"){
+  BondAnalytics <- function (bond.id,
+                             principal,
+                             price, 
+                             trade.date, 
+                             settlement.date, 
+                             method = "dl"){
   # Error Trap Settlement Date and Trade Date order.  This is not done 
   # in the Error Trap Function because that function is 
   # to trap errors in bond information that is passed into the functions.  It is
@@ -79,8 +79,6 @@
   if(trade.date > settlement.date) stop 
     ("Trade Date Must be less than settlement date")
 
-  #Default method for TermStructure
-  if(missing(method)) method = "ns"
 
   Rate.Delta = rate.delta
   # The first step is to read in the Bond Detail
@@ -108,7 +106,8 @@
                                          Rate.Delta = Rate.Delta, 
                                          TermStructure = TermStructure, 
                                          principal = principal, 
-                                         price = price, cashflow = BondCashFlow)
+                                         price = price, 
+                                         cashflow = BondCashFlow)
   new("BondAnalytics",
       Cusip = bond.id@Cusip,
       ID = bond.id@ID,
@@ -116,6 +115,7 @@
       Sector = bond.id@Sector,
       Issuer = bond.id@Issuer,
       Underwriter = bond.id@Underwriter,
+      OfferAmount = bond.id@OfferAmount,
       Coupon = bond.id@Coupon,
       IssueDate = bond.id@IssueDate,
       DatedDate = bond.id@DatedDate,

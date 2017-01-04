@@ -4,10 +4,8 @@
 \alias{BondBasisConversion}
 \title{Functions to convert bond payments to their interest payment basis}
 \usage{
-BondBasisConversion(issue.date = "character", start.date = "character",
-  end.date = "character", settlement.date = "character",
-  lastpmt.date = "character", nextpmt.date = "character",
-  type = "character")
+BondBasisConversion(issue.date, start.date, end.date, settlement.date,
+  lastpmt.date, nextpmt.date, type)
 }
 \arguments{
 \item{issue.date}{A character value the issue date of the security}

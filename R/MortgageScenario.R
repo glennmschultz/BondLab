@@ -296,24 +296,24 @@
   #' seasoning ramp
   #' @param CPR A numeric value the CPR speed
   #' @export
-  MortgageScenario <- function(bond.id ="character",
-                          settlement.date = "character",
-                          rates.data = "character",
-                          price = "character", 
-                          original.bal = numeric(),
-                          scenario = "character",
-                          horizon.months = numeric(),
-                          method = "character",
-                          prepayment = "character",
+  MortgageScenario  <- function(bond.id,
+                          settlement.date,
+                          rates.data,
+                          price, 
+                          original.bal,
+                          scenario,
+                          horizon.months,
+                          method,
+                          prepayment,
                           ...,
                           horizon.spot.spread = NULL,
                           horizon.nominal.spread = NULL,
                           horizon.OAS = NULL,
                           horizon.price = NULL,
-                          begin.cpr = numeric(),
-                          end.cpr = numeric(),
-                          seasoning.period = numeric(),
-                          CPR = numeric()) { 
+                          begin.cpr,
+                          end.cpr,
+                          seasoning.period,
+                          CPR) { 
     
    
     # Mortgage Scenario analysis is done in two steps
@@ -461,17 +461,6 @@
       rates.data = HorizonCurve,
       method = "ns")
     } # End of if logic for term structure method
-    
-    # replace this code with getters and setters.  This will reduce the disk IO
-    # and should speed up the calculation.  In addition it will eliminate the need
-    # the Temp_BondData folder
-    #ForwardPassThrough(
-    #  bond.id = bond.id,
-    #  original.bal = original.bal,
-    #  projected.cashflow = MortgageCashFlow,
-    #  horizon.months = horizon.months)
-
-    #HorizonMBS <- HorizonMBS()
     
     # This section of code rolls the MBS pass-though forward in time updating
     # factor, current balance, lastpaymentdate, nextpaymentdate, wam and wala the 
@@ -699,5 +688,4 @@
       Shiftbps = Shiftbps(Scenario),
       Formula = ScenarioFormula(Scenario))
   }
-  
   

@@ -4,15 +4,9 @@
 \alias{MakeBondDetails}
 \title{A constuctor function to create standard bond cusip information}
 \usage{
-MakeBondDetails(Cusip = "character", ID = "character",
-  BondType = "character", Sector = "character", Issuer = "character",
-  Underwriter = "character", OfferAmount = numeric(), Coupon = numeric(),
-  IssueDate = "character", DatedDate = "character",
-  Maturity = "character", LastPmtDate = "character",
-  NextPmtDate = "character", Moody = "character", SP = "character",
-  BondLab = "character", Frequency = numeric(), BondBasis = "character",
-  Callable = "character", Putable = "character",
-  SinkingFund = "character")
+MakeBondDetails(Cusip, ID, BondType, Sector, Issuer, Underwriter, OfferAmount,
+  Coupon, IssueDate, DatedDate, Maturity, LastPmtDate, NextPmtDate, Moody, SP,
+  BondLab, Frequency, BondBasis, Callable, Putable, SinkingFund)
 }
 \arguments{
 \item{Cusip}{A character string the bond's cusip number}

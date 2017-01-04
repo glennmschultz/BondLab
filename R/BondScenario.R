@@ -168,12 +168,12 @@
                         "BondReturn",
                         "CurveSpreads",
                         "Scenario"))
-  
+
   setGeneric("BondScenario", function(bond.id = "character",
                                       settlement.date = "character",
                                       rates.data = "character",
                                       scenario = "character",
-                                      horizon.months = "character",
+                                      horizon.months = numeric(),
                                       method = "character",
                                       ...,
                                       horizon.spot.spread = NULL,
@@ -216,14 +216,14 @@
   #' (not currently implemented)
   #' @param horizon.price A numeric value the horizon price
   #' @export BondScenario
-  BondScenario <- function(bond.id = "character",
-                           settlement.date = "character",
-                           rates.data = "character",
-                           price = numeric(),
-                           par.amount = numeric(),
-                           scenario = "character",
-                           horizon.months = numeric(),
-                           method = "ns",
+  BondScenario <- function(bond.id,
+                           settlement.date,
+                           rates.data,
+                           price,
+                           par.amount,
+                           scenario,
+                           horizon.months,
+                           method = "dl",
                            ...,
                            horizon.spot.spread = NULL,
                            horizon.nominal.spread = NULL,

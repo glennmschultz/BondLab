@@ -4,11 +4,9 @@
 \alias{BondScenario}
 \title{BondScenario function}
 \usage{
-BondScenario(bond.id = "character", settlement.date = "character",
-  rates.data = "character", price = numeric(), par.amount = numeric(),
-  scenario = "character", horizon.months = numeric(), method = "ns", ...,
-  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
-  horizon.OAS = NULL, horizon.price = NULL)
+BondScenario(bond.id, settlement.date, rates.data, price, par.amount, scenario,
+  horizon.months, method = "dl", ..., horizon.spot.spread = NULL,
+  horizon.nominal.spread = NULL, horizon.OAS = NULL, horizon.price = NULL)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of the type BondDetails}

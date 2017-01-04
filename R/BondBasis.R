@@ -44,13 +44,13 @@
   #' @importFrom lubridate year
   #' @importFrom lubridate month
   #' @export
-  BondBasisConversion <- function(issue.date = "character", 
-                                  start.date = "character", 
-                                  end.date = "character", 
-                                  settlement.date = "character",
-                                  lastpmt.date = "character", 
-                                  nextpmt.date = "character",
-                                  type = "character"){
+  BondBasisConversion <- function(issue.date, 
+                                  start.date, 
+                                  end.date, 
+                                  settlement.date,
+                                  lastpmt.date, 
+                                  nextpmt.date,
+                                  type){
   # This function converts day count to bond U.S. Bond Basis 30/360 day count
   #  calculation. It returns the number of payments that will be received, 
   #  period, and n for discounting

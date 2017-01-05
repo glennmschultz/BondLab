@@ -172,6 +172,8 @@
   setGeneric("BondScenario", function(bond.id = "character",
                                       settlement.date = "character",
                                       rates.data = "character",
+                                      price = numeric(),
+                                      principal = numeric(),
                                       scenario = "character",
                                       horizon.months = numeric(),
                                       method = "character",
@@ -203,7 +205,7 @@
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
   #' @param rates.data A character string an object yield curve
   #' @param price A character string in decimal equivalent (.) or 32nds (-)
-  #' @param par.amount A numeric value the par amount. 
+  #' @param principal A numeric value the par amount. 
   #' @param scenario A character string the scenario
   #' @param horizon.months A numeric value the time horizon
   #' @param method A character string the method used to fit the term structure
@@ -216,13 +218,13 @@
   #' (not currently implemented)
   #' @param horizon.price A numeric value the horizon price
   #' @export BondScenario
-  BondScenario <- function(bond.id,
-                           settlement.date,
-                           rates.data,
-                           price,
-                           par.amount,
-                           scenario,
-                           horizon.months,
+  BondScenario <- function(bond.id = "character",
+                           settlement.date = "character",
+                           rates.data = "character",
+                           price = "character",
+                           principal = numeric(),
+                           scenario = "character",
+                           horizon.months = numeric(),
                            method = "dl",
                            ...,
                            horizon.spot.spread = NULL,
@@ -283,12 +285,12 @@
       method = method)
     
     BondCashFlow <- BondCashFlows(bond.id = bond.id,
-                                  principal = par.amount,
+                                  principal = principal,
                                   settlement.date = settlement.date,
                                   price = PriceDecimalString(Price))
     
-    proceeds <- Accrued(BondCashFlow) + (par.amount * PriceBasis(Price))
-    principal <- par.amount
+    proceeds <- Accrued(BondCashFlow) + (principal * PriceBasis(Price))
+    #principal <- par.amount
     
     # Compute the CurvesSpreads based on the user price and prepayment vector
     # given the user's scenario interest rate shift
@@ -336,17 +338,9 @@
     } else {
       HorizonTermStructure <- TermStructure(
         rates.data = HorizonCurve,
-        method = "ns")
+        method = method)
     } # End of if logic for term structure method
-    
-    # replace this code with getters and setters.  This will reduce the disk IO
-    # and should speed up the calculation.  In addition it will eliminate the need
-    # the Temp_BondData folder
-    #ForwardBond(bond.id = bond.id,
-    #            par.amount = par.amount,
-    #            horizon.months = horizon.months)
-    
-    #HorizonBond = HorizonBond()
+
     #
     # This section of code rolls the bond forward in time updating
     # factor, current balance, lastpaymentdate, nextpaymentdate, wam and wala the 
@@ -368,7 +362,7 @@
     )
     
     HorizonCashFlow <- BondCashFlows(bond.id = bond.id,
-                                     principal = par.amount,
+                                     principal = principal,
                                      settlement.date = settlement.date,
                                      price = price)
     
@@ -435,7 +429,7 @@
                                     HorizonPrice = numeric()){
       price.basis = 100
       if(LastPmtDate(HorizonBond) == Maturity(HorizonBond)){0
-    }else {par.amount * (HorizonPrice/price.basis)}
+    }else {principal * (HorizonPrice/price.basis)}
     }
     
     PresentValue <- switch(horizon.price.type,
@@ -451,18 +445,18 @@
     
     # Here will need to subtract from sinking fund scheduled principal paid
     HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
-      (PresentValue / par.amount) * price.basis}
+      (PresentValue / principal) * price.basis}
     
     # Replace this with PriceTypes objects  
     HorizonPrice <- sprintf("%.8f", HorizonPrice)
     
     # Replace this with an array of cashflow 
     HorizonCashFlow <- BondCashFlows(bond.id = bond.id,
-                                     principal = par.amount,
+                                     principal = principal,
                                      settlement.date = settlement.date,
                                      price = PriceDecimalString(Price))
 
-    HorizonProceeds <- (((as.numeric(HorizonPrice)/price.basis) * par.amount) + 
+    HorizonProceeds <- (((as.numeric(HorizonPrice)/price.basis) * principal) + 
                           Accrued(HorizonCashFlow))
     
     HorizonSpread <- CurveSpreads(
@@ -527,7 +521,7 @@
         CouponIncome = CouponIncome,
         PrincipalReceived = PrincipalRepaid,
         ReinvestmentIncome = ReinvestmentIncome,
-        HorizonCurrBal = par.amount - PrincipalRepaid,
+        HorizonCurrBal = principal - PrincipalRepaid,
         HorizonPrice = as.numeric(HorizonPrice),
         HorizonReturn = HorizonReturn,
         HorizonMos = horizon.months,

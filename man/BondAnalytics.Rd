@@ -4,8 +4,9 @@
 \alias{BondAnalytics}
 \title{Bond Analytics function}
 \usage{
-BondAnalytics(bond.id, principal, price, trade.date, settlement.date,
-  method = "dl")
+BondAnalytics(bond.id = "character", principal = numeric(),
+  price = numeric(), trade.date = "character",
+  settlement.date = "character", method = "dl")
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or id of the bond}

@@ -296,14 +296,14 @@
   #' seasoning ramp
   #' @param CPR A numeric value the CPR speed
   #' @export
-  MortgageScenario  <- function(bond.id,
-                          settlement.date,
-                          rates.data,
-                          price, 
-                          original.bal,
-                          scenario,
-                          horizon.months,
-                          method,
+  MortgageScenario  <- function(bond.id = "character",
+                          settlement.date = "character",
+                          rates.data = "character",
+                          price = "character", 
+                          original.bal = numeric(),
+                          scenario = "character",
+                          horizon.months = numeric(),
+                          method = "dl",
                           prepayment,
                           ...,
                           horizon.spot.spread = NULL,
@@ -459,7 +459,7 @@
     } else {
     HorizonTermStructure <- TermStructure(
       rates.data = HorizonCurve,
-      method = "ns")
+      method = method)
     } # End of if logic for term structure method
     
     # This section of code rolls the MBS pass-though forward in time updating

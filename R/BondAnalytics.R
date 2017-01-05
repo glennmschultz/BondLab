@@ -65,11 +65,11 @@
   #'\dontrun{BondAnalytics(bond.id = "bondlab10", principal = 1000, price = 100, 
   #'trade.date = "01-10-2013", settlement.date = "01-16-2013")}
   #'@export
-  BondAnalytics <- function (bond.id,
-                             principal,
-                             price, 
-                             trade.date, 
-                             settlement.date, 
+  BondAnalytics <- function (bond.id = "character",
+                             principal = numeric(),
+                             price = numeric(), 
+                             trade.date = "character", 
+                             settlement.date = "character", 
                              method = "dl"){
   # Error Trap Settlement Date and Trade Date order.  This is not done 
   # in the Error Trap Function because that function is 

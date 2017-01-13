@@ -1,4 +1,3 @@
-
   # Bond Lab is a software application for the analysis of 
   # fixed income securities it provides a suite of applications
   # mortgage backed, asset backed securities, and commerical mortgage backed 
@@ -56,8 +55,8 @@
   for(i in 1:RowCount) {
     if(SwapRateData[i,ColCount] != "ND") {data = SwapRateData[i,]                                      
     data <- rbind(data, as.numeric(maturityvector))
-
+    
     saveRDS(data, paste(
       system.file(package = "BondLab"),"/RatesData/", 
       as.character(data[1,1]), ".rds", sep = ""), compress = TRUE)}}
-}
+  }

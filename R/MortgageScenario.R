@@ -677,7 +677,7 @@
         sum(PrepaidPrin(MortgageCashFlow)[1:horizon.months]),
       ReinvestmentIncome = ReinvestmentIncome,
       HorizonCurrBal = original.bal * MBSFactor(HorizonMBS),
-      HorizonPrice = as.numeric(HorizonPrice),
+      HorizonPrice = PriceDecimal(HorizonPrice),
       HorizonReturn = HorizonReturn,
       HorizonMos = horizon.months,
       Name = Name(Scenario),

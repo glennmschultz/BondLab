@@ -577,10 +577,10 @@
   
   # Horizon.Price.Value is a function which returns the principal proceeds
   # at the horizon date and is used to calculate PresentValue
-  Horizon.Price.Value <- function(HorizonBond = "character",
-                                    HorizonPrice = numeric()){
-      price.basis = 100
-      original.bal * MBSFactor(HorizonBond) * (HorizonPrice/price.basis)
+  Horizon.Price.Value <- function(HorizonBond,
+                                    HorizonPrice){
+      HorizonPrice <- PriceTypes(HorizonPrice)
+      original.bal * MBSFactor(HorizonBond) * (PriceBasis(HorizonPrice))
     }
   
   PresentValue <- switch(horizon.price.type,
@@ -597,17 +597,15 @@
   HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
   (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
   
-  
-  # Replace this with PriceTypes objects  
-  HorizonPrice <- sprintf("%.8f", HorizonPrice)
+  HorizonPrice <- PriceTypes(Price = HorizonPrice)
   
   HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
                     original.bal = original.bal,
                     settlement.date = HorizonSettlement,
-                    price = HorizonPrice,
+                    price = PriceDecimalString(HorizonPrice),
                     PrepaymentAssumption = HorizonPrepaymentAssumption)
   
-  HorizonProceeds <- ((as.numeric(HorizonPrice)/price.basis * 
+  HorizonProceeds <- ((PriceBasis(HorizonPrice) * 
                          MBSFactor(HorizonMBS) *
                          original.bal) + Accrued(HorizonCashFlow))
 

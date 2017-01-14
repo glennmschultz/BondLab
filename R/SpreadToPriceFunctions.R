@@ -80,7 +80,7 @@
     Spread <- SpreadTypes(Spread = spread)
     
     rates.data <- Rates(trade.date = trade.date)
-    bond.id = MBS(MBS.id = bond.id)
+    bond.id = bond.id
     MortgageRate = MtgRate()
     Burnout = BurnOut(bond.id)
     orig.bal = OriginalBal(bond.id)

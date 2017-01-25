@@ -587,13 +587,14 @@
   # investor estimated cashflow is accurately projected following
   # TBA settlement
   
-  SchedSMM = Sched.Prin(balance = 1, 
+  SchedPrin = Sched.Prin(balance = principal, 
                         note.rate = note.rate,
                         term.mos = WAM,
                         period =1)
   
   if(PrepaymentAssumption(PrepaymentAssumption) == "CPR"){
-    AdjFactor = factor - SMM(PrepaymentAssumption)[1] - SchedSMM
+    paydown = (principal - SchedPrin) * SMM(PrepaymentAssumption)[1]
+    AdjFactor = (principal - SchedPrin - paydown)/OriginalBal(bond.id)
   } else {AdjFactor = factor}
   
   AdjPrincipal = original.bal * AdjFactor

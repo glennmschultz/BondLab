@@ -601,7 +601,7 @@
   
   MBS.CF.Table = CashFlowEngine(bond.id = bond.id,
                                 settlement.date = settlement.date,
-                                principal = AdjPrincipal,
+                                principal = principal,
                                 PrepaymentAssumption = PrepaymentAssumption)
 
 

@@ -644,7 +644,7 @@
           tol = tolerance, 
           time.period = round(as.numeric(MBS.CF.Table[,"Time"]),12), 
           cashflow = round(as.numeric(MBS.CF.Table[,"Investor CashFlow"]),12), 
-          principal = AdjPrincipal, 
+          principal = principal, 
           price = PriceBasis(Price), 
           accrued.interest = accrued.interest)$root)
     

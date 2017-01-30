@@ -69,25 +69,6 @@
   # Note: HorizonReturn is found in MortgageScenario.R
   # Note: HorizonMos is found in MortgageScenario.R
 
-  setMethod("initialize",
-            signature("BondReturn"),
-            function(.Object,
-                     CouponIncome = numeric(),
-                     PrincipalReceived = numeric(),
-                     ReinvestmentIncome = numeric(),
-                     HorizonCurrBal = numeric(),
-                     HorizonReturn = numeric(),
-                     HorizonMos = numeric(),
-                     ...)
-            {
-              callNextMethod(.Object,
-                             CouponIncome = CouponIncome,
-                             PrincipalReceived = PrincipalReceived,
-                             ReinvestmentIncome = ReinvestmentIncome,
-                             HorizonCurrBal = HorizonCurrBal,
-                             HorizonReturn = HorizonReturn,
-                             HorizonMos = HorizonMos)
-            })
   #' @title CouponIncome method, class BondReturn
   #' @family Bond Scenario Analysis
   #' @description 
@@ -184,13 +165,6 @@
                                       horizon.price = NULL)
     {standardGeneric("BondScenario")})
   
-  setMethod("initialize",
-            signature("BondScenario"),
-            function(.Object,
-                     ...)
-            {callNextMethod(.Object,
-                            ...)
-            })
   
   #' @title BondScenario function
   #' @family Bond Scenario Analysis
@@ -290,7 +264,7 @@
                                   price = PriceDecimalString(Price))
     
     proceeds <- Accrued(BondCashFlow) + (principal * PriceBasis(Price))
-    #principal <- par.amount
+    
     
     # Compute the CurvesSpreads based on the user price and prepayment vector
     # given the user's scenario interest rate shift

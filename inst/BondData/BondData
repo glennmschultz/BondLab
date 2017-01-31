@@ -51,7 +51,7 @@
   #10-year note
   MakeBondDetails(
   Cusip = "9128282A7",
-  ID = "UST150082026",
+  ID = "9128282A7UST150082026",
   BondType = "UST",
   Sector = "USGovt",
   Issuer = "US Treasury",

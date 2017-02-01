@@ -362,7 +362,7 @@
     HorizonSettlement <- as.Date(
       settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
     
-    Price <- PriceTypes(Price = price)
+    Price <- PriceTypes(price = price)
   
     # fit the term structure and calcualate cashflows to compute the 
     # following Yield, WAL, Curve Spreads, KeyRate Durations, etc
@@ -597,7 +597,7 @@
   HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
   (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
   
-  HorizonPrice <- PriceTypes(Price = HorizonPrice)
+  HorizonPrice <- PriceTypes(price = HorizonPrice)
   
   HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
                     original.bal = original.bal,

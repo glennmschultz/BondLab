@@ -555,6 +555,16 @@
                              settlement.date = "character",
                              price = "character",
                              PrepaymentAssumption = "character"){
+    
+    if(mode(bond.id) != "S4") stop ("bond.id must be object MBSDetails")
+    if(mode(original.bal) != "numeric") stop ("original.bal must be numeric")
+    if(nchar(strsplit(settlement.date, "-")[[1]][3]) != 4) stop (
+      "enter date in mm-dd-YYYY format")
+    if(mode(price) != "character") stop (
+      "price must be entered as a character")
+    if(is.na(strsplit(price, "\\.|\\-")[[1]][2]) == TRUE) stop (
+      "tail value is missing"
+    ) 
   
   #This function error traps mortgage bond inputs
   ErrorTrap(bond.id = bond.id, 
@@ -587,17 +597,17 @@
   # investor estimated cashflow is accurately projected following
   # TBA settlement
   
-  SchedPrin = Sched.Prin(balance = principal, 
-                        note.rate = note.rate,
-                        term.mos = WAM,
-                        period =1)
+  #SchedPrin = Sched.Prin(balance = principal, 
+  #                      note.rate = note.rate,
+  #                      term.mos = WAM,
+  #                      period =1)
   
-  if(PrepaymentAssumption(PrepaymentAssumption) == "CPR"){
-    paydown = (principal - SchedPrin) * SMM(PrepaymentAssumption)[1]
-    AdjFactor = (principal - SchedPrin - paydown)/OriginalBal(bond.id)
-  } else {AdjFactor = factor}
+  #if(PrepaymentAssumption(PrepaymentAssumption) == "CPR"){
+  #  paydown = (principal - SchedPrin) * SMM(PrepaymentAssumption)[1]
+  #  AdjFactor = (principal - SchedPrin - paydown)/OriginalBal(bond.id)
+  #} else {AdjFactor = factor}
   
-  AdjPrincipal = original.bal * AdjFactor
+  #AdjPrincipal = original.bal * AdjFactor
   
   MBS.CF.Table = CashFlowEngine(bond.id = bond.id,
                                 settlement.date = settlement.date,

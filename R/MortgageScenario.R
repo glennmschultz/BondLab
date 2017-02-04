@@ -599,7 +599,7 @@
   HorizonPrice <- if(horizon.price.type == "price"){horizon.price} else {
   (PresentValue / (original.bal * MBSFactor(HorizonMBS))) * price.basis}
   
-  HorizonPrice <- PriceTypes(price = HorizonPrice)
+  HorizonPrice <- PriceTypes(price = as.character(HorizonPrice))
   
   HorizonCashFlow <- MortgageCashFlow(bond.id = HorizonMBS,
                     original.bal = original.bal,

@@ -60,16 +60,12 @@
   PrincipalPmtDate <- function(date.vector = "character",
                                principal.vector = "character",
                                type = "character"){
-
+    
     if(!type %in% c("FirstPmt", "LastPmt")) stop("Not a valid type")
-
-    firstpmt <- function(x){x!=0}
-    lastdate <- length(principal.vector)
-
-    PaymentIndex <- date.vector[which(sapply(principal.vector, firstpmt ) == TRUE)[1]]
-
-    if(type == "FirstPmt") {unname(PaymentIndex)
-    }else{unname(date.vector[lastdate])}}
-
-
-
+    
+    firstdate <- min(which(principal.vector !=0))
+    lastpmt <- max(which(principal.vector !=0))
+    
+    
+    if(type == "FirstPmt") {unname(date.vector[firstdate])
+    }else{unname(date.vector[lastpmt])}}

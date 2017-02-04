@@ -194,6 +194,10 @@
     PriceBasis = 100
     Units = 32
     
+    if(mode(price) != "character") stop ("price must be a character")
+    if(is.na(strsplit(price, "\\.|\\-")[[1]][2]) == TRUE) stop (
+      "tail value is missing")
+    
     Convertto32nds <- function(Price = "character"){
       #convert price to numeric value
       Price = as.numeric(Price)

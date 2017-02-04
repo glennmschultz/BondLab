@@ -359,9 +359,11 @@
     HorizonCurve[1,2:length(HorizonCurve)] <- 
       ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
                                 Shiftbps = Shiftbps(Scenario))
-    HorizonSettlement <- as.Date(
-      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
     
+    HorizonSettlement <- as.character(
+      as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months),
+      format = "%m-%d-%Y")
+ 
     Price <- PriceTypes(price = price)
   
     # fit the term structure and calcualate cashflows to compute the 

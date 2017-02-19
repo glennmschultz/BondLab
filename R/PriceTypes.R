@@ -193,6 +193,7 @@
   PriceTypes <- function(price = "character"){
     PriceBasis = 100
     Units = 32
+
     
     if(mode(price) != "character") stop ("price must be a character")
     if(is.na(strsplit(price, "\\.|\\-")[[1]][2]) == TRUE) stop (
@@ -225,7 +226,7 @@
       
       # Convert Price when entered as a decimal value
       if(grepl(".", as.character(price), fixed = TRUE) == TRUE){
-        Price_Decimal = format(price, nsmall =2)
+        Price_Decimal = format(as.numeric(price), nsmall =2)
         Price_32nds = Convertto32nds(Price = price)
         Price_Basis = as.numeric(price) / PriceBasis
         Price_Decimal_String = ConverttoString(

@@ -30,6 +30,18 @@
            yr30 = "function",
            yr15 = "function"))
   
+  #' A standard generic function to access the slot yr30 from class MortgageRate
+  #' @param object an S4 class object
+  #' @export yr30 
+  setGeneric("yr30", function(object)
+    {standardGeneric("yr30")})
+  
+  #' A standard generic function to access the slot yr15 from class MortgageRate
+  #' @param object an S4 class object
+  #' @export yr15
+  setGeneric("yr15", function(object)
+    {standardGeneric("yr15")})
+  
   #' A constructor function for the class Mortgage Rate
   #' @param two A numeric value the two year rate
   #' @param ten A numeric value the ten year rate

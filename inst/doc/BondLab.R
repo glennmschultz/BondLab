@@ -73,7 +73,7 @@ Valuation()
       settlementdate <- "08-18-2016"
     # note PriceTypes class is used to convert price from string to
     # numeric decimal equivilant
-    Price <- PriceTypes(Price = price)
+    Price <- PriceTypes(price = price)
 
 ## ---- termstructure, echo = TRUE-----------------------------------------
    rates.data <- Rates(trade.date = "07-11-2016")
@@ -100,7 +100,7 @@ PassThrough <-
                    original.bal = OriginalBal(bond.id),
                    settlement.date = settlementdate,
                    # note: here price is passed as decimal eqivalent string
-                   # internally this function also uses PriceType to convert
+                   # internally this function also uses PriceTypes to convert
                    # price to a numeric decimal basis
                    price = PriceDecimalString(Price),
                    PrepaymentAssumption = Prepayment)
@@ -121,6 +121,9 @@ PassThrough <-
     NoChangeScenario <- MortgageScenario(
       bond.id = bond.id,
       settlement.date = settlementdate,
+      #note: rates data is passed rather than term structure object
+      #this is because the scenario operates on either the spot curve
+      #taken from term structure object of on coupon curve (rates data)
       rates.data = rates.data,
       price = PriceDecimalString(Price),
       original.bal = OriginalBal(bond.id),
@@ -165,7 +168,5 @@ MyPassThrough <- function(bond.id = "character",
                                   MortgageRate = MortgageRate,
                                   ModelTune = ModelTune,
                                   PrepaymentAssumption = prepayment,
-                                  CPR = CPR)
-
-                         }
+                                  CPR = CPR)}
 

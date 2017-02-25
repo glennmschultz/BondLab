@@ -25,7 +25,6 @@
   #' @slot yr15 A function defining the 15-year mortgage rate as a function
   #' of the 2- and 10-year swap rate 
   #' @export MortgageRate
-   
   setClass("MortgageRate",
          representation(
            yr30 = "function",

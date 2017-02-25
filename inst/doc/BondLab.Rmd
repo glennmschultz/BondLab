@@ -41,19 +41,6 @@ uses the following R packages:
 
 ## The Bond Lab® Valuation Framework
 
-The Bond Lab® valuation framework combines both linear and non-linear
-term structure assumptions into a holistic valuation framework.  Bond cashflows
-are viewed as bundle of zero coupon cashflows which are discounted along the
-spot rate curve.  The value or price of a bond is sum of the individual 
-valuation of each zero coupon cashflow.  The timing and magnitude of the 
-cahflows determine the relative richness or cheapness of each cashflow.  
-
-* The cheap cashflows are those whose present value along the spot curve are greater
-than the yield to maturity (a linear term structure assumption) pricing of each cashflow.
-
-* The rich cashflows are those whose present value along the sopt rate curve are
-less than the yield to maturity assumption pricing of each cashflow.
-
 ```{r, echo = FALSE, fig.align='center', fig.height= 5, fig.width= 7}
  Valuation <- function(){
     cbbPalette <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', 
@@ -115,6 +102,19 @@ less than the yield to maturity assumption pricing of each cashflow.
  }
 Valuation()
 ```
+
+The Bond Lab® valuation framework combines both linear and non-linear
+term structure assumptions into a holistic valuation framework.  Bond cashflows
+are viewed as bundle of zero coupon cashflows which are discounted along the
+spot rate curve.  The value or price of a bond is sum of the individual 
+valuation of each zero coupon cashflow.  The timing and magnitude of the 
+cahflows determine the relative richness or cheapness of each cashflow.  
+
+* The cheap cashflows are those whose present value along the spot curve are greater
+than the yield to maturity (a linear term structure assumption) pricing of each cashflow.
+
+* The rich cashflows are those whose present value along the sopt rate curve are
+less than the yield to maturity assumption pricing of each cashflow.
 
 > the spread to the spot rate curve is referred to in the fixed income markets as
 the **Zero Volatility Spread**. The zero volatility spread (ZV spread) is the 
@@ -192,8 +192,8 @@ security
 
 ### Scenario
     The scenario class represents interest rates used in total return scenario 
-    analysis.  The user may define and scenario applied to either the coupon curve
-    or the spot rate curve.  spot rate curve scenarios are designated with a trailing
+    analysis.  The user may define a scenario applied to either the coupon curve
+    or the spot rate curve.  spot rate curve scenarios are identified with a trailing
     (s).
 
 ## Bond Classes  
@@ -322,7 +322,7 @@ Bond Lab call for MBS return analysis is outlined below
       settlementdate <- "08-18-2016"
     # note PriceTypes class is used to convert price from string to
     # numeric decimal equivilant
-    Price <- PriceTypes(Price = price)
+    Price <- PriceTypes(price = price)
 ```
 
 ## Step Two: call the yield curve and fit the term structure model
@@ -357,7 +357,7 @@ PassThrough <-
                    original.bal = OriginalBal(bond.id),
                    settlement.date = settlementdate,
                    # note: here price is passed as decimal eqivalent string
-                   # internally this function also uses PriceType to convert
+                   # internally this function also uses PriceTypes to convert
                    # price to a numeric decimal basis
                    price = PriceDecimalString(Price),
                    PrepaymentAssumption = Prepayment)
@@ -382,6 +382,9 @@ PassThrough <-
     NoChangeScenario <- MortgageScenario(
       bond.id = bond.id,
       settlement.date = settlementdate,
+      #note: rates data is passed rather than term structure object
+      #this is because the scenario operates on either the spot curve
+      #taken from term structure object of on coupon curve (rates data)
       rates.data = rates.data,
       price = PriceDecimalString(Price),
       original.bal = OriginalBal(bond.id),
@@ -439,7 +442,5 @@ MyPassThrough <- function(bond.id = "character",
                                   MortgageRate = MortgageRate,
                                   ModelTune = ModelTune,
                                   PrepaymentAssumption = prepayment,
-                                  CPR = CPR)
-
-                         }
+                                  CPR = CPR)}
 ```

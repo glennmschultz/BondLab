@@ -2,9 +2,10 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{SaveMortgageRate}
 \alias{SaveMortgageRate}
-\title{A connection function to save the PrepaymentModel model tuning parameters}
+\title{A connection function to save the prepayment model folder to 
+save teh mortgage rate function class}
 \usage{
-SaveMortgageRate()
+SaveMortgageRate(ModelFile, ModelName)
 }
 \arguments{
 \item{ModelFile}{A character string the model tuning default value is temp}
@@ -13,7 +14,7 @@ SaveMortgageRate()
 prepayment model}
 }
 \description{
-Opens a connection to the PrepaymentModel folder to save the prepayment
-model tuning
+A connection function to save the prepayment model folder to 
+save teh mortgage rate function class
 }
 

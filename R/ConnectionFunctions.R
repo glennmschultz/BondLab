@@ -109,8 +109,8 @@
       return(Rates)
     }
     
-  setGeneric("Rates", function(trade.date = "character")
-    {standardGeneric("Rates")})
+  #setGeneric("Rates", function(trade.date = "character")
+  #  {standardGeneric("Rates")})
 
   #' A connection function to the Prepayment model folder to call 
   #' mortgage rate function class
@@ -131,20 +131,19 @@
       on.exit(close.connection(MtgRate.Conn))
       return(MtgRate)}
   
-  #' A connection function to save the PrepaymentModel model tuning parameters
+  #' A connection function to save the prepayment model folder to 
+  #' save teh mortgage rate function class
   #' 
-  #' Opens a connection to the PrepaymentModel folder to save the prepayment
-  #' model tuning
   #' @param ModelFile A character string the model tuning default value is temp
   #' @param ModelName A character string the model name used to reference the
   #' prepayment model
   #' @export 
-  SaveMortgageRate <-function(){
+  SaveMortgageRate <-function(ModelFile, ModelName){
     MortgageRateConn <-gzfile(description = paste(
       system.file(package = "BondLab"), "/PrepaymentModel/", 
       "MortgageRate.rds", sep =""))
-    on.exit(close.connection(ModelRateConn))
-    saveRDS("MortgageRate.rds", ModelTuneConn)
+    on.exit(close.connection(MortgageRateConn))
+    saveRDS("MortgageRate.rds", MortgageRateConn)
   }
 
   #' A connection function to the horzon MBS pass-though object

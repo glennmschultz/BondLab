@@ -148,7 +148,8 @@
     
     # use predict ModelCurve to determine
     ICurve = predict(ModelCurve, WAL)
-    YieldTypes <- YieldTypes( yield = (ICurve + SpreadDecimal(Spread)))
+    yieldforprice = sprintf("%.8f", ICurve, SpreadDecimal(Spread))
+    YieldTypes <- YieldTypes(yield = (ICurve + SpreadDecimal(Spread)))
     
     # Present value of the cash flows Present Value Factors
     MBS.CF.Table[,"Present Value Factor"] =
@@ -160,9 +161,10 @@
       MBS.CF.Table[,"Investor CashFlow"] *
       MBS.CF.Table[,"Present Value Factor"]
     
-    price = ((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) /
-               principal) * price.basis
-    PriceTypes <- PriceTypes(price = as.character(price))
+    price = round((((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) /
+               principal) * price.basis), digits = 8)
+    
+    PriceTypes <- PriceTypes(price = sprintf("%.8f", price))
     return(PriceTypes)
   }
   

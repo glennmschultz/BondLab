@@ -201,7 +201,7 @@
     Convertto32nds <- function(Price){
       #convert price to numeric value
       Price = as.numeric(Price)
-      tail32nds = round(x = (Price - floor(x = Price)) * 32, digits = 4)
+      tail32nds = round(x = (Price - floor(x = Price)) * 32, digits = 8)
       Price = paste(as.character(floor(x=Price)),
                     "-",
                     as.character(tail32nds),
@@ -225,7 +225,7 @@
       
       # Convert Price when entered as a decimal value
       if(grepl(".", as.character(price), fixed = TRUE) == TRUE){
-        Price_Decimal = format(as.numeric(price), nsmall =2)
+        Price_Decimal = format(as.numeric(price), nsmall = 8)
         Price_32nds = Convertto32nds(Price = price)
         Price_Basis = as.numeric(price) / PriceBasis
         Price_Decimal_String = ConverttoString(

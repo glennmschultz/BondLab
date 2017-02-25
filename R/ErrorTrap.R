@@ -25,7 +25,8 @@
                         principal = numeric(), 
                         settlement.date = "character", 
                         price = "character") {
-  #Error inputs by the user make sure all needed dates and values are passed to Bond Cash Flow
+  #Error inputs by the user make sure all needed dates and values are 
+  #passed to Bond Cash Flow
   issue.date = bond.id@IssueDate
   start.date = bond.id@DatedDate
   end.date = bond.id@Maturity
@@ -56,15 +57,18 @@
   
   #============= Pass dates into the function m-d-y ======================
   
-  #Error Trapping on Dates settlement date < next payment date or settlement date , issue date    
-  if(settlement.date > nextpmt.date) stop ("Settlement Date is Greater Than Next Payment Date")
+  #Error Trapping on Dates settlement date < next payment date or 
+  #settlement date , issue date    
+  if(settlement.date > nextpmt.date) 
+    stop ("Settlement Date is Greater Than Next Payment Date")
   if(settlement.date < issue.date) stop ("Settlement Date is Less Than Issue Date")
-  if(settlement.date < lastpmt.date) stop ("Settlement Date is Less Than Last Payment Date")
-  #Error Trapping on frequency and payment dates
-  
+  if(settlement.date < lastpmt.date) 
+    stop ("Settlement Date is Less Than Last Payment Date")
+   
   #Error Trap the user's price input
   if(price <= 0) stop("No valid bond price")
   #Error Trap the user's coupon input
   if (coupon < 0 | coupon > 100) stop("No valid coupon specified.")
-  #Note: Minimum demonination needs to be added to class bond information as well as function input
+  #Note: Minimum demonination needs to be added to class bond information 
+  #as well as function input
   }

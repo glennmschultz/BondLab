@@ -187,19 +187,18 @@
   
   #' PriceTypes is a constructor function for the class PriceTypes
   #' 
-  #' @param Price character the price in either 
+  #' @param price character the price in either 
   #' decimal notation (example "100.125") or 32nds notation (example "100-4")
   #' @export PriceTypes
-  PriceTypes <- function(price = "character"){
+  PriceTypes <- function(price){
     PriceBasis = 100
     Units = 32
 
-    
     if(mode(price) != "character") stop ("price must be a character")
     if(is.na(strsplit(price, "\\.|\\-")[[1]][2]) == TRUE) stop (
       "tail value is missing")
     
-    Convertto32nds <- function(Price = "character"){
+    Convertto32nds <- function(Price){
       #convert price to numeric value
       Price = as.numeric(Price)
       tail32nds = round(x = (Price - floor(x = Price)) * 32, digits = 4)
@@ -210,7 +209,7 @@
       return(Price)
     }
       
-      ConverttoDecimal <- function(Price = "character", Units = numeric()){
+      ConverttoDecimal <- function(Price, Units){
         SplitPrice = strsplit(as.character(Price), "-")
         handle = as.numeric(SplitPrice[[1]][1])
         TailDecimal = signif(as.numeric(SplitPrice[[1]][2])/Units,8)
@@ -220,7 +219,7 @@
         return(Price)
       }
 
-    ConverttoString <- function(PriceDecimal = numeric()){
+    ConverttoString <- function(PriceDecimal){
       sprintf("%.8f", PriceDecimal)
     }
       

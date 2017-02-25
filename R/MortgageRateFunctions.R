@@ -29,13 +29,17 @@
          representation(
            yr30 = "function",
            yr15 = "function"))
-
+  
   #' A constructor function for the class Mortgage Rate
-  MortgageRate <- function(){
+  #' @param two A numeric value the two year rate
+  #' @param ten A numeric value the ten year rate
+  #' @param sato A numeric value the borrower SATO
+  #' @export
+  MortgageRate <- function(two, ten, sato){
     new("MortgageRate",
-        yr30 = function(two = numeric(), ten = numeric(), sato = numeric()) {
+        yr30 = function(two = two, ten = ten, sato = sato) {
                         2.25 + (.06 * two) + (.75 * ten) + sato},
-        yr15 = function(two = numeric(), ten = numeric(), sato = numeric()){
+        yr15 = function(two = two, ten = ten, sato = sato){
                         1.75 + (.06 * two) + (.75 * ten) + sato}
                       )}
   

@@ -69,7 +69,7 @@ payment from the trust to the investor}
 \item{BondLab}{A character string BondLab's or the user's 
 assigned credit rating}
 
-\item{Frequency}{A numeric value string the frequency of payments made 
+\item{Frequency}{A numeric value the frequency of payments made 
 to the investor}
 
 \item{BondBasis}{A character string the basis on which 

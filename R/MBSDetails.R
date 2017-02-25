@@ -926,7 +926,7 @@
   #' @param SP A character string SP's assigned credit rating
   #' @param BondLab A character string BondLab's or the user's 
   #' assigned credit rating
-  #' @param Frequency A numeric value string the frequency of payments made 
+  #' @param Frequency A numeric value the frequency of payments made 
   #' to the investor
   #' @param BondBasis A character string the basis on which 
   #' interest is calculated

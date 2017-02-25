@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondDetails.R
 \name{MakeBondDetails}
 \alias{MakeBondDetails}
-\title{A constuctor function to create standard bond cusip information}
+\title{MakeBondDetails}
 \usage{
 MakeBondDetails(Cusip, ID, BondType, Sector, Issuer, Underwriter, OfferAmount,
   Coupon, IssueDate, DatedDate, Maturity, LastPmtDate, NextPmtDate, Moody, SP,
@@ -56,6 +56,10 @@ the investor}
 \item{SinkingFund}{a character strign the bond sinking fund schedule}
 }
 \description{
-This is a standard generic function used to construct a tradtional bond
+Creates standard bond cusip information and
+saves to the BondData folder useful for working on a local computer
+}
+\seealso{
+Other BondDetails: \code{\link{BondDetails}}
 }
 

@@ -362,28 +362,57 @@
   setMethod("SinkingFund", signature("BondDetails"),
             function(object){object@SinkingFund})
   
+  #' @title BondDetails
+  #' @family BondDetails
+  #' @description BondDetails creates Bond cusip object in the local environment
+  #' useful for connection to an extenal database and parallel computing
+  #' @param Cusip A character the cusip number
+  #' @param ID a character the bond ticker
+  #' @param BondType A character string the type of bond Bond, MBS, etc
+  #' @param Sector A character string the description of the sector 
+  #' @param Issuer A character string the name of the issuer
+  #' @param Underwriter A character string the name of the underwriter
+  #' @param OfferAmount A numeric value the original offering amount
+  #' @param Coupon A numeric value the coupon
+  #' @param IssueDate A character string the issue date mm-dd-YYYY
+  #' @param DatedDate A character string the dated date mm-dd-YYYY
+  #' @param Maturity A character string the maturity date mm-dd-YYYY
+  #' @param LastPmtDate A character string the last pmt date mm-dd-YYYY
+  #' @param NextPmtDate A character string the next pmt date mm-dd-YYYY
+  #' @param Moody A character string the Moody rating
+  #' @param SP A character string the SP rating
+  #' @param BondLab A character string the BondLab rating
+  #' @param Frequency A numeric value the frequency of payments made to the
+  #' investor
+  #' @param BondBasis A character string the basis on which interest 
+  #' is calcualted
+  #' @param Callable A logical indicating if the bond is callable
+  #' @param Putable A logical indicating if the bond is putable
+  #' @param SinkingFund A logical indicating if the bond has a sinking fund
+  #' provision
+  #' @export
   BondDetails <-function(
-    Cusip = "character",
-    ID ="character",
-    BondType = "character",
-    Sector ="character",
-    Issuer = "character",
-    Underwriter = "character",
-    OfferAmount = numeric(),
-    Coupon = numeric(),
-    IssueDate = "character",
-    DatedDate = "character",
-    Maturity = "character",
-    LastPmtDate = "character",
-    NextPmtDate = "character",
-    Moody = "character",
-    SP = "character",
-    BondLab  = "character",
-    Frequency = numeric(),
-    BondBasis = "character",
-    Callable = "logical",
-    Putable = "logical",
-    SinkingFund = "logical") {
+    Cusip,
+    ID,
+    BondType,
+    Sector,
+    Issuer,
+    Underwriter,
+    OfferAmount,
+    Coupon,
+    IssueDate,
+    DatedDate,
+    Maturity,
+    LastPmtDate,
+    NextPmtDate,
+    Moody,
+    SP,
+    BondLab,
+    Frequency,
+    BondBasis,
+    Callable,
+    Putable,
+    SinkingFund) {
     
     new("BondDetails",
         Cusip = Cusip,
@@ -409,9 +438,10 @@
         SinkingFund = SinkingFund)
   }
 
-  #' A constuctor function to create standard bond cusip information
-  #' 
-  #' This is a standard generic function used to construct a tradtional bond
+  #'@title MakeBondDetails
+  #'@family BondDetails
+  #'@description Creates standard bond cusip information and
+  #' saves to the BondData folder useful for working on a local computer
   #' @param Cusip A character string the bond's cusip number
   #' @param ID A character string the bond's ID
   #' @param BondType A character string the type of bond

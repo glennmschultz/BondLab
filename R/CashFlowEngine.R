@@ -17,11 +17,11 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  setGeneric("CashFlowEngine",function (bond.id = "character",
-                                        settlement.date = "character",
-                                        principal = numeric(), 
-                                        PrepaymentAssumption = "character")
-    {standardGeneric("CashFlowEngine")})
+  #setGeneric("CashFlowEngine",function (bond.id = "character",
+  #                                      settlement.date = "character",
+  #                                      principal = numeric(), 
+  #                                      PrepaymentAssumption = "character")
+  #  {standardGeneric("CashFlowEngine")})
 
   #' Bond Lab function the residential mortgage cash flow engine
   #' 
@@ -41,11 +41,11 @@
     end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
     lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
     nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
-    coupon = bond.id@Coupon
-    frequency = bond.id@Frequency
-    delay = bond.id@PaymentDelay
+    coupon = Coupon(bond.id) #bond.id@Coupon
+    frequency = Frequency(bond.id) #bond.id@Frequency
+    delay = PaymentDelay(bond.id) #bond.id@PaymentDelay
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
-    bondbasis = bond.id@BondBasis
+    bondbasis = BondBasis(bond.id) #bond.id@BondBasis
     
     #Mortgage specific inputs
     note.rate = GWac(bond.id)

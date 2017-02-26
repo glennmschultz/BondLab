@@ -43,16 +43,16 @@
     {standardGeneric("yr15")})
   
   #' A constructor function for the class Mortgage Rate
-  #' @param two A numeric value the two year rate
-  #' @param ten A numeric value the ten year rate
+  #' @param two.year A numeric value the two year rate
+  #' @param ten.year A numeric value the ten year rate
   #' @param sato A numeric value the borrower SATO
   #' @export
-  MortgageRate <- function(two, ten, sato){
+  MortgageRate <- function(two.year, ten.year, sato){
     new("MortgageRate",
-        yr30 = function(two = two, ten = ten, sato = sato) {
-                        2.25 + (.06 * two) + (.75 * ten) + sato},
-        yr15 = function(two = two, ten = ten, sato = sato){
-                        1.75 + (.06 * two) + (.75 * ten) + sato}
+        yr30 = function(two.year = two.year, ten,year = ten.year, sato = sato) {
+                        2.25 + (.06 * two.year) + (.75 * ten.year) + sato},
+        yr15 = function(two.year = two.year, ten.year = ten.year, sato = sato){
+                        1.75 + (.06 * two.year) + (.75 * ten.year) + sato}
                       )}
   
  

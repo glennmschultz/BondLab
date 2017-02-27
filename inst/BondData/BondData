@@ -196,7 +196,7 @@
     ID = "3138W5GK8FNAR7401",
     BondType = "MBS",
     Sector = "Agency Mortgage",
-    Issuer = "Fannie MAC",
+    Issuer = "Fannie MAE",
     Underwriter = "FNMA",
     Coupon = 3.00,
     IssueDate = "06-01-2013",

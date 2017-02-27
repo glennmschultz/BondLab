@@ -227,7 +227,7 @@
       if(grepl(".", as.character(price), fixed = TRUE) == TRUE){
         Price_Decimal = format(as.numeric(price), nsmall = 8)
         Price_32nds = Convertto32nds(Price = price)
-        Price_Basis = as.numeric(price) / PriceBasis
+        Price_Basis = format(as.numeric(sprintf("%.8s",price)) / PriceBasis, nsmall = 8)
         Price_Decimal_String = ConverttoString(
           PriceDecimal = as.numeric(Price_Decimal))
       }
@@ -235,7 +235,7 @@
       if(grepl("-", as.character(price), fixed = TRUE) == TRUE){
         Price_Decimal = ConverttoDecimal(Price = price, Units = Units)
         Price_32nds = price
-        Price_Basis = as.numeric(Price_Decimal)/PriceBasis
+        Price_Basis = format(as.numeric(Price_Decimal)/PriceBasis, nsmall = 8)
         Price_Decimal_String = ConverttoString(
           PriceDecimal = as.numeric(Price_Decimal))
       }

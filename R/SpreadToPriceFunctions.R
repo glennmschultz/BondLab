@@ -161,8 +161,8 @@
       MBS.CF.Table[,"Investor CashFlow"] *
       MBS.CF.Table[,"Present Value Factor"]
     
-    price = round((((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) /
-               principal) * price.basis), digits = 8)
+    price = signif(((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) /
+               principal) * price.basis, 12)
     
     PriceTypes <- PriceTypes(price = sprintf("%.8f", price))
     return(PriceTypes)

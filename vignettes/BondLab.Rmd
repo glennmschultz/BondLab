@@ -131,7 +131,7 @@ Zero Volatility Spread = Nominal Spread  | Rich and cheap cash flows are balance
 Zero Volatility Spread > Nominal Spread  | Cheap cash flows outweigh rich cash flows 
 
 ## Bond Lab® Design Philosphy
-Bond Lab® is designed to be modular. All classes are exposed to the user thereby allowing the user to create new class from existing classes (super class) or extend the classes as the user sees fit.  Thus, the user is free to combine these classes into a new class consiting of superclasses to fit her analytics needs or extend classes to incorporate additional analytic information.  The Bond Lab® classes are outlined below:
+Bond Lab® is designed to be modular. All classes are exposed to the user thereby allowing the user to create a new class from existing classes (sub classes) or extend the classes as the user sees fit.  Thus, the user is free to combine these classes into a new class super classes to fit her analytics needs or extend classes to incorporate additional analytic information.  The Bond Lab® classes are outlined below:
 
 # Bond Lab® Classes
 
@@ -140,40 +140,51 @@ Conversion classes take a value or string and convert the object to numeric,
 basis, or string.
 
 ### PriceTypes
-    The PriceTypes class represents price as passed to functions. Price is passed
-    to functions as a character.  The PriceTypes class converts the character value
-    to numeric and string values. It contains Price (numeric), Price32nds(string),
-    PriceBasis (numeric), and PriceDecimalString (character).  Price are be passed
-    to BondLab® functions as characters in either decimal (.) or 32nds (-) format.
+    The PriceTypes class represents price as passed to functions. Price is
+    passed to functions as a character.  The PriceTypes class converts the
+    character value to numeric and string values. It contains the slots: 
+    * Price (numeric), 
+    * Price32nds(string),
+    * PriceBasis (numeric) and
+    * PriceDecimalString (character).  
+    Price is be passed to BondLab® functions as characters in either 
+    decimal (.) or 32nds (-) format.
     
 ### YieldTypes
     The YieldTypes class represents yield to maturity as passed from function.
     Yield to maturity is passed to the function in numeric decimal form (3.0).
-    The YieldTypes class converts teh numeric decimal value to a basis value 
-    0.30 and a character string.
+    The YieldTypes class converts the numeric decimal value to a basis value 
+    0.030 and a character string. It contains the slots:
+    * YieldDecimal,
+    * YieldBasis,
+    * YieldDecimalString
 
 ### CouponTypes
-    The CouponTypes class represents the bond coupon passed to a function.  Coupon
-    is passed to function in numeric decimal form (5.5).  The CouponTypes class 
-    converts the numeric decimal value to a basis 0.55 and character string
+    The CouponTypes class represents the bond coupon passed to a function.
+    Coupon is passed to function in numeric decimal form (5.5).  The 
+    CouponTypes class  converts the numeric decimal value to a basis value and
+    character string.  It contains the slots:
+    * CouponDecimal,
+    * CouponBasis,
+    * CouponDecimalString
     
 ### GFeeTypes 
-    The GFeeTypes class represents the guarantee fee, if any, passed to the cashflow
-    engine.  GFee is passed to the function in numeric decimal form (0.35).
-    The GFeeTypes converts the numeric decimal value to a basis 0.0035 and character
-    string.
+    The GFeeTypes class represents the guarantee fee, if any, passed to the
+    cash flow engine.  GFee is passed to the function in numeric decimal form
+    (0.35). The GFeeTypes converts the numeric decimal value to a basis 0.0035
+    and character string.
 
 ### GWacTypes 
     The GWacTypes class represents the borrower Gross WAC passed to the cashflow
     engine.  GWac is passed to the function in numeric decimal form (4.00).
-    The GWacTypes converts the numeric decimal value to a basis 0.04 and character
-    string.
+    The GWacTypes converts the numeric decimal value to a basis 0.04 and
+    character string.
     
 ### ServicingFeeTypes 
-    The ServicingFeeTypes class represents the servicing fee passed to the cashflow
-    engine.  Servicing fee is passed to the function in numeric decimal form (0.30).
-    The ServicingFeeTypes converts the numeric decimal value to a basis 0.0030 
-    and character string.
+    The ServicingFeeTypes class represents the servicing fee passed to the
+    cash flow engine.  Servicing fee is passed to the function in numeric
+    decimal form (0.30). The ServicingFeeTypes converts the numeric decimal
+    value to a basis 0.0030 and character string.
 
 ## Price, Term Structure, and Scenario classes
 These classes contain the pricing and term structure classes need to price and evlauation the relative richness or cheapness of a bond or mortgage backed 
@@ -181,10 +192,10 @@ security
 
 
 ### TermStructure
-    The TermStructure class represents the term structure of interest rates.  The 
-    class contains forward rates, spot rates, two year forward, ten year forward.
-    The constructuctor function TermStrucuture is a wrapper around the package 
-    termstruc.
+    The TermStructure class represents the term structure of interest rates.
+    The class contains forward rates, spot rates, two year forward, ten year
+    forward.  The constructor function TermStrucuture is a wrapper around the
+    R package termstruc.
 
 ### CurveSpreads
     The CurvesSpreads class represents curve spreads.  It contains benchmark, 
@@ -193,8 +204,8 @@ security
 ### Scenario
     The scenario class represents interest rates used in total return scenario 
     analysis.  The user may define a scenario applied to either the coupon curve
-    or the spot rate curve.  spot rate curve scenarios are identified with a trailing
-    (s).
+    or the spot rate curve.  spot rate curve scenarios are identified with a
+    trailing (s).
 
 ## Bond Classes  
 Generally, speaking these classes pertain to a bond which pays a period coupon
@@ -268,9 +279,9 @@ a delay, based on the pool's underlying borrowers' prepayment rates.
     
 ### MortgageScenario
     The MortgageScenario class represents the mortgage total return analysis. It
-    is a superclass consisting of the classes TermStructure, PrepaymentAssumption
-    MortgageCashFlow, MortgageTermStructure, MortgageReturn, ModelToCPR,
-    CurveSpreads, Scenario.
+    is a superclass consisting of the classes TermStructure,
+    PrepaymentAssumptionMortgageCashFlow, MortgageTermStructure, MortgageReturn,
+    ModelToCPR, CurveSpreads, Scenario.
 
 ### MortgageScenarioSet
     The MortgageScenarioSet class is a list of scenarios which can be used to 
@@ -330,7 +341,7 @@ Bond Lab call for MBS return analysis is outlined below
    rates.data <- Rates(trade.date = "07-11-2016")
    # note use invisible(capture.output()) to supress messages
    invisible(capture.output(
-     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+     TermStructure <- TermStructure(rates.data = rates.data, method = "dl")))
 ```
 
 ## Step Three: call the MBS either by cusip of bond id
@@ -366,7 +377,8 @@ PassThrough <-
 ## Step Six: Optional but recommended, calculate curve spread
 ```{r, spreads, echo=TRUE}
 # note: used getter methods on the classes to calculate proceeds
-  proceeds = OriginalBal(bond.id) *MBSFactor(bond.id) * PriceBasis(Price)
+  proceeds = (OriginalBal(bond.id) *MBSFactor(bond.id) * PriceBasis(Price)) +
+  Accrued(PassThrough)
 # The class curve spreads calculates curve spreads for reporting
 # or in this case to pass zero volatility spread to the total return function  
   CurveSpreads <- CurveSpreads(rates.data = rates.data,
@@ -390,7 +402,7 @@ PassThrough <-
       original.bal = OriginalBal(bond.id),
       scenario = "NCs",
       horizon.months = 12,
-      method = "ns",
+      method = "dl",
       prepayment = "MODEL",
       horizon.spot.spread = ZeroVolSpread(CurveSpreads))))
 ```
@@ -417,30 +429,91 @@ Naturally, one does not wish to replicate the anatomy of a Bond Lab® call
 repeatedly.  The user can create her own function to encapsulate the anatomy of 
 a Bond Lab® call.
 
-```{r, MyPassThrough, echo= TRUE}
-MyPassThrough <- function(bond.id = "character",
-                         trade.date = "character",
-                         settlement.date = "character",
-                         prepayment = "character",
-                         ...,
-                         price = NULL,
-                         spread = NULL,
-                         CPR = numeric()){
+```{r, MyScenario, echo= TRUE}
+MyScenario <- function(bond.id,
+                       trade.date,
+                       settlement.date,
+                       price,
+                       scenario,
+                       horizon.months,
+                       prepayment,
+                       ...,
+                       horizon.spot.spread = NULL,
+                       horizon.nominal.spread = NULL,
+                       horizon.OAS = NULL,
+                       horizon.price = NULL,
+                       method = "dl",
+                       CPR = numeric()){
   
-  Price <- PriceTypes(Price = price)
-  bond.id <- MBS(MBS.id = "FHQ41072")
+  Price <- PriceTypes(price = price)
+  bond.id <- MBS(MBS.id = bond.id)
   rates.data <- Rates(trade.date = trade.date)
   MortgageRate <- MtgRate()
   ModelTune <- ModelTune(bond.id = bond.id) 
   
   invisible(capture.output(
-     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+    TermStructure <- TermStructure(rates.data = rates.data, 
+                                   method = method)))
   
-    #invoke the prepayment model and assign it to object
-    Prepayment <- PrepaymentModel(bond.id = bond.id,
-                                  TermStructure = TermStructure,
-                                  MortgageRate = MortgageRate,
-                                  ModelTune = ModelTune,
-                                  PrepaymentAssumption = prepayment,
-                                  CPR = CPR)}
+  #invoke the prepayment model and assign it to object
+  Prepayment <- PrepaymentModel(bond.id = bond.id,
+                                TermStructure = TermStructure,
+                                MortgageRate = MortgageRate,
+                                ModelTune = ModelTune,
+                                PrepaymentAssumption = prepayment,
+                                CPR = CPR)
+  
+  passthroughcashflow <- MortgageCashFlow(bond.id = bond.id,
+                                          original.bal = OriginalBal(bond.id),
+                                          settlement.date = settlement.date,
+                                          price = PriceDecimalString(Price),
+                                          PrepaymentAssumption = Prepayment)
+  
+  proceeds = (OriginalBal(bond.id) * MBSFactor(bond.id) * PriceBasis(Price)) +
+    Accrued(passthroughcashflow)
+  
+  Spread <- CurveSpreads(rates.data = rates.data,
+                         CashFlow = passthroughcashflow,
+                         TermStructure = TermStructure,
+                         proceeds = proceeds)
+  
+  invisible(capture.output(
+    scenario <- MortgageScenario(bond.id = bond.id,
+                               settlement.date =settlement.date,
+                               rates.data = rates.data,
+                               price = PriceDecimalString(Price),
+                               original.bal = OriginalBal(bond.id),
+                               scenario = scenario,
+                               horizon.months = horizon.months,
+                               prepayment = prepayment,
+                               method = method,
+                               horizon.spot.spread = ZeroVolSpread(Spread),
+                               horizon.nominal.spread = horizon.nominal.spread,
+                               horizon.OAS = horizon.OAS,
+                               horizon.price = horizon.price,
+                               CPR = CPR)))
+  return(scenario)
+}
+```
+
+Now, with the function completed you are ready to perform the scenario analysis.
+Simply, call the function and assign its output to the object scenario. The scenario object contains a wealth of information.
+
+```{r, analysis, echo=TRUE}
+ Scenario <- MyScenario(bond.id = "FHQ41072",
+                        trade.date = "07-11-2016",
+                        settlement.date = "08-18-2016",
+                        price = "103-16",
+                        scenario = "NCs",
+                        horizon.months = 12,
+                        prepayment = "MODEL")
+```
+
+The help files provide detail on class slots.  Alternatively, one can interrogate the class using the str() command which compactly displays the structure of an R object.  Getter methods are defined allowing one to easily retrieve the object's slots.
+
+```{r, scenarioresults, echo = TRUE}
+YieldToMaturity(Scenario)
+ModDuration(Scenario)
+ZeroVolSpread(Scenario)
+HorizonReturn(Scenario)
 ```

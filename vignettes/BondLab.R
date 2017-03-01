@@ -79,7 +79,7 @@ Valuation()
    rates.data <- Rates(trade.date = "07-11-2016")
    # note use invisible(capture.output()) to supress messages
    invisible(capture.output(
-     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+     TermStructure <- TermStructure(rates.data = rates.data, method = "dl")))
 
 ## ---- bonddata, echo=TRUE------------------------------------------------
       bond.id <- MBS(MBS.id = "FHQ41072")
@@ -107,7 +107,8 @@ PassThrough <-
 
 ## ---- spreads, echo=TRUE-------------------------------------------------
 # note: used getter methods on the classes to calculate proceeds
-  proceeds = OriginalBal(bond.id) *MBSFactor(bond.id) * PriceBasis(Price)
+  proceeds = (OriginalBal(bond.id) *MBSFactor(bond.id) * PriceBasis(Price)) +
+  Accrued(PassThrough)
 # The class curve spreads calculates curve spreads for reporting
 # or in this case to pass zero volatility spread to the total return function  
   CurveSpreads <- CurveSpreads(rates.data = rates.data,
@@ -129,7 +130,7 @@ PassThrough <-
       original.bal = OriginalBal(bond.id),
       scenario = "NCs",
       horizon.months = 12,
-      method = "ns",
+      method = "dl",
       prepayment = "MODEL",
       horizon.spot.spread = ZeroVolSpread(CurveSpreads))))
 
@@ -143,30 +144,84 @@ WAL(NoChangeScenario)
 EffDuration(NoChangeScenario)
 barplot(KeyRateDuration(NoChangeScenario))
 
-## ---- MyPassThrough, echo= TRUE------------------------------------------
-MyPassThrough <- function(bond.id = "character",
-                         trade.date = "character",
-                         settlement.date = "character",
-                         prepayment = "character",
-                         ...,
-                         price = NULL,
-                         spread = NULL,
-                         CPR = numeric()){
+## ---- MyScenario, echo= TRUE---------------------------------------------
+MyScenario <- function(bond.id,
+                       trade.date,
+                       settlement.date,
+                       price,
+                       scenario,
+                       horizon.months,
+                       prepayment,
+                       ...,
+                       horizon.spot.spread = NULL,
+                       horizon.nominal.spread = NULL,
+                       horizon.OAS = NULL,
+                       horizon.price = NULL,
+                       method = "dl",
+                       CPR = numeric()){
   
-  Price <- PriceTypes(Price = price)
-  bond.id <- MBS(MBS.id = "FHQ41072")
+  Price <- PriceTypes(price = price)
+  bond.id <- MBS(MBS.id = bond.id)
   rates.data <- Rates(trade.date = trade.date)
   MortgageRate <- MtgRate()
   ModelTune <- ModelTune(bond.id = bond.id) 
   
   invisible(capture.output(
-     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+    TermStructure <- TermStructure(rates.data = rates.data, 
+                                   method = method)))
   
-    #invoke the prepayment model and assign it to object
-    Prepayment <- PrepaymentModel(bond.id = bond.id,
-                                  TermStructure = TermStructure,
-                                  MortgageRate = MortgageRate,
-                                  ModelTune = ModelTune,
-                                  PrepaymentAssumption = prepayment,
-                                  CPR = CPR)}
+  #invoke the prepayment model and assign it to object
+  Prepayment <- PrepaymentModel(bond.id = bond.id,
+                                TermStructure = TermStructure,
+                                MortgageRate = MortgageRate,
+                                ModelTune = ModelTune,
+                                PrepaymentAssumption = prepayment,
+                                CPR = CPR)
+  
+  passthroughcashflow <- MortgageCashFlow(bond.id = bond.id,
+                                          original.bal = OriginalBal(bond.id),
+                                          settlement.date = settlement.date,
+                                          price = PriceDecimalString(Price),
+                                          PrepaymentAssumption = Prepayment)
+  
+  proceeds = (OriginalBal(bond.id) * MBSFactor(bond.id) * PriceBasis(Price)) +
+    Accrued(passthroughcashflow)
+  
+  Spread <- CurveSpreads(rates.data = rates.data,
+                         CashFlow = passthroughcashflow,
+                         TermStructure = TermStructure,
+                         proceeds = proceeds)
+  
+  invisible(capture.output(
+    scenario <- MortgageScenario(bond.id = bond.id,
+                               settlement.date =settlement.date,
+                               rates.data = rates.data,
+                               price = PriceDecimalString(Price),
+                               original.bal = OriginalBal(bond.id),
+                               scenario = scenario,
+                               horizon.months = horizon.months,
+                               prepayment = prepayment,
+                               method = method,
+                               horizon.spot.spread = ZeroVolSpread(Spread),
+                               horizon.nominal.spread = horizon.nominal.spread,
+                               horizon.OAS = horizon.OAS,
+                               horizon.price = horizon.price,
+                               CPR = CPR)))
+  return(scenario)
+}
+
+## ---- analysis, echo=TRUE------------------------------------------------
+ Scenario <- MyScenario(bond.id = "FHQ41072",
+                        trade.date = "07-11-2016",
+                        settlement.date = "08-18-2016",
+                        price = "103-16",
+                        scenario = "NCs",
+                        horizon.months = 12,
+                        prepayment = "MODEL")
+
+## ---- scenarioresults, echo = TRUE---------------------------------------
+YieldToMaturity(Scenario)
+ModDuration(Scenario)
+ZeroVolSpread(Scenario)
+HorizonReturn(Scenario)
 

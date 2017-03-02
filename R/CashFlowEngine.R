@@ -137,9 +137,10 @@
   
     MBS.CF.Table <- array(data = NA, 
                           c(num.periods, 23), 
-                          dimnames = list(seq(c(1:num.periods)),col.names))  
-  
-  for(x in 1:num.periods){
+                          dimnames = list(seq(c(1:num.periods)),col.names))
+
+  for(x in seq_along(time.period)){
+  #for(x in 1:num.periods){
     MBS.CF.Table[x,"Period"] = x
     MBS.CF.Table[x,"Date"] = pmtdate[x]
     MBS.CF.Table[x,"Time"] = time.period[x]

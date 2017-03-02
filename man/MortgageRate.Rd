@@ -4,7 +4,7 @@
 \alias{MortgageRate}
 \title{A constructor function for the class Mortgage Rate}
 \usage{
-MortgageRate(two.year, ten.year, sato)
+MortgageRate()
 }
 \arguments{
 \item{two.year}{A numeric value the two year rate}

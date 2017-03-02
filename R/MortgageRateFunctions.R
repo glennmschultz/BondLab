@@ -47,12 +47,12 @@
   #' @param ten.year A numeric value the ten year rate
   #' @param sato A numeric value the borrower SATO
   #' @export
-  MortgageRate <- function(two.year, ten.year, sato){
+  MortgageRate <- function(){
     new("MortgageRate",
-        yr30 = function(two.year = two.year, ten,year = ten.year, sato = sato) {
-                        2.25 + (.06 * two.year) + (.75 * ten.year) + sato},
-        yr15 = function(two.year = two.year, ten.year = ten.year, sato = sato){
-                        1.75 + (.06 * two.year) + (.75 * ten.year) + sato}
+        yr30 = function(two, ten, sato) {
+                        2.25 + (.06 * two) + (.75 * ten) + sato},
+        yr15 = function(two, ten, sato){
+                        1.75 + (.06 * two) + (.75 * ten) + sato}
                       )}
   
  

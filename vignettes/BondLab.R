@@ -85,7 +85,7 @@ Valuation()
       bond.id <- MBS(MBS.id = "FHQ41072")
 
 ## ---- prepayment, echo=TRUE----------------------------------------------
-    MortgageRate <- MtgRate()
+    MortgageRate <- MortgageRate()
     ModelTune <- ModelTune(bond.id = bond.id)
     #invoke the prepayment model and assign it to object
     Prepayment <- PrepaymentModel(bond.id = bond.id,

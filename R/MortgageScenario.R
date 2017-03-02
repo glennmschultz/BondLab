@@ -337,7 +337,7 @@
     
     bond.id <- bond.id
     rates.data <- rates.data
-    MortgageRate <- MtgRate()
+    MortgageRate <- MortgageRate() #MtgRate()
     ModelTune <- ModelTune(bond.id = bond.id)
     Burnout = BurnOut(bond.id)
     Scenario <- ScenarioCall(Scenario = scenario)

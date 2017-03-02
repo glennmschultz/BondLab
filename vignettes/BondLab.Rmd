@@ -351,7 +351,7 @@ Bond Lab call for MBS return analysis is outlined below
 
 ## Step Four: call the mortgage prepayment model and its dependencies
 ```{r, prepayment, echo=TRUE}
-    MortgageRate <- MtgRate()
+    MortgageRate <- MortgageRate()
     ModelTune <- ModelTune(bond.id = bond.id)
     #invoke the prepayment model and assign it to object
     Prepayment <- PrepaymentModel(bond.id = bond.id,

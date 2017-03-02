@@ -363,7 +363,7 @@ slots to the class to extend the prepayment model.</code></pre>
 </div>
 <div id="step-four-call-the-mortgage-prepayment-model-and-its-dependencies" class="section level2">
 <h2>Step Four: call the mortgage prepayment model and its dependencies</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    MortgageRate &lt;-<span class="st"> </span><span class="kw">MtgRate</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    MortgageRate &lt;-<span class="st"> </span><span class="kw">MortgageRate</span>()
     ModelTune &lt;-<span class="st"> </span><span class="kw">ModelTune</span>(<span class="dt">bond.id =</span> bond.id)
     <span class="co">#invoke the prepayment model and assign it to object</span>
     Prepayment &lt;-<span class="st"> </span><span class="kw">PrepaymentModel</span>(<span class="dt">bond.id =</span> bond.id,

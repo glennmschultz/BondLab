@@ -165,6 +165,14 @@
                                       horizon.price = NULL)
     {standardGeneric("BondScenario")})
   
+  setMethod("initialize",
+            signature("BondScenario"),
+            function(.Object,
+                     ...)
+              {callNextMethod(.Object,
+                              ...)
+              })
+  
   
   #' @title BondScenario function
   #' @family Bond Scenario Analysis

@@ -186,7 +186,7 @@
   accrued = Accrued(cashflow)
 
   # create PriceTypes for mortgage cash flow call in key rate
-  Price <- PriceTypes(Price = price)
+  Price <- PriceTypes(price = price)
  
   # calcuate proceeds the order of operation is important
 

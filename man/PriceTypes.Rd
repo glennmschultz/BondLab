@@ -4,7 +4,7 @@
 \alias{PriceTypes}
 \title{PriceTypes is a constructor function for the class PriceTypes}
 \usage{
-PriceTypes(Price = "character")
+PriceTypes(price)
 }
 \arguments{
 \item{Price}{character the price in either 

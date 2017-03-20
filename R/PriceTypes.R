@@ -190,13 +190,13 @@
   #' @param Price character the price in either 
   #' decimal notation (example "100.125") or 32nds notation (example "100-4")
   #' @export PriceTypes
-  PriceTypes <- function(Price = "character"){
+  PriceTypes <- function(price){
     PriceBasis = 100
     Units = 32
     
-    Convertto32nds <- function(Price = "character"){
+    Convertto32nds <- function(price){
       #convert price to numeric value
-      Price = as.numeric(Price)
+      Price = as.numeric(price)
       tail32nds = round(x = (Price - floor(x = Price)) * 32, digits = 4)
       Price = paste(as.character(floor(x=Price)),
                     "-",
@@ -205,8 +205,8 @@
       return(Price)
     }
       
-      ConverttoDecimal <- function(Price = "character", Units = numeric()){
-        SplitPrice = strsplit(as.character(Price), "-")
+      ConverttoDecimal <- function(price, units){
+        SplitPrice = strsplit(as.character(price), "-")
         handle = as.numeric(SplitPrice[[1]][1])
         TailDecimal = signif(as.numeric(SplitPrice[[1]][2])/Units,8)
         TailDecimal = gsub("(^|[^0-9])0+", "\\1", TailDecimal, perl = TRUE)
@@ -215,25 +215,25 @@
         return(Price)
       }
 
-    ConverttoString <- function(PriceDecimal = numeric()){
-      sprintf("%.8f", PriceDecimal)
+    ConverttoString <- function(price.decimal){
+      sprintf("%.8f", price.decimal)
     }
       
       # Convert Price when entered as a decimal value
-      if(grepl(".", as.character(Price), fixed = TRUE) == TRUE){
-        Price_Decimal = format(Price, nsmall =2)
-        Price_32nds = Convertto32nds(Price = Price)
-        Price_Basis = as.numeric(Price) / PriceBasis
+      if(grepl(".", as.character(price), fixed = TRUE) == TRUE){
+        Price_Decimal = format(price, nsmall =2)
+        Price_32nds = Convertto32nds(price = price)
+        Price_Basis = as.numeric(price) / PriceBasis
         Price_Decimal_String = ConverttoString(
-          PriceDecimal = as.numeric(Price_Decimal))
+          price.decimal = as.numeric(Price_Decimal))
       }
       
-      if(grepl("-", as.character(Price), fixed = TRUE) == TRUE){
-        Price_Decimal = ConverttoDecimal(Price = Price, Units = Units)
-        Price_32nds = Price
+      if(grepl("-", as.character(price), fixed = TRUE) == TRUE){
+        Price_Decimal = ConverttoDecimal(price = price, units = Units)
+        Price_32nds = price
         Price_Basis = as.numeric(Price_Decimal)/PriceBasis
         Price_Decimal_String = ConverttoString(
-          PriceDecimal = as.numeric(Price_Decimal))
+          price.decimal = as.numeric(Price_Decimal))
       }
 
     new("PriceTypes",

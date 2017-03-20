@@ -257,7 +257,7 @@
     HorizonSettlement <- as.Date(
       settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
     
-    Price <- PriceTypes(Price = price)
+    Price <- PriceTypes(price = price)
     
     # fit the term structure and calcualate cashflows to compute the 
     # following Yield, WAL, Curve Spreads, KeyRate Durations, etc

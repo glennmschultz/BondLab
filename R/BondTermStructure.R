@@ -143,7 +143,7 @@
   maturity = Maturity(bond.id)
   accrued = Accrued(cashflow)
   
-  Price <- PriceTypes(price)
+  Price <- PriceTypes(price = price)
 
   proceeds = (principal * PriceBasis(Price)) + accrued 
   

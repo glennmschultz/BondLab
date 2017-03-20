@@ -223,7 +223,7 @@
   
   # Pass price to the PriceTypes constructor function.  This function allows
   # converts from 32nds and to decimal basis
-  price <- PriceTypes(Price = price)
+  price <- PriceTypes(price = price)
   Coupon <- CouponTypes(coupon = coupon)
 
   # Calculate the number of cashflows that will be paid from settlement date to

@@ -481,22 +481,14 @@
                     as.character(format(
                       as.Date(LastPmtDate(bond.id), 
                               format = "%m-%d-%Y") %m+% months(horizon.months), 
-                      "%m-%d-%Y"))
-                    )
-    #LastPmtDate(HorizonMBS) <- as.character(format(
-    #  as.Date(LastPmtDate(bond.id), 
-    #          format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
+                      "%m-%d-%Y")))
     
     HorizonMBS <- `NextPmtDate<-`(HorizonMBS,
                     as.character(format(
                       as.Date(NextPmtDate(bond.id), 
                               format = "%m-%d-%Y") %m+% months(horizon.months), 
-                      "%m-%d-%Y"))
-                    )
-    #NextPmtDate(HorizonMBS) <- as.character(format(
-    #  as.Date(NextPmtDate(bond.id), 
-    #          format = "%m-%d-%Y") %m+% months(horizon.months), "%m-%d-%Y"))
-    
+                      "%m-%d-%Y")))
+      
     MBSFactor(HorizonMBS) <- ((original.bal * 
                                   MBSFactor(bond.id)) - TotalPrincipal)/ original.bal
     

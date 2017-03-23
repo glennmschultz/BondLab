@@ -374,18 +374,17 @@
         difftime(as.Date(PmtDate(HorizonCashFlow)),
                  as.Date(TradeDate(HorizonTermStructure)))/30)
       
-      #print(SpotRates$y)
       n.period = as.numeric(difftime(as.Date(PmtDate(HorizonCashFlow)),
                    as.Date(TradeDate(HorizonTermStructure)))/30) / months.in.year
-      print(n.period)
+      
       DiscountRate <- 
         (1+((SpotRates$y + horizon.spot.spread)/yield.basis))^ n.period
       DiscountRate <- 1/DiscountRate
-      print(DiscountRate)
+      
       HorizonPresentValue <- 
       DiscountRate * TotalCashFlow(HorizonCashFlow)
       PresentValue <- sum(HorizonPresentValue)
-      print(PresentValue)
+      
       return(PresentValue)}
     
     # Do not replace this with curve spreads as this section of code is used 
@@ -405,7 +404,6 @@
                            (Period(HorizonTermStructure)[1:NumberofCashFlow]))
       HorizonPresentValue <- DiscountRate * TotalCashFlow(HorizonCashFlow)
       PresentValue <- sum(HorizonPresentValue)
-      print(PresentValue)
       return(PresentValue)}
     
     # Horizon.Price.Value is a function which returns the principal proceeds

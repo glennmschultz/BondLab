@@ -399,7 +399,7 @@
   rates.data <- Rates(trade.date = trade.date)
   
   # PriceType class to convert price
-  Price <- PriceTypes(Price = price)
+  Price <- PriceTypes(price = price)
   
   issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
   start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")

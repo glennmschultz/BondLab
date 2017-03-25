@@ -493,6 +493,8 @@
         SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
         SpreadToCurve = SpreadToCurve(HorizonSpread),
         ZeroVolSpread = ZeroVolSpread(HorizonSpread),
+        Price = PriceDecimalString(Price),
+        Accrued = Accrued(BondCashFlow),
         YieldToMaturity = YieldToMaturity(BondCashFlow),
         WAL = WAL(BondCashFlow),
         ModDuration = ModDuration(BondCashFlow),

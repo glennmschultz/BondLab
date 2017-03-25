@@ -539,13 +539,30 @@
                                    HorizonCashFlow = "character",
                                    HorizonSpotSpread = numeric(),
                                    NumberofCashFlow = numeric()){
-  DiscountRate <- 1/((1+((SpotRate(HorizonTermStructure)[1:NumberofCashFlow] + 
-                           horizon.spot.spread)/monthly.yield.basis)) ^ 
-                          (Period(HorizonTermStructure)[1:NumberofCashFlow]))
-      
-  HorizonPresentValue <- 
-    DiscountRate[1:NumberofCashFlow] * TotalCashFlow(HorizonCashFlow)
+    # calculate discount rates
+    InterpolateSpot <- splines::interpSpline(
+      difftime(as.Date(ForwardDate(HorizonTermStructure)[1:360]),
+               TradeDate(HorizonTermStructure))/30,
+      SpotRate(HorizonTermStructure)[1:360],
+      bSpline = TRUE)
+    
+    SpotRates <- predict(
+      InterpolateSpot,
+      difftime(as.Date(PmtDate(HorizonCashFlow)),
+               as.Date(TradeDate(HorizonTermStructure)))/30)
+    
+    n.period = as.numeric(difftime(as.Date(
+      PmtDate(HorizonCashFlow)),
+      as.Date(TradeDate(HorizonTermStructure)))/30) / months.in.year
+    
+    DiscountRate <- 
+      (1+((SpotRates$y + horizon.spot.spread)/yield.basis))^ n.period
+    DiscountRate <- 1/DiscountRate
+    
+    HorizonPresentValue <- 
+      DiscountRate * TotalCashFlow(HorizonCashFlow)
     PresentValue <- sum(HorizonPresentValue)
+    
     return(PresentValue)}
   
   # Do not replace this with curve spreads as this section of code is used 
@@ -653,6 +670,8 @@
       SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
       SpreadToCurve = SpreadToCurve(HorizonSpread),
       ZeroVolSpread = ZeroVolSpread(HorizonSpread),
+      Price = PriceDecimalString(Price),
+      Accrued = Accrued(MortgageCashFlow),
       YieldToMaturity = YieldToMaturity(MortgageCashFlow),
       WAL = WAL(HorizonCashFlow),
       ModDuration = ModDuration(MortgageCashFlow),

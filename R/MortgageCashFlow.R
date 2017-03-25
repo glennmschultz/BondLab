@@ -167,7 +167,7 @@
   #' @exportClass MortgageCashFlow
   setClass("MortgageCashFlow",
          representation(
-           Price = "numeric",
+           Price = "character",
            Accrued = "numeric",
            YieldToMaturity = "numeric",
            WAL = "numeric",
@@ -338,7 +338,7 @@
   setMethod("initialize",
           signature("MortgageCashFlow"),
           function(.Object,       
-                   Price = numeric(),
+                   Price = "character",
                    Accrued = numeric(),
                    YieldToMaturity = numeric(),
                    WAL = numeric(),
@@ -698,7 +698,7 @@
   
   #Create Class Mortgage Loan Cashflows
   new("MortgageCashFlow",
-      Price = PriceDecimal(Price),
+      Price = PriceDecimalString(Price),
       Accrued = accrued.interest,
       YieldToMaturity = YieldDecimal(Yield),
       WAL = WAL,

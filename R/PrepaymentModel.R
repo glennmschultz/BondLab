@@ -147,11 +147,25 @@
   setGeneric("SMM", function(object)
     {standardGeneric("SMM")})
   
+  #' A standard generic function to replace the values of the slot SMM
+  #' @param object An S4 class object of the type PrepaymentModel
+  #' @param value the replacement value of the slot
+  #' @export SMM<-
+  setGeneric("SMM<-", function(object, value)
+    {standardGeneric("SMM<-")})
+  
   #' A standard generic function to access the slot MDR
   #' @param object An S4 class object of the type PrepaymentModel
   #' @export MDR
   setGeneric("MDR", function(object)
     {standardGeneric("MDR")})
+  
+  #' A standard generic function to replace the value of the slot MDR
+  #' @param object An S4 class object of the type PrepaymentModel
+  #' @param value the replacement value of the slot
+  #' @export MDR<-
+  setGeneric("MDR<-", function(object, value)
+    {standardGeneric("MDR<-")})
   
   #' A standard generic function to access the slot Severity
   #' @param object An S4 class object of the type PrepaymentModel
@@ -282,11 +296,31 @@
   setMethod("SMM", signature("PrepaymentModel"),
             function(object){object@SMM})
   
+  #' A method to replace SMM value in the class PrepaymentModel
+  #' @param object the name of the S4 class object
+  #' @param value the replace value of the slot SMM
+  #' @exportMethod SMM<-
+  setReplaceMethod("SMM", signature("PrepaymentModel"),
+                   function(object, value){
+                     object@SMM <- value
+                     return(object)
+                   })
+  
   #' A method to extract MDR from S4 class PrepaymentModel
   #' @param object the name of the S4 class
   #' @exportMethod MDR
   setMethod("MDR", signature("PrepaymentModel"),
             function(object){object@MDR})
+  
+  #' A method to replace the MDR value in the class PrepaymentModel
+  #' @param object The name of the S4 class object
+  #' @param value the replacement value of the slot
+  #' @exportMethod MDR<-
+  setReplaceMethod("MDR", signature("PrepaymentModel"),
+                   function(object, value){
+                     object@MDR <- value
+                     return(object)
+                   })
   
   #' A method to extract Severity from class PrepaymentModel
   #' @param object the name of the S4 class

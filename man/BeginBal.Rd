@@ -4,7 +4,7 @@
 \alias{BeginBal}
 \title{Function to assign the beginning principal balance to REMIC tranche}
 \usage{
-BeginBal(node, period = numeric())
+BeginBal(node, period)
 }
 \arguments{
 \item{node}{The entry point of the deal's tree structure.}

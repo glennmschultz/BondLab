@@ -64,8 +64,9 @@
   #' See data.tree for more details on the package.
   #' @param node The entry point of the deal's tree structure.
   #' @param period A numeric value the period in which payment is recieved 
-  #' stated as an integer.  
-  BeginBal <- function(node, period = numeric()){
+  #' stated as an integer.
+  #' @export BeginBal  
+  BeginBal <- function(node, period){
     if(period == 1) {node$BeginBal[period] <- node$CurrBal
     } else {node$BeginBal[period] <- node$EndingBal[period-1]}}
   

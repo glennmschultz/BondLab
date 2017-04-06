@@ -322,17 +322,19 @@
                         format = "%m-%d-%Y") %m+% months(horizon.months), 
                         "%m-%d-%Y")))
     
+    if(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') %m+% months(horizon.months) > 
+       as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     HorizonBond <- `NextPmtDate<-`(HorizonBond,
                                    as.character(format(
-                                     as.Date(NextPmtDate(bond.id), 
-                      format = "%m-%d-%Y") %m+% months(horizon.months), 
-                      "%m-%d-%Y")))
+                                     as.Date(NextPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
+                                       months(horizon.months + (months.in.year/Frequency(bond.id)))), 
+                      "%m-%d-%Y"))}
     
     HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
                                      principal = principal,
                                      settlement.date = HorizonSettlement,
                                      price = PriceDecimalString(Price))
-
+  #print(HorizonBond)
     # ========================================================================
     # This section begins the calculation of horizon total return
     # Cashflow Received + Reinvestment Income + Present Value at Horizon

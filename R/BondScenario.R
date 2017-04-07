@@ -315,6 +315,8 @@
     # first step is to assign bond.id to HorizonMBS object
     
     HorizonBond <- bond.id
+    # check last payment date and next payment date
+
     HorizonBond <- `LastPmtDate<-`(HorizonBond,
                                    as.character(
                                      format(as.Date(
@@ -322,19 +324,22 @@
                         format = "%m-%d-%Y") %m+% months(horizon.months), 
                         "%m-%d-%Y")))
     
-    if(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') %m+% months(horizon.months) > 
+    
+    if(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') %m+% months(horizon.months) >= 
        as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     HorizonBond <- `NextPmtDate<-`(HorizonBond,
                                    as.character(format(
-                                     as.Date(NextPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
-                                       months(horizon.months + (months.in.year/Frequency(bond.id)))), 
-                      "%m-%d-%Y"))}
-    
+                                     as.Date(LastPmtDate(HorizonBond), format = "%m-%d-%Y") %m+% 
+                                       months(months.in.year/Frequency(bond.id)), 
+                      "%m-%d-%Y")))
+    }
+      #print(HorizonSettlement)
+      #print(HorizonBond)
     HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
                                      principal = principal,
                                      settlement.date = HorizonSettlement,
                                      price = PriceDecimalString(Price))
-  #print(HorizonBond)
+
     # ========================================================================
     # This section begins the calculation of horizon total return
     # Cashflow Received + Reinvestment Income + Present Value at Horizon

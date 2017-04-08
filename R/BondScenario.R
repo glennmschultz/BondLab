@@ -317,7 +317,7 @@
     HorizonBond <- bond.id
     # check last payment date and next payment date
 
-    if(as.Date(settlement.date, format = '%m-%d-%Y') %m+% months(horizon.months) >
+    if(as.Date(settlement.date, format = '%m-%d-%Y') %m+% months(horizon.months) >=
        as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     HorizonBond <- `LastPmtDate<-`(HorizonBond,
                                    as.character(

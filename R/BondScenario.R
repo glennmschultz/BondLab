@@ -206,7 +206,9 @@
     
     # logical declarations of scenario analysis are horzion pricing methods
     # and horizon term structure assumption used shift the sopt curve or shift
-    # the coupon curve and refit the term structure model
+    # the coupon curve and refit the term structure model.
+
+    if(horizon.months %% 6 != 0) stop("horizon.months not valid")
     
     if(is.null(horizon.spot.spread) != TRUE) {
       horizon.price.type <- "spot"
@@ -318,22 +320,27 @@
 
     if(as.Date(settlement.date, format = '%m-%d-%Y') %m+% months(horizon.months) >=
        as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
-    HorizonBond <- `LastPmtDate<-`(HorizonBond, NextPmtDate(bond.id))}
-    
+    HorizonBond <- `LastPmtDate<-`(HorizonBond, 
+                                   as.character(format(
+                                     as.Date(LastPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
+                                       months(horizon.months), 
+                                     "%m-%d-%Y")))
+    }
+
     if(as.Date(LastPmtDate(HorizonBond), format = '%m-%d-%Y') 
-       == as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
+       >= as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     HorizonBond <- `NextPmtDate<-`(HorizonBond,
                                    as.character(format(
                                      as.Date(LastPmtDate(HorizonBond), format = "%m-%d-%Y") %m+% 
                                        months(months.in.year/Frequency(bond.id)), 
                       "%m-%d-%Y")))
     }
-      #print(HorizonSettlement)
-      #print(HorizonBond)
+
     HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
                                      principal = principal,
                                      settlement.date = HorizonSettlement,
                                      price = PriceDecimalString(Price))
+    print(HorizonCashFlow)
 
     # ========================================================================
     # This section begins the calculation of horizon total return

@@ -17,7 +17,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
   
-  #' @include ScenarioConstructor.R BondCashFlows.R TermStructure.R
+  #' @include ScenarioConstructor.R BondDetails.R BondCashFlows.R TermStructure.R
   #' @include BondTermStructure.R MortgageScenario.R CurveSpreads.R
   NULL
   
@@ -221,7 +221,6 @@
     bond.id <- bond.id
     rates.data <- rates.data
     Scenario <- ScenarioCall(Scenario = scenario)
-    
     #set rates shift (immediate) for term structure fit
     ShiftCurve <- rates.data
     ShiftCurve[1,2:length(ShiftCurve)] <- 
@@ -319,17 +318,10 @@
 
     if(as.Date(settlement.date, format = '%m-%d-%Y') %m+% months(horizon.months) >=
        as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
-    HorizonBond <- `LastPmtDate<-`(HorizonBond,
-                                   as.character(
-                                     format(as.Date(
-                                       LastPmtDate(bond.id), 
-                        format = "%m-%d-%Y") %m+% months(months.in.year/Frequency(bond.id)), 
-                        "%m-%d-%Y")))
-    }
+    HorizonBond <- `LastPmtDate<-`(HorizonBond, NextPmtDate(bond.id))}
     
-    
-    if(as.Date(LastPmtDate(HorizonBond), format = '%m-%d-%Y') <= 
-       as.Date(NextPmtDate(HorizonBond), format = '%m-%d-%Y')){
+    if(as.Date(LastPmtDate(HorizonBond), format = '%m-%d-%Y') 
+       == as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     HorizonBond <- `NextPmtDate<-`(HorizonBond,
                                    as.character(format(
                                      as.Date(LastPmtDate(HorizonBond), format = "%m-%d-%Y") %m+% 

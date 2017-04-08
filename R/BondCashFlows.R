@@ -17,8 +17,9 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-  #'@include MortgageCashFlow.R
+  #' @include BondDetails.R MortgageCashFlow.R
   NULL
+
   
   #' An S4 class representing standard bond cash flows
   #' 
@@ -214,8 +215,19 @@
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   bondbasis = bond.id@BondBasis
   
-  # This function error traps bond input information
+  # Test payment dates against settlement dates
+  if(as.Date(settlement.date, format = '%m-%d-%Y') >=
+     as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
+    bond.id <- `LastPmtDate<-`(bond.id, NextPmtDate(bond.id))}
   
+  if(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') 
+     == as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
+    bond.id <- `NextPmtDate<-`(bond.id,
+                                   as.character(format(
+                                     as.Date(LastPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
+                                       months(months.in.year/Frequency(bond.id)), 
+                                     "%m-%d-%Y")))}
+  # This function error traps bond input information
   ErrorTrap(bond.id = bond.id, 
             principal = principal,
             settlement.date = settlement.date,

@@ -328,7 +328,8 @@
     }
     
     
-    if(as.Date(LastPmtDate(HorizonBond), format = '%m-%d-%Y') <= as.Date(NextPmtDate(HorizonBond), format = '%m-%d-%Y')){
+    if(as.Date(LastPmtDate(HorizonBond), format = '%m-%d-%Y') <= 
+       as.Date(NextPmtDate(HorizonBond), format = '%m-%d-%Y')){
     HorizonBond <- `NextPmtDate<-`(HorizonBond,
                                    as.character(format(
                                      as.Date(LastPmtDate(HorizonBond), format = "%m-%d-%Y") %m+% 

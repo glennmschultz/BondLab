@@ -340,7 +340,7 @@
                                      principal = principal,
                                      settlement.date = HorizonSettlement,
                                      price = PriceDecimalString(Price))
-    print(HorizonCashFlow)
+
 
     # ========================================================================
     # This section begins the calculation of horizon total return

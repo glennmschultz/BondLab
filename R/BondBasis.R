@@ -61,15 +61,22 @@
   # lastpmt.date is the last coupon payment date
   # nextpmt.date is the next coupon payment date
     
-  d1 <- if(settlement.date == issue.date) {day(issue.date)
-    } else {day(settlement.date)}    
-  m1 <- if(settlement.date == issue.date) {month(issue.date)
-    } else {month(settlement.date)}
-  y1 <- if(settlement.date == issue.date) {year(issue.date)
-    } else {year(settlement.date)}
-  d2 <- day(nextpmt.date)
-  m2 <- month(nextpmt.date)
-  y2 <- year(nextpmt.date)
+  #d1 <- if(settlement.date == issue.date) {day(issue.date)
+  #  } else {day(settlement.date)}    
+  #m1 <- if(settlement.date == issue.date) {month(issue.date)
+  #  } else {month(settlement.date)}
+  #y1 <- if(settlement.date == issue.date) {year(issue.date)
+  #  } else {year(settlement.date)}
+  #d2 <- day(nextpmt.date)
+  #m2 <- month(nextpmt.date)
+  #y2 <- year(nextpmt.date)
+  
+    d1 <- ifelse(settlement.date == issue.date, day(issue.date), day(settlement.date))    
+    m1 <- ifelse(settlement.date == issue.date, month(issue.date), month(settlement.date))
+    y1 <- ifelse(settlement.date == issue.date, year(issue.date), year(settlement.date))
+    d2 <- day(nextpmt.date)
+    m2 <- month(nextpmt.date)
+    y2 <- year(nextpmt.date)
   
   switch(type,
   "30360" = (max(0, 30 - d1) + min(30, d2) + 360*(y2-y1) + 30*(m2-m1-1))/360,

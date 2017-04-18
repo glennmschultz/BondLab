@@ -957,7 +957,7 @@
   #' Applicable in the case of Fannie Mae, Freddie Mac, or Ginnie Mae pools.
   #' @param InitialInterest A logical indicating the note carries an interest 
   #' only period
-  #' @param InterestOnlyPeriod A character string indicating the note's 
+  #' @param InterestOnlyPeriod A numeric value indicating the note's 
   #' interest only period
   #' @param FirstPrinPaymentDate A character string indicating the first 
   #' principal payment date due of the mortgage.

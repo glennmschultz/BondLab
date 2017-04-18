@@ -115,7 +115,7 @@ Applicable in the case of Fannie Mae, Freddie Mac, or Ginnie Mae pools.}
 \item{InitialInterest}{A logical indicating the note carries an interest 
 only period}
 
-\item{InterestOnlyPeriod}{A character string indicating the note's 
+\item{InterestOnlyPeriod}{A numeric value indicating the note's 
 interest only period}
 
 \item{FirstPrinPaymentDate}{A character string indicating the first 

@@ -1,0 +1,192 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+  word_document: default
+---
+
+This file creates a list of the yield curve data and fits the DL model and 
+
+```{r, echo=FALSE}
+require(lubridate)
+require(termstrc)
+require(forecast)
+require(xts)
+require(ggplot2)
+
+months.in.year = 12
+weeks.in.year = 52.1429
+pmt.frequency = 2
+min.principal = 100
+days.in.month = 30.4162
+
+CurveData <- list.files(path = '~/Documents/FabozziModel/', pattern = '[0-9].rds')
+numrows = length(CurveData)
+FactorLoads = array(data = NA, c(numrows,8), 
+                    dimnames = list(c(seq(1, numrows, 1)), 
+                                    c('date', 'beta1', 'beta2', 'beta3', 
+                                      'lambda', 'level', 'slope', 'curvature')))
+# a function to create a termstructure object
+
+TermStrcFit <- function(rates.data){
+    # pass the yield curve to the function
+  rates.data <- rates.data
+  
+  #set the column counter to make cashflows for termstrucutre
+  ColCount <- as.numeric(ncol(rates.data))
+  Mat.Years <- as.numeric(rates.data[2,2:ColCount])
+  Coupon.Rate <- as.numeric(rates.data[1,2:ColCount])
+  Issue.Date <- as.Date(rates.data[1,1])
+  
+  #initialize coupon bonds S3 class
+  #This can be upgraded when bondlab has portfolio function
+  ISIN <- vector()
+  MATURITYDATE <- vector()
+  ISSUEDATE <- vector()
+  COUPONRATE <- vector()
+  PRICE <- vector()
+  ACCRUED <- vector()
+  CFISIN <- vector()
+  CF <- vector()
+  DATE <- vector()
+  CASHFLOWS  <- list(CFISIN,CF,DATE)
+  names(CASHFLOWS) <- c("ISIN","CF","DATE")
+  TODAY <- vector()
+  data <- list()
+  TSInput <- list()
+  
+  ### Assign Values to List Items #########
+  data = NULL
+  data$ISIN <- colnames(rates.data[2:ColCount])
+  data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
+  
+  data$MATURITYDATE <-
+    sapply(Mat.Years, function(Mat.Years = Mat.Years, 
+                               Issue = Issue.Date) {
+      Maturity = if(Mat.Years < 1) {
+        Issue %m+% months(round(Mat.Years * months.in.year))
+        } else {Issue %m+% years(as.numeric(Mat.Years))}
+    return(as.character(Maturity))
+    }) 
+  
+  
+  data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
+  
+  data$PRICE <- ifelse(Mat.Years < 1, 
+                       (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100,
+                       100)
+  
+  data$ACCRUED <- rep(0, ColCount -1)
+  
+  for(j in 1:(ColCount-1)){
+    Vector.Length <- as.numeric(
+      round(difftime(data[[3]][j],
+                     data[[2]][j],
+                     units = c("weeks"))/weeks.in.year,5))
+    
+    Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , 
+                            round(Vector.Length * pmt.frequency))
+    
+    data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, 
+                                  rep(data[[1]][j],Vector.Length))
+    
+    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
+      as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * 
+                     min.principal, 
+              (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* 
+                 min.principal))))
+    
+    by.months = ifelse(data[[4]][j] == 0, 
+                       round(difftime(data[[3]][j], 
+                                      rates.data[1,1])/days.in.month), 6) 
+  # this sets the month increment so that cashflows can handle discount bills
+  
+  data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
+  seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
+  as.Date(data[[3]][j]), 
+  by = as.character(paste(by.months, "months", sep = " "))))
+    
+  } #The Loop Ends here and the list is made
+  
+  data$TODAY <- as.Date(rates.data[1,1])
+  TSInput[[as.character(rates.data[1,1])]] <- c(data)
+  
+  #set term strucuture input (TSInput) to class couponbonds
+  class(TSInput) <- "couponbonds"
+  
+  TS <- TSInput
+  
+  TSFit <- estim_nss(dataset = TSInput, 
+                     group = as.character(rates.data[1,1]), 
+                     matrange = "all", method = 'dl')
+  
+  dlfactors = unname(TSFit$opt_result[[1]]$par[c("beta0", 
+                                          "beta1", 
+                                          "beta2")])
+  dlfactors = c(dlfactors, TSFit$lambda)
+  
+  #return(paste(rates.data[1,1],dlfactors[1], dlfactors[2], dlfactors[3], sep =','))
+  return(dlfactors)
+}
+
+for(curve in seq_along(CurveData)){
+rates.data = readRDS(file = paste0('~/Documents/FabozziModel/',CurveData[curve]))
+factorloading = tryCatch(TermStrcFit(rates.data = rates.data),
+                         error = function(e) return(NULL))
+if(is.null(factorloading)) next 
+FactorLoads[curve, 1] = rates.data[1,1]
+FactorLoads[curve,2] = factorloading[1]
+FactorLoads[curve,3] = factorloading[2]
+FactorLoads[curve,4] = factorloading[3]
+FactorLoads[curve,5] = factorloading[4]
+FactorLoads[curve,6] = rates.data[1,11]
+FactorLoads[curve,7] = round(rates.data[1,11] - rates.data[1,3],2)
+FactorLoads[curve,8] = round(2 * (rates.data[1,6]) - sum(rates.data[1,3], rates.data[1,11]),2)
+}
+```
+
+```{r, echo=FALSE}
+Factors = as.data.frame(FactorLoads, stringsAsFactors = FALSE)
+Factors = Factors[complete.cases(Factors),]
+Factors[,'date'] <- as.Date(Factors[,'date'])
+Factors[,'beta1'] <- as.numeric(Factors[,'beta1'])
+Factors[,'beta2'] <- as.numeric(Factors[,'beta2'])
+Factors[,'beta3'] <- as.numeric(Factors[,'beta3'])
+Factors[,'lambda'] <- as.numeric(Factors[,'lambda'])
+Factors[,'level'] <- as.numeric(Factors[,'level'])
+Factors[,'slope'] <- as.numeric(Factors[,'slope'])
+Factors[,'curvature'] <- as.numeric(Factors[,'curvature'])
+
+write.csv(Factors, file = '~/Documents/FabozziModel/DLFactors.csv', 
+          sep =',', dec ='.',
+          row.names = FALSE)
+
+# Distributions 
+ggplot(data = Factors, aes(x = as.numeric(beta1)))+
+  geom_histogram(binwidth = .25, color = 'white', fill = 'dark blue') +
+  ylab('Frequency')+
+  xlab('Beta 1 - Level') +
+  theme_minimal()
+ggsave('~/Documents/FabozziModel/beta_1.png')
+
+ggplot(data = Factors, aes(x = as.numeric(beta2)))+
+    geom_histogram(binwidth = .25, color = 'white', fill = 'dark blue') +
+  ylab('Frequency')+
+  xlab('Beta 2 - Slope') +
+  theme_minimal()
+ggsave('~/Documents/FabozziModel/beta_2.png')
+
+ggplot(data = Factors, aes(x = as.numeric(beta3)))+
+    geom_histogram(binwidth = .25, color = 'white', fill = 'dark blue') +
+  ylab('Frequency')+
+  xlab('Beta 2 - Curvature') +
+  theme_minimal()
+ggsave('~/Documents/FabozziModel/beta_3.png')
+
+barplot(Factors[1:183, 'beta1'] - Factors[2:184, 'beta1'])
+hist(Factors[1:183, 'beta1'] - Factors[2:184, 'beta1'], breaks = 20)
+hist(Factors[1:183, 'beta2'] - Factors[2:184, 'beta2'], breaks = 20)
+hist(Factors[1:183, 'beta3'] - Factors[2:184, 'beta3'], breaks = 20)
+```
+

@@ -1,0 +1,109 @@
+
+```{r}  
+  require(BondLab)
+  require(lubridate)
+  require(RCurl)
+  require(XML)
+
+
+  GetSwapCurve <- function(CurveDate,
+                           APIKey = "31df8645e635484db99e5d1133ce9245"){
+    rates <- list("USD1MTD156N", 
+                  "USD3MTD156N", 
+                  "USD6MTD156N",
+                  "USD12MD156N",
+                  "DSWP2", 
+                  "DSWP3", 
+                  "DSWP4", 
+                  "DSWP5",
+                  "DSWP7", 
+                  "DSWP10", 
+                  "DSWP30")
+  
+  SwapData <- matrix(data = NA, nrow = 1, ncol = 12)
+  colnames(SwapData) <- c("Date", 
+                          "ED1M", 
+                          "ED3M", 
+                          "ED6M", 
+                          "USSW1", 
+                          "USSW2", 
+                          "USSW3", 
+                          "USSW4", 
+                          "USSW5", 
+                          "USSW7", 
+                          "USSW10", 
+                          "USSW30")
+  
+  startdate <- as.character(as.Date(
+    as.character(CurveDate), format = "%m-%d-%Y") + days(0))
+  enddate <- as.character(
+    as.Date(as.character(CurveDate), format = "%m-%d-%Y"))
+  SwapData[1,1] = startdate 
+  
+  for(i in 1:11){
+    
+    LIBORRate <- getURL(
+      paste("https://api.stlouisfed.org/fred/series/observations?series_id=",
+            as.character(rates[i]),
+            "&observation_start=", startdate,
+            "&observation_end=", enddate, 
+            "&api_key=", APIKey,
+            "&file_type=xml", sep =""))
+    doc = xmlParse(LIBORRate)
+    RateValue <- as.numeric(
+      xpathSApply(doc, "//observation", xmlGetAttr, "value"))
+    SwapData[1,as.numeric(i) +1] = RateValue}
+  
+  write.csv(SwapData,
+            paste0('~/Documents/FabozziModel/', CurveDate, '.csv'), 
+            row.names = FALSE)
+  }
+```
+
+Create a list of month end dates between July 2000 and September 2016
+
+```{r}
+
+month =  seq(as.Date('2000-07-01'), as.Date('2016-11-01'), by = 'month')
+load_rmetrics_calendars(seq(2000, 2016, 1))
+curvedate = adjust.next(month, 'Rmetrics/NYSE')
+```
+
+```{r}
+  curvedate = as.character(as.Date(curvedate), format = '%m-%d-%Y')
+for(month in seq_along(curvedate)){
+
+  if(is.null(
+    tryCatch(GetSwapCurve(curvedate[month])
+           ,error = function(e) return(NULL))) == TRUE) next
+}
+```
+
+```{r}
+
+  SwapRateCurve <- function(datafile = "character", maturityvector = numeric()){
+  # Note: maturityvector must start with an empty space e.g. c("", 1, 2, )  
+  #========== Read Swap Rate Data ===========================
+  SwapRateData <-read.csv(datafile, header = TRUE, as.is = TRUE)
+  #======== remove month and year data and reorder dataset
+  RowCount = nrow(SwapRateData)
+  ColCount = ncol(SwapRateData)
+  
+  for(i in 1:RowCount) {
+    if(SwapRateData[i,ColCount] != "ND") {data = SwapRateData[i,]
+    data <- rbind(data, as.numeric(maturityvector))
+    
+    saveRDS(data, paste('~/Documents/FabozziModel/', 
+      as.character(data[1,1]), ".rds", sep = ""), compress = TRUE)}}
+  }
+  
+  files = list.files(path ='~/Documents/FabozziModel/', pattern = '[0-9].csv')
+  maturity <- c("",.0833, .25, .5, 1, 2, 3, 4, 5, 7, 10, 30)
+  for(file in seq_along(files)){
+  tryCatch(SwapRateCurve(datafile = paste0('~/Documents/FabozziModel/',files[file]), 
+      maturityvector = maturity), error = function(e) return(NULL))
+  }
+```
+
+
+

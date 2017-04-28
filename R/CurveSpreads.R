@@ -141,9 +141,9 @@
 
     # Find the cloest maturity for spread to benchmark
     RatesIndex =  which(abs(as.numeric(MarketCurve[2,2:12])-
-                              as.numeric(WAL(CashFlow))) ==
+                              as.numeric(WAL(CashFlow)) - .0001) ==
                           min(abs(as.numeric(MarketCurve[2,2:12])-
-                                    as.numeric(WAL(CashFlow)))))
+                                    as.numeric(WAL(CashFlow)) - .0001)))
     # BenchMark maturity
     BenchMarkMaturity <- as.numeric(MarketCurve[2,RatesIndex + 1])
 

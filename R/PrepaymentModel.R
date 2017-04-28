@@ -572,6 +572,9 @@
   "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
                            ten = TermStructure@TenYearFwd[1:length(LoanAge)],
                            sato = sato),
+  "20" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
+                           ten = TermStructure@TenYearFwd[1:length(LoanAge)],
+                           sato = sato),
   "15" = MortgageRate@yr15(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
                            ten = TermStructure@TenYearFwd[1:length(LoanAge)],
                            sato = sato)

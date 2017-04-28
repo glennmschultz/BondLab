@@ -45,7 +45,7 @@ interest begins to accure.}
 \item{Maturity}{A character sting the final payment date to the investor
 in the case MBS the final payment data assuming 0 CPR.}
 
-\item{LastPmtDate}{A character string the date the last payment scheduled 
+\item{LastPmtDate}{A character string the date the last scheduled 
 payment to the investor.}
 
 \item{NextPmtDate}{A character string the date of the next scheduled 

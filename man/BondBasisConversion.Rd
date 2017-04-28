@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondBasis.R
 \name{BondBasisConversion}
 \alias{BondBasisConversion}
-\title{Functions to convert bond payments to their interest payment basis}
+\title{Bond Basis (day count) conventions}
 \usage{
 BondBasisConversion(issue.date, start.date, end.date, settlement.date,
   lastpmt.date, nextpmt.date, type)
@@ -24,6 +24,11 @@ BondBasisConversion(issue.date, start.date, end.date, settlement.date,
 \item{type}{a character vector the interest basis day count type}
 }
 \description{
-Conversion for payment date (currently 30/360 is supported)
+applies the correct bond basis (day count) convention to interest
+calculations
+}
+\seealso{
+Other BondBasis: \code{\link{ActualFactor}},
+  \code{\link{is.leapyear}}
 }
 

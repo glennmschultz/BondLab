@@ -24,15 +24,54 @@
                                              nextpmt.date)
   {standardGeneric("BondBasisConversion")})
   
-
+  #' @title Is leap year
+  #' @family BondBasis
+  #' @description Tests if year is a leap year and reurns TRUE or FALSE
+  #' @param year The year to test as leap year
+  #' @export
+  is.leapyear=function(year){
+    #http://en.wikipedia.org/wiki/Leap_year
+    return(((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0))}
+  
+  #' @title Actual day count
+  #' @family BondBasis
+  #' @description Calculates actual days using leap year
+  #' @param year.settlement year input
+  #' @param year.payment year input
+  #' @export
+  ActualFactor = function(settlement.date, nextpmt.date){
+    actual.factor = NULL
+    new.year.date = as.Date(paste0(year(nextpmt.date),"/01/01"))
+    year.settlement.leap = is.leapyear(year(settlement.date))
+    year.payment.leap = is.leapyear(year(nextpmt.date))
+    test.leap = year.settlement.leap + year.payment.leap
+    
+    if(test.leap == 0) actual.factor = as.numeric(
+      difftime(nextpmt.date, settlement.date, units = "days"))/360
+    
+    if(test.leap == 1 | year.settlement.leap == TRUE) actual.factor = sum(
+      as.numeric(difftime(new.year.date, settlement.date, units = 'days'))/366,
+      as.numeric(difftime(nextpmt.date, new.year.date, units = 'days'))/365)
+    
+    if(test.leap == 1 | year.settlement.leap == FALSE) actual.factor = sum(
+      as.numeric(difftime(new.year.date, settlement.date, units = 'days'))/365,
+      as.numeric(difftime(nextpmt.date, new.year.date, units = 'days'))/366)
+    
+    if(test.leap == 2) actual.factor = as.numeric(
+      difftime(nextpmt.date, settlement.date, units = "days"))/365
+    
+  return(actual.factor)
+  }
+  
   #----------------------------
   #Bond basis function This function set the interest payment day count basis 
   #----------------------------
   # Note use switch to add additional basis default will be 30/360
-
-  #' Functions to convert bond payments to their interest payment basis
-  #' 
-  #' Conversion for payment date (currently 30/360 is supported)
+  
+  #' @title Bond Basis (day count) conventions
+  #' @family BondBasis
+  #' @description applies the correct bond basis (day count) convention to interest
+  #' calculations
   #' @param issue.date A character value the issue date of the security
   #' @param start.date A character value the start date for interest payment
   #'  (dated date)
@@ -60,26 +99,23 @@
   # settlement.date is the settlement date of the bond
   # lastpmt.date is the last coupon payment date
   # nextpmt.date is the next coupon payment date
-    
-  #d1 <- if(settlement.date == issue.date) {day(issue.date)
-  #  } else {day(settlement.date)}    
-  #m1 <- if(settlement.date == issue.date) {month(issue.date)
-  #  } else {month(settlement.date)}
-  #y1 <- if(settlement.date == issue.date) {year(issue.date)
-  #  } else {year(settlement.date)}
-  #d2 <- day(nextpmt.date)
-  #m2 <- month(nextpmt.date)
-  #y2 <- year(nextpmt.date)
-  
+
+
     d1 <- ifelse(settlement.date == issue.date, day(issue.date), day(settlement.date))    
     m1 <- ifelse(settlement.date == issue.date, month(issue.date), month(settlement.date))
     y1 <- ifelse(settlement.date == issue.date, year(issue.date), year(settlement.date))
     d2 <- day(nextpmt.date)
     m2 <- month(nextpmt.date)
     y2 <- year(nextpmt.date)
-  
+
+
   switch(type,
   "30360" = (max(0, 30 - d1) + min(30, d2) + 360*(y2-y1) + 30*(m2-m1-1))/360,
-  "Actual360" = difftime(nextpmt.date, settlement.date, units = "days")/360
+  "30E360"= (max(0, 30 - ifelse(d1 > 30, 30, d1)) +  
+               min(30, ifelse(d2 > 30, 30, d2)) + 
+               360*(y2-y1) + 30*(m2-m1-1))/360,
+  "Actual360" = as.numeric(difftime(nextpmt.date, settlement.date, units = "days"))/360,
+  "Actual365" = as.numeric(difftime(nextpmt.date, settlement.date, units = "days"))/365,
+  "ActualActual" = ActualFactor(settlement.date = settlement.date, nextpmt.date = nextpmt.date)
   ) # end of switch function
   } # end of function

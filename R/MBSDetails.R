@@ -911,7 +911,7 @@
   #' interest begins to accure.
   #' @param Maturity A character sting the final payment date to the investor
   #' in the case MBS the final payment data assuming 0 CPR.
-  #' @param LastPmtDate A character string the date the last payment scheduled 
+  #' @param LastPmtDate A character string the date the last scheduled 
   #' payment to the investor.
   #' @param NextPmtDate A character string the date of the next scheduled 
   #' payment to the investor.

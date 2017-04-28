@@ -215,7 +215,8 @@
   settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
   bondbasis = bond.id@BondBasis
   
-  # Test payment dates against settlement dates
+  # Test payment dates against settlement dates and roll forward if payment 
+  # settlement date crossses over the payment date
   if(as.Date(settlement.date, format = '%m-%d-%Y') >=
      as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     bond.id <- `LastPmtDate<-`(bond.id, NextPmtDate(bond.id))}
@@ -223,10 +224,11 @@
   if(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') 
      == as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
     bond.id <- `NextPmtDate<-`(bond.id,
-                                   as.character(format(
-                                     as.Date(LastPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
-                                       months(months.in.year/Frequency(bond.id)), 
-                                     "%m-%d-%Y")))}
+                               as.character(format(
+                                 as.Date(LastPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
+                                   months(months.in.year/Frequency(bond.id)), 
+                                 "%m-%d-%Y")))}
+  
   # This function error traps bond input information
   ErrorTrap(bond.id = bond.id, 
             principal = principal,
@@ -265,10 +267,18 @@
   
   #step3 build the time period vector (n) for discounting the cashflows 
   #nextpmt date is vector of payment dates to n for each period
-  time.period = BondBasisConversion(
-    issue.date = issue.date, start.date = start.date, end.date = end.date, 
-    settlement.date = settlement.date, lastpmt.date = lastpmt.date, 
-    nextpmt.date = pmtdate, type = bondbasis)
+  numpayments = length(pmtdate)
+  time.period <- numeric(numpayments)
+  for(pmt in seq_along(pmtdate))
+    time.period[pmt] = BondBasisConversion(
+    issue.date = issue.date, 
+    start.date = start.date, 
+    end.date = end.date, 
+    #settlement.date = settlement.date,
+    settlement.date = lastpmt.date, 
+    lastpmt.date = lastpmt.date, 
+    nextpmt.date = pmtdate[pmt], 
+    type = bondbasis)
   
   #step4 Count the number of cashflows 
   #num.periods is the total number of cashflows to be received
@@ -296,29 +306,50 @@
     Bond.CF.Table[i,"Date"] = pmtdate[i]
     Bond.CF.Table[i,"Time"] = time.period[i]
     Bond.CF.Table[i,"Principal Outstanding"] = principal
-    Bond.CF.Table[i,"Coupon"] = CouponBasis(Coupon) /frequency
+    Bond.CF.Table[i,"Coupon"] = CouponBasis(Coupon)
     Bond.CF.Table[i,"Coupon Income"] = 
-      Bond.CF.Table[i,"Coupon"] * Bond.CF.Table[i,"Principal Outstanding"]
+      Bond.CF.Table[i,"Coupon"] * 
+      BondBasisConversion(issue.date = issue.date,
+                          start.date = start.date,
+                          end.date = end.date,
+                          settlement.date = as.Date(ifelse(i == 1, lastpmt.date, 
+                          as.Date(Bond.CF.Table[i-1, 'Date'], origin = "1970-01-01")),
+                          origin = '1970-01-01'),
+                          lastpmt.date = as.Date(ifelse(i == 1, lastpmt.date, 
+                          as.Date(Bond.CF.Table[i-1, 'Date'], origin = "1970-01-01")),
+                          origin = '1970-01-01'),
+                          nextpmt.date = as.Date(ifelse(i == 1, nextpmt.date, 
+                          as.Date(Bond.CF.Table[i, 'Date'], origin = "1970-01-01")),
+                          origin = '1970-01-01'),
+                          type = bondbasis) *
+      Bond.CF.Table[i,"Principal Outstanding"]
     if(Bond.CF.Table[i,"Date"] == end.date) {Bond.CF.Table[i,"Principal Paid"] = principal
     } else {Bond.CF.Table[i,"Principal Paid"] = 0}
     Bond.CF.Table[i,"TotalCashFlow"] = 
       Bond.CF.Table[i,"Coupon Income"] + Bond.CF.Table[i,"Principal Paid"]
   }
-
+  #return(Bond.CF.Table)
   #step5 calculate accrued interest for the period
-  days.to.nextpmt = (BondBasisConversion(
-    issue.date = issue.date, 
-    start.date = start.date, 
-    end.date = end.date,
-    settlement.date = settlement.date, 
-    lastpmt.date = lastpmt.date, 
-    nextpmt.date = nextpmt.date, type = bondbasis)) * days.in.year.360
+  #days.to.nextpmt = (BondBasisConversion(
+  #  issue.date = issue.date, 
+  #  start.date = start.date, 
+  #  end.date = end.date,
+  #  settlement.date = settlement.date, 
+  #  lastpmt.date = lastpmt.date, 
+  #  nextpmt.date = nextpmt.date, type = bondbasis)) * days.in.year.360
   
-  days.between.pmtdate = ((
-    months.in.year/frequency)/months.in.year) * days.in.year.360
-  days.of.accrued = days.between.pmtdate - days.to.nextpmt
-  accrued.interest = 
-    (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,"Coupon Income"]
+  #days.between.pmtdate = ((
+  #months.in.year/frequency)/months.in.year) * days.in.year.360
+  #days.of.accrued = days.between.pmtdate - days.to.nextpmt
+  #accrued.interest = 
+  #  (days.of.accrued/days.between.pmtdate) * Bond.CF.Table[1,"Coupon Income"]
+  accrued.interest = BondBasisConversion(
+      issue.date = issue.date, 
+      start.date = start.date, 
+      end.date = end.date,
+      settlement.date = settlement.date, 
+      lastpmt.date = lastpmt.date, 
+      nextpmt.date = nextpmt.date, type = bondbasis) * Bond.CF.Table[1,"Coupon Income"]
 
   # Step6 solve for yield to maturity given the price of the bond.  
   # irr is an internal function used to solve for yield to maturity
@@ -327,11 +358,11 @@
   
   irr <- function(rate , 
                   time.period , 
-                  cashflow , 
-                  principal , 
-                  price , 
+                  cashflow, 
+                  principal, 
+                  price, 
                   accrued.interest){
-    pv = cashflow * 1/(1+rate) ^ time.period
+    pv = cashflow * (1/(1+rate) ^ time.period)
     proceeds = principal * price
     sum(pv) - (proceeds + accrued.interest)}
   
@@ -345,7 +376,7 @@
                 accrued.interest = accrued.interest)$root
   
   # convert to semi-bond equivalent yield
-  Yield.To.Maturity = ((((1 + ytm)^(1/2))-1) * 2) * yield.basis
+  Yield.To.Maturity = ytm *  yield.basis #((((1 + ytm)^(1/2))-1) * 2) * yield.basis
   
   # pass Yield.To.Maturity to class YieldTypes for conversion to YieldDecimal,
   # YieldBasis, and YieldDecimalString

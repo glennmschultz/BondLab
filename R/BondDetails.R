@@ -311,14 +311,14 @@
   #' @param object the name of the object of type BondDetails
   #' @exportMethod MoodyRating
   setMethod("MoodyRating", signature("BondDetails"),
-            function(object){object@MoodyRating})
+            function(object){object@Moody})
   
   #' Method to extract SP rating from S4 class of type BondDetails
   #' 
   #' @param object the name of the object of type BondDetails
   #' @exportMethod SPRating
   setMethod("SPRating", signature("BondDetails"),
-            function(object){object@SPRating})
+            function(object){object@SP})
   
   #' Method to extract BondLab rating from S4 class of type BondDetails
   #' 
@@ -362,6 +362,35 @@
   setMethod("SinkingFund", signature("BondDetails"),
             function(object){object@SinkingFund})
   
+  #' @title BondDetails
+  #' @family BondDetails
+  #' @description BondDetails creates a BondDetails cusip object in the 
+  #' local environment
+  #' @param Cusip A character the bond cusip
+  #' @param ID a character the bond id
+  #' @param BondType A character the type of bond MBS, Bond, etc.
+  #' @param Sector A character the description of the sector
+  #' @param Issser A character the Issuer
+  #' @param Underwriter A character the Underwriter
+  #' @param OfferAmount A numeric value the initial offer amount
+  #' @param Coupon A numeric value the bond coupon
+  #' @param IssueDate A character the issue date mm-dd-YYYY
+  #' @param DatedDate A character the dated date mm-dd-YYYY
+  #' @param Maturity A character the maturity date mm-dd-YYYY
+  #' @param LastPmtDate A character the last scheduled payment date to the
+  #' investor mm-dd-YYYY
+  #' @param NextPmtDate A character the next scheduled payment date to the 
+  #' investor mm-dd-YYYY
+  #' @param Moody A character the Moody Rating
+  #' @param SP A character the SP Rating
+  #' @param BondLab A character the BondLab (Investor) assigned rating
+  #' @param Frequency A numeric value the frequency (number) of payments made
+  #' each year
+  #' @param BondBasis A character the interest calculation basis
+  #' @param Callable A logical TRUE if the bond is callable
+  #' @param Putable A logical TRUE if the bond is putable
+  #' @param SinkingFund A logical TRUE if the bond is sinking fund bond
+  #' @export BondDetails
   BondDetails <-function(
     Cusip = "character",
     ID ="character",
@@ -409,34 +438,33 @@
         SinkingFund = SinkingFund)
   }
 
-  #' A constuctor function to create standard bond cusip information
-  #' 
-  #' This is a standard generic function used to construct a tradtional bond
-  #' @param Cusip A character string the bond's cusip number
-  #' @param ID A character string the bond's ID
-  #' @param BondType A character string the type of bond
-  #' @param Sector A character string the bond sector
-  #' @param Issuer A character string the bond issuer
-  #' @param Underwriter A character string the bond underwriter
-  #' @param OfferAmount A numeric value the offer amount of the bond
-  #' @param Coupon A numeric value the coupon (interest rate) 
-  #' paid to the investor
-  #' @param IssueDate A character string the issue date of the bond
-  #' @param DatedDate A character string the bond's dated date
-  #' @param Maturity A character string the bond's maturity date of final 
-  #' principal payment date
-  #' @param LastPmtDate A character string the most recent payment 
-  #' date to the investor
-  #' @param NextPmtDate A character string the next payment date due to 
-  #' the investor
-  #' @param Moody A character string the Moody assigned rating
-  #' @param SP A character string the SP assigned rating
-  #' @param BondLab A character string the Bond Lab assigned rating
-  #' @param Frequency A numeric value the payment frequency
-  #' @param BondBasis A character string the interest calculation basis
-  #' @param Callable A character string the bond's call schedule
-  #' @param Putable A caracter string the bond's put schedule
-  #' @param SinkingFund a character strign the bond sinking fund schedule
+  #' @title MakeBondDetails
+  #' @family BondDetails
+  #' @description MakeBondDetails writes a BondDetails cusip object to a datafolder
+  #' @param Cusip A character the bond cusip
+  #' @param ID a character the bond id
+  #' @param BondType A character the type of bond MBS, Bond, etc.
+  #' @param Sector A character the description of the sector
+  #' @param Issser A character the Issuer
+  #' @param Underwriter A character the Underwriter
+  #' @param OfferAmount A numeric value the initial offer amount
+  #' @param Coupon A numeric value the bond coupon
+  #' @param IssueDate A character the issue date mm-dd-YYYY
+  #' @param DatedDate A character the dated date mm-dd-YYYY
+  #' @param Maturity A character the maturity date mm-dd-YYYY
+  #' @param LastPmtDate A character the last scheduled payment date to the
+  #' investor mm-dd-YYYY
+  #' @param NextPmtDate A character the next scheduled payment date to the 
+  #' investor mm-dd-YYYY
+  #' @param Moody A character the Moody Rating
+  #' @param SP A character the SP Rating
+  #' @param BondLab A character the BondLab (Investor) assigned rating
+  #' @param Frequency A numeric value the frequency (number) of payments made
+  #' each year
+  #' @param BondBasis A character the interest calculation basis
+  #' @param Callable A logical TRUE if the bond is callable
+  #' @param Putable A logical TRUE if the bond is putable
+  #' @param SinkingFund A logical TRUE if the bond is sinking fund bond
   #' @export MakeBondDetails
     MakeBondDetails <- function(    
     Cusip,

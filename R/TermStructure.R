@@ -442,32 +442,32 @@
   
   
   #Calculate the spot rate curve and determine the forward rates needed to 
-  period <- seq(from = 1, to = 492, by = 1)
+  period <- seq(from = 1, to = 600, by = 1)
   #Use the date from the cashflow file
   date <- seq(as.Date(rates.data[1,1]) %m+% months(1), 
               as.Date(data[[3]][j]), by="1 months")
   spot.rate.curve <- if(method != "dl"){
     spotrates(method = method, 
               beta = Vector, 
-              m = seq(from = 1/12, to = 492/12, by = 1/12))
+              m = seq(from = 1/12, to = 600/12, by = 1/12))
     } else {
       spotrates(method = method, 
                 beta = Vector, 
-                m = seq(from = 1/12, to = 492/12, by = 1/12), 
+                m = seq(from = 1/12, to = 600/12, by = 1/12), 
                 lambda = TSFit$lambda)}
   forward.rate.curve <- if(method != "dl"){
     forwardrates(method = method, 
                  beta = Vector, 
-                 m = seq(from = 1/12, to = 492/12, by = 1/12))
+                 m = seq(from = 1/12, to = 600/12, by = 1/12))
   } else {
     forwardrates(method = method, 
                  beta = Vector, 
-                 m = seq(from = 1/12, to = 492/12, by = 1/12),
+                 m = seq(from = 1/12, to = 600/12, by = 1/12),
                  lambda = TSFit$lambda)
   }
   
-  Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:360]
-  Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:360]
+  Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:600]
+  Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:600]
 
   new("TermStructure",
       TradeDate = as.character(rates.data[1,1]),

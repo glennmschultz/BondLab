@@ -569,6 +569,9 @@
     term = as.character(term)
     switch( type,
             fixed = switch(term,
+  "40" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
+                           ten = TermStructure@TenYearFwd[1:length(LoanAge)],
+                           sato = sato),                         
   "30" = MortgageRate@yr30(two = TermStructure@TwoYearFwd[1:length(LoanAge)],
                            ten = TermStructure@TenYearFwd[1:length(LoanAge)],
                            sato = sato),

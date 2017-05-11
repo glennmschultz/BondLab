@@ -549,8 +549,9 @@
   #' settlement.date = "01-13-2013", 
   #' price = 104.00, 
   #' PrepaymentAssumption = "Prepayment")}
-  #' @export MortgageCashFlow
   #' @importFrom stats uniroot
+  #' @export MortgageCashFlow
+
   MortgageCashFlow <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              settlement.date = "character",

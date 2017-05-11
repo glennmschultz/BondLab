@@ -29,16 +29,24 @@
   #year interest rates which will define the level, slope and curvature
   #coefficients of the Dibold Li model
   
-  MonteCarloMeanReversion <- function(initial.value, mean, sigma, reversion.speed, step){
+  MonteCarloMeanReversion <- function(initial.value, mean, sigma, reversion.speed, step = 1/12){
     drift.1 = log(initial.value) * exp(-reversion.speed * step)
     drift.2 = log(mean) * (1-(exp(-reversion.speed*step)))
     stochastic = sigma * sqrt((1-exp(-2*reversion.speed * step))/(2*reversion.speed)) * rnorm(1, 0, 1)
     simulated.delta = drift.1 + drift.2 + stochastic
     simulated.value = exp(simulated.delta - (.5 * (1-exp(-2*reversion.speed*step)) * ((sigma^2)/(2*reversion.speed))))
     return(simulated.value)}
-  
 
-  #Function to simulate the three month, 2-year and 10-year rates
+  #'@title SimRates
+  #'@family mortgage pass through option adjusted spread
+  #'@description A function to simulate interest rate paths.  The function is called
+  #'by FitMarket and used to fit the forward rate curve
+  #'@param rates.data A character refrencing a rates.data object
+  #'@param num.paths The number of interest rate paths to simulate defaults to 300
+  #'@param seed The random seed defaults to 42
+  #'@param rate.to.simulate The rate to simulate
+  #'@param parameters A vector parameters mean, standard deviation, and the rate
+  #'of mean reversion of the rate simulated
   SimRates <- function(rates.data,
                        num.paths = 300,
                        seed = 42,
@@ -76,7 +84,19 @@
   return(rates.array)
   }
 
-  #Function to simulate the three month, 2-year and 10-year rates
+  #'@title SimCurve Yield Curve Simulation
+  #'@family mortgage pass through option adjusted spread
+  #'@description Simulation of the 3-mo, 2-year, and 10-year forward.
+  #'The function is used by the OASRatesArray function to create the rate array
+  #'@param rates.data A character referencing a rates.data object
+  #'@param num.paths The number of simulation paths
+  #'@param seed The value of the random seed defaults to 42
+  #'@param three.month A vector of the mean, standard deviation, and mean 
+  #'reversion rate of the three month
+  #'@param two.year A vector of the mean, standard deviation and mean reversion
+  #'rate of the two year
+  #'@param ten.year A vector of the mean, standard deviation and mean reversion
+  #'rate of the ten year
   SimCurve <- function(rates.data,
                        num.paths = 300,
                        seed = 42,
@@ -140,6 +160,16 @@
   return(rates.array)
   }
 
+  #'@title FitMarket
+  #'@family mortgage pass through option adjusted spread 
+  #'@description Function passed to CalibrateRates to fit forward rate curve.
+  #'This function is used by CalibrateRates optimization.
+  #'@param param the parameters optimized by CalibrateRates
+  #'@param rate.to.simulate rate to simulate
+  #'@param rates.data A character referencing a rates.data object
+  #'@param num.periods The number of mortgage payments defaults to 480
+  #'@param num.paths The number of interest rate paths to simulate defaults to 300
+  #'@export FitMarket
   FitMarket <- function(param,
                         rate.to.simulate,
                         rates.data,
@@ -150,7 +180,7 @@
                              TermStructure(rates.data = rates.data, method = 'dl')))
   fwd.curve = ForwardRate(term.structure)[1:num.periods]/1
   
-  simulation <- sim.rates(rates.data = rates.data,
+  simulation <- SimRates(rates.data = rates.data,
                           num.paths = num.paths,
                           rate.to.simulate = rate.to.simulate,
                           parameters = param)
@@ -163,12 +193,20 @@
   return(sum.squared.diff)
   }
 
-
+  #'@title CalibrateRates
+  #'@family mortgage pass through option adjusted spread
+  #'@description optimization to fit 3-mo, 2-year, and 10-year rates to the
+  #'forward rate curve
+  #'@param rates.data A character referencing a rates.data object
+  #'@param num.paths the number of simulations to fit to the market 
+  #'defaults to 3,000
+  #'@importFrom stats optim
+  #'@export CalibrateRates
   CalibrateRates <- function(rates.data,
-                             num.paths = 300){
+                             num.paths = 3000){
 
   params.3M = optim(par = c(1.5, 0.3, 0.2),
-                    fn = fit.to.market,
+                    fn = FitMarket,
                     method = "L-BFGS-B",
                     lower = c(0.10, .05, 0.10),
                     upper = c(3.00, .30, 0.50),
@@ -180,7 +218,7 @@
                                    pgtol = 1e-6))$par
   
   params.24M = optim(par = c(1.5, 0.3, 0.2),
-                     fn = fit.to.market,
+                     fn = FitMarket,
                      method = "L-BFGS-B",
                      lower = c(0.20, .05, 0.10),
                      upper = c(3.50, .30, 0.50),
@@ -192,7 +230,7 @@
                                     pgtol = 1e-6))$par
   
   params.120M = optim(par = c(2.23, 0.3, 0.2),
-                      fn = fit.to.market,
+                      fn = FitMarket,
                       method = "L-BFGS-B",
                       lower = c(2.0, .05, 0.05),
                       upper = c(8.0, .20, 0.30),
@@ -216,6 +254,8 @@
   #'@param num.periods The number of mortgage payment periods defaults to 480
   #'do not change unless you know what you are doing
   #'@param calibration A character referencing the rate calibration object
+  #'@importFrom termstrc spr_dl
+  #'@importFrom termstrc fwr_dl
   #'@export OASRatesArray
   OASRatesArray <- function(rates.data,
                             num.paths = 300,
@@ -224,7 +264,7 @@
   # Create the curve simulation matrix - the curve parameters needed to
   # drive the DL model and simulate the yield curve
   
-  simulation = sim.curve(rates.data = rates.data,
+  simulation = SimCurve(rates.data = rates.data,
                          num.paths = num.paths,
                          three.month = unname(calibration['params.3M',]),
                          two.year = unname(calibration['params.24M',]),
@@ -248,10 +288,10 @@
     beta.1 = simulation[period,'TenYear']
     beta.2 = simulation[period,'ThreeMonth'] - simulation[period,'TenYear']
     beta.3 = 2 * (simulation[period,'TwoYear'] -(simulation[period,'ThreeMonth'] + simulation[period,'TenYear']))
-    spot.rate = spr_dl(beta = c(beta.1, beta.2, beta.1),
+    spot.rate = termstrc::spr_dl(beta = c(beta.1, beta.2, beta.1),
                        m = seq(1/12, (num.periods + 120)/12, 1/12),
                        lambda = .731)
-    fwd.rate = fwr_dl(beta = c(beta.1, beta.2, beta.1),
+    fwd.rate = termstrc::fwr_dl(beta = c(beta.1, beta.2, beta.1),
                       m = seq(1/12, num.periods/12, 1/12),
                       lambda = .731)
     
@@ -333,7 +373,7 @@
     as.character(as.Date(TradeDate(OAS.Term.Structure), format ="%m-%d-%Y") %m+% months(1:num.periods))
   
   
-  for(paths in 1:ncol(oas.array)){
+  for(paths in 1:ncol(OAS.array)){
     SpotRate(OAS.Term.Structure) <- OAS.array[,paths,1]
     ForwardRate(OAS.Term.Structure) <- OAS.array[,paths,2]
     TwoYearForward(OAS.Term.Structure) <- OAS.array[,paths,3]

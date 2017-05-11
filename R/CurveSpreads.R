@@ -120,6 +120,7 @@
   #'@importFrom splines interpSpline
   #'@importFrom stats loess
   #'@importFrom stats predict
+  #'@importFrom stats uniroot
   #'@export CurveSpreads
   CurveSpreads <- function(rates.data = "character",
                            CashFlow = "character",

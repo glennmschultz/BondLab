@@ -187,7 +187,7 @@
   
   #' PriceTypes is a constructor function for the class PriceTypes
   #' 
-  #' @param Price character the price in either 
+  #' @param price character the price in either 
   #' decimal notation (example "100.125") or 32nds notation (example "100-4")
   #' @export PriceTypes
   PriceTypes <- function(price){

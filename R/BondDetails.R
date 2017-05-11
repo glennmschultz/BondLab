@@ -370,7 +370,7 @@
   #' @param ID a character the bond id
   #' @param BondType A character the type of bond MBS, Bond, etc.
   #' @param Sector A character the description of the sector
-  #' @param Issser A character the Issuer
+  #' @param Issuer A character the Issuer
   #' @param Underwriter A character the Underwriter
   #' @param OfferAmount A numeric value the initial offer amount
   #' @param Coupon A numeric value the bond coupon
@@ -445,7 +445,7 @@
   #' @param ID a character the bond id
   #' @param BondType A character the type of bond MBS, Bond, etc.
   #' @param Sector A character the description of the sector
-  #' @param Issser A character the Issuer
+  #' @param Issuer A character the Issuer
   #' @param Underwriter A character the Underwriter
   #' @param OfferAmount A numeric value the initial offer amount
   #' @param Coupon A numeric value the bond coupon

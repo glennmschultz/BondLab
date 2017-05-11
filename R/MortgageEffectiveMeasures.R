@@ -94,7 +94,7 @@
   rates.data <- rates.data
   TermStructure = TermStructure
   MortgageRate = MortgageRate()
-  Price = PriceTypes(Price = price)
+  Price = PriceTypes(price = price)
   proceeds <- OriginalBal(bond.id) * MBSFactor(bond.id) * PriceBasis(Price)
   
   # Pricing prepayment vector and cashflows under the no change scenario

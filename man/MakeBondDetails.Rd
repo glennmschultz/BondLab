@@ -17,6 +17,8 @@ MakeBondDetails(Cusip, ID, BondType, Sector, Issuer, Underwriter, OfferAmount,
 
 \item{Sector}{A character the description of the sector}
 
+\item{Issuer}{A character the Issuer}
+
 \item{Underwriter}{A character the Underwriter}
 
 \item{OfferAmount}{A numeric value the initial offer amount}
@@ -51,8 +53,6 @@ each year}
 \item{Putable}{A logical TRUE if the bond is putable}
 
 \item{SinkingFund}{A logical TRUE if the bond is sinking fund bond}
-
-\item{Issser}{A character the Issuer}
 }
 \description{
 MakeBondDetails writes a BondDetails cusip object to a datafolder

@@ -163,6 +163,7 @@
   #' @param cashflow A character string referencing an object of the 
   #' type MortgageCashFlow
   #' @export MtgTermStructure
+  #' @importFrom stats uniroot
   MtgTermStructure <- function(bond.id = "character", 
                              original.bal = numeric(), 
                              Rate.Delta = numeric(), 

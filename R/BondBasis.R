@@ -36,8 +36,8 @@
   #' @title Actual day count
   #' @family BondBasis
   #' @description Calculates actual days using leap year
-  #' @param year.settlement year input
-  #' @param year.payment year input
+  #' @param settlement.date The settlement date
+  #' @param nextpmt.date The next scheduled interest payment date
   #' @export
   ActualFactor = function(settlement.date, nextpmt.date){
     actual.factor = NULL

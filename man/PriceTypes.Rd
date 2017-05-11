@@ -7,7 +7,7 @@
 PriceTypes(price)
 }
 \arguments{
-\item{Price}{character the price in either 
+\item{price}{character the price in either 
 decimal notation (example "100.125") or 32nds notation (example "100-4")}
 }
 \description{

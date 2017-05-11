@@ -38,6 +38,7 @@
   #' @param sigma A numeric value the volatility of home price
   #' @param N A numeric value the number of paths
   #' @export
+  #' @importFrom stats rnorm
   HPISim <- function(shortrate = numeric(),
                    LongTermGrowth = numeric(),
                    T = numeric(),

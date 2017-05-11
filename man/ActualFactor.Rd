@@ -7,9 +7,9 @@
 ActualFactor(settlement.date, nextpmt.date)
 }
 \arguments{
-\item{year.settlement}{year input}
+\item{settlement.date}{The settlement date}
 
-\item{year.payment}{year input}
+\item{nextpmt.date}{The next scheduled interest payment date}
 }
 \description{
 Calculates actual days using leap year

@@ -133,18 +133,15 @@
   
   #' A connection function to save the PrepaymentModel model tuning parameters
   #' 
-  #' Opens a connection to the PrepaymentModel folder to save the prepayment
-  #' model tuning
-  #' @param ModelFile A character string the model tuning default value is temp
-  #' @param ModelName A character string the model name used to reference the
-  #' prepayment model
+  #' Opens a connection to the PrepaymentModel folder to save the MortgageRate
+  #' object
   #' @export 
   SaveMortgageRate <-function(){
     MortgageRateConn <-gzfile(description = paste(
       system.file(package = "BondLab"), "/PrepaymentModel/", 
       "MortgageRate.rds", sep =""))
-    on.exit(close.connection(ModelRateConn))
-    saveRDS("MortgageRate.rds", ModelTuneConn)
+    on.exit(close.connection(MortgageRateConn))
+    saveRDS("MortgageRate.rds", MortgageRateConn)
   }
 
   #' A connection function to the horzon MBS pass-though object

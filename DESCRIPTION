@@ -22,6 +22,7 @@ Imports:
     RCurl,
     httr,
     splines,
+    stats,
     XML
 Suggests:
     knitr,
@@ -68,14 +69,11 @@ Collate:
     'GetSwapCurve.R'
     'HomePriceSim.R'
     'HorizonBondData.R'
-    'InterestRateModelCIR.R'
     'MortgageCashFlowArray.R'
     'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'
-    'MortgageOAS.R'
     'MortgageRateFunctions.R'
     'PMITypes.R'
-    'PassThroughOAS.R'
     'PaymentDateFunctions.R'
     'PrepaymentModelTune.R'
     'PrepaymentModelFunctions.R'

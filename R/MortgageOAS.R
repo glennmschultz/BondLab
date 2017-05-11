@@ -22,7 +22,7 @@
   # the standard procedure is followed set class, set generics,
   # set methods, functions.  This class is a sub class (document superclass)
   
-  #'@include CashFlowEngine.R MortgageKeyRate.R
+  #'@include CashFlowEngine.R
 
   #Function to calcualte the spread over the discount curve
   SpotSpread <- function(

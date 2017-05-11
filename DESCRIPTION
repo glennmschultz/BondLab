@@ -71,6 +71,7 @@ Collate:
     'MortgageCashFlowArray.R'
     'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'
+    'MortgageOAS.R'
     'MortgageRateFunctions.R'
     'PMITypes.R'
     'PaymentDateFunctions.R'

@@ -4,13 +4,13 @@
 \alias{CalibrateRates}
 \title{CalibrateRates}
 \usage{
-CalibrateRates(rates.data, num.paths = 3000)
+CalibrateRates(rates.data, num.paths = 5000)
 }
 \arguments{
 \item{rates.data}{A character referencing a rates.data object}
 
 \item{num.paths}{the number of simulations to fit to the market 
-defaults to 3,000}
+defaults to 5,000}
 }
 \description{
 optimization to fit 3-mo, 2-year, and 10-year rates to the

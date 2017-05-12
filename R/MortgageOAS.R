@@ -199,11 +199,11 @@
   #'forward rate curve
   #'@param rates.data A character referencing a rates.data object
   #'@param num.paths the number of simulations to fit to the market 
-  #'defaults to 3,000
+  #'defaults to 5,000
   #'@importFrom stats optim
   #'@export CalibrateRates
   CalibrateRates <- function(rates.data,
-                             num.paths = 3000){
+                             num.paths = 5000){
 
   params.3M = optim(par = c(1.5, 0.3, 0.2),
                     fn = FitMarket,

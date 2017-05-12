@@ -29,7 +29,7 @@ The function is used by the OASRatesArray function to create the rate array
 }
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}},
-  \code{\link{FitMarket}}, \code{\link{OASRatesArray}},
-  \code{\link{SimRates}}
+  \code{\link{FitMarket}}, \code{\link{MortgageOAS-class}},
+  \code{\link{OASRatesArray}}, \code{\link{SimRates}}
 }
 

@@ -36,6 +36,83 @@
     simulated.delta = drift.1 + drift.2 + stochastic
     simulated.value = exp(simulated.delta - (.5 * (1-exp(-2*reversion.speed*step)) * ((sigma^2)/(2*reversion.speed))))
     return(simulated.value)}
+  
+  #'@title mortgage oas class
+  #'@family mortgage pass through option adjusted spread
+  #'@description mortgage pass through oas class
+  #'@slot Cusip the pass through cusip
+  #'@slot Issuer the pass through issuer
+  #'@slot Coupon the pass through investor coupon
+  #'@slot Term the pass though amortization term 
+  #'@slot OAS the mortgage option adjusted spread
+  #'@slot Spreads the path spread along each simulation
+  #'@slot OAD option adjusted duration
+  #'@slot OAC option adjusted convexity
+  #'@exportClass MortgageOAS
+  setClass('MortgageOAS',
+           representation(
+             Cusip = 'character',
+             Issuer = 'character',
+             Coupon = 'numeric',
+             Term = 'numeric',
+             OAS = 'numeric',
+             Spreads = 'numeric',
+             OAD = 'numeric',
+             OAC = 'numeric'
+           ))
+  
+  #'@title generic function to plot OAS
+  #'@description standard generic to polt MortgageOAS
+  #'@param object MortgageOAS object
+  #'@export PlotOAS
+  setGeneric('PlotOAS', function(object)
+    {standardGeneric('PlotOAS')})
+  
+  #'@title Method to plot MortgageOAS 
+  #'@description A method to plot MortgageOAS
+  #'@param object MortgageOAS object
+  #'@importFrom stats ecdf
+  #'@importFrom grDevices rgb
+  #'@importFrom graphics axis grid hist lines mtext par plot
+  #'@exportMethod PlotOAS
+  setMethod('PlotOAS', signature('MortgageOAS'),
+            function(object){
+                par(mar = c(5,5,2,5), lwd = 2)
+                h <- hist(object@Spreads,
+                          main = paste(object@Issuer, 
+                                       format(round(object@Coupon,2), nsmall =2), 
+                                       object@Term,'-year OAS Distribution'),
+                          sub = paste('Paths', 
+                                      length(object@Spreads), 
+                                      'OAS =', format(round(object@OAS,2), nsmall = 2), 
+                                      sep = " "),
+                          ylab = 'Frequency', 
+                          xlab = 'Spread', 
+                          col = 'blue', 
+                          border = 'grey')
+                par(new = T, lwd = 1)
+                ec <- ecdf(object@Spreads)
+                plot(x = h$mids, y=ec(h$mids)*max(h$counts), 
+                     col = rgb(0,0,0,alpha=0), 
+                     axes=F, 
+                     xlab=NA, 
+                     ylab=NA)
+                lines(x = h$mids, 
+                      y=ec(h$mids)*max(h$counts), 
+                      col ='orange', 
+                      lwd = 3)
+                axis(4, 
+                     at=seq(from = 0, to = max(h$counts), 
+                            length.out = 11), 
+                     labels=seq(0, 1, 0.1), 
+                     col = 'black', 
+                     col.axis = 'black')
+                mtext(side = 4, 
+                      line = 3, 
+                      'Cumulative Density', 
+                      col = 'black')
+                grid(col = 'grey', lty = 'dotted')
+            })
 
   #'@title SimRates
   #'@family mortgage pass through option adjusted spread
@@ -401,5 +478,14 @@
                                        discount.rates = OAS.array[,paths,2]/100,
                                        t.period = cash.flow.array[,2],
                                        proceeds = proceeds)$root}
-  return(discount.spreads)
+  new('MortgageOAS',
+      Cusip = Cusip(bond.id),
+      Issuer = Issuer(bond.id),
+      Coupon = Coupon(bond.id),
+      Term = AmortizationTerm(bond.id),
+      OAS = mean(discount.spreads) * yield.basis,
+      Spreads = discount.spreads * yield.basis,
+      OAD = 999,
+      OAC = 999
+      )
   }

@@ -18,6 +18,7 @@ forward rate curve
 }
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{FitMarket}},
+  \code{\link{MonteCarloMeanReversion}},
   \code{\link{MortgageOAS-class}},
   \code{\link{OASRatesArray}}, \code{\link{SimCurve}},
   \code{\link{SimRates}}

@@ -24,18 +24,6 @@
 
   #'@include CashFlowEngine.R PrepaymentModel.R
   NULL
-
-  #Define the mean reversion function used to simulate the 3mo, 2-, and 10-
-  #year interest rates which will define the level, slope and curvature
-  #coefficients of the Dibold Li model
-  
-  MonteCarloMeanReversion <- function(initial.value, mean, sigma, reversion.speed, step = 1/12){
-    drift.1 = log(initial.value) * exp(-reversion.speed * step)
-    drift.2 = log(mean) * (1-(exp(-reversion.speed*step)))
-    stochastic = sigma * sqrt((1-exp(-2*reversion.speed * step))/(2*reversion.speed)) * rnorm(1, 0, 1)
-    simulated.delta = drift.1 + drift.2 + stochastic
-    simulated.value = exp(simulated.delta - (.5 * (1-exp(-2*reversion.speed*step)) * ((sigma^2)/(2*reversion.speed))))
-    return(simulated.value)}
   
   #'@title mortgage oas class
   #'@family mortgage pass through option adjusted spread
@@ -45,6 +33,7 @@
   #'@slot Coupon the pass through investor coupon
   #'@slot Term the pass though amortization term 
   #'@slot OAS the mortgage option adjusted spread
+  #'@slot ZeroVolSpread the zero volatility spread
   #'@slot Spreads the path spread along each simulation
   #'@slot OAD option adjusted duration
   #'@slot OAC option adjusted convexity
@@ -56,6 +45,7 @@
              Coupon = 'numeric',
              Term = 'numeric',
              OAS = 'numeric',
+             ZeroVolSpread = 'numeric',
              Spreads = 'numeric',
              OAD = 'numeric',
              OAC = 'numeric'
@@ -66,7 +56,7 @@
   #'@param object MortgageOAS object
   #'@export PlotOAS
   setGeneric('PlotOAS', function(object)
-    {standardGeneric('PlotOAS')})
+  {standardGeneric('PlotOAS')})
   
   #'@title Method to plot MortgageOAS 
   #'@description A method to plot MortgageOAS
@@ -77,43 +67,68 @@
   #'@exportMethod PlotOAS
   setMethod('PlotOAS', signature('MortgageOAS'),
             function(object){
-                par(mar = c(5,5,2,5), lwd = 2)
-                h <- hist(object@Spreads,
-                          main = paste(object@Issuer, 
-                                       format(round(object@Coupon,2), nsmall =2), 
-                                       object@Term,'-year OAS Distribution'),
-                          sub = paste('Paths', 
-                                      length(object@Spreads), 
-                                      'OAS =', format(round(object@OAS,2), nsmall = 2), 
-                                      sep = " "),
-                          ylab = 'Frequency', 
-                          xlab = 'Spread', 
-                          col = 'blue', 
-                          border = 'grey')
-                par(new = T, lwd = 1)
-                ec <- ecdf(object@Spreads)
-                plot(x = h$mids, y=ec(h$mids)*max(h$counts), 
-                     col = rgb(0,0,0,alpha=0), 
-                     axes=F, 
-                     xlab=NA, 
-                     ylab=NA)
-                lines(x = h$mids, 
-                      y=ec(h$mids)*max(h$counts), 
-                      col ='orange', 
-                      lwd = 3)
-                axis(4, 
-                     at=seq(from = 0, to = max(h$counts), 
-                            length.out = 11), 
-                     labels=seq(0, 1, 0.1), 
-                     col = 'black', 
-                     col.axis = 'black')
-                mtext(side = 4, 
-                      line = 3, 
-                      'Cumulative Density', 
-                      col = 'black')
-                grid(col = 'grey', lty = 'dotted')
+              par(mar = c(5,5,2,5), lwd = 2)
+              h <- hist(object@Spreads,
+                        main = paste(object@Issuer, 
+                                     format(round(object@Coupon,2), nsmall =2), 
+                                     object@Term,'-year OAS Distribution'),
+                        sub = paste('Paths', 
+                                    length(object@Spreads), 
+                                    'OAS =', format(round(object@OAS,2), nsmall = 2), 
+                                    sep = " "),
+                        ylab = 'Frequency', 
+                        xlab = 'Spread', 
+                        col = 'blue', 
+                        border = 'grey')
+              par(new = T, lwd = 1)
+              ec <- ecdf(object@Spreads)
+              plot(x = h$mids, y=ec(h$mids)*max(h$counts), 
+                   col = rgb(0,0,0,alpha=0), 
+                   axes=F, 
+                   xlab=NA, 
+                   ylab=NA)
+              lines(x = h$mids, 
+                    y=ec(h$mids)*max(h$counts), 
+                    col ='orange', 
+                    lwd = 3)
+              axis(4, 
+                   at=seq(from = 0, to = max(h$counts), 
+                          length.out = 11), 
+                   labels=seq(0, 1, 0.1), 
+                   col = 'black', 
+                   col.axis = 'black')
+              mtext(side = 4, 
+                    line = 3, 
+                    'Cumulative Density', 
+                    col = 'black')
+              grid(col = 'grey', lty = 'dotted')
             })
 
+  #Define the mean reversion function used to simulate the 3mo, 2-, and 10-
+  #year interest rates which will define the level, slope and curvature
+  #coefficients of the Dibold Li model
+  
+  #'@title MonteCarloMeanReversion
+  #'@family mortgage pass through option adjusted spread
+  #'@description Monte Carlo Simulation
+  #'@param initial.value the initial value
+  #'@param mean the mean of the asset to simulate
+  #'@param sigma the volatility of the asset to simulate
+  #'@param reversion.speed the speed of the mean reversion
+  #'@param step the time step defaults to 1/12
+  #'@importFrom stats rnorm
+  #'@export MonteCarloMeanReversion
+  MonteCarloMeanReversion <- function(initial.value, mean, sigma, reversion.speed, step = 1/12){
+    drift.1 = log(initial.value) * exp(-reversion.speed * step)
+    drift.2 = log(mean) * (1-(exp(-reversion.speed*step)))
+    stochastic = sigma * sqrt((1-exp(-2*reversion.speed * step))/(2*reversion.speed)) * rnorm(1, 0, 1)
+    simulated.delta = drift.1 + drift.2 + stochastic
+    simulated.value = exp(simulated.delta - (.5 * (1-exp(-2*reversion.speed*step)) * ((sigma^2)/(2*reversion.speed))))
+    return(simulated.value)}
+  
+
+  
+ 
   #'@title SimRates
   #'@family mortgage pass through option adjusted spread
   #'@description A function to simulate interest rate paths.  The function is called
@@ -124,6 +139,7 @@
   #'@param rate.to.simulate The rate to simulate
   #'@param parameters A vector parameters mean, standard deviation, and the rate
   #'of mean reversion of the rate simulated
+  #'@export SimRates
   SimRates <- function(rates.data,
                        num.paths = 300,
                        seed = 42,
@@ -174,6 +190,7 @@
   #'rate of the two year
   #'@param ten.year A vector of the mean, standard deviation and mean reversion
   #'rate of the ten year
+  #'@export SimCurve
   SimCurve <- function(rates.data,
                        num.paths = 300,
                        seed = 42,
@@ -209,7 +226,7 @@
       step = 1/12)}
     
     if(period ==1) {rates.array[period, 'TwoYear'] = MonteCarloMeanReversion(
-      initial.value = rates.data[1,'USSW2']/1,
+      initial.value = rates.data[1,'USSW2'],
       mean = two.year[1],
       sigma = two.year[2],
       reversion.speed = two.year[3],
@@ -255,12 +272,12 @@
   
   invisible(capture.output(term.structure <-
                              TermStructure(rates.data = rates.data, method = 'dl')))
-  fwd.curve = ForwardRate(term.structure)[1:num.periods]/1
+  fwd.curve = ForwardRate(term.structure)[1:num.periods]
   
   simulation <- SimRates(rates.data = rates.data,
-                          num.paths = num.paths,
-                          rate.to.simulate = rate.to.simulate,
-                          parameters = param)
+                         num.paths = num.paths,
+                         rate.to.simulate = rate.to.simulate,
+                         parameters = param)
   
   mkt.fwd.rate.tenor = rates.data[2,rate.to.simulate] * 12
   mkt.fwd.rate = fwd.curve[mkt.fwd.rate.tenor]
@@ -285,8 +302,8 @@
   params.3M = optim(par = c(1.5, 0.3, 0.2),
                     fn = FitMarket,
                     method = "L-BFGS-B",
-                    lower = c(0.10, .05, 0.10),
-                    upper = c(3.00, .30, 0.50),
+                    lower = c(1.00, 0.10, 0.20),
+                    upper = c(3.00, 0.30, 0.30),
                     rates.data = rates.data,
                     rate.to.simulate = 'ED3M',
                     num.paths = num.paths,
@@ -297,8 +314,8 @@
   params.24M = optim(par = c(1.5, 0.3, 0.2),
                      fn = FitMarket,
                      method = "L-BFGS-B",
-                     lower = c(0.20, .05, 0.10),
-                     upper = c(3.50, .30, 0.50),
+                     lower = c(3.00, .10, 0.20),
+                     upper = c(5.50, .30, 0.30),
                      rates.data = rates.data,
                      rate.to.simulate = 'USSW2',
                      num.paths = num.paths,
@@ -309,8 +326,8 @@
   params.120M = optim(par = c(2.23, 0.3, 0.2),
                       fn = FitMarket,
                       method = "L-BFGS-B",
-                      lower = c(2.0, .05, 0.05),
-                      upper = c(8.0, .20, 0.30),
+                      lower = c(4.0, .10, 0.20),
+                      upper = c(8.0, .30, 0.40),
                       rates.data = rates.data,
                       rate.to.simulate = 'USSW10',
                       num.paths = num.paths,
@@ -365,10 +382,10 @@
     beta.1 = simulation[period,'TenYear']
     beta.2 = simulation[period,'ThreeMonth'] - simulation[period,'TenYear']
     beta.3 = 2 * (simulation[period,'TwoYear'] -(simulation[period,'ThreeMonth'] + simulation[period,'TenYear']))
-    spot.rate = termstrc::spr_dl(beta = c(beta.1, beta.2, beta.1),
+    spot.rate = termstrc::spr_dl(beta = c(beta.1, beta.2, beta.3),
                        m = seq(1/12, (num.periods + 120)/12, 1/12),
                        lambda = .731)
-    fwd.rate = termstrc::fwr_dl(beta = c(beta.1, beta.2, beta.1),
+    fwd.rate = termstrc::fwr_dl(beta = c(beta.1, beta.2, beta.3),
                       m = seq(1/12, num.periods/12, 1/12),
                       lambda = .731)
     
@@ -455,7 +472,7 @@
     ForwardRate(OAS.Term.Structure) <- OAS.array[,paths,2]
     TwoYearForward(OAS.Term.Structure) <- OAS.array[,paths,3]
     TenYearForward(OAS.Term.Structure) <- OAS.array[,paths,4]
-    
+    print(paths)
     prepayment <- PrepaymentModel(bond.id = bond.id,
                                   TermStructure = OAS.Term.Structure,
                                   MortgageRate = MtgRate,
@@ -471,19 +488,55 @@
     
     cash.flow.array[1:length(CashFlow), 3] = CashFlow
     
-    discount.spreads[paths] <- uniroot(SpotSpread,
-                                       interval = c(-1, 1),
-                                       tol = .0000000001,
+    discount.spreads[paths] <- tryCatch(uniroot(SpotSpread,
+                                       interval = c(-.05, .05),
+                                       tol = .00000001,
+                                       extendInt = c('yes'),
                                        cashflow = cash.flow.array[,3],
                                        discount.rates = OAS.array[,paths,2]/100,
                                        t.period = cash.flow.array[,2],
-                                       proceeds = proceeds)$root}
+                                       proceeds = proceeds)$root,
+                                       error = function(e) 0)
+    }
+  
+  # Calculate the zero volatility spread
+  SpotRate(OAS.Term.Structure) = rowMeans(OAS.array[,,1])
+  ForwardRate(OAS.Term.Structure) <- rowMeans(OAS.array[,,2])
+  TwoYearForward(OAS.Term.Structure) <- rowMeans(OAS.array[,,3])
+  TenYearForward(OAS.Term.Structure) <- rowMeans(OAS.array[,,4])
+  
+  
+  prepayment <- PrepaymentModel(bond.id = bond.id,
+                                TermStructure = OAS.Term.Structure,
+                                MortgageRate = MtgRate,
+                                ModelTune = ModelTune,
+                                Burnout = Burnout,
+                                PrepaymentAssumption = "MODEL") 
+  CashFlow <- CashFlowEngine(
+    bond.id = bond.id,
+    settlement.date = trade.date,
+    principal = principal,
+    PrepaymentAssumption = prepayment)[,'Investor CashFlow']
+  
+  cash.flow.array[1:length(CashFlow), 3] = CashFlow
+  
+  Zero.Vol.Spread = tryCatch(uniroot(SpotSpread,
+                            interval = c(-.05, .05),
+                            tol = .0000001,
+                            extendInt = c('yes'),
+                            cashflow = cash.flow.array[,3],
+                            discount.rates = SpotRate(OAS.Term.Structure)/100,
+                            t.period = cash.flow.array[,2],
+                            proceeds = proceeds)$root,
+                            error = function(e) 0)
+  
   new('MortgageOAS',
       Cusip = Cusip(bond.id),
       Issuer = Issuer(bond.id),
       Coupon = Coupon(bond.id),
       Term = AmortizationTerm(bond.id),
       OAS = mean(discount.spreads) * yield.basis,
+      ZeroVolSpread = Zero.Vol.Spread * yield.basis,
       Spreads = discount.spreads * yield.basis,
       OAD = 999,
       OAC = 999

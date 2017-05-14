@@ -24,6 +24,7 @@ This function is used by CalibrateRates optimization.
 }
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}},
+  \code{\link{MonteCarloMeanReversion}},
   \code{\link{MortgageOAS-class}},
   \code{\link{OASRatesArray}}, \code{\link{SimCurve}},
   \code{\link{SimRates}}

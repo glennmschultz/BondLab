@@ -21,7 +21,9 @@ Simulated rates paths for option adjusted spread analysis
 }
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}},
-  \code{\link{FitMarket}}, \code{\link{MortgageOAS-class}},
-  \code{\link{SimCurve}}, \code{\link{SimRates}}
+  \code{\link{FitMarket}},
+  \code{\link{MonteCarloMeanReversion}},
+  \code{\link{MortgageOAS-class}}, \code{\link{SimCurve}},
+  \code{\link{SimRates}}
 }
 

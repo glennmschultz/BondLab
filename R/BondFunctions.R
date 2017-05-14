@@ -174,6 +174,7 @@
     Forward.Rate <- FutureValueVector[(FwdRate.Tenor + 1):max.maturity] / 
                     FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
     Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
+    Forward.Rate <- ifelse(is.nan(Forward.Rate),0,Forward.Rate)
   }
   
   setGeneric("BondEffectiveMeasure", function(Rate.Delta = numeric(), 

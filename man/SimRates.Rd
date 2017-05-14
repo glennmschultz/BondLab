@@ -25,7 +25,9 @@ by FitMarket and used to fit the forward rate curve
 }
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}},
-  \code{\link{FitMarket}}, \code{\link{MortgageOAS-class}},
+  \code{\link{FitMarket}},
+  \code{\link{MonteCarloMeanReversion}},
+  \code{\link{MortgageOAS-class}},
   \code{\link{OASRatesArray}}, \code{\link{SimCurve}}
 }
 

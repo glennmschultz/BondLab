@@ -20,6 +20,8 @@ mortgage pass through oas class
 
 \item{\code{OAS}}{the mortgage option adjusted spread}
 
+\item{\code{ZeroVolSpread}}{the zero volatility spread}
+
 \item{\code{Spreads}}{the path spread along each simulation}
 
 \item{\code{OAD}}{option adjusted duration}
@@ -28,7 +30,9 @@ mortgage pass through oas class
 }}
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}},
-  \code{\link{FitMarket}}, \code{\link{OASRatesArray}},
-  \code{\link{SimCurve}}, \code{\link{SimRates}}
+  \code{\link{FitMarket}},
+  \code{\link{MonteCarloMeanReversion}},
+  \code{\link{OASRatesArray}}, \code{\link{SimCurve}},
+  \code{\link{SimRates}}
 }
 

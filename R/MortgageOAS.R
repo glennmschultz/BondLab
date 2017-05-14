@@ -58,6 +58,32 @@
   setGeneric('PlotOAS', function(object)
   {standardGeneric('PlotOAS')})
   
+  setMethod('initialize',
+            signature('MortgageOAS'),
+            function(.Object,
+                     Cusip = 'character',
+                     Issuer = 'character',
+                     Coupon = numeric(),
+                     Term = numeric(),
+                     OAS = numeric(),
+                     ZeroVolSpread = numeric(),
+                     Spreads = numeric(),
+                     OAD = numeric(),
+                     OAC = numeric(),
+                     ...){
+              callNextMethod(.Object,
+                             Cusip = Cusip,
+                             Issuer = Issuer,
+                             Coupon = Coupon,
+                             Term = Term,
+                             OAS = OAS,
+                             ZeroVolSpread = ZeroVolSpread,
+                             Spreads = Spreads,
+                             OAD = OAD,
+                             OAC = OAC,
+                             ...)
+            })
+  
   #'@title Method to plot MortgageOAS 
   #'@description A method to plot MortgageOAS
   #'@param object MortgageOAS object
@@ -472,7 +498,7 @@
     ForwardRate(OAS.Term.Structure) <- OAS.array[,paths,2]
     TwoYearForward(OAS.Term.Structure) <- OAS.array[,paths,3]
     TenYearForward(OAS.Term.Structure) <- OAS.array[,paths,4]
-    print(paths)
+
     prepayment <- PrepaymentModel(bond.id = bond.id,
                                   TermStructure = OAS.Term.Structure,
                                   MortgageRate = MtgRate,

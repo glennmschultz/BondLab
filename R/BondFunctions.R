@@ -163,6 +163,7 @@
   #' @param SpotRate.Curve A vector of monthly spot rates
   #' @param FwdRate.Tenor A numeric value the tenor of the forward rate in months
   #' @importFrom stats loess
+  #' @importFrom stats loess.control
   #' @export Forward.Rate
   Forward.Rate <- function(
     SpotRate.Curve = vector(), 

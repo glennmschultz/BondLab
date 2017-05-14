@@ -162,6 +162,7 @@
   #' Calculate forward rate given a vector of spot rates
   #' @param SpotRate.Curve A vector of monthly spot rates
   #' @param FwdRate.Tenor A numeric value the tenor of the forward rate in months
+  #' @importFrom stats loess
   #' @export Forward.Rate
   Forward.Rate <- function(
     SpotRate.Curve = vector(), 
@@ -174,8 +175,9 @@
     Forward.Rate <- FutureValueVector[(FwdRate.Tenor + 1):max.maturity] / 
                     FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
     Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
-    Forward.Rate <- ifelse(is.nan(Forward.Rate),0,Forward.Rate)
-  }
+    Forward.Rate <- predict(loess(Forward.Rate ~ seq(1:length(Forward.Rate)), span = .02,
+              control = loess.control(surface = 'direct')))}
+  
   
   setGeneric("BondEffectiveMeasure", function(Rate.Delta = numeric(), 
                                               cashflow = vector(), 

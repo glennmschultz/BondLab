@@ -449,7 +449,7 @@
   params.120M = optim(par = c(2.23, 0.3, 0.2),
                       fn = FitMarket,
                       method = "L-BFGS-B",
-                      lower = c(3.5, .10, 0.20),
+                      lower = c(4.0, .10, 0.20),
                       upper = c(8.0, .30, 0.40),
                       rates.data = rates.data,
                       rate.to.simulate = 'USSW10',

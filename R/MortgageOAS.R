@@ -22,7 +22,7 @@
   # the standard procedure is followed set class, set generics,
   # set methods, functions.  This class is a sub class (document superclass)
 
-  #'@include CashFlowEngine.R PrepaymentModel.R
+  #'@include CashFlowEngine.R PrepaymentModel.R MBSDetails.R CurveSpreads.R
   NULL
   
   #'@title mortgage oas class
@@ -58,6 +58,40 @@
   setGeneric('PlotOAS', function(object)
   {standardGeneric('PlotOAS')})
   
+  # Note standard generic Cusip is defined in MBSDetails.R
+  # Note standard generic Issuer is defined in MBSDetails.R
+  # Note standard generic Coupon is defined in MBSDetails.R
+  # Note standard generic Term is defined in MBSDetails.R
+  # Note standard generic ZeroVolSpread is defined in CurveSpreads.R
+
+  #'@title A standard generic to access the slot OAS
+  #'@description Access the slot OAS from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@export OAS
+  setGeneric('OAS', function(object)
+    {standardGeneric('OAS')})
+  
+  #'@title A standard generic to access the slot Spreads
+  #'@description Access the slot Spreads from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@export Spreads
+  setGeneric('Spreads', function(object)
+    {standardGeneric('Spreads')})
+  
+  #'@title A standard generic to access the slot OAD
+  #'@description Access the slot OAD from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@export OAD
+  setGeneric('OAD', function(object)
+    {standardGeneric('OAD')})
+  
+  #'@title A standard generic to access the slot OAC
+  #'@description Access the slot OAC from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@export OAC
+  setGeneric('OAC', function(object)
+    {standardGeneric('OAC')})
+  
   setMethod('initialize',
             signature('MortgageOAS'),
             function(.Object,
@@ -84,8 +118,71 @@
                              ...)
             })
   
-  #'@title Method to plot MortgageOAS 
-  #'@description A method to plot MortgageOAS
+  #'@title A method to access the slot cusip
+  #'@description Access the slot Cusip from object MortgageOAS
+  #'@param object MortgageOAS object
+  #'@exportMethod Cusip
+  setMethod('Cusip', signature('MortgageOAS'),
+            function(object){object@Cusip})
+  
+  #'@title A method to access the slot Issuer
+  #'@description Access the slot Issuer from object MortgageOAS
+  #'@param object MortgageOAS object
+  #'@exportMethod Issuer
+  setMethod('Issuer', signature('MortgageOAS'),
+            function(object){object@Issuer})
+  
+  #'@title A Method to access the slot Coupon
+  #'@description Access the slot Coupon from object MortgageOAS
+  #'@param object MortgageOAS object
+  #'@exportMethod Coupon
+  setMethod('Coupon', signature('MortgageOAS'),
+            function(object){object@Coupon})
+  
+  #'@title A Method to access the slot Term
+  #'@description Access the slot Term from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@exportMethod Term
+  setMethod('Term', signature('MortgageOAS'),
+            function(object){object@Term})
+  
+  #'@title A Method to access the slot OAS
+  #'@description Access the slot OAS from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@exportMethod OAS
+  setMethod('OAS', signature('MortgageOAS'),
+            function(object){object@OAS})
+  
+  #'@title A Method to access the slot ZeroVolSpread
+  #'@description Access the slot ZeroVolSpread from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@exportMethod ZeroVolSpread
+  setMethod('ZeroVolSpread', signature('MortgageOAS'),
+            function(object){object@ZeroVolSpread})
+  
+  #'@title A Method to access the slot Spreads
+  #'@description Access the slot Spreads from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@exportMethod Spreads
+  setMethod('Spreads', signature('MortgageOAS'),
+            function(object){object@Spreads})
+  
+  #'@title A Method to access the slot OAD
+  #'@description Access the slot OAD from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@exportMethod OAD
+  setMethod('OAD', signature('MortgageOAS'),
+            function(object){object@OAD})
+  
+  #'@title A Method to access the slot OAC
+  #'@description Access the slot OAC from object MortgageOAS
+  #'@param object MortgageOAS
+  #'@exportMethod OAC
+  setMethod('OAC', signature('MortgageOAS'),
+            function(object){object@OAC})
+  
+  #'@title Method to plot MortgageOAS spread distribution
+  #'@description A method to plot MortgageOAS spread distribution
   #'@param object MortgageOAS object
   #'@importFrom stats ecdf
   #'@importFrom grDevices rgb
@@ -352,7 +449,7 @@
   params.120M = optim(par = c(2.23, 0.3, 0.2),
                       fn = FitMarket,
                       method = "L-BFGS-B",
-                      lower = c(3.0, .10, 0.20),
+                      lower = c(3.5, .10, 0.20),
                       upper = c(8.0, .30, 0.40),
                       rates.data = rates.data,
                       rate.to.simulate = 'USSW10',

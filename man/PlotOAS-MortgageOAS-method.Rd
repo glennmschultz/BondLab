@@ -3,7 +3,7 @@
 \docType{methods}
 \name{PlotOAS,MortgageOAS-method}
 \alias{PlotOAS,MortgageOAS-method}
-\title{Method to plot MortgageOAS}
+\title{Method to plot MortgageOAS spread distribution}
 \usage{
 \S4method{PlotOAS}{MortgageOAS}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{MortgageOAS object}
 }
 \description{
-A method to plot MortgageOAS
+A method to plot MortgageOAS spread distribution
 }
 

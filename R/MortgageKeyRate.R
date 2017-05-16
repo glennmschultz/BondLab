@@ -43,16 +43,7 @@
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
-  
-  setGeneric("MtgTermStructure", function(bond.id = "character", 
-                                          original.bal = numeric(), 
-                                          Rate.Delta = numeric(), 
-                                          TermStructure = "character", 
-                                          settlement.date = "character", 
-                                          principal = numeric(), 
-                                          price = "character", 
-                                          cashflow = "character")
-  {standardGeneric("MtgTermStructure")})
+
 
   
   #' A standard generic function to access the slot SpotSpread

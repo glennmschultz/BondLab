@@ -51,14 +51,7 @@
            Shiftbps = "character",
            Formula = "function"
          ))
-  
-  #' @export
-  setGeneric("Scenario", function(Name = "character",
-                                      Type = "character",
-                                      ShiftType = "character",
-                                      Shiftbps = "character",
-                                      Formula = "function")
-  {standardGeneric("Scenario")})
+
   
   #' A standard generic to access the slot Name
   #' @param object An S4 class object of the type Scenario

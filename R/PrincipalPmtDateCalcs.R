@@ -17,8 +17,6 @@
   # These functions calcualte the difference between dates
   # using the lubridate package 
 
-  setGeneric("AddMonths", function(Date = "character", Months = numeric())
-    {standardGeneric("AddMonths")})
 
   #' @title Principal payment dates
   #' @family ScenarioAnalysis
@@ -35,8 +33,6 @@
   as.Date(Date, format = "%m-%d-%Y") %m+% months(Months)
   }
 
-  setGeneric("SubtractMonths", function(Date = "character", Months = numeric())
-    {standardGeneric("SubtractMonths")})
 
   #' A function to subtract months to a date
   #'

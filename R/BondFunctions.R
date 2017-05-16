@@ -17,12 +17,6 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  setGeneric("bondprice", function(yield.to.maturity = numeric(),
-                                 coupon = numeric(), 
-                                 coupon.frequency = numeric(), 
-                                 years.mat = numeric(), 
-                                 face.value = numeric())
-  {standardGeneric("bondprice")})
 
   #' Determine the price a bond on the interest payment date 
   #' 
@@ -59,12 +53,7 @@
   (((1-(1/(1+i)^n))/i) * (fv * c)) + (1/(1+i)^n * fv)
   }
 
-  setGeneric("EstimYTM", function(coupon = numeric(), 
-                                  coupon.frequency = numeric(), 
-                                  years.mat = numeric(), 
-                                  face.value = numeric(), 
-                                  price = numeric())
-  {standardGeneric("EstimYTM")})
+
   
   #' A function to estimate the yield to maturity of a standard bond
   #' 
@@ -96,11 +85,7 @@
   ((c * fv) + ((fv - (fv *p))/2)) / (((fv + (fv *p))/f))
   }
 
-  setGeneric("BondEffectiveDuration", function(Rate.Delta = numeric(), 
-                                            cashflow = vector(), 
-                                            discount.rates = vector(), 
-                                            time.period = vector())
-  {standardGeneric("BondEffectiveDuration")})
+
 
   #' A function to compute effective duration
   #' 
@@ -123,12 +108,7 @@
   Price.DWN = sum((1/((1+discount.rates.dwn)^time.period)) * cashflow)  
   (Price.UP - Price.DWN)/(2*Price.NC*Rate.Delta)
   }
-  
-  setGeneric("BondEffectiveConvexity", function(Rate.Delta = numeric(), 
-                                             cashflow = vector(), 
-                                             discount.rates = vector(), 
-                                             time.period = vector())
-  {standardGeneric("BondEffectiveConvexity")})
+
 
   #' A function to compute effective convexity
   #' 
@@ -151,10 +131,6 @@
   
   (Price.UP + Price.DWN - (2*Price.NC))/(2*Price.NC*(Rate.Delta^2))
   }
-  
-  setGeneric("Forward.Rate", function(SpotRate.Curve = vector(),
-                                      FwdRate.Tenor = numeric())
-  {standardGeneric("Forward.Rate")})
 
 
   #' A function to calculate forward rates
@@ -179,13 +155,6 @@
     Forward.Rate <- predict(loess(Forward.Rate ~ seq(1:length(Forward.Rate)), span = .02,
               control = loess.control(surface = 'direct')))}
   
-  
-  setGeneric("BondEffectiveMeasure", function(Rate.Delta = numeric(), 
-                                              cashflow = vector(), 
-                                              discount.rates = vector(), 
-                                              time.period = vector(),
-                                              type = "character")
-  {standardGeneric("BondEffectiveMeasure")})
   
   #' A function to compute effective duration and convexity
   #' 

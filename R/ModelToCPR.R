@@ -29,19 +29,6 @@
              CPRLife = "numeric")
            )
 
-  setGeneric("ModelToCPR", function(bond.id = "character",
-                                    TermStructure = "character",
-                                    MortgageRate = "character",
-                                    ModelTune = "character",
-                                    Burnout = numeric(),
-                                    original.bal = numeric(),
-                                    settlement.date = "character",
-                                    price = numeric(),
-                                    yield = numeric(),
-                                    ...,
-                                    iter = numeric(),
-                                    eps = 1e-08)
-  {standardGeneric("ModelToCPR")})
 
   #' A standard generic to access the CPRLife slot of class ModelToCPR
   #'

@@ -52,16 +52,6 @@
            TotalFutureValue = "numeric",
            DropImpliedValue = "numeric"))
 
-  setGeneric("DollarRoll", function(bond.id = "character", 
-                                  price = numeric(), 
-                                  drop = numeric(), 
-                                  original.bal = numeric(), 
-                                  settlement.date = "character", 
-                                  fwd.settlement.date = "character", 
-                                  reinvestment.rate = numeric(), 
-                                  finance.rate = numeric(),
-                                  MortgageCashFlow = "character") 
-  {standardGeneric("DollarRoll")})
 
   setMethod("initialize",
           signature("DollarRoll"),

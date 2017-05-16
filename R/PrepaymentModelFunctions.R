@@ -51,20 +51,7 @@
              DefaultUpdatedLTVMult = "function",
              DefaultSATOMult = "function"
            ))
-  
-  setGeneric("PrepaymentModelFunctions", function(
-             TurnoverRate = "numeric",
-             SeasoningRamp = "function",
-             Curtailment = "function",
-             SeasonalFactors = "function",
-             ArcTanIncentive = "function",
-             BorrowerBurnout = "function",
-             DefaultRamp = "function",
-             DefaultOrigLTVMult = "function",
-             DefaultUpdatedLTVMult = "function",
-             DefaultSATOMult = "function"
-             )
-  {standardGeneric("PrepaymentModelFunctions")})
+
   
   # Note: standard generic function TurnoverRate is defined
   # in prepayment model tune

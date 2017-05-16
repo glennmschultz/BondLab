@@ -30,8 +30,6 @@
       YieldDecimalString = "character")
     )
   
-  setGeneric("YieldTypes", function(yield = numeric())
-    {standardGeneric("YieldTypes")})
   
   #' A standard generic function to get the slot YieldDecimal
   #' 

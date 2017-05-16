@@ -36,8 +36,7 @@
              PMIBasis = "numeric",
              PMIDecimalString = "character"
            ))
-  setGeneric("PMITypes", function(PMI = numeric())
-    {standardGeneric("PMITypes")})
+
   
   #' A standard generic function to get the slot PMIDecimal
   #' 

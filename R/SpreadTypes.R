@@ -33,8 +33,7 @@
               SpreadDecimal = "numeric",
               SpreadDecimalString = "character"
               ))
-  setGeneric("SpreadTypes", function(spread = "character")
-  {standardGeneric("SpreadTypes")})
+
   
   #' A standard generic function to get the slot SpreadBasis
   #' 

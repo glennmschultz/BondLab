@@ -35,9 +35,6 @@
              ZeroVolSpread = "numeric"
            ))
 
-  setGeneric("CurveSpreads", function(rates.data = "character",
-                                      CashFlow = "character")
-    {standardGeneric("CurveSpreads")})
 
   #' A standard generic function to access BenchMark
   #' 

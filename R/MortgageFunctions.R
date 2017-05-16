@@ -17,10 +17,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  setGeneric("Mortgage.Monthly.Payment", function(orig.bal = numeric(),
-                                                  note.rate = numeric(),
-                                                  term.mos = numeric())
-  {standardGeneric("Mortgage.Monthly.Payment")})
+
   
   #' A function to calculate the monthly payment of a mortgage
   #' 
@@ -49,11 +46,7 @@
   }
 
   #-----------------------------------------------------------------------------------------------
-  setGeneric("Sched.Prin", function(balance = numeric(),
-                                    note.rate = numeric(),
-                                    term.mos = numeric(),
-                                    period = numeric())
-  {standardGeneric("Sched.Prin")})
+
 
   #' A function to calculate the scheduled principal of mortgage
   #' 
@@ -79,12 +72,6 @@
   return(Scheduled.Prin)
   }
 
-
-  setGeneric("Remain.Balance", function(balance = numeric(), 
-                                        note.rate = numeric(), 
-                                        term.mos = numeric(), 
-                                        period = numeric())
-  {standardGeneric("Remain.Balance")})
   
   #' A function to compute the remaining balance of a mortgage
   #' 
@@ -106,11 +93,7 @@
   }
 
   #-----------------------------------------------------------------------------------------------
-  setGeneric("PPC.Ramp", function(season.period = numeric(),
-                                  begin.cpr = numeric(),
-                                  end.cpr = numeric(),
-                                  period = numeric())
-  {standardGeneric("PPC.Ramp")})
+
 
   #' A function to calculate the PPC ramp
   #' 
@@ -134,8 +117,7 @@
   }
 
   #-----------------------------------------------------------------------------------------------
-  setGeneric("SMM.To.CPR", function(SMM = numeric())
-  {standardGeneric("SMM.To.CPR")})
+
 
   #' Convert the single monthly mortality rate SMM to CPR
   #' 
@@ -155,8 +137,6 @@
   }
 
   #-----------------------------------------------------------------------------------------------
-  setGeneric("CPR.To.SMM", function(CPR = numeric())
-  {standardGeneric("CPR.To.SMM")})
 
   #' A function to convert the CPR to a single monthly mortality rate SMM
   #' 
@@ -177,8 +157,7 @@
   }
   
   #-----------------------------------------------------------------------------------------------
-  setGeneric("CDR.To.MDR", function(MDR = numeric())
-  {standardGeneric("CDR.To.MDR")})
+
   
   #' A function to convert the CDR to a single monthly mortality rate MDR
   #' 
@@ -199,8 +178,7 @@
   }
 
   #-----------------------------------------------------------------------------------------------
-  setGeneric("SMMVector.To.CPR", function(SMM = vector(), num.period = vector())
-  {standardGeneric("SMMVector.To.CPR")})
+
 
   #' A function to convert  a time series of SMM to CPR
   #' 

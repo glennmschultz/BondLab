@@ -54,11 +54,6 @@
            CouponPmt = "numeric",
            TotalCashFlow = "numeric"))
  
-  setGeneric("BondCashFlows", function (bond.id = "character", 
-                                      principal = numeric(), 
-                                      settlement.date = "character", 
-                                      price = "character")
-  {standardGeneric("BondCashFlows")})
   
   # Note: standard generic Price is defined in MortgageCashFlow.R
   # Note: standard generic Accrued is defined in MortgageCashFlow.R

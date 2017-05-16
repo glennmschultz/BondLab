@@ -74,30 +74,7 @@
            Callable = "logical",
            Putable = "logical",
            SinkingFund = "logical"))
-  
-  setGeneric("MakeBondDetails", function(
-    Cusip = "character",                              
-    ID ="character",                              
-    BondType = "character",                              
-    Sector ="character",
-    Issuer = "character",
-    Underwriter = "character",
-    OfferAmount = numeric(),
-    Coupon = numeric(),
-    IssueDate = "character",
-    DatedDate = "character",
-    Maturity = "character",
-    LastPmtDate = "character",
-    NextPmtDate = "character",
-    Moody = "character",
-    SP = "character",
-    BondLab  = "character",
-    Frequency = numeric(),
-    BondBasis = "character",
-    Callable = "logical",
-    Putable = "logical",
-    SinkingFund = "logical")
-  {standardGeneric("MakeBondDetails")})
+
   
   # standard generic cusip is defined in the MBSDetails
   # standard generic ID is defined in the MBSDetails

@@ -36,9 +36,7 @@
              GFeeBasis = "numeric",
              GFeeDecimalString = "character"
            ))
-  
-  setGeneric("GFeeTypes", function(GFee = numeric())
-    {standardGeneric("GFeeTypes")})
+
   
   #' A standard generic function to get the slot GFeeDecimal
   #' 

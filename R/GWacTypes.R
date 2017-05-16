@@ -36,8 +36,7 @@
              GWacBasis = "numeric",
              GWacDecimalString = "character")
            )
-  setGeneric("GWacTypes", function(GWac)
-    {standardGeneric("GWacTypes")})
+  
   
   #' A standard generic function to get the slot GWacDecimal
   #' 

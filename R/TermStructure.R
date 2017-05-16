@@ -46,9 +46,6 @@
              TwoYearFwd = "numeric",
              TenYearFwd = "numeric"))
 
-  setGeneric("TermStructure",
-             function(rates.data = "character", method = "character")
-             {standardGeneric("TermStructure")})
   
   #' A generic function to access the slot TradeDate
   #' @param object an S4 class object

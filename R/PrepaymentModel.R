@@ -70,21 +70,7 @@
            MDR = "numeric",
            Severity = "numeric"))
 
-  setGeneric("PrepaymentModel", function(bond.id = "character", 
-                                         TermStructure = "character", 
-                                         MortgageRate = "character",
-                                         ModelTune = "character", 
-                                         Burnout = numeric(), 
-                                         PrepaymentAssumption = "character", 
-                                         ...,
-                                         begin.cpr = numeric(), 
-                                         end.cpr = numeric(), 
-                                         seasoning.period = numeric(), 
-                                         CPR = numeric(),
-                                         CDR = 0,
-                                         HomePrice = NULL,
-                                         Severity = 0)
-  {standardGeneric("PrepaymentModel")})
+
   
   #' A standard generic function to access the slot PrepaymentAssumption
   #' @param object An S4 class object of the type PrepaymentModel

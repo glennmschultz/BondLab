@@ -40,9 +40,6 @@
              PrepaymentScenario = "list"
            ))
   
-  setGeneric("PriceYieldScenarioSet", function(PrepaymentType = list(),
-                                               PrepaymentScenario = list())
-    {standardGeneric("PriceYieldScenarioSet")})
   
   #' A generic functon to access the slot PrepaymentType
   #' 
@@ -190,13 +187,7 @@
            PMIPremium = "numeric",
            GFeePremium = "numeric",  
            TotalCashFlow = "numeric"))
-  
-  setGeneric("MortgageCashFlow", function(bond.id = "character", 
-                                        original.bal = numeric(), 
-                                        settlement.date = "character", 
-                                        price = numeric(), 
-                                        PrepaymentAssumption = "character") 
-  {standardGeneric("MortgageCashFlow")})
+
 
   #' A standard generic function to access the slot Price
   #' @param object an S4 class object

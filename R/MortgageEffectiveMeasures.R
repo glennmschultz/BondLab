@@ -40,13 +40,6 @@
   # Note: generic EffDuration is set in MortgageKeyRate.R
   # Note: generic EffConvexity is set in MortgageKeyRate.R
   
-  setGeneric("MortgageEffectiveMeasures",
-             function(bond.id = "character",
-                      settlement.date = "character",
-                      rates.data = "character",
-                      TermStructure = "character",
-                      price = "character")
-            {standardGeneric("MortgageEffectiveMeasures")})
   
   setMethod("initialize",
             signature("MortgageEffectiveMeasures"),

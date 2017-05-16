@@ -17,11 +17,6 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  setGeneric("CashFlowEngine",function (bond.id = "character",
-                                        settlement.date = "character",
-                                        principal = numeric(), 
-                                        PrepaymentAssumption = "character")
-    {standardGeneric("CashFlowEngine")})
 
   #' Bond Lab function the residential mortgage cash flow engine
   #' 

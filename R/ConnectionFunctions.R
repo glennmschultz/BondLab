@@ -36,8 +36,6 @@
   on.exit(close.connection(MBS.Conn))
   return(MBS)}
   
-  setGeneric("MBS", function(MBS.id = "character")
-    {standardGeneric("MBS")})
 
   #' A connection function to the BondData calling bond cusips
   #' 
@@ -58,8 +56,6 @@
   return(Bond)
   }
   
-  setGeneric("Bond", function(Bond.id = "character")
-    {standardGeneric("Bond")})
 
   #' A connection function to BondData folder saved MBS cusip Detail
   #' 
@@ -74,8 +70,6 @@
       saveRDS(filename, connMBSDetails)
       close(connMBSDetails)}
 
-  setGeneric("SaveMBS", function(filename = "character")
-    {standardGeneric("SaveMBS")})
   
   #' A connection function to BondData folder saved MBS cusip Detail
   #' 
@@ -90,8 +84,6 @@
     saveRDS(filename, connBondDetails)
     close(connBondDetails)}
   
-  setGeneric("SaveBond", function(filename = "character")
-  {standardGeneric("SaveBond")})  
 
   #' A connection function to the RatesData folder to call swap curve data
   #' 
@@ -108,9 +100,7 @@
       Rates <- readRDS(Rates.Conn)
       return(Rates)
     }
-    
-  setGeneric("Rates", function(trade.date = "character")
-    {standardGeneric("Rates")})
+
 
   #' A connection function to the Prepayment model folder to call 
   #' mortgage rate function class

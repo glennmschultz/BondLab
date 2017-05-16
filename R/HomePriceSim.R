@@ -17,13 +17,6 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  setGeneric("HPISim", function(shortrate = numeric(),
-                              LongTermGrowth = numeric(),
-                              T = numeric(),
-                              step = numeric(),
-                              sigma = numeric(),
-                              N = numeric())
-  {standardGeneric("HPISim")})
  
   #' A function to simulate home prices given a short-term rate
   #' 

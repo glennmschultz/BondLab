@@ -17,11 +17,6 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  setGeneric("TimeValue", function(interest.rate = numeric(), 
-                                 number.periods = numeric(), 
-                                 frequency = numeric(), 
-                                 type = "character")
-  {standardGeneric("TimeValue")})
 
   #' A function to compute the time value of money
   #'                  

@@ -2,18 +2,23 @@
 % Please edit documentation in R/GetSwapCurve.R
 \name{GetSwapCurve}
 \alias{GetSwapCurve}
-\title{A function to call swap curve data from the St. Louis Federal Reserve
-(FRED) database.  Full swap curve data is reported with a lag of 
+\title{A function to call swap curve data from the ICE website 
+Full swap curve data is reported with a lag of 
 approximately four days due to delayed reporting of LIBOR rates by ICE}
 \usage{
-GetSwapCurve(CurveDate = "character")
+GetSwapCurve(CurveDate = "character", ..., save.curve = FALSE)
 }
 \arguments{
 \item{CurveDate}{a character the swap curve date}
+
+\item{...}{optional value to save curve to rates file}
+
+\item{save.curve}{a logical indicating whether to save the rates data TRUE of FALSE
+defaults to FALSE}
 }
 \description{
-A function to call swap curve data from the St. Louis Federal Reserve
-(FRED) database.  Full swap curve data is reported with a lag of 
+A function to call swap curve data from the ICE website 
+Full swap curve data is reported with a lag of 
 approximately four days due to delayed reporting of LIBOR rates by ICE
 }
 

@@ -1,7 +1,7 @@
 Package: BondLab
 Type: Package
 Title: BondLab is a package for the analysis of fixed-income securities
-Version: 0.0.0.9002
+Version: 0.0.0.9003
 Date: 2015-12-19
 Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>

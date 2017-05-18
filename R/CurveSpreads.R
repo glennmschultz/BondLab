@@ -18,14 +18,20 @@
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   
-  #' An S4 class to hold curve spread values
+  #'@title CurveSpreads
+  #'@family Pricing
+  #'@description A class representing the curve spreads used to determine relative
+  #'value in the fixed income markets.
   #' 
-  #' @slot BenchMark A numeric value the closest curve benchmark
-  #' @slot SpreadToBenchmark A numeric value to nominal spread to the nearest
-  #' pricing benchmark
-  #' @slot SpreadToCurve A numeric value the nominal spread to 
-  #' the interpolated curve
-  #' @slot ZeroVolSpread A numeric value the Zero Volatilty spread
+  #' @slot BenchMark The maturity of the nearest maturity on the coupon pricing 
+  #' curve.
+  #' @slot SpreadToBenchmark The yield (nominal) spread of the bond over the nearest
+  #' maturity point along the coupon pricing curve.
+  #' @slot SpreadToCurve The yield spread over the interpolated point on the 
+  #' coupon curve matching the bond's weighted average life.
+  #' @slot ZeroVolSpread The spread over the spot rate curve.  By market convention
+  #' this is referred to as the ZeroVolSpread, an output of the OAS model, outside an
+  #' OAS framework a more accurate reference to the measure is spread to the spot curve.
   #' @exportClass CurveSpreads
   setClass("CurveSpreads",
            representation(
@@ -107,22 +113,25 @@
   setMethod("ZeroVolSpread", signature = ("CurveSpreads"),
             function(object){object@ZeroVolSpread})
 
-  #' A functon to compute the curve spread metrics
-  #'
-  #'@param rates.data a character string the yield curve used
-  #'@param CashFlow a character string the object of type MBSCashFlow
-  #'@param TermStructure a character string the object of type TermStructure
-  #'@param proceeds a numeric value the investor trade proceeeds 
-  #'MortgageCashFlow
+  #'@title Compute Curve Spreads
+  #'@family Pricing
+  #'@description Given proceeds, coupon curve, term structure, and cashflow compute
+  #'the curve spreads used to determine relative value in the fixed income markets.
+  #'the function returns the class CurveSpreads which contains the Benchmark, 
+  #'SpreadToBenchMark, SpreadToCurve, and ZeroVolSpread.
+  #'@param rates.data a character string referencing a rates.data object.
+  #'@param CashFlow a character string referencing an object of type MBSCashFlow or BondCashFlow
+  #'@param TermStructure a character string referencing an object of type TermStructure
+  #'@param proceeds a numeric value the investor trade proceeeds.
   #'@importFrom splines interpSpline
   #'@importFrom stats loess
   #'@importFrom stats predict
   #'@importFrom stats uniroot
   #'@export CurveSpreads
-  CurveSpreads <- function(rates.data = "character",
-                           CashFlow = "character",
-                           TermStructure = "character",
-                           proceeds = numeric()){
+  CurveSpreads <- function(rates.data,
+                           CashFlow,
+                           TermStructure,
+                           proceeds){
 
     # Get market curve for interpolation of nominal spread to curve
     MarketCurve <- rates.data

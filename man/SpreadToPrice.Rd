@@ -2,11 +2,10 @@
 % Please edit documentation in R/SpreadToPriceFunctions.R
 \name{SpreadToPrice}
 \alias{SpreadToPrice}
-\title{SpreadToPrice Function}
+\title{Spread To Price}
 \usage{
-SpreadToPrice(bond.id = "character", trade.date = "character",
-  settlement.date = "character", PrepaymentAssumption = "character",
-  spread = "character", CPR = numeric(), ..., benchmark = NULL)
+SpreadToPrice(bond.id, trade.date, settlement.date, PrepaymentAssumption,
+  spread, CPR, ..., benchmark = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -15,20 +14,25 @@ SpreadToPrice(bond.id = "character", trade.date = "character",
 
 \item{settlement.date}{A character string the settlement date mm-dd-YYYY}
 
-\item{PrepaymentAssumption}{the assumption must be: "CPR", "PPC", "MODEL"}
+\item{PrepaymentAssumption}{The assumption must be: "CPR", "PPC", "MODEL"}
 
-\item{spread}{a charcter string the spread to the interpolated curve
+\item{spread}{A charcter string the spread to the interpolated curve
 entered in basis points}
 
-\item{CPR}{a numeric value the CPR assumption used to price the MBS.  For
+\item{CPR}{A numeric value the CPR assumption used to price the MBS.  For
 example 16 CPR is entered 16.}
 
-\item{...}{optional values follow}
+\item{...}{Optional values follow}
 
-\item{benchmark}{optionally the user can pass pricing benchmark}
+\item{benchmark}{Optionally the user can pass pricing benchmark - currently 
+this functonality is not implemented.}
 }
 \description{
 Returns the clean price of the MBS given a prepayment speed
 and spread to the curve
+}
+\seealso{
+Other Pricing: \code{\link{CurveSpreads-class}},
+  \code{\link{CurveSpreads}}
 }
 

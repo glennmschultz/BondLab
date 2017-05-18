@@ -2,22 +2,27 @@
 % Please edit documentation in R/CurveSpreads.R
 \name{CurveSpreads}
 \alias{CurveSpreads}
-\title{A functon to compute the curve spread metrics}
+\title{Compute Curve Spreads}
 \usage{
-CurveSpreads(rates.data = "character", CashFlow = "character",
-  TermStructure = "character", proceeds = numeric())
+CurveSpreads(rates.data, CashFlow, TermStructure, proceeds)
 }
 \arguments{
-\item{rates.data}{a character string the yield curve used}
+\item{rates.data}{a character string referencing a rates.data object.}
 
-\item{CashFlow}{a character string the object of type MBSCashFlow}
+\item{CashFlow}{a character string referencing an object of type MBSCashFlow or BondCashFlow}
 
-\item{TermStructure}{a character string the object of type TermStructure}
+\item{TermStructure}{a character string referencing an object of type TermStructure}
 
-\item{proceeds}{a numeric value the investor trade proceeeds 
-MortgageCashFlow}
+\item{proceeds}{a numeric value the investor trade proceeeds.}
 }
 \description{
-A functon to compute the curve spread metrics
+Given proceeds, coupon curve, term structure, and cashflow compute
+the curve spreads used to determine relative value in the fixed income markets.
+the function returns the class CurveSpreads which contains the Benchmark, 
+SpreadToBenchMark, SpreadToCurve, and ZeroVolSpread.
+}
+\seealso{
+Other Pricing: \code{\link{CurveSpreads-class}},
+  \code{\link{SpreadToPrice}}
 }
 

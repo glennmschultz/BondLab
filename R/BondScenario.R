@@ -143,12 +143,8 @@
   #' @exportClass BondScenario
   setClass("BondScenario",
            representation(),
-           contains = c("TermStructure",
-                        "BondCashFlows",
-                        "BondTermStructure",
-                        "BondReturn",
-                        "CurveSpreads",
-                        "Scenario"))
+           contains = c("BondReturn",
+                        "CurveSpreads"))
   
   setMethod("initialize",
             signature("BondScenario"),
@@ -268,13 +264,7 @@
                                 CashFlow = BondCashFlow,
                                 TermStructure = TermStructure,
                                 proceeds = proceeds)
-    
-    BondTermStructure = BondTermStructure(bond.id = bond.id,
-                                          Rate.Delta = rate.delta,
-                                          TermStructure = TermStructure,
-                                          principal = principal,
-                                          price = PriceDecimalString(Price),
-                                          cashflow = BondCashFlow)
+
 
     # This section begins the  horizon bond analysis. 
     # Horizon curve can be calculated by either shifting the coupon curve or
@@ -488,41 +478,15 @@
     HorizonReturn <- (HorizonReturn - 1) * yield.basis
     
     new("BondScenario",
-        Period = Period(BondCashFlow),
-        PmtDate = PmtDate(BondCashFlow),
-        TimePeriod = TimePeriod(BondCashFlow),
-        PrincipalOutstanding = PrincipalOutstanding(BondCashFlow),
-        CouponPmt = CouponPmt(BondCashFlow),
-        TotalCashFlow = TotalCashFlow(BondCashFlow),
-        SpotRate = SpotRate(TermStructure),
-        ForwardRate = ForwardRate(TermStructure),
-        TwoYearFwd = TwoYearForward(TermStructure),
-        TenYearFwd = TenYearForward(TermStructure),
         BenchMark = BenchMark(HorizonSpread),
         SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
         SpreadToCurve = SpreadToCurve(HorizonSpread),
         ZeroVolSpread = ZeroVolSpread(HorizonSpread),
-        Price = PriceDecimalString(Price),
-        Accrued = Accrued(BondCashFlow),
-        YieldToMaturity = YieldToMaturity(BondCashFlow),
-        WAL = WAL(BondCashFlow),
-        ModDuration = ModDuration(BondCashFlow),
-        Convexity = Convexity(BondCashFlow), 
-        EffDuration = EffDuration(BondTermStructure),
-        EffConvexity = EffConvexity(BondTermStructure),
-        KeyRateTenor = unname(KeyRateTenor(BondTermStructure)),
-        KeyRateDuration = unname(KeyRateDuration(BondTermStructure)),
-        KeyRateConvexity = unname(KeyRateConvexity(BondTermStructure)),
         CouponIncome = CouponIncome,
         PrincipalReceived = PrincipalRepaid,
         ReinvestmentIncome = ReinvestmentIncome,
         HorizonCurrBal = principal - PrincipalRepaid,
         HorizonPrice = as.numeric(HorizonPrice),
         HorizonReturn = HorizonReturn,
-        HorizonMos = horizon.months,
-        Name = Name(Scenario),
-        Type = Type(Scenario),
-        ShiftType = ShiftType(Scenario),
-        Shiftbps = Shiftbps(Scenario),
-        Formula = ScenarioFormula(Scenario))
+        HorizonMos = horizon.months)
   }

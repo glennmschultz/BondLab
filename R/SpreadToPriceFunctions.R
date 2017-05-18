@@ -52,7 +52,7 @@
                           proceeds = proceeds)$root
     return(spot.spread)}
   
-  #' @title SpreadToPrice Function
+  #' @title Spread To Price
   #' @family Pricing
   #' @description Returns the clean price of the MBS given a prepayment speed
   #' and spread to the curve
@@ -60,20 +60,21 @@
   #' @param bond.id A character string the cusip number or bond.id
   #' @param trade.date A character string the trade date mm-dd-YYYY
   #' @param settlement.date A character string the settlement date mm-dd-YYYY
-  #' @param PrepaymentAssumption the assumption must be: "CPR", "PPC", "MODEL"
-  #' @param spread a charcter string the spread to the interpolated curve
+  #' @param PrepaymentAssumption The assumption must be: "CPR", "PPC", "MODEL"
+  #' @param spread A charcter string the spread to the interpolated curve
   #' entered in basis points
-  #' @param CPR a numeric value the CPR assumption used to price the MBS.  For
+  #' @param CPR A numeric value the CPR assumption used to price the MBS.  For
   #' example 16 CPR is entered 16.
-  #' @param ... optional values follow
-  #' @param benchmark optionally the user can pass pricing benchmark
+  #' @param ... Optional values follow
+  #' @param benchmark Optionally the user can pass pricing benchmark - currently 
+  #' this functonality is not implemented.
   #' @export
-  SpreadToPrice <- function(bond.id = "character",
-                            trade.date = "character",
-                            settlement.date = "character",
-                            PrepaymentAssumption = "character",
-                            spread = "character",
-                            CPR = numeric(),
+  SpreadToPrice <- function(bond.id,
+                            trade.date,
+                            settlement.date,
+                            PrepaymentAssumption,
+                            spread,
+                            CPR,
                             ...,
                             benchmark = NULL){
     

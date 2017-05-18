@@ -3,21 +3,29 @@
 \docType{class}
 \name{CurveSpreads-class}
 \alias{CurveSpreads-class}
-\title{An S4 class to hold curve spread values}
+\title{CurveSpreads}
 \description{
-An S4 class to hold curve spread values
+A class representing the curve spreads used to determine relative
+value in the fixed income markets.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{BenchMark}}{A numeric value the closest curve benchmark}
+\item{\code{BenchMark}}{The maturity of the nearest maturity on the coupon pricing 
+curve.}
 
-\item{\code{SpreadToBenchmark}}{A numeric value to nominal spread to the nearest
-pricing benchmark}
+\item{\code{SpreadToBenchmark}}{The yield (nominal) spread of the bond over the nearest
+maturity point along the coupon pricing curve.}
 
-\item{\code{SpreadToCurve}}{A numeric value the nominal spread to 
-the interpolated curve}
+\item{\code{SpreadToCurve}}{The yield spread over the interpolated point on the 
+coupon curve matching the bond's weighted average life.}
 
-\item{\code{ZeroVolSpread}}{A numeric value the Zero Volatilty spread}
+\item{\code{ZeroVolSpread}}{The spread over the spot rate curve.  By market convention
+this is referred to as the ZeroVolSpread, an output of the OAS model, outside an
+OAS framework a more accurate reference to the measure is spread to the spot curve.}
 }}
+\seealso{
+Other Pricing: \code{\link{CurveSpreads}},
+  \code{\link{SpreadToPrice}}
+}
 

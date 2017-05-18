@@ -227,14 +227,9 @@
   #' @exportClass MortgageScenario    
   setClass("MortgageScenario",
            representation(),
-           contains = c("TermStructure",
-                        "PrepaymentModel",
-                        "MortgageCashFlow",
-                        "MortgageTermStructure",
-                        "MortgageReturn",
+           contains = c("MortgageReturn",
                         "ModelToCPR",
-                        "CurveSpreads",
-                        "Scenario"))
+                        "CurveSpreads"))
 
   setGeneric("MortgageScenario", function(bond.id ="character",
                                           settlement.date = "character",
@@ -414,20 +409,7 @@
       price = PriceDecimalString(Price),
       yield = YieldToMaturity(MortgageCashFlow)/yield.basis
     )
-    
-    # compute the key rate duration, effective duration, and convexity 
-    # given the base case structure pricing. 
-    MortgageTermStructure <- MtgTermStructure(
-      bond.id = bond.id,
-      original.bal = original.bal,
-      Rate.Delta = rate.delta,
-      TermStructure = TermStructure,
-      settlement.date = settlement.date,
-      principal = principal,
-      price = PriceDecimalString(Price),
-      cashflow = MortgageCashFlow)
-    
-    
+
     # This section begins the  horizon mortgage pass-through analysis. 
     # Horizon curve can be calculated by either shifting the coupon curve or
     # and refitting the curve or it can be calculated by shifting the spot rate
@@ -651,36 +633,11 @@
   HorizonReturn <- (HorizonReturn - 1) * yield.basis
     
   new("MortgageScenario",
-      Period = Period(MortgageCashFlow),
-      PmtDate = PmtDate(MortgageCashFlow),
-      TimePeriod = TimePeriod(MortgageCashFlow),
-      BeginningBal = BeginningBal(MortgageCashFlow),
-      PassThroughInterest = PassThroughInterest(MortgageCashFlow),
-      ScheduledPrin = ScheduledPrin(MortgageCashFlow),
-      PrepaidPrin = PrepaidPrin(MortgageCashFlow),
-      EndingBal = EndingBalance(MortgageCashFlow),
-      TotalCashFlow = TotalCashFlow(MortgageCashFlow),
-      SpotRate = SpotRate(TermStructure),
-      ForwardRate = ForwardRate(TermStructure),
-      TwoYearFwd = TwoYearForward(TermStructure),
-      TenYearFwd = TenYearForward(TermStructure),
-      SMM = SMM(Prepayment),
       CPRLife = CPRLife(LifeCPR),
       BenchMark = BenchMark(HorizonSpread),
       SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),
       SpreadToCurve = SpreadToCurve(HorizonSpread),
       ZeroVolSpread = ZeroVolSpread(HorizonSpread),
-      Price = PriceDecimalString(Price),
-      Accrued = Accrued(MortgageCashFlow),
-      YieldToMaturity = YieldToMaturity(MortgageCashFlow),
-      WAL = WAL(HorizonCashFlow),
-      ModDuration = ModDuration(MortgageCashFlow),
-      Convexity = Convexity(MortgageCashFlow), 
-      EffDuration = EffDuration(MortgageTermStructure),
-      EffConvexity = EffConvexity(MortgageTermStructure),
-      KeyRateTenor = unname(KeyRateTenor(MortgageTermStructure)),
-      KeyRateDuration = unname(KeyRateDuration(MortgageTermStructure)),
-      KeyRateConvexity = unname(KeyRateConvexity(MortgageTermStructure)),
       CouponIncome = CouponIncome,
       ScheduledPrinReceived = 
         sum(ScheduledPrin(MortgageCashFlow)[1:horizon.months]),
@@ -690,11 +647,6 @@
       HorizonCurrBal = original.bal * MBSFactor(HorizonMBS),
       HorizonPrice = PriceDecimal(HorizonPrice),
       HorizonReturn = HorizonReturn,
-      HorizonMos = horizon.months,
-      Name = Name(Scenario),
-      Type = Type(Scenario),
-      ShiftType = ShiftType(Scenario),
-      Shiftbps = Shiftbps(Scenario),
-      Formula = ScenarioFormula(Scenario))
+      HorizonMos = horizon.months)
   }
   

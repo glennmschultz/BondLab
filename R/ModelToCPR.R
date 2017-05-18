@@ -146,5 +146,5 @@
   } else {LifeCPR = 999}
 
   new("ModelToCPR",
-      CPRLife = LifeCPR)
+      CPRLife = LifeCPR * PSA.basis)
 }

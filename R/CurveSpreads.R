@@ -134,7 +134,6 @@
   #'@param TermStructure a character string referencing an object of type TermStructure
   #'@param proceeds a numeric value the investor trade proceeeds.
   #'@importFrom splines interpSpline
-  #'@importFrom stats loess
   #'@importFrom stats predict
   #'@importFrom stats uniroot
   #'@export CurveSpreads
@@ -147,14 +146,14 @@
     MarketCurve <- rates.data
     RateLen <- as.numeric(ncol(MarketCurve))
     
-    # local regression smooth of market curve
-    ModelCurve <- loess(as.numeric(MarketCurve[1,2:12]) ~
-                          as.numeric(MarketCurve[2,2:12]),
-                        data = data.frame(MarketCurve))
+    # Basis spline
+    ModelCurve <- splines::interpSpline(as.numeric(MarketCurve[2,2:12]),
+                               as.numeric(MarketCurve[1,2:12]),
+                               bSpline = TRUE)
 
     # use predict ModelCurve to spread to curve
     SpreadToCurve <- (YieldToMaturity(CashFlow)) -
-      predict(ModelCurve, WAL(CashFlow))
+      predict(ModelCurve, WAL(CashFlow))$y
 
     # Find the cloest maturity for spread to benchmark
     RatesIndex =  which(abs(as.numeric(MarketCurve[2,2:12])-

@@ -365,6 +365,7 @@ PassThrough <-
 
 ## Step Six: Optional but recommended, calculate curve spread
 ```{r, spreads, echo=TRUE}
+# curve spreads are also returned in the mortgagescenario object
 # note: used getter methods on the classes to calculate proceeds
   proceeds = OriginalBal(bond.id) *MBSFactor(bond.id) * PriceBasis(Price)
 # The class curve spreads calculates curve spreads for reporting
@@ -404,9 +405,7 @@ ZeroVolSpread(NoChangeScenario)
 SpreadToCurve(NoChangeScenario)
 SpreadToBenchmark(NoChangeScenario)
 BenchMark(NoChangeScenario)
-WAL(NoChangeScenario)
-EffDuration(NoChangeScenario)
-barplot(KeyRateDuration(NoChangeScenario))
+WAL(PassThrough)
 ```
 
 ## Create Your Own Function

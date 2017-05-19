@@ -530,6 +530,8 @@
   #'@param OAS.array An array of simulated rate vectors from the function OASArray
   #'@param num.periods the number of payment periods defaults to 480 do not change 
   #'this unless you know what you are doing
+  #' @importFrom splines interpSpline
+  #' @importFrom stats predict
   #'@importFrom stats optim
   #'@export MortgageOAS
   MortgageOAS <- function(bond.id,

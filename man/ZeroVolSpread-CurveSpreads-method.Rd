@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ZeroVolSpread,CurveSpreads-method}
 \alias{ZeroVolSpread,CurveSpreads-method}
-\title{A method to extract the ZeroVol spread from object CurveSpreads}
+\title{Zero Volatility Spread}
 \usage{
 \S4method{ZeroVolSpread}{CurveSpreads}(object)
 }
@@ -11,6 +11,17 @@
 \item{object}{An object of type CurveSpreads}
 }
 \description{
-A method to extract the ZeroVol spread from object CurveSpreads
+The bond spread over the spot rate curve.  Within the OAS framework
+the term is correctly applied.  When calculated over a static sport rate curve
+spot spread is a more appropriate description.  Keeping with market convention the 
+term ZeroVolSpread is applied.
+}
+\seealso{
+Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
+  \code{\link{CurveSpreads-class}},
+  \code{\link{CurveSpreads}},
+  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
+  \code{\link{SpreadToCurve,CurveSpreads-method}},
+  \code{\link{SpreadToPrice}}
 }
 

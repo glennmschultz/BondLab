@@ -85,29 +85,39 @@
                              ZeroVolSpread = ZeroVolSpread,
                              ...)
             })
-  #' A method to extract the BenchMark from object CurveSpreads
-  #' 
-  #' @param object An object of the type CurveSpreads
+  #'@title BenchMark (Pricing)
+  #'@family Pricing
+  #'@description Get the pricing benchmark.  The pricing benchmark is the nearest
+  #'marutity along the pricing curve to the weighted average life of the bond.  
+  #'@param object An object of the type CurveSpreads
   #' @exportMethod BenchMark
   setMethod("BenchMark", signature("CurveSpreads"),
             function(object){object@BenchMark})
   
-  #' A method to extract the SpreadToBenchmark from object CurveSpreads
-  #'
-  #' @param object An object of type CurveSpreads
-  #' @exportMethod SpreadToBenchmark
+  #'@title Spread To Benchmark
+  #'@family Pricing
+  #'@description The bond yield (nominal) spread relative to that of the nearest
+  #'pricing benchmark along the curve.
+  #'@param object An object of type CurveSpreads
+  #'@exportMethod SpreadToBenchmark
   setMethod("SpreadToBenchmark", signature("CurveSpreads"),
             function(object){object@SpreadToBenchmark})
 
-  #' A method to extract the SpreadToCurve from object CurveSpreads
-  #'
-  #' @param object An object of type CurveSpreads
-  #' @exportMethod SpreadToCurve
+  #'@title Spread To curve
+  #'@family Pricing
+  #'@description The bond yield spread (nominal) relative to the interpolated
+  #'point along the couopn curve matching the weighted average life. 
+  #'@param object An object of type CurveSpreads
+  #'@exportMethod SpreadToCurve
   setMethod("SpreadToCurve", signature("CurveSpreads"),
             function(object){object@SpreadToCurve})
   
-  #' A method to extract the ZeroVol spread from object CurveSpreads
-  #' 
+  #'@title Zero Volatility Spread
+  #'@family Pricing
+  #'@description The bond spread over the spot rate curve.  Within the OAS framework
+  #'the term is correctly applied.  When calculated over a static sport rate curve
+  #'spot spread is a more appropriate description.  Keeping with market convention the 
+  #'term ZeroVolSpread is applied.
   #' @param object An object of type CurveSpreads
   #' @exportMethod ZeroVolSpread
   setMethod("ZeroVolSpread", signature = ("CurveSpreads"),

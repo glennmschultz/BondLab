@@ -3,7 +3,7 @@
 \docType{methods}
 \name{BenchMark,CurveSpreads-method}
 \alias{BenchMark,CurveSpreads-method}
-\title{A method to extract the BenchMark from object CurveSpreads}
+\title{BenchMark (Pricing)}
 \usage{
 \S4method{BenchMark}{CurveSpreads}(object)
 }
@@ -11,6 +11,15 @@
 \item{object}{An object of the type CurveSpreads}
 }
 \description{
-A method to extract the BenchMark from object CurveSpreads
+Get the pricing benchmark.  The pricing benchmark is the nearest
+marutity along the pricing curve to the weighted average life of the bond.
+}
+\seealso{
+Other Pricing: \code{\link{CurveSpreads-class}},
+  \code{\link{CurveSpreads}},
+  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
+  \code{\link{SpreadToCurve,CurveSpreads-method}},
+  \code{\link{SpreadToPrice}},
+  \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 

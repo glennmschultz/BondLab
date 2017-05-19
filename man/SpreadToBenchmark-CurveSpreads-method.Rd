@@ -3,7 +3,7 @@
 \docType{methods}
 \name{SpreadToBenchmark,CurveSpreads-method}
 \alias{SpreadToBenchmark,CurveSpreads-method}
-\title{A method to extract the SpreadToBenchmark from object CurveSpreads}
+\title{Spread To Benchmark}
 \usage{
 \S4method{SpreadToBenchmark}{CurveSpreads}(object)
 }
@@ -11,6 +11,15 @@
 \item{object}{An object of type CurveSpreads}
 }
 \description{
-A method to extract the SpreadToBenchmark from object CurveSpreads
+The bond yield (nominal) spread relative to that of the nearest
+pricing benchmark along the curve.
+}
+\seealso{
+Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
+  \code{\link{CurveSpreads-class}},
+  \code{\link{CurveSpreads}},
+  \code{\link{SpreadToCurve,CurveSpreads-method}},
+  \code{\link{SpreadToPrice}},
+  \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 

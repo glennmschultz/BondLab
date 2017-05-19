@@ -3,7 +3,7 @@
 \docType{methods}
 \name{SpreadToCurve,CurveSpreads-method}
 \alias{SpreadToCurve,CurveSpreads-method}
-\title{A method to extract the SpreadToCurve from object CurveSpreads}
+\title{Spread To curve}
 \usage{
 \S4method{SpreadToCurve}{CurveSpreads}(object)
 }
@@ -11,6 +11,15 @@
 \item{object}{An object of type CurveSpreads}
 }
 \description{
-A method to extract the SpreadToCurve from object CurveSpreads
+The bond yield spread (nominal) relative to the interpolated
+point along the couopn curve matching the weighted average life.
+}
+\seealso{
+Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
+  \code{\link{CurveSpreads-class}},
+  \code{\link{CurveSpreads}},
+  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
+  \code{\link{SpreadToPrice}},
+  \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 

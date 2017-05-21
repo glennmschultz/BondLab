@@ -22,7 +22,11 @@
 
   #' An S4 class representing the bond term structure exposure
   #' 
-  #' @slot SpotSpread a numeric value the spread to the spot curve
+  #' @slot Cusip A character the cusip number
+  #' @slot Issuer A character the Issuer name
+  #' @slot Coupon A numeric value the coupon
+  #' @slot Term A numeric value the term
+  #' @slot ZeroVolSpread a numeric value the spread to the spot curve
   #' @slot EffDuration a numeric value the effective duration
   #' @slot EffConvexity a numeric value the effective convexity
   #' @slot KeyRateTenor a vector of values the key rate tenors
@@ -31,7 +35,11 @@
   #' @exportClass BondTermStructure
   setClass("BondTermStructure",
          representation(
-           SpotSpread = "numeric",   
+           Cusip = "character",
+           Issuer = "character",
+           Coupon = "numeric",
+           Term = "numeric",
+           ZeroVolSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",
@@ -45,11 +53,17 @@
   # Note: standard generic KeyRateTenor is defined in MortgageKeyRate
   # Note: standard generic KeyRateDuration is defined in MortgageKeyRate
   # Note: standard generic KeyRateConvexity is defined in MortgageKeyRate
+  # Note: standard generic ZeroVolSpread is defined in CurveSpreads.R
+  
   
   setMethod("initialize",
             signature("BondTermStructure"),
             function(.Object,
-                     SpotSpread = "numeric",   
+                     Cusip = "character",
+                     Issuer = "character",
+                     Coupon = "numeric",
+                     Term = "numeric",
+                     ZeroVolSpread = "numeric",   
                      EffDuration = "numeric",
                      EffConvexity = "numeric",
                      KeyRateTenor = "numeric",
@@ -57,7 +71,11 @@
                      KeyRateConvexity = "numeric",
                      ...){
               callNextMethod(.Object,
-                             SpotSpread = SpotSpread,
+                             Cusip = Cusip,
+                             Issuer = Issuer,
+                             Coupon = Coupon,
+                             Term = Term,
+                             ZeroVolSpread = ZeroVolSpread,
                              EffDuration = EffDuration,
                              EffConvexity = EffConvexity,
                              KeyRateTenor = KeyRateTenor,
@@ -66,12 +84,19 @@
                              ...)
             })
   
-  #' A method to get SpotSpread from the class BondTermStructure
-  #' 
-  #' @param object an object of the type BondTermStructure
-  #' @exportMethod SpotSpread
-  setMethod("SpotSpread", signature("BondTermStructure"),
-            function(object){object@SpotSpread})
+  #'@title Zero Volatility Spread
+  #'@description Zero Volatility Spread from object BondTermStructure 
+  #'@param object BondTermStructure object
+  #'@exportMethod ZeroVolSpread
+  setMethod('ZeroVolSpread', signature('BondTermStructure'),
+            function(object){object@ZeroVolSpread})
+  
+#  #' A method to get SpotSpread from the class BondTermStructure
+#  #' 
+#  #' @param object an object of the type BondTermStructure
+#  #' @exportMethod SpotSpread
+#  setMethod("SpotSpread", signature("BondTermStructure"),
+#            function(object){object@SpotSpread})
   
   #' A method to get EffDuration from the class BondTermStructure
   #' 
@@ -418,7 +443,11 @@
     ) 
   } # Outer Loop around KRIndex
   new("BondTermStructure",
-      SpotSpread = spot.spread * yield.basis,
+      Cusip = Cusip(bond.id),
+      Issuer = Issuer(bond.id),
+      Coupon = Coupon(bond.id),
+      Term = AmortizationTerm(bond.id),
+      ZeroVolSpread = spot.spread * yield.basis,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3]),
       KeyRateTenor = KR.Duration[,1],

@@ -10,7 +10,15 @@ An S4 class representing the bond term structure exposure
 \section{Slots}{
 
 \describe{
-\item{\code{SpotSpread}}{a numeric value the spread to the spot curve}
+\item{\code{Cusip}}{A character the cusip number}
+
+\item{\code{Issuer}}{A character the Issuer name}
+
+\item{\code{Coupon}}{A numeric value the coupon}
+
+\item{\code{Term}}{A numeric value the term}
+
+\item{\code{ZeroVolSpread}}{a numeric value the spread to the spot curve}
 
 \item{\code{EffDuration}}{a numeric value the effective duration}
 

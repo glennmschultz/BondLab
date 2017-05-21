@@ -27,7 +27,11 @@
 
   #' An S4 class MortgageTermStructure
   #' 
-  #' @slot SpotSpread A numeric value the spread to the spot rate curve
+  #' @slot Cusip A character the cusip number
+  #' @slot Issuer A character the Issuer name
+  #' @slot Coupon A numeric value the coupon
+  #' @slot Term A numeric value the amorization term
+  #' @slot ZeroVolSpread A numeric value the spread to the spot rate curve
   #' @slot EffDuration A numeric value the effective duration
   #' @slot EffConvexity A numeric value the effective convexity
   #' @slot KeyRateTenor A numeric value the Key Rate Tenor
@@ -37,20 +41,36 @@
   #' @exportClass MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(
-           SpotSpread = "numeric",   
+           Cusip = "character",
+           Issuer = "character",
+           Coupon = "numeric",
+           Term = "numeric",
+           ZeroVolSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",
            KeyRateDuration = "numeric",
            KeyRateConvexity = "numeric"))
 
-
+  #'@title Plot Key Rate Duration
+  #'@description Generic function to plot key rate duration
+  #'@param object MortgageTermStructure object
+  #'@export PlotKeyRate
+  setGeneric('PlotKeyRate', function(object)
+    {standardGeneric('PlotKeyRate')})
   
-  #' A standard generic function to access the slot SpotSpread
-  #' @param object an S4 class object
-  #' @export SpotSpread
-  setGeneric("SpotSpread", function(object)
-    {standardGeneric("SpotSpread")})
+  
+  # Note standard generic Cusip is defined in MBSDetails.R
+  # Note standard generic Issuer is defined in MBSDetails.R
+  # Note standard generic Coupon is defined in MBSDetails.R
+  # Note standard generic Term is defined in MBSDetails.R
+  # Note standard generic ZeroVolSpread is defined in CurveSpreads.R
+  
+#  #' A standard generic function to access the slot SpotSpread
+#  #' @param object an S4 class object
+#  #' @export SpotSpread
+#  setGeneric("SpotSpread", function(object)
+#    {standardGeneric("SpotSpread")})
   
   #' A standard generic function to access the slot EffDuration
   #' @param object an S4 class object
@@ -85,7 +105,11 @@
   setMethod("initialize",
          signature("MortgageTermStructure"),
          function(.Object,
-                  SpotSpread = "numeric",   
+                  Cusip = "character",
+                  Issuer = "character",
+                  Coupon = "numeric",
+                  Term = "numeric",
+                  ZeroVolSpread = "numeric",   
                   EffDuration = "numeric",
                   EffConvexity = "numeric",
                   KeyRateTenor = "numeric",
@@ -93,20 +117,50 @@
                   KeyRateConvexity = "numeric",
                   ...){
           callNextMethod(.Object,
-                  SpotSpread = SpotSpread,
-                  EffDuration = EffDuration,
-                  EffConvexity = EffConvexity,
-                  KeyRateTenor = KeyRateTenor,
-                  KeyRateDuration = KeyRateDuration,
-                  KeyRateConvexity = KeyRateConvexity,
-           ...)
-         })
+                         Cusip = Cusip,
+                         Issuer = Issuer,
+                         Coupon = Coupon,
+                         Term = Term,
+                         ZeroVolSpread = ZeroVolSpread,
+                         EffDuration = EffDuration,
+                         EffConvexity = EffConvexity,
+                         KeyRateTenor = KeyRateTenor,
+                         KeyRateDuration = KeyRateDuration,
+                         KeyRateConvexity = KeyRateConvexity,
+                         ...)
+           })
+
+  #'@title Plot Mortgage Key Rate Duration
+  #'@description A method to plot mortgage key rate duration
+  #'@param object MortgageTermStructure object
+  #'@importFrom stats ecdf
+  #'@importFrom grDevices rgb
+  #'@importFrom graphics axis grid hist lines mtext par plot barplot
+  #'@exportMethod PlotKeyRate
+  setMethod('PlotKeyRate', signature('MortgageTermStructure'),
+            function(object){
+              colors = rep(c('orange', 'red', 'magenta', 'purple', 'blue', 'green', 'yellow'),2)
+              barplot(object@KeyRateDuration, col = colors,
+                      sub = paste('Effective Duration =', 
+                                  format(round(sum(object@KeyRateDuration),2), nsmall = 2)),
+                      names.arg = object@KeyRateTenor,
+                      ylab = 'Key Rate Duration',
+                      xlab = 'Key Rate Tenor',
+                      border = colors)
+              })
   
-  #' Method to extract SpotSpread from S4 class
-  #' @param object The name of the S4 object of type MortgageTermStructure
-  #' @exportMethod SpotSpread
-  setMethod("SpotSpread", signature("MortgageTermStructure"),
-            function(object){object@SpotSpread})
+  
+  #' Zero Volatility Spread
+  #'@param object MortgageTermStructure object
+  #'@exportMethod ZeroVolSpread
+  setMethod('ZeroVolSpread', signature('MortgageTermStructure'),
+            function(object){object@ZeroVolSpread})
+  
+#  #' Method to extract SpotSpread from S4 class
+#  #' @param object The name of the S4 object of type MortgageTermStructure
+#  #' @exportMethod SpotSpread
+#  setMethod("SpotSpread", signature("MortgageTermStructure"),
+#            function(object){object@SpotSpread})
   
   #' Method to extract EffDuration from S4 class
   #' @param object The name of the S4 object of type MortgageTermStructure
@@ -608,7 +662,11 @@
     
   } # Outer Loop around KRIndex
   new("MortgageTermStructure",
-      SpotSpread = spot.spread * 100,
+      Cusip = Cusip(bond.id),
+      Issuer = Issuer(bond.id),
+      Coupon = Coupon(bond.id),
+      Term = AmortizationTerm(bond.id),      
+      ZeroVolSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,"Key Rate Duration"]),
       EffConvexity = sum(KR.Duration[,"Key Rate Convexity"]),
       KeyRateTenor = unname(KR.Duration[,"Key Rate"]),

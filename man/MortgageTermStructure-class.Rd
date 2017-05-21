@@ -10,7 +10,15 @@ An S4 class MortgageTermStructure
 \section{Slots}{
 
 \describe{
-\item{\code{SpotSpread}}{A numeric value the spread to the spot rate curve}
+\item{\code{Cusip}}{A character the cusip number}
+
+\item{\code{Issuer}}{A character the Issuer name}
+
+\item{\code{Coupon}}{A numeric value the coupon}
+
+\item{\code{Term}}{A numeric value the amorization term}
+
+\item{\code{ZeroVolSpread}}{A numeric value the spread to the spot rate curve}
 
 \item{\code{EffDuration}}{A numeric value the effective duration}
 

@@ -11,6 +11,6 @@
 \item{object}{MortgageTermStructure object}
 }
 \description{
-Zero Volatility Spread
+Get ZeroVolSpread from object of type MortgageTermStructure
 }
 

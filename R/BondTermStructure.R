@@ -84,9 +84,37 @@
                              ...)
             })
   
+  #'@title Cusip
+  #'@description Get Cusip from object BondTermStructure
+  #'@param object object of type BondTermStructure 
+  #'@exportMethod Cusip
+  setMethod('Cusip', signature('BondTermStructure'),
+            function(object){object@Cusip})
+  
+  #'@title Issuer
+  #'@description Get Issuer from object BondTermStructure
+  #'@param object object of type BondTermStructure
+  #'@exportMethod Issuer
+  setMethod('Issuer', signature('BondTermStructure'),
+            function(object){object@Issuer})
+  
+  #'@title Coupon
+  #'@description Get Coupon from object BondTermStructure
+  #'@param object object of type BondTermStructure
+  #'@exportMethod Coupon
+  setMethod('Coupon', signature('BondTermStructure'),
+            function(object){object@Coupon})
+  
+  #'@title Term
+  #'@description Get Term from object BondTermStructure
+  #'@param object object of type BondTermStructure
+  #'@exportMethod Term
+  setMethod('Term', signature('BondTermStructure'),
+            function(object){object@Term})
+  
   #'@title Zero Volatility Spread
   #'@description Zero Volatility Spread from object BondTermStructure 
-  #'@param object BondTermStructure object
+  #'@param object object of type BondTermStructure
   #'@exportMethod ZeroVolSpread
   setMethod('ZeroVolSpread', signature('BondTermStructure'),
             function(object){object@ZeroVolSpread})

@@ -8,7 +8,7 @@
 \S4method{ZeroVolSpread}{BondTermStructure}(object)
 }
 \arguments{
-\item{object}{BondTermStructure object}
+\item{object}{object of type BondTermStructure}
 }
 \description{
 Zero Volatility Spread from object BondTermStructure

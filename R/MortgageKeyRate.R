@@ -139,8 +139,12 @@
   #'@exportMethod PlotKeyRate
   setMethod('PlotKeyRate', signature('MortgageTermStructure'),
             function(object){
-              colors = rep(c('orange', 'red', 'magenta', 'purple', 'blue', 'green', 'yellow'),2)
-              barplot(object@KeyRateDuration, col = colors,
+              colors = rep(c('orange'),13)
+              colors_transparent <- adjustcolor(colors, alpha.f = 0.6) 
+              barplot(object@KeyRateDuration, col = colors_transparent,
+                      main = paste(object@Issuer,
+                                   format(round(object@Coupon,2), nsmall =2), 
+                                   object@Term,'-year Key Rate Duration'),
                       sub = paste('Effective Duration =', 
                                   format(round(sum(object@KeyRateDuration),2), nsmall = 2)),
                       names.arg = object@KeyRateTenor,
@@ -149,8 +153,36 @@
                       border = colors)
               })
   
+  #'@title Cusip
+  #'@description Get Cusip from object of type MortgageTermStructure
+  #'@param object MortgageTermStructure
+  #'@exportMethod Cusip
+  setMethod('Cusip', signature('MortgageTermStructure'),
+            function(object){object@Cusip})
   
-  #' Zero Volatility Spread
+  #'@title Issuer
+  #'@description Get Issuer from object of type MortgageTermStrucutre
+  #'@param object MortgageTermStructure
+  #'@exportMethod Issuer
+  setMethod('Issuer', signature('MortgageTermStructure'),
+            function(object){object@Issuer})
+  
+  #'@title Coupon
+  #'@description Get Coupon from object of type MortgageTermStructure
+  #'@param object MortgageTermStructure
+  #'@exportMethod Coupon
+  setMethod('Coupon', signature('MortgageTermStructure'),
+            function(object){object@Coupon})
+  
+  #'@title Term
+  #'@description Get Term from object of type MortgageTermStructure
+  #'@param object MortgageTermStructure
+  #'@exportMethod Term
+  setMethod('Term', signature('MortgageTermStructure'),
+            function(object){object@Term})
+  
+  #'@title Zero Volatility Spread
+  #'@description Get ZeroVolSpread from object of type MortgageTermStructure
   #'@param object MortgageTermStructure object
   #'@exportMethod ZeroVolSpread
   setMethod('ZeroVolSpread', signature('MortgageTermStructure'),

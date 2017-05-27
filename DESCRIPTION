@@ -79,6 +79,7 @@ Collate:
     'PrincipalPmtDateCalcs.R'
     'SpreadToPriceFunctions.R'
     'SpreadTypes.R'
+    'StructuringFunctions.R'
     'TimeValueFunction.R'
     'YieldTypes.R'
     'zzz.R'

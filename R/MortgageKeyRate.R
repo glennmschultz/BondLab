@@ -38,6 +38,7 @@
   #' @slot KeyRateDuration A numeric value the Key Rate Duration
   #' @slot KeyRateConvexity A numeric value the Key Rate Convexity
   #' @importFrom stats approx
+  #' @importFrom grDevices adjustcolor
   #' @exportClass MortgageTermStructure
   setClass("MortgageTermStructure",
          representation(

@@ -2,15 +2,16 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{MBS}
 \alias{MBS}
-\title{A connection function to BondData calling MBS cusips}
+\title{query sql lite cusip database}
 \usage{
-MBS(MBS.id = "character")
+MBS(cusip)
 }
 \arguments{
-\item{MBS.id}{A character string the MBS.id or cusip number current 
-MBS.id is supported}
+\item{cusip}{the cusip identifier of the pass through must be in quotes}
 }
 \description{
-Opens a connection to the BondData folder to call MBS cusip data
+a function to query the sql lite data base of mortgage
+cusips.  The function illustrates how one would connect to a cusip database
+and construct the mortgage pass through object for analysis
 }
 

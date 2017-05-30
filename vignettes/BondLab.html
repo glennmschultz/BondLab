@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2017-05-19" />
+<meta name="date" content="2017-05-29" />
 
 <title>Bond Lab®</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2017-05-19</em></h4>
+<h4 class="date"><em>2017-05-29</em></h4>
 
 
 
@@ -330,25 +330,41 @@ slots to the class to extend the prepayment model.</code></pre>
 <div id="anatomy-of-a-bond-lab-call" class="section level1">
 <h1>Anatomy of a Bond Lab® Call</h1>
 <p>Bond Lab® is designed to be modular in nature. The classes outlined above are passed thereby providing input required for the next step in the analysis. The design is intened to allow users to create bespoke analytic functions addressing the user’s unique question or analytic framework. Through inheritance users can create new superclasses from the subclasses outlined above. The anatomy of a Bond Lab call for MBS return analysis is outlined below</p>
+<p>First query the database for available cusip data</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  MBSData &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw">SQLite</span>(), <span class="dt">dbname=</span><span class="kw">paste0</span>(<span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;BondLab&quot;</span>), <span class="st">&quot;/BondData/MBSData&quot;</span>))
+  <span class="kw">dbGetQuery</span>(MBSData,
+             <span class="st">'Select Cusip</span>
+<span class="st">             ,Coupon</span>
+<span class="st">             ,AmortizationTerm</span>
+<span class="st">             ,price </span>
+<span class="st">             from MBS'</span>)</code></pre></div>
+<pre><code>##       Cusip Coupon AmortizationTerm    price
+## 1 31283HY40    2.5               30    96-29
+## 2 31283HY41    3.0               30  100-3.5
+## 3 31283HY42    3.5               30   103-00
+## 4 31283HY43    4.0               30   105-13
+## 5 31283HY44    4.5               30 107-22.5
+## 6 31283HY45    5.0               30 109-22.5</code></pre>
 <div id="step-one-define-the-required-input-for-analysis" class="section level2">
 <h2>Step One: define the required input for analysis</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      price &lt;-<span class="st"> &quot;103-16&quot;</span>
-      tradedate &lt;-<span class="st"> &quot;07-11-2016&quot;</span>
-      settlementdate &lt;-<span class="st"> &quot;08-18-2016&quot;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      cusip =<span class="st"> &quot;31283HY43&quot;</span>
+      price &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(MBSData, <span class="st">'Select price from MBS where cusip = &quot;31283HY43&quot;'</span>)
+      tradedate &lt;-<span class="st"> '05-19-2017'</span>
+      settlementdate &lt;-<span class="st"> '06-15-2017'</span>
     <span class="co"># note PriceTypes class is used to convert price from string to</span>
     <span class="co"># numeric decimal equivilant</span>
-    Price &lt;-<span class="st"> </span><span class="kw">PriceTypes</span>(<span class="dt">price =</span> price)</code></pre></div>
+    Price &lt;-<span class="st"> </span><span class="kw">PriceTypes</span>(<span class="dt">price =</span> <span class="kw">as.character</span>(price))</code></pre></div>
 </div>
 <div id="step-two-call-the-yield-curve-and-fit-the-term-structure-model" class="section level2">
 <h2>Step Two: call the yield curve and fit the term structure model</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   rates.data &lt;-<span class="st"> </span><span class="kw">Rates</span>(<span class="dt">trade.date =</span> <span class="st">&quot;07-11-2016&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   rates.data &lt;-<span class="st"> </span><span class="kw">Rates</span>(<span class="dt">trade.date =</span> tradedate)
    <span class="co"># note use invisible(capture.output()) to supress messages</span>
    <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
      TermStructure &lt;-<span class="st"> </span><span class="kw">TermStructure</span>(<span class="dt">rates.data =</span> rates.data, <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>)))</code></pre></div>
 </div>
-<div id="step-three-call-the-mbs-either-by-cusip-of-bond-id" class="section level2">
-<h2>Step Three: call the MBS either by cusip of bond id</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      bond.id &lt;-<span class="st"> </span><span class="kw">MBS</span>(<span class="dt">MBS.id =</span> <span class="st">&quot;FHQ41072&quot;</span>)</code></pre></div>
+<div id="step-three-call-the-mbs-either-by-cusip" class="section level2">
+<h2>Step Three: call the MBS either by cusip</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    bond.id &lt;-<span class="st"> </span><span class="kw">MBS</span>(<span class="dt">cusip =</span> cusip)</code></pre></div>
 </div>
 <div id="step-four-call-the-mortgage-prepayment-model-and-its-dependencies" class="section level2">
 <h2>Step Four: call the mortgage prepayment model and its dependencies</h2>
@@ -404,17 +420,17 @@ slots to the class to extend the prepayment model.</code></pre>
 <div id="now-lets-get-some-analytics-out-of-the-class-mortgagescenario" class="section level2">
 <h2>Now, lets get some analytics out of the class MortgageScenario</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">HorizonReturn</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.4841607</code></pre>
+<pre><code>## [1] 1.929541</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ZeroVolSpread</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.1728999</code></pre>
+<pre><code>## [1] 1.0163343</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToCurve</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.3565511</code></pre>
+<pre><code>## [1] 1.1084769</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToBenchmark</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.3505244</code></pre>
+<pre><code>## [1] 1.0843198</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">WAL</span>(PassThrough)</code></pre></div>
-<pre><code>## [1] 7.0621324</code></pre>
+<pre><code>## [1] 6.7640053</code></pre>
 </div>
 <div id="create-your-own-function" class="section level2">
 <h2>Create Your Own Function</h2>

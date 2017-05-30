@@ -5,6 +5,8 @@ require(reshape2)
 require(scales)
 require(termstrc)
 require(BondLab)
+require(sqldf)
+require(RSQLite)
 
 ## ---- echo = FALSE, fig.align='center', fig.height= 5, fig.width= 7------
  Valuation <- function(){
@@ -67,22 +69,32 @@ require(BondLab)
  }
 Valuation()
 
+## ---- sqlquery, echo=TRUE------------------------------------------------
+  MBSData <- dbConnect(SQLite(), dbname=paste0(system.file(package = "BondLab"), "/BondData/MBSData"))
+  dbGetQuery(MBSData,
+             'Select Cusip
+             ,Coupon
+             ,AmortizationTerm
+             ,price 
+             from MBS')
+
 ## ---- priceclass, echo=TRUE----------------------------------------------
-      price <- "103-16"
-      tradedate <- "07-11-2016"
-      settlementdate <- "08-18-2016"
+      cusip = "31283HY43"
+      price <- dbGetQuery(MBSData, 'Select price from MBS where cusip = "31283HY43"')
+      tradedate <- '05-19-2017'
+      settlementdate <- '06-15-2017'
     # note PriceTypes class is used to convert price from string to
     # numeric decimal equivilant
-    Price <- PriceTypes(price = price)
+    Price <- PriceTypes(price = as.character(price))
 
 ## ---- termstructure, echo = TRUE-----------------------------------------
-   rates.data <- Rates(trade.date = "07-11-2016")
+   rates.data <- Rates(trade.date = tradedate)
    # note use invisible(capture.output()) to supress messages
    invisible(capture.output(
      TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
 
 ## ---- bonddata, echo=TRUE------------------------------------------------
-      bond.id <- MBS(MBS.id = "FHQ41072")
+    bond.id <- MBS(cusip = cusip)
 
 ## ---- prepayment, echo=TRUE----------------------------------------------
     MortgageRate <- MtgRate()

@@ -17,24 +17,90 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+  #'@title query sql lite cusip database
+  #'@description a function to query the sql lite data base of mortgage
+  #'cusips.  The function illustrates how one would connect to a cusip database
+  #'and construct the mortgage pass through object for analysis
+  #'@param cusip the cusip identifier of the pass through must be in quotes
+  #'@importFrom RSQLite SQLite
+  #'@importFrom RSQLite dbConnect
+  #'@importFrom RSQLite dbSendQuery
+  #'@importFrom RSQLite dbBind
+  #'@importFrom RSQLite dbFetch
+  #'@export MBS
+  MBS <- function(cusip){
+    MBSData <- dbConnect(SQLite(), dbname= paste0(system.file(package = "BondLab"), "/BondData/MBSData"))
+    data <- dbSendQuery(MBSData,
+                        'Select *
+                        FROM MBS
+                        WHERE "cusip" = :x')
+    dbBind(data, params = list(x = cusip))
+    data <- dbFetch(data)
+    MBS <- MBSDetails(
+      Cusip = data$Cusip,
+      ID = data$Poold,
+      BondType = data$BondType,
+      Issuer = data$Issuer,
+      Underwriter = data$Issuer,
+      Sector = data$Issuer,
+      Coupon = data$Coupon,
+      IssueDate = data$IssueDate,
+      DatedDate = data$DatedDate,
+      Maturity = data$MaturityDate,
+      LastPmtDate = data$LastPmtDate,
+      NextPmtDate = data$NextPmtDate,
+      Term = data$Term,
+      WALA = data$WALA,
+      WAM = data$WAM,
+      PaymentDelay = data$PaymentDelay,
+      Moody = data$Moody,
+      SP = data$SP,
+      BondLab = data$BondLab,
+      Frequency = data$Frequency,
+      BondBasis = as.character(data$BondBasis),
+      GWac = data$Gwac,
+      OrigLoanBal = data$OrigLoanBal,
+      OrigLTV = data$OrigLTV,
+      AmortizationType = data$AmortizationType,
+      AmortizationTerm = data$AmortizationTerm,
+      Index = data$Index,
+      Margin = data$Margin,
+      FirstPmtDate = data$FirstPmtDate,
+      FinalPmtDate = data$FinalPmtDate,
+      Servicing = data$Servicing,
+      PMI = data$PMI,
+      GFeePremium = data$GFeePremium,
+      InitialInterest = as.logical(data$InitialInterest),
+      InterestOnlyPeriod = data$InterestOnlyPeriod,
+      FirstPrinPaymentDate = data$FirstPrinPmtDate,
+      BalloonPmt = as.logical(data$BalloonPmt),
+      BalloonDate = data$BalloonDate,
+      MBSFactor =  data$Factor,
+      OriginalBal = data$OriginalBal,
+      CurrentBal = data$CurrBalance,
+      Model = data$Model,
+      Burnout = data$Burnout,
+      SATO = data$SATO)
+    return(MBS)}
 
-  #' A connection function to BondData calling MBS cusips
-  #' 
-  #' Opens a connection to the BondData folder to call MBS cusip data 
-  #' @param MBS.id A character string the MBS.id or cusip number current 
-  #' MBS.id is supported
-  #' @export MBS
-  MBS <- function(MBS.id = "character"){
-  # if(nchar(MBS.id) == 9) should be all.equal function
-  MBS.Conn <- if(nchar(MBS.id) == 9) {
-  gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
-  "/BondData/", MBS.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
-  } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
-  "/BondData/", "*", MBS.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
-  }
-  MBS <- readRDS(MBS.Conn)
-  on.exit(close.connection(MBS.Conn))
-  return(MBS)}
+
+#  #' A connection function to BondData calling MBS cusips
+#  #' 
+#  #' Opens a connection to the BondData folder to call MBS cusip data 
+#  #' @param MBS.id A character string the MBS.id or cusip number current 
+#  #' MBS.id is supported
+#  #' @export MBS
+#  MBS <- function(MBS.id = "character"){
+#  # if(nchar(MBS.id) == 9) should be all.equal function
+#  MBS.Conn <- if(nchar(MBS.id) == 9) {
+#  gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+#  "/BondData/", MBS.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
+#  } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+#  "/BondData/", "*", MBS.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
+#  }
+#  MBS <- readRDS(MBS.Conn)
+#  on.exit(close.connection(MBS.Conn))
+#  return(MBS)}
   
 
   #' A connection function to the BondData calling bond cusips

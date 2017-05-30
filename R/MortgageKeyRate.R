@@ -67,11 +67,6 @@
   # Note standard generic Term is defined in MBSDetails.R
   # Note standard generic ZeroVolSpread is defined in CurveSpreads.R
   
-#  #' A standard generic function to access the slot SpotSpread
-#  #' @param object an S4 class object
-#  #' @export SpotSpread
-#  setGeneric("SpotSpread", function(object)
-#    {standardGeneric("SpotSpread")})
   
   #' A standard generic function to access the slot EffDuration
   #' @param object an S4 class object

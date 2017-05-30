@@ -23,7 +23,9 @@ Imports:
     httr,
     splines,
     stats,
-    XML
+    XML,
+    RSQLite,
+    sqldf
 Suggests:
     knitr,
     devtools,

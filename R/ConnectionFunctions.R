@@ -38,7 +38,7 @@
     data <- dbFetch(data)
     MBS <- MBSDetails(
       Cusip = data$Cusip,
-      ID = data$Poold,
+      ID = data$PoolId,
       BondType = data$BondType,
       Issuer = data$Issuer,
       Underwriter = data$Issuer,

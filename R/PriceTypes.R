@@ -190,7 +190,7 @@
   #' @export PriceTypes
   PriceTypes <- function(price){
     PriceBasis = 100
-    Units = 32
+  
     
     Convertto32nds <- function(price){
       #convert price to numeric value
@@ -203,37 +203,35 @@
       return(Price)
     }
       
-      ConverttoDecimal <- function(price, units){
-        SplitPrice = strsplit(as.character(price), "-")
-        handle = as.numeric(SplitPrice[[1]][1])
-        TailDecimal = signif(as.numeric(SplitPrice[[1]][2])/Units,8)
-        TailDecimal = gsub("(^|[^0-9])0+", "\\1", TailDecimal, perl = TRUE)
-        Price = paste(as.character(handle),
-                      as.character(TailDecimal),sep="")
-        return(Price)
-      }
-
+    ConverttoDecimal <- function(price, units = 32){
+      SplitPrice = strsplit(as.character(price), "-")
+      handle = as.numeric(SplitPrice[[1]][1])
+      TailDecimal = signif(as.numeric(SplitPrice[[1]][2])/units,8)
+      TailDecimal = gsub("(^|[^.0-9])0+", "\\1", TailDecimal, perl = TRUE)
+      Price = paste(as.character(handle),
+                    as.character(TailDecimal),sep="")
+      return(Price)
+    }
+    
     ConverttoString <- function(price.decimal){
       sprintf("%.8f", price.decimal)
     }
       
       # Convert Price when entered as a decimal value
-      if(grepl(".", as.character(price), fixed = TRUE) == TRUE){
-        Price_Decimal = format(price, nsmall =2)
+      if(grepl("-", as.character(price), fixed = TRUE) == FALSE){
+        Price_Decimal = format(price, nsmall =8)
         Price_32nds = Convertto32nds(price = price)
-        Price_Basis = as.numeric(price) / PriceBasis
+        Price_Basis = format(as.numeric(price) / PriceBasis, nsmall = 8)
         Price_Decimal_String = ConverttoString(
           price.decimal = as.numeric(Price_Decimal))
-      }
-      
-      if(grepl("-", as.character(price), fixed = TRUE) == TRUE){
-        Price_Decimal = ConverttoDecimal(price = price, units = Units)
-        Price_32nds = price
-        Price_Basis = as.numeric(Price_Decimal)/PriceBasis
-        Price_Decimal_String = ConverttoString(
-          price.decimal = as.numeric(Price_Decimal))
-      }
-
+      } else {
+      Price_Decimal = ConverttoDecimal(price = price)
+      Price_32nds = price
+      Price_Basis = format(as.numeric(Price_Decimal)/PriceBasis, nsmall = 8)
+      Price_Decimal_String = ConverttoString(
+        price.decimal = as.numeric(ConverttoDecimal(price = price)))
+    }
+    
     new("PriceTypes",
         PriceDecimal = as.numeric(Price_Decimal),
         Price32nds = Price_32nds,

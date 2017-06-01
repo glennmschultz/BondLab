@@ -16,7 +16,7 @@ An S4 class representing the bond term structure exposure
 
 \item{\code{Coupon}}{A numeric value the coupon}
 
-\item{\code{Term}}{A numeric value the term}
+\item{\code{Maturity}}{A character string the bond maturity}
 
 \item{\code{ZeroVolSpread}}{a numeric value the spread to the spot curve}
 

@@ -19,7 +19,7 @@ Other Pricing: \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
-  \code{\link{SpreadToPrice}},
+  \code{\link{SpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 

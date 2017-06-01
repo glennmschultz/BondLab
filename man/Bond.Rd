@@ -2,14 +2,16 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{Bond}
 \alias{Bond}
-\title{A connection function to the BondData calling bond cusips}
+\title{query sql lite UST Bond cusip database}
 \usage{
-Bond(Bond.id = "character")
+Bond(cusip)
 }
 \arguments{
-\item{Bond.id}{A character string the bond's cusip number or id}
+\item{cusip}{the cusip identifier of the pass through must be in quotes}
 }
 \description{
-Opens a connection to BondData folder to call a standard bond
+a function to query the sql lite data base of mortgage
+cusips.  The function illustrates how one would connect to a cusip database
+and construct the mortgage pass through object for analysis
 }
 

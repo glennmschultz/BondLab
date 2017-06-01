@@ -17,7 +17,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  #'@title query sql lite cusip database
+  #'@title query sql lite MBS cusip database
   #'@description a function to query the sql lite data base of mortgage
   #'cusips.  The function illustrates how one would connect to a cusip database
   #'and construct the mortgage pass through object for analysis
@@ -82,7 +82,54 @@
       Burnout = data$Burnout,
       SATO = data$SATO)
     return(MBS)}
-
+  
+  #'@title query sql lite UST Bond cusip database
+  #'@description a function to query the sql lite data base of mortgage
+  #'cusips.  The function illustrates how one would connect to a cusip database
+  #'and construct the mortgage pass through object for analysis
+  #'@param cusip the cusip identifier of the pass through must be in quotes
+  #'@importFrom RSQLite SQLite
+  #'@importFrom RSQLite dbConnect
+  #'@importFrom RSQLite dbSendQuery
+  #'@importFrom RSQLite dbBind
+  #'@importFrom RSQLite dbFetch
+  #'@export Bond
+  Bond <- function(cusip){
+    #create a connection to the MBS database
+    BondData <- dbConnect(SQLite(), dbname= paste0(system.file(package = "BondLab"), "/BondData/BondData"))
+    data <- dbSendQuery(BondData,
+                        'Select *
+                        FROM USTBonds
+                        WHERE "cusip" = :x')
+    dbBind(data, params = list(x = cusip))
+    data <- dbFetch(data)
+    Bond <- BondDetails(
+      Cusip = data$Cusip,
+      ID = data$ID,
+      BondType = data$BondType,
+      Sector = data$Sector,
+      Issuer = data$Issuer,
+      Underwriter = data$Underwriter,
+      OfferAmount = data$OfferAmount,
+      Coupon = data$Coupon,
+      IssueDate = data$IssueDate,
+      DatedDate = data$DatedDate,
+      Maturity = data$MaturityDate,
+      LastPmtDate = data$LastPmtDate,
+      NextPmtDate = data$NextPmtDate,
+      Moody = data$Moody,
+      SP = data$SP,
+      BondLab = data$BondLab,
+      Frequency = data$Frequency,
+      BondBasis = as.character(data$BondBasis),
+      Callable = as.logical(data$Callable),
+      Putable = as.logical(data$Putable),
+      SinkingFund = as.logical(data$SinkingFund)
+    )
+    return(Bond)
+    
+  }
+  
 
 #  #' A connection function to BondData calling MBS cusips
 #  #' 
@@ -103,24 +150,24 @@
 #  return(MBS)}
   
 
-  #' A connection function to the BondData calling bond cusips
-  #' 
-  #' Opens a connection to BondData folder to call a standard bond
-  #' @param Bond.id A character string the bond's cusip number or id
-  #' @export
-  Bond <- function(Bond.id = "character"){
-  Bond.Conn <- if(nchar(Bond.id) == 9){
-  gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
-  "/BondData/", Bond.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
-  } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
-  "/BondData/", "*", Bond.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
-  }
-  #Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
-  #            "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
-  Bond <- readRDS(Bond.Conn)
-  on.exit(close.connection(Bond.Conn))
-  return(Bond)
-  }
+#  #' A connection function to the BondData calling bond cusips
+#  #' 
+#  #' Opens a connection to BondData folder to call a standard bond
+#  #' @param Bond.id A character string the bond's cusip number or id
+#  #' @export
+#  Bond <- function(Bond.id = "character"){
+#  Bond.Conn <- if(nchar(Bond.id) == 9){
+#  gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+#  "/BondData/", Bond.id, "*.rds", sep = ""), dirmark = FALSE), open = "rb")
+#  } else {gzfile(description = Sys.glob(paste(system.file(package = "BondLab"),
+#  "/BondData/", "*", Bond.id, ".rds", sep = ""), dirmark = FALSE), open = "rb")
+#  }
+#  #Bond.Conn <- gzfile(description = paste(system.file(package = "BondLab"),
+#  #            "/BondData/", Bond.id, ".rds", sep = ""), open = "rb")
+#  Bond <- readRDS(Bond.Conn)
+#  on.exit(close.connection(Bond.Conn))
+#  return(Bond)
+#  }
   
 
   #' A connection function to BondData folder saved MBS cusip Detail

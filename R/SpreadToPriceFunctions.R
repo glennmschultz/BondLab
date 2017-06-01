@@ -68,8 +68,11 @@
   #' @param ... Optional values follow
   #' @param benchmark Optionally the user can pass pricing benchmark - currently 
   #' this functonality is not implemented.
+  #'@importFrom splines interpSpline
+  #'@importFrom stats predict
+  #'@importFrom stats uniroot
   #' @export
-  SpreadToPrice <- function(bond.id,
+  SpreadToPriceMBS <- function(bond.id,
                             trade.date,
                             settlement.date,
                             PrepaymentAssumption,
@@ -112,9 +115,15 @@
       CPR = CPR)
     
     # local regression smooth of market curve
-    ModelCurve <- loess(as.numeric(rates.data[1,2:12]) ~
-                          as.numeric(rates.data[2,2:12]),
-                        data = rates.data)
+    #ModelCurve <- loess(as.numeric(rates.data[1,2:12]) ~
+    #                      as.numeric(rates.data[2,2:12]),
+    #                    data = rates.data)
+  
+    # Basis spline to interpolate given yield curve
+    ModelCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
+                                        as.numeric(rates.data[1,2:12]),
+                                        bSpline = TRUE)
+    
     
     MBS.CF.Table = CashFlowEngine(
       bond.id = bond.id,
@@ -148,7 +157,9 @@
                       MBS.CF.Table[,"Recovered Amount"]))
     
     # use predict ModelCurve to determine
-    ICurve = predict(ModelCurve, WAL)
+    #ICurve = predict(ModelCurve, WAL)
+    ICurve = predict(ModelCurve, WAL)$y
+    
     YieldTypes <- YieldTypes( yield = (ICurve + SpreadDecimal(Spread)))
     
     # Present value of the cash flows Present Value Factors

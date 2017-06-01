@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Term,BondTermStructure-method}
 \alias{Term,BondTermStructure-method}
-\title{Term}
+\title{Maturity}
 \usage{
 \S4method{Term}{BondTermStructure}(object)
 }

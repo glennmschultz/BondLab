@@ -25,7 +25,7 @@
   #' @slot Cusip A character the cusip number
   #' @slot Issuer A character the Issuer name
   #' @slot Coupon A numeric value the coupon
-  #' @slot Term A numeric value the term
+  #' @slot Maturity A character string the bond maturity
   #' @slot ZeroVolSpread a numeric value the spread to the spot curve
   #' @slot EffDuration a numeric value the effective duration
   #' @slot EffConvexity a numeric value the effective convexity
@@ -38,7 +38,7 @@
            Cusip = "character",
            Issuer = "character",
            Coupon = "numeric",
-           Term = "numeric",
+           Maturity = "character",
            ZeroVolSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
@@ -62,7 +62,7 @@
                      Cusip = "character",
                      Issuer = "character",
                      Coupon = "numeric",
-                     Term = "numeric",
+                     Maturity = "character",
                      ZeroVolSpread = "numeric",   
                      EffDuration = "numeric",
                      EffConvexity = "numeric",
@@ -74,7 +74,7 @@
                              Cusip = Cusip,
                              Issuer = Issuer,
                              Coupon = Coupon,
-                             Term = Term,
+                             Maturity = Maturity,
                              ZeroVolSpread = ZeroVolSpread,
                              EffDuration = EffDuration,
                              EffConvexity = EffConvexity,
@@ -105,12 +105,12 @@
   setMethod('Coupon', signature('BondTermStructure'),
             function(object){object@Coupon})
   
-  #'@title Term
+  #'@title Maturity
   #'@description Get Term from object BondTermStructure
   #'@param object object of type BondTermStructure
   #'@exportMethod Term
   setMethod('Term', signature('BondTermStructure'),
-            function(object){object@Term})
+            function(object){object@Maturity})
   
   #'@title Zero Volatility Spread
   #'@description Zero Volatility Spread from object BondTermStructure 
@@ -474,7 +474,7 @@
       Cusip = Cusip(bond.id),
       Issuer = Issuer(bond.id),
       Coupon = Coupon(bond.id),
-      Term = AmortizationTerm(bond.id),
+      Maturity = Maturity(bond.id),
       ZeroVolSpread = spot.spread * yield.basis,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3]),

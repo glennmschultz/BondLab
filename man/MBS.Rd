@@ -2,7 +2,7 @@
 % Please edit documentation in R/ConnectionFunctions.R
 \name{MBS}
 \alias{MBS}
-\title{query sql lite cusip database}
+\title{query sql lite MBS cusip database}
 \usage{
 MBS(cusip)
 }

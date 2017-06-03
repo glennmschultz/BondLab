@@ -64,15 +64,22 @@
   
   #' @title Bond Basis (day count) conventions
   #' @family BondBasis
-  #' @description applies the correct bond basis (day count) convention to interest
-  #' calculations
-  #' @param issue.date A character value the issue date of the security
+  #' @description Applies the correct bond basis (day count) convention to interest
+  #' calculations. Currently supported bond day count conventions:
+  #' \itemize{
+  #' \item{'30360' }{Agency MBS}
+  #' \item{'30E360' }{European 30360}
+  #' \item{'Actual360' }{used in money market}
+  #' \item{'Actual365' }{}
+  #' \item{'ActualActual' }
+  #' }
+  #' @param issue.date A character value the issue date of the security 'mm-dd-YYY'.
   #' @param start.date A character value the start date for interest payment
-  #'  (dated date)
-  #' @param end.date A character value the final payment date
-  #' @param settlement.date A character value the settlement date
-  #' @param lastpmt.date  A character value the last payment date to the investor
-  #' @param nextpmt.date A character value the next payment date to the investor
+  #'  (dated date) 'mm-dd-YYYY'.
+  #' @param end.date A character value the final payment date 'mm-dd-YYYY'.
+  #' @param settlement.date A character value the settlement date 'mm-dd-YYYY'
+  #' @param lastpmt.date  A character value the last payment date to the investor 'mm-dd-YYYY'
+  #' @param nextpmt.date A character value the next payment date to the investor 'mm-dd-YYYY'
   #' @param type a character vector the interest basis day count type
   #' @importFrom lubridate year
   #' @importFrom lubridate month

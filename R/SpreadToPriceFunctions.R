@@ -52,7 +52,7 @@
                           proceeds = proceeds)$root
     return(spot.spread)}
   
-  #' @title Spread To Price
+  #' @title Spread To Price MBS
   #' @family Pricing
   #' @description Returns the clean price of the MBS given a prepayment speed
   #' and spread to the curve
@@ -84,7 +84,7 @@
     Spread <- SpreadTypes(Spread = spread)
     
     rates.data <- Rates(trade.date = trade.date)
-    bond.id = bond.id
+    #bond.id = bond.id
     MortgageRate = MtgRate()
     Burnout = BurnOut(bond.id)
     orig.bal = OriginalBal(bond.id)
@@ -114,10 +114,6 @@
       PrepaymentAssumption = PrepaymentAssumption,
       CPR = CPR)
     
-    # local regression smooth of market curve
-    #ModelCurve <- loess(as.numeric(rates.data[1,2:12]) ~
-    #                      as.numeric(rates.data[2,2:12]),
-    #                    data = rates.data)
   
     # Basis spline to interpolate given yield curve
     ModelCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
@@ -156,16 +152,14 @@
                       MBS.CF.Table[,"Prepaid Prin"] +
                       MBS.CF.Table[,"Recovered Amount"]))
     
-    # use predict ModelCurve to determine
-    #ICurve = predict(ModelCurve, WAL)
+    # use predict ModelCurve to determine interpolated value of Icurve
     ICurve = predict(ModelCurve, WAL)$y
     
-    YieldTypes <- YieldTypes( yield = (ICurve + SpreadDecimal(Spread)))
+    YieldTypes <- YieldTypes(yield = (ICurve + SpreadDecimal(Spread)))
     
     # Present value of the cash flows Present Value Factors
     MBS.CF.Table[,"Present Value Factor"] =
-      1/((1+(YieldBasis(YieldTypes)/frequency))^(MBS.CF.Table[,"Time"] *
-                                              frequency))
+      1/((1+(YieldBasis(YieldTypes)/frequency))^(MBS.CF.Table[,"Time"] * frequency))
     
     # Present Value of the cash flows
     MBS.CF.Table[,"Present Value"] =
@@ -177,6 +171,97 @@
     PriceTypes <- PriceTypes(price = as.character(price))
     return(PriceTypes)
   }
+  
+  #'@title Spread to Price Bond
+  #'@family Pricing
+  #'@description returns the clean price of a bond given a spread and benchmark.
+  #'market convention is to quote spread to a benchmark in basis points.  Bond Lab
+  #'follows the market convection.  The user specified spread to the benchmark in basis points.
+  #'@param bond.id a character or connection referencing an object of type BondDetails
+  #'@param trade.date a character the trade date mm-dd-YYYY
+  #'@param settlement.date a character the settlement.date
+  #'@param spread the spread to the benchmark given in basis points.
+  #'@param benchmark the pricing benchmark.  The default in NULL in which case the
+  #'function will determine the nearest pricing benchmark.  The user override values are
+  #'1, 2, 3, 4, 5, 7, 10, 30
+  #'@export SpreadToPriceBond
+  SpreadToPriceBond <- function(bond.id,
+                                trade.date,
+                                settlement.date,
+                                spread,
+                                benchmark = NULL){
+
+    issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+    start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+    end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+    lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+    nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+    coupon = Coupon(bond.id)
+    frequency = Frequency(bond.id)
+    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+    bondbasis = BondBasis(bond.id)
+    principal = OfferAmount(bond.id)
+    
+    if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
+      days.in.year = days.in.year} else {days.in.year = days.in.year.360}
+    
+    Spreads <- SpreadTypes(Spread = spread)
+    
+    rates.data = Rates(trade.date = trade.date)
+    ModelCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
+                                        as.numeric(rates.data[1,2:12]),
+                                        bSpline = TRUE)
+    
+    trade.date = as.Date(trade.date, format = '%m-%d-%Y')
+    maturity.date = as.Date(Maturity(bond.id), format = '%m-%d-%Y')
+    maturity.years = as.numeric(difftime(maturity.date, trade.date)/days.in.year)
+    
+    if(is.null(benchmark) == TRUE){
+      # Find the cloest maturity for spread to benchmark
+      RatesIndex =  which(abs(as.numeric(rates.data[2,2:12])-
+                                maturity.years - .0001) ==
+                            min(abs(as.numeric(rates.data[2,2:12])-
+                                      maturity.years) - .0001))
+    } else {RatesIndex = which(abs(as.numeric(rates.data[2,2:12])-
+                                     benchmark) ==
+                                 min(abs(as.numeric(rates.data[2,2:12])-
+                                           benchmark)))}
+    
+    benchmark = as.numeric(rates.data[2,RatesIndex + 1])
+    
+    #use predict ModelCurve to determine interpolated value of curve
+    ICurve = predict(ModelCurve, benchmark)$y
+    YieldTypes <- YieldTypes( yield = (ICurve + SpreadDecimal(Spreads)))
+    
+    Bond.CF.Table <- CashFlowBond(bond.id = bond.id,
+                                  principal = principal,
+                                  settlement.date = settlement.date)
+    
+    #step5 calculate accrued interest for the period
+    days.to.nextpmt = (BondBasisConversion(
+      issue.date = issue.date,
+      start.date = start.date,
+      end.date = end.date,
+      settlement.date = settlement.date,
+      lastpmt.date = lastpmt.date,
+      nextpmt.date = nextpmt.date,
+      type = bondbasis)) * days.in.year
+    
+    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year
+    days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
+    accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(Bond.CF.Table[1,"Coupon Income"])
+    
+    Bond.CF.Table[,"Present Value Factor"] =
+      1/((1+(YieldBasis(YieldTypes)/frequency))^(Bond.CF.Table[,"Time"] * frequency))
+    
+    # Present Value of the cash flows
+    Bond.CF.Table[,"Present Value"] = Bond.CF.Table[,"TotalCashFlow"] * Bond.CF.Table[,"Present Value Factor"]
+    price = ((sum(Bond.CF.Table[,"Present Value"]) - accrued.interest) / principal) * price.basis
+    PriceTypes <- PriceTypes(price = as.character(price))
+    
+    return(PriceTypes)
+  }
+  
   
   
   

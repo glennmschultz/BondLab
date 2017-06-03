@@ -8,24 +8,31 @@ BondBasisConversion(issue.date, start.date, end.date, settlement.date,
   lastpmt.date, nextpmt.date, type)
 }
 \arguments{
-\item{issue.date}{A character value the issue date of the security}
+\item{issue.date}{A character value the issue date of the security 'mm-dd-YYY'.}
 
 \item{start.date}{A character value the start date for interest payment
-(dated date)}
+(dated date) 'mm-dd-YYYY'.}
 
-\item{end.date}{A character value the final payment date}
+\item{end.date}{A character value the final payment date 'mm-dd-YYYY'.}
 
-\item{settlement.date}{A character value the settlement date}
+\item{settlement.date}{A character value the settlement date 'mm-dd-YYYY'}
 
-\item{lastpmt.date}{A character value the last payment date to the investor}
+\item{lastpmt.date}{A character value the last payment date to the investor 'mm-dd-YYYY'}
 
-\item{nextpmt.date}{A character value the next payment date to the investor}
+\item{nextpmt.date}{A character value the next payment date to the investor 'mm-dd-YYYY'}
 
 \item{type}{a character vector the interest basis day count type}
 }
 \description{
-applies the correct bond basis (day count) convention to interest
-calculations
+Applies the correct bond basis (day count) convention to interest
+calculations. Currently supported bond day count conventions:
+\itemize{
+\item{'30360' }{Agency MBS}
+\item{'30E360' }{European 30360}
+\item{'Actual360' }{used in money market}
+\item{'Actual365' }{}
+\item{'ActualActual' }
+}
 }
 \seealso{
 Other BondBasis: \code{\link{ActualFactor}},

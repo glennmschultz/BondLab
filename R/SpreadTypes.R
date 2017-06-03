@@ -161,17 +161,17 @@
   SpreadTypes <- function(Spread = "character"){
     SpreadBasis = 100
     
-    ConverttoDecimal <- function(spread, basis){
-      spread = as.numeric(spread)/basis
+    ConverttoDecimal <- function(spread){
+      spread = as.numeric(spread)
       return(spread)}
       
-    ConverttoString <- function(spread,basis){
-      spread = as.numeric(spread)/basis
+    ConverttoString <- function(spread){
+      spread = as.numeric(spread)
       spread = sprintf("%.8f", spread)
       return(spread)}
     new("SpreadTypes",
-        SpreadBasis = Spread,
-        SpreadDecimal = ConverttoDecimal(spread = Spread, basis = SpreadBasis),
-        SpreadDecimalString = ConverttoString(spread = Spread, basis = SpreadBasis)
+        SpreadBasis = as.numeric(Spread/100),
+        SpreadDecimal = ConverttoDecimal(spread = Spread),
+        SpreadDecimalString = ConverttoString(spread = Spread)
         )
   }

@@ -182,5 +182,133 @@
   MBS.CF.Table[x,"Recovered Amount"] + MBS.CF.Table[x,"Pass Through Interest"]
   }
     return(MBS.CF.Table)
-}
+  }
+  
+  #'@title Bond Lab function to cash flow a bond
+  #'@description calculates the bond cashflow table used in function BondCashflows.
+  #'@param bond.id a character or connection referring to an object of type BondDetails.
+  #'@param principal the investor principal amount.
+  #'@param settlement.date a character the settlement data mm-dd-YYYY.
+  #'@export CashFlowBond
+  CashFlowBond <- function(bond.id,
+                           principal,
+                           settlement.date){
+    issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+    start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+    end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+    lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+    nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+    coupon = Coupon(bond.id)
+    frequency = Frequency(bond.id)       
+    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+    bondbasis = BondBasis(bond.id)
+    
+    # Test payment dates against settlement dates and roll forward if 
+    # settlement date crossses over the payment date
+    if(as.Date(settlement.date, format = '%m-%d-%Y') >=
+       as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
+      bond.id <- `LastPmtDate<-`(bond.id, NextPmtDate(bond.id))}
+    
+    if(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') 
+       == as.Date(NextPmtDate(bond.id), format = '%m-%d-%Y')){
+      bond.id <- `NextPmtDate<-`(bond.id,
+                                 as.character(format(
+                                   as.Date(LastPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
+                                     months(months.in.year/Frequency(bond.id)), 
+                                   "%m-%d-%Y")))}
+    
+    Coupon <- CouponTypes(coupon = coupon)
+    
+    
+    # Calculate the number of cashflows that will be paid from settlement date to
+    # maturity date 
+    # step1 calculate the years to maturity  
+    ncashflows = BondBasisConversion(
+      issue.date = issue.date, 
+      start.date = start.date, 
+      end.date = end.date, 
+      settlement.date = settlement.date,
+      lastpmt.date = lastpmt.date, 
+      nextpmt.date = end.date, 
+      type = bondbasis)
+    
+    #Step2 build a vector of dates for the payment schedule
+    # first get the pmtdate interval
+    pmtdate.interval = months.in.year/frequency
+    
+    # then compute the payment dates based on payment date interval.  The logic
+    # including the settlement.date == issue.date is to facilitate adding first
+    # payment date to BondDetails object
+    pmtdate = as.Date(c(if(settlement.date == issue.date) {
+      seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))
+    } else {
+      seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), 
+    "%m-%d-%Y")
+    
+    #step3 build the time period vector (n) for discounting the cashflows 
+    #nextpmt date is vector of payment dates to n for each period
+    numpayments = length(pmtdate)
+    time.period <- numeric(numpayments)
+    for(pmt in seq_along(pmtdate))
+      time.period[pmt] = BondBasisConversion(
+        issue.date = issue.date, 
+        start.date = start.date, 
+        end.date = end.date, 
+        #settlement.date = settlement.date,
+        settlement.date = lastpmt.date, 
+        lastpmt.date = lastpmt.date, 
+        nextpmt.date = pmtdate[pmt], 
+        type = bondbasis)
+    
+    #step4 Count the number of cashflows 
+    #num.periods is the total number of cashflows to be received
+    #num.period is the period in which the cashflow is received
+    num.periods = length(time.period)
+    col.names <- c("Period",                   #1
+                   "Date",                     #2
+                   "Time",                     #3
+                   "Principal Outstanding",    #4
+                   "Coupon",                   #5
+                   "Coupon Income",            #6
+                   "Principal Paid",           #7
+                   "TotalCashFlow",            #8
+                   "Present Value Factor",     #9
+                   "Present Value",            #10
+                   "Duration",                 #11
+                   "Convexity Time",           #12
+                   "CashFlow Convexity",       #13
+                   "Convexity")                #14
+    num.columns <- length(col.names)
+    Bond.CF.Table <- array(data = NA, c(num.periods, num.columns), 
+                           dimnames = list(seq(c(1:num.periods)),col.names))  
+    for(i in 1:num.periods){
+      Bond.CF.Table[i,"Period"] = i
+      Bond.CF.Table[i,"Date"] = pmtdate[i]
+      Bond.CF.Table[i,"Time"] = time.period[i]
+      Bond.CF.Table[i,"Principal Outstanding"] = principal
+      Bond.CF.Table[i,"Coupon"] = CouponBasis(Coupon)
+      Bond.CF.Table[i,"Coupon Income"] = 
+        Bond.CF.Table[i,"Coupon"] * 
+        BondBasisConversion(issue.date = issue.date,
+                            start.date = start.date,
+                            end.date = end.date,
+                            settlement.date = as.Date(ifelse(i == 1, lastpmt.date,
+                            as.Date(Bond.CF.Table[i-1, 'Date'], origin = "1970-01-01")),
+                            origin = '1970-01-01'),
+                            lastpmt.date = as.Date(ifelse(i == 1, lastpmt.date, 
+                            as.Date(Bond.CF.Table[i-1, 'Date'], origin = "1970-01-01")),
+                            origin = '1970-01-01'),
+                            nextpmt.date = as.Date(ifelse(i == 1, nextpmt.date, 
+                            as.Date(Bond.CF.Table[i, 'Date'], origin = "1970-01-01")),
+                            origin = '1970-01-01'),
+                            type = bondbasis) *
+        Bond.CF.Table[i,"Principal Outstanding"]
+      if(Bond.CF.Table[i,"Date"] == end.date) {Bond.CF.Table[i,"Principal Paid"] = principal
+      } else {Bond.CF.Table[i,"Principal Paid"] = 0}
+      Bond.CF.Table[i,"TotalCashFlow"] = 
+        Bond.CF.Table[i,"Coupon Income"] + Bond.CF.Table[i,"Principal Paid"]
+    }
+    return(Bond.CF.Table)
+    
+  }
 

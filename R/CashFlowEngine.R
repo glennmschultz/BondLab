@@ -86,20 +86,18 @@
     
     # step5 calculate accrued interest for the period this is also
     # the remain time period used to adjust the period vector 
-    days.to.nextpmt = (BondBasisConversion(
-      issue.date = issue.date,
-      start.date = start.date,
-      end.date = end.date,
-      settlement.date = settlement.date,
-      lastpmt.date = lastpmt.date,
-      nextpmt.date = nextpmt.date,
-      type = bondbasis)) * days.in.year.360
+    #days.to.nextpmt = (BondBasisConversion(
+    #  issue.date = issue.date,
+    #  start.date = start.date,
+    #  end.date = end.date,
+    #  settlement.date = settlement.date,
+    #  lastpmt.date = lastpmt.date,
+    #  nextpmt.date = nextpmt.date,
+    #  type = bondbasis)) * days.in.year.360
     
-    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * 
-      days.in.year.360
-    
-    days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
-    remain.period = days.of.accrued/days.in.year.360
+    #days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
+    #days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
+    #remain.period = days.of.accrued/days.in.year.360
     
     #Count the number of cashflows 
     #num.periods is the total number of cashflows to be received
@@ -254,8 +252,8 @@
         issue.date = issue.date, 
         start.date = start.date, 
         end.date = end.date, 
-        #settlement.date = settlement.date,
-        settlement.date = lastpmt.date, 
+        settlement.date = settlement.date,
+        #settlement.date = lastpmt.date, 
         lastpmt.date = lastpmt.date, 
         nextpmt.date = pmtdate[pmt], 
         type = bondbasis)

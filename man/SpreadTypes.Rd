@@ -4,10 +4,10 @@
 \alias{SpreadTypes}
 \title{SpreadTypes is a constructor function for the class SpreadTypes}
 \usage{
-SpreadTypes(Spread = "character")
+SpreadTypes(spread = "character")
 }
 \arguments{
-\item{Spread}{a character string the spread entered in basis points}
+\item{spread}{a character string the spread entered in basis points}
 }
 \description{
 SpreadTypes is a constructor function for the class SpreadTypes

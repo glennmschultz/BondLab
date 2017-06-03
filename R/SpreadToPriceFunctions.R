@@ -81,10 +81,9 @@
                             ...,
                             benchmark = NULL){
     
-    Spread <- SpreadTypes(Spread = spread)
+    Spread <- SpreadTypes(spread = spread)
     
     rates.data <- Rates(trade.date = trade.date)
-    #bond.id = bond.id
     MortgageRate = MtgRate()
     Burnout = BurnOut(bond.id)
     orig.bal = OriginalBal(bond.id)
@@ -128,20 +127,30 @@
       PrepaymentAssumption = prepayment)
     
     #step5 calculate accrued interest for the period
-    days.to.nextpmt = (BondBasisConversion(
+      #days.to.nextpmt = (BondBasisConversion(
+      #issue.date = issue.date,
+      #start.date = start.date,
+      #end.date = end.date,
+      #settlement.date = settlement.date,
+      #lastpmt.date = lastpmt.date,
+      #nextpmt.date = nextpmt.date,
+      #type = bondbasis)) * days.in.year.360
+      
+    
+    #days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
+    #days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
+    #accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(MBS.CF.Table[1,"Pass Through Interest"])
+    
+    Factor = BondBasisConversion(
       issue.date = issue.date,
       start.date = start.date,
       end.date = end.date,
       settlement.date = settlement.date,
       lastpmt.date = lastpmt.date,
       nextpmt.date = nextpmt.date,
-      type = bondbasis)) * days.in.year.360
+      type = bondbasis)
+    accrued.interest = Factor * as.numeric(MBS.CF.Table[1,"Pass Through Interest"])
     
-    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) *
-      days.in.year.360
-    days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
-    accrued.interest = (days.of.accrued/days.between.pmtdate) *
-      as.numeric(MBS.CF.Table[1,"Pass Through Interest"])
     
     # Weighted Average Life
     WAL = sum(((MBS.CF.Table[,"Scheduled Prin"] +
@@ -166,8 +175,7 @@
       MBS.CF.Table[,"Investor CashFlow"] *
       MBS.CF.Table[,"Present Value Factor"]
     
-    price = ((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) /
-               principal) * price.basis
+    price = ((sum(MBS.CF.Table[,"Present Value"]) - accrued.interest) / principal) * price.basis
     PriceTypes <- PriceTypes(price = as.character(price))
     return(PriceTypes)
   }
@@ -205,7 +213,7 @@
     if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
       days.in.year = days.in.year} else {days.in.year = days.in.year.360}
     
-    Spreads <- SpreadTypes(Spread = spread)
+    Spreads <- SpreadTypes(spread = spread)
     
     rates.data = Rates(trade.date = trade.date)
     ModelCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
@@ -228,6 +236,7 @@
                                            benchmark)))}
     
     benchmark = as.numeric(rates.data[2,RatesIndex + 1])
+    benchmark.yield = as.numeric(rates.data[1,RatesIndex + 1])
     
     #use predict ModelCurve to determine interpolated value of curve
     ICurve = predict(ModelCurve, benchmark)$y
@@ -238,25 +247,35 @@
                                   settlement.date = settlement.date)
     
     #step5 calculate accrued interest for the period
-    days.to.nextpmt = (BondBasisConversion(
+    #days.to.nextpmt = (BondBasisConversion(
+    #  issue.date = issue.date,
+    #  start.date = start.date,
+    #  end.date = end.date,
+    #  settlement.date = settlement.date,
+    #  lastpmt.date = lastpmt.date,
+    #  nextpmt.date = nextpmt.date,
+    #  type = bondbasis)) * days.in.year
+    
+    Factor = BondBasisConversion(
       issue.date = issue.date,
       start.date = start.date,
       end.date = end.date,
       settlement.date = settlement.date,
       lastpmt.date = lastpmt.date,
       nextpmt.date = nextpmt.date,
-      type = bondbasis)) * days.in.year
+      type = bondbasis)
     
-    days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year
-    days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
-    accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(Bond.CF.Table[1,"Coupon Income"])
+    #days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year
+    #days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
+    #accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(Bond.CF.Table[1,"Coupon Income"])
+    accrued.interest = Factor * as.numeric(Bond.CF.Table[1, "Coupon Income"])
     
     Bond.CF.Table[,"Present Value Factor"] =
       1/((1+(YieldBasis(YieldTypes)/frequency))^(Bond.CF.Table[,"Time"] * frequency))
     
     # Present Value of the cash flows
     Bond.CF.Table[,"Present Value"] = Bond.CF.Table[,"TotalCashFlow"] * Bond.CF.Table[,"Present Value Factor"]
-    price = ((sum(Bond.CF.Table[,"Present Value"]) - accrued.interest) / principal) * price.basis
+    price = ((sum(Bond.CF.Table[,"Present Value"])- accrued.interest) / principal) * price.basis
     PriceTypes <- PriceTypes(price = as.character(price))
     
     return(PriceTypes)

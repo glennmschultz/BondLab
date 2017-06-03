@@ -599,19 +599,13 @@
 
 
   #step5 calculate accrued interest for the period
-  days.to.nextpmt = (BondBasisConversion(issue.date = issue.date, 
+  accrued.interest = BondBasisConversion(issue.date = issue.date, 
                                          start.date = start.date, 
                                          end.date = end.date, 
                                          settlement.date = settlement.date,
                                          lastpmt.date = lastpmt.date,
                                          nextpmt.date = nextpmt.date,
-                                         type = bondbasis)) * days.in.year.360
-  
-  days.between.pmtdate = 
-    ((months.in.year/frequency)/months.in.year) * days.in.year.360
-  days.of.accrued = (days.between.pmtdate - days.to.nextpmt) 
-  accrued.interest = (days.of.accrued/days.between.pmtdate) * 
-  ((coupon/yield.basis)/frequency) * principal
+                                         type = bondbasis) * MBS.CF.Table[1,'Pass Through Interest']
  
   # Step6 solve for yield to maturity given the price of the bond.  
   # irr is an internal function used to solve for yield to maturity
@@ -625,7 +619,7 @@
                   price, 
                   accrued.interest){
   #pv = cashflow * exp(rate * -time.period)
-  pv = cashflow * 1/(1+rate) ^ time.period
+  pv = cashflow * 1/(1+(rate/frequency)) ^ (time.period * frequency)
   proceeds = principal * PriceBasis(Price)
   sum(pv) - (proceeds + accrued.interest)}
   
@@ -642,16 +636,14 @@
           accrued.interest = accrued.interest)$root)
     
   # Convert to semi-bond equivalent
-  Yield.To.Maturity = ((((1 + ytm) ^ (1/2)) -1) * 2) * yield.basis
+  Yield.To.Maturity = ytm * yield.basis #((((1 + (ytm) ^ (1/2)) -1) * 2) * yield.basis
 
-  # Pass Yield.To.Maturity to YieldTypes class to handle the conversion to 
-  # YieldBasis, YieldDecimal, and YieldDecimalString
+  # Pass Yield.To.Maturity to YieldTypes class to handle the conversion
   Yield <- YieldTypes(yield = Yield.To.Maturity)
   
   #Step7 Present value of the cash flows Present Value Factors
   MBS.CF.Table[,"Present Value Factor"] = 
-    round((1/((1+(YieldBasis(Yield)/frequency))^(MBS.CF.Table[,"Time"] * 
-                                                   frequency))),12)
+    round((1/((1+(YieldBasis(Yield)/frequency))^(MBS.CF.Table[,"Time"] * frequency))),12)
   
   #Present Value of the cash flows
   MBS.CF.Table[,"Present Value"] = 

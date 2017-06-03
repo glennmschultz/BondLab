@@ -91,7 +91,7 @@ Valuation()
    rates.data <- Rates(trade.date = tradedate)
    # note use invisible(capture.output()) to supress messages
    invisible(capture.output(
-     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+     TermStructure <- TermStructure(rates.data = rates.data, method = "dl")))
 
 ## ---- bonddata, echo=TRUE------------------------------------------------
     bond.id <- MBS(cusip = cusip)

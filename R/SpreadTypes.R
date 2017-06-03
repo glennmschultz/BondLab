@@ -156,22 +156,23 @@
   
   #' SpreadTypes is a constructor function for the class SpreadTypes
   #' 
-  #' @param Spread a character string the spread entered in basis points
+  #' @param spread a character string the spread entered in basis points
   #' @export SpreadTypes
-  SpreadTypes <- function(Spread = "character"){
-    SpreadBasis = 100
-    
-    ConverttoDecimal <- function(spread){
-      spread = as.numeric(spread)
-      return(spread)}
+    SpreadTypes <- function(spread = "character"){
+      spread.basis = 100
       
-    ConverttoString <- function(spread){
-      spread = as.numeric(spread)
-      spread = sprintf("%.8f", spread)
-      return(spread)}
-    new("SpreadTypes",
-        SpreadBasis = as.numeric(Spread/100),
-        SpreadDecimal = ConverttoDecimal(spread = Spread),
-        SpreadDecimalString = ConverttoString(spread = Spread)
-        )
+      ConverttoDecimal <- function(spread, basis){
+        spread = as.numeric(spread)/basis
+        return(spread)}
+      
+      ConverttoString <- function(spread,basis){
+        spread = as.numeric(spread)/basis
+        spread = sprintf("%.8f", spread)
+        return(spread)}
+      
+      new("SpreadTypes",
+          SpreadBasis = spread,
+          SpreadDecimal = ConverttoDecimal(spread = spread, basis = spread.basis),
+          SpreadDecimalString = ConverttoString(spread = spread, basis = spread.basis)
+      )
   }

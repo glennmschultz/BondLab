@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2017-05-29" />
+<meta name="date" content="2017-06-03" />
 
 <title>Bond Lab®</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2017-05-29</em></h4>
+<h4 class="date"><em>2017-06-03</em></h4>
 
 
 
@@ -84,7 +84,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 * optimx<br />
 * RCurl<br />
 * splines<br />
-* XML<br />
 * knitr<br />
 * devtools<br />
 * testthat<br />
@@ -340,7 +339,7 @@ slots to the class to extend the prepayment model.</code></pre>
 <span class="st">             from MBS'</span>)</code></pre></div>
 <pre><code>##       Cusip Coupon AmortizationTerm    price
 ## 1 31283HY40    2.5               30    96-29
-## 2 31283HY41    3.0               30  100-3.5
+## 2 31283HY41    3.0               30 100-03.5
 ## 3 31283HY42    3.5               30   103-00
 ## 4 31283HY43    4.0               30   105-13
 ## 5 31283HY44    4.5               30 107-22.5
@@ -360,7 +359,7 @@ slots to the class to extend the prepayment model.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">   rates.data &lt;-<span class="st"> </span><span class="kw">Rates</span>(<span class="dt">trade.date =</span> tradedate)
    <span class="co"># note use invisible(capture.output()) to supress messages</span>
    <span class="kw">invisible</span>(<span class="kw">capture.output</span>(
-     TermStructure &lt;-<span class="st"> </span><span class="kw">TermStructure</span>(<span class="dt">rates.data =</span> rates.data, <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>)))</code></pre></div>
+     TermStructure &lt;-<span class="st"> </span><span class="kw">TermStructure</span>(<span class="dt">rates.data =</span> rates.data, <span class="dt">method =</span> <span class="st">&quot;dl&quot;</span>)))</code></pre></div>
 </div>
 <div id="step-three-call-the-mbs-either-by-cusip" class="section level2">
 <h2>Step Three: call the MBS either by cusip</h2>
@@ -420,17 +419,17 @@ slots to the class to extend the prepayment model.</code></pre>
 <div id="now-lets-get-some-analytics-out-of-the-class-mortgagescenario" class="section level2">
 <h2>Now, lets get some analytics out of the class MortgageScenario</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">HorizonReturn</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.929541</code></pre>
+<pre><code>## [1] 1.8987845</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ZeroVolSpread</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.0163343</code></pre>
+<pre><code>## [1] 1.0230011</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToCurve</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.1084769</code></pre>
+<pre><code>## [1] 1.1149492</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToBenchmark</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.0843198</code></pre>
+<pre><code>## [1] 1.0907922</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">WAL</span>(PassThrough)</code></pre></div>
-<pre><code>## [1] 6.7640053</code></pre>
+<pre><code>## [1] 6.6473276</code></pre>
 </div>
 <div id="create-your-own-function" class="section level2">
 <h2>Create Your Own Function</h2>

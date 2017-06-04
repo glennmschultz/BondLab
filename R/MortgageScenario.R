@@ -471,8 +471,7 @@
                               format = "%m-%d-%Y") %m+% months(horizon.months), 
                       "%m-%d-%Y")))
       
-    MBSFactor(HorizonMBS) <- ((original.bal * 
-                                  MBSFactor(bond.id)) - TotalPrincipal)/ original.bal
+    MBSFactor(HorizonMBS) <- ((original.bal * MBSFactor(bond.id)) - TotalPrincipal)/ original.bal
     
     CurrentBal(HorizonMBS) <- CurrentBal(bond.id) - TotalPrincipal
     WAM(HorizonMBS) <- WAM(bond.id) - horizon.months

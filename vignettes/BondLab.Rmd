@@ -55,6 +55,7 @@ than the yield to maturity (a linear term structure assumption) pricing of each 
 * The rich cashflows are those whose present value along the sopt rate curve are
 less than the yield to maturity assumption pricing of each cashflow.
 
+![Bond Lab Valuation Framework](framework.png)
 
 > the spread to the spot rate curve is referred to in the fixed income markets as
 the **Zero Volatility Spread**. The zero volatility spread (ZV spread) is the 

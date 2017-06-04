@@ -226,10 +226,11 @@
     
     if(is.null(benchmark) == TRUE){
       # Find the cloest maturity for spread to benchmark
-      RatesIndex =  which(abs(as.numeric(rates.data[2,2:12])-
-                                maturity.years - .0001) ==
-                            min(abs(as.numeric(rates.data[2,2:12])-
-                                      maturity.years) - .0001))
+      RatesIndex =  which(round(abs(as.numeric(rates.data[2,2:12])-
+                                maturity.years - .0001),3) ==
+                            min(round(abs(as.numeric(rates.data[2,2:12])-
+                                      maturity.years - .0001),3))
+                          )
     } else {RatesIndex = which(abs(as.numeric(rates.data[2,2:12])-
                                      benchmark) ==
                                  min(abs(as.numeric(rates.data[2,2:12])-

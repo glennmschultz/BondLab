@@ -4,17 +4,17 @@
 \alias{MtgTermStructure}
 \title{A function to calculate mortgage key rate duration and convexity}
 \usage{
-MtgTermStructure(bond.id = "character", original.bal = numeric(),
-  Rate.Delta = numeric(), TermStructure = "character",
-  settlement.date = "character", principal = numeric(),
-  price = "character", cashflow = "character")
+MtgTermStructure(bond.id, original.bal, Rate.Delta = 0.5, TermStructure,
+  settlement.date, principal, price, cashflow)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of type MBS details}
 
 \item{original.bal}{A numeric value the original balance}
 
-\item{Rate.Delta}{A numeric value the rate delta used to calculate KRDs}
+\item{Rate.Delta}{A numeric value the rate delta used to calculate KRDs.
+Default value is 0.50.  Do not change this unless you are sure you know what
+you are doing.}
 
 \item{TermStructure}{A character string referencing an object of the 
 type TermStructure}

@@ -226,7 +226,9 @@
   #' MortgageTermStructure object
   #' @param bond.id A character string referencing an object of type MBS details
   #' @param original.bal A numeric value the original balance
-  #' @param Rate.Delta A numeric value the rate delta used to calculate KRDs
+  #' @param Rate.Delta A numeric value the rate delta used to calculate KRDs.
+  #' Default value is 0.50.  Do not change this unless you are sure you know what
+  #' you are doing.
   #' @param TermStructure A character string referencing an object of the 
   #' type TermStructure
   #' @param settlement.date a character string the settlement date
@@ -237,14 +239,14 @@
   #' type MortgageCashFlow
   #' @export MtgTermStructure
   #' @importFrom stats uniroot
-  MtgTermStructure <- function(bond.id = "character", 
-                             original.bal = numeric(), 
-                             Rate.Delta = numeric(), 
-                             TermStructure = "character", 
-                             settlement.date = "character", 
-                             principal = numeric(), 
-                             price = "character", 
-                             cashflow = "character"){
+  MtgTermStructure <- function(bond.id, 
+                             original.bal, 
+                             Rate.Delta = 0.50, 
+                             TermStructure, 
+                             settlement.date, 
+                             principal, 
+                             price, 
+                             cashflow){
   
   # Open connection to the prepayment model tuning library
   ModelTune <- ModelTune(bond.id = bond.id)

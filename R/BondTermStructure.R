@@ -167,7 +167,8 @@
   #' @param bond.id A character string referencing an object of 
   #' type bond details.
   #' @param Rate.Delta A numeric value the rate delta used to calcualte the 
-  #' bond KRDs.
+  #' bond KRDs.  Default value is 0.50.  Do not change this unless you know what
+  #' you are doing.
   #' @param TermStructure A character string referencing an object of typre
   #' TermStructure.
   #' @param principal A numeric value the principal or face amount of the bond.
@@ -176,12 +177,12 @@
   #' BondCashFlow.
   #' @importFrom stats approx
   #' @export BondTermStructure
-  BondTermStructure <- function(bond.id = "character", 
-                                Rate.Delta = numeric(), 
-                                TermStructure = "character", 
-                                principal = numeric(), 
-                                price = "character", 
-                                cashflow = "character"){
+  BondTermStructure <- function(bond.id, 
+                                Rate.Delta = 0.50, 
+                                TermStructure, 
+                                principal, 
+                                price, 
+                                cashflow){
   
   #Call the bond frequency to adjust the spot spread to the 
   #payment frequency of the bond

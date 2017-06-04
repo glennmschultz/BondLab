@@ -4,16 +4,16 @@
 \alias{BondTermStructure}
 \title{A function to calculate a bond key rate duration}
 \usage{
-BondTermStructure(bond.id = "character", Rate.Delta = numeric(),
-  TermStructure = "character", principal = numeric(), price = "character",
-  cashflow = "character")
+BondTermStructure(bond.id, Rate.Delta = 0.5, TermStructure, principal, price,
+  cashflow)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of 
 type bond details.}
 
 \item{Rate.Delta}{A numeric value the rate delta used to calcualte the 
-bond KRDs.}
+bond KRDs.  Default value is 0.50.  Do not change this unless you know what
+you are doing.}
 
 \item{TermStructure}{A character string referencing an object of typre
 TermStructure.}

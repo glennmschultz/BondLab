@@ -52,7 +52,7 @@ cahflows determine the relative richness or cheapness of each cashflow.
 * The cheap cashflows are those whose present value along the spot curve are greater
 than the yield to maturity (a linear term structure assumption) pricing of each cashflow.
 
-* The rich cashflows are those whose present value along the sopt rate curve are
+* The rich cashflows are those whose present value along the spot rate curve are
 less than the yield to maturity assumption pricing of each cashflow.
 
 ![Bond Lab Valuation Framework](framework.png)
@@ -62,6 +62,10 @@ the **Zero Volatility Spread**. The zero volatility spread (ZV spread) is the
 spread which equates the present value of a bond's cash flows along the spot rate curve to its yield to maturity price. The zero volatility spread is the corner 
 stone upon which the valuation framework is built, linking the linear and non-linear
 term structure pricing assumptions.
+
+Note: The term zero volatility spread when applied to the spot rate curve is technically incorrect. The
+zero volatility spread is given by an option adjusted spread model and represents the average spread over
+the spot curve in the OAS framework.  The measure as illustrated above is better defined the spread to the spot rate curve.
 
 **From the *valuation framework* we can deduce the following:**  
 

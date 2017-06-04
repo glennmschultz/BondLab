@@ -696,7 +696,7 @@
       Term = AmortizationTerm(bond.id),      
       ZeroVolSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,"Key Rate Duration"]),
-      EffConvexity = sum(KR.Duration[,"Key Rate Convexity"]),
+      EffConvexity = sum(KR.Duration[,"Key Rate Convexity"] * .5),
       KeyRateTenor = unname(KR.Duration[,"Key Rate"]),
       KeyRateDuration = unname(KR.Duration[,"Key Rate Duration"]),
       KeyRateConvexity = unname(KR.Duration[,"Key Rate Convexity"])

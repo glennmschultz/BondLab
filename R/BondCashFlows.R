@@ -315,14 +315,14 @@
       Accrued = accrued.interest,
       YieldToMaturity = YieldDecimal(Yield),
       WAL = WAL,
-      ModDuration = Modified.Duration,
-      Convexity = Convexity,
-      Period = Bond.CF.Table[,"Period"],
-      PmtDate = as.character(as.Date(Bond.CF.Table[,"Date"], origin = "1970-01-01")),
-      TimePeriod = Bond.CF.Table[,"Time"],
-      PrincipalOutstanding  = Bond.CF.Table[,"Principal Outstanding"],
-      CouponPmt = Bond.CF.Table[,"Coupon Income"],
-      TotalCashFlow = Bond.CF.Table[,"TotalCashFlow"]
+      ModDuration = unname(Modified.Duration),
+      Convexity = unname(Convexity),
+      Period = unname(Bond.CF.Table[,"Period"]),
+      PmtDate = unname(as.character(as.Date(Bond.CF.Table[,"Date"], origin = "1970-01-01"))),
+      TimePeriod = unname(Bond.CF.Table[,"Time"]),
+      PrincipalOutstanding  = unname(Bond.CF.Table[,"Principal Outstanding"]),
+      CouponPmt = unname(Bond.CF.Table[,"Coupon Income"]),
+      TotalCashFlow = unname(Bond.CF.Table[,"TotalCashFlow"])
   )
 }
 

@@ -297,14 +297,14 @@
   #' @importFrom lubridate month
   #' @importFrom termstrc estim_nss estim_cs spotrates forwardrates
   #' @export TermStructure
-  TermStructure <- function(rates.data = "character", method = "character"){
+  TermStructure <- function(rates.data, method = "dl"){
   
   #function(trade.date = "character", method = "character")  
   #Error Trap User inputs to the function
   if(missing(rates.data)) stop("missing rates data object")  
   
-  #Default to Nelson-Siegel
-  if(missing(method)) {method = "ns"}
+  #Default to Dibold Li
+  if(missing(method)) {method = "dl"}
   
   #Default to parametric
   if(method == "cs") stop("cubic spline not implemented")

@@ -5,7 +5,7 @@
 \title{The TermStructure constructor function it is a wrapper function 
 around the package termstrc}
 \usage{
-TermStructure(rates.data = "character", method = "character")
+TermStructure(rates.data, method = "dl")
 }
 \arguments{
 \item{rates.data}{A character string representing the data for which 

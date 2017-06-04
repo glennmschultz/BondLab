@@ -56,9 +56,16 @@
   #'@title Plot Key Rate Duration
   #'@description Generic function to plot key rate duration
   #'@param object MortgageTermStructure object
-  #'@export PlotKeyRate
-  setGeneric('PlotKeyRate', function(object)
-    {standardGeneric('PlotKeyRate')})
+  #'@export plotkrd
+  setGeneric('plotkrd', function(object)
+    {standardGeneric('plotkrd')})
+  
+  #'@title Plot Key Rate Convexity
+  #'@description Generic function to plot key rate convexity
+  #'@param object MortgageTermStructure object
+  #'@export plotkrc
+  setGeneric('plotkrc', function(object)
+  {standardGeneric('plotkrc')})
   
   
   # Note standard generic Cusip is defined in MBSDetails.R
@@ -132,8 +139,8 @@
   #'@importFrom stats ecdf
   #'@importFrom grDevices rgb
   #'@importFrom graphics axis grid hist lines mtext par plot barplot
-  #'@exportMethod PlotKeyRate
-  setMethod('PlotKeyRate', signature('MortgageTermStructure'),
+  #'@exportMethod plotkrd
+  setMethod('plotkrd', signature('MortgageTermStructure'),
             function(object){
               colors = rep(c('orange'),13)
               colors_transparent <- adjustcolor(colors, alpha.f = 0.6) 
@@ -148,6 +155,29 @@
                       xlab = 'Key Rate Tenor',
                       border = colors)
               })
+  
+  #'@title Plot Mortgage Key Rate Convexity
+  #'@description A method to plot mortgage key rate convexity
+  #'@param object MortgageTermStructure object
+  #'@importFrom stats ecdf
+  #'@importFrom grDevices rgb
+  #'@importFrom graphics axis grid hist lines mtext par plot barplot
+  #'@exportMethod plotkrc
+  setMethod('plotkrc', signature('MortgageTermStructure'),
+            function(object){
+              colors = rep(c('orange'),13)
+              colors_transparent <- adjustcolor(colors, alpha.f = 0.6) 
+              barplot(object@KeyRateConvexity, col = colors_transparent,
+                      main = paste(object@Issuer,
+                                   format(round(object@Coupon,2), nsmall =2), 
+                                   object@Term,'-year Key Rate Duration'),
+                      sub = paste('Effective Convexity =', 
+                                  format(round(sum(object@KeyRateConvexity),2), nsmall = 2)),
+                      names.arg = object@KeyRateTenor,
+                      ylab = 'Key Rate Convexity',
+                      xlab = 'Key Rate Tenor',
+                      border = colors)
+            })
   
   #'@title Cusip
   #'@description Get Cusip from object of type MortgageTermStructure

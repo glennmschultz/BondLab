@@ -8,67 +8,6 @@ require(BondLab)
 require(sqldf)
 require(RSQLite)
 
-## ---- echo = FALSE, fig.align='center', fig.height= 5, fig.width= 7------
- Valuation <- function(){
-    cbbPalette <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', 
-                    '#D55E00', '#CC79A7', '#000000','#E69F00')
-
-  SpotCurve <- spr_ns(c(4.26591, -3.54742, 2.46095, 7.49599), m = 1:30)
-  Maturity <- as.numeric(seq(1:30))
-  Coupon <- SpotCurve - .25
-
-  Data <- data.frame(Maturity = Maturity, 
-                     CouponCurve = Coupon, 
-                     SpotRateCurve = SpotCurve, 
-                     ZVSpread = SpotCurve +.20, 
-                     YTM = 3.25)
-  Data <- melt(Data, id = 'Maturity')
-  
-  framework <-
-  ggplot(Data, aes(x= Maturity, y = value/100, colour = variable))+
-  geom_line(aes(linetype = variable), size = 1)+
-  scale_linetype_manual(values = c('solid', 'dashed', 'dotted', 'twodash')) +
-  scale_y_continuous(breaks = seq(0, .04, .005), labels = percent_format())+
-  geom_vline(xintercept = 10)+
-  ylab('Yield') +
-  xlab('Maturity (years)') +
-  scale_colour_manual(values = cbbPalette) +
-  theme_minimal()+  
-  theme(axis.text = element_text(size = 15),
-        axis.title = element_text(size = 20),
-        panel.grid.major = element_line(size = .25, color = 'grey'),
-        legend.title=element_blank(),
-        legend.position=c(.80,.25), 
-        legend.background = element_rect(fill = 'transparent', 
-                                         colour = 'transparent')
-        )+
-  # Add annotations describing the valuation framework for mortgage and asset 
-  # backed securities
-  # 
-  # Add annotation labeling: the Nominal Spread to the curve
-    annotate('pointrange', x = 9, y = 2.95/100, ymin = 2.65/100, 
-             ymax = 3.25/100, colour = 'black', size = .5)+
-    geom_segment(aes(x= 1, y = 2.8/100, xend = 8.75, yend = 2.8/100), 
-               arrow = arrow(length = unit(0.2, 'cm')), colour = 'black') +
-    annotate('text', x=4.35, y = 2.9/100, label = c('Nominal Spread')) +
-  
-  # Add annotation labeling: the ZV spread
-    annotate('pointrange', x= 19, y = 3.78/100, ymin = 3.67/100, ymax = 3.89/100, 
-           colour = 'black', size = .5) +
-    geom_segment(aes(x= 12.5, y = 3.75/100, xend = 18.5, yend = 3.75/100), 
-               arrow = arrow(length = unit(0.2, 'cm')), colour = 'black') +
-    annotate('text', x=14.75, y = 3.85/100, label = c('ZV-Spread')) +
-
-  # Label Cheap Cash Flows region on the graph
-  annotate('text', x=4.35, y = 4.25/100, 
-           label = c('Cheap Cash Flows\n PV Spot > PV YTM'), size = 4) +
-  # Label Rich Cash Flows region on the graph
-  annotate('text', x=16, y = 4.25/100, 
-           label = c('Rich Cash Flows\n PV Spot < PV YTM'), size = 4)
-  plot(framework)
- }
-Valuation()
-
 ## ---- sqlquery, echo=TRUE------------------------------------------------
   MBSData <- dbConnect(SQLite(), dbname=paste0(system.file(package = "BondLab"), "/BondData/MBSData"))
   dbGetQuery(MBSData,
@@ -91,7 +30,7 @@ Valuation()
    rates.data <- Rates(trade.date = tradedate)
    # note use invisible(capture.output()) to supress messages
    invisible(capture.output(
-     TermStructure <- TermStructure(rates.data = rates.data, method = "ns")))
+     TermStructure <- TermStructure(rates.data = rates.data, method = "dl")))
 
 ## ---- bonddata, echo=TRUE------------------------------------------------
     bond.id <- MBS(cusip = cusip)

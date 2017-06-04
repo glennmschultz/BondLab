@@ -29,9 +29,6 @@ Suggests:
     knitr,
     devtools,
     testthat,
-    ggplot2,
-    reshape2,
-    scales,
     markdown,
     rmarkdown
 VignetteBuilder: knitr

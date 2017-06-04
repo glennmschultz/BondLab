@@ -126,21 +126,6 @@
       principal = principal,
       PrepaymentAssumption = prepayment)
     
-    #step5 calculate accrued interest for the period
-      #days.to.nextpmt = (BondBasisConversion(
-      #issue.date = issue.date,
-      #start.date = start.date,
-      #end.date = end.date,
-      #settlement.date = settlement.date,
-      #lastpmt.date = lastpmt.date,
-      #nextpmt.date = nextpmt.date,
-      #type = bondbasis)) * days.in.year.360
-      
-    
-    #days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
-    #days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
-    #accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(MBS.CF.Table[1,"Pass Through Interest"])
-    
     Factor = BondBasisConversion(
       issue.date = issue.date,
       start.date = start.date,
@@ -246,17 +231,7 @@
     Bond.CF.Table <- CashFlowBond(bond.id = bond.id,
                                   principal = principal,
                                   settlement.date = settlement.date)
-    
-    #step5 calculate accrued interest for the period
-    #days.to.nextpmt = (BondBasisConversion(
-    #  issue.date = issue.date,
-    #  start.date = start.date,
-    #  end.date = end.date,
-    #  settlement.date = settlement.date,
-    #  lastpmt.date = lastpmt.date,
-    #  nextpmt.date = nextpmt.date,
-    #  type = bondbasis)) * days.in.year
-    
+
     Factor = BondBasisConversion(
       issue.date = issue.date,
       start.date = start.date,
@@ -265,10 +240,7 @@
       lastpmt.date = lastpmt.date,
       nextpmt.date = nextpmt.date,
       type = bondbasis)
-    
-    #days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year
-    #days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
-    #accrued.interest = (days.of.accrued/days.between.pmtdate) * as.numeric(Bond.CF.Table[1,"Coupon Income"])
+
     accrued.interest = Factor * as.numeric(Bond.CF.Table[1, "Coupon Income"])
     
     Bond.CF.Table[,"Present Value Factor"] =

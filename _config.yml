@@ -1,0 +1,8 @@
+title: Bondlab
+description: "Bond Lab is a suite of software for the analysis of fixed income securities.  "
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-modernist
+
+gems:
+  - jekyll-mentions

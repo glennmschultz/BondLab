@@ -253,7 +253,6 @@
         start.date = start.date, 
         end.date = end.date, 
         settlement.date = settlement.date,
-        #settlement.date = lastpmt.date, 
         lastpmt.date = lastpmt.date, 
         nextpmt.date = pmtdate[pmt], 
         type = bondbasis)

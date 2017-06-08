@@ -83,21 +83,7 @@
                                       lastpmt.date = lastpmt.date,
                                       nextpmt.date = pmtdate,
                                       type = bondbasis)
-    
-    # step5 calculate accrued interest for the period this is also
-    # the remain time period used to adjust the period vector 
-    #days.to.nextpmt = (BondBasisConversion(
-    #  issue.date = issue.date,
-    #  start.date = start.date,
-    #  end.date = end.date,
-    #  settlement.date = settlement.date,
-    #  lastpmt.date = lastpmt.date,
-    #  nextpmt.date = nextpmt.date,
-    #  type = bondbasis)) * days.in.year.360
-    
-    #days.between.pmtdate = ((months.in.year/frequency)/months.in.year) * days.in.year.360
-    #days.of.accrued = (days.between.pmtdate - days.to.nextpmt)
-    #remain.period = days.of.accrued/days.in.year.360
+
     
     #Count the number of cashflows 
     #num.periods is the total number of cashflows to be received
@@ -221,27 +207,21 @@
     # Calculate the number of cashflows that will be paid from settlement date to
     # maturity date 
     # step1 calculate the years to maturity  
-    ncashflows = BondBasisConversion(
+    ncashflows = max(BondBasisConversion(
       issue.date = issue.date, 
       start.date = start.date, 
       end.date = end.date, 
-      settlement.date = settlement.date,
+      settlement.date = lastpmt.date,
       lastpmt.date = lastpmt.date, 
       nextpmt.date = end.date, 
-      type = bondbasis)
-    
-    #Step2 build a vector of dates for the payment schedule
-    # first get the pmtdate interval
-    pmtdate.interval = months.in.year/frequency
+      type = bondbasis) %/% (1/frequency),1)
     
     # then compute the payment dates based on payment date interval.  The logic
     # including the settlement.date == issue.date is to facilitate adding first
     # payment date to BondDetails object
-    pmtdate = as.Date(c(if(settlement.date == issue.date) {
-      seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))
-    } else {
-      seq(nextpmt.date, end.date, by = paste(pmtdate.interval, "months"))}), 
-    "%m-%d-%Y")
+    monthvector <- seq(1, ncashflows,1) * (months.in.year/frequency)
+    if(ncashflows == 1 & (settlement.date < end.date)) {pmtdate = end.date
+    } else pmtdate = c(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') %m+% months(monthvector))
     
     #step3 build the time period vector (n) for discounting the cashflows 
     #nextpmt date is vector of payment dates to n for each period

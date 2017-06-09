@@ -46,7 +46,7 @@
            Issuer = "character",
            Coupon = "numeric",
            Term = "numeric",
-           ZeroVolSpread = "numeric",   
+           #ZeroVolSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",
@@ -112,7 +112,7 @@
                   Issuer = "character",
                   Coupon = "numeric",
                   Term = "numeric",
-                  ZeroVolSpread = "numeric",   
+                  #ZeroVolSpread = "numeric",   
                   EffDuration = "numeric",
                   EffConvexity = "numeric",
                   KeyRateTenor = "numeric",
@@ -124,7 +124,7 @@
                          Issuer = Issuer,
                          Coupon = Coupon,
                          Term = Term,
-                         ZeroVolSpread = ZeroVolSpread,
+                         #ZeroVolSpread = ZeroVolSpread,
                          EffDuration = EffDuration,
                          EffConvexity = EffConvexity,
                          KeyRateTenor = KeyRateTenor,
@@ -207,12 +207,12 @@
   setMethod('Term', signature('MortgageTermStructure'),
             function(object){object@Term})
   
-  #'@title Zero Volatility Spread
-  #'@description Get ZeroVolSpread from object of type MortgageTermStructure
-  #'@param object MortgageTermStructure object
-  #'@exportMethod ZeroVolSpread
-  setMethod('ZeroVolSpread', signature('MortgageTermStructure'),
-            function(object){object@ZeroVolSpread})
+#  #'@title Zero Volatility Spread
+#  #'@description Get ZeroVolSpread from object of type MortgageTermStructure
+#  #'@param object MortgageTermStructure object
+#  #'@exportMethod ZeroVolSpread
+#  setMethod('ZeroVolSpread', signature('MortgageTermStructure'),
+#            function(object){object@ZeroVolSpread})
   
 #  #' Method to extract SpotSpread from S4 class
 #  #' @param object The name of the S4 object of type MortgageTermStructure
@@ -419,6 +419,7 @@
   
   # Initialze the spot rate array for key rate duration calculations
   # The spot rate must be passed from Term Strucuture object
+
   SpotRate <- as.matrix(SpotRate(TermStructure))
   
   # Populate Period, Time(t) and Spot Rate Curve of Key Rate Table using NS 
@@ -434,7 +435,7 @@
     Key.Rate.Table [x,"Time"] = x/months.in.year
 
   #spot rates for discounting
-  Key.Rate.Table[x,"Spot Curve"] = SpotRate[x,1]/yield.basis
+  Key.Rate.Table[x,"Spot Curve"] = as.numeric(SpotRate[x,1])/yield.basis
 
   #Align Cash Flows and populated the CashFlowArray
   #Step One: Make sure all cash flows are set to zero
@@ -726,7 +727,7 @@
       Issuer = Issuer(bond.id),
       Coupon = Coupon(bond.id),
       Term = AmortizationTerm(bond.id),      
-      ZeroVolSpread = spot.spread * 100,
+      #ZeroVolSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,"Key Rate Duration"]),
       EffConvexity = sum(KR.Duration[,"Key Rate Convexity"] * .5),
       KeyRateTenor = unname(KR.Duration[,"Key Rate"]),

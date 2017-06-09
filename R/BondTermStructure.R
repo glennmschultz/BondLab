@@ -26,7 +26,7 @@
   #' @slot Issuer A character the Issuer name
   #' @slot Coupon A numeric value the coupon
   #' @slot Maturity A character string the bond maturity
-  #' @slot ZeroVolSpread a numeric value the spread to the spot curve
+#  #' @slot ZeroVolSpread a numeric value the spread to the spot curve
   #' @slot EffDuration a numeric value the effective duration
   #' @slot EffConvexity a numeric value the effective convexity
   #' @slot KeyRateTenor a vector of values the key rate tenors
@@ -39,7 +39,7 @@
            Issuer = "character",
            Coupon = "numeric",
            Maturity = "character",
-           ZeroVolSpread = "numeric",   
+#           ZeroVolSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",
@@ -63,7 +63,7 @@
                      Issuer = "character",
                      Coupon = "numeric",
                      Maturity = "character",
-                     ZeroVolSpread = "numeric",   
+                     #ZeroVolSpread = "numeric",   
                      EffDuration = "numeric",
                      EffConvexity = "numeric",
                      KeyRateTenor = "numeric",
@@ -75,7 +75,7 @@
                              Issuer = Issuer,
                              Coupon = Coupon,
                              Maturity = Maturity,
-                             ZeroVolSpread = ZeroVolSpread,
+                             #ZeroVolSpread = ZeroVolSpread,
                              EffDuration = EffDuration,
                              EffConvexity = EffConvexity,
                              KeyRateTenor = KeyRateTenor,
@@ -112,12 +112,12 @@
   setMethod('Term', signature('BondTermStructure'),
             function(object){object@Maturity})
   
-  #'@title Zero Volatility Spread
-  #'@description Zero Volatility Spread from object BondTermStructure 
-  #'@param object object of type BondTermStructure
-  #'@exportMethod ZeroVolSpread
-  setMethod('ZeroVolSpread', signature('BondTermStructure'),
-            function(object){object@ZeroVolSpread})
+#  #'@title Zero Volatility Spread
+#  #'@description Zero Volatility Spread from object BondTermStructure 
+#  #'@param object object of type BondTermStructure
+#  #'@exportMethod ZeroVolSpread
+#  setMethod('ZeroVolSpread', signature('BondTermStructure'),
+#            function(object){object@ZeroVolSpread})
   
 #  #' A method to get SpotSpread from the class BondTermStructure
 #  #' 
@@ -476,7 +476,7 @@
       Issuer = Issuer(bond.id),
       Coupon = Coupon(bond.id),
       Maturity = Maturity(bond.id),
-      ZeroVolSpread = spot.spread * yield.basis,
+      #ZeroVolSpread = spot.spread * yield.basis,
       EffDuration = sum(KR.Duration[,2]),
       EffConvexity = sum(KR.Duration[,3] * .5),
       KeyRateTenor = unname(KR.Duration[,1]),

@@ -18,8 +18,6 @@ An S4 class representing the bond term structure exposure
 
 \item{\code{Maturity}}{A character string the bond maturity}
 
-\item{\code{ZeroVolSpread}}{a numeric value the spread to the spot curve}
-
 \item{\code{EffDuration}}{a numeric value the effective duration}
 
 \item{\code{EffConvexity}}{a numeric value the effective convexity}

@@ -36,11 +36,11 @@
     end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
     lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
     nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
-    coupon = bond.id@Coupon
-    frequency = bond.id@Frequency
-    delay = bond.id@PaymentDelay
+    coupon = Coupon(bond.id)
+    frequency = Frequency(bond.id)
+    delay = PaymentDelay(bond.id)
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
-    bondbasis = bond.id@BondBasis
+    bondbasis = BondBasis(bond.id)
     
     #Mortgage specific inputs
     note.rate = GWac(bond.id)

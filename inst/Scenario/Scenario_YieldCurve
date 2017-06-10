@@ -266,7 +266,7 @@
   ShiftType = "Twist",
   Shiftbps = c(rep("25",7),0, rep("-25",3)),
   Formula = function(rates.data, Shiftbps){
-  as.character(max(0.01, as.numeric(rates.data) + as.numeric(Shiftbps)/yield.basis))
+  as.character(pmax(0.01, as.numeric(rates.data) + as.numeric(Shiftbps)/yield.basis))
   })
 
 

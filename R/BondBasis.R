@@ -27,9 +27,9 @@
     #http://en.wikipedia.org/wiki/Leap_year
     return(((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0))}
   
-  #' @title Actual day count
+  #' @title Actual/Actual day count
   #' @family BondBasis
-  #' @description Calculates actual days using leap year
+  #' @description Calculates actual days using leap year IDSA method
   #' @param settlement.date The settlement date
   #' @param nextpmt.date The next scheduled interest payment date
   #' @export
@@ -55,6 +55,19 @@
       difftime(nextpmt.date, settlement.date, units = "days"))/365
     
   return(actual.factor)
+  }
+  
+  #'@title Act/Act day count 
+  #'@family BondBasis
+  #'@description Calculate Act/Act factor IMCA. used for UST corporates, etc
+  #'@param settlement.date the settlement date
+  #'@param lastpmt.date the last payment bond coupon and or principal payment date 
+  #'@param nextpmt.date the next bond coupon and or principal payment date
+  #'@export
+  ActFactor = function(settlement.date, lastpmt.date, nextpmt.date){
+    Actual.Factor = NULL
+    Actual.Factor = as.numeric(difftime(nextpmt.date, settlement.date,  units = 'days')/365)
+    return(Actual.Factor)
   }
   
   #----------------------------
@@ -117,6 +130,7 @@
                360*(y2-y1) + 30*(m2-m1-1))/360,
   "Actual360" = as.numeric(difftime(nextpmt.date, settlement.date, units = "days"))/360,
   "Actual365" = as.numeric(difftime(nextpmt.date, settlement.date, units = "days"))/365,
-  "ActualActual" = ActualFactor(settlement.date = settlement.date, nextpmt.date = nextpmt.date)
+  "ActualActual" = ActualFactor(settlement.date = settlement.date, nextpmt.date = nextpmt.date),
+  "ActAct" = ActFactor(settlement.date = settlement.date, nextpmt.date = nextpmt.date, lastpmt.date = lastpmt.date)
   ) # end of switch function
   } # end of function

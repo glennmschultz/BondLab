@@ -200,17 +200,7 @@
                              principal = numeric(), 
                              settlement.date = "character", 
                              price = "character"){
-  
-  issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
-  start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
-  end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
-  lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
-  nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
-  coupon = bond.id@Coupon
-  frequency = bond.id@Frequency       
-  settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
-  bondbasis = bond.id@BondBasis
-  
+
   # Test payment dates against settlement dates and roll forward if payment 
   # settlement date crossses over the payment date
   if(as.Date(settlement.date, format = '%m-%d-%Y') >=
@@ -224,6 +214,16 @@
                                  as.Date(LastPmtDate(bond.id), format = "%m-%d-%Y") %m+% 
                                    months(months.in.year/Frequency(bond.id)), 
                                  "%m-%d-%Y")))}
+    
+    issue.date = as.Date(bond.id@IssueDate, "%m-%d-%Y")
+    start.date = as.Date(bond.id@DatedDate, "%m-%d-%Y")
+    end.date = as.Date(bond.id@Maturity, "%m-%d-%Y")
+    lastpmt.date = as.Date(bond.id@LastPmtDate, "%m-%d-%Y")
+    nextpmt.date = as.Date(bond.id@NextPmtDate, "%m-%d-%Y")
+    coupon = bond.id@Coupon
+    frequency = bond.id@Frequency       
+    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+    bondbasis = bond.id@BondBasis
   
   # This function error traps bond input information
   ErrorTrap(bond.id = bond.id, 
@@ -240,13 +240,29 @@
                                 principal = principal,
                                 settlement.date = settlement.date)
   
-  accrued.interest = BondBasisConversion(
-      issue.date = issue.date, 
-      start.date = start.date, 
-      end.date = end.date,
-      settlement.date = settlement.date, 
-      lastpmt.date = lastpmt.date, 
-      nextpmt.date = nextpmt.date, type = bondbasis) * Bond.CF.Table[1,"Coupon Income"]
+  # Accrual factor one is based on settlement date equal to last payment date it
+  # give the accural factor for the coupon period
+  accrual.factor.one = BondBasisConversion(
+    issue.date = issue.date, 
+    start.date = start.date, 
+    end.date = end.date,
+    settlement.date = lastpmt.date, 
+    lastpmt.date = lastpmt.date, 
+    nextpmt.date = nextpmt.date, type = bondbasis)
+  
+  # Accrial factor two is based on settlement date equal to settlement date it
+  # gives the remaining accural factor for the coupon period
+  accrual.factor.two = BondBasisConversion(
+    issue.date = issue.date, 
+    start.date = start.date, 
+    end.date = end.date,
+    settlement.date = settlement.date, 
+    lastpmt.date = lastpmt.date, 
+    nextpmt.date = nextpmt.date, type = bondbasis)
+  
+  accrual.factor = (accrual.factor.one - accrual.factor.two)/accrual.factor.one
+  
+  accrued.interest = accrual.factor * Bond.CF.Table[1,"Coupon Income"]
 
   # Step6 solve for yield to maturity given the price of the bond.  
   # irr is an internal function used to solve for yield to maturity

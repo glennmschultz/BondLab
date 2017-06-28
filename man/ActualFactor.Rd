@@ -2,7 +2,7 @@
 % Please edit documentation in R/BondBasis.R
 \name{ActualFactor}
 \alias{ActualFactor}
-\title{Actual day count}
+\title{Actual/Actual day count}
 \usage{
 ActualFactor(settlement.date, nextpmt.date)
 }
@@ -12,10 +12,11 @@ ActualFactor(settlement.date, nextpmt.date)
 \item{nextpmt.date}{The next scheduled interest payment date}
 }
 \description{
-Calculates actual days using leap year
+Calculates actual days using leap year IDSA method
 }
 \seealso{
-Other BondBasis: \code{\link{BondBasisConversion}},
+Other BondBasis: \code{\link{ActFactor}},
+  \code{\link{BondBasisConversion}},
   \code{\link{is.leapyear}}
 }
 

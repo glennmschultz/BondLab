@@ -13,7 +13,8 @@ is.leapyear(year)
 Tests if year is a leap year and reurns TRUE or FALSE
 }
 \seealso{
-Other BondBasis: \code{\link{ActualFactor}},
+Other BondBasis: \code{\link{ActFactor}},
+  \code{\link{ActualFactor}},
   \code{\link{BondBasisConversion}}
 }
 

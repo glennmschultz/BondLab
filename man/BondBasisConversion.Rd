@@ -35,7 +35,7 @@ calculations. Currently supported bond day count conventions:
 }
 }
 \seealso{
-Other BondBasis: \code{\link{ActualFactor}},
-  \code{\link{is.leapyear}}
+Other BondBasis: \code{\link{ActFactor}},
+  \code{\link{ActualFactor}}, \code{\link{is.leapyear}}
 }
 

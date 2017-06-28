@@ -18,8 +18,6 @@ An S4 class MortgageTermStructure
 
 \item{\code{Term}}{A numeric value the amorization term}
 
-\item{\code{ZeroVolSpread}}{A numeric value the spread to the spot rate curve}
-
 \item{\code{EffDuration}}{A numeric value the effective duration}
 
 \item{\code{EffConvexity}}{A numeric value the effective convexity}

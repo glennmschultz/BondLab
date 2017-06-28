@@ -31,7 +31,7 @@
   #' @slot Issuer A character the Issuer name
   #' @slot Coupon A numeric value the coupon
   #' @slot Term A numeric value the amorization term
-  #' @slot ZeroVolSpread A numeric value the spread to the spot rate curve
+#  #' @slot ZeroVolSpread A numeric value the spread to the spot rate curve
   #' @slot EffDuration A numeric value the effective duration
   #' @slot EffConvexity A numeric value the effective convexity
   #' @slot KeyRateTenor A numeric value the Key Rate Tenor

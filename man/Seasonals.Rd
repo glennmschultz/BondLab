@@ -17,4 +17,8 @@ Seasonals(alpha = numeric(), month = numeric(), theta = numeric())
 The function creates seasonal factors for use in prepayment 
 modeling
 }
+\seealso{
+Other Prepayment and Default: \code{\link{BorrowerIncentive}},
+  \code{\link{BurnoutFunction}}, \code{\link{SDARamp}}
+}
 

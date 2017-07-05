@@ -20,4 +20,8 @@ The function is the logit used to model incentive.  The
 function may be used to fit incentive curve based on either wac spread to 
 the mortgage rate or annuity ratio.
 }
+\seealso{
+Other Prepayment and Default: \code{\link{BurnoutFunction}},
+  \code{\link{SDARamp}}, \code{\link{Seasonals}}
+}
 

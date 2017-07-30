@@ -4,12 +4,15 @@
 \alias{Forward.Rate}
 \title{A function to calculate forward rates}
 \usage{
-Forward.Rate(SpotRate.Curve = vector(), FwdRate.Tenor)
+Forward.Rate(term.structure, forward.tenor, type = "C")
 }
 \arguments{
-\item{SpotRate.Curve}{A vector of monthly spot rates}
+\item{term.structure}{an S4 object of the type TermStructure}
 
-\item{FwdRate.Tenor}{A numeric value the tenor of the forward rate in months}
+\item{forward.tenor}{the forward tenor stated in months.  For example the
+two-year forward rate is specified as 24.}
+
+\item{type}{the calculation type "P" periodic or "C" continuous}
 }
 \description{
 Calculate forward rate given a vector of spot rates

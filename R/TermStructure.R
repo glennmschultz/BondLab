@@ -29,31 +29,43 @@
   #' A function to calculate forward rates
   #' 
   #' Calculate forward rate given a vector of spot rates
-  #' @param SpotRate.Curve A vector of monthly spot rates
-  #' @param FwdRate.Tenor A numeric value the tenor of the forward rate in months
+  #' @param term.structure an S4 object of the type TermStructure
+  #' @param forward.tenor the forward tenor stated in months.  For example the
+  #' two-year forward rate is specified as 24.
+  #' @param type the calculation type "P" periodic or "C" continuous
   #' @importFrom stats predict
   #' @importFrom stats na.omit
   #' @importFrom splines interpSpline
-  #' @importFrom stats loess
-  #' @importFrom stats loess.control
   #' @export Forward.Rate
-  Forward.Rate <- function(
-    SpotRate.Curve = vector(), 
-    FwdRate.Tenor){
-    max.maturity <- length(SpotRate.Curve)
-    num.period <- seq(from = 1/months.in.year, 
-                      to = max.maturity/months.in.year, 
-                      by = 1/months.in.year)
-    FutureValueVector <- (1 + SpotRate.Curve) ^ num.period
-    Forward.Rate <- FutureValueVector[(FwdRate.Tenor + 1):max.maturity] / 
-      FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
-    Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
+  Forward.Rate <- function(term.structure,
+                           forward.tenor,
+                           type = "C"){
+    
+    disc.rate = DiscRate(term.structure)
+    spot.rate = SpotRate(term.structure)/rate.basis
+    num.period = TimePeriod(term.structure)
+    FutureValueVector <- (1 + spot.rate) ^ num.period
+    max.maturity <- length(spot.rate)
+    
+    forward.rate <- 
+    switch(type,
+           C = -((log(disc.rate[(forward.tenor + 1) : length(disc.rate)]) -
+                      log(disc.rate[1:(length(disc.rate) - forward.tenor)])) / 
+                 (forward.tenor/months.in.year)),
+           P = (FutureValueVector[(forward.tenor + 1):length(spot.rate)] / 
+                  FutureValueVector[1 : (length(spot.rate) - (forward.tenor))]) ^ 
+             (1/(forward.tenor/months.in.year))-1)
 
-    Forward.Rate <- predict(
+    forward.rate <- predict(
       splines::interpSpline(
-        seq(1:length(Forward.Rate)), Forward.Rate, bSpline = TRUE, na.action = na.omit)
-      ,seq(1:length(Forward.Rate))
-    )$y}
+        seq(1:length(forward.rate)), 
+        forward.rate, 
+        bSpline = TRUE, 
+        na.action = na.omit)
+      ,seq(1:length(forward.rate)))$y
+    
+    return(forward.rate)
+    }
   
   #' An S4 class the term structure data needed to price bonds
   #' 
@@ -556,10 +568,31 @@
                           as.Date(rates.data[1,1]),
                           units = "days")/365
   
-  disc.curve <- (1+(spot.rate.curve/yield.basis))^(as.numeric(-time.period))
+  disc.curve <- exp((spot.rate.curve/rate.basis) * -as.numeric(time.period))
+  
+  # encapsulate function for forward rate.  Forward.Rate function call the 
+  # object TermStructure.  forward.tenor is specified in months.
+  forward.rate <- function(time.period = time.period,
+                           disc.rate = disc.curve,
+                           forward.tenor){
+    forward.rate = -((log(disc.rate[(forward.tenor + 1) : length(disc.rate)]) -
+                       log(disc.rate[1:(length(disc.rate) - forward.tenor)])) / 
+      (forward.tenor/months.in.year))
+    
+    forward.rate <- predict(
+      splines::interpSpline(
+        seq(1:length(forward.rate)), 
+        forward.rate, 
+        bSpline = TRUE, 
+        na.action = na.omit)
+      ,seq(1:length(forward.rate)))$y
+    
+    forward.rate = forward.rate * rate.basis
+    return(forward.rate)
+  }
 
-  Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:600]
-  Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:600]
+  Two.Year.Fwd <- forward.rate(forward.tenor = 24)[1:600]
+  Ten.Year.Fwd <- forward.rate(forward.tenor = 120)[1:600]
 
   new("TermStructure",
       TradeDate = as.character(rates.data[1,1]),

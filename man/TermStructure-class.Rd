@@ -17,9 +17,14 @@ mm/dd/YYYY}
 
 \item{\code{Date}}{A numeric value the date of the next cash flow}
 
+\item{\code{TimePeriod}}{a numeric value the time period between payments made
+to the investor}
+
 \item{\code{SpotRate}}{A numeric value the one-month spot rate}
 
 \item{\code{ForwardRate}}{A numeric value the one-month forward rate}
+
+\item{\code{DiscRate}}{A numeric value the discount rate curve}
 
 \item{\code{TwoYearFwd}}{A numeric vlaue the two-year forward rate}
 

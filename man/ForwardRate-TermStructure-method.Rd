@@ -3,7 +3,7 @@
 \docType{methods}
 \name{ForwardRate,TermStructure-method}
 \alias{ForwardRate,TermStructure-method}
-\title{Method to extract SpotRate from the class TermStructure}
+\title{Method to extract ForwardRate from the class TermStructure}
 \usage{
 \S4method{ForwardRate}{TermStructure}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the name of the object of type TermStructure}
 }
 \description{
-Method to extract SpotRate from the class TermStructure
+Method to extract ForwardRate from the class TermStructure
 }
 

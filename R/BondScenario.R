@@ -290,8 +290,10 @@
       Period(HorizonTermStructure) <- Period(TermStructure)
       ForwardDate(HorizonTermStructure) <- as.character(
         as.Date(ForwardDate(TermStructure)) %m+% months(horizon.months))
+      TimePeriod(HorizonTermStructure) <- TimePeriod(TermStructure)
       ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
       SpotRate(HorizonTermStructure) <- SpotRate(TermStructure)
+      DiscRate(HorizonTermStructure) <- DiscRate(TermStructure)
       TwoYearForward(HorizonTermStructure) <- TwoYearForward(TermStructure)
       TenYearForward(HorizonTermStructure) <- TenYearForward(TermStructure)
     } else {

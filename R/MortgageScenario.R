@@ -426,16 +426,20 @@
           as.Date(rates.data[1,1]) %m+% months(horizon.months)),
         Period = numeric(),
         Date = "character",
+        TimePeriod = numeric(),
         SpotRate = numeric(),
         ForwardRate = numeric(),
+        DiscRate = numeric(),
         TwoYearFwd = numeric(),
         TenYearFwd = numeric())
       
       Period(HorizonTermStructure) <- Period(TermStructure)
       ForwardDate(HorizonTermStructure) <- as.character(
         as.Date(ForwardDate(TermStructure)) %m+% months(horizon.months))
-      ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
+      TimePeriod(HorizonTermStructure) <- TimePeriod(TermStructure)
       SpotRate(HorizonTermStructure) <- SpotRate(TermStructure)
+      ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
+      DiscRate(HorizonTermStructure) <- DiscRate(TermStructure)
       TwoYearForward(HorizonTermStructure) <- TwoYearForward(TermStructure)
       TenYearForward(HorizonTermStructure) <- TenYearForward(TermStructure)
     } else {

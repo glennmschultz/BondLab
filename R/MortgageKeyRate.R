@@ -599,7 +599,9 @@
                            TradeDate <- TradeDate(TermStructure),
                            Period <- Period(TermStructure),
                            Date <- ForwardDate(TermStructure),
+                           TimePeriod <- TimePeriod(TermStructure),
                            SpotRate = numeric(),
+                           DiscRate = numeric(),
                            ForwardRate = numeric(),
                            TwoYearFwd = numeric(),
                            TenYearFwd = numeric())
@@ -608,7 +610,9 @@
                            TradeDate <- TradeDate(TermStructure),
                            Period <- Period(TermStructure),
                            Date <- ForwardDate(TermStructure),
+                           TimePeriod <- TimePeriod(TermStructure),
                            SpotRate = numeric(),
+                           DiscRate = numeric(),
                            ForwardRate = numeric(),
                            TwoYearFwd = numeric(),
                            TenYearFwd = numeric()) 

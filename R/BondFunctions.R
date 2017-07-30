@@ -133,36 +133,6 @@
   }
 
 
-  #' A function to calculate forward rates
-  #' 
-  #' Calculate forward rate given a vector of spot rates
-  #' @param SpotRate.Curve A vector of monthly spot rates
-  #' @param FwdRate.Tenor A numeric value the tenor of the forward rate in months
-  #' @importFrom stats predict
-  #' @importFrom stats na.omit
-  #' @importFrom splines interpSpline
-  #' @importFrom stats loess
-  #' @importFrom stats loess.control
-  #' @export Forward.Rate
-  Forward.Rate <- function(
-    SpotRate.Curve = vector(), 
-    FwdRate.Tenor){
-    max.maturity <- length(SpotRate.Curve)
-    num.period <- seq(from = 1/months.in.year, 
-                      to = max.maturity/months.in.year, 
-                      by = 1/months.in.year)
-    FutureValueVector <- (1 + SpotRate.Curve) ^ num.period
-    Forward.Rate <- FutureValueVector[(FwdRate.Tenor + 1):max.maturity] / 
-                    FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
-    Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
-    #Forward.Rate <- predict(loess(Forward.Rate ~ seq(1:length(Forward.Rate)), span = .02,
-    #          control = loess.control(surface = 'direct')))
-    
-    Forward.Rate <- predict(
-      splines::interpSpline(
-        seq(1:length(Forward.Rate)), Forward.Rate, bSpline = TRUE, na.action = na.omit)
-      ,seq(1:length(Forward.Rate))
-    )$y}
   
   #' A function to compute effective duration and convexity
   #' 

@@ -25,14 +25,47 @@
   #' @include MortgageCashFlow.R
   NULL
   
+  
+  #' A function to calculate forward rates
+  #' 
+  #' Calculate forward rate given a vector of spot rates
+  #' @param SpotRate.Curve A vector of monthly spot rates
+  #' @param FwdRate.Tenor A numeric value the tenor of the forward rate in months
+  #' @importFrom stats predict
+  #' @importFrom stats na.omit
+  #' @importFrom splines interpSpline
+  #' @importFrom stats loess
+  #' @importFrom stats loess.control
+  #' @export Forward.Rate
+  Forward.Rate <- function(
+    SpotRate.Curve = vector(), 
+    FwdRate.Tenor){
+    max.maturity <- length(SpotRate.Curve)
+    num.period <- seq(from = 1/months.in.year, 
+                      to = max.maturity/months.in.year, 
+                      by = 1/months.in.year)
+    FutureValueVector <- (1 + SpotRate.Curve) ^ num.period
+    Forward.Rate <- FutureValueVector[(FwdRate.Tenor + 1):max.maturity] / 
+      FutureValueVector[1 : (max.maturity - (FwdRate.Tenor + 0))]
+    Forward.Rate <- (Forward.Rate ^ (1/(FwdRate.Tenor/months.in.year)))-1
+
+    Forward.Rate <- predict(
+      splines::interpSpline(
+        seq(1:length(Forward.Rate)), Forward.Rate, bSpline = TRUE, na.action = na.omit)
+      ,seq(1:length(Forward.Rate))
+    )$y}
+  
   #' An S4 class the term structure data needed to price bonds
   #' 
   #' @slot TradeDate A character string the trade date in the format
   #' mm/dd/YYYY
   #' @slot Period A numeric value the period index of the next cash flow
   #' @slot Date A numeric value the date of the next cash flow
+  #' @slot TimePeriod a numeric value the time period between payments made
+  #' to the investor
   #' @slot SpotRate A numeric value the one-month spot rate
   #' @slot ForwardRate A numeric value the one-month forward rate
+  #' @slot DiscRate A numeric value the discount rate curve
   #' @slot TwoYearFwd A numeric vlaue the two-year forward rate
   #' @slot TenYearFwd A numeric value the ten-year forward rate
   #' @exportClass TermStructure
@@ -41,8 +74,10 @@
              TradeDate = "character",
              Period = "numeric",
              Date = "character",
+             TimePeriod = 'numeric',
              SpotRate = "numeric",
              ForwardRate = "numeric",
+             DiscRate = "numeric",
              TwoYearFwd = "numeric",
              TenYearFwd = "numeric"))
 
@@ -61,6 +96,7 @@
     {standardGeneric("TradeDate<-")})
   
   # Note: Period standard generic is found in MortgageCashFlow.R
+  # Note: TimePeriod standard generic is found in MortgageCashFlow.R
   
   #' a generic function to replace the slot Period
   #' @param object an S4 class object
@@ -108,6 +144,19 @@
   setGeneric("ForwardRate<-", function(object, value)
   {standardGeneric("ForwardRate<-")})
   
+  #' A generic function to access the slot DiscRate
+  #' @param object an S4 class object
+  #' @export DiscRate
+  setGeneric("DiscRate", function(object)
+    {standardGeneric("DiscRate")})
+  
+  #' A generic function to replace the slot DiscRate
+  #' @param object an S4 class object
+  #' @param value the value of the replacement
+  #' @export DiscRate<-
+  setGeneric("DiscRate<-", function(object, value)
+    {standardGeneric("DiscRate<-")})
+  
   #' A generic function to access the slot TwoYearForward in class TermStructure
   #' @param object an S4 class object
   #' @export TwoYearForward
@@ -142,8 +191,10 @@
                    TradeDate = "character",
                    Period = "numeric",
                    Date = "character",
+                   TimePeriod = 'numeric',
                    SpotRate = "numeric",
                    ForwardRate = "numeric",
+                   DiscRate = "numeric",
                    TwoYearFwd = "numeric",
                    TenYearFwd = "numeric",
                    ...)
@@ -152,12 +203,13 @@
                            TradeDate = TradeDate,
                            Period = Period,
                            Date = Date,
+                           TimePeriod = TimePeriod,
                            SpotRate = SpotRate,
                            ForwardRate = ForwardRate,
+                           DiscRate = DiscRate,
                            TwoYearFwd = TwoYearFwd,
                            TenYearFwd = TenYearFwd,
             ...)
-            
           })
   
   #' Method to extract TradeDate from the class TermStructure
@@ -207,6 +259,22 @@
               object@Date <- value
               return(object)
               })
+  
+  #' Method to get TimePeriod in the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @exportMethod TimePeriod
+  setMethod("TimePeriod", signature("TermStructure"),
+            function(object){object@TimePeriod})
+  
+  #' Method to replace TimePeriod in the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @param value the replacement value of the slot
+  #' @exportMethod TimePeriod<-
+  setReplaceMethod("TimePeriod", signature("TermStructure"),
+                   function(object,value){
+                     object@TimePeriod <- value
+                     return(object)
+                   })
 
   #' Method to extract SpotRate from the class TermStructure
   #' @param object the name of the object of type TermStructure
@@ -224,7 +292,7 @@
                      return(object)
                      })
   
-  #' Method to extract SpotRate from the class TermStructure
+  #' Method to extract ForwardRate from the class TermStructure
   #' @param object the name of the object of type TermStructure
   #' @exportMethod ForwardRate
   setMethod("ForwardRate", signature("TermStructure"),
@@ -239,6 +307,22 @@
                      object@ForwardRate <- value
                      return(object)
                      })
+  
+  #' Method to extract DiscRate from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @exportMethod DiscRate
+  setMethod("DiscRate", signature("TermStructure"),
+            function(object){object@DiscRate})
+  
+  #' Method to replace DiscRate from the class TermStructure
+  #' @param object the name of the object of type TermStructure
+  #' @param value the replacement value
+  #' @exportMethod DiscRate<-
+  setReplaceMethod("DiscRate", signature("TermStructure"),
+                   function(object, value){
+                     object@DiscRate <-value
+                     return(object)
+                   })
   
   #' Method to extract the TwoYearForward from the class TermStructure
   #' @param object the name of the object of the type TermStructure
@@ -440,9 +524,11 @@
   
   #Calculate the spot rate curve and determine the forward rates needed to 
   period <- seq(from = 1, to = 600, by = 1)
+  
   #Use the date from the cashflow file
   date <- seq(as.Date(rates.data[1,1]) %m+% months(1), 
               as.Date(data[[3]][j]), by="1 months")
+  
   spot.rate.curve <- if(method != "dl"){
     spotrates(method = method, 
               beta = Vector, 
@@ -452,6 +538,7 @@
                 beta = Vector, 
                 m = seq(from = 1/12, to = 600/12, by = 1/12), 
                 lambda = TSFit$lambda)}
+  
   forward.rate.curve <- if(method != "dl"){
     forwardrates(method = method, 
                  beta = Vector, 
@@ -462,7 +549,15 @@
                  m = seq(from = 1/12, to = 600/12, by = 1/12),
                  lambda = TSFit$lambda)
   }
+ 
+  time.period <- difftime(seq(as.Date(rates.data[1,1]) %m+% months(1), 
+                              by="1 months",
+                              length.out = length(spot.rate.curve)),
+                          as.Date(rates.data[1,1]),
+                          units = "days")/365
   
+  disc.curve <- (1+(spot.rate.curve/yield.basis))^(as.numeric(-time.period))
+
   Two.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 24)[1:600]
   Ten.Year.Fwd <- Forward.Rate(spot.rate.curve, FwdRate.Tenor = 120)[1:600]
 
@@ -470,8 +565,10 @@
       TradeDate = as.character(rates.data[1,1]),
       Period = as.numeric(period),
       Date = as.character(date),
+      TimePeriod = as.numeric(time.period),
       SpotRate = spot.rate.curve,
       ForwardRate = forward.rate.curve,
+      DiscRate = disc.curve,
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
   )} 

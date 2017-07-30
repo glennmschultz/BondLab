@@ -7,7 +7,7 @@
 PmtDate(object)
 }
 \arguments{
-\item{object}{an S4 class object of type MortgageCashFlow}
+\item{object}{an S4 class object}
 }
 \description{
 A standard generic function to access the slot PmtDate

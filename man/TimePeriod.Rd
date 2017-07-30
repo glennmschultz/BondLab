@@ -2,14 +2,14 @@
 % Please edit documentation in R/MortgageCashFlow.R
 \name{TimePeriod}
 \alias{TimePeriod}
-\title{A standard generic function to access the slot PmtDate}
+\title{A standard generic function to access the slot TimePeriod}
 \usage{
 TimePeriod(object)
 }
 \arguments{
-\item{object}{an S4 class object of type MortgageCashFlow}
+\item{object}{an S4 class object}
 }
 \description{
-A standard generic function to access the slot PmtDate
+A standard generic function to access the slot TimePeriod
 }
 

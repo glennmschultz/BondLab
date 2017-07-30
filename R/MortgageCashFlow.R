@@ -232,16 +232,23 @@
     {standardGeneric("Period")})
   
   #' A standard generic function to access the slot PmtDate
-  #' @param object an S4 class object of type MortgageCashFlow 
+  #' @param object an S4 class object 
   #' @export
   setGeneric("PmtDate", function(object)
     {standardGeneric("PmtDate")})
   
-  #' A standard generic function to access the slot PmtDate
-  #' @param object an S4 class object of type MortgageCashFlow 
+  #' A standard generic function to access the slot TimePeriod
+  #' @param object an S4 class object
   #' @export
   setGeneric("TimePeriod", function(object)
   {standardGeneric("TimePeriod")})
+  
+  #' A standard generic function to replace the slot TimePeriod
+  #' @param object an S4 class object
+  #' @param value replacement value of the slot
+  #' @export TimePeriod<-
+  setGeneric("TimePeriod<-", function(object, value)
+    {standardGeneric("TimePeriod<-")})
   
   #' A standard generic function to access the slot BeginningBal
   #' @param object an S4 class object of type MortgageCashFlow

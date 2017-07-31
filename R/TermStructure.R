@@ -42,8 +42,8 @@
                            type = "C"){
     
     disc.rate = DiscRate(term.structure)
-    spot.rate = SpotRate(term.structure)/rate.basis
-    num.period = TimePeriod(term.structure)
+    spot.rate = SpotRate(term.structure)/yield.basis
+    num.period = TimePeriod(term.structure)[1:length(spot.rate)]
     FutureValueVector <- (1 + spot.rate) ^ num.period
     max.maturity <- length(spot.rate)
     
@@ -568,7 +568,7 @@
                           as.Date(rates.data[1,1]),
                           units = "days")/365
   
-  disc.curve <- exp((spot.rate.curve/rate.basis) * -as.numeric(time.period))
+  disc.curve <- round(exp((spot.rate.curve/yield.basis) * -as.numeric(time.period)),8)
   
   # encapsulate function for forward rate.  Forward.Rate function call the 
   # object TermStructure.  forward.tenor is specified in months.
@@ -587,7 +587,7 @@
         na.action = na.omit)
       ,seq(1:length(forward.rate)))$y
     
-    forward.rate = forward.rate * rate.basis
+    forward.rate = forward.rate * yield.basis
     return(forward.rate)
   }
 

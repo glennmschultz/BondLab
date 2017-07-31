@@ -605,6 +605,25 @@
                            ForwardRate = numeric(),
                            TwoYearFwd = numeric(),
                            TenYearFwd = numeric())
+
+    SpotRate(Key.Rate.TS.Dwn) <- c((unname(Key.Rate.Table[,"KRDwn"])-spot.spread) * 100, 
+                                   ((SpotRate(TermStructure)[361:492])))
+    
+    DiscRate(Key.Rate.TS.Dwn) <- exp(SpotRate(Key.Rate.TS.Dwn)/yield.basis * 
+                                       -TimePeriod(Key.Rate.TS.Dwn)[1:length(SpotRate(Key.Rate.TS.Dwn))])
+
+    TwoYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(term.structure = Key.Rate.TS.Dwn,
+                                                    forward.tenor = 24)* yield.basis
+    TenYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(term.structure = Key.Rate.TS.Dwn,
+                                                     forward.tenor = 120) * yield.basis
+    #return(Key.Rate.TS.Dwn)
+    #TwoYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
+    #  SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn), 
+    #  FwdRate.Tenor = 24) 
+    #TenYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
+    #  SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn),
+    #  FwdRate.Tenor = 120)
+    
     
     Key.Rate.TS.Up <- new("TermStructure",
                            TradeDate <- TradeDate(TermStructure),
@@ -615,27 +634,26 @@
                            DiscRate = numeric(),
                            ForwardRate = numeric(),
                            TwoYearFwd = numeric(),
-                           TenYearFwd = numeric()) 
-
-  SpotRate(Key.Rate.TS.Dwn) <- c((Key.Rate.Table[,"KRDwn"]-spot.spread) * 100, 
-  ((SpotRate(TermStructure)[361:492])))
+                           TenYearFwd = numeric())
+   
+    SpotRate(Key.Rate.TS.Up) <- c((unname(Key.Rate.Table[,"KRUp"])-spot.spread) * 100, 
+                                  ((SpotRate(TermStructure)[361:492])))
     
-  TwoYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
-    SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn), 
-    FwdRate.Tenor = 24) 
-    TenYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
-      SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn),
-      FwdRate.Tenor = 120)
+    DiscRate(Key.Rate.TS.Up) <- exp(SpotRate(Key.Rate.TS.Up)/yield.basis * 
+                                       -TimePeriod(Key.Rate.TS.Up)[1:length(SpotRate(Key.Rate.TS.Up))])
     
-  SpotRate(Key.Rate.TS.Up) <- c((Key.Rate.Table[,"KRUp"]-spot.spread) * 100, 
-  ((SpotRate(TermStructure)[361:492]))) 
-
-  TwoYearForward(Key.Rate.TS.Up) <- Forward.Rate(
-    SpotRate.Curve = SpotRate(Key.Rate.TS.Up),
-    FwdRate.Tenor = 24) 
-    TenYearForward(Key.Rate.TS.Up) <- Forward.Rate(
-      SpotRate.Curve = SpotRate(Key.Rate.TS.Up),
-      FwdRate.Tenor = 120)
+    TwoYearForward(Key.Rate.TS.Up) <- Forward.Rate(term.structure = Key.Rate.TS.Up,
+                                                    forward.tenor = 24) * yield.basis
+    TenYearForward(Key.Rate.TS.Up) <- Forward.Rate(term.structure = Key.Rate.TS.Up,
+                                                     forward.tenor = 120) * yield.basis
+   
+  #return(Key.Rate.TS.Up)
+  #TwoYearForward(Key.Rate.TS.Up) <- Forward.Rate(
+  #  SpotRate.Curve = SpotRate(Key.Rate.TS.Up),
+  #  FwdRate.Tenor = 24) 
+  #  TenYearForward(Key.Rate.TS.Up) <- Forward.Rate(
+  #    SpotRate.Curve = SpotRate(Key.Rate.TS.Up),
+  #    FwdRate.Tenor = 120)
     
   # Run the prepayment model to derive the SMM vector given each Key Rate shift
   # =======================================================================   
@@ -680,7 +698,7 @@
     ModelTune = ModelTune,
     Burnout = Burnout,
     Severity = 0)
-    
+
   # Mortgage Cashflows call here requires that price as 
   # a whole number passed
   MortgageCashFlows.Up <- MortgageCashFlow(

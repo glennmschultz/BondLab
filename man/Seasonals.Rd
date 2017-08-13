@@ -19,6 +19,7 @@ modeling
 }
 \seealso{
 Other Prepayment and Default: \code{\link{BorrowerIncentive}},
-  \code{\link{BurnoutFunction}}, \code{\link{SDARamp}}
+  \code{\link{BurnoutFunction}}, \code{\link{SDARamp}},
+  \code{\link{Turnover}}
 }
 

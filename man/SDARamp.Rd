@@ -32,6 +32,7 @@ backed securities.  The function is stylized as the standard default assumption
 }
 \seealso{
 Other Prepayment and Default: \code{\link{BorrowerIncentive}},
-  \code{\link{BurnoutFunction}}, \code{\link{Seasonals}}
+  \code{\link{BurnoutFunction}}, \code{\link{Seasonals}},
+  \code{\link{Turnover}}
 }
 

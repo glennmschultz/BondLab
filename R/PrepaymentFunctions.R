@@ -85,6 +85,18 @@
     return(popmatrix)
   }
   
+  #' @title Housing Turnover
+  #' @description The function defines the housing turnover ramp (seasoning)
+  #' @family Prepayment and Default
+  #' @param alpha The seasoning curve aysmptote (default value is 1.0)
+  #' @param beta The seasoning curve intercept default value is 0.879
+  #' @param theta The point of maximum steepness of the seasoning curve
+  #' @param loan.age The age (WALA) of the mortgage loan or pool of mortgage loans
+  #' @export
+  Turnover <- function(alpha = 1, beta = 0.879, theta = 0.192, loan.age){
+    alpha - beta * exp(-theta * loan.age)
+  }
+  
   #'@title Standard default assumption ramp
   #'@description The function is the conditional default ramp for mortgage 
   #'backed securities.  The function is stylized as the standard default assumption

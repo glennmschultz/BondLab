@@ -86,13 +86,12 @@
   #' \item{'Actual365' }{}
   #' \item{'ActualActual' }
   #' }
-  #' @param issue.date A character value the issue date of the security 'mm-dd-YYY'.
-  #' @param start.date A character value the start date for interest payment
-  #'  (dated date) 'mm-dd-YYYY'.
-  #' @param end.date A character value the final payment date 'mm-dd-YYYY'.
-  #' @param settlement.date A character value the settlement date 'mm-dd-YYYY'
-  #' @param lastpmt.date  A character value the last payment date to the investor 'mm-dd-YYYY'
-  #' @param nextpmt.date A character value the next payment date to the investor 'mm-dd-YYYY'
+  #' @param issue.date A date object, the issue date of the security
+  #' @param start.date A date object, the start date for interest payment
+  #' @param end.date A date object, the final payment date
+  #' @param settlement.date A date object, the settlement date
+  #' @param lastpmt.date  A date object, the last payment date
+  #' @param nextpmt.date A date object, the next payment date to the investor
   #' @param type a character vector the interest basis day count type
   #' @importFrom lubridate year
   #' @importFrom lubridate month

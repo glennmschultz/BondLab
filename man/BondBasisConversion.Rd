@@ -8,18 +8,17 @@ BondBasisConversion(issue.date, start.date, end.date, settlement.date,
   lastpmt.date, nextpmt.date, type)
 }
 \arguments{
-\item{issue.date}{A character value the issue date of the security 'mm-dd-YYY'.}
+\item{issue.date}{A date object, the issue date of the security}
 
-\item{start.date}{A character value the start date for interest payment
-(dated date) 'mm-dd-YYYY'.}
+\item{start.date}{A date object, the start date for interest payment}
 
-\item{end.date}{A character value the final payment date 'mm-dd-YYYY'.}
+\item{end.date}{A date object, the final payment date}
 
-\item{settlement.date}{A character value the settlement date 'mm-dd-YYYY'}
+\item{settlement.date}{A date object, the settlement date}
 
-\item{lastpmt.date}{A character value the last payment date to the investor 'mm-dd-YYYY'}
+\item{lastpmt.date}{A date object, the last payment date}
 
-\item{nextpmt.date}{A character value the next payment date to the investor 'mm-dd-YYYY'}
+\item{nextpmt.date}{A date object, the next payment date to the investor}
 
 \item{type}{a character vector the interest basis day count type}
 }

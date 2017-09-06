@@ -290,6 +290,7 @@
   #' @param seasoning.period A numeric value the length of the 
   #' seasoning ramp
   #' @param CPR A numeric value the CPR speed
+  #' @importFrom stats loess
   #' @export
   MortgageScenario  <- function(bond.id = "character",
                           settlement.date = "character",

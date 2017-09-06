@@ -20,6 +20,7 @@ Imports:
     methods,
     optimx,
     RCurl,
+    bitops,
     httr,
     splines,
     stats,

@@ -732,7 +732,7 @@
     ) 
     
     KR.Duration[w-1,3] <- EffectiveMeasures(
-      rate.delta = Rate.Delta /100, 
+      rate.delta = Rate.Delta/100, 
       cashflow = CashFlowArray[,"cashflow_nc"],
       cashflow.dwn = CashFlowArray[,"cashflow_dwn"],
       cashflow.up = CashFlowArray[,"cashflow_up"],

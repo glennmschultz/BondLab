@@ -178,7 +178,7 @@
   #' @importFrom stats approx
   #' @export BondTermStructure
   BondTermStructure <- function(bond.id, 
-                                Rate.Delta = 0.50, 
+                                Rate.Delta = .50, 
                                 TermStructure, 
                                 principal, 
                                 price, 

@@ -39,7 +39,7 @@
            Issuer = "character",
            Coupon = "numeric",
            Maturity = "character",
-#           ZeroVolSpread = "numeric",   
+#          ZeroVolSpread = "numeric",   
            EffDuration = "numeric",
            EffConvexity = "numeric",
            KeyRateTenor = "numeric",

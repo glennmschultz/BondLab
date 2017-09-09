@@ -88,7 +88,7 @@
                                  settlement.date,
                                  frequency,
                                  bond.basis){
-    months.in.year = 12
+    #months.in.year = 12
     
     issue.date = as.Date(issue.date, format = '%m-%d-%Y')
     dated.date =  as.Date(dated.date, format = '%m-%d-%Y')

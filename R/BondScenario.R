@@ -180,6 +180,7 @@
   #' @param horizon.OAS A numeric value the horizon option adjusted spread
   #' (not currently implemented)
   #' @param horizon.price A numeric value the horizon price
+  #' @importFrom stats loess
   #' @export BondScenario
   BondScenario <- function(bond.id = "character",
                            settlement.date = "character",

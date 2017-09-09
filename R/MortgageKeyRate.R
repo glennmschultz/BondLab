@@ -315,12 +315,10 @@
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
     Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)
-    
+    print(c(Price.UP, Price.DWN, Price.NC))
     switch(type,
-
-  duration = (Price.UP - Price.DWN)/(2*Price.NC*rate.delta),
-  convexity =  (Price.UP + Price.DWN - (2*Price.NC))/
-    (2 * Price.NC * (rate.delta^2))
+           duration = (Price.UP - Price.DWN)/(2*Price.NC*rate.delta),
+           convexity =  (Price.UP + Price.DWN - (2*Price.NC))/(2 * Price.NC * (rate.delta^2))
   )}
   
   
@@ -362,7 +360,8 @@
                        "15", 
                        "20", 
                        "25", 
-                       "30")
+                       "30",
+                       "40")
   
   #Key Rate Calculation Starts Here
   #set the arrays for key rate duration calculation
@@ -398,7 +397,8 @@
           "20", 
           "25", 
           "30", 
-          "30")   
+          "40",
+          "50")   
   # Key Rates
   KRCount = length(KR)
   KRIndex <- array(data = NA, c(KRCount, 6), 
@@ -426,7 +426,7 @@
   # coefficients from Term Stucture and then populate and align the cashflow 
   # array for discounting and key rate computations
   # !!! SET LOOP TO LENGTH OF CASHFLOW ARRAY !!!
-  for(x in 1:360){
+  for(x in 1:600){
     #Period (n) in which the cashflow is received
     Key.Rate.Table[x,"Period"] = x
     
@@ -478,7 +478,7 @@
   # calculation
   # at a minimum the cash flow array should be 360 months
   
-  for(i in 1:360){
+  for(i in 1:600){
     Key.Rate.Table[i,"Disc Curve"] = 
       Key.Rate.Table[i,"Spot Curve"] + spot.spread
     }
@@ -576,9 +576,9 @@
   # on the curve.  It is possible to set the endpoints longer using row 12 of 
   # the KRIndex
     
-  if (KRIndex[w,2] == 30) {
-    (Key.Rate.Table[x,"KRDwn"] = KRIndex[12,"KRDwn"]) & 
-      (Key.Rate.Table[x,"KRUp"] = KRIndex[12,"KRUp"])}
+  #if (KRIndex[w,2] == 30) {
+  #  (Key.Rate.Table[x,"KRDwn"] = KRIndex[12,"KRDwn"]) & 
+  #    (Key.Rate.Table[x,"KRUp"] = KRIndex[12,"KRUp"])}
     
   # Derive Key Rate Up and Key Rate Down Cash Flows
   # For MBS Cashflows two term strucutre objects are created the 
@@ -720,7 +720,7 @@
   
  # Calculate Key Rate Duration 
     KR.Duration[w-1,2] <- -EffectiveMeasures(
-      rate.delta = Rate.Delta/100, 
+      rate.delta = Rate.Delta/yield.basis, 
       cashflow = CashFlowArray[,"cashflow_nc"],
       cashflow.dwn = CashFlowArray[,"cashflow_dwn"],
       cashflow.up = CashFlowArray[,"cashflow_up"],
@@ -732,7 +732,7 @@
     ) 
     
     KR.Duration[w-1,3] <- EffectiveMeasures(
-      rate.delta = Rate.Delta/100, 
+      rate.delta = Rate.Delta/yield.basis, 
       cashflow = CashFlowArray[,"cashflow_nc"],
       cashflow.dwn = CashFlowArray[,"cashflow_dwn"],
       cashflow.up = CashFlowArray[,"cashflow_up"],
@@ -751,7 +751,7 @@
       Term = AmortizationTerm(bond.id),      
       #ZeroVolSpread = spot.spread * 100,
       EffDuration = sum(KR.Duration[,"Key Rate Duration"]),
-      EffConvexity = sum(KR.Duration[,"Key Rate Convexity"] * .5),
+      EffConvexity = sum(unname(KR.Duration[,"Key Rate Convexity"]) * .5),
       KeyRateTenor = unname(KR.Duration[,"Key Rate"]),
       KeyRateDuration = unname(KR.Duration[,"Key Rate Duration"]),
       KeyRateConvexity = unname(KR.Duration[,"Key Rate Convexity"])

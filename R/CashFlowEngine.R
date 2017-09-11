@@ -206,15 +206,20 @@
     
     # Calculate the number of cashflows that will be paid from settlement date to
     # maturity date 
-    # step1 calculate the years to maturity  
-    ncashflows = max(BondBasisConversion(
-      issue.date = issue.date, 
-      start.date = start.date, 
-      end.date = end.date, 
-      settlement.date = lastpmt.date,
-      lastpmt.date = lastpmt.date, 
-      nextpmt.date = end.date, 
-      type = bondbasis) %/% (1/frequency),1)
+    # step1 calculate the years to maturity
+    ncashflows = (as.numeric(
+      difftime(end.date, nextpmt.date, units = 'days'))/days.in.month
+      ) %/% (months.in.year/frequency) + 1
+
+    
+    #ncashflows = max(BondBasisConversion(
+    #  issue.date = issue.date, 
+    #  start.date = start.date, 
+    #  end.date = end.date, 
+    #  settlement.date = lastpmt.date,
+    #  lastpmt.date = lastpmt.date, 
+    #  nextpmt.date = end.date, 
+    #  type = bondbasis) %/% (1/frequency),1)
     
     # then compute the payment dates based on payment date interval.  The logic
     # including the settlement.date == issue.date is to facilitate adding first
@@ -230,7 +235,7 @@
     for(pmt in seq_along(pmtdate))
       time.period[pmt] = BondBasisConversion(
         issue.date = issue.date, 
-        start.date = start.date, 
+        start.date = settlement.date, 
         end.date = end.date, 
         settlement.date = settlement.date,
         lastpmt.date = lastpmt.date, 
@@ -267,7 +272,11 @@
       Bond.CF.Table[i,"Coupon Income"] = 
         Bond.CF.Table[i,"Coupon"] * 
         BondBasisConversion(issue.date = issue.date,
-                            start.date = start.date,
+                            #this will need more logic for other than actual
+                            start.date = as.Date(ifelse(i == 1, lastpmt.date,
+                                                        as.Date(Bond.CF.Table[i-1, 'Date'], 
+                                                                origin = "1970-01-01")),
+                                                 origin = '1970-01-01'),
                             end.date = end.date,
                             settlement.date = as.Date(ifelse(i == 1, lastpmt.date,
                             as.Date(Bond.CF.Table[i-1, 'Date'], origin = "1970-01-01")),
@@ -280,7 +289,8 @@
                             origin = '1970-01-01'),
                             type = bondbasis) *
         Bond.CF.Table[i,"Principal Outstanding"]
-      if(Bond.CF.Table[i,"Date"] == end.date) {Bond.CF.Table[i,"Principal Paid"] = principal
+      if(as.Date(Bond.CF.Table[i,"Date"], origin = "1970-01-01") == end.date) {
+        Bond.CF.Table[i,"Principal Paid"] = principal
       } else {Bond.CF.Table[i,"Principal Paid"] = 0}
       Bond.CF.Table[i,"TotalCashFlow"] = 
         Bond.CF.Table[i,"Coupon Income"] + Bond.CF.Table[i,"Principal Paid"]

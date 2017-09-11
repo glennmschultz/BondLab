@@ -63,10 +63,27 @@
   #'@param settlement.date the settlement date
   #'@param lastpmt.date the last payment bond coupon and or principal payment date 
   #'@param nextpmt.date the next bond coupon and or principal payment date
+  #'@param ... option value used to compute time between payments
+  #'@param dated.date the dated date of the bond or alternatively the settlement date.
+  #'the default value is null.
   #'@export
-  ActFactor = function(settlement.date, lastpmt.date, nextpmt.date){
+  ActFactor = function(settlement.date, 
+                       lastpmt.date, 
+                       nextpmt.date,
+                       start.date = NULL){
     Actual.Factor = NULL
-    Actual.Factor = as.numeric(difftime(nextpmt.date, settlement.date,  units = 'days')/365)
+    d1 = NULL
+    d2= NULL
+    if(is.null(start.date)==TRUE){
+    d1 = as.numeric(difftime(settlement.date, lastpmt.date, units = 'days'))
+    d2 = as.numeric(difftime(nextpmt.date, lastpmt.date, units = 'days'))
+    Actual.Factor = d1/d2
+    } else {
+    Actual.Factor = as.numeric(difftime(as.Date(nextpmt.date, format = '%m-%d-%Y'), 
+                          as.Date(start.date, format = '%m-%d-%Y'), units = 'days'))/days.in.year
+      
+    }
+    #Actual.Factor = as.numeric(difftime(nextpmt.date, settlement.date,  units = 'days')/365)
     return(Actual.Factor)
   }
   
@@ -128,8 +145,15 @@
                min(30, ifelse(d2 > 30, 30, d2)) + 
                360*(y2-y1) + 30*(m2-m1-1))/360,
   "Actual360" = as.numeric(difftime(nextpmt.date, settlement.date, units = "days"))/360,
-  "Actual365" = as.numeric(difftime(nextpmt.date, settlement.date, units = "days"))/365,
-  "ActualActual" = ActualFactor(settlement.date = settlement.date, nextpmt.date = nextpmt.date),
-  "ActAct" = ActFactor(settlement.date = settlement.date, nextpmt.date = nextpmt.date, lastpmt.date = lastpmt.date)
+  "Actual365" = ActFactor(settlement.date =settlement.date, 
+                          lastpmt.date = lastpmt.date,
+                          nextpmt.date = nextpmt.date,
+                          start.date = start.date),
+  "ActualActual" = ActualFactor(settlement.date = settlement.date, 
+                                nextpmt.date = nextpmt.date),
+  "ActAct" = ActFactor(settlement.date = settlement.date, 
+                       nextpmt.date = nextpmt.date, 
+                       lastpmt.date = lastpmt.date,
+                       start.date = start.date)
   ) # end of switch function
   } # end of function

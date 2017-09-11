@@ -242,25 +242,34 @@
   
   # Accrual factor one is based on settlement date equal to last payment date it
   # give the accural factor for the coupon period
-  accrual.factor.one = BondBasisConversion(
-    issue.date = issue.date, 
-    start.date = start.date, 
-    end.date = end.date,
-    settlement.date = lastpmt.date, 
-    lastpmt.date = lastpmt.date, 
-    nextpmt.date = nextpmt.date, type = bondbasis)
+  #accrual.factor.one = BondBasisConversion(
+  #  issue.date = issue.date, 
+  #  start.date = start.date, 
+  #  end.date = end.date,
+  #  settlement.date = lastpmt.date, 
+  #  lastpmt.date = lastpmt.date, 
+  #  nextpmt.date = nextpmt.date, type = bondbasis)
   
   # Accrial factor two is based on settlement date equal to settlement date it
   # gives the remaining accural factor for the coupon period
-  accrual.factor.two = BondBasisConversion(
+  #accrual.factor.two = BondBasisConversion(
+  #  issue.date = issue.date, 
+  #  start.date = start.date, 
+  #  end.date = end.date,
+  #  settlement.date = settlement.date, 
+  #  lastpmt.date = lastpmt.date, 
+  #  nextpmt.date = nextpmt.date, type = bondbasis)
+  
+  accrual.factor = BondBasisConversion(
     issue.date = issue.date, 
-    start.date = start.date, 
+    start.date = NULL, 
     end.date = end.date,
     settlement.date = settlement.date, 
     lastpmt.date = lastpmt.date, 
-    nextpmt.date = nextpmt.date, type = bondbasis)
+    nextpmt.date = nextpmt.date, 
+    type = bondbasis)
   
-  accrual.factor = (accrual.factor.one - accrual.factor.two)/accrual.factor.one
+  #accrual.factor = (accrual.factor.one - accrual.factor.two)/accrual.factor.one
   
   accrued.interest = accrual.factor * Bond.CF.Table[1,"Coupon Income"]
 

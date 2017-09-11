@@ -4,7 +4,7 @@
 \alias{ActFactor}
 \title{Act/Act day count}
 \usage{
-ActFactor(settlement.date, lastpmt.date, nextpmt.date)
+ActFactor(settlement.date, lastpmt.date, nextpmt.date, start.date = NULL)
 }
 \arguments{
 \item{settlement.date}{the settlement date}
@@ -12,6 +12,11 @@ ActFactor(settlement.date, lastpmt.date, nextpmt.date)
 \item{lastpmt.date}{the last payment bond coupon and or principal payment date}
 
 \item{nextpmt.date}{the next bond coupon and or principal payment date}
+
+\item{...}{option value used to compute time between payments}
+
+\item{dated.date}{the dated date of the bond or alternatively the settlement date.
+the default value is null.}
 }
 \description{
 Calculate Act/Act factor IMCA. used for UST corporates, etc

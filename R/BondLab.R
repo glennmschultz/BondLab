@@ -22,7 +22,7 @@
   utils::globalVariables(c("day", "month", "year"))
 
 
-  days.in.month <- 30.41
+  days.in.month <- 30
   days.in.year <- 365.00
   days.in.year.360 <- 360
   weeks.in.year <- 52.25

@@ -228,9 +228,16 @@
     if(ncashflows == 1 & (settlement.date < end.date)) {pmtdate = end.date
     } else pmtdate = c(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') %m+% months(monthvector))
     
+    # in leap years, notably UST, even though bond basis is actual/365 the maturity
+    # date reflect 366 days if the bond matures in Feb. leap year.  Thus, to ensure the 
+    # correct maturity date the last payment in the vector is checked against the maturity
+    # date.
+    numpayments = length(pmtdate)
+    monthvector[numpayments] == end.date
+
     #step3 build the time period vector (n) for discounting the cashflows 
     #nextpmt date is vector of payment dates to n for each period
-    numpayments = length(pmtdate)
+
     time.period <- numeric(numpayments)
     for(pmt in seq_along(pmtdate))
       time.period[pmt] = BondBasisConversion(

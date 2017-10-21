@@ -25,7 +25,8 @@ Imports:
     splines,
     stats,
     RSQLite,
-    sqldf
+    sqldf,
+    bizdays
 Suggests:
     knitr,
     devtools,

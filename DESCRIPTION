@@ -62,7 +62,7 @@ Collate:
     'ErrorTrap.R'
     'ExtractScenario.R'
     'GFeeTypes.R'
-    'GetSwapCurve.R'
+    'GetUSTCurve.R'
     'HomePriceSim.R'
     'HorizonBondData.R'
     'MortgageCashFlowArray.R'

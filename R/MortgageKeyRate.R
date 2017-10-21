@@ -316,7 +316,7 @@
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
     Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)
-    print(c(Price.UP, Price.DWN, Price.NC))
+    #print(c(Price.UP, Price.DWN, Price.NC))
     switch(type,
            duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
            convexity =  (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * (rate.delta^2))

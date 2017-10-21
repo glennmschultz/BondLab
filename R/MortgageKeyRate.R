@@ -310,15 +310,16 @@
                                 discount.rates, 
                                 discount.rates.up, 
                                 discount.rates.dwn, 
-                                t.period, 
+                                t.period,
+                                proceeds,
                                 type){
     Price.NC = sum((1/((1+discount.rates)^t.period)) * cashflow)
     Price.UP = sum((1/((1+discount.rates.up)^t.period)) * cashflow.up)
     Price.DWN = sum((1/((1+discount.rates.dwn)^t.period)) * cashflow.dwn)
     print(c(Price.UP, Price.DWN, Price.NC))
     switch(type,
-           duration = (Price.UP - Price.DWN)/(2*Price.NC*rate.delta),
-           convexity =  (Price.UP + Price.DWN - (2*Price.NC))/(2 * Price.NC * (rate.delta^2))
+           duration = (Price.UP - Price.DWN)/(2*proceeds*rate.delta),
+           convexity =  (Price.UP + Price.DWN - (2*proceeds))/(2 * proceeds * (rate.delta^2))
   )}
   
   
@@ -369,14 +370,12 @@
   #!! DIM TO LENGTH OF CASH FLOW ARRAY AND SET LAST KR TO LENGTH LINE 604 !!
   #
   Key.Rate.Table <- array(data = NA, 
-                          c(360,6), 
-                          dimnames = list(seq(c(1:360)), 
-                                          Index.Names))
+                          c(600,6), 
+                          dimnames = list(seq(c(1:600)), Index.Names))
   
   #key rate duration array holds the key rates and the key rate duration
-  KR.Duration <- array(data = NA, c(11,3), 
-                       dimnames = list(seq(c(1:11)), 
-                                       KR.Duration.Col))
+  KR.Duration <- array(data = NA, c(12,3), 
+                       dimnames = list(seq(c(1:12)), KR.Duration.Col))
   
   KR.Duration[,"Key Rate"] <- as.numeric(KR.Duration.Row)
   
@@ -410,8 +409,8 @@
   # This will be the first pass at the cash flows before shocking the curve
   
   # Dimension the cashflow array for key rate discounting
-  CashFlowArray <- array(data = NA, c(360,4), 
-                         dimnames = list(seq(1:360), 
+  CashFlowArray <- array(data = NA, c(600,4), 
+                         dimnames = list(seq(1:600), 
                                          c("period", 
                                            "cashflow_nc", 
                                            "cashflow_dwn", 
@@ -500,7 +499,7 @@
   # structure implementation other than Nelson Siegel the key rate index table
   # (KRIndex) is used to populate the key rate table (KRTable)
   for (j in 1:KRCount){                                   
-    for (i in 1:360){
+    for (i in 1:600){
       if (Key.Rate.Table[i,"Period"] == round(KRIndex[j,"Time"] * 12,0)) {
         KRIndex[j,"Spot Curve"] = Key.Rate.Table[i,"Spot Curve"]
         } else {KRIndex[j,"Spot Curve"] = KRIndex[j,"Spot Curve"]}
@@ -511,7 +510,7 @@
   # from the key rate table these will be the reference points for the 
   # appropriate key rate shifts
   for (j in 1:KRCount){                                   
-    for (i in 1:360){
+    for (i in 1:600){
       if (Key.Rate.Table[i,"Period"] == round(KRIndex[j,"Time"] * 12,0)) {
         KRIndex[j,"Disc Curve"] = Key.Rate.Table[i,"Disc Curve"]
         } else {KRIndex[j,"Spot Curve"] = KRIndex[j,"Spot Curve"]}
@@ -536,7 +535,7 @@
   # dynamic at some point in the future
   # y is column counter used the key rate down and key rate up values
   for (w in 2:(KRCount-1)){ 
-    for (x in 1:360){
+    for (x in 1:600){
   #This allocates the up and down Key.Rate.Table index.  
   #col 5 is KR down and 6 is KR up
   for(y in 5:6){
@@ -680,7 +679,7 @@
     PrepaymentAssumption = Prepayment.Dwn)
     
     # Assign CashFlows into the cash flow array.  This has to be done in a loop
-    for(cfd in 1:360){
+    for(cfd in 1:600){
       if(cfd > as.numeric(length(MortgageCashFlows.Dwn@TotalCashFlow))) {
         CashFlowArray[cfd,"cashflow_dwn"] = 0
       } else {
@@ -710,7 +709,7 @@
 
   # Assign CashFlows into the cash flow array. 
   # This has to be done in a loop
-  for(cfu in 1:360){
+  for(cfu in 1:600){
     if(cfu > as.numeric(length(MortgageCashFlows.Up@TotalCashFlow))) {
       CashFlowArray[cfu,"cashflow_up"] = 0
     } else {
@@ -728,6 +727,7 @@
       discount.rates.up = Key.Rate.Table[,"KRUp"],
       discount.rates.dwn = Key.Rate.Table[,"KRDwn"],
       t.period = Key.Rate.Table[,"Time"],
+      proceeds = proceeds,
       type = "duration"
     ) 
     
@@ -740,6 +740,7 @@
       discount.rates.up = Key.Rate.Table[,"KRUp"],
       discount.rates.dwn = Key.Rate.Table[,"KRDwn"],
       t.period = Key.Rate.Table[,"Time"],
+      proceeds = proceeds,
       type = "convexity"
     )
     

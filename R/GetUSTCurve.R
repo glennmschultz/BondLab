@@ -122,6 +122,7 @@
 
   #' @export GetUSTCurve
   GetUSTCurve <- function(CurveDate, FREDAPI, ..., save.curve = FALSE){
+    APIKey <- FREDAPI
     rates <- list("DGS1MO", 
                   "DGS3MO", 
                   "DGS6MO",

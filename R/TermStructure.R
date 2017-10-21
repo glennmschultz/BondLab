@@ -673,8 +673,6 @@
   #cs = need to figure this out
   )
   
-  
-  
   #Calculate the spot rate curve and determine the forward rates needed to 
   #period <- seq(from = 1, to = 600, by = 1)
   

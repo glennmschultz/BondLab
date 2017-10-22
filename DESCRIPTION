@@ -26,7 +26,8 @@ Imports:
     stats,
     RSQLite,
     sqldf,
-    bizdays
+    bizdays,
+    XML
 Suggests:
     knitr,
     devtools,

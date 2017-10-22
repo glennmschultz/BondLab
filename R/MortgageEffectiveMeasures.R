@@ -131,11 +131,9 @@
   
   # Compute Forward Rates for the prepayment model
   TwoYearForward(TermStructureUp) <- Forward.Rate(
-    SpotRate.Curve = SpotRate(TermStructureUp),
-    FwdRate.Tenor = 24)
+    term.structure = TermStructureUp, forward.tenor = 24, type = "C")
   TenYearForward(TermStructureUp) <- Forward.Rate(
-    SpotRate.Curve = SpotRate(TermStructureUp),
-    FwdRate.Tenor = 120)
+    term.structure = TermStructureDwn, forward.tenor = 120, type = "C")
   
   # Model the prepayment up vector
   prepaymentup <- PrepaymentModel(
@@ -173,12 +171,8 @@
     ScenarioFormula(ScenarioDwn)(rates.data = ForwardRate(TermStructure),
                                  Shiftbps = Shiftbps(ScenarioDwn))
   # Compute Forward Rates
-  TwoYearForward(TermStructureDwn) <- Forward.Rate(
-    SpotRate.Curve = SpotRate(TermStructureDwn),
-    FwdRate.Tenor = 24)
-  TenYearForward(TermStructureDwn) <- Forward.Rate(
-    SpotRate.Curve = SpotRate(TermStructureDwn),
-    FwdRate.Tenor = 120)
+  TwoYearForward(TermStructureDwn) <- Forward.Rate(term.structure = TermStructureDwn, forward.tenor = 24, type = "C")
+  TenYearForward(TermStructureDwn) <- Forward.Rate(term.structure = TermStructureDwn, forward.tenor = 120, type = "C")
   
   # Prepayment Down Vector
   prepaymentdwn <- PrepaymentModel(

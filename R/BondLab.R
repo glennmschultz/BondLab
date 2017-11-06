@@ -24,6 +24,7 @@
 
   days.in.month <- 30
   days.in.year <- 365.00
+  days.in.leap.year <- 366.00
   days.in.year.360 <- 360
   weeks.in.year <- 52.25
   months.in.year <- 12

@@ -52,7 +52,7 @@
       as.numeric(difftime(nextpmt.date, new.year.date, units = 'days'))/366)
     
     if(test.leap == 2) actual.factor = as.numeric(
-      difftime(nextpmt.date, settlement.date, units = "days"))/365
+      difftime(nextpmt.date, settlement.date, units = "days"))/366
     
   return(actual.factor)
   }

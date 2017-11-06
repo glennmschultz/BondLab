@@ -105,7 +105,7 @@
     
     monthvector <- seq(1,numcashflow,1) * (months.in.year/frequency)
     pmt.date <- c(as.Date(dated.date) %m+% months(monthvector))
-    LastPmt <- if(settlement.date < pmt.date[2]){as.Date(dated.date)
+    LastPmt <- if(settlement.date < pmt.date[1]){as.Date(dated.date)
     } else {pmt.date[max(which(difftime(pmt.date, settlement.date) <= 0))]}
     NextPmt <- pmt.date[min(which(difftime(pmt.date, settlement.date) > 0))]
     FirstandLast <- c(LastPmt, NextPmt)

@@ -203,6 +203,14 @@
     
     Coupon <- CouponTypes(coupon = coupon)
     
+    leap_day <- function(pmt.date){
+      for(date in seq_along(pmt.date)){
+        if(leap_year(pmt.date)[date] == TRUE & 
+           month(pmt.date)[date] == 2 & day(pmt.date)[date] == 28){
+          pmt.date[date] = pmt.date[date] %m+% days(1)} else {next}
+      }
+      return(pmt.date)
+    }
     
     # Calculate the number of cashflows that will be paid from settlement date to
     # maturity date 
@@ -221,7 +229,7 @@
     
     monthvector <- seq(1, ncashflows,1) * (months.in.year/frequency)
     pmt.date = c(as.Date(DatedDate(bond.id), format = '%m-%d-%Y') %m+% months(monthvector))
-    #pmt.date = as.character(as.Date(pmt.date), format = '%m-%d-%Y')
+    pmt.date <- leap_day(pmt.date)
     
     #get the index number of the last payment date made to the investor
     pmtindex = if(any(pmt.date == as.Date(LastPmtDate(bond.id),format ='%m-%d-%Y')) == FALSE) {1

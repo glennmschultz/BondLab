@@ -88,7 +88,15 @@
                                  settlement.date,
                                  frequency,
                                  bond.basis){
-    #months.in.year = 12
+  
+    leap_day <- function(pmt.date){
+      for(date in seq_along(pmt.date)){
+        if(leap_year(pmt.date)[date] == TRUE & 
+           month(pmt.date)[date] == 2 & day(pmt.date)[date] == 28){
+          pmt.date[date] = pmt.date[date] %m+% days(1)} else {next}
+      }
+      return(pmt.date)
+    }
     
     issue.date = as.Date(issue.date, format = '%m-%d-%Y')
     dated.date =  as.Date(dated.date, format = '%m-%d-%Y')
@@ -109,6 +117,7 @@
     } else {pmt.date[max(which(difftime(pmt.date, settlement.date) <= 0))]}
     NextPmt <- pmt.date[min(which(difftime(pmt.date, settlement.date) > 0))]
     FirstandLast <- c(LastPmt, NextPmt)
+    FirstandLast <- leap_day(FirstandLast)
     return(FirstandLast)
   }
   

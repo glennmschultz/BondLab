@@ -229,6 +229,8 @@
     
     monthvector <- seq(1, ncashflows,1) * (months.in.year/frequency)
     pmt.date = c(as.Date(DatedDate(bond.id), format = '%m-%d-%Y') %m+% months(monthvector))
+    
+    #insert logic here to include leap date if actual is used
     pmt.date <- leap_day(pmt.date)
     
     #get the index number of the last payment date made to the investor

@@ -56,7 +56,9 @@
     {seq(nextpayment.date, end.date, by = paste(paymentdate.interval, 
                                             "months"))}), "%m-%d-%Y") + payment.delay
   }
-  #' @title function to determine the last and next payment date of a standard bond
+  
+  #' @title function to determine the last and next payment date of a standard bond whose
+  #' interest accrual is based on actual days
   #' 
   #' @description The function returns a list the first position is the last payment date and the 
   #' second position is the next payment date
@@ -82,7 +84,7 @@
   #' }
   #' @importFrom lubridate %m+%
   #' @export 
-  LastandNextPmtDate <- function(issue.date, 
+  LastandNextPmtDate_Actual <- function(issue.date, 
                                  dated.date, 
                                  maturity.date, 
                                  settlement.date,
@@ -118,6 +120,63 @@
     NextPmt <- pmt.date[min(which(difftime(pmt.date, settlement.date) > 0))]
     FirstandLast <- c(LastPmt, NextPmt)
     FirstandLast <- leap_day(FirstandLast)
+    return(FirstandLast)
+  }
+  
+  #' @title function to determine the last and next payment date of a standard bond whose
+  #' interest accrual is based on 360 days
+  #' 
+  #' @description The function returns a list the first position is the last payment date and the 
+  #' second position is the next payment date
+  #' @family payment dates
+  #' @param issue.date A character, the issue date mm-dd-YYYY
+  #' @param dated.date A character, the dated date mm-dd-YYYY
+  #' @param maturity.date A character, the maturity date mm-dd-YYYY
+  #' @param settlement.date A character, the settlement date mm-dd-YYYY
+  #' @param frequency The frequency of interest payments made to the investor
+  #' \itemize{
+  #' \item Annual = 1
+  #' \item Semi Annual = 2
+  #' \item Quarterly = 4
+  #' \item Monthly = 12}
+  #' @param bond.basis The day count convention used to calculate interest (see BondBasisConversion)
+  #' Currently supported bond day count conventions:
+  #' \itemize{
+  #' \item{'30360' }{Agency MBS}
+  #' \item{'30E360' }{European 30360}
+  #' \item{'Actual360' }{used in money market}
+  #' \item{'Actual365' }{}
+  #' \item{'ActualActual' }
+  #' }
+  #' @importFrom lubridate %m+%
+  #' @export 
+  LastandNextPmtDate_360 <- function(issue.date, 
+                                        dated.date, 
+                                        maturity.date, 
+                                        settlement.date,
+                                        frequency,
+                                        bond.basis){
+    
+    issue.date = as.Date(issue.date, format = '%m-%d-%Y')
+    dated.date =  as.Date(dated.date, format = '%m-%d-%Y')
+    maturity.date = as.Date(maturity.date, format = '%m-%d-%Y')
+    settlement.date = as.Date(settlement.date, format = '%m-%d-%Y')
+    
+    numcashflow <- max(BondBasisConversion(issue.date = issue.date,
+                                           start.date = dated.date,
+                                           end.date = maturity.date,
+                                           settlement.date = settlement.date,
+                                           lastpmt.date = dated.date,
+                                           nextpmt.date = maturity.date,
+                                           type = bond.basis) %/% (1/frequency),1)
+    
+    monthvector <- seq(1,numcashflow,1) * (months.in.year/frequency)
+    pmt.date <- c(as.Date(dated.date) %m+% months(monthvector))
+    LastPmt <- if(settlement.date < pmt.date[1]){as.Date(dated.date)
+    } else {pmt.date[max(which(difftime(pmt.date, settlement.date) <= 0))]}
+    NextPmt <- pmt.date[min(which(difftime(pmt.date, settlement.date) > 0))]
+    FirstandLast <- c(LastPmt, NextPmt)
+
     return(FirstandLast)
   }
   

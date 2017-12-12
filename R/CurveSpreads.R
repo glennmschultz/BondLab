@@ -174,10 +174,13 @@
       SpotRate(TermStructure)[1:360],
       bSpline = TRUE)
     
+    #SpotRates <- predict(
+    #  InterpolateSpot,
+    #  difftime(as.Date(PmtDate(CashFlow)),
+    #            as.Date(TradeDate(TermStructure)))/30)
+    
     SpotRates <- predict(
-      InterpolateSpot,
-      difftime(as.Date(PmtDate(CashFlow)),
-                as.Date(TradeDate(TermStructure)))/30)
+      InterpolateSpot,TimePeriod(CashFlow))
 
       
       FindSpread <- function(

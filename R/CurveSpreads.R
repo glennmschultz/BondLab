@@ -168,9 +168,14 @@
       as.numeric(MarketCurve[1,RatesIndex + 1])
     
     # calculate ZVSpread (Spot Spread)
+    #InterpolateSpot <- splines::interpSpline(
+    #  difftime(as.Date(ForwardDate(TermStructure)[1:360]),
+    #           TradeDate(TermStructure))/30,
+    #  SpotRate(TermStructure)[1:360],
+    #  bSpline = TRUE)
+    
     InterpolateSpot <- splines::interpSpline(
-      difftime(as.Date(ForwardDate(TermStructure)[1:360]),
-               TradeDate(TermStructure))/30,
+      TimePeriod(TermStructure),
       SpotRate(TermStructure)[1:360],
       bSpline = TRUE)
     

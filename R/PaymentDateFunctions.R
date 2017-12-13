@@ -81,6 +81,7 @@
   #' \item{'ActualActual' }
   #' }
   #' @importFrom lubridate %m+%
+  #' @importFrom lubridate leap_year
   #' @export 
   LastandNextPmtDate <- function(issue.date, 
                                  dated.date, 

@@ -173,6 +173,7 @@
   #'@param bond.id a character or connection referring to an object of type BondDetails.
   #'@param principal the investor principal amount.
   #'@param settlement.date a character the settlement data mm-dd-YYYY.
+  #' @importFrom lubridate leap_year
   #'@export CashFlowBond
   CashFlowBond <- function(bond.id,
                            principal,

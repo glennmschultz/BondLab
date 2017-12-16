@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2017-06-04" />
+<meta name="date" content="2017-12-16" />
 
 <title>Bond Lab®</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2017-06-04</em></h4>
+<h4 class="date"><em>2017-12-16</em></h4>
 
 
 
@@ -415,17 +415,17 @@ slots to the class to extend the prepayment model.</code></pre>
 <div id="now-lets-get-some-analytics-out-of-the-class-mortgagescenario" class="section level2">
 <h2>Now, lets get some analytics out of the class MortgageScenario</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">HorizonReturn</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 2.0348229</code></pre>
+<pre><code>## [1] 9.3143005</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ZeroVolSpread</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.0480018</code></pre>
+<pre><code>## [1] -0.34426306</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToCurve</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.1189636</code></pre>
+<pre><code>## [1] -0.3846668</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToBenchmark</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.0948066</code></pre>
+<pre><code>## [1] -0.36370853</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">WAL</span>(PassThrough)</code></pre></div>
-<pre><code>## [1] 6.6473276</code></pre>
+<pre><code>## [1] 7.5748621</code></pre>
 </div>
 <div id="create-your-own-function" class="section level2">
 <h2>Create Your Own Function</h2>

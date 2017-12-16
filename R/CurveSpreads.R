@@ -175,7 +175,7 @@
     #  bSpline = TRUE)
     
     InterpolateSpot <- splines::interpSpline(
-      TimePeriod(TermStructure),
+      TimePeriod(TermStructure)[1:360],
       SpotRate(TermStructure)[1:360],
       bSpline = TRUE)
     

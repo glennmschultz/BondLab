@@ -4,6 +4,7 @@ require(termstrc)
 require(BondLab)
 require(sqldf)
 require(RSQLite)
+APIKEY <- "31df8645e635484db99e5d1133ce9245"
 
 ## ---- sqlquery, echo=TRUE------------------------------------------------
   MBSData <- dbConnect(SQLite(), dbname=paste0(system.file(package = "BondLab"), "/BondData/MBSData"))

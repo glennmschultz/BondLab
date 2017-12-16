@@ -485,7 +485,7 @@
       100, USTData[1,bonddata]/100, 
       floor(USTData[2,bonddata] * 364))} else {100}
     
-    if(USTData[2,bonddata] <= 1){PmtDates = c(as.Date(SettlementDate, format = '%m-%d-%Y'),
+    if(USTData[2,bonddata] <= 1){PmtDates = c(as.Date(IssueDate, format = '%m-%d-%Y'),
                                               as.Date(MaturityDate, format = '%m-%d-%Y'))} else {
                                                 PmtDates = LastandNextPmtDate(
                                                   issue.date = IssueDate,
@@ -517,7 +517,8 @@
       Moody = 'Aaa',
       SP = 'AAA',
       BondLab = 'AAA',
-      Frequency = 2,
+      Frequency = if(USTData[2,bonddata] <= 1) {floor(1/USTData[2,bonddata])
+        } else {2},
       BondBasis = 'Actual365',
       Callable = FALSE,
       Putable = FALSE,
@@ -547,104 +548,16 @@
   class(CurveData) <- 'couponbonds'
   
   
-  #----------------------------------------------------------------------------
-  # this is old code that is depricated.  The code was written prior to the 
-  # bondlab bond cash flow engines and was used to cashflow swaps for term structure
-  # the new code uses the bond lab bond cashflow engine is far more understandable
-  #set the column counter to make cashflows for termstrucutre
-#  ColCount <- as.numeric(ncol(rates.data))
-#  Mat.Years <- as.numeric(rates.data[2,2:ColCount])
-#  Coupon.Rate <- as.numeric(rates.data[1,2:ColCount])
-#  Issue.Date <- as.Date(rates.data[1,1])
-  
-  #initialize coupon bonds S3 class
-  #This can be upgraded when bondlab has portfolio function
-#  ISIN <- vector()
-#  MATURITYDATE <- vector()
-#  ISSUEDATE <- vector()
-#  COUPONRATE <- vector()
-#  PRICE <- vector()
-#  ACCRUED <- vector()
-#  CFISIN <- vector()
-#  CF <- vector()
-#  DATE <- vector()
-#  CASHFLOWS  <- list(CFISIN,CF,DATE)
-#  names(CASHFLOWS) <- c("ISIN","CF","DATE")
-#  TODAY <- vector()
-#  data <- list()
-#  TSInput <- list()
-  
-  ### Assign Values to List Items #########
-#  data = NULL
-#  data$ISIN <- colnames(rates.data[2:ColCount])
-#  data$ISSUEDATE <- rep(as.Date(rates.data[1,1]),ColCount - 1)
-  
-#  data$MATURITYDATE <-
-#    sapply(Mat.Years, function(Mat.Years = Mat.Years, 
-#                               Issue = Issue.Date) {
-#      Maturity = if(Mat.Years < 1) {
-#        Issue %m+% months(round(Mat.Years * months.in.year))
-#        } else {Issue %m+% years(as.numeric(Mat.Years))}
-#    return(as.character(Maturity))
-#    }) 
-  
-  
-#  data$COUPONRATE <- ifelse(Mat.Years < 1, 0, Coupon.Rate)                  
-  
-#  data$PRICE <- ifelse(Mat.Years < 1, 
-#                       (1 + (Coupon.Rate/100))^(Mat.Years * -1) * 100,
-#                       100)
-  
-#  data$ACCRUED <- rep(0, ColCount -1)
-  
-#  for(j in 1:(ColCount-1)){
-#    Vector.Length <- as.numeric(
-#      round(difftime(data[[3]][j],
-#                     data[[2]][j],
-#                     units = c("weeks"))/weeks.in.year,5))
-    
-#    Vector.Length <- ifelse(round(Vector.Length) < 1, 1 , 
-#                            round(Vector.Length * pmt.frequency))
-    
-#    data$CASHFLOWS$ISIN <- append(data$CASHFLOWS$ISIN, 
-#                                  rep(data[[1]][j],Vector.Length))
-    
-#    data$CASHFLOWS$CF <- append(data$CASHFLOWS$CF,
-#      as.numeric(c(rep((data[[4]][j]/100/pmt.frequency), Vector.Length-1) * 
-#                     min.principal, 
-#              (min.principal + (data$COUPONRATE[j]/100/pmt.frequency)* 
-#                 min.principal))))
-    
-#    by.months = ifelse(data[[4]][j] == 0, 
-#                       round(difftime(data[[3]][j], 
-#                                      rates.data[1,1])/days.in.month), 6) 
-  # this sets the month increment so that cashflows can handle discount bills
-  
-#  data$CASHFLOWS$DATE <- append(data$CASHFLOW$DATE,
-#  seq(as.Date(rates.data[1,1]) %m+% months(as.numeric(by.months)), 
-#  as.Date(data[[3]][j]), 
-#  by = as.character(paste(by.months, "months", sep = " "))))
-    
-#  } #The Loop Ends here and the list is made
-  
-#  data$TODAY <- as.Date(rates.data[1,1])
-#  TSInput[[as.character(rates.data[1,1])]] <- c(data)
-  
-  #set term strucuture input (TSInput) to class couponbonds
-#  class(TSInput) <- "couponbonds"
-  
-#  TS <- TSInput
-  # this is end of the old code
-  # ----------------------------------------------------------------------------
-  
   #Fit the term structure of interest rates
   
   if(method != "cs") {TSFit <- estim_nss(dataset = CurveData, 
                                         group = 'treasurybonds', 
-                                        matrange = "all", method = method)
+                                        matrange = "all", 
+                                        method = method)
   } else {TSFit <- estim_cs(bonddata = CurveData, 
                      group = 'treasurybonds', 
-                     matrange = "all", rse = TRUE)}
+                     matrange = "all", 
+                     rse = TRUE)}
   
   #Return the coefficient vector to be passed in to the spot and 
   #forward rate functions
@@ -749,4 +662,5 @@
       DiscRate = disc.curve,
       TwoYearFwd = Two.Year.Fwd,
       TenYearFwd = Ten.Year.Fwd
-  )} 
+  )
+  } 

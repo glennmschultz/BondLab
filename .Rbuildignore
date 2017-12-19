@@ -22,3 +22,6 @@
 ^params\.json$
 ^index\.html$
 ^sandbox$
+^\CODE_OF_CONDUCT.md$
+^\_config.yml$
+^\index.md$

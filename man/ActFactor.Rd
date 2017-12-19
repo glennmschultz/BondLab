@@ -4,7 +4,7 @@
 \alias{ActFactor}
 \title{Act/Act day count}
 \usage{
-ActFactor(settlement.date, lastpmt.date, nextpmt.date, start.date = NULL)
+ActFactor(settlement.date, lastpmt.date, nextpmt.date, ..., start.date = NULL)
 }
 \arguments{
 \item{settlement.date}{the settlement date}
@@ -15,7 +15,7 @@ ActFactor(settlement.date, lastpmt.date, nextpmt.date, start.date = NULL)
 
 \item{...}{option value used to compute time between payments}
 
-\item{dated.date}{the dated date of the bond or alternatively the settlement date.
+\item{start.date}{the dated date of the bond or alternatively the settlement date.
 the default value is null.}
 }
 \description{

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Glenn M. Schultz, CFA" />
 
-<meta name="date" content="2017-06-04" />
+<meta name="date" content="2017-12-19" />
 
 <title>Bond Lab®</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Bond Lab®</h1>
 <h4 class="author"><em>Glenn M. Schultz, CFA</em></h4>
-<h4 class="date"><em>2017-06-04</em></h4>
+<h4 class="date"><em>2017-12-19</em></h4>
 
 
 
@@ -228,13 +228,6 @@ and principal payment(s), and total cash flow.</code></pre>
 <pre><code>The BondTermStructure class represents the key rate duration and key rate
 convexity of bond.</code></pre>
 </div>
-<div id="bondanalytics" class="section level3">
-<h3>BondAnalytics</h3>
-<pre><code>The BondAnalytics class is a subclass of BondTermStructure, BondDetails,
-BondCashFlows, and TermStructure.  The BondAnalytics class represents the
-measures which define the value of and a bond and the risk measures of a
-bond.  It is an example of creating a superclass from existing classes.</code></pre>
-</div>
 <div id="bondreturn" class="section level3">
 <h3>BondReturn</h3>
 <pre><code>The BondReturn class represents the total return of a bond.  The BondReturn
@@ -299,20 +292,20 @@ batch calculate MortgageScenario.</code></pre>
 </div>
 <div id="mortgageoas" class="section level3">
 <h3>MortgageOAS</h3>
-<pre><code>The MortgageOAS class represents the results of a mortgage OAS analysis. It
-is currently defined by slots but plans are to make MortgageOAS a superclass
-containing EffectiveMeasures, MortgageTermStructure</code></pre>
+<pre><code>The MortgageOAS class represents the results of a mortgage OAS analysis.</code></pre>
 </div>
 </div>
 <div id="prepayment-model-classes" class="section level2">
 <h2>Prepayment Model Classes</h2>
-<p>The prepayment model classes support the prepayment model used in Bond Lab®.<br />
-The Bond Lab® prepayment model is non-parametric in the sense that the model makes no assumption as to the underlying distributional properties of mortgage prepayment rates.</p>
+<pre><code>The prepayment model classes support the prepayment model used in Bond Lab®.  
+The Bond Lab® prepayment model is non-parametric in the sense that the model 
+makes no assumption as to the underlying distributional properties of mortgage
+prepayment rates.</code></pre>
 <div id="prepaymentassumption" class="section level3">
 <h3>PrepaymentAssumption</h3>
 <pre><code>The PrepaymentAssumption class represents the output of the prepayment model,
 Prospectus Prepayment Curve (PPC) and CPR.  The class is used to pass 
-prepayment assumtptions to mortgage casflow.</code></pre>
+prepayment assumptions to mortgage casflow.</code></pre>
 </div>
 </div>
 <div id="prepaymentmodeltune" class="section level2">
@@ -418,22 +411,21 @@ slots to the class to extend the prepayment model.</code></pre>
       <span class="dt">method =</span> <span class="st">&quot;ns&quot;</span>,
       <span class="dt">prepayment =</span> <span class="st">&quot;MODEL&quot;</span>,
       <span class="dt">horizon.spot.spread =</span> <span class="kw">ZeroVolSpread</span>(CurveSpreads))))</code></pre></div>
-<p>MortgageScenario is a superclass of the following subclasses :TermStructure, PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn, ModelToCPR. CurveSpreads, and Scenario. MortgageScenario inherits the getters of each of the above classes.</p>
 </div>
 <div id="now-lets-get-some-analytics-out-of-the-class-mortgagescenario" class="section level2">
 <h2>Now, lets get some analytics out of the class MortgageScenario</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">HorizonReturn</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 2.034823</code></pre>
+<pre><code>## [1] 2.254273</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ZeroVolSpread</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.048002</code></pre>
+<pre><code>## [1] 0.9822384</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToCurve</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.118964</code></pre>
+<pre><code>## [1] 0.8806088</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">SpreadToBenchmark</span>(NoChangeScenario)</code></pre></div>
-<pre><code>## [1] 1.094807</code></pre>
+<pre><code>## [1] 0.9015671</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BenchMark</span>(NoChangeScenario)</code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">WAL</span>(PassThrough)</code></pre></div>
-<pre><code>## [1] 6.647328</code></pre>
+<pre><code>## [1] 7.574862</code></pre>
 </div>
 <div id="create-your-own-function" class="section level2">
 <h2>Create Your Own Function</h2>

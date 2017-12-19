@@ -64,12 +64,13 @@
   #'@param lastpmt.date the last payment bond coupon and or principal payment date 
   #'@param nextpmt.date the next bond coupon and or principal payment date
   #'@param ... option value used to compute time between payments
-  #'@param dated.date the dated date of the bond or alternatively the settlement date.
+  #'@param start.date the dated date of the bond or alternatively the settlement date.
   #'the default value is null.
   #'@export
   ActFactor = function(settlement.date, 
                        lastpmt.date, 
                        nextpmt.date,
+                       ...,
                        start.date = NULL){
     Actual.Factor = NULL
     d1 = NULL

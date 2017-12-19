@@ -480,6 +480,11 @@
                             calibration){
   # Create the curve simulation matrix - the curve parameters needed to
   # drive the DL model and simulate the yield curve
+  fwd.rate <- function(spot.rate, fwd.rate.tenor){
+    spot.rate = spot.rate/100
+    time.period <- seq(from = 1/12, to = length(spot.rate)/12, by = 1/12)
+    disc.curve <- exp(-spot.rate*time.period)
+  }
   
   simulation = SimCurve(rates.data = rates.data,
                          num.paths = num.paths,

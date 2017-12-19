@@ -13,13 +13,11 @@ vignette: >
 ---
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(cache=FALSE)
-require(ggplot2)
-require(reshape2)
-require(scales)
 require(termstrc)
 require(BondLab)
 require(sqldf)
 require(RSQLite)
+APIKEY <- "31df8645e635484db99e5d1133ce9245"
 ```
 # Preface
 Bond Lab® is an R package for the analysis of fixed income securities.  The 
@@ -161,12 +159,6 @@ putable, or have a sinking-fund schedule.
     The BondTermStructure class represents the key rate duration and key rate
     convexity of bond.
 
-### BondAnalytics
-    The BondAnalytics class is a subclass of BondTermStructure, BondDetails,
-    BondCashFlows, and TermStructure.  The BondAnalytics class represents the
-    measures which define the value of and a bond and the risk measures of a
-    bond.  It is an example of creating a superclass from existing classes.
-
 ### BondReturn
     The BondReturn class represents the total return of a bond.  The BondReturn
     class contains the coupon income, principal recieved, reinvestment income
@@ -222,20 +214,18 @@ a delay, based on the pool's underlying borrowers' prepayment rates.
     batch calculate MortgageScenario.
     
 ### MortgageOAS
-    The MortgageOAS class represents the results of a mortgage OAS analysis. It
-    is currently defined by slots but plans are to make MortgageOAS a superclass
-    containing EffectiveMeasures, MortgageTermStructure
+    The MortgageOAS class represents the results of a mortgage OAS analysis.
 
 ## Prepayment Model Classes
-The prepayment model classes support the prepayment model used in Bond Lab®.  
-The Bond Lab® prepayment model is non-parametric in the sense that the model 
-makes no assumption as to the underlying distributional properties of mortgage
-prepayment rates.
+    The prepayment model classes support the prepayment model used in Bond Lab®.  
+    The Bond Lab® prepayment model is non-parametric in the sense that the model 
+    makes no assumption as to the underlying distributional properties of mortgage
+    prepayment rates.
 
 ### PrepaymentAssumption
     The PrepaymentAssumption class represents the output of the prepayment model,
     Prospectus Prepayment Curve (PPC) and CPR.  The class is used to pass 
-    prepayment assumtptions to mortgage casflow.
+    prepayment assumptions to mortgage casflow.
     
 ## PrepaymentModelTune
     The PrepaymentModelTune class represents the tuning parameters of the 
@@ -350,11 +340,6 @@ PassThrough <-
       prepayment = "MODEL",
       horizon.spot.spread = ZeroVolSpread(CurveSpreads))))
 ```
-
-MortgageScenario is a superclass of the following subclasses :TermStructure, 
-PrepaymentAssumption, MortgageCashFlow, MortgageTermStructure, MortgageReturn,
-ModelToCPR. CurveSpreads, and Scenario.  MortgageScenario inherits the 
-getters of each of the above classes.
 
 ## Now, lets get some analytics out of the class MortgageScenario
 ```{r, return, echo=TRUE}

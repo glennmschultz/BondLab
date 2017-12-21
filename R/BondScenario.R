@@ -368,18 +368,24 @@
                                    NumberofCashFlow){
       # calculate discount rates
       InterpolateSpot <- splines::interpSpline(
-        difftime(as.Date(ForwardDate(HorizonTermStructure)[1:360]),
-                 TradeDate(HorizonTermStructure))/30,
+        TimePeriod(HorizonTermStructure)[1:360],
         SpotRate(HorizonTermStructure)[1:360],
-        bSpline = TRUE)
+        bSpline = TRUE
+      )
+      #InterpolateSpot <- splines::interpSpline(
+      #  difftime(as.Date(ForwardDate(HorizonTermStructure)[1:360]),
+      #           TradeDate(HorizonTermStructure))/30,
+      #  SpotRate(HorizonTermStructure)[1:360],
+      #  bSpline = TRUE)
       
       SpotRates <- predict(
-        InterpolateSpot,
-        difftime(as.Date(PmtDate(HorizonCashFlow)),
-                 as.Date(TradeDate(HorizonTermStructure)))/30)
+        InterpolateSpot,TimePeriod(HorizonCashFlow))
+        #difftime(as.Date(PmtDate(HorizonCashFlow)),
+        #         as.Date(TradeDate(HorizonTermStructure)))/30)
       
-      n.period = as.numeric(difftime(as.Date(PmtDate(HorizonCashFlow)),
-                   as.Date(TradeDate(HorizonTermStructure)))/30) / months.in.year
+      n.period = as.numeric(difftime(as.Date(
+        PmtDate(HorizonCashFlow)),
+        as.Date(TradeDate(HorizonTermStructure)))/30) / months.in.year
       
       DiscountRate <- 
         (1+((SpotRates$y + horizon.spot.spread)/yield.basis))^ n.period
@@ -397,12 +403,17 @@
     Horizon.Nominal.Value <- function(HorizonCurve = "character",
                                       HorizonTermStructure = "character",
                                       HorizonCashFlow = "character"){
-      InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
-                                  as.numeric(rates.data[2,2:12]),
-                                data = data.frame(HorizonCurve))
+      
+      InterpolateCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
+                                                as.numeric(rates.data[1,2:12]),
+                                                bSpline = TRUE)
+      
+      #InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
+      #                            as.numeric(rates.data[2,2:12]),
+      #                          data = data.frame(HorizonCurve))
       
       HorizonYield <- 
-      predict(InterpolateCurve, WAL(HorizonCashFlow)) + horizon.nominal.spread
+      predict(InterpolateCurve, WAL(HorizonCashFlow))$y + horizon.nominal.spread
       HorizonYield <- rep(HorizonYield, NumberofCashFlow)
       DiscountRate <- 1/((1 + (HorizonYield/monthly.yield.basis))^
                            (Period(HorizonTermStructure)[1:NumberofCashFlow]))

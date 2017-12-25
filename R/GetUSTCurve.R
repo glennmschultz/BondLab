@@ -137,17 +137,17 @@
     
     RateData <- matrix(data = NA, nrow = 1, ncol = 12)
     colnames(RateData) <- c("Date", 
-                            "1MO", 
-                            "3MO", 
-                            "6MO", 
-                            "12MO", 
-                            "2YR", 
-                            "3YR", 
-                            "5YR", 
-                            "7YR", 
-                            "10YR", 
-                            "20YR", 
-                            "30YR")
+                            "UST1MO", 
+                            "UST3MO", 
+                            "UST6MO", 
+                            "UST12MO", 
+                            "UST2YR", 
+                            "UST3YR", 
+                            "UST5YR", 
+                            "UST7YR", 
+                            "UST10YR", 
+                            "UST20YR", 
+                            "UST30YR")
     
     startdate <- as.character(as.Date(
       as.character(CurveDate), format = "%m-%d-%Y") + days(0))

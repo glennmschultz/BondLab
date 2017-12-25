@@ -336,7 +336,7 @@
     rates.array[period, 'Path'] = period
     
     if(period ==1) {rates.array[period, 'ThreeMonth'] = MonteCarloMeanReversion(
-      initial.value = rates.data[1,'ED3M'],
+      initial.value = rates.data[1,'UST1MO'],
       mean = three.month[1],
       sigma = three.month[2],
       reversion.speed = three.month[3],
@@ -349,7 +349,7 @@
       step = 1/12)}
     
     if(period ==1) {rates.array[period, 'TwoYear'] = MonteCarloMeanReversion(
-      initial.value = rates.data[1,'USSW2'],
+      initial.value = rates.data[1,'UST2YR'],
       mean = two.year[1],
       sigma = two.year[2],
       reversion.speed = two.year[3],
@@ -362,7 +362,7 @@
       step = 1/12)}
     
     if(period ==1) {rates.array[period, 'TenYear'] = MonteCarloMeanReversion(
-      initial.value = rates.data[1,'USSW10'],
+      initial.value = rates.data[1,'UST10YR'],
       mean = ten.year[1],
       sigma = ten.year[2],
       reversion.speed = ten.year[3],
@@ -428,7 +428,7 @@
                     lower = c(0.50, 0.10, 0.20),
                     upper = c(3.00, 0.30, 0.30),
                     rates.data = rates.data,
-                    rate.to.simulate = 'ED3M',
+                    rate.to.simulate = 'UST1MO',
                     num.paths = num.paths,
                     control = list(maxit = 500,
                                    factr = 1e-08,
@@ -440,7 +440,7 @@
                      lower = c(1.50, .10, 0.20),
                      upper = c(5.50, .30, 0.30),
                      rates.data = rates.data,
-                     rate.to.simulate = 'USSW2',
+                     rate.to.simulate = 'UST2YR',
                      num.paths = num.paths,
                      control = list(maxit = 5000,
                                     factr = 1e-08,
@@ -452,7 +452,7 @@
                       lower = c(4.0, .10, 0.20),
                       upper = c(8.0, .30, 0.40),
                       rates.data = rates.data,
-                      rate.to.simulate = 'USSW10',
+                      rate.to.simulate = 'UST10YR',
                       num.paths = num.paths,
                       control = list(maxit = 5000,
                                      factr = 1e-8,
@@ -480,10 +480,15 @@
                             calibration){
   # Create the curve simulation matrix - the curve parameters needed to
   # drive the DL model and simulate the yield curve
-  fwd.rate <- function(spot.rate, fwd.rate.tenor){
+  fwd.rate.function <- function(spot.rate, fwd.rate.tenor){
     spot.rate = spot.rate/100
     time.period <- seq(from = 1/12, to = length(spot.rate)/12, by = 1/12)
     disc.curve <- exp(-spot.rate*time.period)
+    
+    forward.rate = -((log(disc.curve[(fwd.rate.tenor + 1) : length(disc.curve)]) -
+         log(disc.curve[1:(length(disc.curve) - fwd.rate.tenor)])) / 
+        (fwd.rate.tenor/months.in.year))
+    return(forward.rate)
   }
   
   simulation = SimCurve(rates.data = rates.data,
@@ -519,8 +524,10 @@
     
     OAS.array[,period,1] = spot.rate[1:num.periods]
     OAS.array[,period,2] = fwd.rate
-    OAS.array[,period,3] = Forward.Rate(SpotRate.Curve = spot.rate, FwdRate.Tenor =  24)[1:num.periods]
-    OAS.array[,period,4] = Forward.Rate(SpotRate.Curve = spot.rate, FwdRate.Tenor =  120)[1:num.periods]
+    OAS.array[,period,3] = fwd.rate.function(spot.rate = spot.rate, fwd.rate.tenor = 24)[1:num.periods]
+    OAS.array[,period,4] = fwd.rate.function(spot.rate = spot.rate, fwd.rate.tenor = 120)[1:num.periods]
+    #OAS.array[,period,3] = Forward.Rate(SpotRate.Curve = spot.rate, FwdRate.Tenor =  24)[1:num.periods]
+    #OAS.array[,period,4] = Forward.Rate(SpotRate.Curve = spot.rate, FwdRate.Tenor =  120)[1:num.periods]
   } # end of oas rate array loop
   return(OAS.array)
   }
@@ -555,6 +562,7 @@
     proceeds = numeric()){
     Present.Value <- sum((1/(1+(discount.rates + spread))^t.period) * cashflow)
     return(proceeds - Present.Value)}
+
   
   # This section begins the OAS analysis.  the code above is market fit and
   # should be run before OAS and assigned to a market rates environment
@@ -587,8 +595,10 @@
                             TradeDate = as.character(trade.date),
                             Period = numeric(),
                             Date = "character",
+                            TimePeriod = numeric(),
                             SpotRate = numeric(),
                             ForwardRate = numeric(),
+                            DiscRate = numeric(),
                             TwoYearFwd = numeric(),
                             TenYearFwd = numeric())
   

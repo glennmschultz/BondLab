@@ -171,7 +171,7 @@
       RateData[1,as.numeric(i) +1] = RateValue}
     
     if(save.curve == FALSE){
-      maturity <- c("",.0833, .25, .5, 1, 2, 3, 4, 5, 7, 10, 30)
+      maturity <- c("",.0833, .25, .5, 1, 2, 3, 5, 7, 10, 20, 30)
       utils::write.csv(RateData, paste(system.file(package = "BondLab"),
                                       "/RatesData/Today.csv", sep = ""),
                       row.names = FALSE)

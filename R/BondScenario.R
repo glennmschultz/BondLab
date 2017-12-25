@@ -223,8 +223,8 @@
     #set rates shift (immediate) for term structure fit
     ShiftCurve <- rates.data
     ShiftCurve[1,2:length(ShiftCurve)] <- 
-      ScenarioFormula(Scenario)(rates.data[1,2:length(ShiftCurve)], 
-                                Shiftbps = Shiftbps(Scenario))
+      as.numeric(ScenarioFormula(Scenario)(rates.data[1,2:length(ShiftCurve)], 
+                                Shiftbps = Shiftbps(Scenario)))
     
     # Set horizon curve and settlment date for horizon ending value analysis
     # This curve is used to fit the horizon term structure when the scenario is
@@ -236,8 +236,8 @@
       as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
     
     HorizonCurve[1,2:length(HorizonCurve)] <- 
-      ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
-                                Shiftbps = Shiftbps(Scenario))
+      as.numeric(ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
+                                Shiftbps = Shiftbps(Scenario)))
     
     HorizonSettlement <- as.Date(
       settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)

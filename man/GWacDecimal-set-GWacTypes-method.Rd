@@ -15,4 +15,3 @@
 \description{
 A method to set the vlaue of GWacDecimal slot in the object GWacTypes
 }
-

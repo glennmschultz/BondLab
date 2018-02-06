@@ -27,4 +27,3 @@ SwapRate(datafile = paste(system.file(package = "BondLab"),
 "/RatesData/20150911.csv", sep = "". header = TRUE),
 maturity = c("",.0833, .25, .5, 1, 2, 3, 4, 5, 7, 10, 30))}
 }
-

@@ -12,4 +12,3 @@ OAC(object)
 \description{
 Access the slot OAC from object MortgageOAS
 }
-

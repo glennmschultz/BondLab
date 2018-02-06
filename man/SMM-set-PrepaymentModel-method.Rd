@@ -15,4 +15,3 @@
 \description{
 A method to replace SMM value in the class PrepaymentModel
 }
-

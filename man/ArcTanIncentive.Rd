@@ -14,4 +14,3 @@ ArcTanIncentive(object)
 A standard generic function to access the slot ArcTanIncentive from the 
 class PrepaymentModelFunctions
 }
-

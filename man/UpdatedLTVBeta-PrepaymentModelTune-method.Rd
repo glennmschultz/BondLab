@@ -13,4 +13,3 @@
 \description{
 A method to extract the UpdatedLTV.beta from class PrepaymentModelTune
 }
-

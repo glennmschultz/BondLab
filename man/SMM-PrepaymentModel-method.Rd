@@ -13,4 +13,3 @@
 \description{
 A method to extract SMM from S4 class PrepaymentModel
 }
-

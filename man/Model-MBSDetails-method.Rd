@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Model from the class MBSDetails
 }
-

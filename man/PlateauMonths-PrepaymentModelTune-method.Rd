@@ -13,4 +13,3 @@
 \description{
 A method to extract PlateauMonths from class PrepaymentModelTune
 }
-

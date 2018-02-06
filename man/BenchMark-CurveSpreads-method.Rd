@@ -23,4 +23,3 @@ Other Pricing: \code{\link{CurveSpreads-class}},
   \code{\link{SpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
-

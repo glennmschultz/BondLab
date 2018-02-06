@@ -35,16 +35,17 @@ Suggests:
     markdown,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
-Collate:
+RoxygenNote: 6.0.1
+Collate: 
+    'MBSDetails.R'
+    'BondDetails.R'
+    'BillDetails.R'
     'BondBasis.R'
     'ServicingFeeTypes.R'
     'GWacTypes.R'
     'CouponTypes.R'
     'PriceTypes.R'
-    'MBSDetails.R'
     'MortgageCashFlow.R'
-    'BondDetails.R'
     'BondCashFlows.R'
     'BondFunctions.R'
     'BondLab.R'

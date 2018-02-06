@@ -13,4 +13,3 @@
 \description{
 Get Term from object of type MortgageTermStructure
 }
-

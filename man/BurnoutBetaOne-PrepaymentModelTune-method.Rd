@@ -13,4 +13,3 @@
 \description{
 A method to extract Burnout.beta.1 from class PrepaymentModelTune
 }
-

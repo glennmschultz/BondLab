@@ -13,4 +13,3 @@
 \description{
 A method to extract the MinOrigLTV from class PrepaymentModelTune
 }
-

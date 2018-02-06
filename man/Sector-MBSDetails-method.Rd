@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Sector from the class MBSDetails
 }
-

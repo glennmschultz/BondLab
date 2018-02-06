@@ -14,4 +14,3 @@ SeasoningRamp(object)
 A standard generic function to access the slot SeasoningRamp from the class
 PrepaymentModelFunctions
 }
-

@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Servicing from the class MBSDetails
 }
-

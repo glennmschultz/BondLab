@@ -23,4 +23,3 @@ Calculates the effective duration and convexity based on discount
 vector (zero coupon),
 cashflow vector, and rate delta
 }
-

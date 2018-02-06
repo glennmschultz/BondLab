@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot TurnoverRate from the object PrepaymentModelFunctions
 }
-

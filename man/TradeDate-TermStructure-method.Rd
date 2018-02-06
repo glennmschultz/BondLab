@@ -13,4 +13,3 @@
 \description{
 Method to extract TradeDate from the class TermStructure
 }
-

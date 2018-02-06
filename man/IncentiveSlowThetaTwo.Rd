@@ -12,4 +12,3 @@ IncentiveSlowThetaTwo(object)
 \description{
 A standard generic function to access the slot Incentive.Slow.theta.2
 }
-

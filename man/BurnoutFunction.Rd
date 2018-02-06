@@ -31,4 +31,3 @@ Other Prepayment and Default: \code{\link{BorrowerIncentive}},
   \code{\link{SDARamp}}, \code{\link{Seasonals}},
   \code{\link{Turnover}}
 }
-

@@ -16,4 +16,3 @@
 \description{
 A method to extract a Price/Yield Scenario Pair
 }
-

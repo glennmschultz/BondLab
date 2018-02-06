@@ -25,4 +25,3 @@ Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{PrincipalReceived,BondReturn-method}},
   \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
-

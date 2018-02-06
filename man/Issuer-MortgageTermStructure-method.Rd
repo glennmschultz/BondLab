@@ -13,4 +13,3 @@
 \description{
 Get Issuer from object of type MortgageTermStrucutre
 }
-

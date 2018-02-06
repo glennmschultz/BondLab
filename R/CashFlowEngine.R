@@ -168,13 +168,13 @@
     return(MBS.CF.Table)
   }
   
-  #'@title Bond Lab function to cash flow a bond
-  #'@description calculates the bond cashflow table used in function BondCashflows.
-  #'@param bond.id a character or connection referring to an object of type BondDetails.
-  #'@param principal the investor principal amount.
-  #'@param settlement.date a character the settlement data mm-dd-YYYY.
+  #' @title Bond Lab function to cash flow a bond
+  #' @description calculates the bond cashflow table used in function BondCashflows.
+  #' @param bond.id a character or connection referring to an object of type BondDetails.
+  #' @param principal the investor principal amount.
+  #' @param settlement.date a character the settlement date mm-dd-YYYY.
   #' @importFrom lubridate leap_year
-  #'@export CashFlowBond
+  #' @export CashFlowBond
   CashFlowBond <- function(bond.id,
                            principal,
                            settlement.date){
@@ -212,13 +212,7 @@
       }
       return(pmt.date)
     }
-    
-    # Calculate the number of cashflows that will be paid from settlement date to
-    # maturity date 
-    # step1 calculate the years to maturity
-    #ncashflows = (as.numeric(
-    #  difftime(end.date, nextpmt.date, units = 'days'))/days.in.month
-    #  ) %/% (months.in.year/frequency) + 1
+
     
     ncashflows = max(BondBasisConversion(issue.date = issue.date,
                             start.date = start.date,
@@ -231,7 +225,8 @@
     monthvector <- seq(1, ncashflows,1) * (months.in.year/frequency)
     pmt.date = c(as.Date(DatedDate(bond.id), format = '%m-%d-%Y') %m+% months(monthvector))
     
-    #insert logic here to include leap date if actual is used
+    # Insert logic here to include leap date if actual is used.  There will need
+    # to be additional logic to handle calculation basis Actual(f)/365
     pmt.date <- leap_day(pmt.date)
     
     #get the index number of the last payment date made to the investor
@@ -239,30 +234,7 @@
       } else {which(pmt.date == as.Date(LastPmtDate(bond.id),format ='%m-%d-%Y')) + 1}
     pmtdate = pmt.date[pmtindex:length(pmt.date)]
     
-    
-    #ncashflows = max(BondBasisConversion(
-    #  issue.date = issue.date, 
-    #  start.date = start.date, 
-    #  end.date = end.date, 
-    #  settlement.date = lastpmt.date,
-    #  lastpmt.date = lastpmt.date, 
-    #  nextpmt.date = end.date, 
-    #  type = bondbasis) %/% (1/frequency),1)
-    
-    # then compute the payment dates based on payment date interval.  The logic
-    # including the settlement.date == issue.date is to facilitate adding first
-    # payment date to BondDetails object.  Due to differing bond basis the payment
-    # date vector must be calculated
-    
-    #if(ncashflows == 1 & (settlement.date < end.date)) {pmtdate = end.date
-    #} else pmtdate = c(as.Date(LastPmtDate(bond.id), format = '%m-%d-%Y') %m+% months(monthvector))
-    
-    # in leap years, notably UST, even though bond basis is actual/365 the maturity
-    # date reflect 366 days if the bond matures in Feb. leap year.  Thus, to ensure the 
-    # correct maturity date the last payment in the vector is checked against the maturity
-    # date.
     numpayments = length(pmtdate)
-    #monthvector[numpayments] == end.date
 
     #step3 build the time period vector (n) for discounting the cashflows 
     #nextpmt date is vector of payment dates to n for each period
@@ -333,5 +305,29 @@
     }
     return(Bond.CF.Table)
     
+  }
+  
+  #' @title Bond Lab function to cash flow a discount bill.
+  #' @description Calculates the bill cash flow table used in the BillCashFlow function.
+  #' @param bill.id a character or connection referring to an object of type BillDetails.
+  #' @param principal A numeric value the principal.
+  #' @param settlement.date A character the settlement date mm-dd-YYYY
+  #' @importFrom lubridate leap_year
+  #' @export CashFlowBill
+  CashFlowBill <- function(bill.id, principal, settlement.date){
+    issue.date = as.Date(IssueDate(bill.id), format = "%m-%d-%Y")
+    start.date = as.Date(DatedDate(bill.id), format = "%m-%d-%Y")
+    maturity.date = as.Date(MaturityDate(bill.id), format = "%m-%d-%Y")
+    settlment.date = as.Date(settlement.date, format = "%m-%d-%Y")
+    bond.basis = as.Date(BondBasis(bill.id), format = "%m-%d-%Y")
+  
+  leap_day <- function(pmt.date){
+    for(date in seq_along(pmt.date)){
+      if(leap_year(pmt.date)[date] == TRUE & 
+         month(pmt.date)[date] == 2 & day(pmt.date)[date] == 28){
+        pmt.date[date] = pmt.date[date] %m+% days(1)} else {next}
+    }
+    return(pmt.date)
+  }
   }
 

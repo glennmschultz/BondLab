@@ -13,4 +13,3 @@
 \description{
 A method to extract PeakMonth from class PrepaymentModelTune
 }
-

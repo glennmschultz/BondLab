@@ -12,4 +12,3 @@ MonthlyInterest(object)
 \description{
 A generic function to access the slot MonthlyInterest
 }
-

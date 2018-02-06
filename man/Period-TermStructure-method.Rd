@@ -13,4 +13,3 @@
 \description{
 Method to extract Period from S4 class TermStructure
 }
-

@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot BondLab from the class MBSDetails
 }
-

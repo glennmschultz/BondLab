@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot ArcTanIncentive from the object PrepaymentModelFunctions
 }
-

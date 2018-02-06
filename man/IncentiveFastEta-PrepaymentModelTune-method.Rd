@@ -13,4 +13,3 @@
 \description{
 A method to extract Incentive.Fast.beta from class PrepaymentModelTune
 }
-

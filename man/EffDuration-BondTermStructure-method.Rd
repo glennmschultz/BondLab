@@ -13,4 +13,3 @@
 \description{
 A method to get EffDuration from the class BondTermStructure
 }
-

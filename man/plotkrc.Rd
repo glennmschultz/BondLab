@@ -12,4 +12,3 @@ plotkrc(object)
 \description{
 Generic function to plot key rate convexity
 }
-

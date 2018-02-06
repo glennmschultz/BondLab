@@ -14,4 +14,3 @@ Curtailment(object)
 A standard generic function to access the slot Curatialment from the class
 PrepaymentModelFunctions
 }
-

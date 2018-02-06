@@ -13,4 +13,3 @@
 \description{
 A method to extract Incentive.Slow.eta from class PrepaymentModelTune
 }
-

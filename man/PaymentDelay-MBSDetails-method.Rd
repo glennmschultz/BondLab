@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot PaymentDelay from the class MBSDetails
 }
-

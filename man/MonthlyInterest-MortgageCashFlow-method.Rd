@@ -13,4 +13,3 @@
 \description{
 Method to extract the MonthlyInterest from class MortgageCashFlow
 }
-

@@ -12,4 +12,3 @@ PeakCDR(object)
 \description{
 A standard generic functin to access the slot PeakCDR
 }
-

@@ -24,6 +24,7 @@ coupon curve matching the bond's weighted average life.}
 this is referred to as the ZeroVolSpread, an output of the OAS model, outside an
 OAS framework a more accurate reference to the measure is spread to the spot curve.}
 }}
+
 \seealso{
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{CurveSpreads}},
@@ -33,4 +34,3 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{SpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
-

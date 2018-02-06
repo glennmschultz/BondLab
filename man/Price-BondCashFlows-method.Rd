@@ -13,4 +13,3 @@
 \description{
 Method to get Price from S4 class
 }
-

@@ -14,4 +14,3 @@ LastPmtDate(object) <- value
 \description{
 A standard generic function to replace the slot LastPmtDate
 }
-

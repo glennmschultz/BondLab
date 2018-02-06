@@ -17,4 +17,3 @@ forward rate
 \dontrun{
 MtgRate()}
 }
-

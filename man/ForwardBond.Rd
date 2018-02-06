@@ -19,4 +19,3 @@ A standard generic function to roll forward bond details to the scenario
 horizon for pricing using the spot spread (nomimal spread), spread to the 
 benchmark, option adjusted spread or price.
 }
-

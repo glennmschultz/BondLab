@@ -13,4 +13,3 @@
 \description{
 A method to extract PPCStart from S4 class PrepaymentModel
 }
-

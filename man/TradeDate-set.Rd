@@ -14,4 +14,3 @@ TradeDate(object) <- value
 \description{
 A generic function to replace the slot TradeDate
 }
-

@@ -12,4 +12,3 @@ Model(object)
 \description{
 A standard generic function to access the slot Model
 }
-

@@ -30,4 +30,3 @@ Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}}
   \code{\link{MortgageOAS-class}},
   \code{\link{OASRatesArray}}, \code{\link{SimCurve}}
 }
-

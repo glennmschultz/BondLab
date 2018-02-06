@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot SeasonalFactors from the object PrepaymentModelFunctions
 }
-

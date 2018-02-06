@@ -14,4 +14,3 @@ No inputs are required
 \dontrun{
 HorizonBond()}
 }
-

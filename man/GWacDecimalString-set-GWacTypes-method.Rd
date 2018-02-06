@@ -17,4 +17,3 @@ object GWacTypes}
 A method to set the value of GWacDecimalString slot in the 
 object GWacTypes
 }
-

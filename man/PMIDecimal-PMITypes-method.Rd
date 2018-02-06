@@ -13,4 +13,3 @@
 \description{
 A method to get the slot PMIDecimal from the object PMITypes
 }
-

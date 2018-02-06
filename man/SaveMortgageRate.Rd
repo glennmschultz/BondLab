@@ -10,4 +10,3 @@ SaveMortgageRate()
 Opens a connection to the PrepaymentModel folder to save the MortgageRate
 object
 }
-

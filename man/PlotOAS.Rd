@@ -12,4 +12,3 @@ PlotOAS(object)
 \description{
 standard generic to polt MortgageOAS
 }
-

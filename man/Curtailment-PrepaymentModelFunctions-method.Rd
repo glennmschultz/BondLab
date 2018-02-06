@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot Curtailment from the object PrepaymentModelFunctions
 }
-

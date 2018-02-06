@@ -31,4 +31,3 @@ DollarRoll(bond.id = "character", price = numeric(), drop = numeric(),
 \description{
 One-month dollar roll analysis.  This function is called by Dollar Roll Analytics
 }
-

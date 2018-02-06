@@ -11,9 +11,8 @@ CashFlowBond(bond.id, principal, settlement.date)
 
 \item{principal}{the investor principal amount.}
 
-\item{settlement.date}{a character the settlement data mm-dd-YYYY.}
+\item{settlement.date}{a character the settlement date mm-dd-YYYY.}
 }
 \description{
 calculates the bond cashflow table used in function BondCashflows.
 }
-

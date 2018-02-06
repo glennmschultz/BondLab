@@ -22,4 +22,3 @@ A standard generic function to roll forward MBS cusip detail to the
 scenario horizon for pricing using spot spread, nominal spread, 
 or option adjusted spread
 }
-

@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Term from the class MBSDetails
 }
-

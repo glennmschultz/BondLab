@@ -14,4 +14,3 @@ SpotRate(object) <- value
 \description{
 A generic function to replace slot SpotRate
 }
-

@@ -13,4 +13,3 @@
 \description{
 Method to get TotalCashFlow from S4 class BondCashFlows
 }
-

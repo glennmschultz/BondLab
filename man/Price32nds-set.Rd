@@ -14,4 +14,3 @@ Price32nds(object) <- value
 \description{
 A standard generic function to set the slot Price32nds
 }
-

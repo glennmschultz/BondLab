@@ -40,4 +40,3 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
-

@@ -13,4 +13,3 @@
 \description{
 Method to extract DiscRate from the class TermStructure
 }
-

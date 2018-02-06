@@ -15,4 +15,3 @@ to the prepayment type}
 \description{
 A function to convert Price Yield data to class PriceYieldScenarioSet
 }
-

@@ -13,4 +13,3 @@
 \description{
 A method to extract Turnover.alpha from class PrepaymentModelTune
 }
-

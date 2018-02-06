@@ -13,4 +13,3 @@
 \description{
 A method to extract the EffConvexity from class MortgageEffectiveMeasures
 }
-

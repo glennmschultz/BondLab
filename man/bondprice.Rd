@@ -36,4 +36,3 @@ bondprice(
 yield.to.maturity = .05, coupon = .05, coupon.frequency = 2,
 years.mat = 10, face.value = 100)
 }
-

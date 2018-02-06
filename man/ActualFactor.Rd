@@ -19,4 +19,3 @@ Other BondBasis: \code{\link{ActFactor}},
   \code{\link{BondBasisConversion}},
   \code{\link{is.leapyear}}
 }
-

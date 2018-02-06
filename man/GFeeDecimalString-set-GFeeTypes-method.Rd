@@ -17,4 +17,3 @@ object GFeeTypes}
 A method to set the value of the slot GFeeDecimalString in the 
 object GFeeTypes
 }
-

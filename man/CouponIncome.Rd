@@ -23,4 +23,3 @@ Other Scenario Analysis: \code{\link{HorizonCurrBal}},
   \code{\link{Scenario-class}},
   \code{\link{ScheduledPrinReceived}}
 }
-

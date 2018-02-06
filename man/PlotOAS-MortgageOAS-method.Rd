@@ -13,4 +13,3 @@
 \description{
 A method to plot MortgageOAS spread distribution
 }
-

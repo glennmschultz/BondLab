@@ -28,4 +28,3 @@ Structuring function to split a bond into a floater and
 inverse floating rate bond.  The optional arguments will determine the principal
 balance of the floating rate bond.  Select either inverse.multiplier or inverse.percentage
 }
-

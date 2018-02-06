@@ -13,4 +13,3 @@
 \description{
 Method to extract SpotRate from the class TermStructure
 }
-

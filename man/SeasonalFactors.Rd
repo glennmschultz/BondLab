@@ -14,4 +14,3 @@ SeasonalFactors(object)
 A standard generic function to access the slot SeasonalFactors from the 
 class PrepaymentModelFunctions
 }
-

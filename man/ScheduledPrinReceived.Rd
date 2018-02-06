@@ -22,4 +22,3 @@ Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{ReinvestmentIncome}},
   \code{\link{Scenario-class}}
 }
-

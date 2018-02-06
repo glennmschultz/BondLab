@@ -13,4 +13,3 @@ SaveRAID(RAIDFile = "character")
 Opens a connection to the RAID folder and saves RAID information
 REMIC at Issuance Disclouse data
 }
-

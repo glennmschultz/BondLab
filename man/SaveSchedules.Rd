@@ -15,4 +15,3 @@ schedule file to save}
 \description{
 Opens a connection to the Schedules folder to save PAC or TAC schedules
 }
-

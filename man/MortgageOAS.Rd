@@ -24,4 +24,3 @@ this unless you know what you are doing}
 \description{
 A function to compute mortgage passthrough option adjusted spread
 }
-

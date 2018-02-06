@@ -13,4 +13,3 @@
 \description{
 A method to extract Seasonality.theta from class PrepaymentModelTune
 }
-

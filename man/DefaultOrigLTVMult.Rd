@@ -14,4 +14,3 @@ DefaultOrigLTVMult(object)
 A standard generic function to access the slot OrigLTVMult from the 
 class PrepaymentModelFunctions
 }
-

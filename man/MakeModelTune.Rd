@@ -116,4 +116,3 @@ be applied to specific collateral cohorts
  SATO.beta = .8)
 }
 }
-

@@ -12,4 +12,3 @@ SATOBeta(object)
 \description{
 A standard generic function to access the slot SATO.beta
 }
-

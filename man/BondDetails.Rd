@@ -4,14 +4,9 @@
 \alias{BondDetails}
 \title{BondDetails}
 \usage{
-BondDetails(Cusip = "character", ID = "character", BondType = "character",
-  Sector = "character", Issuer = "character", Underwriter = "character",
-  OfferAmount = numeric(), Coupon = numeric(), IssueDate = "character",
-  DatedDate = "character", Maturity = "character",
-  LastPmtDate = "character", NextPmtDate = "character",
-  Moody = "character", SP = "character", BondLab = "character",
-  Frequency = numeric(), BondBasis = "character", Callable = "logical",
-  Putable = "logical", SinkingFund = "logical")
+BondDetails(Cusip, ID, BondType, Sector, Issuer, Underwriter, OfferAmount,
+  Coupon, IssueDate, DatedDate, Maturity, LastPmtDate, NextPmtDate, Moody, SP,
+  BondLab, Frequency, BondBasis, Callable, Putable, SinkingFund)
 }
 \arguments{
 \item{Cusip}{A character the bond cusip}
@@ -66,4 +61,3 @@ local environment
 \seealso{
 Other BondDetails: \code{\link{MakeBondDetails}}
 }
-

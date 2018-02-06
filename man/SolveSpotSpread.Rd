@@ -21,4 +21,3 @@ discount cash flow}
 \description{
 A function to solve for the spread to the spot rate curve
 }
-

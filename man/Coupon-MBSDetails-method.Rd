@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Coupon from the class MBSDetails
 }
-

@@ -14,4 +14,3 @@ YieldDecimalString(object) <- value
 \description{
 A standard generic function to set the value in the slot YieldDecimalString
 }
-

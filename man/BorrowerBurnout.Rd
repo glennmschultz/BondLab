@@ -14,4 +14,3 @@ BorrowerBurnout(object)
 A standard generic function to access the slot BorrowerBurnout from the 
 class PrepaymentModelFunctions
 }
-

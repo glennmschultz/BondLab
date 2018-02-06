@@ -19,4 +19,3 @@ object (file) to serialize}
 Opens a connection to the Tranches folder and save Tranche Data
 REMIC Tranche information
 }
-

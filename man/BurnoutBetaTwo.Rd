@@ -12,4 +12,3 @@ BurnoutBetaTwo(object)
 \description{
 A standard generic function to access the slot Burnout.beta.e
 }
-

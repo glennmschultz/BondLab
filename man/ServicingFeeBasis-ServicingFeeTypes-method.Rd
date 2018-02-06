@@ -15,4 +15,3 @@ ServicingFeeTypes}
 A method to get the slot ServicingFeeBasis from the object 
 ServicingFeeTypes
 }
-

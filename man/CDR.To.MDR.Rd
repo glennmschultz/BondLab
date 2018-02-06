@@ -15,4 +15,3 @@ Standard Generic Function used to convert CPR to SMM
 \examples{
 CDR.To.MDR(CDR = .06)
 }
-

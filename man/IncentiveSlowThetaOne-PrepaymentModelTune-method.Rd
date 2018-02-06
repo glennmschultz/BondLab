@@ -13,4 +13,3 @@
 \description{
 A method to extract Incentive.Slow.theta.1 from class PrepaymentModelTune
 }
-

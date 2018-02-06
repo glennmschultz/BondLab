@@ -13,4 +13,3 @@
 \description{
 Method to get CouponPmt from S4 class BondCashFlows
 }
-

@@ -13,4 +13,3 @@
 \description{
 A method to get KeyRateConvexity from the class BondTermStructure
 }
-

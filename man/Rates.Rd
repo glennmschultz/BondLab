@@ -13,4 +13,3 @@ Rates(trade.date = "character")
 A read connection function to the rates database folder to call swap 
 rate data
 }
-

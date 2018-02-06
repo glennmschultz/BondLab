@@ -13,4 +13,3 @@
 \description{
 Get Coupon from object BondTermStructure
 }
-

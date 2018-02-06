@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot SeasoningRamp from the object PrepaymentModelFunctions
 }
-

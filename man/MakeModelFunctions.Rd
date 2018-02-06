@@ -9,4 +9,3 @@ MakeModelFunctions()
 \description{
 There are no inputs model functions are coded into the function constructor
 }
-

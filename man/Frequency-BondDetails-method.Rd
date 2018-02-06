@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Frequency from S4 class of type BondDetails
 }
-

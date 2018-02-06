@@ -14,4 +14,3 @@ DefaultUpdatedLTVMult(object)
 A standard generic function to access the slot UpdatedLTVMult from the 
 class PrepaymentModelFunctions
 }
-

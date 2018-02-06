@@ -13,4 +13,3 @@
 \description{
 Access the slot Issuer from object MortgageOAS
 }
-

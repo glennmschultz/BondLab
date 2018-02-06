@@ -35,6 +35,7 @@ investment horizon}
 \item{\code{HorizonMos}}{A numeric value the number of months to 
 the scenario horizon date}
 }}
+
 \seealso{
 Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method}},
   \code{\link{HorizonCurrBal,MortgageReturn-method}},
@@ -46,4 +47,3 @@ Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method
   \code{\link{ReinvestmentIncome,MortgageReturn-method}},
   \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
-

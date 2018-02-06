@@ -13,4 +13,3 @@
 \description{
 A method to extract Seasonality.alpha from class PrepaymentModelTune
 }
-

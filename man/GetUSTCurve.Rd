@@ -21,4 +21,3 @@ defaults to FALSE}
 A function to call UST constant maturity curve data from the St, Louis Fed  
 FRED website.
 }
-

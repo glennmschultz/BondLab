@@ -24,4 +24,3 @@ Other Mortgage Scenario Analysis: \code{\link{CouponIncome,MortgageReturn-method
   \code{\link{ReinvestmentIncome,MortgageReturn-method}},
   \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
-

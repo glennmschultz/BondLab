@@ -13,4 +13,3 @@
 \description{
 A method to extract PmtDate from S4 class PrepaymentModel
 }
-

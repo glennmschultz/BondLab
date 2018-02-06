@@ -14,4 +14,3 @@ DefaultRamp(object)
 A standard generic function to access the slot DefaultRamp from the 
 class PrepaymentModelFunctions
 }
-

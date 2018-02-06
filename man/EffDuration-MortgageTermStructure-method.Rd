@@ -13,4 +13,3 @@
 \description{
 Method to extract EffDuration from S4 class
 }
-

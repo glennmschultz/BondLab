@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot OrigLTVMult from the object PrepaymentModelFunctions
 }
-

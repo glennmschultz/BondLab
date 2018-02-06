@@ -15,4 +15,3 @@
 \description{
 A method to set PriceDecimal in slot of class PriceTypes
 }
-

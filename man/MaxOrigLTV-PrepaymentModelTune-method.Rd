@@ -13,4 +13,3 @@
 \description{
 A method to extract the MaxOrigLTV from class PrepaymentModelTune
 }
-

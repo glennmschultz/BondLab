@@ -195,4 +195,3 @@ repeatedly call the cusip.
 \seealso{
 Other MBSDetails: \code{\link{MBSDetails}}
 }
-

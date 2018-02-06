@@ -25,4 +25,3 @@ Other Prepayment and Default: \code{\link{BurnoutFunction}},
   \code{\link{SDARamp}}, \code{\link{Seasonals}},
   \code{\link{Turnover}}
 }
-

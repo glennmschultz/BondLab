@@ -12,4 +12,3 @@ NoteRate(object)
 \description{
 A standard generic function to access the slot NoteRate
 }
-

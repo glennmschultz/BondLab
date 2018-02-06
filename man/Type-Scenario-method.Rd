@@ -13,4 +13,3 @@
 \description{
 A Method to extract scenario type from an S4 class Scenario
 }
-

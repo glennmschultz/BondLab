@@ -40,4 +40,3 @@ its maximum value}
 \description{
 A constructor function for the class ModelFunctions
 }
-

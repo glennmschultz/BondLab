@@ -13,4 +13,3 @@
 \description{
 A method to extract Turnover.beta from class PrepaymentModelTune
 }
-

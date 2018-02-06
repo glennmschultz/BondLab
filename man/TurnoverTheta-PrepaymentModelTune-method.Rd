@@ -13,4 +13,3 @@
 \description{
 A method to extract Turnover.theta from class PrepaymentModelTune
 }
-

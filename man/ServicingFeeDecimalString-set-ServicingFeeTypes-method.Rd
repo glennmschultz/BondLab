@@ -17,4 +17,3 @@ ServicingFeeTypes}
 A method to set the slot ServicingFeeDecimalString in the object
 ServicingFeeTypes
 }
-

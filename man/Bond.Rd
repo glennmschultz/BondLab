@@ -14,4 +14,3 @@ a function to query the sql lite data base of mortgage
 cusips.  The function illustrates how one would connect to a cusip database
 and construct the mortgage pass through object for analysis
 }
-

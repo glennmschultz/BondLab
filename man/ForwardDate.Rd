@@ -12,4 +12,3 @@ ForwardDate(object)
 \description{
 A generic function to access the slot Date in class TermStructure
 }
-

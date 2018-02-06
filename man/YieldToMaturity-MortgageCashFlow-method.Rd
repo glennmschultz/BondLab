@@ -13,4 +13,3 @@
 \description{
 Method to extract YieldToMaturity from S4 class MortgageCashFlow
 }
-

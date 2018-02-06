@@ -13,4 +13,3 @@
 \description{
 A method to extract PPCSeasoning from S4 class PrepaymentModel
 }
-

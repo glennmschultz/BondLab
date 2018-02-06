@@ -26,4 +26,3 @@ Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{HorizonReturn,BondReturn-method}},
   \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
-

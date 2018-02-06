@@ -13,4 +13,3 @@ ValidPriceYieldScenarioSet(object)
 Validity test of the PriceYieldScenarioSet object test if the length
 of the PrepaymentType and the PrepaymentScenario are equal
 }
-

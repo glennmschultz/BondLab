@@ -14,4 +14,3 @@ CouponDecimal(object) <- value
 \description{
 A standard generic function to set the slot CouponDecimal
 }
-

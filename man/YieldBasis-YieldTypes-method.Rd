@@ -13,4 +13,3 @@
 \description{
 A method to extract the slot YieldBasis from the class YieldTypes
 }
-

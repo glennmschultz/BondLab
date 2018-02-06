@@ -12,4 +12,3 @@ Underwriter(object)
 \description{
 A generic function to access the slot Underwriter
 }
-

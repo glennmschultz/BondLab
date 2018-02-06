@@ -13,4 +13,3 @@
 \description{
 A method to extract BeginCDR from class PrepaymentModelTune
 }
-

@@ -13,4 +13,3 @@ as a numeric decimal}
 \description{
 GFeeTypes is a constructor function for the class GFeeTypes
 }
-

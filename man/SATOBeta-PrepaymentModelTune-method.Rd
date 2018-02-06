@@ -13,4 +13,3 @@
 \description{
 A method to extract the SATO.beta from class PrepaymentModelTune
 }
-

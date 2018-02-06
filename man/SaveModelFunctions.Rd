@@ -14,4 +14,3 @@ value is temp}
 Opens a connection to the PrepaymentModel folder to save the 
 ModelFunctions class
 }
-

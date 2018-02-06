@@ -28,6 +28,7 @@ mortgage pass through oas class
 
 \item{\code{OAC}}{option adjusted convexity}
 }}
+
 \seealso{
 Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}},
   \code{\link{FitMarket}},
@@ -35,4 +36,3 @@ Other mortgage pass through option adjusted spread: \code{\link{CalibrateRates}}
   \code{\link{OASRatesArray}}, \code{\link{SimCurve}},
   \code{\link{SimRates}}
 }
-

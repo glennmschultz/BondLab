@@ -15,4 +15,3 @@ ServicingFeeTypes}
 A method to get the slot ServicingFeeDecimal from the object 
 ServicingFeeTypes
 }
-

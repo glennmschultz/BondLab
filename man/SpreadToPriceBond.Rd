@@ -34,4 +34,3 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{SpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
-

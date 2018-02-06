@@ -13,4 +13,3 @@
 \description{
 Method to extract the TwoYearForward from the class TermStructure
 }
-

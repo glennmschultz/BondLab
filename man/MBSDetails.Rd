@@ -144,4 +144,3 @@ local environment
 \seealso{
 Other MBSDetails: \code{\link{MakeMBSDetails}}
 }
-

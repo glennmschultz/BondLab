@@ -13,4 +13,3 @@ REMICWaterFall(deal.name = "character")
 Opens a connection to the WaterFall folder calling the REMIC waterfall
 script by deal name.  This function supports REMIC tranche analysis
 }
-

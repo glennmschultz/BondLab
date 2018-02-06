@@ -13,4 +13,3 @@
 \description{
 A method to extract PPCEnd from S4 class PrepaymentModel
 }
-

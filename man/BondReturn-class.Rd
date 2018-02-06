@@ -34,6 +34,7 @@ investment horizon}
 \item{\code{HorizonMos}}{A numeric value the number of months to 
 the scenario horizon date}
 }}
+
 \seealso{
 Other Bond Scenario Analysis: \code{\link{BondScenario-class}},
   \code{\link{BondScenario}},
@@ -45,4 +46,3 @@ Other Bond Scenario Analysis: \code{\link{BondScenario-class}},
   \code{\link{PrincipalReceived,BondReturn-method}},
   \code{\link{ReinvestmentIncome,BondReturn-method}}
 }
-

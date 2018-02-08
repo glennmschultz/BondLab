@@ -5,7 +5,7 @@
 \title{BillDetails}
 \usage{
 BillDetails(Cusip, ID, BillType, Sector, Issuer, Underwriter, OfferAmount,
-  IssueDiscountRate, IssueDate, DatedDate, MaturityDate, Moody, SP, BondLab,
+  IssueDiscountRate, IssueDate, DatedDate, Maturity, Moody, SP, BondLab,
   BondBasis)
 }
 \arguments{
@@ -29,6 +29,8 @@ BillDetails(Cusip, ID, BillType, Sector, Issuer, Underwriter, OfferAmount,
 
 \item{DatedDate}{A character mm-dd-YYYY}
 
+\item{Maturity}{A character mm-dd-YYYY}
+
 \item{Moody}{A character the Moody Rating}
 
 \item{SP}{A character the SP Rating}
@@ -36,8 +38,6 @@ BillDetails(Cusip, ID, BillType, Sector, Issuer, Underwriter, OfferAmount,
 \item{BondLab}{A character the BondLab (Investor) assigned rating}
 
 \item{BondBasis}{A character the interest calculation basis}
-
-\item{Maturity}{A character mm-dd-YYYY}
 }
 \description{
 BillDetails creates BillDetails cusip object in the 

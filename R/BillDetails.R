@@ -198,7 +198,7 @@
   #' 
   #' @param object The name of the S4 class of type BillDetails
   setMethod("Maturity", signature("BillDetails"),
-            function(object){object@MaturityDate})
+            function(object){object@Maturity})
   
   #' Method to extract Moody rating from S4 class of type BillDetails
   #' 
@@ -255,7 +255,7 @@
     IssueDiscountRate,
     IssueDate,
     DatedDate,
-    MaturityDate,
+    Maturity,
     Moody,
     SP,
     BondLab,
@@ -271,7 +271,7 @@
         IssueDiscountRate = IssueDiscountRate,
         IssueDate = IssueDate,
         DatedDate = DatedDate,
-        MaturityDate = MaturityDate,
+        Maturity = Maturity,
         Moody = Moody,
         SP = SP,
         BondLab = BondLab,

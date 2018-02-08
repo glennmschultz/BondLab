@@ -213,7 +213,6 @@
       return(pmt.date)
     }
 
-    
     ncashflows = max(BondBasisConversion(issue.date = issue.date,
                             start.date = start.date,
                             end.date = end.date,
@@ -314,12 +313,15 @@
   #' @param settlement.date A character the settlement date mm-dd-YYYY
   #' @importFrom lubridate leap_year
   #' @export CashFlowBill
-  CashFlowBill <- function(bill.id, principal, settlement.date){
+  CashFlowBill <- function(bill.id, 
+                           principal, 
+                           settlement.date){
     issue.date = as.Date(IssueDate(bill.id), format = "%m-%d-%Y")
     start.date = as.Date(DatedDate(bill.id), format = "%m-%d-%Y")
-    maturity.date = as.Date(MaturityDate(bill.id), format = "%m-%d-%Y")
-    settlment.date = as.Date(settlement.date, format = "%m-%d-%Y")
-    bond.basis = as.Date(BondBasis(bill.id), format = "%m-%d-%Y")
+    lastpmt.date = as.Date(IssueDate(bill.id), format = "%m-%d-%Y")
+    end.date = as.Date(Maturity(bill.id), format = "%m-%d-%Y")
+    settlement.date = as.Date(settlement.date, format = "%m-%d-%Y")
+    bondbasis = as.Date(BondBasis(bill.id), format = "%m-%d-%Y")
   
   leap_day <- function(pmt.date){
     for(date in seq_along(pmt.date)){
@@ -329,5 +331,50 @@
     }
     return(pmt.date)
   }
+  
+  Coupon = CouponTypes(coupon = 0)
+  
+  
+  # Insert logic here to include leap date if actual is used.  There will need
+  # to be additional logic to handle calculation basis Actual(f)/365
+  pmt.date = end.date
+  pmt.date = leap_day(pmt.date)
+  
+  # Index number of the last payment of a bill is 1
+  numpayments = 1
+  pmtdate = 1
+  
+  #step3 build the time period vector (n) for discounting the cashflows 
+  #nextpmt date is vector of payment dates to n for each period
+  
+  time.period <- numeric(numpayments)
+  for(pmt in seq_along(pmtdate))
+    time.period[pmt] = BondBasisConversion(
+      issue.date = issue.date, 
+      start.date = settlement.date, 
+      end.date = end.date, 
+      settlement.date = settlement.date,
+      lastpmt.date = lastpmt.date, 
+      nextpmt.date = pmtdate[pmt], 
+      type = bondbasis)
+  
+  num.periods = length(pmt.date)
+  
+  for(i in 1:num.periods){
+    Bill.CF.Table[i,"Period"] = i
+    Bill.CF.Table[i,"Date"] = pmtdate[i]
+    Bill.CF.Table[i,"Time"] = time.period[i]
+    Bill.CF.Table[i,"Principal Outstanding"] = principal
+    Bill.CF.Table[i,"Coupon"] = CouponBasis(Coupon)
+    Bill.CF.Table[i,"Coupon Income"] = 
+      Bill.CF.Table[i,"Coupon"] * CouponBasis(Coupon) * Bill.CF.Table[i,"Principal Outstanding"]
+    if(as.Date(Bill.CF.Table[i,"Date"], origin = "1970-01-01") == end.date) {
+      Bill.CF.Table[i,"Principal Paid"] = principal
+    } else {Bond.CF.Table[i,"Principal Paid"] = 0}
+    Bill.CF.Table[i,"TotalCashFlow"] = 
+      Bill.CF.Table[i,"Coupon Income"] + Bill.CF.Table[i,"Principal Paid"]
+  }
+  return(Bill.CF.Table)
+  
   }
 

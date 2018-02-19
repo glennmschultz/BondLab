@@ -17,7 +17,7 @@
   # You should have received a copy of the GNU General Public License
   # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-  #'@include MBSDetails.R BondDetails.R
+  #' @include MBSDetails.R BondDetails.R
   NULL
   
   #' An S4 class representing the cusip detail of a discount bill
@@ -185,42 +185,49 @@
   #' Method to extract IssueDate from an S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod IssueDate
   setMethod("IssueDate", signature("BillDetails"),
             function(object){object@IssueDate})
   
   #' Method to extract DatedDate from an S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod DatedDate
   setMethod("DatedDate", signature("BillDetails"),
             function(object){object@DatedDate})
   
   #' Method to extract MaturityDate from an S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod Maturity
   setMethod("Maturity", signature("BillDetails"),
             function(object){object@Maturity})
   
   #' Method to extract Moody rating from S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod MoodyRating
   setMethod("MoodyRating", signature("BillDetails"),
             function(object){object@Moody})
   
   #' Method to extract S&P rating from S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod SPRating
   setMethod("SPRating", signature("BillDetails"),
             function(object){object@SP})
   
   #' Method to extract BondLab rating from S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod BondLabRating
   setMethod("BondLabRating", signature("BillDetails"),
             function(object){object@BondLab})
   
   #' Method to extract BondBasis of the S4 class of type BillDetails
   #' 
   #' @param object The name of the S4 class of type BillDetails
+  #' @exportMethod BondBasis
   setMethod("BondBasis", signature("BillDetails"),
             function(object){object@BondBasis})
   

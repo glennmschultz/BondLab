@@ -29,6 +29,7 @@ follows the market convection.  The user specified spread to the benchmark in ba
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
+  \code{\link{DiscountToPrice}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceMBS}},

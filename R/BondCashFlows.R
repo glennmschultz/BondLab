@@ -31,7 +31,7 @@
   #' @slot Convexity a numeric value the bond convexity
   #' @slot Period a numeric value an index of the payment to the investor
   #' @slot PmtDate a character string the payment date to the investor format 
-  #' is mm/dd/YYYY
+  #' is mm-dd-YYYY
   #' @slot TimePeriod a numeric value the time period between payments made
   #' to the investor
   #' @slot PrincipalOutstanding a numeric value the outstanding principal balance
@@ -69,13 +69,13 @@
   #' @param object An S4 class object
   #' @export PrincipalOutstanding
   setGeneric("PrincipalOutstanding", function(object)
-             {standardGeneric})
+             {standardGeneric("PrincipalOutstanding")})
   
   #' A standard generic function to get the slot CouponPmt
   #' @param object An S4 class object
   #' @export CouponPmt
   setGeneric("CouponPmt", function(object)
-    {standardGeneric})
+    {standardGeneric("CouponPmt")})
   
   # Note: standard generic TotalCashFlow is defined in MortgageCashFlow.R 
   
@@ -240,26 +240,6 @@
                                 principal = principal,
                                 settlement.date = settlement.date)
   
-  # Accrual factor one is based on settlement date equal to last payment date it
-  # give the accural factor for the coupon period
-  #accrual.factor.one = BondBasisConversion(
-  #  issue.date = issue.date, 
-  #  start.date = start.date, 
-  #  end.date = end.date,
-  #  settlement.date = lastpmt.date, 
-  #  lastpmt.date = lastpmt.date, 
-  #  nextpmt.date = nextpmt.date, type = bondbasis)
-  
-  # Accrial factor two is based on settlement date equal to settlement date it
-  # gives the remaining accural factor for the coupon period
-  #accrual.factor.two = BondBasisConversion(
-  #  issue.date = issue.date, 
-  #  start.date = start.date, 
-  #  end.date = end.date,
-  #  settlement.date = settlement.date, 
-  #  lastpmt.date = lastpmt.date, 
-  #  nextpmt.date = nextpmt.date, type = bondbasis)
-  
   accrual.factor = BondBasisConversion(
     issue.date = issue.date, 
     start.date = NULL, 
@@ -268,8 +248,7 @@
     lastpmt.date = lastpmt.date, 
     nextpmt.date = nextpmt.date, 
     type = bondbasis)
-  
-  #accrual.factor = (accrual.factor.one - accrual.factor.two)/accrual.factor.one
+
   
   accrued.interest = accrual.factor * Bond.CF.Table[1,"Coupon Income"]
 

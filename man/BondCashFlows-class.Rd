@@ -25,7 +25,7 @@ An S4 class representing standard bond cash flows
 \item{\code{Period}}{a numeric value an index of the payment to the investor}
 
 \item{\code{PmtDate}}{a character string the payment date to the investor format 
-is mm/dd/YYYY}
+is mm-dd-YYYY}
 
 \item{\code{TimePeriod}}{a numeric value the time period between payments made
 to the investor}

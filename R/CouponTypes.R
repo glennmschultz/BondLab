@@ -157,7 +157,7 @@
   #' The CouponTypes class converts coupon as a numeric value to a basis value
   #' (CouponBasis) used to calculate interest due and character string 
   #' CouponDecimalString
-  #' @param coupon A numeric value the state coupon of the bond
+  #' @param coupon A numeric value the stated coupon of the bond
   #' @export CouponTypes
   CouponTypes <- function(coupon = numeric()){
     CouponBasis = 100

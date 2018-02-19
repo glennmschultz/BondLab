@@ -247,12 +247,14 @@
   #' Method to extract Maturity from an S4 class of type BondDetails
   #' 
   #' @param object the name of the S4 class of type BondDetails
+  #' @exportMethod Maturity
   setMethod("Maturity", signature("BondDetails"),
             function(object){object@Maturity})
   
   #' Method to extract LastPmtDate from an S4 class of type BondDetails
   #' 
   #' @param object the name of the S4 class of type BondDetails
+  #' @exportMethod LastPmtDate
   setMethod("LastPmtDate", signature("BondDetails"),
             function(object){object@LastPmtDate})
   

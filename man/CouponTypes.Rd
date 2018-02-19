@@ -7,7 +7,7 @@
 CouponTypes(coupon = numeric())
 }
 \arguments{
-\item{coupon}{A numeric value the state coupon of the bond}
+\item{coupon}{A numeric value the stated coupon of the bond}
 }
 \description{
 The CouponTypes class converts coupon as a numeric value to a basis value

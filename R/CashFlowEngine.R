@@ -320,7 +320,7 @@
     start.date = as.Date(DatedDate(bill.id), format = "%m-%d-%Y")
     lastpmt.date = as.Date(IssueDate(bill.id), format = "%m-%d-%Y")
     end.date = as.Date(Maturity(bill.id), format = "%m-%d-%Y")
-    settlement.date = as.Date(settlement.date, format = "%m-%d-%Y")
+    settlement.date = as.Date(c(settlement.date), format = "%m-%d-%Y")
     bondbasis = as.Date(BondBasis(bill.id), format = "%m-%d-%Y")
   
   leap_day <- function(pmt.date){
@@ -342,23 +342,35 @@
   
   # Index number of the last payment of a bill is 1
   numpayments = 1
-  pmtdate = 1
+  pmtdate = pmt.date
   
   #step3 build the time period vector (n) for discounting the cashflows 
   #nextpmt date is vector of payment dates to n for each period
   
   time.period <- numeric(numpayments)
-  for(pmt in seq_along(pmtdate))
-    time.period[pmt] = BondBasisConversion(
-      issue.date = issue.date, 
-      start.date = settlement.date, 
-      end.date = end.date, 
-      settlement.date = settlement.date,
-      lastpmt.date = lastpmt.date, 
-      nextpmt.date = pmtdate[pmt], 
-      type = bondbasis)
-  
   num.periods = length(pmt.date)
+  
+  #step4 Count the number of cashflows 
+  #num.periods is the total number of cashflows to be received
+  #num.period is the period in which the cashflow is received
+  num.periods = length(time.period)
+  col.names <- c("Period",                   #1
+                 "Date",                     #2
+                 "Time",                     #3
+                 "Principal Outstanding",    #4
+                 "Coupon",                   #5
+                 "Coupon Income",            #6
+                 "Principal Paid",           #7
+                 "TotalCashFlow",            #8
+                 "Present Value Factor",     #9
+                 "Present Value",            #10
+                 "Duration",                 #11
+                 "Convexity Time",           #12
+                 "CashFlow Convexity",       #13
+                 "Convexity")                #14
+  num.columns <- length(col.names)
+  Bill.CF.Table <- array(data = NA, c(num.periods, num.columns), 
+                         dimnames = list(seq(c(1:num.periods)),col.names)) 
   
   for(i in 1:num.periods){
     Bill.CF.Table[i,"Period"] = i
@@ -370,7 +382,7 @@
       Bill.CF.Table[i,"Coupon"] * CouponBasis(Coupon) * Bill.CF.Table[i,"Principal Outstanding"]
     if(as.Date(Bill.CF.Table[i,"Date"], origin = "1970-01-01") == end.date) {
       Bill.CF.Table[i,"Principal Paid"] = principal
-    } else {Bond.CF.Table[i,"Principal Paid"] = 0}
+    } else {Bill.CF.Table[i,"Principal Paid"] = 0}
     Bill.CF.Table[i,"TotalCashFlow"] = 
       Bill.CF.Table[i,"Coupon Income"] + Bill.CF.Table[i,"Principal Paid"]
   }

@@ -18,6 +18,7 @@ pricing benchmark along the curve.
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
+  \code{\link{DiscountToPrice}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},
   \code{\link{SpreadToPriceMBS}},

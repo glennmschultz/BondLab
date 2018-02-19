@@ -18,6 +18,7 @@ point along the couopn curve matching the weighted average life.
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
+  \code{\link{DiscountToPrice}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},
   \code{\link{SpreadToPriceMBS}},

@@ -29,6 +29,8 @@ OAS framework a more accurate reference to the measure is spread to the spot cur
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{CurveSpreads}},
   \code{\link{DiscountToPrice}},
+  \code{\link{PriceToBondYield}},
+  \code{\link{PriceToDiscountYield}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},

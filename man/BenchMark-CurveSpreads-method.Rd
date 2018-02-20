@@ -18,6 +18,8 @@ marutity along the pricing curve to the weighted average life of the bond.
 Other Pricing: \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
   \code{\link{DiscountToPrice}},
+  \code{\link{PriceToBondYield}},
+  \code{\link{PriceToDiscountYield}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},

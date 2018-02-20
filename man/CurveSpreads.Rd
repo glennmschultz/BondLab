@@ -25,6 +25,8 @@ SpreadToBenchMark, SpreadToCurve, and ZeroVolSpread.
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{CurveSpreads-class}},
   \code{\link{DiscountToPrice}},
+  \code{\link{PriceToBondYield}},
+  \code{\link{PriceToDiscountYield}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},

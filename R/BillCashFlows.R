@@ -1,0 +1,185 @@
+  # Bond Lab is a software application for the analysis of 
+  # fixed income securities it provides a suite of applications
+  # mortgage backed, asset backed securities, and commerical mortgage backed 
+  # securities Copyright (C) 2018  Bond Lab Technologies, Inc.
+  # 
+  # This program is free software: you can redistribute it and/or modify
+  # it under the terms of the GNU General Public License as published by
+  # the Free Software Foundation, either version 3 of the License, or
+  # (at your option) any later version.
+  # 
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  
+  #' @include BondDetails.R MortgageCashFlow.R BondCashFlows.R
+  NULL
+  
+  #' An S4 class representing standared bill cash flows
+  #' 
+  #' @slot Price a character the price of the bill
+  #' @slot Discount a numeric value the discount rate
+  #' @slot YieldToMaturity a numeric value the bill yield expressed as semi-annual
+  #' bond equivalent
+  #' @slot WAL a numeric value the weighted average life of the bond
+  #' @slot ModDuration a numeric value the bill modified duration
+  #' @slot Convexity a numeric value the bill convexity
+  #' @slot Period a numeric value the index of the payment to the investor
+  #' @slot PmtDate a character string the payment date to the investor the format
+  #' is mm-dd-YYYY.
+  #' @slot TimePeriod a numeric value the time period between payment dates made 
+  #' to the investor.
+  #' @slot PrincipalOutstanding a numeric value the outstanding principal balance
+  #' @slot CouponPmt a numeric value the outstanding principal balance
+  #' @slot TotalCashFlow a numeric value the sum of the principal and interest 
+  #' payment made in each period.
+  #' @exportClass BillCashFlows
+  setClass("BillCashFlows",
+           representation(
+             Price = "character",
+             Discount = "numeric",
+             YieldToMaturity = "numeric",
+             WAL = "numeric",
+             ModDuration = "numeric",
+             Convexity = "numeric",
+             Period = "numeric",
+             PmtDate = "character",
+             TimePeriod = "numeric",
+             PrincipalOutstanding = "numeric",
+             CouponPmt ="numeric",
+             TotalCashFlow ="numeric"
+           ))
+  
+  # Note: standard generic Price is defined in MortgageCashFlow.R
+  
+  #' A standard generic to get the slot Discount 
+  #' @param object an S4 class object
+  #' @export Discount
+  setGeneric("Discount", function(object)
+    {standardGeneric("Discount")})
+  
+  # Note: standard generic YieldToMaturity is defined in MortgageCashFlow.R
+  # Note: standard generic WAL is defined in MortgageCashFlow.R
+  # Note: standard generic ModDuration is defined in MortgageCashFlow.R
+  # Note: standard generic Convexity is defined in MortgageCashFlow.R
+  # Note: standard generic Period is defined in MortgageCashFlow.R
+  # Note: standard generic PmtDate is defined in MortgageCashFlow.R
+  # Note: standard generic TimePeriod is defined in MortgageCashFlow.R
+  # Note: standard generic CouponPmt is defined in BondCashFlow.R
+  # Note: standard generic PrincipalOutstanding is defined in BondCashFlow.R
+  # Note: standard generic TotalCashFlow is defined in MortgageCashFlow.R
+  
+  setMethod("initialize",
+            signature("BillCashFlows"),
+            function(.Object,
+                     Price = "character",
+                     Discount = "numeric",
+                     YieldToMaturity = "numeric",
+                     WAL = "numeric",
+                     ModDuration = "numeric",
+                     Convexity = "numeric",
+                     Period = "numeric",
+                     PmtDate = "character",
+                     TimePeriod = "numeric",
+                     PrincipalOutstanding = "numeric",
+                     CouponPmt = "numeric",
+                     TotalCashFlow = "numeric",
+                     ...){
+              callNextMethod(.Object,
+                             Price = Price,
+                             Disocunt = Discount,
+                             YieldToMaturity = YieldToMaturity,
+                             WAL = WAL,
+                             ModDuration = ModDuration,
+                             Convexity = Convexity,
+                             Period = Period,
+                             PmtDate = PmtDate,
+                             TimePeriod = TimePeriod,
+                             PrincipalOutstanding = PrincipalOutstanding,
+                             CouponPmt = CouponPmt,
+                             TotalCashFlow = TotalCashFlow,
+                             ...)
+                     })
+  
+  #' Method to get price from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod Price
+  setMethod("Price", signature("BillCashFlows"),
+            function(object){object@Price})
+  
+  #' Method to get discount from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod Discount
+  setMethod("Discount", signature("BillCashFlows"),
+            function(object){object@Discount})
+  
+  #' Method to get YieldToMaturity from S4 class
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod YieldToMaturity
+  setMethod("YieldToMaturity", signature("BillCashFlows"),
+            function(object){object@YieldToMaturity})
+  
+  #' Method to get WAL from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod WAL
+  setMethod("WAL", signature("BillCashFlows"),
+            function(object){object@YieldToMaturity})
+  
+  #' Method to get modified duration from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod ModDuration
+  setMethod("ModDuration", signature("BillCashFlows"),
+            function(object){object@ModDuration})
+  
+  #' Method to get Convexity from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod Convexity
+  setMethod("Convexity", signature("BillCashFlows"),
+            function(object){object@Convexity})
+  
+  #' Method to get Period from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod Period
+  setMethod("Period", signature("BillCashFlows"),
+            function(object){object@Period})
+  
+  #' Method to get PmtDate from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod PmtDate
+  setMethod("PmtDate", signature("BillCashFlows"),
+            function(object){object@PmtDate})
+  
+  #' Method to get TimePeriod from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object BillCashFlows
+  #' @exportMethod TimePeriod
+  setMethod("TimePeriod", signature("BillCashFlows"),
+            function(object){object@TimePeriod})
+  
+  #' Method to get Principal outstanding from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S$ object BillCashFlows
+  #' @exportMethod PrincipalOutstanding
+  setMethod("PrincipalOutstanding", signature("BillCashFlows"),
+            function(object){object@PrincipalOutstanding})
+  
+  #' Method to get TotalCashFlows from S4 class BillCashFlows
+  #' 
+  #' @param object the name of the S4 object
+  #' @exportMethod TotalCashFlow
+  setMethod("TotalCashFlow", signature("BillCashFlows"),
+            function(object){object@TotalCashFlow})
+
+  

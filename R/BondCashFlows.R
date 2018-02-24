@@ -188,9 +188,9 @@
   #' 
   #' Cashflow engine for standard non-callable bond
   #' @param bond.id A character string referencing an object of type BondDetails
-  #' @param principal A numeric string the principal or face amount of the bond
+  #' @param principal A numeric value the principal or face amount of the bond
   #' @param settlement.date A character string the settlement date
-  #' @param price A character value the price of the bond
+  #' @param price A character string the price of the bond
   #' @examples
   #' \dontrun{BondCashFlows(bond.id = "bondlab10", principal = 1000, 
   #' settlement.date = "1-13-2013", price = "100")}
@@ -277,7 +277,7 @@
                 accrued.interest = accrued.interest)$root
   
   # convert to semi-bond equivalent yield
-  Yield.To.Maturity = ytm * yield.basis  #((((1 + ytm)^(1/2))-1) * 2) * yield.basis
+  Yield.To.Maturity = ytm * yield.basis
   
   # pass Yield.To.Maturity to class YieldTypes for conversion to YieldDecimal,
   # YieldBasis, and YieldDecimalString

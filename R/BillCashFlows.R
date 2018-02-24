@@ -91,7 +91,7 @@
                      ...){
               callNextMethod(.Object,
                              Price = Price,
-                             Disocunt = Discount,
+                             Discount = Discount,
                              YieldToMaturity = YieldToMaturity,
                              WAL = WAL,
                              ModDuration = ModDuration,
@@ -183,3 +183,93 @@
             function(object){object@TotalCashFlow})
 
   
+  #' Bill Cash Flow engine for a standard discount bill
+  #' 
+  #' @param bill.id A character the referencing an object of type BillDetails
+  #' @param principal A numeric value the principal or face amount of the bill
+  #' @param settlement.date A character the settlment date mm-dd-YYYY
+  #' @param price A character the price of the bill
+  #' @export BillCashFlows
+  BillCashFlows <- function(bill.id,
+                            principal,
+                            settlement.date,
+                            price){
+    
+    issue.date = as.Date(IssueDate(bill.id), format = '%m-%d-%Y')
+    start.date = as.Date(DatedDate(bill.id), format = '%m-%d-%Y')
+    end.date = as.Date(Maturity(bill.id), format = '%m-%d-%Y')
+    bond.basis = BondBasis(bill.id)
+    
+    # This function error traps bond input information
+    #ErrorTrap(bond.id = bill.id, 
+    #          principal = principal,
+    #          settlement.date = settlement.date,
+    #          price = price)
+    
+    # Pass price to the PriceTypes constructor function.  This function allows
+    # converts from 32nds and to decimal basis
+    price <- PriceTypes(price = price)
+    
+    # Calculate discount given price
+    discount = PriceToDiscountYield(bill.id = bill.id,
+                                    price = PriceDecimalString(price),
+                                    day.count = 360,
+                                    settlement.date = settlement.date)
+    
+    Discount.Type <- DiscountTypes(discount.rate = discount)
+    
+    Bill.CF.Table <- CashFlowBill(bill.id = bill.id,
+                                  principal = principal,
+                                  settlement.date = settlement.date)
+    
+    ytm = PriceToBondYield(bill.id,
+                           price = PriceDecimalString(price),
+                           day.count = 360,
+                           settlement.date = settlement.date)
+    
+    Yield.To.Maturity = ytm * yield.basis
+    
+    # pass Yield.To.Maturity to class YieldTypes for conversion to YieldDecimal,
+    # YieldBasis, and YieldDecimalString
+    Yield <- YieldTypes(yield = Yield.To.Maturity)
+    
+    #Step7 Present value of the cash flows Present Value Factors
+    Bill.CF.Table[,"Present Value Factor"] = 1/((1+(YieldBasis(Yield)))^(Bill.CF.Table[,"Time"]))
+    
+    #Present Value of the cash flows
+    Bill.CF.Table[,"Present Value"] = Bill.CF.Table[,"TotalCashFlow"] * Bill.CF.Table[,"Present Value Factor"]
+    
+    #Step8 Risk measures Duration Factors
+    Bill.CF.Table[,"Duration"] = Bill.CF.Table[,"Time"] * (Bill.CF.Table[,"Present Value"]/((principal * PriceBasis(price))))
+    
+    #Convexity Factors
+    Bill.CF.Table[,"Convexity Time"] = Bill.CF.Table[,"Time"] *(Bill.CF.Table[,"Time"] + 1)
+    
+    Bill.CF.Table[,"CashFlow Convexity"] = (Bill.CF.Table[,"TotalCashFlow"]/((1 + ((YieldBasis(Yield)))) ^ ((Bill.CF.Table[,"Time"] + 2))))/((principal * PriceBasis(price)))
+    
+    Bill.CF.Table[,"Convexity"] = Bill.CF.Table[,"Convexity Time"] * Bill.CF.Table[,"CashFlow Convexity"] 
+    
+    #Weighted Average Life
+    WAL = sum((Bill.CF.Table[,"Principal Paid"] * Bill.CF.Table[,"Time"]))/sum(Bill.CF.Table[,"Principal Paid"])
+    
+    #Duration and Convexity
+    Duration = apply(Bill.CF.Table, 2, sum)["Duration"]
+    Modified.Duration = Duration/(1 + (YieldBasis(Yield)))
+    Convexity = apply(Bill.CF.Table, 2, sum)["Convexity"] * .5
+    
+    #Assign Values to the slots
+    new("BillCashFlows",   
+        Price = PriceDecimalString(price),
+        Discount = DiscountDecimal(Discount.Type),
+        YieldToMaturity = YieldDecimal(Yield),
+        WAL = WAL,
+        ModDuration = unname(Modified.Duration),
+        Convexity = unname(Convexity),
+        Period = unname(Bill.CF.Table[,"Period"]),
+        PmtDate = unname(as.character(as.Date(Bill.CF.Table[,"Date"], origin = "1970-01-01"))),
+        TimePeriod = unname(Bill.CF.Table[,"Time"]),
+        PrincipalOutstanding  = unname(Bill.CF.Table[,"Principal Outstanding"]),
+        CouponPmt = unname(Bill.CF.Table[,"Coupon Income"]),
+        TotalCashFlow = unname(Bill.CF.Table[,"TotalCashFlow"])
+    )
+  }

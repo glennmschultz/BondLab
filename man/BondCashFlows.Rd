@@ -10,11 +10,11 @@ BondCashFlows(bond.id = "character", principal = numeric(),
 \arguments{
 \item{bond.id}{A character string referencing an object of type BondDetails}
 
-\item{principal}{A numeric string the principal or face amount of the bond}
+\item{principal}{A numeric value the principal or face amount of the bond}
 
 \item{settlement.date}{A character string the settlement date}
 
-\item{price}{A character value the price of the bond}
+\item{price}{A character string the price of the bond}
 }
 \description{
 Cashflow engine for standard non-callable bond

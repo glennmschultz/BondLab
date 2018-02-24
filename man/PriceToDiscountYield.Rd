@@ -4,7 +4,7 @@
 \alias{PriceToDiscountYield}
 \title{Price to Discount Yield bill}
 \usage{
-PriceToDiscountYield(bill.id, price, day.count, trade.date, settlement.date)
+PriceToDiscountYield(bill.id, price, day.count, settlement.date)
 }
 \arguments{
 \item{bill.id}{A character string the cusip number or bill.id}
@@ -12,8 +12,6 @@ PriceToDiscountYield(bill.id, price, day.count, trade.date, settlement.date)
 \item{price}{A character string the bill price}
 
 \item{day.count}{A numeric value the day count used for pricing}
-
-\item{trade.date}{A character the trade date mm-dd-YYYY}
 
 \item{settlement.date}{A character the settlement date mm-dd-YYYY}
 }

@@ -24,13 +24,11 @@
   #' @param bill.id A character string the cusip number or bill.id
   #' @param discount A numeric value the discount rate stated as a percentage
   #' @param day.count A numeric value the day count used for pricing
-  #' @param trade.date A character the trade date mm-dd-YYYY
   #' @param settlement.date A character the settlement date mm-dd-YYYY
   #' @export
   DiscountToPrice <- function(bill.id,
                               discount,
                               day.count,
-                              trade.date,
                               settlement.date){
     price = NULL
     principal = 100
@@ -48,13 +46,11 @@
   #' @param bill.id A character string the cusip number or bill.id
   #' @param price A character string the bill price
   #' @param day.count A numeric value the day count used for pricing
-  #' @param trade.date A character the trade date mm-dd-YYYY
   #' @param settlement.date A character the settlement date mm-dd-YYYY
   #' @export
   PriceToDiscountYield <- function(bill.id,
                               price,
                               day.count,
-                              trade.date,
                               settlement.date){
     discount.yield = NULL
     price = PriceTypes(price = price)
@@ -74,13 +70,11 @@
   #' @param bill.id A character string the cusip number or bill.id
   #' @param price A character string the bill price
   #' @param day.count A numeric value the day count used for pricing
-  #' @param trade.date A character the trade date mm-dd-YYYY
   #' @param settlement.date A character the settlement date mm-dd-YYYY
   #' @export
   PriceToBondYield <- function(bill.id,
                                price,
                                day.count,
-                               trade.date,
                                settlement.date){
     bond.yield = NULL
     price = PriceTypes(price = price)

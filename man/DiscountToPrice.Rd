@@ -4,7 +4,7 @@
 \alias{DiscountToPrice}
 \title{Discount To Price bill}
 \usage{
-DiscountToPrice(bill.id, discount, day.count, trade.date, settlement.date)
+DiscountToPrice(bill.id, discount, day.count, settlement.date)
 }
 \arguments{
 \item{bill.id}{A character string the cusip number or bill.id}
@@ -12,8 +12,6 @@ DiscountToPrice(bill.id, discount, day.count, trade.date, settlement.date)
 \item{discount}{A numeric value the discount rate stated as a percentage}
 
 \item{day.count}{A numeric value the day count used for pricing}
-
-\item{trade.date}{A character the trade date mm-dd-YYYY}
 
 \item{settlement.date}{A character the settlement date mm-dd-YYYY}
 }

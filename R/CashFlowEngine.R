@@ -347,7 +347,7 @@
   #step3 build the time period vector (n) for discounting the cashflows 
   #nextpmt date is vector of payment dates to n for each period
   
-  time.period <- numeric(numpayments)
+  time.period <- difftime(end.date, settlement.date, units = c('days')) /360
   num.periods = length(pmt.date)
   
   #step4 Count the number of cashflows 

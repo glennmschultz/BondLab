@@ -227,7 +227,7 @@
                            day.count = 360,
                            settlement.date = settlement.date)
     
-    Yield.To.Maturity = ytm * yield.basis
+    Yield.To.Maturity = ytm
     
     # pass Yield.To.Maturity to class YieldTypes for conversion to YieldDecimal,
     # YieldBasis, and YieldDecimalString
@@ -260,7 +260,7 @@
     #Assign Values to the slots
     new("BillCashFlows",   
         Price = PriceDecimalString(price),
-        Discount = DiscountDecimal(Discount.Type),
+        Discount = 100 - PriceDecimal(price),
         YieldToMaturity = YieldDecimal(Yield),
         WAL = WAL,
         ModDuration = unname(Modified.Duration),

@@ -15,11 +15,10 @@ Get the pricing benchmark.  The pricing benchmark is the nearest
 marutity along the pricing curve to the weighted average life of the bond.
 }
 \seealso{
-Other Pricing: \code{\link{CurveSpreads-class}},
+Other Pricing: \code{\link{BillPriceToYield}},
+  \code{\link{BillYieldToPrice}},
+  \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
-  \code{\link{DiscountToPrice}},
-  \code{\link{PriceToBondYield}},
-  \code{\link{PriceToDiscountYield}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},

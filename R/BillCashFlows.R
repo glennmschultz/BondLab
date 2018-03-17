@@ -200,34 +200,21 @@
     end.date = as.Date(Maturity(bill.id), format = '%m-%d-%Y')
     bond.basis = BondBasis(bill.id)
     
-    # This function error traps bond input information
-    #ErrorTrap(bond.id = bill.id, 
-    #          principal = principal,
-    #          settlement.date = settlement.date,
-    #          price = price)
     
     # Pass price to the PriceTypes constructor function.  This function allows
     # converts from 32nds and to decimal basis
     price <- PriceTypes(price = price)
     
-    # Calculate discount given price
-    discount = PriceToDiscountYield(bill.id = bill.id,
-                                    price = PriceDecimalString(price),
-                                    day.count = 360,
-                                    settlement.date = settlement.date)
-    
-    Discount.Type <- DiscountTypes(discount.rate = discount)
     
     Bill.CF.Table <- CashFlowBill(bill.id = bill.id,
                                   principal = principal,
                                   settlement.date = settlement.date)
     
-    ytm = PriceToBondYield(bill.id,
-                           price = PriceDecimalString(price),
-                           day.count = 360,
-                           settlement.date = settlement.date)
-    
-    Yield.To.Maturity = ytm
+    Yield.To.Maturity = BillPriceToYield(bill.id,
+                                         price = PriceDecimalString(price),
+                                         day.count = 360,
+                                         settlement.date = settlement.date)
+
     
     # pass Yield.To.Maturity to class YieldTypes for conversion to YieldDecimal,
     # YieldBasis, and YieldDecimalString

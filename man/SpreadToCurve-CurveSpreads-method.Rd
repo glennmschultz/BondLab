@@ -16,11 +16,10 @@ point along the couopn curve matching the weighted average life.
 }
 \seealso{
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
+  \code{\link{BillPriceToYield}},
+  \code{\link{BillYieldToPrice}},
   \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
-  \code{\link{DiscountToPrice}},
-  \code{\link{PriceToBondYield}},
-  \code{\link{PriceToDiscountYield}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},
   \code{\link{SpreadToPriceMBS}},

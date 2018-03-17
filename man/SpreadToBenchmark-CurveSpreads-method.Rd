@@ -16,11 +16,10 @@ pricing benchmark along the curve.
 }
 \seealso{
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
+  \code{\link{BillPriceToYield}},
+  \code{\link{BillYieldToPrice}},
   \code{\link{CurveSpreads-class}},
   \code{\link{CurveSpreads}},
-  \code{\link{DiscountToPrice}},
-  \code{\link{PriceToBondYield}},
-  \code{\link{PriceToDiscountYield}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},
   \code{\link{SpreadToPriceMBS}},

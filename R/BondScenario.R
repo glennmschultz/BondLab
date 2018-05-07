@@ -231,7 +231,7 @@
     # not based on shift of the spot rate curve.
     
     HorizonCurve <- rates.data
-    
+
     HorizonCurve[1,1] <- as.character(
       as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
     
@@ -372,11 +372,6 @@
         SpotRate(HorizonTermStructure)[1:360],
         bSpline = TRUE
       )
-      #InterpolateSpot <- splines::interpSpline(
-      #  difftime(as.Date(ForwardDate(HorizonTermStructure)[1:360]),
-      #           TradeDate(HorizonTermStructure))/30,
-      #  SpotRate(HorizonTermStructure)[1:360],
-      #  bSpline = TRUE)
       
       SpotRates <- predict(
         InterpolateSpot,TimePeriod(HorizonCashFlow))
@@ -407,10 +402,7 @@
       InterpolateCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
                                                 as.numeric(rates.data[1,2:12]),
                                                 bSpline = TRUE)
-      
-      #InterpolateCurve <- loess(as.numeric(rates.data[1,2:12]) ~ 
-      #                            as.numeric(rates.data[2,2:12]),
-      #                          data = data.frame(HorizonCurve))
+
       
       HorizonYield <- 
       predict(InterpolateCurve, WAL(HorizonCashFlow))$y + horizon.nominal.spread

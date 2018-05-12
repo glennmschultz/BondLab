@@ -254,6 +254,61 @@
     return(PriceTypes)
   }
   
+  #'@title ZV Spread to Price Bond
+  #'@family Pricing
+  #'@description returns the clean price of a bond given a spread to the spot rate curve.
+  #'market convention is to quote spread to a benchmark in basis points.  Bond Lab
+  #'follows the market convection.  The user specified spread to the benchmark in basis points.
+  
+  ZVSpreadToPriceBond <- function(bond.id,
+                                  settlement.date,
+                                  term.structure,
+                                  ZV.spread){
+    
+    issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+    start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+    end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+    lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+    nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+    coupon = Coupon(bond.id)
+    frequency = Frequency(bond.id)
+    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+    bondbasis = BondBasis(bond.id)
+    principal = OfferAmount(bond.id)
+    
+    if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
+      days.in.year = days.in.year} else {days.in.year = days.in.year.360}
+    
+    Spreads <- SpreadTypes(spread = spread)
+    
+    Bond.Cf.Table <- CashFlowBond(bond.id = bond.id, 
+                                  principal = OfferAmount(bond.id), 
+                                  settlement.date = settlement.date)
+    
+    Factor = BondBasisConversion(
+      issue.date = issue.date, 
+      start.date = NULL, 
+      end.date = end.date,
+      settlement.date = settlement.date, 
+      lastpmt.date = lastpmt.date, 
+      nextpmt.date = nextpmt.date, 
+      type = BondBasis(bond.id))
+    
+    accrued.interest = Factor * as.numeric(Bond.CF.Table[1, "Coupon Income"])
+
+    ModelSpotCurve <- splines::interpSpline(SpotRate(term.structure)~TimePeriod(term.structure), 
+                                            bSpline = TRUE)
+    
+    spot.rate <- predict(ModelSpotCurve, cash.flow[,'Time'])
+    presentvalue = (sum(cash.flow[,'TotalCashFlow'] * 
+                          (1 + (spot.rate$y/100) + ZV.spread) ^ -spot.rate$x)) - accrued
+    
+    price = presentvalue/ OfferAmount(bond.id)
+    price = price * 100
+    price = PriceTypes(as.character(price))
+    return(price)
+  }
+  
   
   
   

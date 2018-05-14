@@ -21,9 +21,10 @@ function will determine the nearest pricing benchmark.  The user override values
 1, 2, 3, 4, 5, 7, 10, 30}
 }
 \description{
-returns the clean price of a bond given a spread and benchmark.
-market convention is to quote spread to a benchmark in basis points.  Bond Lab
-follows the market convection.  The user specified spread to the benchmark in basis points.
+returns the clean price of a bond given via PriceTypes object 
+given a spread and benchmark. market convention is to quote spread to a 
+benchmark in basis points.  Bond Lab follows the market convection.  
+The user specified spread to the benchmark in basis points.
 }
 \seealso{
 Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
@@ -34,5 +35,6 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceMBS}},
+  \code{\link{ZVSpreadToPriceBond}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }

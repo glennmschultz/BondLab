@@ -25,5 +25,6 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{SpreadToBenchmark,CurveSpreads-method}},
   \code{\link{SpreadToCurve,CurveSpreads-method}},
   \code{\link{SpreadToPriceBond}},
-  \code{\link{SpreadToPriceMBS}}
+  \code{\link{SpreadToPriceMBS}},
+  \code{\link{ZVSpreadToPriceBond}}
 }

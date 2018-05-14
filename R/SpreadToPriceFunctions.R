@@ -263,6 +263,7 @@
   #'user specified spread to the benchmark in basis points.
   #'@param bond.id a character or connection to object of type BondDetails
   #'@param settlement.date a character the settlement date 'mm-dd-yyyy'
+  #'@param term.structure a character string referencing a term structure object
   #'@param ZV.spread the spread to the spot rate curve quoted in basis points
   
   ZVSpreadToPriceBond <- function(bond.id,
@@ -282,9 +283,10 @@
     principal = OfferAmount(bond.id)
     
     if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
-      days.in.year = days.in.year} else {days.in.year = days.in.year.360}
+      
+    days.in.year = days.in.year} else {days.in.year = days.in.year.360}
     
-    Spreads <- SpreadTypes(spread = spread)
+    Spreads <- SpreadTypes(spread = ZV.spread)
     
     Bond.CF.Table <- CashFlowBond(bond.id = bond.id, 
                                   principal = OfferAmount(bond.id), 
@@ -304,18 +306,12 @@
     ModelSpotCurve <- splines::interpSpline(SpotRate(term.structure)~TimePeriod(term.structure), 
                                             bSpline = TRUE)
     
-    spot.rate <- predict(ModelSpotCurve, cash.flow[,'Time'])
-    presentvalue = (sum(cash.flow[,'TotalCashFlow'] * 
-                          (1 + (spot.rate$y/yield.basis) + ZV.spread) ^ -spot.rate$x)) - accrued
+    spot.rate <- predict(ModelSpotCurve, Bond.CF.Table[,'Time'])
+    presentvalue = (sum(Bond.CF.Table[,'TotalCashFlow'] * 
+                          (1 + (spot.rate$y/yield.basis) + ZV.spread) ^ -spot.rate$x)) - accrued.interest
     
     price = presentvalue/ OfferAmount(bond.id)
     price = price * price.basis
     price = PriceTypes(as.character(price))
     return(price)
   }
-  
-  
-  
-  
-  
-  

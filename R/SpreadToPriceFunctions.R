@@ -265,7 +265,7 @@
   #'@param settlement.date a character the settlement date 'mm-dd-yyyy'
   #'@param term.structure a character string referencing a term structure object
   #'@param ZV.spread the spread to the spot rate curve quoted in basis points
-  
+  #'@export ZVSpreadToPriceBond
   ZVSpreadToPriceBond <- function(bond.id,
                                   settlement.date,
                                   term.structure,
@@ -286,7 +286,7 @@
       
     days.in.year = days.in.year} else {days.in.year = days.in.year.360}
     
-    Spreads <- SpreadTypes(spread = ZV.spread)
+    ZVSpread <- SpreadTypes(spread = ZV.spread)
     
     Bond.CF.Table <- CashFlowBond(bond.id = bond.id, 
                                   principal = OfferAmount(bond.id), 
@@ -308,7 +308,8 @@
     
     spot.rate <- predict(ModelSpotCurve, Bond.CF.Table[,'Time'])
     presentvalue = (sum(Bond.CF.Table[,'TotalCashFlow'] * 
-                          (1 + (spot.rate$y/yield.basis) + ZV.spread) ^ -spot.rate$x)) - accrued.interest
+                          (1 + (spot.rate$y/yield.basis) + (SpreadDecimal(ZVSpread)/yield.basis)) ^ 
+                          -spot.rate$x)) - accrued.interest
     
     price = presentvalue/ OfferAmount(bond.id)
     price = price * price.basis

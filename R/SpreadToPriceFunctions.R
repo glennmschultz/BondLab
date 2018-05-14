@@ -167,9 +167,10 @@
   
   #'@title Spread to Price Bond
   #'@family Pricing
-  #'@description returns the clean price of a bond given a spread and benchmark.
-  #'market convention is to quote spread to a benchmark in basis points.  Bond Lab
-  #'follows the market convection.  The user specified spread to the benchmark in basis points.
+  #'@description returns the clean price of a bond given via PriceTypes object 
+  #'given a spread and benchmark. market convention is to quote spread to a 
+  #'benchmark in basis points.  Bond Lab follows the market convection.  
+  #'The user specified spread to the benchmark in basis points.
   #'@param bond.id a character or connection referencing an object of type BondDetails
   #'@param trade.date a character the trade date mm-dd-YYYY
   #'@param settlement.date a character the settlement.date
@@ -256,9 +257,13 @@
   
   #'@title ZV Spread to Price Bond
   #'@family Pricing
-  #'@description returns the clean price of a bond given a spread to the spot rate curve.
-  #'market convention is to quote spread to a benchmark in basis points.  Bond Lab
-  #'follows the market convection.  The user specified spread to the benchmark in basis points.
+  #'@description returns the clean price of a bond via PriceTypes object given a 
+  #'spread to the spot rate curve.  Market convention is to quote spread to a 
+  #'the spot rate curve in basis points.  Bond Lab follows the market convection.  The 
+  #'user specified spread to the benchmark in basis points.
+  #'@param bond.id a character or connection to object of type BondDetails
+  #'@param settlement.date a character the settlement date 'mm-dd-yyyy'
+  #'@param ZV.spread the spread to the spot rate curve quoted in basis points
   
   ZVSpreadToPriceBond <- function(bond.id,
                                   settlement.date,
@@ -281,7 +286,7 @@
     
     Spreads <- SpreadTypes(spread = spread)
     
-    Bond.Cf.Table <- CashFlowBond(bond.id = bond.id, 
+    Bond.CF.Table <- CashFlowBond(bond.id = bond.id, 
                                   principal = OfferAmount(bond.id), 
                                   settlement.date = settlement.date)
     
@@ -301,10 +306,10 @@
     
     spot.rate <- predict(ModelSpotCurve, cash.flow[,'Time'])
     presentvalue = (sum(cash.flow[,'TotalCashFlow'] * 
-                          (1 + (spot.rate$y/100) + ZV.spread) ^ -spot.rate$x)) - accrued
+                          (1 + (spot.rate$y/yield.basis) + ZV.spread) ^ -spot.rate$x)) - accrued
     
     price = presentvalue/ OfferAmount(bond.id)
-    price = price * 100
+    price = price * price.basis
     price = PriceTypes(as.character(price))
     return(price)
   }

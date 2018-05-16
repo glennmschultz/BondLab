@@ -206,6 +206,7 @@
                                         bSpline = TRUE)
     
     trade.date = as.Date(rates.data[1,1])
+    
     maturity.date = as.Date(Maturity(bond.id), format = '%m-%d-%Y')
     maturity.years = as.numeric(difftime(maturity.date, trade.date)/days.in.year)
     
@@ -234,7 +235,7 @@
 
     Factor = BondBasisConversion(
       issue.date = issue.date,
-      start.date = start.date,
+      start.date = NULL,
       end.date = end.date,
       settlement.date = settlement.date,
       lastpmt.date = lastpmt.date,

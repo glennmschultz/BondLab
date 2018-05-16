@@ -338,14 +338,7 @@
     
     PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(HorizonSettlement)) {PmtIndex -1
       } else {PmtIndex}
-    
 
-
-    # Here frequency and horizon is converted into the number of payments 
-    # received Frequency is the number of payments recieved in a year and the 
-    # monthly interval between payments.  Maybe frequency should be months 
-    # between payments
-    #NumberPaymentReceived <- horizon.months/(horizon.months/Frequency(bond.id))
 
     # =========================================================================
     # Horizon present value of MBS pass through using spot spread, nominal 

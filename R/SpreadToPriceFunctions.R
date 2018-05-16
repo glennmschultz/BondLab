@@ -172,15 +172,15 @@
   #'benchmark in basis points.  Bond Lab follows the market convection.  
   #'The user specified spread to the benchmark in basis points.
   #'@param bond.id a character or connection referencing an object of type BondDetails
-  #'@param trade.date a character the trade date mm-dd-YYYY
+  #'@param rates.data a character the referencing a curve object
   #'@param settlement.date a character the settlement.date
   #'@param spread the spread to the benchmark given in basis points.
-  #'@param benchmark the pricing benchmark.  The default in NULL in which case the
+  #'@param benchmark the pricing benchmark.  The default is NULL in which case the
   #'function will determine the nearest pricing benchmark.  The user override values are
   #'1, 2, 3, 4, 5, 7, 10, 30
   #'@export SpreadToPriceBond
   SpreadToPriceBond <- function(bond.id,
-                                trade.date,
+                                rates.data,
                                 settlement.date,
                                 spread,
                                 benchmark = NULL){
@@ -201,12 +201,11 @@
     
     Spreads <- SpreadTypes(spread = spread)
     
-    rates.data = Rates(trade.date = trade.date)
     ModelCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
                                         as.numeric(rates.data[1,2:12]),
                                         bSpline = TRUE)
     
-    trade.date = as.Date(trade.date, format = '%m-%d-%Y')
+    trade.date = as.Date(rates.data[1,1])
     maturity.date = as.Date(Maturity(bond.id), format = '%m-%d-%Y')
     maturity.years = as.numeric(difftime(maturity.date, trade.date)/days.in.year)
     

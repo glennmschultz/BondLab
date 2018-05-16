@@ -313,11 +313,7 @@
     # ==========================================================================
     
     HorizonBond <- bond.id
-    
-    #===========================================================================
-    # Calculate Last and Next Payment Dates for the horizon bond object
-    #===========================================================================
-    
+
     paymentdates <- LastandNextPmtDate(issue.date = IssueDate(HorizonBond),
                                        dated.date = DatedDate(HorizonBond),
                                        maturity.date = Maturity(HorizonBond),
@@ -329,11 +325,6 @@
                                    as.character(paymentdates[1], format = '%m-%d-%Y'))
     HorizonBond <- `NextPmtDate<-`(HorizonBond, 
                                    as.character(paymentdates[2], format = '%m-%d-%Y'))
-    
-    HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
-                                     principal = principal,
-                                     settlement.date = HorizonSettlement,
-                                     price = PriceDecimalString(Price))
 
 
     # ========================================================================
@@ -348,7 +339,7 @@
     PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(HorizonSettlement)) {PmtIndex -1
       } else {PmtIndex}
     
-    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
+
 
     # Here frequency and horizon is converted into the number of payments 
     # received Frequency is the number of payments recieved in a year and the 
@@ -373,30 +364,29 @@
                                  term.structure = HorizonTermStructure,
                                  ZV.spread = horizon.spot.spread),
    "nominal" = SpreadToPriceBond(bond.id = HorizonBond,
-                                 trade.date = HorizonSettlement,
+                                 rates.data = HorizonCurve,
                                  settlement.date = HorizonSettlement,
                                  spread = horizon.nominal.spread),
    "price" = PriceTypes(horizon.price))
 
-
-    # Replace this with an array of cashflow?
     HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
-                                     principal = principal,
+                                     principal = OfferAmount(HorizonBond),
                                      settlement.date = HorizonSettlement,
                                      price = PriceDecimalString(HorizonPrice))
 
-    HorizonProceeds <- ((PriceBasis(HorizonPrice) * principal) + 
-                          Accrued(HorizonCashFlow))
+    HorizonProceeds <- (PriceBasis(HorizonPrice) * OfferAmount(HorizonBond)) + 
+      Accrued(HorizonCashFlow)
 
     HorizonSpread <- CurveSpreads(
       rates.data = HorizonCurve,
       CashFlow = HorizonCashFlow,
       TermStructure = HorizonTermStructure,
       proceeds = HorizonProceeds)
-    
+  
+    #==========================================================================
     # From the beginning cashflow calculation get the cashflow recieved by the 
     # investor.  This should be the matrix in the book
-      
+    #==========================================================================
     CouponIncome <- sum(CouponPmt(BondCashFlow)[1:PmtIndex])
     ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:PmtIndex]
 
@@ -404,9 +394,11 @@
       as.numeric(difftime(as.Date(PmtDate(BondCashFlow)[PmtIndex]), 
                           as.Date(PmtDate(BondCashFlow)[1:PmtIndex]), 
                           units = "days")/days.in.month)
+    
+    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
 
     TerminalValue <- 
-    ReceivedCashFlow * ((1 + ((reinvestment.rate/price.basis)/months.in.year)) ^ (n.period))
+    ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
     ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
     
     # This needs to be changed by adding principal pmt to bond cashflow class

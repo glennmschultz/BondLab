@@ -4,19 +4,19 @@
 \alias{SpreadToPriceBond}
 \title{Spread to Price Bond}
 \usage{
-SpreadToPriceBond(bond.id, trade.date, settlement.date, spread,
+SpreadToPriceBond(bond.id, rates.data, settlement.date, spread,
   benchmark = NULL)
 }
 \arguments{
 \item{bond.id}{a character or connection referencing an object of type BondDetails}
 
-\item{trade.date}{a character the trade date mm-dd-YYYY}
+\item{rates.data}{a character the referencing a curve object}
 
 \item{settlement.date}{a character the settlement.date}
 
 \item{spread}{the spread to the benchmark given in basis points.}
 
-\item{benchmark}{the pricing benchmark.  The default in NULL in which case the
+\item{benchmark}{the pricing benchmark.  The default is NULL in which case the
 function will determine the nearest pricing benchmark.  The user override values are
 1, 2, 3, 4, 5, 7, 10, 30}
 }

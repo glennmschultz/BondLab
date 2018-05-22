@@ -23,6 +23,51 @@
   # for the class MortgageCashFlow and the initialize method for the class.  
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
+
+  #' @title an S4 class Horizon Curve 
+  #' @family Scenario Analysis
+  #' @description The class HorizonCurve holds both the start and horizon curve
+  #' the object returned has both start TermStructure object and the horizon 
+  #' term structure object
+  #' @slot Start the starting TermStructure assumption
+  #' @slot Horizon the horizon TermStructure assumption
+  #' @exportClass HorizonCurve
+  setClass('HorizonCurve',
+           slots = c(Start = 'TermStructure',
+                     Horizon = 'TermStructure'))
+  
+  #' @title a constructor function of the class HorizonCurve
+  #' @family Scenario Analysis
+  #' @description a function to construct the HorizonCurve class 
+  #' @param rates.data A character string referencing a rates object
+  #' @param settlement.date A character string the settlement date 'mm-dd-YYYY'
+  #' @param horizon.months A numeric value the horizon in months
+  #' @param scenario A character string the scenario
+  #' @param method A character string indicating the fitting method ns = Nelson
+  #' Siegel, dl = Diebond Lee, sv = Severson, asv = adjusted Severson, 
+  #' cs = cubic spline (not yet implemented).  For additional details see the termstrc
+  #' documentation. 
+  #' @export HorizonCurve
+  HorizonCurve <- function(rates.data,
+                           settlement.date,
+                           horizon.months = 12,
+                           scenario = 'NC',
+                           method = 'dl'){
+  horizon.settlement <- as.Date(settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)  
+  start <- rates.data
+  horizon <- rates.data
+  # Calculate the horizon curve based on the scenario
+  Scenario <- ScenarioCall(Scenario = scenario)
+  horizon[1,2:length(horizon)] <- as.numeric(ScenarioFormula(Scenario)(start[1,2:length(start)], 
+                                                                       Shiftbps = Shiftbps(Scenario)))
+  horizon[1,1] <- as.character(as.Date(horizon[1,1]) %m+% months(horizon.months))
+  # Calculate the term structure objects
+  invisible(capture.output(start.termstructure <- TermStructure(rates.data = start, method = method)))
+  invisible(capture.output(horizon.termstructure <- TermStructure(rates.data = horizon, method = method)))
+  
+  new("HorizonCurve",
+      Start = start.termstructure,
+      Horizon = horizon.termstructure)}
   
   #' @title An S4 class Scenario
   #' @family Scenario Analysis
@@ -52,7 +97,6 @@
            Formula = "function"
          ))
 
-  
   #' A standard generic to access the slot Name
   #' @param object An S4 class object of the type Scenario
   #' @export Name

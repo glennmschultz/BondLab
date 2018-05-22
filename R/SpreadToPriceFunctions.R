@@ -192,7 +192,7 @@
     nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
     coupon = Coupon(bond.id)
     frequency = Frequency(bond.id)
-    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+    settlement.date = as.Date(settlement.date, "%m-%d-%Y")
     bondbasis = BondBasis(bond.id)
     principal = OfferAmount(bond.id)
     
@@ -264,7 +264,10 @@
   #'@param bond.id a character or connection to object of type BondDetails
   #'@param settlement.date a character the settlement date 'mm-dd-yyyy'
   #'@param term.structure a character string referencing a term structure object
-  #'@param ZV.spread the spread to the spot rate curve quoted in basis points
+  #'@param ZV.spread a character the spread to the spot rate curve quoted in basis points
+  #'@importFrom splines interpSpline
+  #'@importFrom stats predict
+  #'@importFrom stats uniroot
   #'@export ZVSpreadToPriceBond
   ZVSpreadToPriceBond <- function(bond.id,
                                   settlement.date,
@@ -278,12 +281,11 @@
     nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
     coupon = Coupon(bond.id)
     frequency = Frequency(bond.id)
-    settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
+    settlement.date = as.Date(settlement.date, "%m-%d-%Y")
     bondbasis = BondBasis(bond.id)
     principal = OfferAmount(bond.id)
     
     if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
-      
     days.in.year = days.in.year} else {days.in.year = days.in.year.360}
     
     ZVSpread <- SpreadTypes(spread = ZV.spread)

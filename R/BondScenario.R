@@ -332,13 +332,56 @@
     # Cashflow Received + Reinvestment Income + Present Value at Horizon
     # ========================================================================
     
-    #NumberofCashFlow <- as.numeric(length(TotalCashFlow(HorizonCashFlow)))
     PmtIndex <- which(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(HorizonSettlement)) == 
                         min(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(HorizonSettlement))))
     
     PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(HorizonSettlement)) {PmtIndex -1
-      } else {PmtIndex}
+    } else {PmtIndex}
+    
+    #==========================================================================
+    # From the beginning cashflow calculation get the cashflow recieved by the 
+    # investor.  This should be the matrix in the book
+    #==========================================================================
 
+    CashFlowArray <- array(data = 0, dim = c(PmtIndex +2, horizon.months + 2), dimnames = NULL)
+    
+    # --------------------------------------------------------------------------
+    # set days to 01 forces all coupon payment calculations to month year basis
+    horizon.month.seq <- as.character(seq(as.Date(rates.data[1,1]), by = 'months', 
+                                          length.out = horizon.months + 1),format ='%Y-01-%m')
+    coupon.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-01-%m")
+
+    colindex = NULL
+    for(col in seq_along(coupon.months)){
+      loc <- which(as.Date(coupon.months[col]) == as.Date(horizon.month.seq))
+      if(length(loc) != 0){colindex <- append(colindex, loc, after = length(colindex))
+      } else {next()}}
+
+    for(pmtrow in seq_along(colindex)){
+      CashFlowArray[pmtrow,colindex[pmtrow]] <- CouponPmt(BondCashFlow)[pmtrow]}
+    
+    # To price the bond at the horizon one must first determine the scenario cash
+    # flow in particular on must determine the amount of princial returned, if any,
+    # over the scenario to adjust the principal outstanding of the investor holdings
+    
+    # -------------------------------note----------------------------------------
+    # the bond cash flow engine requires an upgrade to include the slot principal
+    # paid similar to that of the mortgage cash flow engine.  The engine below will
+    # work for a non callable bond but will not work for sinking, putable or callable
+    # bonds.  This is CashFlowBond problem and relates to the allocation of principal
+    prin.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-01-%m")
+    
+    colindex = NULL
+    for(col in seq_along(prin.months)){
+      loc <- which(as.Date(prin.months[col]) == as.Date(horizon.month.seq))
+      if(length(loc) != 0){colindex <- append(colindex, loc, after = length(colindex))
+      } else {next()}}
+    
+    for(pmtrow in seq_along(colindex)){
+      CashFlowArray[PmtIndex + 1,colindex[pmtrow]] <- principal - PrincipalOutstanding(BondCashFlow)[pmtrow]}
+    
+    CashFlowArray[PmtIndex + 1] <- sum(CashFlowArray[PmtIndex + 1,])
+    horizon.principal <- principal - CashFlowArray[PmtIndex + 1,13]
 
     # =========================================================================
     # Horizon present value of MBS pass through using spot spread, nominal 
@@ -363,51 +406,59 @@
    "price" = PriceTypes(horizon.price))
 
     HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
-                                     principal = OfferAmount(HorizonBond),
+                                     principal = principal,
                                      settlement.date = HorizonSettlement,
                                      price = PriceDecimalString(HorizonPrice))
 
-    HorizonProceeds <- (PriceBasis(HorizonPrice) * OfferAmount(HorizonBond)) + 
-      Accrued(HorizonCashFlow)
+    HorizonProceeds <- (PriceBasis(HorizonPrice) * principal) + Accrued(HorizonCashFlow)
 
     HorizonSpread <- CurveSpreads(
       rates.data = HorizonCurve,
       CashFlow = HorizonCashFlow,
       TermStructure = HorizonTermStructure,
       proceeds = HorizonProceeds)
-  
-    #==========================================================================
-    # From the beginning cashflow calculation get the cashflow recieved by the 
-    # investor.  This should be the matrix in the book
-    #==========================================================================
+    
+    #---------------------------------------------------------------------------
+    #Allocate reinvestment income to the bond cash flows
+    #---------------------------------------------------------------------------
+
+    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
+    
+    for(rr in 1:nrow(CashFlowArray-1)){
+      for(month in 1:horizon.months + 1){
+        if(month == 1){CashFlowArray[rr,month] = CashFlowArray[rr,month]
+        } else {CashFlowArray[rr,month] = CashFlowArray[rr,month] + 
+          CashFlowArray[rr, month-1] *(1 + reinvestment.rate/months.in.year)}
+      }
+    }
+
+    #---------------------------------------------------------------------------
+    #Aggregate Cashflows 
+    #---------------------------------------------------------------------------
+
+    for(row in 1:nrow(CashFlowArray-1)){
+      CashFlowArray[row, ncol(CashFlowArray)] = CashFlowArray[row,ncol(CashFlowArray)-1]
+    }
+
+    #---------------------------------------------------------------------------
+    #Assign horizon proceeds to array
+    #---------------------------------------------------------------------------
+
+    CashFlowArray[nrow(CashFlowArray), ncol(CashFlowArray)] = HorizonProceeds
+
     CouponIncome <- sum(CouponPmt(BondCashFlow)[1:PmtIndex])
     ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:PmtIndex]
 
-    n.period <- 
-      as.numeric(difftime(as.Date(PmtDate(BondCashFlow)[PmtIndex]), 
-                          as.Date(PmtDate(BondCashFlow)[1:PmtIndex]), 
-                          units = "days")/days.in.month)
-    
-    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
-
-    TerminalValue <- 
-    ReceivedCashFlow * ((1 + (reinvestment.rate/months.in.year)) ^ (n.period))
+    TerminalValue <-  sum(CashFlowArray[,ncol(CashFlowArray)])
     ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
-    
+
     # This needs to be changed by adding principal pmt to bond cashflow class
     # and bond cashflow engine. 
-    PrincipalRepaid <- sum(TotalCashFlow(BondCashFlow)[1:PmtIndex]) - 
-    sum(CouponPmt(BondCashFlow)[1:PmtIndex])
+    PrincipalRepaid <- sum(TotalCashFlow(BondCashFlow)[1:PmtIndex]) - sum(CouponPmt(BondCashFlow)[1:PmtIndex])
 
-    HorizonValue <- 
-      CouponIncome + 
-      ReinvestmentIncome + 
-      PrincipalRepaid + 
-      HorizonProceeds
-    
-    HorizonReturn <- (HorizonValue/proceeds)^(months.in.year/horizon.months)
+    HorizonReturn <- (TerminalValue/proceeds)^(1/(months.in.year/horizon.months))
     HorizonReturn <- (HorizonReturn - 1) * yield.basis
-    
+
     new("BondScenario",
         BenchMark = BenchMark(HorizonSpread),
         SpreadToBenchmark = SpreadToBenchmark(HorizonSpread),

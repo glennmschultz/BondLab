@@ -13,7 +13,7 @@ ZVSpreadToPriceBond(bond.id, settlement.date, term.structure, ZV.spread)
 
 \item{term.structure}{a character string referencing a term structure object}
 
-\item{ZV.spread}{the spread to the spot rate curve quoted in basis points}
+\item{ZV.spread}{a character the spread to the spot rate curve quoted in basis points}
 }
 \description{
 returns the clean price of a bond via PriceTypes object given a 

@@ -14,7 +14,9 @@ A generic function for method dispatch
 }
 \seealso{
 Other Scenario Analysis: \code{\link{CouponIncome}},
-  \code{\link{HorizonCurrBal}}, \code{\link{HorizonMos}},
+  \code{\link{HorizonCurrBal}},
+  \code{\link{HorizonCurve-class}},
+  \code{\link{HorizonCurve}}, \code{\link{HorizonMos}},
   \code{\link{HorizonPrice}}, \code{\link{HorizonReturn}},
   \code{\link{Name,Scenario-method}},
   \code{\link{PrincipalReceived}},

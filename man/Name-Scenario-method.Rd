@@ -17,7 +17,9 @@ analysis.
 }
 \seealso{
 Other Scenario Analysis: \code{\link{CouponIncome}},
-  \code{\link{HorizonCurrBal}}, \code{\link{HorizonMos}},
+  \code{\link{HorizonCurrBal}},
+  \code{\link{HorizonCurve-class}},
+  \code{\link{HorizonCurve}}, \code{\link{HorizonMos}},
   \code{\link{HorizonPrice}}, \code{\link{HorizonReturn}},
   \code{\link{PrepaidPrinReceived}},
   \code{\link{PrincipalReceived}},

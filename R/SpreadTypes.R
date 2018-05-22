@@ -158,7 +158,7 @@
   #' 
   #' @param spread a character string the spread entered in basis points
   #' @export SpreadTypes
-    SpreadTypes <- function(spread = "character"){
+    SpreadTypes <- function(spread){
       spread.basis = 100
       
       ConverttoDecimal <- function(spread, basis){

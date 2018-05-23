@@ -29,16 +29,104 @@
   #' @description The class HorizonCurve holds both the start and horizon curve
   #' the object returned has both start TermStructure object and the horizon 
   #' term structure object
-  #' @slot Start the starting TermStructure assumption
-  #' @slot Horizon the horizon TermStructure assumption
+  #' @slot Start the starting curve assumption
+  #' @slot Horizon the horizon curve assumption
+  #' @slot StartTermStrc the starting TermStructure assumption
+  #' @slot HorizonTermStrc the horizon TermStructure assumption
   #' @exportClass HorizonCurve
   setClass('HorizonCurve',
-           slots = c(Start = 'TermStructure',
-                     Horizon = 'TermStructure'))
+           slots = c(Start = 'list',
+                     Horizon = 'list',
+                     StartTermStrc = 'TermStructure',
+                     HorizonTermStrc = 'TermStructure'))
+  
+  #' A standard generic function to access the HorizonCurve slot StartCurve
+  #' @param object An S4 class object of the type HorizonCurve
+  #' @export Start
+  setGeneric('Start', function(object)
+    {standardGeneric('Start')})
+  
+  #' A standard generic function to access the HorizonCurve slot HorizonCurve
+  #' @param object An S4 class object of the type HorizonCurve
+  #' @export Horizon
+  setGeneric('Horizon', function(object)
+    {standardGeneric('Horizon')})
+  
+  #' A standard generic function to access the HorizonCurve slot StartTermStruc
+  #' @param object An S4 class object of the type HorizonCurve
+  #' @export StartTermStruc
+  setGeneric('StartTermStruc', function(object)
+    {standardGeneric('StartTermStruc')})
+  
+  #' A standard generic function to access the HorizonCurve slot HorizonTermStruc
+  #' @param object An S4 class object of the HorizonCurve
+  #' @export HorizonTermStruc
+  setGeneric('HorizonTermStruc', function(object)
+    {standardGeneric('HorizonTermStruc')})
+  
+  #'@title Start the Scenario Starting Curve
+  #'@family Scenario
+  #'@description a method to get the \strong{Start Curve} from the HorizonCurve object
+  #'@param object The name of the object of type Horizon Curve
+  #'@exportMethod Start
+  setMethod('Start', signature('HorizonCurve'),
+            function(object){object@Start})
+  
+  #'@title Horizon the Scenario Horizon Curve
+  #'@family Scenario
+  #'@description a method to the \strong{Horizon Curve} from the HorizonCurve object
+  #'@param object The name of the object of type Horizon Curve
+  #'@exportMethod Horizon
+  setMethod('Horizon', signature('HorizonCurve'),
+            function(object){object@Horizon})
+  
+  #'@title StartTermStruc the Scenario Start Term Structure Assumption
+  #'@family Scenario
+  #'@description a method to get the \strong{Start Term Structure} from the Horizon Curve object
+  #'@param object The name of the object of type Horizon Curve
+  #'@exportMethod StartTermStruc
+  setMethod('StartTermStruc', signature('HorizonCurve'),
+            function(object){object@StartTermStruc})
+  
+  #'@title HorizonTermStruc the Scenario Horizon Term Structure Assumption
+  #'@family Scenario
+  #'@description a method to get the \strong{Horizon Term Structure} from the Horizon Curve object
+  #'@param object The name of the object of the type Horizon Curve
+  #'@exportMethod HorizonTermStruc
+  setMethod('HorizonTermStruc', signature('HorizonCurve'),
+            function(object){object@HorizonTermStruc})
   
   #' @title a constructor function of the class HorizonCurve
   #' @family Scenario Analysis
-  #' @description a function to construct the HorizonCurve class 
+  #' @description a function to construct the HorizonCurve class.  Currently 
+  #' supported scenarios
+  #' \itemize{
+  #' \item{D300 - parallel down 300 basis points}
+  #' \item{D275 - parallel down 275 basis points}
+  #' \item{D250 - parallel down 250 basis points}
+  #' \item{D225 - parallel down 225 basis points}
+  #' \item{D200 - parallel down 200 basis points}
+  #' \item{D175 - parallel down 175 basis points}
+  #' \item{D150 - parallel down 150 basis points}
+  #' \item{D125 - parallel down 125 basis points}
+  #' \item{D100 - parallel down 100 basis points}
+  #' \item{D75 - parallel down 75 basis points}
+  #' \item{D50 - parallel down 50 basis points}
+  #' \item{D25 - parallel down 25 basis points}
+  #' \item{NC - No Change}
+  #' \item{U25 - parallel up 25 basis points}
+  #' \item{U50 - parallel up 50 basis points}
+  #' \item{U75 - parallel up 75 basis points}
+  #' \item{U100 - parallel up 100 basis points}
+  #' \item{U125 - parallel up 125 basis points}
+  #' \item{U150 - parallel up 150 basis points}
+  #' \item{U175 - parallel up 175 basis points}
+  #' \item{U200 - parallel up 200 basis points}
+  #' \item{U225 - parallel up 225 basis points}
+  #' \item{U250 - parallel up 250 basis points}
+  #' \item{U275 - parallel up 275 basis points}
+  #' \item{U300 - parallel up 300 basis points}
+  #' } 
   #' @param rates.data A character string referencing a rates object
   #' @param settlement.date A character string the settlement date 'mm-dd-YYYY'
   #' @param horizon.months A numeric value the horizon in months
@@ -66,8 +154,10 @@
   invisible(capture.output(horizon.termstructure <- TermStructure(rates.data = horizon, method = method)))
   
   new("HorizonCurve",
-      Start = start.termstructure,
-      Horizon = horizon.termstructure)}
+      Start = start,
+      Horizon = horizon,
+      StartTermStrc = start.termstructure,
+      HorizonTermStrc = horizon.termstructure)}
   
   #' @title An S4 class Scenario
   #' @family Scenario Analysis

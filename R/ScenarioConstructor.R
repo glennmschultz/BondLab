@@ -23,78 +23,92 @@
   # for the class MortgageCashFlow and the initialize method for the class.  
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
+  
+  #'@include MortgageScenario.R
 
   #' @title an S4 class Horizon Curve 
   #' @family Scenario Analysis
   #' @description The class HorizonCurve holds both the start and horizon curve
   #' the object returned has both start TermStructure object and the horizon 
   #' term structure object
-  #' @slot Start the starting curve assumption
-  #' @slot Horizon the horizon curve assumption
+  #' @slot HorizonMos the scenario horizon months
+  #' @slot StartCurve the starting curve assumption
+  #' @slot HorizonCurve the horizon curve assumption
   #' @slot StartTermStrc the starting TermStructure assumption
   #' @slot HorizonTermStrc the horizon TermStructure assumption
-  #' @exportClass HorizonCurve
-  setClass('HorizonCurve',
-           slots = c(Start = 'list',
-                     Horizon = 'list',
+  #' @exportClass ScenarioCurve
+  setClass('ScenarioCurve',
+           slots = c(HorizonMos = 'numeric',
+                     StartCurve = 'list',
+                     HorizonCurve = 'list',
                      StartTermStrc = 'TermStructure',
                      HorizonTermStrc = 'TermStructure'))
   
+  # Note: Standard Generic HorizonMos found in Mortgage Scenario
+  
   #' A standard generic function to access the HorizonCurve slot StartCurve
   #' @param object An S4 class object of the type HorizonCurve
-  #' @export Start
-  setGeneric('Start', function(object)
-    {standardGeneric('Start')})
+  #' @export StartCurve
+  setGeneric('StartCurve', function(object)
+    {standardGeneric('StartCurve')})
   
   #' A standard generic function to access the HorizonCurve slot HorizonCurve
   #' @param object An S4 class object of the type HorizonCurve
-  #' @export Horizon
-  setGeneric('Horizon', function(object)
-    {standardGeneric('Horizon')})
+  #' @export HorizonCurve
+  setGeneric('HorizonCurve', function(object)
+    {standardGeneric('HorizonCurve')})
   
   #' A standard generic function to access the HorizonCurve slot StartTermStruc
   #' @param object An S4 class object of the type HorizonCurve
-  #' @export StartTermStruc
-  setGeneric('StartTermStruc', function(object)
-    {standardGeneric('StartTermStruc')})
+  #' @export StartTermStrc
+  setGeneric('StartTermStrc', function(object)
+    {standardGeneric('StartTermStrc')})
   
   #' A standard generic function to access the HorizonCurve slot HorizonTermStruc
   #' @param object An S4 class object of the HorizonCurve
-  #' @export HorizonTermStruc
-  setGeneric('HorizonTermStruc', function(object)
-    {standardGeneric('HorizonTermStruc')})
+  #' @export HorizonTermStrc
+  setGeneric('HorizonTermStrc', function(object)
+    {standardGeneric('HorizonTermStrc')})
+  
+#  #'@title HorizonMos the Scenario Horizon Months
+#  #'@family Scenario
+#  #'@description a method to get the \strong{HorizonMos} from the HorizonCurve object
+#  #'@param object The name of the object of the type Horizon Curve
+#  #'@exportMethod HorizonMos
+#  setMethod('HorizonMos', signature('ScenarioCurve'),
+#            function(object){object@HorizonMos})
   
   #'@title Start the Scenario Starting Curve
   #'@family Scenario
   #'@description a method to get the \strong{Start Curve} from the HorizonCurve object
   #'@param object The name of the object of type Horizon Curve
-  #'@exportMethod Start
-  setMethod('Start', signature('HorizonCurve'),
-            function(object){object@Start})
+  #'@exportMethod StartCurve
+  setMethod('StartCurve', signature('ScenarioCurve'),
+            function(object){object@StartCurve})
   
   #'@title Horizon the Scenario Horizon Curve
   #'@family Scenario
   #'@description a method to the \strong{Horizon Curve} from the HorizonCurve object
   #'@param object The name of the object of type Horizon Curve
-  #'@exportMethod Horizon
-  setMethod('Horizon', signature('HorizonCurve'),
-            function(object){object@Horizon})
+  #'@exportMethod HorizonCurve
+  setMethod('HorizonCurve', signature('ScenarioCurve'),
+            function(object){object@HorizonCurve})
   
   #'@title StartTermStruc the Scenario Start Term Structure Assumption
   #'@family Scenario
   #'@description a method to get the \strong{Start Term Structure} from the Horizon Curve object
   #'@param object The name of the object of type Horizon Curve
-  #'@exportMethod StartTermStruc
-  setMethod('StartTermStruc', signature('HorizonCurve'),
-            function(object){object@StartTermStruc})
+  #'@exportMethod StartTermStrc
+  setMethod('StartTermStrc', signature('ScenarioCurve'),
+            function(object){object@StartTermStrc})
   
   #'@title HorizonTermStruc the Scenario Horizon Term Structure Assumption
   #'@family Scenario
   #'@description a method to get the \strong{Horizon Term Structure} from the Horizon Curve object
   #'@param object The name of the object of the type Horizon Curve
-  #'@exportMethod HorizonTermStruc
-  setMethod('HorizonTermStruc', signature('HorizonCurve'),
-            function(object){object@HorizonTermStruc})
+  #'@exportMethod HorizonTermStrc
+  setMethod('HorizonTermStrc', signature('ScenarioCurve'),
+            function(object){object@HorizonTermStrc})
   
   #' @title a constructor function of the class HorizonCurve
   #' @family Scenario Analysis
@@ -135,8 +149,8 @@
   #' Siegel, dl = Diebond Lee, sv = Severson, asv = adjusted Severson, 
   #' cs = cubic spline (not yet implemented).  For additional details see the termstrc
   #' documentation. 
-  #' @export HorizonCurve
-  HorizonCurve <- function(rates.data,
+  #' @export HorizonCurveShift
+  HorizonCurveShift <- function(rates.data,
                            settlement.date,
                            horizon.months = 12,
                            scenario = 'NC',
@@ -153,9 +167,10 @@
   invisible(capture.output(start.termstructure <- TermStructure(rates.data = start, method = method)))
   invisible(capture.output(horizon.termstructure <- TermStructure(rates.data = horizon, method = method)))
   
-  new("HorizonCurve",
-      Start = start,
-      Horizon = horizon,
+  new("ScenarioCurve",
+      HorizonMos = horizon.months,
+      StartCurve = start,
+      HorizonCurve = horizon,
       StartTermStrc = start.termstructure,
       HorizonTermStrc = horizon.termstructure)}
   

@@ -166,12 +166,9 @@
   #' investor's total return.  The function returns the class BondScenario
   #' @param bond.id A character string referencing an object of the type BondDetails
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
-  #' @param rates.data A character string an object yield curve
+  #' @param scenario.curves A character string an object yield curve
   #' @param price A character string in decimal equivalent (.) or 32nds (-)
   #' @param principal A numeric value the par amount. 
-  #' @param scenario A character string the scenario
-  #' @param horizon.months A numeric value the time horizon
-  #' @param method A character string the method used to fit the term structure
   #' @param ... Optional values to select term structure and horizon price method
   #' @param horizon.spot.spread A numeric value the horizon zero volatility 
   #' spread
@@ -184,12 +181,9 @@
   #' @export BondScenario
   BondScenario <- function(bond.id = "character",
                            settlement.date = "character",
-                           rates.data = "character",
+                           scenario.curves = "character",
                            price = "character",
                            principal = numeric(),
-                           scenario = "character",
-                           horizon.months = numeric(),
-                           method = "dl",
                            ...,
                            horizon.spot.spread = NULL,
                            horizon.nominal.spread = NULL,
@@ -205,7 +199,17 @@
     # and horizon term structure assumption used shift the sopt curve or shift
     # the coupon curve and refit the term structure model.
 
-    if(horizon.months %% 6 != 0) stop("horizon.months not valid")
+    bond.id <- bond.id
+    Price <- PriceTypes(price)
+    startcurve <- StartCurve(scenario.curves)
+    starttermstrc <- StartTermStrc(scenario.curves)
+    horizoncurve <- HorizonCurve(scenario.curves)
+    horizontermstrc <- HorizonTermStrc(scenario.curves)
+    horizonsettlement <- as.character(as.Date(horizoncurve[1,1]), format = '%m-%d,%Y')
+    horizonmonths = 12
+    Price <- PriceTypes(price = price)
+
+    if(horizonmonths %% 6 != 0) stop("horizon.months not valid")
     
     if(is.null(horizon.spot.spread) != TRUE) {
       horizon.price.type <- "spot"
@@ -216,40 +220,7 @@
     } else {
       horizon.price.type <- "price"
     }
-    
-    bond.id <- bond.id
-    rates.data <- rates.data
-    Scenario <- ScenarioCall(Scenario = scenario)
-    #set rates shift (immediate) for term structure fit
-    ShiftCurve <- rates.data
-    ShiftCurve[1,2:length(ShiftCurve)] <- 
-      as.numeric(ScenarioFormula(Scenario)(rates.data[1,2:length(ShiftCurve)], 
-                                Shiftbps = Shiftbps(Scenario)))
-    
-    # Set horizon curve and settlment date for horizon ending value analysis
-    # This curve is used to fit the horizon term structure when the scenario is
-    # not based on shift of the spot rate curve.
-    
-    HorizonCurve <- rates.data
 
-    HorizonCurve[1,1] <- as.character(
-      as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
-    
-    HorizonCurve[1,2:length(HorizonCurve)] <- 
-      as.numeric(ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
-                                Shiftbps = Shiftbps(Scenario)))
-    
-    HorizonSettlement <- as.Date(
-      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
-    
-    Price <- PriceTypes(price = price)
-    
-    # fit the term structure and calcualate cashflows to compute the 
-    # following Yield, WAL, Curve Spreads, KeyRate Durations, etc
-    
-    TermStructure <- TermStructure(
-      rates.data = ShiftCurve,
-      method = method)
 
     BondCashFlow <- BondCashFlows(bond.id = bond.id,
                                   principal = principal,
@@ -258,52 +229,12 @@
     
     proceeds <- Accrued(BondCashFlow) + (principal * PriceBasis(Price))
     
-    
     # Compute the CurvesSpreads based on the user price and prepayment vector
     # given the user's scenario interest rate shift
-    CurveSpread <- CurveSpreads(rates.data = rates.data,
+    CurveSpread <- CurveSpreads(rates.data = startcurve,
                                 CashFlow = BondCashFlow,
-                                TermStructure = TermStructure,
+                                TermStructure = starttermstrc,
                                 proceeds = proceeds)
-
-
-    # This section begins the  horizon bond analysis. 
-    # Horizon curve can be calculated by either shifting the coupon curve or
-    # and refitting the curve or it can be calculated by shifting the spot rate
-    # curve.  Senarios with ending with (s) indicate the user wishes to shift
-    # the spot rate curve.
-    
-    if(grepl("s",scenario) == TRUE){
-      # initialize term structure object and assign shift vlaue to the 
-      # spot rate curve based on the TermStructure object above
-      
-      HorizonTermStructure <- new(
-        "TermStructure",
-        TradeDate = as.character(
-          as.Date(rates.data[1,1]) %m+% months(horizon.months)),
-        Period = numeric(),
-        Date = "character",
-        TimePeriod = numeric(),
-        SpotRate = numeric(),
-        ForwardRate = numeric(),
-        DiscRate = numeric(),
-        TwoYearFwd = numeric(),
-        TenYearFwd = numeric())
-      
-      Period(HorizonTermStructure) <- Period(TermStructure)
-      ForwardDate(HorizonTermStructure) <- as.character(
-        as.Date(ForwardDate(TermStructure)) %m+% months(horizon.months))
-      TimePeriod(HorizonTermStructure) <- TimePeriod(TermStructure)
-      SpotRate(HorizonTermStructure) <- SpotRate(TermStructure)
-      ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
-      DiscRate(HorizonTermStructure) <- DiscRate(TermStructure)
-      TwoYearForward(HorizonTermStructure) <- TwoYearForward(TermStructure)
-      TenYearForward(HorizonTermStructure) <- TenYearForward(TermStructure)
-    } else {
-      HorizonTermStructure <- TermStructure(
-        rates.data = HorizonCurve,
-        method = method)
-    } # End of if logic for term structure method
 
 
     #===========================================================================
@@ -317,7 +248,7 @@
     paymentdates <- LastandNextPmtDate(issue.date = IssueDate(HorizonBond),
                                        dated.date = DatedDate(HorizonBond),
                                        maturity.date = Maturity(HorizonBond),
-                                       settlement.date = HorizonSettlement,
+                                       settlement.date = horizonsettlement,
                                        frequency = Frequency(HorizonBond),
                                        bond.basis = BondBasis(HorizonBond))
 
@@ -332,10 +263,10 @@
     # Cashflow Received + Reinvestment Income + Present Value at Horizon
     # ========================================================================
     
-    PmtIndex <- which(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(HorizonSettlement)) == 
-                        min(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(HorizonSettlement))))
+    PmtIndex <- which(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizonsettlement)) == 
+                        min(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizonsettlement))))
     
-    PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(HorizonSettlement)) {PmtIndex -1
+    PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(horizonsettlement)) {PmtIndex -1
     } else {PmtIndex}
     
     #==========================================================================
@@ -343,17 +274,17 @@
     # investor.  This should be the matrix in the book
     #==========================================================================
 
-    CashFlowArray <- array(data = 0, dim = c(PmtIndex +2, horizon.months + 2), dimnames = NULL)
+    CashFlowArray <- array(data = 0, dim = c(PmtIndex +2, horizonmonths + 2), dimnames = NULL)
     
     # --------------------------------------------------------------------------
     # set days to 01 forces all coupon payment calculations to month year basis
-    horizon.month.seq <- as.character(seq(as.Date(rates.data[1,1]), by = 'months', 
-                                          length.out = horizon.months + 1),format ='%Y-01-%m')
+    horizonmonths.seq <- as.character(seq(as.Date(startcurve[1,1]), by = 'months', 
+                                          length.out = horizonmonths + 1),format ='%Y-01-%m')
     coupon.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-01-%m")
 
     colindex = NULL
     for(col in seq_along(coupon.months)){
-      loc <- which(as.Date(coupon.months[col]) == as.Date(horizon.month.seq))
+      loc <- which(as.Date(coupon.months[col]) == as.Date(horizonmonths))
       if(length(loc) != 0){colindex <- append(colindex, loc, after = length(colindex))
       } else {next()}}
 
@@ -373,7 +304,7 @@
     
     colindex = NULL
     for(col in seq_along(prin.months)){
-      loc <- which(as.Date(prin.months[col]) == as.Date(horizon.month.seq))
+      loc <- which(as.Date(prin.months[col]) == as.Date(horizonmonths.seq))
       if(length(loc) != 0){colindex <- append(colindex, loc, after = length(colindex))
       } else {next()}}
     
@@ -396,18 +327,18 @@
 
     HorizonPrice <- switch(horizon.price.type,
     "spot" = ZVSpreadToPriceBond(bond.id = HorizonBond,
-                                 settlement.date = HorizonSettlement,
-                                 term.structure = HorizonTermStructure,
+                                 settlement.date = horizonsettlement,
+                                 term.structure = horizontermstrc,
                                  ZV.spread = horizon.spot.spread),
    "nominal" = SpreadToPriceBond(bond.id = HorizonBond,
-                                 rates.data = HorizonCurve,
-                                 settlement.date = HorizonSettlement,
+                                 rates.data = horizoncurve,
+                                 settlement.date = horizonsettlement,
                                  spread = horizon.nominal.spread),
    "price" = PriceTypes(horizon.price))
 
     HorizonCashFlow <- BondCashFlows(bond.id = HorizonBond,
                                      principal = principal,
-                                     settlement.date = HorizonSettlement,
+                                     settlement.date = horizonsettlement,
                                      price = PriceDecimalString(HorizonPrice))
 
     HorizonProceeds <- (PriceBasis(HorizonPrice) * principal) + Accrued(HorizonCashFlow)
@@ -415,7 +346,7 @@
     HorizonSpread <- CurveSpreads(
       rates.data = HorizonCurve,
       CashFlow = HorizonCashFlow,
-      TermStructure = HorizonTermStructure,
+      TermStructure = horizontermstrc,
       proceeds = HorizonProceeds)
     
     #---------------------------------------------------------------------------
@@ -425,7 +356,7 @@
     reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
     
     for(rr in 1:nrow(CashFlowArray-1)){
-      for(month in 1:horizon.months + 1){
+      for(month in 1:horizonmonths + 1){
         if(month == 1){CashFlowArray[rr,month] = CashFlowArray[rr,month]
         } else {CashFlowArray[rr,month] = CashFlowArray[rr,month] + 
           CashFlowArray[rr, month-1] *(1 + reinvestment.rate/months.in.year)}
@@ -456,7 +387,7 @@
     # and bond cashflow engine. 
     PrincipalRepaid <- sum(TotalCashFlow(BondCashFlow)[1:PmtIndex]) - sum(CouponPmt(BondCashFlow)[1:PmtIndex])
 
-    HorizonReturn <- (TerminalValue/proceeds)^(1/(months.in.year/horizon.months))
+    HorizonReturn <- (TerminalValue/proceeds)^(1/(months.in.year/horizonmonths))
     HorizonReturn <- (HorizonReturn - 1) * yield.basis
 
     new("BondScenario",
@@ -470,5 +401,5 @@
         HorizonCurrBal = principal - PrincipalRepaid,
         HorizonPrice = PriceDecimal(HorizonPrice),
         HorizonReturn = HorizonReturn,
-        HorizonMos = horizon.months)
+        HorizonMos = horizonmonths)
   }

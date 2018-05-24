@@ -5,27 +5,20 @@
 \title{BondScenario function}
 \usage{
 BondScenario(bond.id = "character", settlement.date = "character",
-  rates.data = "character", price = "character", principal = numeric(),
-  scenario = "character", horizon.months = numeric(), method = "dl", ...,
-  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
-  horizon.OAS = NULL, horizon.price = NULL)
+  scenario.curves = "character", price = "character",
+  principal = numeric(), ..., horizon.spot.spread = NULL,
+  horizon.nominal.spread = NULL, horizon.OAS = NULL, horizon.price = NULL)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of the type BondDetails}
 
 \item{settlement.date}{A character string the settlement data "mm-dd-YYYY".}
 
-\item{rates.data}{A character string an object yield curve}
+\item{scenario.curves}{A character string an object yield curve}
 
 \item{price}{A character string in decimal equivalent (.) or 32nds (-)}
 
 \item{principal}{A numeric value the par amount.}
-
-\item{scenario}{A character string the scenario}
-
-\item{horizon.months}{A numeric value the time horizon}
-
-\item{method}{A character string the method used to fit the term structure}
 
 \item{...}{Optional values to select term structure and horizon price method}
 

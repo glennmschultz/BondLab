@@ -70,14 +70,6 @@
   setGeneric('HorizonTermStrc', function(object)
     {standardGeneric('HorizonTermStrc')})
   
-#  #'@title HorizonMos the Scenario Horizon Months
-#  #'@family Scenario
-#  #'@description a method to get the \strong{HorizonMos} from the HorizonCurve object
-#  #'@param object The name of the object of the type Horizon Curve
-#  #'@exportMethod HorizonMos
-#  setMethod('HorizonMos', signature('ScenarioCurve'),
-#            function(object){object@HorizonMos})
-  
   #'@title Start the Scenario Starting Curve
   #'@family Scenario
   #'@description a method to get the \strong{Start Curve} from the HorizonCurve object

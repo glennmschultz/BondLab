@@ -3,12 +3,12 @@
 \docType{methods}
 \name{StartCurve,ScenarioCurve-method}
 \alias{StartCurve,ScenarioCurve-method}
-\title{Start the Scenario Starting Curve}
+\title{Start Curve the Scenario Starting Curve}
 \usage{
 \S4method{StartCurve}{ScenarioCurve}(object)
 }
 \arguments{
-\item{object}{The name of the object of type Horizon Curve}
+\item{object}{The name of the object of type HorizonCurve}
 }
 \description{
 a method to get the \strong{Start Curve} from the HorizonCurve object

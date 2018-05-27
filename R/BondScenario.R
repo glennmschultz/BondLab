@@ -197,7 +197,7 @@
     starttermstrc <- StartTermStrc(scenario.curves)
     horizoncurve <- as.data.frame(HorizonCurve(scenario.curves))
     horizontermstrc <- HorizonTermStrc(scenario.curves)
-    horizonmonths = 12
+    horizonmonths = ScenarioHorizonMos(scenario.curves)
 
     #if(horizonmonths %% 6 != 0) stop("horizon.months not valid")
     
@@ -302,7 +302,7 @@
       CashFlowArray[PmtIndex + 1,colindex[pmtrow]] <- principal - PrincipalOutstanding(BondCashFlow)[pmtrow]}
     
     CashFlowArray[PmtIndex + 1] <- sum(CashFlowArray[PmtIndex + 1,])
-    horizon.principal <- principal - CashFlowArray[PmtIndex + 1,13]
+    horizon.principal <- principal - CashFlowArray[PmtIndex + 1,horizonmonths-1]
     # =========================================================================
     # Horizon present value of MBS pass through using spot spread, nominal 
     # spread or OAS use switch here to compute the horizon present value based 

@@ -24,5 +24,6 @@ Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{HorizonMos,BondReturn-method}},
   \code{\link{HorizonPrice,BondReturn-method}},
   \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}}
+  \code{\link{ReinvestmentIncome,BondReturn-method}},
+  \code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
 }

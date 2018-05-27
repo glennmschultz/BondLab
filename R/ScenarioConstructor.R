@@ -23,8 +23,9 @@
   # for the class MortgageCashFlow and the initialize method for the class.  
   # This class is a subclass of the following: (document the superclasses)
   # for the most part this script is requiring only modest changes.
-  
-  #'@include MortgageScenario.R
+
+  #'@include BondScenario.R MortgageScenario.R TermStructure.R
+  NULL
 
   #' @title an S4 class Horizon Curve 
   #' @family Scenario Analysis
@@ -70,17 +71,31 @@
   setGeneric('HorizonTermStrc', function(object)
     {standardGeneric('HorizonTermStrc')})
   
-  #'@title Start the Scenario Starting Curve
+  #' A standard generic function to access the HorizonCurve slot HorizonTermStruc
+  #' @param object An S4 class object of the HorizonCurve
+  #' @export ScenarioHorizonMos
+  setGeneric('ScenarioHorizonMos', function(object)
+  {standardGeneric('ScenarioHorizonMos')})
+  
+  #' @title HorizonMos method, class ScenarioReturn
+  #' @family Bond Scenario Analysis
+  #' @description A method to get \strong{HorizonMos} over which a scenario covers
+  #' @param object the name of an S4 class of type BondReturn
+  #' @exportMethod ScenarioHorizonMos
+  setMethod("ScenarioHorizonMos", signature("ScenarioCurve"),
+            function(object){object@HorizonMos})
+  
+  #'@title Start Curve the Scenario Starting Curve
   #'@family Scenario
   #'@description a method to get the \strong{Start Curve} from the HorizonCurve object
-  #'@param object The name of the object of type Horizon Curve
+  #'@param object The name of the object of type HorizonCurve
   #'@exportMethod StartCurve
   setMethod('StartCurve', signature('ScenarioCurve'),
             function(object){object@StartCurve})
   
-  #'@title Horizon the Scenario Horizon Curve
+  #'@title Horizon Curve the Scenario Horizon Curve
   #'@family Scenario
-  #'@description a method to the \strong{Horizon Curve} from the HorizonCurve object
+  #'@description a method to get the \strong{Horizon Curve} from the HorizonCurve object
   #'@param object The name of the object of type Horizon Curve
   #'@exportMethod HorizonCurve
   setMethod('HorizonCurve', signature('ScenarioCurve'),

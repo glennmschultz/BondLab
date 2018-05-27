@@ -3,7 +3,7 @@
 \docType{methods}
 \name{HorizonCurve,ScenarioCurve-method}
 \alias{HorizonCurve,ScenarioCurve-method}
-\title{Horizon the Scenario Horizon Curve}
+\title{Horizon Curve the Scenario Horizon Curve}
 \usage{
 \S4method{HorizonCurve}{ScenarioCurve}(object)
 }
@@ -11,7 +11,7 @@
 \item{object}{The name of the object of type Horizon Curve}
 }
 \description{
-a method to the \strong{Horizon Curve} from the HorizonCurve object
+a method to get the \strong{Horizon Curve} from the HorizonCurve object
 }
 \seealso{
 Other Scenario: \code{\link{HorizonTermStrc,ScenarioCurve-method}},

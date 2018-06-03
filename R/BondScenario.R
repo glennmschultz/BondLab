@@ -253,8 +253,8 @@
     # Cashflow Received + Reinvestment Income + Present Value at Horizon
     # ========================================================================
     
-    PmtIndex <- which(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizoncurve[1,1])) == 
-                        min(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizoncurve[1,1]))))
+    PmtIndex <- which(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizoncurve[1,1])) ==
+                        min(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizoncurve[1,1]))))[1]
     
     PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(horizoncurve[1,1])) {PmtIndex -1
     } else {PmtIndex}

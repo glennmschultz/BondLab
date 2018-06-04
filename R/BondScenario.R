@@ -193,9 +193,9 @@
 
     bond.id <- bond.id
     Price <- PriceTypes(price)
-    startcurve <- as.data.frame(StartCurve(scenario.curves))
+    startcurve <- as.data.frame(StartCurve(scenario.curves), stringsAsFactors = FALSE)
     starttermstrc <- StartTermStrc(scenario.curves)
-    horizoncurve <- as.data.frame(HorizonCurve(scenario.curves))
+    horizoncurve <- as.data.frame(HorizonCurve(scenario.curves), stringsAsFactors = FALSE)
     horizontermstrc <- HorizonTermStrc(scenario.curves)
     horizonmonths = ScenarioHorizonMos(scenario.curves)
 
@@ -268,9 +268,10 @@
     
     # --------------------------------------------------------------------------
     # set days to 01 forces all coupon payment calculations to month year basis
-    horizonmonths.seq <- as.character(seq(as.Date(startcurve[1,1]), by = 'months', 
-                                          length.out = horizonmonths + 1),format ='%Y-01-%m')
-    coupon.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-01-%m")
+    startdate <- paste(substr(startcurve[1,1],1,8),'01', sep ="")
+    horizonmonths.seq <- as.character(seq(as.Date(startdate), by = 'months', 
+                                          length.out = horizonmonths + 1),format ='%Y-%m-%d')
+    coupon.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-%m-01")
 
     colindex = NULL
     for(col in seq_along(coupon.months)){
@@ -290,7 +291,7 @@
     # paid similar to that of the mortgage cash flow engine.  The engine below will
     # work for a non callable bond but will not work for sinking, putable or callable
     # bonds.  This is CashFlowBond problem and relates to the allocation of principal
-    prin.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-01-%m")
+    prin.months <- as.character(as.Date(PmtDate(BondCashFlow)), format = "%Y-%m-01")
     
     colindex = NULL
     for(col in seq_along(prin.months)){
@@ -345,13 +346,13 @@
     #Allocate reinvestment income to the bond cash flows
     #---------------------------------------------------------------------------
 
-    reinvestment.rate <- as.numeric(horizoncurve[1,2])/yield.basis
+    reinvestment.rate <- as.numeric(horizoncurve[1,2])/(yield.basis * months.in.year)
     
     for(rr in 1:nrow(CashFlowArray-1)){
       for(month in 1:horizonmonths + 1){
         if(month == 1){CashFlowArray[rr,month] = CashFlowArray[rr,month]
         } else {CashFlowArray[rr,month] = CashFlowArray[rr,month] + 
-          CashFlowArray[rr, month-1] *(1 + reinvestment.rate/months.in.year)}
+          CashFlowArray[rr, month-1] *(1 + reinvestment.rate)}
       }
     }
 
@@ -373,7 +374,7 @@
     ReceivedCashFlow <- TotalCashFlow(BondCashFlow)[1:PmtIndex]
 
     TerminalValue <-  sum(CashFlowArray[,ncol(CashFlowArray)])
-    ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow))
+    ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow)- HorizonProceeds)
 
     # This needs to be changed by adding principal pmt to bond cashflow class
     # and bond cashflow engine. 

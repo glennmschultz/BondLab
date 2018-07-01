@@ -82,11 +82,11 @@
   
   #' @title PrincipalReceived method, class BondReturn 
   #' @family Bond Scenario Analysis
-  #' @description A method to get \strong{ScheduledPrinReceived} over the 
-  #' scenario horizon to the investor.  SceheduledPrincipalReceived is reported 
+  #' @description A method to get \strong{Principal Received} over the 
+  #' scenario horizon to the investor.  Principal Received is reported 
   #' as the sum of scheduled principal received by the investor.
   #' @param object An S4 class of type BondReturn
-  #' @exportMethod ScheduledPrinReceived
+  #' @exportMethod PrincipalReceived
   setMethod("PrincipalReceived", signature("BondReturn"),
             function(object){object@PrincipalReceived})
   

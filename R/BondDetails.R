@@ -304,7 +304,7 @@
   #' @param object the name of the object of type BondDetails
   #' @exportMethod BondLabRating
   setMethod("BondLabRating", signature("BondDetails"),
-            function(object){object@BondLabRating})
+            function(object){object@BondLab})
   
   #' Method to extract the slot Frequency from S4 class of type BondDetails
   #' 

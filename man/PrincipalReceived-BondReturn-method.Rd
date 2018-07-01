@@ -11,8 +11,8 @@
 \item{object}{An S4 class of type BondReturn}
 }
 \description{
-A method to get \strong{ScheduledPrinReceived} over the 
-scenario horizon to the investor.  SceheduledPrincipalReceived is reported 
+A method to get \strong{Principal Received} over the 
+scenario horizon to the investor.  Principal Received is reported 
 as the sum of scheduled principal received by the investor.
 }
 \seealso{

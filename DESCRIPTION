@@ -61,6 +61,7 @@ Collate:
     'BondTermStructure.R'
     'BondScenario.R'
     'CashFlowEngine.R'
+    'CashFlowMatrix.R'
     'ConnectionFunctions.R'
     'DiscountToPrice.R'
     'DiscountTypes.R'

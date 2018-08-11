@@ -28,7 +28,7 @@
   #'consist of the following names columns: cusip, interestrate, issuedate,
   #'dateddate, maturitydate, type, close.
   #'@import bizdays
-  #'@importFrom lubridate leap_year
+  #'@importFrom lubridate leap_year days
   #'@export CreateCashFlowMatrix
   CreateCashFlowMatrix <- function(trade.date, bonddata){
     bonddata <- bonddata[order(as.Date(bonddata$maturitydate, format = '%Y-%m-%d')),]
@@ -119,7 +119,7 @@
   #'consist of the following names columns: cusip, interestrate, issuedate,
   #'dateddate, maturitydate, type, close
   #'@import bizdays
-  #'@importFrom lubridate leap_year
+  #'@importFrom lubridate leap_year days
   #'@export CreateMaturitiesMatrix
   CreateMaturitiesMatrix <- function(trade.date, bonddata){
     bonddata <- bonddata[order(as.Date(bonddata$maturitydate, format = '%Y-%m-%d')),]

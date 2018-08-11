@@ -24,6 +24,12 @@ APIKEY <- "31df8645e635484db99e5d1133ce9245"
     # numeric decimal equivilant
     Price <- PriceTypes(price = as.character(price))
 
+## ---- termstructure, echo = TRUE-----------------------------------------
+   rates.data <- Rates(trade.date = tradedate)
+   # note use invisible(capture.output()) to supress messages
+   invisible(capture.output(
+     TermStructure <- TermStructure(rates.data = rates.data, method = "dl")))
+
 ## ---- bonddata, echo=TRUE------------------------------------------------
     bond.id <- MBS(cusip = cusip)
 

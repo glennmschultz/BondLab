@@ -5,11 +5,10 @@
 \title{A contstructor function for the PrepaymentModel object}
 \usage{
 PrepaymentModel(bond.id = "character", TermStructure = "character",
-  MortgageRate = "character", ModelTune = "character",
-  Burnout = numeric(), PrepaymentAssumption = "character", ...,
-  begin.cpr = numeric(), end.cpr = numeric(),
-  seasoning.period = numeric(), CPR = numeric(), CDR = 0,
-  HomePrice = NULL, Severity = 0)
+  MortgageRate = "character", ModelTune = "character", Burnout = 0,
+  PrepaymentAssumption = "character", ..., begin.cpr = numeric(),
+  end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric(),
+  CDR = 0, HomePrice = NULL, Severity = 0)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object 

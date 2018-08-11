@@ -6,12 +6,12 @@ Date: 2018-03-17
 Author: Glenn Schultz, CFA
 Maintainer: Glenn Schultz <glennmschultz@me.com>
 Copyright: BondLab Technologies, Inc.
-Description: The analysis of fixed income, mortgage (MBS) and asset backed (ABS) 
-    securities (ABS) is complex. The valuation framework requires the investor 
-    to develop interest rate, prepayment, and cash flow models. The valaution 
-    framework views MBS and ABS cash flow as a series of zero coupon bonds. 
-    Bond Lab is an R package providing a suite of software utilities for the 
-    analysis and valuation of Fixed Income, Mortgage, and Asset Backed securities.
+Description: The analysis of fixed income, mortgage (MBS) and asset backed (ABS)
+    securities (ABS) is complex. The valuation framework requires the investor to
+    develop interest rate, prepayment, and cash flow models. The valaution framework
+    views MBS and ABS cash flow as a series of zero coupon bonds. Bond Lab is an R
+    package providing a suite of software utilities for the analysis and valuation
+    of Fixed Income, Mortgage, and Asset Backed securities.
 LazyLoad: yes
 License: file LICENSE
 Imports:
@@ -19,15 +19,11 @@ Imports:
     lubridate,
     methods,
     optimx,
-    RCurl,
-    bitops,
-    httr,
     splines,
     stats,
     RSQLite,
     sqldf,
     bizdays,
-    XML
 Suggests:
     knitr,
     devtools,
@@ -69,7 +65,6 @@ Collate:
     'ErrorTrap.R'
     'ExtractScenario.R'
     'GFeeTypes.R'
-    'GetUSTCurve.R'
     'HomePriceSim.R'
     'MortgageCashFlowArray.R'
     'MortgageEffectiveMeasures.R'
@@ -78,9 +73,6 @@ Collate:
     'MortgageRateFunctions.R'
     'PMITypes.R'
     'PaymentDateFunctions.R'
-    'PrepaymentModelTune.R'
-    'PrepaymentFunctions.R'
-    'PrepaymentModelFunctions.R'
     'PrincipalPmtDateCalcs.R'
     'SpreadToPriceFunctions.R'
     'SpreadTypes.R'

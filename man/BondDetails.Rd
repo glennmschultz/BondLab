@@ -58,6 +58,3 @@ each year}
 BondDetails creates a BondDetails cusip object in the 
 local environment
 }
-\seealso{
-Other BondDetails: \code{\link{MakeBondDetails}}
-}

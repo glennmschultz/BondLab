@@ -21,7 +21,7 @@ of the type TermStructure}
 mortgagerate.rds.  Prepayment Assumption does not
 open Mtg.Rate connection directly rather takes the argument as an object.}
 
-\item{ModelTune}{A character string the prepayment model tune object}
+\item{ModelTune}{A character string the prepayment model object}
 
 \item{Burnout}{A numeric value the burnout variable}
 

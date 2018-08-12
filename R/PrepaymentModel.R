@@ -373,7 +373,7 @@
   #' @param MortgageRate A character string the input value of 
   #' mortgagerate.rds.  Prepayment Assumption does not
   #' open Mtg.Rate connection directly rather takes the argument as an object.
-  #' @param ModelTune A character string the prepayment model tune object
+  #' @param ModelTune A character string the prepayment model object
   #' @param Burnout A numeric value the burnout variable
   #' @param PrepaymentAssumption A character string the prepayment assumption 
   #' used "MODEL", "PPC", or "CPR"

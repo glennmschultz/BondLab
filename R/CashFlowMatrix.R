@@ -22,7 +22,11 @@
   
   #'@title CreateCashFlowMatrix
   #'@family Interest Rate Models
-  #'@description An dataframe containing bond cash flow
+  #'@description An dataframe containing bond cash flow.  The first three rows
+  #'include the price, accured interest, and yield to maturity, and modified 
+  #'duration. CashFlowMatrix[5:nrow,] matches the maturity matrix for yield curve
+  #'fitting
+  #'should match the number of rows of the maturity matrix
   #'@param trade.date The trade date 
   #'@param bonddata A dataframe of bond data.  The complete dataframe must
   #'consist of the following names columns: cusip, interestrate, issuedate,
@@ -37,7 +41,7 @@
                                              nrow = 60,
                                              ncol = nrow(bonddata)))
     price_matrix <- as.data.frame(matrix(data = 0,
-                                         nrow = 1,
+                                         nrow = 4 ,
                                          ncol = nrow(bonddata)))
     cal <- 'actual'
     leap_day <- function(pmt.date){
@@ -102,7 +106,10 @@
                                          price = PriceDecimalString(Price)),
                            error = function(e) return (NULL))
       numcashflow <- length(TotalCashFlow(CashFlow))
-      price_matrix[1,bonds] <- PriceDecimal(Price) + Accrued(CashFlow)
+      price_matrix[1,bonds] <- PriceDecimal(Price)
+      price_matrix[2,bonds] <- Accrued(CashFlow)
+      price_matrix[3,bonds] <- YieldToMaturity(CashFlow)
+      price_matrix[4,bonds] <- ModDuration(CashFlow)
       cash_flow_matrix[1:numcashflow,bonds] <- TotalCashFlow(CashFlow)
       #cash_flow_matrix[1:numcashflow,bonds] <- TimePeriod(CashFlow)
     }

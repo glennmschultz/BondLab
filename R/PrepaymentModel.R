@@ -368,35 +368,110 @@
   #' The function is a constructor function for the PrepaymentModel object
   #' @param bond.id A character string referring to an object 
   #' of the type MBSDetails
-  #' @param TermStructure A character string referring to an object 
+  #' @param term.structure A character string referring to an object 
   #' of the type TermStructure
-  #' @param MortgageRate A character string the input value of 
-  #' mortgagerate.rds.  Prepayment Assumption does not
-  #' open Mtg.Rate connection directly rather takes the argument as an object.
   #' @param ModelTune A character string the prepayment model object
   #' @param Burnout A numeric value the burnout variable
   #' @param PrepaymentAssumption A character string the prepayment assumption 
-  #' used "MODEL", "PPC", or "CPR"
-  #' @param ... Optional values when "PPC" or "CPR" is used
+  #' used "model", "ppc", or "cpr"
+  #' @param ... Optional values when "ppc" or "cpr" is used
   #' @param begin.cpr A numeric value the beginning CPR assumption
   #' @param end.cpr A numeric value the ending CPR assumption
   #' @param seasoning.period A numeric value the length of the seasoning ramp
-  #' @param CPR A numeric value the CPR assumption (annual prepayment rate)
-  #' @param CDR A numeric value the CDR assumption (annual default rate)
-  #' @param HomePrice NULL do not override value
-  #' @param Severity A numeric value the loss severity given default
+  #' @param cpr A numeric value the CPR assumption (annual prepayment rate)
+  #' @param cdr A numeric value the CDR assumption (annual default rate)
+  #' @param severity A numeric value the loss severity given default
   #' @export PrepaymentModel
-  PrepaymentModel <- function(bond.id = "character", 
-                              TermStructure = "character", 
-                              MortgageRate = "character",
-                              ModelTune = "character", 
+  PrepaymentModel <- function(bond.id, 
+                              term.structure, 
+                              ModelTune,
                               Burnout = 0, 
-                              PrepaymentAssumption = "character", 
+                              PrepaymentAssumption = 'MODEL' ,
                               ...,
-                              begin.cpr = numeric(), 
-                              end.cpr = numeric(), 
-                              seasoning.period = numeric(), 
-                              CPR = numeric(),
-                              CDR = 0,
-                              HomePrice = NULL,
-                              Severity = 0){}
+                              begin.cpr = .2, 
+                              end.cpr = 6, 
+                              seasoning.period = 30,
+                              cpr = 6,
+                              cdr = 1,
+                              severity = .25){
+    #Check for a valid prepayment assumption
+    if(!PrepaymentAssumption %in% c("MODEL", "CPR", "PPC")) stop
+    ("Not a Valid Prepayment Assumption")
+
+    NoteRate = GWac(bond.id)
+    sato = SATO(bond.id)
+    AmortizationTerm = AmortizationTerm(bond.id)
+    AmortizationType = AmortizationType(bond.id)
+    OriginalLoanBalance = OrigLoanBal(bond.id)
+    OrigLTV = OrigLTV(bond.id)
+    FirstPmtDate = as.Date(FirstPrinPaymentDate(bond.id), "%m-%d-%Y")
+    LastPmtDate = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+    FinalPmtDate = as.Date(FinalPmtDate(bond.id), "%m-%d-%Y")
+    NextPmtDate = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+    WALA = as.numeric(WALA(bond.id))
+    
+    mtg.rate <- ProjectMortgageRate(bond.id = bond.id,
+                                    term.structure = term.structure)[1:length]
+    
+    mtg.term = as.integer(difftime(FinalPmtDate,
+                                   FirstPmtDate, units = "days")/days.in.month) + 1
+    
+    remain.term = as.integer(difftime(FinalPmtDate,
+                                      LastPmtDate, units = "days")/days.in.month) + 1
+    
+    period = seq(from = 1, to = remain.term, by = 1)
+    
+    pmt.date = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = remain.term-1,
+                                                    by = 1)) 
+    
+    loan.age = as.integer(difftime(as.Date(NextPmtDate) %m+% 
+                                   months(seq(from = 1, to = remain.term, by = 1)),
+                                   as.Date(FirstPmtDate), units = "days")/days.in.month) - 1
+    
+    note.rate =  as.numeric(rep(NoteRate, length(loan.age)))
+    
+    if(PrepaymentAssumption == "MODEL")
+    {smm = 0
+    severity = rep(severity, remain.term)
+    } 
+    else
+    {if(PrepaymentAssumption == "PPC") 
+    {smm = round(as.numeric(1-(1-PPC.Ramp(begin.cpr = begin.cpr,
+                                          end.cpr = end.cpr,
+                                          season.period = seasoning.period,
+                                          period = LoanAge))^(1/months.in.year)),8)
+    severity = rep(severity, remain.term)
+    } 
+      else
+      {smm = round(rep(1-(1-cpr)^(1/12), remain.term),8)}
+      severity = rep(severity, remain.term)
+    }
+    
+    
+    # this condition sets default to zero when the prepayment model is not used 
+    # it allows for standard PPC and CPR assumptions
+    if(PrepaymentAssumption != "MODEL"){
+      mdr <- round(rep(CDR.To.MDR(CDR = cdr), remain.term),8)} else {
+        mdr <- round(0,8)}
+    
+    new("PrepaymentModel",
+        PrepaymentAssumption = as.character(PrepaymentAssumption),
+        PPCStart = if(PrepaymentAssumption == "PPC") {begin.cpr} else {0},
+        PPCEnd = if(PrepaymentAssumption == "PPC") {end.cpr} else {0},
+        PPCSeasoning = if(PrepaymentAssumption == "PPC") {seasoning.period
+        } else {0},
+        NoteRate = as.numeric(NoteRate),
+        FirstPmtDate = as.character(FirstPmtDate),
+        LastPmtDate = as.character(LastPmtDate),
+        FinalPmtDate = as.character(FinalPmtDate),
+        Period = Period,
+        PmtDate = as.character(PmtDate),
+        LoanAge = as.numeric(LoanAge),
+        MtgRateFwd = as.numeric(mtg.rate),
+        Incentive = as.numeric(Incentive),
+        SMM = as.numeric(smm),
+        MDR = as.numeric(mdr),
+        Severity = as.numeric(severity)
+    )
+
+  }

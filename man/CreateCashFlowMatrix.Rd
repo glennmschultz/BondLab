@@ -14,7 +14,11 @@ consist of the following names columns: cusip, interestrate, issuedate,
 dateddate, maturitydate, type, close.}
 }
 \description{
-An dataframe containing bond cash flow
+An dataframe containing bond cash flow.  The first three rows
+include the price, accured interest, and yield to maturity, and modified 
+duration. CashFlowMatrix[5:nrow,] matches the maturity matrix for yield curve
+fitting
+should match the number of rows of the maturity matrix
 }
 \seealso{
 Other Interest Rate Models: \code{\link{CreateMaturitiesMatrix}}

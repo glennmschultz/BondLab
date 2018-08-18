@@ -4,31 +4,25 @@
 \alias{PrepaymentModel}
 \title{A contstructor function for the PrepaymentModel object}
 \usage{
-PrepaymentModel(bond.id = "character", TermStructure = "character",
-  MortgageRate = "character", ModelTune = "character", Burnout = 0,
-  PrepaymentAssumption = "character", ..., begin.cpr = numeric(),
-  end.cpr = numeric(), seasoning.period = numeric(), CPR = numeric(),
-  CDR = 0, HomePrice = NULL, Severity = 0)
+PrepaymentModel(bond.id, term.structure, ModelTune, Burnout = 0,
+  PrepaymentAssumption = "MODEL", ..., begin.cpr = 0.2, end.cpr = 6,
+  seasoning.period = 30, cpr = 6, cdr = 1, severity = 0.25)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object 
 of the type MBSDetails}
 
-\item{TermStructure}{A character string referring to an object 
+\item{term.structure}{A character string referring to an object 
 of the type TermStructure}
-
-\item{MortgageRate}{A character string the input value of 
-mortgagerate.rds.  Prepayment Assumption does not
-open Mtg.Rate connection directly rather takes the argument as an object.}
 
 \item{ModelTune}{A character string the prepayment model object}
 
 \item{Burnout}{A numeric value the burnout variable}
 
 \item{PrepaymentAssumption}{A character string the prepayment assumption 
-used "MODEL", "PPC", or "CPR"}
+used "model", "ppc", or "cpr"}
 
-\item{...}{Optional values when "PPC" or "CPR" is used}
+\item{...}{Optional values when "ppc" or "cpr" is used}
 
 \item{begin.cpr}{A numeric value the beginning CPR assumption}
 
@@ -36,13 +30,11 @@ used "MODEL", "PPC", or "CPR"}
 
 \item{seasoning.period}{A numeric value the length of the seasoning ramp}
 
-\item{CPR}{A numeric value the CPR assumption (annual prepayment rate)}
+\item{cpr}{A numeric value the CPR assumption (annual prepayment rate)}
 
-\item{CDR}{A numeric value the CDR assumption (annual default rate)}
+\item{cdr}{A numeric value the CDR assumption (annual default rate)}
 
-\item{HomePrice}{NULL do not override value}
-
-\item{Severity}{A numeric value the loss severity given default}
+\item{severity}{A numeric value the loss severity given default}
 }
 \description{
 The function is a constructor function for the PrepaymentModel object

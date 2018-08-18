@@ -473,5 +473,4 @@
         MDR = as.numeric(mdr),
         Severity = as.numeric(severity)
     )
-
   }

@@ -4,9 +4,9 @@
 \alias{PrepaymentModel}
 \title{A contstructor function for the PrepaymentModel object}
 \usage{
-PrepaymentModel(bond.id, term.structure, ModelTune, Burnout = 0,
-  PrepaymentAssumption = "MODEL", ..., begin.cpr = 0.2, end.cpr = 6,
-  seasoning.period = 30, cpr = 6, cdr = 1, severity = 0.25)
+PrepaymentModel(bond.id, term.structure, prepayment.assumption = "MODEL", ...,
+  begin.cpr = 0.002, end.cpr = 0.06, seasoning.period = 30, cpr = 0.06,
+  cdr = 0.01, severity = 0.25)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object 
@@ -15,14 +15,10 @@ of the type MBSDetails}
 \item{term.structure}{A character string referring to an object 
 of the type TermStructure}
 
-\item{ModelTune}{A character string the prepayment model object}
+\item{prepayment.assumption}{A character string the prepayment assumption 
+used "MODEL", "PPC", or "CPR"}
 
-\item{Burnout}{A numeric value the burnout variable}
-
-\item{PrepaymentAssumption}{A character string the prepayment assumption 
-used "model", "ppc", or "cpr"}
-
-\item{...}{Optional values when "ppc" or "cpr" is used}
+\item{...}{Optional values when "PPC" or "CPR" is used}
 
 \item{begin.cpr}{A numeric value the beginning CPR assumption}
 

@@ -4,8 +4,8 @@
 \alias{SpreadToPriceMBS}
 \title{Spread To Price MBS}
 \usage{
-SpreadToPriceMBS(bond.id, trade.date, settlement.date, PrepaymentAssumption,
-  spread, CPR, ..., benchmark = NULL)
+SpreadToPriceMBS(bond.id, trade.date, settlement.date, term.structure,
+  rates.data, PrepaymentAssumption, spread, CPR, ..., benchmark = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -13,6 +13,10 @@ SpreadToPriceMBS(bond.id, trade.date, settlement.date, PrepaymentAssumption,
 \item{trade.date}{A character string the trade date mm-dd-YYYY}
 
 \item{settlement.date}{A character string the settlement date mm-dd-YYYY}
+
+\item{term.structure}{A character string referencing a TermStrucutre object}
+
+\item{rates.data}{A character referencing a rates.data object}
 
 \item{PrepaymentAssumption}{The assumption must be: "CPR", "PPC", "MODEL"}
 

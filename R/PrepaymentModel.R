@@ -379,6 +379,8 @@
   #' @param cpr A numeric value the CPR assumption (annual prepayment rate)
   #' @param cdr A numeric value the CDR assumption (annual default rate)
   #' @param severity A numeric value the loss severity given default
+  #' @importFrom lubridate month
+  #' @import Matrix Matrix
   #' @export PrepaymentModel
   PrepaymentModel <- function(bond.id, 
                               term.structure,
@@ -413,15 +415,6 @@
     mtg.rate <- ProjectMortgageRate(bond.id = bond.id,
                                     term.structure = term.structure)
     
-    #mtg.term = as.integer(difftime(FinalPmtDate,FirstPmtDate, units = "days")/days.in.month)
-    #remain.term = as.integer(difftime(FinalPmtDate,LastPmtDate, units = "days")/days.in.month)
-    #loan.age = as.integer(difftime(as.Date(NextPmtDate) %m+% 
-    #                      months(seq(from = 1, to = remain.term, by = 1)),
-    #                      as.Date(FirstPmtDate), units = "days")/days.in.month) - 1
-    
-    #mtg.term = Term
-    #remain.term = WAM
-    
     period = seq(from = 1, to = WAM, by = 1)
     pmt.date = as.Date(NextPmtDate)  %m+% months(seq(from = 0, to = WAM-1, by = 1)) 
     loan.age = seq(from = WALA + 1, to = Term, by = 1)
@@ -433,8 +426,20 @@
                         ifelse(incentive >= 4, pmin(4, incentive), incentive))
     
     if(prepayment.assumption == "MODEL")
-    {smm = 0
-    severity = rep(severity, WAM)
+    {
+      model <- ModelTune(bond.id = bond.id)
+      modelinput <- matrix(data = 0, nrow = WAM, ncol = 6, byrow = FALSE,
+                           dimnames = list(NULL, c('age', 'month', 'incentive', 
+                                                   'incentive_2', 'incentive_3', 'mtmltv')))
+      modelinput[,1] <- loan.age
+      modelinput[,2] <- lubridate::month(pmt.date)
+      modelinput[,3] <- NoteRate - (mtg.rate + sato)
+      modelinput[2:WAM,4] <- modelinput[1:(WAM-1), 3]
+      modelinput[3:WAM,5] <-  modelinput[1:(WAM-2), 3]
+      modelinput[,6] <- 80
+      modelinput <- Matrix(modelinput, sparse = TRUE)
+      smm <- predict(model, newdata = modelinput, type = 'response')
+      severity = rep(severity, WAM)
     } 
     else
     {if(prepayment.assumption == "PPC") 
@@ -454,7 +459,7 @@
     # it allows for standard PPC and CPR assumptions
     if(prepayment.assumption != "MODEL"){
       mdr <- round(rep(CDR.To.MDR(CDR = cdr), WAM),8)} else {
-        mdr <- round(0,8)}
+        mdr <- rep(round(0,8), WAM)}
     
     new("PrepaymentModel",
         PrepaymentAssumption = as.character(prepayment.assumption),

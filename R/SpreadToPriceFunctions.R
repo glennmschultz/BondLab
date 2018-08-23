@@ -19,6 +19,7 @@
   # A function differencing the proceeds and present value used with
   # uni-root to find the spot spread to normalize discounting
   
+  
   FindSpotSpread <- function(spot.spread = vector(),
                              spot.curve = vector(),
                              cash.flow = vector(),
@@ -60,6 +61,8 @@
   #' @param bond.id A character string the cusip number or bond.id
   #' @param trade.date A character string the trade date mm-dd-YYYY
   #' @param settlement.date A character string the settlement date mm-dd-YYYY
+  #' @param term.structure A character string referencing a TermStrucutre object
+  #' @param rates.data A character referencing a rates.data object
   #' @param PrepaymentAssumption The assumption must be: "CPR", "PPC", "MODEL"
   #' @param spread A charcter string the spread to the interpolated curve
   #' entered in basis points
@@ -71,20 +74,24 @@
   #'@importFrom splines interpSpline
   #'@importFrom stats predict
   #'@importFrom stats uniroot
-  #' @export
+  #'@export
   SpreadToPriceMBS <- function(bond.id,
-                            trade.date,
-                            settlement.date,
-                            PrepaymentAssumption,
-                            spread,
-                            CPR,
-                            ...,
-                            benchmark = NULL){
+                               trade.date,
+                               settlement.date,
+                               term.structure,
+                               rates.data,
+                               PrepaymentAssumption,
+                               spread,
+                               CPR,
+                               ...,
+                               benchmark = NULL){
     
     Spread <- SpreadTypes(spread = spread)
     
-    rates.data <- Rates(trade.date = trade.date)
-    MortgageRate = MtgRate()
+    #rates.data <- Rates(trade.date = trade.date)
+    #MortgageRate = MtgRate()
+    MortgageRate <- ProjectMortgageRate(bond.id = bond.id, 
+                                        term.structure = term.structure)
     Burnout = BurnOut(bond.id)
     orig.bal = OriginalBal(bond.id)
     principal = orig.bal * MBSFactor(bond.id)
@@ -101,12 +108,12 @@
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
     bondbasis = BondBasis(bond.id)
     
-    invisible(capture.output(
-      TermStructure <- TermStructure(rates.data = rates.data)))
+    #invisible(capture.output(
+    #  TermStructure <- TermStructure(rates.data = rates.data)))
     
     prepayment = PrepaymentModel(
       bond.id = bond.id,
-      TermStructure = TermStructure,
+      TermStructure = term.structure,
       MortgageRate = MortgageRate,
       ModelTune = ModelTune(bond.id = bond.id),
       Burnout = Burnout,

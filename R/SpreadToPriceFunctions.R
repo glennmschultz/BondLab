@@ -59,11 +59,9 @@
   #' and spread to the curve
   #' @importFrom utils capture.output
   #' @param bond.id A character string the cusip number or bond.id
-  #' @param trade.date A character string the trade date mm-dd-YYYY
-  #' @param settlement.date A character string the settlement date mm-dd-YYYY
-  #' @param term.structure A character string referencing a TermStrucutre object
+  #' @param settlement.data A character string the settlement date mm-dd-YYYY
   #' @param rates.data A character referencing a rates.data object
-  #' @param PrepaymentAssumption The assumption must be: "CPR", "PPC", "MODEL"
+  #' @param prepayment.assumption A character string referencing an object of Prepayment
   #' @param spread A charcter string the spread to the interpolated curve
   #' entered in basis points
   #' @param CPR A numeric value the CPR assumption used to price the MBS.  For
@@ -76,11 +74,9 @@
   #'@importFrom stats uniroot
   #'@export
   SpreadToPriceMBS <- function(bond.id,
-                               trade.date,
-                               settlement.date,
-                               term.structure,
                                rates.data,
-                               PrepaymentAssumption,
+                               settlement.date,
+                               prepayment.assumption,
                                spread,
                                CPR,
                                ...,
@@ -107,19 +103,7 @@
     delay = PaymentDelay(bond.id)
     settlement.date = as.Date(c(settlement.date), "%m-%d-%Y")
     bondbasis = BondBasis(bond.id)
-    
-    #invisible(capture.output(
-    #  TermStructure <- TermStructure(rates.data = rates.data)))
-    
-    prepayment = PrepaymentModel(
-      bond.id = bond.id,
-      TermStructure = term.structure,
-      MortgageRate = MortgageRate,
-      ModelTune = ModelTune(bond.id = bond.id),
-      Burnout = Burnout,
-      PrepaymentAssumption = PrepaymentAssumption,
-      CPR = CPR)
-    
+
   
     # Basis spline to interpolate given yield curve
     ModelCurve <- splines::interpSpline(as.numeric(rates.data[2,2:12]),
@@ -131,7 +115,7 @@
       bond.id = bond.id,
       settlement.date = settlement.date,
       principal = principal,
-      PrepaymentAssumption = prepayment)
+      PrepaymentAssumption = prepayment.assumption)
     
     Factor = BondBasisConversion(
       issue.date = issue.date,
@@ -334,7 +318,8 @@
   #'convection.  The user specified spread to the benchmark in basis points.
   #'@param bond.id a character or connection to object of type BondDetails
   #'@param settlement.date a character the settlement date 'mm-dd-yyyy'
-  #'@param term.structure a character string referencing an object of type 
+  #'@param term.structure a character string referencing an object of type rates data
+  #'@param prepayment.assumption a character string referencing an object of type Prepayment 
   #'@param ZV.spread a character the spread to the spot rate curve quoted in basis points
   #'@importFrom splines interpSpline
   #'@importFrom stats predict
@@ -356,17 +341,17 @@
     settlement.date = as.Date(settlement.date, "%m-%d-%Y")
     bondbasis = BondBasis(bond.id)
     original.bal = OriginalBal(bond.id)
+    mbs.factor = MBSFactor(bond.id)
     
     if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
       days.in.year = days.in.year} else {days.in.year = days.in.year.360}
     
     ZVSpread <- SpreadTypes(spread = ZV.spread)
     
-    Mtge.CF.Table <- MortgageCashFlow(bond.id = bond.id,
-                                      original.bal = original.bal,
-                                      settlement.date = settlement.date,
-                                      price = PriceDecimalString(Price),
-                                      PrepaymentAssumption = prepayment.assumption)
+    Mtge.CF.Table <- CashFlowEngine(bond.id = bond.id,
+                                    settlement.date = settlement.date,
+                                    principal = original.bal * mbs.factor,
+                                    PrepaymentAssumption = prepayment.assumption)
     
     Factor = BondBasisConversion(
       issue.date = issue.date, 
@@ -377,18 +362,19 @@
       nextpmt.date = nextpmt.date, 
       type = BondBasis(bond.id))
     
-    accrued.interest = Factor * as.numeric(Mtge.CF.Table[1, "Coupon Income"])
+    accrued.interest = Factor * as.numeric(Mtge.CF.Table[1, "Pass Through Interest"])
     
     ModelSpotCurve <- splines::interpSpline(SpotRate(term.structure)~TimePeriod(term.structure), 
                                             bSpline = TRUE)
     
     spot.rate <- predict(ModelSpotCurve, Mtge.CF.Table[,'Time'])
-    presentvalue = (sum(Mtge.CF.Table[,'TotalCashFlow'] * 
+    presentvalue = (sum(Mtge.CF.Table[,'Investor CashFlow'] * 
                           (1 + (spot.rate$y/yield.basis) + (SpreadDecimal(ZVSpread)/yield.basis)) ^ 
                           -spot.rate$x)) - accrued.interest
     
-    price = presentvalue/ OriginalBal(bond.id)
+    price = presentvalue/ (original.bal * mbs.factor)
     price = price * price.basis
     PriceTypes <- PriceTypes(price = as.character(price))
     return(PriceTypes)
-    return(price)}
+  }
+  

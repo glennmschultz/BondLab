@@ -4,21 +4,15 @@
 \alias{SpreadToPriceMBS}
 \title{Spread To Price MBS}
 \usage{
-SpreadToPriceMBS(bond.id, trade.date, settlement.date, term.structure,
-  rates.data, PrepaymentAssumption, spread, CPR, ..., benchmark = NULL)
+SpreadToPriceMBS(bond.id, rates.data, settlement.date, prepayment.assumption,
+  spread, CPR, ..., benchmark = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
 
-\item{trade.date}{A character string the trade date mm-dd-YYYY}
-
-\item{settlement.date}{A character string the settlement date mm-dd-YYYY}
-
-\item{term.structure}{A character string referencing a TermStrucutre object}
-
 \item{rates.data}{A character referencing a rates.data object}
 
-\item{PrepaymentAssumption}{The assumption must be: "CPR", "PPC", "MODEL"}
+\item{prepayment.assumption}{A character string referencing an object of Prepayment}
 
 \item{spread}{A charcter string the spread to the interpolated curve
 entered in basis points}
@@ -30,6 +24,8 @@ example 16 CPR is entered 16.}
 
 \item{benchmark}{Optionally the user can pass pricing benchmark - currently 
 this functonality is not implemented.}
+
+\item{settlement.data}{A character string the settlement date mm-dd-YYYY}
 }
 \description{
 Returns the clean price of the MBS given a prepayment speed

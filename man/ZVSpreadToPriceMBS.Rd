@@ -12,7 +12,9 @@ ZVSpreadToPriceMBS(bond.id, settlement.date, term.structure,
 
 \item{settlement.date}{a character the settlement date 'mm-dd-yyyy'}
 
-\item{term.structure}{a character string referencing an object of type}
+\item{term.structure}{a character string referencing an object of type rates data}
+
+\item{prepayment.assumption}{a character string referencing an object of type Prepayment}
 
 \item{ZV.spread}{a character the spread to the spot rate curve quoted in basis points}
 }

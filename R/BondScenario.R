@@ -166,7 +166,7 @@
   #' investor's total return.  The function returns the class BondScenario
   #' @param bond.id A character string referencing an object of the type BondDetails
   #' @param settlement.date A character string the settlement data "mm-dd-YYYY".
-  #' @param scenario.curves A character string an object yield curve
+  #' @param scenario.curves A character string an object of type ScenarioCurves
   #' @param price A character string in decimal equivalent (.) or 32nds (-)
   #' @param principal A numeric value the par amount. 
   #' @param ... Optional values to select term structure and horizon price method

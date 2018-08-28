@@ -283,7 +283,8 @@
   Burnout = BurnOut(bond.id)
   
   # Open connection to the Mortgage Model function
-  MortgageRate <- MtgRate()
+  MortgageRate <- ProjectMortgageRate(bond.id = bond.id,
+                                      term.structure  = TermStructure)
   
   #Call the bond frequency to adjust the spot spread to the payment 
   #frequency of the bond
@@ -615,15 +616,7 @@
                                                     forward.tenor = 24)* yield.basis
     TenYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(term.structure = Key.Rate.TS.Dwn,
                                                      forward.tenor = 120) * yield.basis
-    #return(Key.Rate.TS.Dwn)
-    #TwoYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
-    #  SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn), 
-    #  FwdRate.Tenor = 24) 
-    #TenYearForward(Key.Rate.TS.Dwn) <- Forward.Rate(
-    #  SpotRate.Curve = SpotRate(Key.Rate.TS.Dwn),
-    #  FwdRate.Tenor = 120)
-    
-    
+
     Key.Rate.TS.Up <- new("TermStructure",
                            TradeDate <- TradeDate(TermStructure),
                            Period <- Period(TermStructure),

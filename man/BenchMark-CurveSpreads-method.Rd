@@ -24,5 +24,6 @@ Other Pricing: \code{\link{BillPriceToYield}},
   \code{\link{SpreadToPriceBond}},
   \code{\link{SpreadToPriceMBS}},
   \code{\link{ZVSpreadToPriceBond}},
+  \code{\link{ZVSpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }

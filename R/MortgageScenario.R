@@ -269,16 +269,12 @@
   #' A function to compute the total return of mortgage pass-throughs MBS
   #' @param bond.id A character string referencing an object of type MBSDetails
   #' @param settlement.date A charcter string the settlement date
-  #' @param rates.data A character string the trade date mm-dd-yyyy
   #' @param price A character string in decimal equivalent (.) or 32nds (-)
   #' @param original.bal A numeric value the price
-  #' @param scenario A character string the scenario
-  #' @param horizon.months A numeric value the time horizon
+  #' @param scenario.curves A character string an object of type ScenarioCurves
   #' @param prepayment A character string the prepayment assumption
   #' @param ... Optional values when PSA or CPR is used or Yield Curve
   #' is used
-  #' @param method A character string the method used to fit the 
-  #' term structure
   #' @param horizon.spot.spread A numeric value the horizon zero volatility 
   #' spread
   #' @param horizon.nominal.spread A numeric value the horizon spread
@@ -294,12 +290,9 @@
   #' @export
   MortgageScenario  <- function(bond.id = "character",
                           settlement.date = "character",
-                          rates.data = "character",
                           price = "character", 
                           original.bal = numeric(),
-                          scenario = "character",
-                          horizon.months = numeric(),
-                          method = "dl",
+                          scenario.curves = "character",
                           prepayment,
                           ...,
                           horizon.spot.spread = NULL,
@@ -332,40 +325,15 @@
     }
     
     bond.id <- bond.id
-    rates.data <- rates.data
-    MortgageRate <- MtgRate()
+    Price <- PriceTypes(price)
+    startcurve <- as.data.frame(StartCurve(scenario.curves), stringsAsFactors = FALSE)
+    starttermstrc <- StartTermStrc(scenario.curves)
+    horizoncurve <- as.data.frame(HorizonCurve(scenario.curves), stringsAsFactors = FALSE)
+    horizontermstrc <- HorizonTermStrc(scenario.curves)
+    horizonmonths = ScenarioHorizonMos(scenario.curves)
+    MortgageRate <- ProjectMortgageRate(bond.id = bond.id, term.structure = term.structure)
     ModelTune <- ModelTune(bond.id = bond.id)
-    Burnout = BurnOut(bond.id)
-    Scenario <- ScenarioCall(Scenario = scenario)
 
-    #set rates shift (immediate) for term structure fit
-    ShiftCurve <- rates.data
-    ShiftCurve[1,2:length(ShiftCurve)] <- 
-      as.numeric(ScenarioFormula(Scenario)(rates.data[1,2:length(ShiftCurve)], 
-                                Shiftbps = Shiftbps(Scenario)))
-
-    # Set horizon curve and settlment date for horizon ending value analysis
-    # This curve is used to fit the horizon term structure when the scenario is
-    # not based on shift of the spot rate curve.
-    
-    HorizonCurve <- rates.data
-    HorizonCurve[1,1] <- as.character(
-      as.Date(HorizonCurve[1,1]) %m+% months(horizon.months))
-    
-    HorizonCurve[1,2:length(HorizonCurve)] <- 
-      as.numeric(ScenarioFormula(Scenario)(rates.data[1,2:length(HorizonCurve)], 
-                                Shiftbps = Shiftbps(Scenario)))
-    HorizonSettlement <- as.Date(
-      settlement.date, format = "%m-%d-%Y") %m+% months(horizon.months)
-    
-    Price <- PriceTypes(price = price)
-  
-    # fit the term structure and calcualate cashflows to compute the 
-    # following Yield, WAL, Curve Spreads, KeyRate Durations, etc
-
-    TermStructure <- TermStructure(
-      rates.data = ShiftCurve,
-      method = method)
    
     Prepayment <- PrepaymentModel(
       bond.id = bond.id,
@@ -411,48 +379,18 @@
       yield = YieldToMaturity(MortgageCashFlow)/yield.basis
     )
 
-    # This section begins the  horizon mortgage pass-through analysis. 
-    # Horizon curve can be calculated by either shifting the coupon curve or
-    # and refitting the curve or it can be calculated by shifting the spot rate
-    # curve.  Senarios with ending with (s) indicate the user wishes to shift
-    # the spot rate curve.
-    
-    if(grepl("s",scenario) == TRUE){
-      # initialize term structure object and assign shift vlaue to the 
-      # spot rate curve based on the TermStructure object above
-      
-      HorizonTermStructure <- new(
-        "TermStructure",
-        TradeDate = as.character(
-          as.Date(rates.data[1,1]) %m+% months(horizon.months)),
-        Period = numeric(),
-        Date = "character",
-        TimePeriod = numeric(),
-        SpotRate = numeric(),
-        ForwardRate = numeric(),
-        DiscRate = numeric(),
-        TwoYearFwd = numeric(),
-        TenYearFwd = numeric())
-      
-      Period(HorizonTermStructure) <- Period(TermStructure)
-      ForwardDate(HorizonTermStructure) <- as.character(
-        as.Date(ForwardDate(TermStructure)) %m+% months(horizon.months))
-      TimePeriod(HorizonTermStructure) <- TimePeriod(TermStructure)
-      SpotRate(HorizonTermStructure) <- SpotRate(TermStructure)
-      ForwardRate(HorizonTermStructure) <-ForwardRate(TermStructure)
-      DiscRate(HorizonTermStructure) <- DiscRate(TermStructure)
-      TwoYearForward(HorizonTermStructure) <- TwoYearForward(TermStructure)
-      TenYearForward(HorizonTermStructure) <- TenYearForward(TermStructure)
-    } else {
-    HorizonTermStructure <- TermStructure(
-      rates.data = HorizonCurve,
-      method = method)
-    } # End of if logic for term structure method
-    
     # This section of code rolls the MBS pass-though forward in time updating
     # factor, current balance, lastpaymentdate, nextpaymentdate, wam and wala the 
     # first step is to assign bond.id to HorizonMBS object
     HorizonMBS <- bond.id
+    
+    paymentdates <- LastandNextPmtDate(issue.date = IssueDate(HorizonMBS),
+                                       dated.date = DatedDate(HorizonMBS),
+                                       maturity.date = Maturity(HorizonBond),
+                                       settlement.date = as.character(as.Date(horizoncurve[1,1]), 
+                                                                      format = '%m-%d-%Y'),
+                                       frequency = Frequency(HorizonMBS),
+                                       bond.basis = BondBasis(HorizonMBS))
     
     # Use the projected cashflow to determine the current balance outstanding 
     # at the end of horizon
@@ -460,21 +398,15 @@
     PrepaidPrincipal <- PrepaidPrin(MortgageCashFlow)[1:horizon.months]
     DefaultedPrincipal <- DefaultedPrin(MortgageCashFlow)[1:horizon.months]
     TotalPrincipal <- sum(SchedPrincipal) + 
-      sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
+    sum(PrepaidPrincipal) + sum(DefaultedPrincipal)
     
     # Update the LastPmtDate and NextPmtDate to reflect the end of the horizon
     # and compute and update the MBSFactor, CurrentBal, WAM, and WALA
-    HorizonMBS <- `LastPmtDate<-`(HorizonMBS,
-                    as.character(format(
-                      as.Date(LastPmtDate(bond.id), 
-                              format = "%m-%d-%Y") %m+% months(horizon.months), 
-                      "%m-%d-%Y")))
+    HorizonMBS <- `LastPmtDate<-`(HorizonMBS, 
+                                  as.character(paymentdates[1], format = '%m-%d-%Y'))
     
-    HorizonMBS <- `NextPmtDate<-`(HorizonMBS,
-                    as.character(format(
-                      as.Date(NextPmtDate(bond.id), 
-                              format = "%m-%d-%Y") %m+% months(horizon.months), 
-                      "%m-%d-%Y")))
+    HorizonMBS <- `NextPmtDate<-`(HorizonMBS, 
+                                  as.character(paymentdates[2], format = '%m-%d-%Y'))
       
     MBSFactor(HorizonMBS) <- ((original.bal * MBSFactor(bond.id)) - TotalPrincipal)/ original.bal
     
@@ -502,13 +434,62 @@
       price = PriceDecimalString(Price),
       PrepaymentAssumption = HorizonPrepaymentAssumption)
     
-    # =========================================================================
+    # ========================================================================
     # This section begins the calculation of horizon total return
     # Cashflow Received + Reinvestment Income + Present Value at Horizon
     # ========================================================================
     
-    NumberofCashFlow <- as.numeric(length(TotalCashFlow(HorizonCashFlow)))
-    reinvestment.rate <- as.numeric(HorizonCurve[1,2])/yield.basis
+    PmtIndex <- which(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizoncurve[1,1])) ==
+                        min(abs(as.Date(PmtDate(BondCashFlow)) - as.Date(horizoncurve[1,1]))))[1]
+    
+    PmtIndex <- if(as.Date(PmtDate(BondCashFlow)[PmtIndex]) > as.Date(horizoncurve[1,1])) {PmtIndex -1
+    } else {PmtIndex}
+    
+    #==========================================================================
+    # From the beginning cashflow calculation get the cashflow recieved by the 
+    # investor.  This should be the matrix in the book
+    #==========================================================================
+    
+    CashFlowArray <- array(data = 0, dim = c(PmtIndex +2, horizonmonths + 2), dimnames = NULL)
+    
+    # --------------------------------------------------------------------------
+    # set days to 01 forces all coupon payment calculations to month year basis
+    startdate <- paste(substr(startcurve[1,1],1,8),'01', sep ="")
+    horizonmonths.seq <- as.character(seq(as.Date(startdate), by = 'months', 
+                                          length.out = horizonmonths + 1),format ='%Y-%m-%d')
+    coupon.months <- as.character(as.Date(PmtDate(MortgageCashFlow)), format = "%Y-%m-01")
+    
+    colindex = NULL
+    for(col in seq_along(coupon.months)){
+      loc <- which(as.Date(coupon.months[col]) == as.Date(horizonmonths.seq))
+      if(length(loc) != 0){colindex <- append(colindex, loc, after = length(colindex))
+      } else {next()}}
+    
+    for(pmtrow in seq_along(colindex)){
+      CashFlowArray[pmtrow,colindex[pmtrow]] <- CouponPmt(MortgageCashFlow)[pmtrow]}
+    
+    # To price the bond at the horizon one must first determine the scenario cash
+    # flow in particular on must determine the amount of princial returned, if any,
+    # over the scenario to adjust the principal outstanding of the investor holdings
+    
+    # -------------------------------note----------------------------------------
+    # the bond cash flow engine requires an upgrade to include the slot principal
+    # paid similar to that of the mortgage cash flow engine.  The engine below will
+    # work for a non callable bond but will not work for sinking, putable or callable
+    # bonds.  This is CashFlowBond problem and relates to the allocation of principal
+    prin.months <- as.character(as.Date(PmtDate(MortgageCashFlow)), format = "%Y-%m-01")
+    
+    colindex = NULL
+    for(col in seq_along(prin.months)){
+      loc <- which(as.Date(prin.months[col]) == as.Date(horizonmonths.seq))
+      if(length(loc) != 0){colindex <- append(colindex, loc, after = length(colindex))
+      } else {next()}}
+    
+    for(pmtrow in seq_along(colindex)){
+      CashFlowArray[PmtIndex + 1,colindex[pmtrow]] <- principal - PrincipalOutstanding(MortgageCashFlow)[pmtrow]}
+    
+    CashFlowArray[PmtIndex + 1] <- sum(CashFlowArray[PmtIndex + 1,])
+    horizon.principal <- principal - CashFlowArray[PmtIndex + 1,horizonmonths-1]
     
     # =========================================================================
     # Horizon present value of MBS pass through using spot spread, nominal 
@@ -550,7 +531,8 @@
       DiscountRate * TotalCashFlow(HorizonCashFlow)
     PresentValue <- sum(HorizonPresentValue)
     
-    return(PresentValue)}
+    return(PresentValue)
+    }
   
   # Do not replace this with curve spreads as this section of code is used 
   # to compute horizon yield to maturity from nominal spread and interpolated

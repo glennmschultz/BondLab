@@ -5,29 +5,22 @@
 \title{Mortgage Scenario Analysis}
 \usage{
 MortgageScenario(bond.id = "character", settlement.date = "character",
-  rates.data = "character", price = "character", original.bal = numeric(),
-  scenario = "character", horizon.months = numeric(), method = "dl",
-  prepayment, ..., horizon.spot.spread = NULL,
-  horizon.nominal.spread = NULL, horizon.OAS = NULL, horizon.price = NULL,
-  begin.cpr, end.cpr, seasoning.period, CPR)
+  price = "character", original.bal = numeric(),
+  scenario.curves = "character", prepayment, ...,
+  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
+  horizon.OAS = NULL, horizon.price = NULL, begin.cpr, end.cpr,
+  seasoning.period, CPR)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of type MBSDetails}
 
 \item{settlement.date}{A charcter string the settlement date}
 
-\item{rates.data}{A character string the trade date mm-dd-yyyy}
-
 \item{price}{A character string in decimal equivalent (.) or 32nds (-)}
 
 \item{original.bal}{A numeric value the price}
 
-\item{scenario}{A character string the scenario}
-
-\item{horizon.months}{A numeric value the time horizon}
-
-\item{method}{A character string the method used to fit the 
-term structure}
+\item{scenario.curves}{A character string an object of type ScenarioCurves}
 
 \item{prepayment}{A character string the prepayment assumption}
 

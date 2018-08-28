@@ -325,3 +325,70 @@
     price = PriceTypes(as.character(price))
     return(price)
   }
+  
+  #'@title ZV Spread to price MBS
+  #'@family Pricing
+  #'@description Returns the clean price of an MBS pass throughv via PriceTypes 
+  #'object given a spread to the spot rate curve.  Market convention is to quote 
+  #'spread to the spot rate curve in basis points.  Bond Lab follows the market 
+  #'convection.  The user specified spread to the benchmark in basis points.
+  #'@param bond.id a character or connection to object of type BondDetails
+  #'@param settlement.date a character the settlement date 'mm-dd-yyyy'
+  #'@param term.structure a character string referencing an object of type 
+  #'@param ZV.spread a character the spread to the spot rate curve quoted in basis points
+  #'@importFrom splines interpSpline
+  #'@importFrom stats predict
+  #'@importFrom stats uniroot
+  #'@export ZVSpreadToPriceMBS
+  ZVSpreadToPriceMBS <- function(bond.id,
+                                 settlement.date,
+                                 term.structure,
+                                 prepayment.assumption,
+                                 ZV.spread){
+    
+    issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
+    start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")
+    end.date = as.Date(Maturity(bond.id), "%m-%d-%Y")
+    lastpmt.date = as.Date(LastPmtDate(bond.id), "%m-%d-%Y")
+    nextpmt.date = as.Date(NextPmtDate(bond.id), "%m-%d-%Y")
+    coupon = Coupon(bond.id)
+    frequency = Frequency(bond.id)
+    settlement.date = as.Date(settlement.date, "%m-%d-%Y")
+    bondbasis = BondBasis(bond.id)
+    original.bal = OriginalBal(bond.id)
+    
+    if(grepl('ActualActual', BondBasis(bond.id)) == TRUE | grepl('Actual365', BondBasis(bond.id)) == TRUE){
+      days.in.year = days.in.year} else {days.in.year = days.in.year.360}
+    
+    ZVSpread <- SpreadTypes(spread = ZV.spread)
+    
+    Mtge.CF.Table <- MortgageCashFlow(bond.id = bond.id,
+                                      original.bal = original.bal,
+                                      settlement.date = settlement.date,
+                                      price = PriceDecimalString(Price),
+                                      PrepaymentAssumption = prepayment.assumption)
+    
+    Factor = BondBasisConversion(
+      issue.date = issue.date, 
+      start.date = NULL, 
+      end.date = end.date,
+      settlement.date = settlement.date, 
+      lastpmt.date = lastpmt.date, 
+      nextpmt.date = nextpmt.date, 
+      type = BondBasis(bond.id))
+    
+    accrued.interest = Factor * as.numeric(Mtge.CF.Table[1, "Coupon Income"])
+    
+    ModelSpotCurve <- splines::interpSpline(SpotRate(term.structure)~TimePeriod(term.structure), 
+                                            bSpline = TRUE)
+    
+    spot.rate <- predict(ModelSpotCurve, Mtge.CF.Table[,'Time'])
+    presentvalue = (sum(Mtge.CF.Table[,'TotalCashFlow'] * 
+                          (1 + (spot.rate$y/yield.basis) + (SpreadDecimal(ZVSpread)/yield.basis)) ^ 
+                          -spot.rate$x)) - accrued.interest
+    
+    price = presentvalue/ OriginalBal(bond.id)
+    price = price * price.basis
+    PriceTypes <- PriceTypes(price = as.character(price))
+    return(PriceTypes)
+    return(price)}

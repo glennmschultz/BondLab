@@ -64,11 +64,11 @@
   #' @param prepayment.assumption A character string referencing an object of Prepayment
   #' @param spread A charcter string the spread to the interpolated curve
   #' entered in basis points
-  #' @param CPR A numeric value the CPR assumption used to price the MBS.  For
-  #' example 16 CPR is entered 16.
-  #' @param ... Optional values follow
   #' @param benchmark Optionally the user can pass pricing benchmark - currently 
   #' this functonality is not implemented.
+  #' @param ... Optional values follow
+  #' @param CPR A numeric value the CPR assumption used to price the MBS.  For
+  #' example 16 CPR is entered 16.
   #'@importFrom splines interpSpline
   #'@importFrom stats predict
   #'@importFrom stats uniroot
@@ -78,9 +78,10 @@
                                settlement.date,
                                prepayment.assumption,
                                spread,
-                               CPR,
+                               benchmark = NULL,
                                ...,
-                               benchmark = NULL){
+                               CPR = NULL,
+                               ){
     
     Spread <- SpreadTypes(spread = spread)
     
@@ -321,6 +322,8 @@
   #'@param term.structure a character string referencing an object of type rates data
   #'@param prepayment.assumption a character string referencing an object of type Prepayment 
   #'@param ZV.spread a character the spread to the spot rate curve quoted in basis points
+  #'@param ..., optional values follow
+  #'@param CPR The user may specify a CPR to over riding the prepayment model
   #'@importFrom splines interpSpline
   #'@importFrom stats predict
   #'@importFrom stats uniroot
@@ -329,7 +332,9 @@
                                  settlement.date,
                                  term.structure,
                                  prepayment.assumption,
-                                 ZV.spread){
+                                 ZV.spread,
+                                 ...,
+                                 CPR = NULL){
     
     issue.date = as.Date(IssueDate(bond.id), "%m-%d-%Y")
     start.date = as.Date(DatedDate(bond.id), "%m-%d-%Y")

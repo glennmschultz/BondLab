@@ -288,20 +288,20 @@
   #' @param CPR A numeric value the CPR speed
   #' @importFrom stats loess
   #' @export
-  MortgageScenario  <- function(bond.id = "character",
-                          settlement.date = "character",
-                          price = "character", 
-                          original.bal = numeric(),
-                          scenario.curves = "character",
-                          prepayment,
+  MortgageScenario  <- function(bond.id,
+                          settlement.date,
+                          price, 
+                          original.bal,
+                          scenario.curves,
+                          prepayment.assumption,
                           ...,
                           horizon.spot.spread = NULL,
                           horizon.nominal.spread = NULL,
                           horizon.OAS = NULL,
                           horizon.price = NULL,
-                          begin.cpr,
-                          end.cpr,
-                          seasoning.period,
+                          begin.cpr = NULL,
+                          end.cpr = NULL,
+                          seasoning.period = NULL,
                           CPR) { 
     
    
@@ -502,37 +502,22 @@
     # horizon.price.type
     # ========================================================================
 
-  Horizon.Spot.Value <- function(HorizonTermStructure = "character",
-                                   HorizonCashFlow = "character",
-                                   HorizonSpotSpread = numeric(),
-                                   NumberofCashFlow = numeric()){
-    # calculate discount rates
-    InterpolateSpot <- splines::interpSpline(
-      TimePeriod(HorizonTermStructure)[1:360],
-      #difftime(as.Date(ForwardDate(HorizonTermStructure)[1:360]),
-      #         TradeDate(HorizonTermStructure))/30,
-      SpotRate(HorizonTermStructure)[1:360],
-      bSpline = TRUE)
-    
-    SpotRates <- predict(
-      InterpolateSpot, TimePeriod(HorizonCashFlow))
-      #difftime(as.Date(PmtDate(HorizonCashFlow)),
-      #         as.Date(TradeDate(HorizonTermStructure)))/30)
-    
-    n.period = as.numeric(difftime(as.Date(
-      PmtDate(HorizonCashFlow)),
-      as.Date(TradeDate(HorizonTermStructure)))/30) / months.in.year
-    
-    DiscountRate <- 
-      (1+((SpotRates$y + horizon.spot.spread)/yield.basis))^ n.period
-    DiscountRate <- 1/DiscountRate
-    
-    HorizonPresentValue <- 
-      DiscountRate * TotalCashFlow(HorizonCashFlow)
-    PresentValue <- sum(HorizonPresentValue)
-    
-    return(PresentValue)
-    }
+    HorizonPrice <- switch(horizon.price.type,
+                           "spot" = ZVSpreadToPriceMBS(bond.id = HorizonBond,
+                                                        settlement.date = as.character(as.Date(horizoncurve[1,1]), 
+                                                                                       format = '%m-%d-%Y'),
+                                                        term.structure = horizontermstrc,
+                                                        prepayment.assumption = HorizonPrepaymentAssumption,
+                                                        ZV.spread = horizon.spot.spread,
+                                                        CPR = CPR),
+                           "nominal" = SpreadToPriceMBS(bond.id = HorizonBond,
+                                                         rates.data = horizoncurve,
+                                                         settlement.date = as.character(as.Date(horizoncurve[1,1]), 
+                                                                                        format = '%m-%d-%Y'),
+                                                        prepayment.assumption = HorizonPrepaymentAssumption,
+                                                        spread = horizon.nominal.spread, 
+                                                        CPR = CPR),
+                           "price" = PriceTypes(horizon.price))
   
   # Do not replace this with curve spreads as this section of code is used 
   # to compute horizon yield to maturity from nominal spread and interpolated

@@ -101,7 +101,9 @@
     
     life.cpr <- try(
       uniroot(yieldcpr,
-              interval = c(lower = 0, upper = 1),
+              interval = c(lower = 0, upper = .5),
+              extendInt = 'yes',
+              tol = .001,
               bond.id = bond.id,
               original.bal = original.bal,
               settlement.date = settlement.date,

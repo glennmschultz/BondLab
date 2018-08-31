@@ -59,92 +59,58 @@
   #' secant method of interpolation.
   #' @param bond.id A character string referring to an object of type
   #' MBSDetails.
-  #' @param TermStructure A character string referring to an object of type
-  #' TermStructure.
-  #' @param MortgageRate A character string referring to an object of type
-  #' MortgageRate.
-  #' @param ModelTune A character string referring to an object of type
-  #' ModelTune.
-  #' @param Burnout A numeric value the Burnout of the pool.
+  #' @param settlement.date A character string the settlement date.  
+  #' @param term.structure A character string referring to an object of type
   #' @param original.bal A numeric value the original balance.
-  #' @param settlement.date A character string the settlement date.
-  #' @param price A numeric value the price.
+  #' @param price A character string the price.
   #' @param yield A numeric value the yield to maturity given a prepayment
   #' model vector
-  #' @param ..., optional values
-  #' @param iter A numeric value the number of iterations default = 100
-  #' @param eps the tolerance default = 1e-08
   #' @export ModelToCPR
-  ModelToCPR <- function(bond.id = "character",
-                         TermStructure = "character",
-                         MortgageRate = "character",
-                         ModelTune = "character",
-                         Burnout = numeric(),
-                         original.bal = numeric(),
-                         settlement.date = "character",
-                         price = "character",
-                         yield = "character",
-                        ...,
-                        iter = 100,
-                        eps = 1e-08){
+  ModelToCPR <- function(bond.id,
+                         settlement.date,
+                         term.structure,
+                         original.bal,
+                         price,
+                         yield){
 
-  cprvector = c(0, .35, .75)
-  cpr2 = cprvector[2]
-  i = 0
-
-  for(i in 1:3){
-
-    prepayment = PrepaymentModel(bond.id = bond.id,
-                                 TermStructure = TermStructure,
-                                 MortgageRate = MortgageRate,
-                                 ModelTune = ModelTune,
-                                 Burnout = Burnout,
-                                 PrepaymentAssumption = "CPR",
-                                 CPR = cprvector[i])
-
-
-    yieldatcpr = YieldToMaturity(
-      MortgageCashFlow(
-        bond.id = bond.id,
-        original.bal = original.bal,
-        settlement.date = settlement.date,
-        price = price,
-        PrepaymentAssumption = prepayment))/yield.basis
-
-    if(i==1) yield1 = yieldatcpr
-      if(i==2) yield0 = yieldatcpr
-        if(i ==3) yield2 = yieldatcpr
+    price <- PriceTypes(price)
+    
+    yieldcpr <- function(cpr,
+                        bond.id,
+                        original.bal,
+                        settlement.date,
+                        term.structure,
+                        price,
+                        yield){
+      
+      price <- PriceTypes(price)
+      
+     prepayment.assumption <- PrepaymentModel(bond.id = bond.id, 
+                                              term.structure = term.structure, 
+                                              prepayment.assumption = 'CPR', 
+                                              cpr = cpr)
+            
+    mtg.cashflow <- MortgageCashFlow(bond.id = bond.id,
+                                     original.bal = original.bal,
+                                     settlement.date = settlement.date,
+                                     price = PriceDecimalString(price),
+                                     PrepaymentAssumption = prepayment.assumption)
+   
+    YieldToMaturity(mtg.cashflow) - yield
+    }
+    
+    life.cpr <- try(
+      uniroot(yieldcpr,
+              interval = c(lower = 0, upper = 1),
+              bond.id = bond.id,
+              original.bal = original.bal,
+              settlement.date = settlement.date,
+              term.structure = term.structure,
+              price = PriceDecimalString(price),
+              yield = yield)$root
+      )
+    life.cpr = life.cpr * PSA.basis
+    new("ModelToCPR",
+        CPRLife = life.cpr)
   }
-
-
-  while ((abs(yield - yield0) > eps) & (i < iter)) {
-
-    Prepayment = PrepaymentModel(
-      bond.id = bond.id,
-      TermStructure = TermStructure,
-      MortgageRate = MortgageRate,
-      ModelTune = ModelTune,
-      Burnout = Burnout,
-      PrepaymentAssumption = "CPR",
-      CPR = cpr2)
-
-    yield0 = YieldToMaturity(
-      MortgageCashFlow(
-        bond.id = bond.id,
-        original.bal = original.bal,
-        settlement.date = settlement.date,
-        price = price,
-        PrepaymentAssumption = Prepayment))/yield.basis
-
-    yield2 = yield0
-
-    cpr2 = abs((yield1 - yield)/(yield1 - yield2)) * abs(cprvector[1]- cpr2)
-    i=i+1
-  }
-
-  if( i < iter) {LifeCPR = cpr2
-  } else {LifeCPR = 999}
-
-  new("ModelToCPR",
-      CPRLife = LifeCPR * PSA.basis)
-}
+  

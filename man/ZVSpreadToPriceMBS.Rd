@@ -5,7 +5,7 @@
 \title{ZV Spread to price MBS}
 \usage{
 ZVSpreadToPriceMBS(bond.id, settlement.date, term.structure,
-  prepayment.assumption, ZV.spread)
+  prepayment.assumption, ZV.spread, ..., CPR = NULL)
 }
 \arguments{
 \item{bond.id}{a character or connection to object of type BondDetails}
@@ -17,6 +17,10 @@ ZVSpreadToPriceMBS(bond.id, settlement.date, term.structure,
 \item{prepayment.assumption}{a character string referencing an object of type Prepayment}
 
 \item{ZV.spread}{a character the spread to the spot rate curve quoted in basis points}
+
+\item{..., }{optional values follow}
+
+\item{CPR}{The user may specify a CPR to over riding the prepayment model}
 }
 \description{
 Returns the clean price of an MBS pass throughv via PriceTypes 

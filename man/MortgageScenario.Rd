@@ -4,12 +4,11 @@
 \alias{MortgageScenario}
 \title{Mortgage Scenario Analysis}
 \usage{
-MortgageScenario(bond.id = "character", settlement.date = "character",
-  price = "character", original.bal = numeric(),
-  scenario.curves = "character", prepayment, ...,
-  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
-  horizon.OAS = NULL, horizon.price = NULL, begin.cpr, end.cpr,
-  seasoning.period, CPR)
+MortgageScenario(bond.id, settlement.date, price, original.bal, scenario.curves,
+  prepayment.assumption, ..., horizon.spot.spread = NULL,
+  horizon.nominal.spread = NULL, horizon.OAS = NULL, horizon.price = NULL,
+  begin.cpr = NULL, end.cpr = NULL, seasoning.period = NULL, cpr = NULL,
+  severity = NULL)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of type MBSDetails}
@@ -21,8 +20,6 @@ MortgageScenario(bond.id = "character", settlement.date = "character",
 \item{original.bal}{A numeric value the price}
 
 \item{scenario.curves}{A character string an object of type ScenarioCurves}
-
-\item{prepayment}{A character string the prepayment assumption}
 
 \item{...}{Optional values when PSA or CPR is used or Yield Curve
 is used}
@@ -43,6 +40,8 @@ spread}
 
 \item{seasoning.period}{A numeric value the length of the 
 seasoning ramp}
+
+\item{prepayment}{A character string the prepayment assumption}
 
 \item{CPR}{A numeric value the CPR speed}
 }

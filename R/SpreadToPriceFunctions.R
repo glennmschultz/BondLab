@@ -80,7 +80,7 @@
                                spread,
                                benchmark = NULL,
                                ...,
-                               CPR = NULL,
+                               CPR = NULL
                                ){
     
     Spread <- SpreadTypes(spread = spread)

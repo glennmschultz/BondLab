@@ -4,41 +4,22 @@
 \alias{ModelToCPR}
 \title{Converts a mortgage prepayment model vector to a CPR measure}
 \usage{
-ModelToCPR(bond.id = "character", TermStructure = "character",
-  MortgageRate = "character", ModelTune = "character",
-  Burnout = numeric(), original.bal = numeric(),
-  settlement.date = "character", price = "character", yield = "character",
-  ..., iter = 100, eps = 1e-08)
+ModelToCPR(bond.id, settlement.date, term.structure, original.bal, price, yield)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object of type
 MBSDetails.}
 
-\item{TermStructure}{A character string referring to an object of type
-TermStructure.}
+\item{settlement.date}{A character string the settlement date.}
 
-\item{MortgageRate}{A character string referring to an object of type
-MortgageRate.}
-
-\item{ModelTune}{A character string referring to an object of type
-ModelTune.}
-
-\item{Burnout}{A numeric value the Burnout of the pool.}
+\item{term.structure}{A character string referring to an object of type}
 
 \item{original.bal}{A numeric value the original balance.}
 
-\item{settlement.date}{A character string the settlement date.}
-
-\item{price}{A numeric value the price.}
+\item{price}{A character string the price.}
 
 \item{yield}{A numeric value the yield to maturity given a prepayment
 model vector}
-
-\item{..., }{optional values}
-
-\item{iter}{A numeric value the number of iterations default = 100}
-
-\item{eps}{the tolerance default = 1e-08}
 }
 \description{
 The function ties the model vector yield to an equivalent CPR yield using

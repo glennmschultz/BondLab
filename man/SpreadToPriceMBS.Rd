@@ -5,7 +5,7 @@
 \title{Spread To Price MBS}
 \usage{
 SpreadToPriceMBS(bond.id, rates.data, settlement.date, prepayment.assumption,
-  spread, CPR, ..., benchmark = NULL)
+  spread, benchmark = NULL, ..., CPR = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -17,13 +17,13 @@ SpreadToPriceMBS(bond.id, rates.data, settlement.date, prepayment.assumption,
 \item{spread}{A charcter string the spread to the interpolated curve
 entered in basis points}
 
-\item{CPR}{A numeric value the CPR assumption used to price the MBS.  For
-example 16 CPR is entered 16.}
+\item{benchmark}{Optionally the user can pass pricing benchmark - currently 
+this functonality is not implemented.}
 
 \item{...}{Optional values follow}
 
-\item{benchmark}{Optionally the user can pass pricing benchmark - currently 
-this functonality is not implemented.}
+\item{CPR}{A numeric value the CPR assumption used to price the MBS.  For
+example 16 CPR is entered 16.}
 
 \item{settlement.data}{A character string the settlement date mm-dd-YYYY}
 }

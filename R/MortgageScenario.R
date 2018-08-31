@@ -245,10 +245,11 @@
                                           horizon.nominal.spread = NULL,
                                           horizon.OAS = NULL,
                                           horizon.price = NULL,
-                                          begin.cpr = numeric(),
-                                          end.cpr = numeric(),
-                                          seasoning.period = numeric(),
-                                          CPR = numeric())
+                                          begin.cpr = NULL,
+                                          end.cpr = NULL,
+                                          seasoning.period = NULL,
+                                          cpr = NULL,
+                                          cdr = NULL)
              {standardGeneric("MortgageScenario")})
   
   setMethod("initialize",
@@ -302,7 +303,8 @@
                           begin.cpr = NULL,
                           end.cpr = NULL,
                           seasoning.period = NULL,
-                          CPR) { 
+                          cpr = NULL,
+                          severity = NULL) { 
     
    
     # Mortgage Scenario analysis is done in two steps
@@ -325,6 +327,9 @@
     }
     
     bond.id <- bond.id
+    original.bal <- OriginalBal(bond.id)
+    mbs.factor <- MBSFactor(bond.id)
+    principal <- original.bal * mbs.factor
     Price <- PriceTypes(price)
     startcurve <- as.data.frame(StartCurve(scenario.curves), stringsAsFactors = FALSE)
     starttermstrc <- StartTermStrc(scenario.curves)
@@ -332,21 +337,18 @@
     horizontermstrc <- HorizonTermStrc(scenario.curves)
     horizonmonths = ScenarioHorizonMos(scenario.curves)
     MortgageRate <- ProjectMortgageRate(bond.id = bond.id, term.structure = term.structure)
-    ModelTune <- ModelTune(bond.id = bond.id)
+    Model <- ModelTune(bond.id = bond.id)
 
    
     Prepayment <- PrepaymentModel(
       bond.id = bond.id,
-      MortgageRate = MortgageRate,
-      TermStructure = TermStructure,
-      PrepaymentAssumption = prepayment,
-      ModelTune = ModelTune,
-      Severity = 0,
-      Burnout = Burnout,
+      term.structure = starttermstrc,
+      PrepaymentAssumption = prepayment.assumption,
       begin.cpr = begin.cpr,
       end.cpr = end.cpr,
       seasoning.period = seasoning.period,
-      CPR = CPR)
+      cpr = cpr,
+      severity = 0)
     
     MortgageCashFlow <- MortgageCashFlow(
       bond.id = bond.id,
@@ -355,21 +357,20 @@
       price = PriceDecimalString(Price),
       PrepaymentAssumption = Prepayment)
 
-    proceeds <- Accrued(MortgageCashFlow) + 
-      (original.bal * MBSFactor(bond.id) * PriceBasis(Price))
-    principal <- original.bal * MBSFactor(bond.id)
-    
+    proceeds <- Accrued(MortgageCashFlow) + (principal * PriceBasis(Price))
+
     # Compute the CurvesSpreads based on the user price and prepayment vector
     # given the user's scenario interest rate shift
-    CurveSpread <- CurveSpreads(rates.data = rates.data,
+    CurveSpread <- CurveSpreads(rates.data = startcurve,
                                 CashFlow = MortgageCashFlow,
-                                TermStructure = TermStructure,
+                                TermStructure = starttermstrc,
                                 proceeds = proceeds)
     
     # Compute life CPR using the base case term structure fit
+    # stop here refactor ModelToCPR function
     LifeCPR <- ModelToCPR(
       bond.id = bond.id,
-      TermStructure = TermStructure,
+      TermStructure = starttermstrc,
       MortgageRate = MortgageRate,
       ModelTune = ModelTune,
       Burnout = Burnout,

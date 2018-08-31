@@ -455,10 +455,10 @@
     }
     
     
-    # this condition sets default to zero when the prepayment model is not used 
-    # it allows for standard PPC and CPR assumptions
+     #this condition sets default to zero when the prepayment model is not used 
+     #it allows for standard PPC and CPR assumptions
     if(prepayment.assumption != "MODEL"){
-      mdr <- round(rep(CDR.To.MDR(CDR = cdr), WAM),8)} else {
+      mdr <- rep(round(0,8), WAM)} else {
         mdr <- rep(round(0,8), WAM)}
     
     new("PrepaymentModel",

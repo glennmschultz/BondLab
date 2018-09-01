@@ -59,7 +59,7 @@
   #' and spread to the curve
   #' @importFrom utils capture.output
   #' @param bond.id A character string the cusip number or bond.id
-  #' @param settlement.data A character string the settlement date mm-dd-YYYY
+  #' @param settlement.date A character string the settlement date mm-dd-YYYY
   #' @param rates.data A character referencing a rates.data object
   #' @param prepayment.assumption A character string referencing an object of Prepayment
   #' @param spread A charcter string the spread to the interpolated curve
@@ -85,10 +85,6 @@
     
     Spread <- SpreadTypes(spread = spread)
     
-    #rates.data <- Rates(trade.date = trade.date)
-    #MortgageRate = MtgRate()
-    MortgageRate <- ProjectMortgageRate(bond.id = bond.id, 
-                                        term.structure = term.structure)
     Burnout = BurnOut(bond.id)
     orig.bal = OriginalBal(bond.id)
     principal = orig.bal * MBSFactor(bond.id)

@@ -12,6 +12,8 @@ SpreadToPriceMBS(bond.id, rates.data, settlement.date, prepayment.assumption,
 
 \item{rates.data}{A character referencing a rates.data object}
 
+\item{settlement.date}{A character string the settlement date mm-dd-YYYY}
+
 \item{prepayment.assumption}{A character string referencing an object of Prepayment}
 
 \item{spread}{A charcter string the spread to the interpolated curve
@@ -24,8 +26,6 @@ this functonality is not implemented.}
 
 \item{CPR}{A numeric value the CPR assumption used to price the MBS.  For
 example 16 CPR is entered 16.}
-
-\item{settlement.data}{A character string the settlement date mm-dd-YYYY}
 }
 \description{
 Returns the clean price of the MBS given a prepayment speed

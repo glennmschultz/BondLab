@@ -21,6 +21,8 @@ MortgageScenario(bond.id, settlement.date, price, original.bal, scenario.curves,
 
 \item{scenario.curves}{A character string an object of type ScenarioCurves}
 
+\item{prepayment.assumption}{A character string the prepayment assumption}
+
 \item{...}{Optional values when PSA or CPR is used or Yield Curve
 is used}
 
@@ -41,9 +43,9 @@ spread}
 \item{seasoning.period}{A numeric value the length of the 
 seasoning ramp}
 
-\item{prepayment}{A character string the prepayment assumption}
+\item{cpr}{A numeric value the CPR speed}
 
-\item{CPR}{A numeric value the CPR speed}
+\item{severity}{A numeric value the mortgage loss severity assumption}
 }
 \description{
 A function to compute the total return of mortgage pass-throughs MBS

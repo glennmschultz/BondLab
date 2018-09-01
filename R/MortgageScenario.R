@@ -328,7 +328,6 @@
     }
     
     bond.id <- bond.id
-    original.bal <- OriginalBal(bond.id)
     mbs.factor <- MBSFactor(bond.id)
     principal <- original.bal * mbs.factor
     Price <- PriceTypes(price)
@@ -339,8 +338,6 @@
     horizontermstrc <- HorizonTermStrc(scenario.curves)
     horizonmonths = ScenarioHorizonMos(scenario.curves)
     
-    Model <- ModelTune(bond.id = bond.id)
-    
     Prepayment <- PrepaymentModel(
       bond.id = bond.id,
       term.structure = starttermstrc,
@@ -349,7 +346,7 @@
       end.cpr = end.cpr,
       seasoning.period = seasoning.period,
       cpr = cpr,
-      severity = severity)
+      severity = 0)
     
     MortgageCashFlow <- MortgageCashFlow(
       bond.id = bond.id,
@@ -374,7 +371,7 @@
                           settlement.date = settlement.date,
                           term.structure = starttermstrc,
                           original.bal = original.bal,
-                          price = PriceDecimalString(price),
+                          price = PriceDecimalString(Price),
                           yield = YieldToMaturity(MortgageCashFlow))
 
     # This section of code rolls the MBS pass-though forward in time updating
@@ -419,7 +416,7 @@
       end.cpr = end.cpr,
       seasoning.period = seasoning.period,
       cpr = cpr,
-      severity = severity)
+      severity = 0)
 
     HorizonCashFlow <- MortgageCashFlow(
       bond.id = HorizonMBS,

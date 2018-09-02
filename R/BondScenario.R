@@ -302,6 +302,7 @@
     for(pmtrow in seq_along(colindex)){
       CashFlowArray[PmtIndex + 1,colindex[pmtrow]] <- principal - PrincipalOutstanding(BondCashFlow)[pmtrow]}
     
+    #possible bug here maybe CashFlowArray[PmtIndex + 1,ncol]
     CashFlowArray[PmtIndex + 1] <- sum(CashFlowArray[PmtIndex + 1,])
     horizon.principal <- principal - CashFlowArray[PmtIndex + 1,horizonmonths-1]
     # =========================================================================

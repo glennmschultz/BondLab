@@ -389,9 +389,9 @@
     
     # Use the projected cashflow to determine the current balance outstanding 
     # at the end of horizon
-    SchedPrincipal <- sum(ScheduledPrin(MortgageCashFlow)[1:horizonmonths-1])
-    PrepaidPrincipal <- sum(PrepaidPrin(MortgageCashFlow)[1:horizonmonths-1])
-    DefaultedPrincipal <- sum(DefaultedPrin(MortgageCashFlow)[1:horizonmonths-1])
+    SchedPrincipal <- sum(ScheduledPrin(MortgageCashFlow)[1:horizonmonths])
+    PrepaidPrincipal <- sum(PrepaidPrin(MortgageCashFlow)[1:horizonmonths])
+    DefaultedPrincipal <- sum(DefaultedPrin(MortgageCashFlow)[1:horizonmonths])
     TotalPrincipal <- SchedPrincipal + PrepaidPrincipal + DefaultedPrincipal
     
     # Update the LastPmtDate and NextPmtDate to reflect the end of the horizon
@@ -490,14 +490,14 @@
     PrepaidPrinReceived = 0
     RecoveredAmount =  0
     for(pmtrow in seq_along(colindex)){
-      CashFlowArray[PmtIndex + mtgdelay,colindex[pmtrow]] <- 
+      CashFlowArray[PmtIndex + mtgdelay,colindex[pmtrow]] <-
         sum(ScheduledPrin(MortgageCashFlow)[pmtrow], 
             PrepaidPrin(MortgageCashFlow)[pmtrow], 
-            RecoveredAmount(MortgageCashFlow)[pmtrow])
-      PrincipalRepaid = PrincipalRepaid + CashFlowArray[PmtIndex + mtgdelay,colindex[pmtrow]]
+            RecoveredAmount(MortgageCashFlow)[pmtrow]) + CashFlowArray[PmtIndex + mtgdelay,colindex[pmtrow]]
       ScheduledPrinReceived = ScheduledPrinReceived + ScheduledPrin(MortgageCashFlow)[pmtrow]
-      PrepaidPrinReceived = PrepaidPrinReceived + PrepaidPrin(MortgageCashFlow)[pmtrow]
-      RecoveredAmount = RecoveredAmount(MortgageCashFlow)[pmtrow]
+      PrincipalRepaid = PrincipalRepaid + PrepaidPrin(MortgageCashFlow)[pmtrow]
+      PrepaidPrinReceived = PrepaidPrinReceived + CashFlowArray[PmtIndex + mtgdelay,colindex[pmtrow]]
+      RecoveredAmount = RecoveredAmount(MortgageCashFlow)[pmtrow] + RecoveredAmount(MortgageCashFlow)[pmtrow]
       }
     
     #CashFlowArray[PmtIndex + mtgdelay] <- sum(CashFlowArray[PmtIndex + 1,])
@@ -552,12 +552,12 @@
     CashFlow = HorizonCashFlow,
     TermStructure = horizontermstrc,
     proceeds = HorizonProceeds)
-  
+
   #---------------------------------------------------------------------------
   #Allocate reinvestment income to the bond cash flows
   #---------------------------------------------------------------------------
   reinvestment.rate <- as.numeric(horizoncurve[1,2])/(yield.basis * months.in.year)
-  
+  #reinvestment.rate <- 0
   for(rr in 1:nrow(CashFlowArray-1)){
     for(month in 1:horizonmonths + 1){
       if(month == 1){CashFlowArray[rr,month] = CashFlowArray[rr,month]
@@ -565,7 +565,7 @@
         CashFlowArray[rr, month-1] *(1 + reinvestment.rate)}
     }
   }
-  
+ 
   #---------------------------------------------------------------------------
   #Aggregate Cashflows 
   #---------------------------------------------------------------------------
@@ -574,7 +574,6 @@
     CashFlowArray[row, ncol(CashFlowArray)] = CashFlowArray[row,ncol(CashFlowArray)-1]
   }
   
-  #return(CashFlowArray)
   #---------------------------------------------------------------------------
   #Assign horizon proceeds to array
   #---------------------------------------------------------------------------
@@ -582,11 +581,10 @@
   CashFlowArray[nrow(CashFlowArray), ncol(CashFlowArray)] = HorizonProceeds + 
     CashFlowArray[nrow(CashFlowArray), ncol(CashFlowArray)]
   
-  #CouponIncome <- sum(PassThroughInterest(MortgageCashFlow)[1:PmtIndex])
   ReceivedCashFlow <- CouponIncome + PrincipalRepaid
   
   TerminalValue <-  sum(CashFlowArray[,ncol(CashFlowArray)])
-  ReinvestmentIncome <- as.numeric(sum(TerminalValue) - sum(ReceivedCashFlow)- HorizonProceeds)
+  ReinvestmentIncome <- as.numeric(TerminalValue - ReceivedCashFlow - HorizonProceeds)
   
   # This needs to be changed by adding principal pmt to bond cashflow class
   # and bond cashflow engine. 

@@ -17,5 +17,6 @@ dateddate, maturitydate, type, close}
 An dataframe containing maturity for discounting
 }
 \seealso{
-Other Interest Rate Models: \code{\link{CreateCashFlowMatrix}}
+Other Interest Rate Models: \code{\link{CreateCashFlowMatrix}},
+  \code{\link{HullWhite}}
 }

@@ -65,6 +65,7 @@ Collate:
     'DollarRoll.R'
     'ErrorTrap.R'
     'GFeeTypes.R'
+    'HullWhite.R'
     'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'
     'MortgageOAS.R'

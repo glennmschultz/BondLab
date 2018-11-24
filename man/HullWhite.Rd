@@ -29,6 +29,7 @@ A function to simulate the short rate using a single factor
 Hull White model.
 }
 \seealso{
-Other Interest Rate Models: \code{\link{CreateCashFlowMatrix}},
+Other Interest Rate Models: \code{\link{Bterm}},
+  \code{\link{CreateCashFlowMatrix}},
   \code{\link{CreateMaturitiesMatrix}}
 }

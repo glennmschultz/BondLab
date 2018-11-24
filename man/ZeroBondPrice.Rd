@@ -12,5 +12,5 @@ ZeroBondPrice(r, t)
 \item{t}{time time period for discounting}
 }
 \description{
-A function ot compute bond price per Hull White
+A function to compute zero coupon bond price
 }

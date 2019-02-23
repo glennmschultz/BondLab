@@ -14,3 +14,4 @@ Opens a connection to the REMICData folder calling a REMIC Deal by name
 this function supports REMIC tranche analysis by providing the REMIC
 deal information as the umbrella structure over the tranche
 }
+

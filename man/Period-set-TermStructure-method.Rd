@@ -15,3 +15,4 @@
 \description{
 Method to replace Period in S4 class TermStructure
 }
+

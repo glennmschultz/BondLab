@@ -25,3 +25,4 @@ Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{ScenarioCurve-class}},
   \code{\link{ScheduledPrinReceived}}
 }
+

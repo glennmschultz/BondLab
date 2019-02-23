@@ -13,3 +13,4 @@ YieldTypes(yield = numeric())
 \description{
 YieldTypes is the constructor function for the class YieldTypes
 }
+

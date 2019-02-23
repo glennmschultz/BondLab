@@ -13,3 +13,4 @@
 \description{
 A method to extract the slot YieldDecimalString from the class YieldTypes
 }
+

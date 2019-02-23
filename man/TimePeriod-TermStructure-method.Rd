@@ -13,3 +13,4 @@
 \description{
 Method to get TimePeriod in the class TermStructure
 }
+

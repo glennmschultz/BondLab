@@ -16,3 +16,4 @@ TenYearForward(object) <- value
 A generic function to replace the slot TenYearForward in class 
 TermStructure
 }
+

@@ -22,3 +22,4 @@ A standard generic for the calculation of scheduled principal of mortgage loan
 \examples{
 Sched.Prin(balance = 100000, note.rate = .045, term.mos = 360, period = 2)
 }
+

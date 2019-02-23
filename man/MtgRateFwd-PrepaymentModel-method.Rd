@@ -13,3 +13,4 @@
 \description{
 A method to extract MtgRateFwd from S4 class PrepaymentModel
 }
+

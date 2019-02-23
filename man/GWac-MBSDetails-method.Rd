@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot GWac from the class MBSDetails
 }
+

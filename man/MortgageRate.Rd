@@ -9,3 +9,4 @@ MortgageRate()
 \description{
 A constructor function for the class Mortgage Rate
 }
+

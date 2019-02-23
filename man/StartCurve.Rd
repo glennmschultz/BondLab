@@ -12,3 +12,4 @@ StartCurve(object)
 \description{
 A standard generic function to access the HorizonCurve slot StartCurve
 }
+

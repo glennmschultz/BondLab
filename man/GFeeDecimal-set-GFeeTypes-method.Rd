@@ -15,3 +15,4 @@
 \description{
 A method to set the slot GFeeDecimal in the object GFeeTypes
 }
+

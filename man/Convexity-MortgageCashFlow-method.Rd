@@ -13,3 +13,4 @@
 \description{
 Method to extract Convexity from S4 class MortgageCashFlow
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to get price from S4 class BillCashFlows
 }
+

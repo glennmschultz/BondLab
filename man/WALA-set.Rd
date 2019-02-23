@@ -14,3 +14,4 @@ WALA(object) <- value
 \description{
 A standard generic function to replace the slot WALA
 }
+

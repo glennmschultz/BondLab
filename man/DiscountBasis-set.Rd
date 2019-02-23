@@ -14,3 +14,4 @@ DiscountBasis(object) <- value
 \description{
 A standard generic to set the slot DiscountBasis
 }
+

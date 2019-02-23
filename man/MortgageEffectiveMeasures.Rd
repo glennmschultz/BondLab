@@ -24,3 +24,4 @@ decimal notation or 32nds notation}
 \description{
 A function to calculate mortgage effective duration and convexity
 }
+

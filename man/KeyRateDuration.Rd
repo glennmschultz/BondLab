@@ -12,3 +12,4 @@ KeyRateDuration(object)
 \description{
 A standard generic function to access the slot KeyRateDuration
 }
+

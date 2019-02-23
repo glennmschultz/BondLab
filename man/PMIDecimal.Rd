@@ -12,3 +12,4 @@ PMIDecimal(object)
 \description{
 A standard generic function to get the slot PMIDecimal
 }
+

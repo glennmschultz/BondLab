@@ -18,3 +18,4 @@ SaveRDME(FileName = "character", DealName = "character",
 The function opens a connection to the RDME file to save
 REMIC Month End Disclosure data
 }
+

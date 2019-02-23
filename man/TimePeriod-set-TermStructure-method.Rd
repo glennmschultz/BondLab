@@ -15,3 +15,4 @@
 \description{
 Method to replace TimePeriod in the class TermStructure
 }
+

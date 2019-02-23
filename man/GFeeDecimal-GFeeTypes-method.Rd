@@ -13,3 +13,4 @@
 \description{
 A method to get the slot GFeeDecimal from the object GFeeTypes
 }
+

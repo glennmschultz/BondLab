@@ -18,3 +18,4 @@ A function to subtract months to a date
 \examples{
 SubtractMonths("03-01-2015", 360)
 }
+

@@ -15,3 +15,4 @@
 \description{
 A method to set the value of GWacBasis slot in the object GWacTypes
 }
+

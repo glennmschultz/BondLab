@@ -34,3 +34,4 @@ A standard generic function used to calculate time value of money
 TimeValue(interest.rate = .05, number.periods = 3, 
 frequency = 1, type = "PV")
 }
+

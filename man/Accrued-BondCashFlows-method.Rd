@@ -13,3 +13,4 @@
 \description{
 Method to get Accrued from S4 class BondCashFlows
 }
+

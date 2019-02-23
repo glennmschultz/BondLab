@@ -18,3 +18,4 @@ BillCashFlows(bill.id, principal, settlement.date, price)
 \description{
 Bill Cash Flow engine for a standard discount bill
 }
+

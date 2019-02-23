@@ -15,3 +15,4 @@
 \description{
 Method to replace ForwardRate in the class TermStructure
 }
+

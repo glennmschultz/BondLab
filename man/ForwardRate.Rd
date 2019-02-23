@@ -12,3 +12,4 @@ ForwardRate(object)
 \description{
 A generic function to access the slot ForwardRate
 }
+

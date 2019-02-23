@@ -12,3 +12,4 @@ SpreadTypes(spread)
 \description{
 SpreadTypes is a constructor function for the class SpreadTypes
 }
+

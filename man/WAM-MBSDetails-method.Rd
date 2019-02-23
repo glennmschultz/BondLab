@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot WAM from the class MBSDetails
 }
+

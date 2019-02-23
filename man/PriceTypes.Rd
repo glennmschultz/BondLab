@@ -13,3 +13,4 @@ decimal notation (example "100.125") or 32nds notation (example "100-4")}
 \description{
 PriceTypes is a constructor function for the class PriceTypes
 }
+

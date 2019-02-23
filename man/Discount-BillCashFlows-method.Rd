@@ -13,3 +13,4 @@
 \description{
 Method to get discount from S4 class BillCashFlows
 }
+

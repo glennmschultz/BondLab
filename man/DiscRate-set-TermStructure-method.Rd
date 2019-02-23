@@ -15,3 +15,4 @@
 \description{
 Method to replace DiscRate from the class TermStructure
 }
+

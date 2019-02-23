@@ -12,3 +12,4 @@ SpreadBasis(object)
 \description{
 A standard generic function to get the slot SpreadBasis
 }
+

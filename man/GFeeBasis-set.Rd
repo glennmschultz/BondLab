@@ -14,3 +14,4 @@ GFeeBasis(object) <- value
 \description{
 A standard generic function to set the value of the slot GFeeBasis
 }
+

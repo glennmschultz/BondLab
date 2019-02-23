@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot InitialInterest from the class MBSDetails
 }
+

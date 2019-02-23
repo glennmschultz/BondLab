@@ -15,3 +15,4 @@ Standard Generic Function used to convert CPR to SMM
 \examples{
 CPR.To.SMM(CPR = .06)
 }
+

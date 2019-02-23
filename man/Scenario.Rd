@@ -37,3 +37,4 @@ Formula = function(rates.data, Shiftbps){
 as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
 Shiftbps/yield.basis)})}  
 }
+

@@ -15,3 +15,4 @@
 \description{
 A method to set CouponBasis in the slot of CouponTypes
 }
+

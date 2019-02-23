@@ -13,3 +13,4 @@
 \description{
 Method to extract WAL from S4 class MortgageCashFlow
 }
+

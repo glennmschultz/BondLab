@@ -13,3 +13,4 @@ expressed in decimal numeric}
 \description{
 PMITypes is a constructor function for the PMITypes class
 }
+

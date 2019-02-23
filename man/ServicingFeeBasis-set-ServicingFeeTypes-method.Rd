@@ -15,3 +15,4 @@
 \description{
 A method to set the slot ServicingFeeBasis in object ServicingFeeTypes
 }
+

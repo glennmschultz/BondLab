@@ -13,3 +13,4 @@
 \description{
 A method to get GWacDecimal from the object GWacTypes
 }
+

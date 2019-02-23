@@ -13,3 +13,4 @@
 \description{
 Method to get WAL from S4 class BillCashFlows
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot MBSFactor from the class MBSDetails
 }
+

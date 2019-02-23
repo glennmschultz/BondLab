@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot AmortizationType from the class MBSDetails
 }
+

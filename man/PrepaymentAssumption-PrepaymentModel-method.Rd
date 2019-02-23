@@ -13,3 +13,4 @@
 \description{
 A method to extact PrepaymentAssumption from S4 class PrepaymentModel
 }
+

@@ -15,3 +15,4 @@ SMMVector.To.CPR(SMM = vector(), num.period = vector())
 A standard generic function for the conversion a SMM time series to CPR
 to a time series of CPR.
 }
+

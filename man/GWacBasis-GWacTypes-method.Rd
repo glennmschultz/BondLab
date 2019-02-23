@@ -13,3 +13,4 @@
 \description{
 A method to get the value of GWacBasis slot in the object GWacTypes
 }
+

@@ -22,7 +22,6 @@ term structure object
 
 \item{\code{HorizonTermStrc}}{the horizon TermStructure assumption}
 }}
-
 \seealso{
 Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal}},
@@ -36,3 +35,4 @@ Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{Scenario-class}},
   \code{\link{ScheduledPrinReceived}}
 }
+

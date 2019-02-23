@@ -13,3 +13,4 @@
 \description{
 Mehthod to extract the slot Burnout from the class MBSDetails
 }
+

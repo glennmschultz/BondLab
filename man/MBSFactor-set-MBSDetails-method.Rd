@@ -15,3 +15,4 @@
 \description{
 Method to replace the slot MBSFactor from the class MBSDetails
 }
+

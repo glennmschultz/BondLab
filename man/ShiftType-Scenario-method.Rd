@@ -13,3 +13,4 @@
 \description{
 A Method to extract ShiftType from an S4 class Scenario
 }
+

@@ -16,3 +16,4 @@ CashFlowBond(bond.id, principal, settlement.date)
 \description{
 calculates the bond cashflow table used in function BondCashflows.
 }
+

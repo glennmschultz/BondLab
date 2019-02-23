@@ -26,3 +26,4 @@ price growth potential}
 Simulates home prices as a function of the short-term rate and the 
 long term growth of home prices
 }
+

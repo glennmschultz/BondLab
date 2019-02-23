@@ -12,3 +12,4 @@ PMIPremium(object)
 \description{
 A standard generic function to access the slot of PMIPremium
 }
+

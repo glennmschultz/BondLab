@@ -17,3 +17,4 @@ ServicingFeeTypes}
 A method to set the slot ServicingFeeBasis in the object 
 ServicingFeeTypes
 }
+

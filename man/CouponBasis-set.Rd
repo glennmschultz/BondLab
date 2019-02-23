@@ -14,3 +14,4 @@ CouponBasis(object) <- value
 \description{
 A standard generic function ot set the slot CouponBasis
 }
+

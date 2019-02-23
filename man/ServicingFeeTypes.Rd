@@ -15,3 +15,4 @@ The ServicingFeeTypes class converts ServicingFee, a decimal numeric value,
 to ServicingFeeBasis a numeric value and ServicingFeeDecimalString a
 character string
 }
+

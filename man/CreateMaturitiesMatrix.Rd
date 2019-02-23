@@ -19,3 +19,4 @@ An dataframe containing maturity for discounting
 \seealso{
 Other Interest Rate Models: \code{\link{CreateCashFlowMatrix}}
 }
+

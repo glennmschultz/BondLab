@@ -14,3 +14,4 @@ ServicingFeeDecimalString(object)
 A standard generic function to get the value of the slot
 ServicingFeeDecimalString
 }
+

@@ -37,3 +37,4 @@ Currently supported bond day count conventions:
 The function returns a list the first position is the last payment date and the 
 second position is the next payment date
 }
+

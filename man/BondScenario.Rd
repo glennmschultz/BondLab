@@ -53,3 +53,4 @@ Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{ReinvestmentIncome,BondReturn-method}},
   \code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
 }
+

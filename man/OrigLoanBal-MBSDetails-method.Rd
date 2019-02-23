@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot OrigLoanBal from the class MBSDetails
 }
+

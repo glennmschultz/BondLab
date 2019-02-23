@@ -26,3 +26,4 @@ Other BondBasis: \code{\link{ActualFactor}},
   \code{\link{BondBasisConversion}},
   \code{\link{is.leapyear}}
 }
+

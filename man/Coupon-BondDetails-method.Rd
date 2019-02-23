@@ -13,3 +13,4 @@
 \description{
 Method to extract Coupon from an S4 class of type BondDetails
 }
+

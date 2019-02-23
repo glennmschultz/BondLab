@@ -12,3 +12,4 @@ PMIBasis(object)
 \description{
 A standard generic function to acees the slot PMIBasis
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot SP from the class MBSDetails
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to get TimePeriod from S4 class BondCashFlows
 }
+

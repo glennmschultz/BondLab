@@ -12,3 +12,4 @@ CurrentBal(object)
 \description{
 A standard generic function to access the slot CurrentBal
 }
+

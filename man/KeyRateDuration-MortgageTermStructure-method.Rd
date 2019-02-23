@@ -13,3 +13,4 @@
 \description{
 Method to extract the KeyRateDuration from S4 class
 }
+

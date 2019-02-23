@@ -12,3 +12,4 @@ PriceDecimal(object)
 \description{
 A standard generic function get the slot PriceDecimal
 }
+

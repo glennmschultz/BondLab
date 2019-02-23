@@ -12,3 +12,4 @@ DiscountDecimal(object)
 \description{
 A standard generic to get the slot DiscountDecimal
 }
+

@@ -14,3 +14,4 @@ YieldBasis(object) <- value
 \description{
 A standard generic function set the value in the slot YieldBasis
 }
+

@@ -12,3 +12,4 @@ BenchMark(object)
 \description{
 A standard generic function to access BenchMark
 }
+

@@ -13,3 +13,4 @@
 \description{
 A method to extract PriceDecimal from slot of class PriceTypes
 }
+

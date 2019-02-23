@@ -14,3 +14,4 @@ ForwardRate(object) <- value
 \description{
 A generic function to replace the ForwardRate in class TermStructure
 }
+

@@ -14,3 +14,4 @@ CurrentBal(object) <- value
 \description{
 A standard generic function to replace the slot CurrentBal
 }
+

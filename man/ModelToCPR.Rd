@@ -25,3 +25,4 @@ model vector}
 The function ties the model vector yield to an equivalent CPR yield using
 secant method of interpolation.
 }
+

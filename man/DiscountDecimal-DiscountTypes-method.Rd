@@ -13,3 +13,4 @@
 \description{
 A method to extract the slot DiscountDecimal from the object DiscountTypes
 }
+

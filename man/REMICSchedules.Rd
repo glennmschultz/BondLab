@@ -21,3 +21,4 @@ Opens connection to the Schedules folder by REMIC deal name
 this function supports REMIC tranche analysis by provding the REMIC
 schedules deal information
 }
+

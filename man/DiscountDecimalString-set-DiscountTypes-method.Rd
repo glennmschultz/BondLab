@@ -15,3 +15,4 @@
 \description{
 A method to set the slot DiscountDecimalString from the object DiscountTypes
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot Frequency from the class MBSDetails
 }
+

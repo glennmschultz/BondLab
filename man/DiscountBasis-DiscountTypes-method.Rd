@@ -13,3 +13,4 @@
 \description{
 A method to extract the slot DiscountBasis from the object DiscountTypes
 }
+

@@ -32,8 +32,8 @@ Suggests:
     markdown,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
-Collate: 
+RoxygenNote: 5.0.1
+Collate:
     'ServicingFeeTypes.R'
     'GWacTypes.R'
     'CouponTypes.R'
@@ -64,7 +64,10 @@ Collate:
     'DiscountTypes.R'
     'DollarRoll.R'
     'ErrorTrap.R'
+    'ExtractScenario.R'
     'GFeeTypes.R'
+    'HomePriceSim.R'
+    'MortgageCashFlowArray.R'
     'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'
     'MortgageOAS.R'

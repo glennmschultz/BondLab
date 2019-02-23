@@ -13,3 +13,4 @@
 \description{
 Method to extract OfferAmount from an S4 class of type BillDetails
 }
+

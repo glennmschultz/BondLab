@@ -12,3 +12,4 @@ GFeeBasis(object)
 \description{
 A standard generic function to get the value of the slot GFeeBasis
 }
+

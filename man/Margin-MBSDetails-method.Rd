@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot Margin from the class MBSDetails
 }
+

@@ -31,3 +31,4 @@ made to the bondholder.}
 The function creates a vector of payment date from the 
 last payment date to the end payment date.
 }
+

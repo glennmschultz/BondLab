@@ -12,3 +12,4 @@ TenYearForward(object)
 \description{
 A generic function to access the slot TenYearForward in class TermStructure
 }
+

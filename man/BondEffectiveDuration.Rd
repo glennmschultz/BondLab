@@ -20,3 +20,4 @@ BondEffectiveDuration(Rate.Delta = numeric(), cashflow = vector(),
 Calculates the effective duration based on dscount vector (zero coupon)
 cashflow vector, and rate delta
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot WALA from the class MBSDetails
 }
+

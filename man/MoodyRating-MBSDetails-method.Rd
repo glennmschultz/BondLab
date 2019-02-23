@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot Moody from the class MBSDetails
 }
+

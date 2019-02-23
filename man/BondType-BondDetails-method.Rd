@@ -13,3 +13,4 @@
 \description{
 Method to extract BondType from an S4 class of type BondDetails
 }
+

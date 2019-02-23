@@ -16,3 +16,4 @@ ServicingFeeDecimalString(object) <- value
 A standard generic function to set the value of the slot 
 ServicingFeeDecimalString
 }
+

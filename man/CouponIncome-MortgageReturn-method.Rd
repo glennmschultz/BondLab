@@ -26,3 +26,4 @@ Other Mortgage Scenario Analysis: \code{\link{HorizonCurrBal,MortgageReturn-meth
   \code{\link{ReinvestmentIncome,MortgageReturn-method}},
   \code{\link{ScheduledPrinReceived,MortgageReturn-method}}
 }
+

@@ -12,3 +12,4 @@ CPRLife(object)
 \description{
 A standard generic to access the CPRLife slot of class ModelToCPR
 }
+

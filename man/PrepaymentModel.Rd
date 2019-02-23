@@ -35,3 +35,4 @@ used "MODEL", "PPC", or "CPR"}
 \description{
 The function is a constructor function for the PrepaymentModel object
 }
+

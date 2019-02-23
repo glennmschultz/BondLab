@@ -25,3 +25,4 @@ Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{Scenario-class}},
   \code{\link{ScenarioCurve-class}}
 }
+

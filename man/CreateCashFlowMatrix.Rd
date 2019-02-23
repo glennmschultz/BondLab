@@ -23,3 +23,4 @@ should match the number of rows of the maturity matrix
 \seealso{
 Other Interest Rate Models: \code{\link{CreateMaturitiesMatrix}}
 }
+

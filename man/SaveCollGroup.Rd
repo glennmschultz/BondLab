@@ -19,3 +19,4 @@ CollateralGroup function.}
 \description{
 Opens a connection to the Groups folder to save collateral group
 }
+

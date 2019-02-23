@@ -14,3 +14,4 @@ GWacBasis(object) <- value
 \description{
 A standard generic function to set the slot GwacBasis
 }
+

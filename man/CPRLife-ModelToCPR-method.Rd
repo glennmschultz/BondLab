@@ -13,3 +13,4 @@
 \description{
 A method to extract Life CPR from S4 class
 }
+

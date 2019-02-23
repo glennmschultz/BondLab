@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot SATO from the class MBSDetails
 }
+

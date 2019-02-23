@@ -29,3 +29,4 @@ environment for this function to work.
 \dontrun{
 TermStructure(rates.data = "01-10-2013", method = "ns")}
 }
+

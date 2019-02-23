@@ -15,3 +15,4 @@
 \description{
 A method to set the slot YieldDecimalstring from the class YieldTypes
 }
+

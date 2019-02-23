@@ -13,3 +13,4 @@
 \description{
 A method to get the slot GFeeBasis in the object GFeeTypes
 }
+

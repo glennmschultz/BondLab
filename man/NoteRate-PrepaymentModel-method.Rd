@@ -13,3 +13,4 @@
 \description{
 A method to extract NoteRate from S4 class PrepaymentModel
 }
+

@@ -12,3 +12,4 @@ GFeeDecimalString(object)
 \description{
 A standard generic functon to get the slot GFeeDecimalString
 }
+

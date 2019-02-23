@@ -13,3 +13,4 @@
 \description{
 A method to extract PriceBasis from slot of class PriceTypres
 }
+

@@ -15,3 +15,4 @@ RDMEFactor(DealName = "character", TrancheNumber = numeric())
 The function opens a connection for the aggreation of factor data
 which is used by the REMIC constructor
 }
+

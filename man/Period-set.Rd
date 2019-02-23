@@ -14,3 +14,4 @@ Period(object) <- value
 \description{
 a generic function to replace the slot Period
 }
+

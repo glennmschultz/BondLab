@@ -16,3 +16,4 @@ the CollateralGroup function}
 \description{
 The connection is a read helper to the aggregator CollateralGroup
 }
+

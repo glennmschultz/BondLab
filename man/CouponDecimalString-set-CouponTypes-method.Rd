@@ -15,3 +15,4 @@
 \description{
 A method to set CouponDecimalString in the slot of CouponTypes
 }
+

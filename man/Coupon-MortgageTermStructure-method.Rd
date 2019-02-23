@@ -13,3 +13,4 @@
 \description{
 Get Coupon from object of type MortgageTermStructure
 }
+

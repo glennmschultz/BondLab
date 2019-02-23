@@ -15,3 +15,4 @@ of class SpreadTypes}
 A method to get the value of the slot SpreadBasisString from the object
 of class SpreadTypes
 }
+

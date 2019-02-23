@@ -13,3 +13,4 @@
 \description{
 A Method to extract the scenario formula from an S4 class Scenario
 }
+

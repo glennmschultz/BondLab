@@ -13,3 +13,4 @@
 \description{
 A Method to extract Shiftbps from an S4 class Scenario
 }
+

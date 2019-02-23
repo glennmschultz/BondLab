@@ -15,3 +15,4 @@
 \description{
 Method to replace the slot WAM in the class MBSDetails
 }
+

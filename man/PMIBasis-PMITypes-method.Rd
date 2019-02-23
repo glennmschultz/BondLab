@@ -13,3 +13,4 @@
 \description{
 A method to get the slot PMIBasis from the object PMITypes
 }
+

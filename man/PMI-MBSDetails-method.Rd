@@ -13,3 +13,4 @@
 \description{
 Method to extract the slot PMI from the class MBSDetails
 }
+

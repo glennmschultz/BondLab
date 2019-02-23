@@ -14,3 +14,4 @@ PriceDecimal(object) <- value
 \description{
 A standard generic function to set the slot PriceDecimal
 }
+

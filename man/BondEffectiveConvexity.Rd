@@ -20,3 +20,4 @@ BondEffectiveConvexity(Rate.Delta = numeric(), cashflow = vector(),
 Calculates effective convexity based on a discount vector (zero coupon)
 cashflow vector, and rate delta
 }
+

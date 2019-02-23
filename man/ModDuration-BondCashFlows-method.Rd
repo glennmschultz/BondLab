@@ -13,3 +13,4 @@
 \description{
 Method to get ModDuration from S4 class BondCashFlows
 }
+

@@ -13,3 +13,4 @@
 \description{
 Method to extract ID from an S4 class of type BillDetail
 }
+

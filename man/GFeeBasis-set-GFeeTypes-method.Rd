@@ -15,3 +15,4 @@
 \description{
 A method to set the value of the slot GFeeBasis in the object GFeeTypes
 }
+

@@ -16,11 +16,13 @@ dateddate, maturitydate, type, close.}
 \description{
 An dataframe containing bond cash flow.  The first three rows
 include the price, accured interest, and yield to maturity, and modified 
-duration. CashFlowMatrix[5:nrow,] matches the maturity matrix for yield curve
-fitting
-should match the number of rows of the maturity matrix
+duration. CashFlowMatrix[5:ncol,] (first five rows) matches the maturity 
+matrix for yield curve fitting should match the number of rows of the 
+maturity matrix
 }
 \seealso{
-Other Interest Rate Models: \code{\link{CreateMaturitiesMatrix}}
+Other Interest Rate Models: \code{\link{Bterm}},
+  \code{\link{CreateMaturitiesMatrix}},
+  \code{\link{HullWhite}}
 }
 

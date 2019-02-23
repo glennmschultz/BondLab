@@ -66,8 +66,12 @@ Collate:
     'ErrorTrap.R'
     'ExtractScenario.R'
     'GFeeTypes.R'
+<<<<<<< HEAD
     'HomePriceSim.R'
     'MortgageCashFlowArray.R'
+=======
+    'HullWhite.R'
+>>>>>>> acc93f2f9f12b74df2411bdc0b5697f9904e44e8
     'MortgageEffectiveMeasures.R'
     'MortgageFunctions.R'
     'MortgageOAS.R'

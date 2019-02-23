@@ -12,9 +12,9 @@
   #'@family Interest Rate Models
   #'@description An dataframe containing bond cash flow.  The first three rows
   #'include the price, accured interest, and yield to maturity, and modified 
-  #'duration. CashFlowMatrix[5:nrow,] matches the maturity matrix for yield curve
-  #'fitting
-  #'should match the number of rows of the maturity matrix
+  #'duration. CashFlowMatrix[5:ncol,] (first five rows) matches the maturity 
+  #'matrix for yield curve fitting should match the number of rows of the 
+  #'maturity matrix
   #'@param trade.date The trade date 
   #'@param bonddata A dataframe of bond data.  The complete dataframe must
   #'consist of the following names columns: cusip, interestrate, issuedate,

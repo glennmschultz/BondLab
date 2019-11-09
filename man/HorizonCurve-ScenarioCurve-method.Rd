@@ -18,4 +18,4 @@ Other Scenario: \code{\link{HorizonTermStrc,ScenarioCurve-method}},
   \code{\link{StartCurve,ScenarioCurve-method}},
   \code{\link{StartTermStrc,ScenarioCurve-method}}
 }
-
+\concept{Scenario}

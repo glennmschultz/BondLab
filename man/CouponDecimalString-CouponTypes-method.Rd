@@ -13,4 +13,3 @@
 \description{
 A method to extract CouponDecimalString from the object CouponTypes
 }
-

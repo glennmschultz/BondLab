@@ -13,4 +13,3 @@
 \description{
 Method to extract the GFeePremium from the class MortgageCashFlow
 }
-

@@ -13,4 +13,3 @@
 \description{
 A method to get the value of the slot SpreadDecimal from the class SpreadTypes
 }
-

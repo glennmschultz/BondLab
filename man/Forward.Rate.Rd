@@ -17,4 +17,3 @@ two-year forward rate is specified as 24.}
 \description{
 Calculate forward rate given a vector of spot rates
 }
-

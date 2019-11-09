@@ -13,4 +13,3 @@
 \description{
 A method to extract the PrepaymentType from class PriceYieldScenarioSet
 }
-

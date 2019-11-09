@@ -25,4 +25,4 @@ Other Scenario Analysis: \code{\link{HorizonCurrBal}},
   \code{\link{ScenarioCurve-class}},
   \code{\link{ScheduledPrinReceived}}
 }
-
+\concept{Scenario Analysis}

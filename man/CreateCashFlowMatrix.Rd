@@ -25,4 +25,4 @@ Other Interest Rate Models: \code{\link{Bterm}},
   \code{\link{CreateMaturitiesMatrix}},
   \code{\link{HullWhite}}
 }
-
+\concept{Interest Rate Models}

@@ -13,4 +13,3 @@
 \description{
 Method to extract Maturity from an S4 class of type BondDetails
 }
-

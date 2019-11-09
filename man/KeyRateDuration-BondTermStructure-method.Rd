@@ -13,4 +13,3 @@
 \description{
 A method to get KeyRateDuration from the class BondTermStructure
 }
-

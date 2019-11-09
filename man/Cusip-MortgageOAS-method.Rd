@@ -13,4 +13,3 @@
 \description{
 Access the slot Cusip from object MortgageOAS
 }
-

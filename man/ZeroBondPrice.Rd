@@ -14,3 +14,4 @@ ZeroBondPrice(r, t)
 \description{
 A function to compute zero coupon bond price
 }
+\concept{Bond Function}

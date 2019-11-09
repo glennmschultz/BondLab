@@ -13,4 +13,3 @@
 \description{
 Method to get YieldToMaturity from S4 class BondCashFlows
 }
-

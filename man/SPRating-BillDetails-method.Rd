@@ -13,4 +13,3 @@
 \description{
 Method to extract S&P rating from S4 class of type BillDetails
 }
-

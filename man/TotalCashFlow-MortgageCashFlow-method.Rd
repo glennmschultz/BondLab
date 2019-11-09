@@ -13,4 +13,3 @@
 \description{
 Method to extract the TotalCashFlow from the class MortgageCashFlow
 }
-

@@ -15,4 +15,3 @@ class SpreadTypes}
 A method to get the value of the slot SpreadDecimalString from the
 class SpreadTypes
 }
-

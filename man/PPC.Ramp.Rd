@@ -22,4 +22,3 @@ A standard generic function for the calculation of the PPC ramp
 \examples{
 PPC.Ramp(season.period = 30, begin.cpr = .002, end.cpr = .06, period = 30) 
 }
-

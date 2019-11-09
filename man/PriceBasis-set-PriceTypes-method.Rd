@@ -15,4 +15,3 @@
 \description{
 a method to set PriceBasis from slot of class PriceTypes
 }
-

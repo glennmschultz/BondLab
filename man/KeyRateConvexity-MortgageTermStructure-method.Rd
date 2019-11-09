@@ -13,4 +13,3 @@
 \description{
 Method to extract the KeyRateConvexity from S4 class
 }
-

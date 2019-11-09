@@ -13,4 +13,3 @@
 \description{
 Method to get Convexity from S4 class BillCashFlows
 }
-

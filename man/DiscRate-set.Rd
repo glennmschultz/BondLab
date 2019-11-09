@@ -14,4 +14,3 @@ DiscRate(object) <- value
 \description{
 A generic function to replace the slot DiscRate
 }
-

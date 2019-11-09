@@ -14,4 +14,3 @@ SMM(object) <- value
 \description{
 A standard generic function to replace the values of the slot SMM
 }
-

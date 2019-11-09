@@ -17,4 +17,4 @@ Other BondBasis: \code{\link{ActFactor}},
   \code{\link{ActualFactor}},
   \code{\link{BondBasisConversion}}
 }
-
+\concept{BondBasis}

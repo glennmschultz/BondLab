@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot GFee from the class MBSDetails
 }
-

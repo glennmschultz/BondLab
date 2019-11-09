@@ -17,4 +17,3 @@ class SpreadTypes}
 A method to set the value of the slot SpreadDecimalString of the 
 class SpreadTypes
 }
-

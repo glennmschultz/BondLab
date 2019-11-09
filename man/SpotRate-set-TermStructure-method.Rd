@@ -15,4 +15,3 @@
 \description{
 Method to replace SpotRate in the class TermStructure
 }
-

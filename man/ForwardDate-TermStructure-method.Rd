@@ -13,4 +13,3 @@
 \description{
 Method to extract Date from the class TermStructure
 }
-

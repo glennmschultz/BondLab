@@ -13,4 +13,3 @@
 \description{
 A method to extract MDR from S4 class PrepaymentModel
 }
-

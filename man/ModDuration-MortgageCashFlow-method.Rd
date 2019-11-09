@@ -13,4 +13,3 @@
 \description{
 Method to extract Modified Duration from S4 class MortgageCashFlow
 }
-

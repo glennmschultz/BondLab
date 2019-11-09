@@ -13,4 +13,3 @@ DiscountTypes(discount.rate = numeric())
 The DiscountTypes class converts the discount rate from a numeric value to a
 basis value (divided by 100) and a string (basis value)
 }
-

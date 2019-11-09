@@ -4,8 +4,8 @@
 \alias{SpreadToPriceMBS}
 \title{Spread To Price MBS}
 \usage{
-SpreadToPriceMBS(bond.id, rates.data, settlement.date, prepayment.assumption,
-  spread, benchmark = NULL, ..., CPR = NULL)
+SpreadToPriceMBS(bond.id, rates.data, settlement.date,
+  prepayment.assumption, spread, benchmark = NULL, ..., CPR = NULL)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -44,4 +44,4 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{ZVSpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
-
+\concept{Pricing}

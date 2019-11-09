@@ -13,4 +13,3 @@
 \description{
 A method to extract Price32nds from slot of class PriceTypes
 }
-

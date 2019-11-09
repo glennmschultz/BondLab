@@ -15,4 +15,3 @@
 \description{
 A method to set the value of the slot PMIBasis in the object PMITypes
 }
-

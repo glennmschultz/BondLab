@@ -15,4 +15,3 @@
 \description{
 A method to set Price32nds in slot of class PriceTypes
 }
-

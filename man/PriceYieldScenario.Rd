@@ -14,4 +14,3 @@ PriceYieldScenario(object, ...)
 \description{
 generic function to access both slots of PrepaymentScenario
 }
-

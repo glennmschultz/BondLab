@@ -19,3 +19,4 @@ Other Interest Rate Models: \code{\link{CreateCashFlowMatrix}},
   \code{\link{CreateMaturitiesMatrix}},
   \code{\link{HullWhite}}
 }
+\concept{Interest Rate Models}

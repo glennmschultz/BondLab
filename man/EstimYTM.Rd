@@ -31,4 +31,3 @@ nominall example and does not account for acrrued interest
 EstimYTM(coupon = .04, 
 coupon.frequency = 2, years.mat = 10, face.value = 1000, price = 100)
 }
-

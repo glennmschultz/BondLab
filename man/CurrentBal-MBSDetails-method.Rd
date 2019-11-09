@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot CurrentBal from the class MBSDetails
 }
-

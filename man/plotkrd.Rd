@@ -12,4 +12,3 @@ plotkrd(object)
 \description{
 Generic function to plot key rate duration
 }
-

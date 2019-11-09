@@ -13,4 +13,3 @@
 \description{
 Method to get Period from S4 class BillCashFlows
 }
-

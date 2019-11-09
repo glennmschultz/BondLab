@@ -13,4 +13,3 @@
 \description{
 Method to extract EffConvexity from S4 class
 }
-

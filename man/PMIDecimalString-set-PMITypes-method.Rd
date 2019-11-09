@@ -15,4 +15,3 @@
 \description{
 A method to set the value of the slot PMIDecimalString in the object PMITypes
 }
-

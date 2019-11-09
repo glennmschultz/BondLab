@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Maturity from the class MBSDetails
 }
-

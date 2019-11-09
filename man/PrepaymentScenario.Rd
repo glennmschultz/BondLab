@@ -12,4 +12,3 @@ PrepaymentScenario(object)
 \description{
 A generic function to access the slot PrepaymentScenario
 }
-

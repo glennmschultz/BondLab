@@ -14,4 +14,3 @@ may also be the note rate in the case of a loan}
 The GWacTypes class converts Gross Wac a decimal numeric value to a 
 GWacBasis a numeric value and GWacDecimalString a character string
 }
-

@@ -13,4 +13,3 @@
 \description{
 A method to extract Incentive from S4 class PrepaymentModel
 }
-

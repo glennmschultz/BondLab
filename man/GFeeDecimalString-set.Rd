@@ -14,4 +14,3 @@ GFeeDecimalString(object) <- value
 \description{
 A standard generic function to set the slot GFeeDecimalString
 }
-

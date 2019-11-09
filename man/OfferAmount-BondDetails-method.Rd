@@ -13,4 +13,3 @@
 \description{
 Method to get OfferAmount from an S4 class of type BondDetails
 }
-

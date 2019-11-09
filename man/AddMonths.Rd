@@ -20,4 +20,4 @@ payment dates.
 \examples{
 AddMonths("03-01-2015", 360)
 }
-
+\concept{ScenarioAnalysis}

@@ -43,4 +43,4 @@ BillDetails(Cusip, ID, BillType, Sector, Issuer, Underwriter, OfferAmount,
 BillDetails creates BillDetails cusip object in the 
 local environment
 }
-
+\concept{BillDetails}

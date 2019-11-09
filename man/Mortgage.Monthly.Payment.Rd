@@ -20,4 +20,3 @@ A standard generic function to compute the monthly payment of a mortgage
 \examples{
 Mortgage.Monthly.Payment(orig.bal = 100000, note.rate = .04, term.mos = 360)
 }
-

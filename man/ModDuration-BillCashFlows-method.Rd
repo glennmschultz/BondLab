@@ -13,4 +13,3 @@
 \description{
 Method to get modified duration from S4 class BillCashFlows
 }
-

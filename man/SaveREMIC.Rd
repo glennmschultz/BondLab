@@ -15,4 +15,3 @@ SaveREMIC(DealName = "character", file = "character")
 Opens a connection to REMICData folder saving a REMIC Deal by name
 this connection is used by the function REMIC structure
 }
-

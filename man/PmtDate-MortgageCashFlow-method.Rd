@@ -13,4 +13,3 @@
 \description{
 Method to extract PmtDate from S4 class MortgageCashFlow
 }
-

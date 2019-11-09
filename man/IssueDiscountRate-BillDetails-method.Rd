@@ -13,4 +13,3 @@
 \description{
 Method to extract IssueDiscountRate from an S4 class of type BillDetails
 }
-

@@ -29,6 +29,7 @@ eg("Parallel", "Twist")}
 
 \item{\code{Formula}}{A function defining the interest rate shift}
 }}
+
 \seealso{
 Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{HorizonCurrBal}},
@@ -42,4 +43,4 @@ Other Scenario Analysis: \code{\link{CouponIncome}},
   \code{\link{ScenarioCurve-class}},
   \code{\link{ScheduledPrinReceived}}
 }
-
+\concept{Scenario Analysis}

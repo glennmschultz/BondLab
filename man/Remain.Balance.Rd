@@ -22,4 +22,3 @@ A standard generic for the calculation of a mortgage remaining balance
 \examples{
 Remain.Balance(balance = 100000, note.rate = .045, term.mos = 360, period = 10)
 }
-

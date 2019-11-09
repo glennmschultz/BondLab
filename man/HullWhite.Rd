@@ -33,3 +33,4 @@ Other Interest Rate Models: \code{\link{Bterm}},
   \code{\link{CreateCashFlowMatrix}},
   \code{\link{CreateMaturitiesMatrix}}
 }
+\concept{Interest Rate Models}

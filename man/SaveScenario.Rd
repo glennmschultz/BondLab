@@ -14,4 +14,3 @@ SaveScenario(Scenario = "character", ScenarioFile = "character")
 \description{
 A save connection function to the interest rate scenario data folder
 }
-

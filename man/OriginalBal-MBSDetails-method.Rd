@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot OriginalBal from the class MBSDetails
 }
-

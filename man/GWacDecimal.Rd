@@ -12,4 +12,3 @@ GWacDecimal(object)
 \description{
 A standard generic function to get the slot GWacDecimal
 }
-

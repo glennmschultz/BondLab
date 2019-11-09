@@ -15,4 +15,3 @@
 \description{
 A method to set the slot DiscountBasis in the object DiscountTypes
 }
-

@@ -13,4 +13,3 @@
 \description{
 Method to extract Price from S4 class MortgageCashFlow
 }
-

@@ -13,4 +13,3 @@
 \description{
 A method to extract CouponBasis from the slot of CouponTypes
 }
-

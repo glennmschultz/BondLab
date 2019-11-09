@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot BondType from the class MBSDetails
 }
-

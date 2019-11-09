@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Index from the class MBS Details
 }
-

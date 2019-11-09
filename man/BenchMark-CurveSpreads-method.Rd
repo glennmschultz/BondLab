@@ -27,4 +27,4 @@ Other Pricing: \code{\link{BillPriceToYield}},
   \code{\link{ZVSpreadToPriceMBS}},
   \code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
-
+\concept{Pricing}

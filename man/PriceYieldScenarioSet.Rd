@@ -4,7 +4,8 @@
 \alias{PriceYieldScenarioSet}
 \title{A function to convert Price Yield data to class PriceYieldScenarioSet}
 \usage{
-PriceYieldScenarioSet(PrepaymentType = "list", PrepaymentScenario = "list")
+PriceYieldScenarioSet(PrepaymentType = "list",
+  PrepaymentScenario = "list")
 }
 \arguments{
 \item{PrepaymentType}{a list of the prepayment type}
@@ -15,4 +16,3 @@ to the prepayment type}
 \description{
 A function to convert Price Yield data to class PriceYieldScenarioSet
 }
-

@@ -12,4 +12,3 @@ CouponBasis(object)
 \description{
 A standard generic function to get the slot CouponBasis
 }
-

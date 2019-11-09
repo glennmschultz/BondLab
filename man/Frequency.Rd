@@ -12,4 +12,3 @@ Frequency(object)
 \description{
 A standard generic function to access the slot Frequency
 }
-

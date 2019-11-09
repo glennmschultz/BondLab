@@ -29,4 +29,4 @@ Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
   \code{\link{ZVSpreadToPriceBond}},
   \code{\link{ZVSpreadToPriceMBS}}
 }
-
+\concept{Pricing}

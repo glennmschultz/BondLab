@@ -4,8 +4,9 @@
 \alias{Scenario}
 \title{A constructor function of the class Scenario}
 \usage{
-Scenario(Name = "character", Type = "character", ShiftType = "character",
-  Shiftbps = "character", Formula = "function")
+Scenario(Name = "character", Type = "character",
+  ShiftType = "character", Shiftbps = "character",
+  Formula = "function")
 }
 \arguments{
 \item{Name}{A character string indicating the unique name which 
@@ -37,4 +38,3 @@ Formula = function(rates.data, Shiftbps){
 as.character(as.numeric(rates.data[1,2:length(rates.data)]) + 
 Shiftbps/yield.basis)})}  
 }
-

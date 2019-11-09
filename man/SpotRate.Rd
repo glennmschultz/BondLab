@@ -12,4 +12,3 @@ SpotRate(object)
 \description{
 A generic function to access the slot SpotRate in class TermStructure
 }
-

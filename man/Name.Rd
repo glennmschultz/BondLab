@@ -12,4 +12,3 @@ Name(object)
 \description{
 A standard generic to access the slot Name
 }
-

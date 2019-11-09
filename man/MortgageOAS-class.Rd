@@ -29,3 +29,4 @@ mortgage pass through oas class
 \item{\code{OAC}}{option adjusted convexity}
 }}
 
+\concept{mortgage pass through option adjusted spread}

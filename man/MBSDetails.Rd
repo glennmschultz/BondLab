@@ -4,23 +4,26 @@
 \alias{MBSDetails}
 \title{MBSDetails}
 \usage{
-MBSDetails(Cusip = "character", ID = "character", BondType = "character",
-  Issuer = "character", Underwriter = "character", Sector = "character",
-  Coupon = numeric(), IssueDate = "character", DatedDate = "character",
-  Maturity = "character", LastPmtDate = "character",
-  NextPmtDate = "character", Term = numeric(), WALA = numeric(),
-  WAM = numeric(), PaymentDelay = numeric(), Moody = "character",
-  SP = "character", BondLab = "character", Frequency = numeric(),
+MBSDetails(Cusip = "character", ID = "character",
+  BondType = "character", Issuer = "character",
+  Underwriter = "character", Sector = "character",
+  Coupon = numeric(), IssueDate = "character",
+  DatedDate = "character", Maturity = "character",
+  LastPmtDate = "character", NextPmtDate = "character",
+  Term = numeric(), WALA = numeric(), WAM = numeric(),
+  PaymentDelay = numeric(), Moody = "character", SP = "character",
+  BondLab = "character", Frequency = numeric(),
   BondBasis = "character", GWac = numeric(), OrigLoanBal = numeric(),
   OrigLTV = numeric(), AmortizationType = "character",
-  AmortizationTerm = numeric(), Index = "character", Margin = numeric(),
-  FirstPmtDate = "character", FinalPmtDate = "character",
-  Servicing = numeric(), PMI = numeric(), GFeePremium = numeric(),
-  InitialInterest = "logical", InterestOnlyPeriod = numeric(),
-  FirstPrinPaymentDate = "character", BalloonPmt = "logical",
-  BalloonDate = "character", MBSFactor = numeric(),
-  OriginalBal = numeric(), CurrentBal = numeric(), Model = "character",
-  Burnout = numeric(), SATO = numeric())
+  AmortizationTerm = numeric(), Index = "character",
+  Margin = numeric(), FirstPmtDate = "character",
+  FinalPmtDate = "character", Servicing = numeric(), PMI = numeric(),
+  GFeePremium = numeric(), InitialInterest = "logical",
+  InterestOnlyPeriod = numeric(), FirstPrinPaymentDate = "character",
+  BalloonPmt = "logical", BalloonDate = "character",
+  MBSFactor = numeric(), OriginalBal = numeric(),
+  CurrentBal = numeric(), Model = "character", Burnout = numeric(),
+  SATO = numeric())
 }
 \arguments{
 \item{Cusip}{A character the Pass Through MBS cusip.}
@@ -141,4 +144,4 @@ principal payment date due of the mortgage.}
 MBSDetails creates an MBS pass-through cusip object in the 
 local environment
 }
-
+\concept{MBSDetails}

@@ -12,4 +12,3 @@ DiscountBasis(object)
 \description{
 A standard generic to get the slot DisocuntBasis
 }
-

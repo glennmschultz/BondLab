@@ -13,4 +13,3 @@
 \description{
 Access the slot OAD from object MortgageOAS
 }
-

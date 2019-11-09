@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot FirstPrinPaymentDate from the class MBSDetails
 }
-

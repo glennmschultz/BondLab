@@ -13,4 +13,3 @@
 \description{
 A method to get EffConvexity from the class BondTermStructure
 }
-

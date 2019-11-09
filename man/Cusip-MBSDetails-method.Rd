@@ -13,4 +13,3 @@
 \description{
 Method to extract the slot Cusip from the class MBSDetails
 }
-

@@ -15,4 +15,3 @@ object GWacTypes}
 A method to get the value of the slot GWacDecimalString slot in the
 object GWacTypes
 }
-

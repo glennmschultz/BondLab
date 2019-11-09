@@ -7,7 +7,8 @@
 BondScenario(bond.id = "character", settlement.date = "character",
   scenario.curves = "character", price = "character",
   principal = numeric(), ..., horizon.spot.spread = NULL,
-  horizon.nominal.spread = NULL, horizon.OAS = NULL, horizon.price = NULL)
+  horizon.nominal.spread = NULL, horizon.OAS = NULL,
+  horizon.price = NULL)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of the type BondDetails}
@@ -53,4 +54,4 @@ Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
   \code{\link{ReinvestmentIncome,BondReturn-method}},
   \code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
 }
-
+\concept{Bond Scenario Analysis}

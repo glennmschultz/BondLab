@@ -13,4 +13,3 @@
 \description{
 Access the slot Spreads from object MortgageOAS
 }
-

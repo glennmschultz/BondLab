@@ -14,4 +14,3 @@ ServicingFeeBasis(object)
 A standard generic function to get the value of the slot 
 ServicingFeeBasis
 }
-

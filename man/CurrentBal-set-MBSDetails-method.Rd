@@ -15,4 +15,3 @@
 \description{
 Method to replace the slot CurrentBal from the class MBSDetails
 }
-

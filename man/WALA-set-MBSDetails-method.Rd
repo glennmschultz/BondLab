@@ -15,4 +15,3 @@
 \description{
 Method to replace the slot WALA in the class MBSDetails
 }
-

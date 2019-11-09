@@ -12,4 +12,3 @@ SpreadToBenchmark(object)
 \description{
 A standard generic function to access SpreadToBenchmark
 }
-

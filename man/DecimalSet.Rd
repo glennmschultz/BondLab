@@ -16,3 +16,4 @@ A function to set the number of decimal places.  This is used
 in the Hull White Model to address the floating point issue that may arise
 when simulating interest rates.
 }
+\concept{General Function}

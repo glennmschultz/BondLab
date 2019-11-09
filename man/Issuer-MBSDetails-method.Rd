@@ -13,4 +13,3 @@
 \description{
 Method to extreact the slot Issuer from the class MBSDetails
 }
-

@@ -14,4 +14,3 @@ MDR(object) <- value
 \description{
 A standard generic function to replace the value of the slot MDR
 }
-

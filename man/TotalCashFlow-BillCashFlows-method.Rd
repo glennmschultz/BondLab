@@ -13,4 +13,3 @@
 \description{
 Method to get TotalCashFlows from S4 class BillCashFlows
 }
-

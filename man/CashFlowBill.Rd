@@ -16,4 +16,3 @@ CashFlowBill(bill.id, principal, settlement.date)
 \description{
 Calculates the bill cash flow table used in the BillCashFlow function.
 }
-

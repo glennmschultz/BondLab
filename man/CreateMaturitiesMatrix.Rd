@@ -21,4 +21,4 @@ Other Interest Rate Models: \code{\link{Bterm}},
   \code{\link{CreateCashFlowMatrix}},
   \code{\link{HullWhite}}
 }
-
+\concept{Interest Rate Models}

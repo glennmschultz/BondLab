@@ -13,7 +13,8 @@ Description: The analysis of fixed income, mortgage (MBS) and asset backed (ABS)
     package providing a suite of software utilities for the analysis and valuation
     of Fixed Income, Mortgage, and Asset Backed securities.
 LazyLoad: yes
-License: file LICENSE
+License: GPL-3
+Encoding: UTF-8
 Imports:
     termstrc,
     lubridate,

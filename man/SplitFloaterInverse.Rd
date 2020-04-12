@@ -4,8 +4,15 @@
 \alias{SplitFloaterInverse}
 \title{Split Bond to Floater Inverse Floater}
 \usage{
-SplitFloaterInverse(floater.margin, bond.coupon, bond.balance, index, ...,
-  inverse.multiplier = NULL, inverse.percentage = NULL)
+SplitFloaterInverse(
+  floater.margin,
+  bond.coupon,
+  bond.balance,
+  index,
+  ...,
+  inverse.multiplier = NULL,
+  inverse.percentage = NULL
+)
 }
 \arguments{
 \item{floater.margin}{the floater rate bond's margin to index}

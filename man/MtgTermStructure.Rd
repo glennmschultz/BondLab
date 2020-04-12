@@ -4,8 +4,16 @@
 \alias{MtgTermStructure}
 \title{A function to calculate mortgage key rate duration and convexity}
 \usage{
-MtgTermStructure(bond.id, original.bal, Rate.Delta = 0.5, TermStructure,
-  settlement.date, principal, price, cashflow)
+MtgTermStructure(
+  bond.id,
+  original.bal,
+  Rate.Delta = 0.5,
+  TermStructure,
+  settlement.date,
+  principal,
+  price,
+  cashflow
+)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of type MBS details}

@@ -4,8 +4,12 @@
 \alias{BondEffectiveDuration}
 \title{A function to compute effective duration}
 \usage{
-BondEffectiveDuration(Rate.Delta = numeric(), cashflow = vector(),
-  discount.rates = vector(), time.period = vector())
+BondEffectiveDuration(
+  Rate.Delta = numeric(),
+  cashflow = vector(),
+  discount.rates = vector(),
+  time.period = vector()
+)
 }
 \arguments{
 \item{Rate.Delta}{A numeric value the interest rate shift in basis points}

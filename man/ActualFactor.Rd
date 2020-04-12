@@ -15,8 +15,9 @@ ActualFactor(settlement.date, nextpmt.date)
 Calculates actual days using leap year IDSA method
 }
 \seealso{
-Other BondBasis: \code{\link{ActFactor}},
-  \code{\link{BondBasisConversion}},
-  \code{\link{is.leapyear}}
+Other BondBasis: 
+\code{\link{ActFactor}()},
+\code{\link{BondBasisConversion}()},
+\code{\link{is.leapyear}()}
 }
 \concept{BondBasis}

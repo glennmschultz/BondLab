@@ -4,9 +4,23 @@
 \alias{BillDetails}
 \title{BillDetails}
 \usage{
-BillDetails(Cusip, ID, BillType, Sector, Issuer, Underwriter, OfferAmount,
-  IssueDiscountRate, IssueDate, DatedDate, Maturity, Moody, SP, BondLab,
-  BondBasis)
+BillDetails(
+  Cusip,
+  ID,
+  BillType,
+  Sector,
+  Issuer,
+  Underwriter,
+  OfferAmount,
+  IssueDiscountRate,
+  IssueDate,
+  DatedDate,
+  Maturity,
+  Moody,
+  SP,
+  BondLab,
+  BondBasis
+)
 }
 \arguments{
 \item{Cusip}{A character the bill cusip}

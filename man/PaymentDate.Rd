@@ -4,10 +4,15 @@
 \alias{PaymentDate}
 \title{A function to determine bond payment date}
 \usage{
-PaymentDate(issue.date = "character", start.date = "character",
-  settlement.date = "character", nextpayment.date = "character",
-  end.date = "character", payment.frequency = numeric(),
-  payment.delay = numeric())
+PaymentDate(
+  issue.date = "character",
+  start.date = "character",
+  settlement.date = "character",
+  nextpayment.date = "character",
+  end.date = "character",
+  payment.frequency = numeric(),
+  payment.delay = numeric()
+)
 }
 \arguments{
 \item{issue.date}{A character vector the bond issue date.}

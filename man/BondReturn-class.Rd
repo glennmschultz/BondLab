@@ -36,15 +36,16 @@ the scenario horizon date}
 }}
 
 \seealso{
-Other Bond Scenario Analysis: \code{\link{BondScenario-class}},
-  \code{\link{BondScenario}},
-  \code{\link{CouponIncome,BondReturn-method}},
-  \code{\link{HorizonCurrBal,BondReturn-method}},
-  \code{\link{HorizonMos,BondReturn-method}},
-  \code{\link{HorizonPrice,BondReturn-method}},
-  \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{PrincipalReceived,BondReturn-method}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
+Other Bond Scenario Analysis: 
+\code{\link{BondScenario-class}},
+\code{\link{BondScenario}},
+\code{\link{CouponIncome,BondReturn-method}},
+\code{\link{HorizonCurrBal,BondReturn-method}},
+\code{\link{HorizonMos,BondReturn-method}},
+\code{\link{HorizonPrice,BondReturn-method}},
+\code{\link{HorizonReturn,BondReturn-method}},
+\code{\link{PrincipalReceived,BondReturn-method}},
+\code{\link{ReinvestmentIncome,BondReturn-method}},
+\code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
 }
 \concept{Bond Scenario Analysis}

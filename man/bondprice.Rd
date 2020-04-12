@@ -4,9 +4,13 @@
 \alias{bondprice}
 \title{Determine the price a bond on the interest payment date}
 \usage{
-bondprice(yield.to.maturity = numeric(), coupon = numeric(),
-  coupon.frequency = numeric(), years.mat = numeric(),
-  face.value = numeric())
+bondprice(
+  yield.to.maturity = numeric(),
+  coupon = numeric(),
+  coupon.frequency = numeric(),
+  years.mat = numeric(),
+  face.value = numeric()
+)
 }
 \arguments{
 \item{yield.to.maturity}{A numeric value expressing the yield to

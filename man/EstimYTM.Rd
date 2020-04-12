@@ -4,8 +4,13 @@
 \alias{EstimYTM}
 \title{A function to estimate the yield to maturity of a standard bond}
 \usage{
-EstimYTM(coupon = numeric(), coupon.frequency = numeric(),
-  years.mat = numeric(), face.value = numeric(), price = numeric())
+EstimYTM(
+  coupon = numeric(),
+  coupon.frequency = numeric(),
+  years.mat = numeric(),
+  face.value = numeric(),
+  price = numeric()
+)
 }
 \arguments{
 \item{coupon}{A numeric value expressing the bond's coupon as a

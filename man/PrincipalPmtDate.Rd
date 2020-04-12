@@ -4,8 +4,11 @@
 \alias{PrincipalPmtDate}
 \title{A function to report the first and last principal payment dates}
 \usage{
-PrincipalPmtDate(date.vector = "character",
-  principal.vector = "character", type = "character")
+PrincipalPmtDate(
+  date.vector = "character",
+  principal.vector = "character",
+  type = "character"
+)
 }
 \arguments{
 \item{date.vector}{A character string referencing the payment date slot of

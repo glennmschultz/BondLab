@@ -4,9 +4,29 @@
 \alias{BondDetails}
 \title{BondDetails}
 \usage{
-BondDetails(Cusip, ID, BondType, Sector, Issuer, Underwriter, OfferAmount,
-  Coupon, IssueDate, DatedDate, Maturity, LastPmtDate, NextPmtDate, Moody,
-  SP, BondLab, Frequency, BondBasis, Callable, Putable, SinkingFund)
+BondDetails(
+  Cusip,
+  ID,
+  BondType,
+  Sector,
+  Issuer,
+  Underwriter,
+  OfferAmount,
+  Coupon,
+  IssueDate,
+  DatedDate,
+  Maturity,
+  LastPmtDate,
+  NextPmtDate,
+  Moody,
+  SP,
+  BondLab,
+  Frequency,
+  BondBasis,
+  Callable,
+  Putable,
+  SinkingFund
+)
 }
 \arguments{
 \item{Cusip}{A character the bond cusip}

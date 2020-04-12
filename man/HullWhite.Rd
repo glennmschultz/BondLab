@@ -4,8 +4,16 @@
 \alias{HullWhite}
 \title{The single factor Hull White Model used to simulate the short rate}
 \usage{
-HullWhite(short.rate, mean.reversion, theta, time, delta.time, volatility,
-  trade.days, num.paths)
+HullWhite(
+  short.rate,
+  mean.reversion,
+  theta,
+  time,
+  delta.time,
+  volatility,
+  trade.days,
+  num.paths
+)
 }
 \arguments{
 \item{short.rate}{The short term rate}
@@ -29,8 +37,9 @@ A function to simulate the short rate using a single factor
 Hull White model.
 }
 \seealso{
-Other Interest Rate Models: \code{\link{Bterm}},
-  \code{\link{CreateCashFlowMatrix}},
-  \code{\link{CreateMaturitiesMatrix}}
+Other Interest Rate Models: 
+\code{\link{Bterm}()},
+\code{\link{CreateCashFlowMatrix}()},
+\code{\link{CreateMaturitiesMatrix}()}
 }
 \concept{Interest Rate Models}

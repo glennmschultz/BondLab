@@ -4,8 +4,11 @@
 \alias{SaveTranche}
 \title{A connection function to save Tranche Details information}
 \usage{
-SaveTranche(DealName = "character", TrancheNumber = "character",
-  TrancheFile = "character")
+SaveTranche(
+  DealName = "character",
+  TrancheNumber = "character",
+  TrancheFile = "character"
+)
 }
 \arguments{
 \item{DealName}{a character string the Deal Name}

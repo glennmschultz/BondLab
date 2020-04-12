@@ -6,8 +6,12 @@
                  
 A standard generic function used to calculate time value of money}
 \usage{
-TimeValue(interest.rate = numeric(), number.periods = numeric(),
-  frequency = numeric(), type = "character")
+TimeValue(
+  interest.rate = numeric(),
+  number.periods = numeric(),
+  frequency = numeric(),
+  type = "character"
+)
 }
 \arguments{
 \item{interest.rate}{The interest rate used to determine the discount 

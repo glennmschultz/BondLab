@@ -4,8 +4,13 @@
 \alias{SpreadToPriceBond}
 \title{Spread to Price Bond}
 \usage{
-SpreadToPriceBond(bond.id, rates.data, settlement.date, spread,
-  benchmark = NULL)
+SpreadToPriceBond(
+  bond.id,
+  rates.data,
+  settlement.date,
+  spread,
+  benchmark = NULL
+)
 }
 \arguments{
 \item{bond.id}{a character or connection referencing an object of type BondDetails}
@@ -27,16 +32,17 @@ benchmark in basis points.  Bond Lab follows the market convection.
 The user specified spread to the benchmark in basis points.
 }
 \seealso{
-Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
-  \code{\link{BillPriceToYield}},
-  \code{\link{BillYieldToPrice}},
-  \code{\link{CurveSpreads-class}},
-  \code{\link{CurveSpreads}},
-  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
-  \code{\link{SpreadToCurve,CurveSpreads-method}},
-  \code{\link{SpreadToPriceMBS}},
-  \code{\link{ZVSpreadToPriceBond}},
-  \code{\link{ZVSpreadToPriceMBS}},
-  \code{\link{ZeroVolSpread,CurveSpreads-method}}
+Other Pricing: 
+\code{\link{BenchMark,CurveSpreads-method}},
+\code{\link{BillPriceToYield}()},
+\code{\link{BillYieldToPrice}()},
+\code{\link{CurveSpreads-class}},
+\code{\link{CurveSpreads}},
+\code{\link{SpreadToBenchmark,CurveSpreads-method}},
+\code{\link{SpreadToCurve,CurveSpreads-method}},
+\code{\link{SpreadToPriceMBS}()},
+\code{\link{ZVSpreadToPriceBond}()},
+\code{\link{ZVSpreadToPriceMBS}()},
+\code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 \concept{Pricing}

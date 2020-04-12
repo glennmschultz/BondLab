@@ -4,8 +4,12 @@
 \alias{SolveSpotSpread}
 \title{A function to solve for the spread to the spot rate curve}
 \usage{
-SolveSpotSpread(spot.curve = vector(), cash.flow = vector(),
-  time.period = vector(), proceeds = numeric())
+SolveSpotSpread(
+  spot.curve = vector(),
+  cash.flow = vector(),
+  time.period = vector(),
+  proceeds = numeric()
+)
 }
 \arguments{
 \item{spot.curve}{A vector representing the spot rate curve}

@@ -4,9 +4,18 @@
 \alias{PrepaymentModel}
 \title{A contstructor function for the PrepaymentModel object}
 \usage{
-PrepaymentModel(bond.id, term.structure, prepayment.assumption = "MODEL",
-  ..., begin.cpr = 0.002, end.cpr = 0.06, seasoning.period = 30,
-  cpr = 0.06, cdr = 0.01, severity = 0.25)
+PrepaymentModel(
+  bond.id,
+  term.structure,
+  prepayment.assumption = "MODEL",
+  ...,
+  begin.cpr = 0.002,
+  end.cpr = 0.06,
+  seasoning.period = 30,
+  cpr = 0.06,
+  cdr = 0.01,
+  severity = 0.25
+)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object 

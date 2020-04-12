@@ -4,12 +4,24 @@
 \alias{MortgageScenario}
 \title{Mortgage Scenario Analysis}
 \usage{
-MortgageScenario(bond.id, settlement.date, price, original.bal,
-  scenario.curves, prepayment.assumption, ...,
-  horizon.spot.spread = NULL, horizon.nominal.spread = NULL,
-  horizon.OAS = NULL, horizon.price = NULL, begin.cpr = NULL,
-  end.cpr = NULL, seasoning.period = NULL, cpr = NULL,
-  severity = 0)
+MortgageScenario(
+  bond.id,
+  settlement.date,
+  price,
+  original.bal,
+  scenario.curves,
+  prepayment.assumption,
+  ...,
+  horizon.spot.spread = NULL,
+  horizon.nominal.spread = NULL,
+  horizon.OAS = NULL,
+  horizon.price = NULL,
+  begin.cpr = NULL,
+  end.cpr = NULL,
+  seasoning.period = NULL,
+  cpr = NULL,
+  severity = 0
+)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of type MBSDetails}

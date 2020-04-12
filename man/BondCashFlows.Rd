@@ -4,8 +4,12 @@
 \alias{BondCashFlows}
 \title{Bond cash flow engine for standard non-callable}
 \usage{
-BondCashFlows(bond.id = "character", principal = numeric(),
-  settlement.date = "character", price = "character")
+BondCashFlows(
+  bond.id = "character",
+  principal = numeric(),
+  settlement.date = "character",
+  price = "character"
+)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of type BondDetails}

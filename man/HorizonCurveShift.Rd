@@ -4,8 +4,13 @@
 \alias{HorizonCurveShift}
 \title{a constructor function of the class HorizonCurve}
 \usage{
-HorizonCurveShift(rates.data, settlement.date, horizon.months = 12,
-  scenario = "NC", method = "dl")
+HorizonCurveShift(
+  rates.data,
+  settlement.date,
+  horizon.months = 12,
+  scenario = "NC",
+  method = "dl"
+)
 }
 \arguments{
 \item{rates.data}{A character string referencing a rates object}
@@ -53,15 +58,18 @@ supported scenarios
 }
 }
 \seealso{
-Other Scenario Analysis: \code{\link{CouponIncome}},
-  \code{\link{HorizonCurrBal}}, \code{\link{HorizonMos}},
-  \code{\link{HorizonPrice}}, \code{\link{HorizonReturn}},
-  \code{\link{Name,Scenario-method}},
-  \code{\link{PrepaidPrinReceived}},
-  \code{\link{PrincipalReceived}},
-  \code{\link{ReinvestmentIncome}},
-  \code{\link{Scenario-class}},
-  \code{\link{ScenarioCurve-class}},
-  \code{\link{ScheduledPrinReceived}}
+Other Scenario Analysis: 
+\code{\link{CouponIncome}()},
+\code{\link{HorizonCurrBal}()},
+\code{\link{HorizonMos}()},
+\code{\link{HorizonPrice}()},
+\code{\link{HorizonReturn}()},
+\code{\link{Name,Scenario-method}},
+\code{\link{PrepaidPrinReceived}()},
+\code{\link{PrincipalReceived}()},
+\code{\link{ReinvestmentIncome}()},
+\code{\link{Scenario-class}},
+\code{\link{ScenarioCurve-class}},
+\code{\link{ScheduledPrinReceived}()}
 }
 \concept{Scenario Analysis}

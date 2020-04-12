@@ -4,11 +4,18 @@
 \alias{BondScenario}
 \title{BondScenario function}
 \usage{
-BondScenario(bond.id = "character", settlement.date = "character",
-  scenario.curves = "character", price = "character",
-  principal = numeric(), ..., horizon.spot.spread = NULL,
-  horizon.nominal.spread = NULL, horizon.OAS = NULL,
-  horizon.price = NULL)
+BondScenario(
+  bond.id = "character",
+  settlement.date = "character",
+  scenario.curves = "character",
+  price = "character",
+  principal = numeric(),
+  ...,
+  horizon.spot.spread = NULL,
+  horizon.nominal.spread = NULL,
+  horizon.OAS = NULL,
+  horizon.price = NULL
+)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of the type BondDetails}
@@ -43,15 +50,16 @@ received, reinvestment income, and horizon price are used to compute the
 investor's total return.  The function returns the class BondScenario
 }
 \seealso{
-Other Bond Scenario Analysis: \code{\link{BondReturn-class}},
-  \code{\link{BondScenario-class}},
-  \code{\link{CouponIncome,BondReturn-method}},
-  \code{\link{HorizonCurrBal,BondReturn-method}},
-  \code{\link{HorizonMos,BondReturn-method}},
-  \code{\link{HorizonPrice,BondReturn-method}},
-  \code{\link{HorizonReturn,BondReturn-method}},
-  \code{\link{PrincipalReceived,BondReturn-method}},
-  \code{\link{ReinvestmentIncome,BondReturn-method}},
-  \code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
+Other Bond Scenario Analysis: 
+\code{\link{BondReturn-class}},
+\code{\link{BondScenario-class}},
+\code{\link{CouponIncome,BondReturn-method}},
+\code{\link{HorizonCurrBal,BondReturn-method}},
+\code{\link{HorizonMos,BondReturn-method}},
+\code{\link{HorizonPrice,BondReturn-method}},
+\code{\link{HorizonReturn,BondReturn-method}},
+\code{\link{PrincipalReceived,BondReturn-method}},
+\code{\link{ReinvestmentIncome,BondReturn-method}},
+\code{\link{ScenarioHorizonMos,ScenarioCurve-method}}
 }
 \concept{Bond Scenario Analysis}

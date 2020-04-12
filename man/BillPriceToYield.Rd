@@ -19,16 +19,17 @@ BillPriceToYield(bill.id, price, day.count, settlement.date)
 Returns the bond equivalent yield of bill given price
 }
 \seealso{
-Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
-  \code{\link{BillYieldToPrice}},
-  \code{\link{CurveSpreads-class}},
-  \code{\link{CurveSpreads}},
-  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
-  \code{\link{SpreadToCurve,CurveSpreads-method}},
-  \code{\link{SpreadToPriceBond}},
-  \code{\link{SpreadToPriceMBS}},
-  \code{\link{ZVSpreadToPriceBond}},
-  \code{\link{ZVSpreadToPriceMBS}},
-  \code{\link{ZeroVolSpread,CurveSpreads-method}}
+Other Pricing: 
+\code{\link{BenchMark,CurveSpreads-method}},
+\code{\link{BillYieldToPrice}()},
+\code{\link{CurveSpreads-class}},
+\code{\link{CurveSpreads}},
+\code{\link{SpreadToBenchmark,CurveSpreads-method}},
+\code{\link{SpreadToCurve,CurveSpreads-method}},
+\code{\link{SpreadToPriceBond}()},
+\code{\link{SpreadToPriceMBS}()},
+\code{\link{ZVSpreadToPriceBond}()},
+\code{\link{ZVSpreadToPriceMBS}()},
+\code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 \concept{Pricing}

@@ -4,9 +4,13 @@
 \alias{MortgageEffectiveMeasures}
 \title{A function to calculate mortgage effective duration and convexity}
 \usage{
-MortgageEffectiveMeasures(bond.id = "character",
-  settlement.date = "character", rates.data = "character",
-  TermStructure = "character", price = "character")
+MortgageEffectiveMeasures(
+  bond.id = "character",
+  settlement.date = "character",
+  rates.data = "character",
+  TermStructure = "character",
+  price = "character"
+)
 }
 \arguments{
 \item{bond.id}{A character string referencing  an object of type bond.id}

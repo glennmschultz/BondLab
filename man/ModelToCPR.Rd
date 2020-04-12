@@ -4,8 +4,14 @@
 \alias{ModelToCPR}
 \title{Converts a mortgage prepayment model vector to a CPR measure}
 \usage{
-ModelToCPR(bond.id, settlement.date, term.structure, original.bal, price,
-  yield)
+ModelToCPR(
+  bond.id,
+  settlement.date,
+  term.structure,
+  original.bal,
+  price,
+  yield
+)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object of type

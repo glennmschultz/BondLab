@@ -4,8 +4,14 @@
 \alias{LastandNextPmtDate}
 \title{function to determine the last and next payment date of a standard bond}
 \usage{
-LastandNextPmtDate(issue.date, dated.date, maturity.date, settlement.date,
-  frequency, bond.basis)
+LastandNextPmtDate(
+  issue.date,
+  dated.date,
+  maturity.date,
+  settlement.date,
+  frequency,
+  bond.basis
+)
 }
 \arguments{
 \item{issue.date}{A character, the issue date mm-dd-YYYY}

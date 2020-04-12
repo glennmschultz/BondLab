@@ -4,8 +4,7 @@
 \alias{ActFactor}
 \title{Act/Act day count}
 \usage{
-ActFactor(settlement.date, lastpmt.date, nextpmt.date, ...,
-  start.date = NULL)
+ActFactor(settlement.date, lastpmt.date, nextpmt.date, ..., start.date = NULL)
 }
 \arguments{
 \item{settlement.date}{the settlement date}
@@ -23,8 +22,9 @@ the default value is null.}
 Calculate Act/Act factor IMCA. used for UST corporates, etc
 }
 \seealso{
-Other BondBasis: \code{\link{ActualFactor}},
-  \code{\link{BondBasisConversion}},
-  \code{\link{is.leapyear}}
+Other BondBasis: 
+\code{\link{ActualFactor}()},
+\code{\link{BondBasisConversion}()},
+\code{\link{is.leapyear}()}
 }
 \concept{BondBasis}

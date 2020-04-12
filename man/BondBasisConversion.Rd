@@ -4,8 +4,15 @@
 \alias{BondBasisConversion}
 \title{Bond Basis (day count) conventions}
 \usage{
-BondBasisConversion(issue.date, start.date, end.date, settlement.date,
-  lastpmt.date, nextpmt.date, type)
+BondBasisConversion(
+  issue.date,
+  start.date,
+  end.date,
+  settlement.date,
+  lastpmt.date,
+  nextpmt.date,
+  type
+)
 }
 \arguments{
 \item{issue.date}{A date object, the issue date of the security}
@@ -34,7 +41,9 @@ calculations. Currently supported bond day count conventions:
 }
 }
 \seealso{
-Other BondBasis: \code{\link{ActFactor}},
-  \code{\link{ActualFactor}}, \code{\link{is.leapyear}}
+Other BondBasis: 
+\code{\link{ActFactor}()},
+\code{\link{ActualFactor}()},
+\code{\link{is.leapyear}()}
 }
 \concept{BondBasis}

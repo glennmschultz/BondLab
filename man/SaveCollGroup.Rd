@@ -4,8 +4,11 @@
 \alias{SaveCollGroup}
 \title{A connection functon to the Groups folder}
 \usage{
-SaveCollGroup(FileName = "character", DealName = "character",
-  Group = numeric())
+SaveCollGroup(
+  FileName = "character",
+  DealName = "character",
+  Group = numeric()
+)
 }
 \arguments{
 \item{FileName}{A character string the FileName default to temp}

@@ -21,8 +21,9 @@ matrix for yield curve fitting should match the number of rows of the
 maturity matrix
 }
 \seealso{
-Other Interest Rate Models: \code{\link{Bterm}},
-  \code{\link{CreateMaturitiesMatrix}},
-  \code{\link{HullWhite}}
+Other Interest Rate Models: 
+\code{\link{Bterm}()},
+\code{\link{CreateMaturitiesMatrix}()},
+\code{\link{HullWhite}()}
 }
 \concept{Interest Rate Models}

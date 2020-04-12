@@ -4,8 +4,12 @@
 \alias{Remain.Balance}
 \title{A function to compute the remaining balance of a mortgage}
 \usage{
-Remain.Balance(balance = numeric(), note.rate = numeric(),
-  term.mos = numeric(), period = numeric())
+Remain.Balance(
+  balance = numeric(),
+  note.rate = numeric(),
+  term.mos = numeric(),
+  period = numeric()
+)
 }
 \arguments{
 \item{balance}{A numeric value the balance of the mortgage}

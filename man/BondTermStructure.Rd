@@ -4,8 +4,14 @@
 \alias{BondTermStructure}
 \title{A function to calculate a bond key rate duration}
 \usage{
-BondTermStructure(bond.id, Rate.Delta = 0.5, TermStructure, principal,
-  price, cashflow)
+BondTermStructure(
+  bond.id,
+  Rate.Delta = 0.5,
+  TermStructure,
+  principal,
+  price,
+  cashflow
+)
 }
 \arguments{
 \item{bond.id}{A character string referencing an object of 

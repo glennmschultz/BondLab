@@ -4,8 +4,12 @@
 \alias{BondEffectiveConvexity}
 \title{A function to compute effective convexity}
 \usage{
-BondEffectiveConvexity(Rate.Delta = numeric(), cashflow = vector(),
-  discount.rates = vector(), time.period = vector())
+BondEffectiveConvexity(
+  Rate.Delta = numeric(),
+  cashflow = vector(),
+  discount.rates = vector(),
+  time.period = vector()
+)
 }
 \arguments{
 \item{Rate.Delta}{A numeric value the interest rate shift in basis points}

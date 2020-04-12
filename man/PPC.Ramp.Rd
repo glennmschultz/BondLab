@@ -4,8 +4,12 @@
 \alias{PPC.Ramp}
 \title{A function to calculate the PPC ramp}
 \usage{
-PPC.Ramp(season.period = numeric(), begin.cpr = numeric(),
-  end.cpr = numeric(), period = numeric())
+PPC.Ramp(
+  season.period = numeric(),
+  begin.cpr = numeric(),
+  end.cpr = numeric(),
+  period = numeric()
+)
 }
 \arguments{
 \item{season.period}{A numeric value the time to the peak PPC ramp}

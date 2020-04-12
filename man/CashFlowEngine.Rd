@@ -4,8 +4,12 @@
 \alias{CashFlowEngine}
 \title{Bond Lab function the residential mortgage cash flow engine}
 \usage{
-CashFlowEngine(bond.id = "character", settlement.date = "character",
-  principal = numeric(), PrepaymentAssumption = "character")
+CashFlowEngine(
+  bond.id = "character",
+  settlement.date = "character",
+  principal = numeric(),
+  PrepaymentAssumption = "character"
+)
 }
 \arguments{
 \item{bond.id}{A character string referring to an object of type MBSDetails}

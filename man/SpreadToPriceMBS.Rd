@@ -4,8 +4,16 @@
 \alias{SpreadToPriceMBS}
 \title{Spread To Price MBS}
 \usage{
-SpreadToPriceMBS(bond.id, rates.data, settlement.date,
-  prepayment.assumption, spread, benchmark = NULL, ..., CPR = NULL)
+SpreadToPriceMBS(
+  bond.id,
+  rates.data,
+  settlement.date,
+  prepayment.assumption,
+  spread,
+  benchmark = NULL,
+  ...,
+  CPR = NULL
+)
 }
 \arguments{
 \item{bond.id}{A character string the cusip number or bond.id}
@@ -32,16 +40,17 @@ Returns the clean price of the MBS given a prepayment speed
 and spread to the curve
 }
 \seealso{
-Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
-  \code{\link{BillPriceToYield}},
-  \code{\link{BillYieldToPrice}},
-  \code{\link{CurveSpreads-class}},
-  \code{\link{CurveSpreads}},
-  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
-  \code{\link{SpreadToCurve,CurveSpreads-method}},
-  \code{\link{SpreadToPriceBond}},
-  \code{\link{ZVSpreadToPriceBond}},
-  \code{\link{ZVSpreadToPriceMBS}},
-  \code{\link{ZeroVolSpread,CurveSpreads-method}}
+Other Pricing: 
+\code{\link{BenchMark,CurveSpreads-method}},
+\code{\link{BillPriceToYield}()},
+\code{\link{BillYieldToPrice}()},
+\code{\link{CurveSpreads-class}},
+\code{\link{CurveSpreads}},
+\code{\link{SpreadToBenchmark,CurveSpreads-method}},
+\code{\link{SpreadToCurve,CurveSpreads-method}},
+\code{\link{SpreadToPriceBond}()},
+\code{\link{ZVSpreadToPriceBond}()},
+\code{\link{ZVSpreadToPriceMBS}()},
+\code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 \concept{Pricing}

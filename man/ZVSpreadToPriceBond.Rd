@@ -22,16 +22,17 @@ the spot rate curve in basis points.  Bond Lab follows the market convection.  T
 user specified spread to the benchmark in basis points.
 }
 \seealso{
-Other Pricing: \code{\link{BenchMark,CurveSpreads-method}},
-  \code{\link{BillPriceToYield}},
-  \code{\link{BillYieldToPrice}},
-  \code{\link{CurveSpreads-class}},
-  \code{\link{CurveSpreads}},
-  \code{\link{SpreadToBenchmark,CurveSpreads-method}},
-  \code{\link{SpreadToCurve,CurveSpreads-method}},
-  \code{\link{SpreadToPriceBond}},
-  \code{\link{SpreadToPriceMBS}},
-  \code{\link{ZVSpreadToPriceMBS}},
-  \code{\link{ZeroVolSpread,CurveSpreads-method}}
+Other Pricing: 
+\code{\link{BenchMark,CurveSpreads-method}},
+\code{\link{BillPriceToYield}()},
+\code{\link{BillYieldToPrice}()},
+\code{\link{CurveSpreads-class}},
+\code{\link{CurveSpreads}},
+\code{\link{SpreadToBenchmark,CurveSpreads-method}},
+\code{\link{SpreadToCurve,CurveSpreads-method}},
+\code{\link{SpreadToPriceBond}()},
+\code{\link{SpreadToPriceMBS}()},
+\code{\link{ZVSpreadToPriceMBS}()},
+\code{\link{ZeroVolSpread,CurveSpreads-method}}
 }
 \concept{Pricing}

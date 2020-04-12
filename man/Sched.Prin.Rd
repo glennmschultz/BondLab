@@ -4,8 +4,12 @@
 \alias{Sched.Prin}
 \title{A function to calculate the scheduled principal of mortgage}
 \usage{
-Sched.Prin(balance = numeric(), note.rate = numeric(),
-  term.mos = numeric(), period = numeric())
+Sched.Prin(
+  balance = numeric(),
+  note.rate = numeric(),
+  term.mos = numeric(),
+  period = numeric()
+)
 }
 \arguments{
 \item{balance}{A numeric value, the balance of the mortgage}

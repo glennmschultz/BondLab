@@ -4,8 +4,11 @@
 \alias{SaveRDME}
 \title{A save connection to the RDME folder}
 \usage{
-SaveRDME(FileName = "character", DealName = "character",
-  TrancheNumber = numeric())
+SaveRDME(
+  FileName = "character",
+  DealName = "character",
+  TrancheNumber = numeric()
+)
 }
 \arguments{
 \item{FileName}{A character string the FileName default to temp}

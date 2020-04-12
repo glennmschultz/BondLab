@@ -4,11 +4,17 @@
 \alias{DollarRoll}
 \title{Dollar Roll Calculates the one-month Dollar Roll}
 \usage{
-DollarRoll(bond.id = "character", price = numeric(),
-  drop = numeric(), original.bal = numeric(),
-  settlement.date = "character", fwd.settlement.date = "character",
-  reinvestment.rate = numeric(), finance.rate = numeric(),
-  MortgageCashFlow = "character")
+DollarRoll(
+  bond.id = "character",
+  price = numeric(),
+  drop = numeric(),
+  original.bal = numeric(),
+  settlement.date = "character",
+  fwd.settlement.date = "character",
+  reinvestment.rate = numeric(),
+  finance.rate = numeric(),
+  MortgageCashFlow = "character"
+)
 }
 \arguments{
 \item{bond.id}{A character string the cusip or id of the MBS}

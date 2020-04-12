@@ -4,8 +4,11 @@
 \alias{Mortgage.Monthly.Payment}
 \title{A function to calculate the monthly payment of a mortgage}
 \usage{
-Mortgage.Monthly.Payment(orig.bal = numeric(), note.rate = numeric(),
-  term.mos = numeric())
+Mortgage.Monthly.Payment(
+  orig.bal = numeric(),
+  note.rate = numeric(),
+  term.mos = numeric()
+)
 }
 \arguments{
 \item{orig.bal}{A numeric value, the original loan amount}

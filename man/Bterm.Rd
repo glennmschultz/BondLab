@@ -15,8 +15,9 @@ Bterm(mean.reversion, delta.time)
 A function to compute B term of the Hull White Bond Price
 }
 \seealso{
-Other Interest Rate Models: \code{\link{CreateCashFlowMatrix}},
-  \code{\link{CreateMaturitiesMatrix}},
-  \code{\link{HullWhite}}
+Other Interest Rate Models: 
+\code{\link{CreateCashFlowMatrix}()},
+\code{\link{CreateMaturitiesMatrix}()},
+\code{\link{HullWhite}()}
 }
 \concept{Interest Rate Models}
